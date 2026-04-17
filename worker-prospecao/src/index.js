@@ -16,9 +16,11 @@
 //    GITHUB_TOKEN          Personal Access Token (repo:read+write)
 //    GH_OWNER              seu username no GitHub
 //    GH_REPO               repo privado de dados (ex: andarilho-data)
+//    FATHOM_API_KEY        Meeting intel — Fathom API key
 // ═══════════════════════════════════════════════════════════════
 
-import { lerLeads, salvarLeads, appendLog, dbRead } from './db.js';
+import { lerLeads, salvarLeads, appendLog, dbRead, dbUpdate } from './db.js';
+import { listCalls, getTranscript, getCallSummary } from './fathom.js';
 
 // ─────────────────────────────────────────────────────────────
 // UTILS
@@ -425,16 +427,118 @@ async function agentFollowUp(env, diasSemResposta = 4) {
 }
 
 // ─────────────────────────────────────────────────────────────
+// AGENTE 4 — FATHOM MEETING INTEL
+// Runs daily at 18h UTC (15h BRT). Reads new Fathom calls,
+// extracts client intel via Claude, saves to clients.json.
+// ─────────────────────────────────────────────────────────────
+async function agentFathom(env) {
+  if (!env.FATHOM_API_KEY) {
+    console.log('[AGENTE 4] FATHOM_API_KEY não configurada, pulando.');
+    return 0;
+  }
+  console.log('[AGENTE 4] Lendo reuniões do Fathom...');
+
+  const { data: existentes } = await dbRead(env, 'clients.json');
+  const clientes = existentes ?? [];
+  const idsProcessados = new Set(clientes.map(c => c.fathom_call_id));
+
+  const calls = await listCalls(env, 20);
+  const novas  = calls.filter(c => !idsProcessados.has(c.id ?? c.call_id));
+
+  if (novas.length === 0) {
+    await appendLog(env, 'fathom', 'skip', 'Nenhuma reunião nova');
+    console.log('[AGENTE 4] Nenhuma reunião nova.');
+    return 0;
+  }
+
+  let processadas = 0;
+  for (const call of novas.slice(0, 5)) {
+    const callId = call.id ?? call.call_id;
+    try {
+      const transcript = await getTranscript(env, callId);
+      const fathomSummary = await getCallSummary(env, callId);
+
+      const prompt = `You are a B2B sales assistant for Guilherme Andrade, founder of Andarilho Digital — an AI automation agency.
+
+Meeting title: "${call.title ?? call.name ?? 'Untitled'}"
+Meeting date: ${call.started_at ?? call.date ?? call.created_at ?? 'unknown'}
+Fathom summary: ${fathomSummary ?? 'none'}
+
+TRANSCRIPT:
+${transcript.slice(0, 8000)}
+
+Extract the following as JSON (no markdown, pure JSON):
+{
+  "client_name": "full name of the prospect/client",
+  "company": "company name if mentioned",
+  "role": "their job title if mentioned",
+  "pain_points": ["array of specific problems they described"],
+  "goals": ["what they want to achieve"],
+  "action_items": ["concrete next steps agreed in the call"],
+  "next_meeting": "date/time if scheduled, else null",
+  "deal_status": "prospect | interested | negotiating | closed | not_a_fit",
+  "deal_value": "monthly value discussed if any, else null",
+  "key_insight": "one sentence: the most important thing to remember about this person",
+  "follow_up_message": "a short WhatsApp message to send within 24h based on the conversation"
+}`;
+
+      let intel = null;
+      if (env.ANTHROPIC_API_KEY) {
+        const r = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'x-api-key':         env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+            'content-type':      'application/json',
+          },
+          body: JSON.stringify({
+            model:      'claude-haiku-4-5-20251001',
+            max_tokens: 1024,
+            messages:   [{ role: 'user', content: prompt }],
+          }),
+        });
+        if (r.ok) {
+          const data = await r.json();
+          const raw  = data.content?.[0]?.text ?? '{}';
+          try { intel = JSON.parse(raw); } catch { intel = { raw_extract: raw }; }
+        }
+      }
+
+      const entry = {
+        fathom_call_id:  callId,
+        call_title:      call.title ?? call.name ?? 'Untitled',
+        meeting_date:    call.started_at ?? call.date ?? call.created_at ?? null,
+        fathom_summary:  fathomSummary,
+        ...(intel ?? {}),
+        processed_at:    new Date().toISOString(),
+      };
+
+      clientes.push(entry);
+      processadas++;
+      console.log(`[AGENTE 4] ✅ ${entry.call_title} | ${entry.client_name ?? 'unknown'}`);
+      await sleep(500);
+    } catch (e) {
+      console.error(`[AGENTE 4] erro em ${callId}:`, e.message);
+    }
+  }
+
+  if (processadas > 0) {
+    await dbUpdate(env, 'clients.json', () => clientes, []);
+    await appendLog(env, 'fathom', 'ok', `${processadas} reuniões processadas`);
+  }
+
+  return processadas;
+}
+
+// ─────────────────────────────────────────────────────────────
 // CRON DISPATCH
 // UTC schedule → BRT = UTC-3
 // ─────────────────────────────────────────────────────────────
 const CRON_MAP = {
-  '0 10 * * 2': env => agentProspectar(env),   // Ter 07h BRT
-  '0 10 * * 5': env => agentProspectar(env),   // Sex 07h BRT
-  '0 13 * * 2': env => agentEnviarLote(env),   // Ter 10h BRT
-  '0 13 * * 4': env => agentEnviarLote(env),   // Qui 10h BRT
-  '0 13 * * 3': env => agentFollowUp(env),     // Qua 10h BRT
-  '0 13 * * 6': env => agentFollowUp(env),     // Sab 10h BRT
+  '0 10 * * 2,5': env => agentProspectar(env), // Ter + Sex 07h BRT
+  '0 13 * * 2,4': env => agentEnviarLote(env), // Ter + Qui 10h BRT
+  '0 13 * * 3,6': env => agentFollowUp(env),   // Qua + Sab 10h BRT
+  '0 18 * * *':   env => agentFathom(env),     // Daily 15h BRT
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -574,6 +678,18 @@ export default {
       const dias  = body?.diasSemResposta || 4;
       ctx.waitUntil(agentFollowUp(env, dias));
       return json({ ok: true, mensagem: `Follow-up iniciado (${dias}+ dias sem resposta).` });
+    }
+
+    // GET /clients — list all processed meeting intel
+    if (method === 'GET' && path === '/clients') {
+      const { data } = await dbRead(env, 'clients.json');
+      return json(data ?? []);
+    }
+
+    // POST /fathom/sync — manually trigger Fathom agent
+    if (method === 'POST' && path === '/fathom/sync') {
+      ctx.waitUntil(agentFathom(env).catch(e => console.error('[FATHOM SYNC] erro:', e)));
+      return json({ ok: true, mensagem: 'Fathom sync iniciado.' });
     }
 
     // POST /enviar/:id

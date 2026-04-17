@@ -2,6 +2,7 @@ name       = "andarilho-prospecao"
 main       = "src/index.js"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = true
 
 [triggers]
 # UTC times — BRT = UTC-3
@@ -9,12 +10,10 @@ compatibility_flags = ["nodejs_compat"]
 # Enviar lote: Ter + Qui  10h BRT = 13h UTC
 # Follow-up:   Qua + Sab  10h BRT = 13h UTC
 crons = [
-  "0 10 * * 2",
-  "0 10 * * 5",
-  "0 13 * * 2",
-  "0 13 * * 4",
-  "0 13 * * 3",
-  "0 13 * * 6",
+  "0 10 * * 2,5",
+  "0 13 * * 2,4",
+  "0 13 * * 3,6",
+  "0 18 * * *",
 ]
 
 # Secrets — set via: wrangler secret put VARIABLE_NAME
@@ -27,3 +26,4 @@ crons = [
 # GITHUB_TOKEN
 # GH_OWNER
 # GH_REPO
+# FATHOM_API_KEY
