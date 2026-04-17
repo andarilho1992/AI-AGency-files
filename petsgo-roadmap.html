@@ -159,6 +159,7 @@ p.body { font-size: 13px; color: var(--muted); line-height: 1.6; }
   <span class="nav-logo">🐾 Pets Go — Roadmap</span>
   <div class="nav-links">
     <a href="#status">Status</a>
+    <a href="#modulos">Módulos</a>
     <a href="#urgente">Urgente</a>
     <a href="#proximos">Próximos</a>
     <a href="#timeline">Timeline</a>
@@ -179,13 +180,14 @@ p.body { font-size: 13px; color: var(--muted); line-height: 1.6; }
     <span style="color:var(--yellow);">Agora vamos</span><br>
     <span style="color:var(--blue);">completar a entrega.</span>
   </h1>
-  <p class="lead" style="max-width:560px;margin-bottom:36px;">CRM funcionando, agentes de IA rodando 24/7, app mobile no ar. Faltam 3 ajustes técnicos e a configuração com os dados reais do Junior para o sistema estar 100% operacional.</p>
+  <p class="lead" style="max-width:560px;margin-bottom:36px;">CRM funcionando, agentes de IA rodando 24/7, app mobile no ar. Product Mapping V1.0 definido — 6 módulos, 32 submódulos, 100+ funcionalidades mapeadas em 3 fases de entrega.</p>
   <div style="display:flex;gap:10px;flex-wrap:wrap;">
     <span class="label label-green">✓ CRM no Cloudflare</span>
     <span class="label label-green">✓ Agentes no Railway</span>
     <span class="label label-green">✓ App Mobile PWA</span>
     <span class="label label-orange">⚡ Sync pendente</span>
     <span class="label label-purple">🔮 WhatsApp em breve</span>
+    <span class="label label-blue">📋 Product Mapping V1.0</span>
   </div>
 </div>
 
@@ -238,6 +240,211 @@ p.body { font-size: 13px; color: var(--muted); line-height: 1.6; }
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+
+<!-- MÓDULOS -->
+<div class="section" id="modulos">
+  <div class="label label-blue">Product Mapping V1.0</div>
+  <h2>6 módulos · <span style="color:var(--blue);">100+ funcionalidades</span></h2>
+  <div class="divider" style="background:linear-gradient(90deg,var(--blue),transparent);"></div>
+
+  <!-- counters -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:14px;overflow:hidden;margin-bottom:32px;">
+    <div style="background:var(--bg2);padding:24px;text-align:center;">
+      <div style="font-size:48px;font-weight:900;font-family:var(--mono);color:var(--blue);line-height:1;">6</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:6px;">Módulos</div>
+    </div>
+    <div style="background:var(--bg2);padding:24px;text-align:center;">
+      <div style="font-size:48px;font-weight:900;font-family:var(--mono);color:var(--green);line-height:1;">32</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:6px;">Submódulos</div>
+    </div>
+    <div style="background:var(--bg2);padding:24px;text-align:center;">
+      <div style="font-size:48px;font-weight:900;font-family:var(--mono);color:var(--yellow);line-height:1;">100+</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:6px;">Funcionalidades</div>
+    </div>
+  </div>
+
+  <!-- legend -->
+  <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+    <span class="label label-green">MVP — lançamento inicial</span>
+    <span class="label label-blue">Core — logo após MVP</span>
+    <span class="label label-purple">Fase 2+ — iterações futuras</span>
+  </div>
+
+  <!-- MODULE 1 — Clientes & Pets -->
+  <div style="border:1px solid rgba(52,211,153,.2);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,var(--bg2),rgba(52,211,153,.05));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(52,211,153,.12);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:22px;">🐾</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Clientes & Pets</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Cadastro, histórico e perfil dos tutores e animais</div>
+        </div>
+      </div>
+      <span class="label label-green">MVP</span>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="grid-2">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Cadastro de Clientes — MVP</div>
+          <div class="checklist">
+            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Dados pessoais e contato</span></div>
+            <div class="check-item"><div class="check-ic ci-next">→</div><span>Múltiplos pets por cliente</span></div>
+            <div class="check-item"><div class="check-ic ci-next">→</div><span>Foto e documentos</span></div>
+            <div class="check-item"><div class="check-ic ci-next">→</div><span>Busca inteligente</span></div>
+            <div class="check-item"><div class="check-ic ci-next">→</div><span>Dependentes</span></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Cadastro de Pets — MVP</div>
+          <div class="checklist">
+            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Espécie, raça, porte, idade</span></div>
+            <div class="check-item"><div class="check-ic ci-next">→</div><span>Particularidades e observações</span></div>
+            <div class="check-item"><div class="check-ic ci-next">→</div><span>Fotos do animal</span></div>
+            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Histórico de serviços</span></div>
+            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Histórico de compras</span></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Fidelização — Fase 2+</div>
+          <div class="checklist">
+            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Programa de pontos/bônus</span></div>
+            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Extrato de bônus</span></div>
+            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Estimativa próxima compra</span></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Comunicação Automática — Fase 2+</div>
+          <div class="checklist">
+            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Lembrete aniversário pet/tutor</span></div>
+            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Confirmação de agendamento</span></div>
+            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Cobrança automática · Atalho WhatsApp</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 2 — Agenda & Serviços -->
+  <div style="border:1px solid rgba(79,142,247,.2);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,var(--bg2),rgba(79,142,247,.05));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,142,247,.12);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:22px;">📅</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Agenda & Serviços</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Agendamentos, banho e tosa, hospedagem, taxi dog — 17 submódulos</div>
+        </div>
+      </div>
+      <span class="label label-green">MVP</span>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="grid-2">
+        <div class="checklist">
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Agendamentos online</span></div>
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Banho e tosa</span></div>
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Hospedagem</span></div>
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Taxi dog</span></div>
+        </div>
+        <div style="background:var(--bg3);border-radius:10px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px;">Status</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;">Módulo não iniciado. Prioridade após estabilização do CRM atual. A agenda online é um dos principais pedidos do Junior.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 3 — Vendas & PDV -->
+  <div style="border:1px solid rgba(251,191,36,.15);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(251,191,36,.1);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:22px;">🛒</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Vendas & PDV</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Frente de caixa, terminal de vendas, notas fiscais</div>
+        </div>
+      </div>
+      <span class="label label-blue">Core</span>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="checklist">
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>Frente de caixa</span></div>
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>Terminal de vendas</span></div>
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>Notas fiscais</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 4 — Estoque -->
+  <div style="border:1px solid rgba(251,191,36,.15);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(251,191,36,.1);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:22px;">📦</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Estoque</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Produtos, insumos, fornecedores e compras</div>
+        </div>
+      </div>
+      <span class="label label-blue">Core</span>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="grid-2">
+        <div class="checklist">
+          <div class="check-item"><div class="check-ic ci-done">✓</div><span>Produtos e alertas de estoque baixo</span></div>
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Insumos</span></div>
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Fornecedores</span></div>
+          <div class="check-item"><div class="check-ic ci-next">→</div><span>Gestão de compras</span></div>
+        </div>
+        <div style="background:var(--greenG);border:1px solid rgba(52,211,153,.15);border-radius:10px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">✓ Parcialmente entregue</div>
+          <div style="font-size:12px;color:var(--muted);">Módulo básico de produtos já está no CRM. Fornecedores e compras são Fase Core.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 5 — Financeiro -->
+  <div style="border:1px solid rgba(251,191,36,.15);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(251,191,36,.1);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:22px;">💰</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Financeiro</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Fluxo de caixa, contas, DRE e relatórios</div>
+        </div>
+      </div>
+      <span class="label label-blue">Core</span>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="checklist">
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>Fluxo de caixa completo</span></div>
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>Contas a pagar / a receber</span></div>
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>DRE — Demonstrativo de Resultado</span></div>
+        <div class="check-item"><div class="check-ic ci-next">→</div><span>Relatórios gerenciais</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 6 — Admin & Vet -->
+  <div style="border:1px solid rgba(167,139,250,.15);border-radius:14px;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,var(--bg2),rgba(167,139,250,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(167,139,250,.1);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:22px;">🏥</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;">Administrativo & Clínica Vet</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Usuários, permissões, prontuário veterinário, multifilial</div>
+        </div>
+      </div>
+      <span class="label label-purple">Fase 2+</span>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="checklist">
+        <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Usuários e permissões por nível</span></div>
+        <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Prontuário veterinário completo</span></div>
+        <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Multifilial — gestão de múltiplas unidades</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -392,41 +599,45 @@ p.body { font-size: 13px; color: var(--muted); line-height: 1.6; }
   <h2>Quando cada coisa <span style="color:var(--purple);">acontece</span></h2>
   <div class="divider" style="background:linear-gradient(90deg,var(--purple),transparent);"></div>
 
-  <div class="timeline-grid">
-    <div class="tl-col">
-      <div class="tl-header" style="color:var(--orange);">⚡ Esta semana</div>
+  <div class="timeline-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="tl-col" style="border-top:3px solid var(--green);">
+      <div class="tl-header" style="color:var(--green);">🐾 FASE 1 — MVP</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Abril → Junho 2026</div>
       <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--orange);">Corrigir sync CRM → Railway</div>
-        <div class="tl-item" style="border-left-color:var(--orange);">Chave Anthropic real</div>
-        <div class="tl-item" style="border-left-color:var(--orange);">Upgrade Railway Hobby plan</div>
-        <div class="tl-item" style="border-left-color:var(--orange);">Intake com Junior</div>
+        <div class="tl-item" style="border-left-color:var(--orange);">⚡ Sync CRM → Railway</div>
+        <div class="tl-item" style="border-left-color:var(--orange);">⚡ Upgrade Railway Hobby</div>
+        <div class="tl-item" style="border-left-color:var(--orange);">⚡ Evolution API + WhatsApp</div>
+        <div class="tl-item" style="border-left-color:var(--green);">Clientes & Pets completo</div>
+        <div class="tl-item" style="border-left-color:var(--green);">Busca inteligente + fotos</div>
+        <div class="tl-item" style="border-left-color:var(--green);">Agenda & Serviços (17 mód.)</div>
+        <div class="tl-item" style="border-left-color:var(--green);">Dados reais Pets Control 2.0</div>
+        <div class="tl-item" style="border-left-color:var(--green);">Domínio + go-live oficial</div>
       </div>
     </div>
-    <div class="tl-col">
-      <div class="tl-header" style="color:var(--blue);">📅 Semana 2</div>
+    <div class="tl-col" style="border-top:3px solid var(--blue);">
+      <div class="tl-header" style="color:var(--blue);">🛒 FASE 2 — Core</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Julho → Setembro 2026</div>
       <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--blue);">CRM com dados reais</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Treinamento da equipe</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Domínio personalizado</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Go-live oficial</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Vendas & PDV</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Frente de caixa</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Notas fiscais</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Estoque avançado</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Fornecedores + compras</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Financeiro completo (DRE)</div>
+        <div class="tl-item" style="border-left-color:var(--blue);">Relatórios gerenciais</div>
       </div>
     </div>
-    <div class="tl-col">
-      <div class="tl-header" style="color:var(--green);">🚀 Mês 1</div>
+    <div class="tl-col" style="border-top:3px solid var(--purple);">
+      <div class="tl-header" style="color:var(--purple);">🤖 FASE 3 — Fase 2+</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Outubro 2026+</div>
       <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--green);">Primeiro relatório IA</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Evolution API + WhatsApp</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Lembretes automáticos</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Revisão D+30</div>
-      </div>
-    </div>
-    <div class="tl-col">
-      <div class="tl-header" style="color:var(--purple);">🔮 Mês 2-3</div>
-      <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--purple);">Agendamento online</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Backup automático</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Case study agência</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Proposta de expansão</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Programa de fidelização</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Pontos e bônus</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Cobrança automática</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Prontuário veterinário</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Usuários & permissões</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Multifilial</div>
+        <div class="tl-item" style="border-left-color:var(--purple);">Case study + expansão</div>
       </div>
     </div>
   </div>
