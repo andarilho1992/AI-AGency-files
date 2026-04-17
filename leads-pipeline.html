@@ -183,6 +183,7 @@ select.filter-select {
       Importar Leads
       <input type="file" accept=".json" style="display:none;" onchange="importarJSON(this)">
     </label>
+    <button class="btn btn-secondary" id="btn-sync" onclick="syncWorker()" title="Buscar leads do Cloudflare Worker">⟳ Sync Worker</button>
     <button class="btn btn-primary" onclick="abrirModalNovo()">+ Novo Lead</button>
   </div>
 </header>
@@ -630,6 +631,51 @@ function exportarLeads() {
   a.download = 'leads-andarilho.csv';
   a.click();
   toast('CSV exportado!', 'green');
+}
+
+// ── SYNC COM CLOUDFLARE WORKER ──────────────────────────────
+const WORKER_URL = 'https://andarilho-prospecao.andarilhodigital92.workers.dev';
+const WORKER_SECRET = localStorage.getItem('worker_secret') || '';
+
+async function syncWorker() {
+  const secret = localStorage.getItem('worker_secret') ||
+    prompt('Worker secret (SYNC_SECRET):', '');
+  if (!secret) return;
+  localStorage.setItem('worker_secret', secret);
+
+  const btn = document.getElementById('btn-sync');
+  btn.textContent = '⟳ Sincronizando...';
+  btn.disabled = true;
+
+  try {
+    const r = await fetch(`${WORKER_URL}/sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-sync-secret': secret },
+      body: JSON.stringify({ leads }),
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+
+    // Merge new leads from server
+    if (data.novosParaCliente?.length) {
+      const ids = new Set(leads.map(l => l.id));
+      const novos = data.novosParaCliente.filter(l => !ids.has(l.id));
+      leads = [...novos, ...leads];
+    }
+
+    // Update statuses from server
+    if (data.mapaStatus) {
+      leads = leads.map(l => data.mapaStatus[l.id] ? { ...l, status: data.mapaStatus[l.id] } : l);
+    }
+
+    salvar(); render();
+    toast(`Sync OK — ${data.novosParaCliente?.length || 0} novos leads do worker`, 'green');
+  } catch(e) {
+    toast(`Erro no sync: ${e.message}`, 'red');
+  } finally {
+    btn.textContent = '⟳ Sync Worker';
+    btn.disabled = false;
+  }
 }
 
 // ── IMPORTAR JSON DO AGENTE ──────────────────────────────────

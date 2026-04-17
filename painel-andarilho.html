@@ -575,7 +575,7 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
           <div class="ftab" onclick="setPipeFilter('reuniao',this)">Reunião</div>
           <div class="ftab" onclick="setPipeFilter('fechado',this)">Fechados</div>
         </div>
-        <a href="pipeline-leads.html" class="btn btn-primary" style="font-size:12px;padding:7px 14px;border-radius:8px;background:var(--rust);color:#fff;border:none;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;">
+        <a href="leads-pipeline.html" class="btn btn-primary" style="font-size:12px;padding:7px 14px;border-radius:8px;background:var(--rust);color:#fff;border:none;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Abrir Pipeline Completo
         </a>
       </div>
@@ -1246,7 +1246,7 @@ function renderPipeline() {
 
   if (lista.length === 0) {
     el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted);font-size:13px;">
-      Nenhum lead encontrado.<br><a href="pipeline-leads.html" style="color:var(--rust);margin-top:8px;display:inline-block;">Abrir pipeline para adicionar leads</a>
+      Nenhum lead encontrado.<br><a href="leads-pipeline.html" style="color:var(--rust);margin-top:8px;display:inline-block;">Abrir pipeline para adicionar leads</a>
     </div>`;
     return;
   }
