@@ -243,6 +243,42 @@ input,textarea,select,button{font-family:'Inter',sans-serif}
 .meet-link:hover{background:rgba(96,165,250,.2)}
 .meet-link svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
 
+/* ── KANBAN PIPELINE ── */
+.pipe-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.pipe-search{flex:1;min-width:160px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 12px;font-size:13px;color:var(--text);outline:none}
+.pipe-search:focus{border-color:var(--border2)}
+.pipe-select{height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 10px;color:var(--text);font-size:13px;outline:none;cursor:pointer}
+.pipe-select option{background:var(--bg2)}
+.kanban-wrap{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;min-height:380px}
+.k-col{min-width:215px;flex-shrink:0}
+.k-col-hd{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:9px 9px 0 0;border:1px solid var(--border);border-bottom:none;background:var(--card2)}
+.k-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.k-col-count{font-size:10px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:1px 7px;color:var(--muted)}
+.k-col-body{border:1px solid var(--border);border-top:none;border-radius:0 0 9px 9px;background:var(--card2);padding:7px;display:flex;flex-direction:column;gap:7px;min-height:160px;transition:background .15s,border-color .15s}
+.k-col-body.drag-over{background:var(--rust-dim);border-color:rgba(193,61,20,.3)}
+[data-kcol="encontrado"] .k-col-hd{border-top:2px solid var(--muted)}
+[data-kcol="contatado"]  .k-col-hd{border-top:2px solid var(--blue)}
+[data-kcol="respondeu"]  .k-col-hd{border-top:2px solid var(--yellow)}
+[data-kcol="video"]      .k-col-hd{border-top:2px solid #a855f7}
+[data-kcol="reuniao"]    .k-col-hd{border-top:2px solid #06b6d4}
+[data-kcol="fechado"]    .k-col-hd{border-top:2px solid var(--green)}
+.k-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 11px;cursor:grab;transition:border-color .15s,transform .15s}
+.k-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.k-card.dragging{opacity:.4;cursor:grabbing}
+.k-card-top{display:flex;align-items:flex-start;gap:5px;margin-bottom:4px}
+.k-card-name{font-size:12px;font-weight:700;flex:1;line-height:1.3}
+.k-card-del{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;transition:color .12s}
+.k-card-del:hover{color:var(--red)}
+.k-card-nicho{font-size:9px;padding:2px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.k-card-nota{font-size:11px;color:var(--muted2);line-height:1.4;margin-bottom:6px}
+.k-card-acts{display:flex;gap:4px;flex-wrap:wrap}
+.k-card-date{font-size:10px;color:var(--muted);margin-top:5px}
+.k-empty{border:1px dashed var(--border);border-radius:7px;padding:18px;text-align:center;color:var(--muted);font-size:12px}
+.k-btn{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all .15s}
+.k-btn-wa{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+.k-btn-ig{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+.k-btn-crm{background:var(--rust-dim);color:var(--gold);border:1px solid rgba(193,61,20,.25)}
+
 /* ── GCAL LAYOUT ── */
 .reu-split{display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start}
 .reu-left{min-width:0}
@@ -563,23 +599,32 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
 
     <!-- PIPELINE -->
     <div id="s-pipeline" class="section">
-      <div class="page-hd">
-        <div class="page-title">Pipeline de Leads</div>
-        <div class="page-sub">Leads do sistema de prospecção — converta em clientes com um clique</div>
-      </div>
-      <div class="sec-hd">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <div class="ftab active" onclick="setPipeFilter('todos',this)">Todos</div>
-          <div class="ftab" onclick="setPipeFilter('encontrado',this)">Encontrados</div>
-          <div class="ftab" onclick="setPipeFilter('respondeu',this)">Responderam</div>
-          <div class="ftab" onclick="setPipeFilter('reuniao',this)">Reunião</div>
-          <div class="ftab" onclick="setPipeFilter('fechado',this)">Fechados</div>
+      <div class="page-hd" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div>
+          <div class="page-title">Pipeline de Leads</div>
+          <div class="page-sub">Arraste os cards entre colunas · clique para editar · converta em cliente com um clique</div>
         </div>
-        <a href="leads-pipeline.html" class="btn btn-primary" style="font-size:12px;padding:7px 14px;border-radius:8px;background:var(--rust);color:#fff;border:none;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Abrir Pipeline Completo
-        </a>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" id="btn-sync" style="font-size:12px;padding:7px 12px" onclick="syncWorker()">⟳ Sync Worker</button>
+          <button class="btn btn-primary" style="font-size:12px;padding:7px 14px" onclick="pipeAbrirNovo()">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Novo Lead
+          </button>
+        </div>
       </div>
-      <div id="pipe-list" style="margin-top:8px;"></div>
+      <div class="pipe-toolbar">
+        <input class="pipe-search" placeholder="Buscar nome, cidade, nicho..." oninput="pipeSearch(this.value)">
+        <select class="pipe-select" onchange="pipeFilterNicho(this.value)">
+          <option value="">Todos os nichos</option>
+          <option value="pet shop">Pet Shop</option>
+          <option value="clínica">Clínica</option>
+          <option value="restaurante">Restaurante</option>
+          <option value="salão">Salão</option>
+          <option value="academia">Academia</option>
+          <option value="autônomo">Autônomo</option>
+          <option value="loja">Loja</option>
+        </select>
+      </div>
+      <div class="kanban-wrap" id="pipe-kanban"></div>
     </div>
 
     <!-- ANOTAÇÕES -->
@@ -613,6 +658,85 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
 </div>
 
 <div class="toast-wrap" id="toasts"></div>
+
+<!-- PIPELINE MODAL — NOVO LEAD -->
+<div class="overlay" id="pipe-overlay-novo" onclick="if(event.target===this)pipeFecharNovo()">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">Novo Lead</div>
+      <div class="modal-x" onclick="pipeFecharNovo()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    </div>
+    <div class="modal-body">
+      <div class="form-2">
+        <div><label>Nome do negócio *</label><input class="fi" id="pf-nome" placeholder="Clínica da Dra. Ana"/></div>
+        <div><label>Nicho *</label><select class="fs" id="pf-nicho">
+          <option value="">Seleciona...</option>
+          <option value="pet shop">Pet Shop</option><option value="clínica">Clínica</option>
+          <option value="restaurante">Restaurante</option><option value="salão">Salão</option>
+          <option value="academia">Academia</option><option value="autônomo">Autônomo</option>
+          <option value="loja">Loja</option><option value="outro">Outro</option>
+        </select></div>
+      </div>
+      <div class="form-2">
+        <div><label>WhatsApp</label><input class="fi" id="pf-whatsapp" placeholder="5511999999999"/></div>
+        <div><label>Cidade</label><input class="fi" id="pf-cidade" placeholder="São Paulo"/></div>
+      </div>
+      <div class="form-row"><label>Instagram / Site</label><input class="fi" id="pf-site" placeholder="@perfil ou site.com.br"/></div>
+      <div class="form-row"><label>Problema observado</label><textarea class="ft" id="pf-problema" style="min-height:60px" placeholder="O que você percebeu que indica dor..."></textarea></div>
+      <div class="form-row"><label>Mensagem de primeiro contato</label><textarea class="ft" id="pf-mensagem" placeholder="Escreve aqui a mensagem que vai mandar..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="pipeFecharNovo()">Cancelar</button>
+      <button class="btn btn-primary" onclick="pipeSalvarNovo()">Salvar Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- PIPELINE MODAL — DETALHE -->
+<div class="overlay" id="pipe-overlay-det" onclick="if(event.target===this)pipeFecharDet()">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title" id="pd-nome"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px" id="pd-sub"></div>
+      </div>
+      <div class="modal-x" onclick="pipeFecharDet()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row" style="margin-bottom:16px">
+        <label style="margin-bottom:8px">Status</label>
+        <div id="pd-steps" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+      </div>
+      <div class="form-2">
+        <div><label>WhatsApp</label><input class="fi" id="pd-whatsapp" placeholder="5511999999999" onchange="pipeSalvarCampo('whatsapp',this.value)"/></div>
+        <div><label>Instagram</label><input class="fi" id="pd-instagram" placeholder="@perfil" onchange="pipeSalvarCampo('instagram',this.value)"/></div>
+      </div>
+      <div class="form-2">
+        <div><label>Site</label><input class="fi" id="pd-site" placeholder="site.com.br" onchange="pipeSalvarCampo('site',this.value)"/></div>
+        <div><label>Cidade</label><input class="fi" id="pd-cidade" placeholder="São Paulo" onchange="pipeSalvarCampo('cidade',this.value)"/></div>
+      </div>
+      <div class="form-row"><label>Problema observado</label><textarea class="ft" id="pd-problema" style="min-height:60px" onchange="pipeSalvarCampo('problema',this.value)"></textarea></div>
+      <div class="form-row"><label>Mensagem de primeiro contato</label><textarea class="ft" id="pd-mensagem" onchange="pipeSalvarCampo('mensagem',this.value)"></textarea></div>
+      <div class="form-row" id="pd-presenca-wrap" style="display:none">
+        <label>Presença Digital</label>
+        <div id="pd-presenca" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted2);line-height:1.8"></div>
+      </div>
+      <div class="form-row"><label>Notas / Follow-up</label><textarea class="ft" id="pd-notas" placeholder="Anotações, datas de follow-up..." onchange="pipeSalvarCampo('notas',this.value)"></textarea></div>
+    </div>
+    <div class="modal-ft" style="justify-content:space-between">
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="font-size:12px" id="pd-btn-wa" onclick="pipeAbrirWA()">WhatsApp</button>
+        <button class="btn btn-ghost" style="font-size:12px" id="pd-btn-ig" onclick="pipeAbrirIG()">Instagram</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="pipeCopiarMsg()">Copiar msg</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="pipeDeletarAtual()">Remover</button>
+        <button class="btn btn-primary" style="font-size:12px" id="pd-btn-crm" onclick="pipeConverterCRM()">→ CRM</button>
+        <button class="btn btn-ghost" onclick="pipeFecharDet()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ── DB ──────────────────────────────────────────────────
@@ -678,7 +802,8 @@ function nav(s){
 
 function render(s){
   ({ dashboard:renderDash, clientes:renderCli, projetos:renderProj,
-     propostas:renderProp, faturas:renderFat, reunioes:renderReu, anotacoes:renderAno }[s] || (()=>{}))();
+     propostas:renderProp, faturas:renderFat, reunioes:renderReu, anotacoes:renderAno,
+     pipeline:pipeRender }[s] || (()=>{}))();
 }
 
 function setFilter(sec, val, el){
@@ -865,8 +990,201 @@ function renderFat(list){
     </div>`).join('');
 }
 
+// ── PIPELINE KANBAN ─────────────────────────────────────
+const PIPE_KEY = 'pipeline_leads';
+let pipeLeads      = [];
+let pipeSearchVal  = '';
+let pipeNichoVal   = '';
+let pipeCurrent    = null;
+let pipeDragId     = null;
+
+const PIPE_COLS = [
+  { status:'encontrado', label:'Encontrado',  cor:'var(--muted)' },
+  { status:'contatado',  label:'Contatado',   cor:'var(--blue)' },
+  { status:'respondeu',  label:'Respondeu',   cor:'var(--yellow)' },
+  { status:'video',      label:'Vídeo',       cor:'#a855f7' },
+  { status:'reuniao',    label:'Reunião',     cor:'#06b6d4' },
+  { status:'fechado',    label:'Fechado ✓',  cor:'var(--green)' },
+];
+const NICHO_CLS = { 'pet shop':'nicho-pet','clínica':'nicho-clinica','salão':'nicho-salao','restaurante':'nicho-restaurante','academia':'nicho-academia','autônomo':'nicho-autonomo','loja':'nicho-loja' };
+
+function pipeLoad()  { try { pipeLeads = JSON.parse(localStorage.getItem(PIPE_KEY)||'[]'); } catch(e) { pipeLeads=[]; } }
+function pipeSave()  { localStorage.setItem(PIPE_KEY, JSON.stringify(pipeLeads)); }
+
+function pipeRender() {
+  pipeLoad();
+  // migrate old leads
+  pipeLeads = pipeLeads.map(l=>({notas:'',mensagem:'',instagram:'',canal:'',presencaDigital:'',...l}));
+
+  const badge  = R('b-pipe');
+  const ativos = pipeLeads.filter(l=>['respondeu','reuniao'].includes(l.status)).length;
+  badge.textContent = ativos;
+  badge.style.display = ativos > 0 ? 'inline-block' : 'none';
+
+  const kanban = R('pipe-kanban');
+  if (!kanban) return;
+
+  const txt = pipeSearchVal.toLowerCase();
+  const filtered = pipeLeads.filter(l => {
+    const matchTxt = !txt || l.nome.toLowerCase().includes(txt) || (l.cidade||'').toLowerCase().includes(txt) || l.nicho.toLowerCase().includes(txt);
+    const matchNicho = !pipeNichoVal || l.nicho === pipeNichoVal;
+    return matchTxt && matchNicho;
+  });
+
+  kanban.innerHTML = PIPE_COLS.map(col => {
+    const cards = filtered.filter(l => l.status === col.status);
+    return `<div class="k-col" data-kcol="${col.status}">
+      <div class="k-col-hd">
+        <span class="k-col-title" style="color:${col.cor}">${col.label}</span>
+        <span class="k-col-count">${cards.length}</span>
+      </div>
+      <div class="k-col-body"
+        ondragover="pipeDragOver(event)"
+        ondragleave="pipeDragLeave(event)"
+        ondrop="pipeDrop(event,'${col.status}')">
+        ${cards.length===0 ? '<div class="k-empty">Solte aqui</div>' : cards.map(pipeRenderCard).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pipeRenderCard(l) {
+  const nc = NICHO_CLS[l.nicho]||'nicho-outro';
+  const nota = l.problema ? l.problema.slice(0,65)+(l.problema.length>65?'...':'') : '';
+  return `<div class="k-card" draggable="true" data-pid="${l.id}"
+    onclick="pipeAbrirDet('${l.id}')"
+    ondragstart="pipeDragStart(event,'${l.id}')"
+    ondragend="pipeDragEnd(event)">
+    <div class="k-card-top">
+      <div class="k-card-name">${l.nome}</div>
+      <div class="k-card-nicho ${nc}">${l.nicho}</div>
+      <button class="k-card-del" onclick="event.stopPropagation();pipeDel('${l.id}')">×</button>
+    </div>
+    ${nota?`<div class="k-card-nota">${nota}</div>`:''}
+    <div class="k-card-acts">
+      ${l.whatsapp?`<button class="k-btn k-btn-wa" onclick="event.stopPropagation();window.open('https://wa.me/${l.whatsapp?l.whatsapp.replace(/\\D/g,''):''}','_blank')">WA</button>`:''}
+      ${l.instagram&&!l.whatsapp?`<button class="k-btn k-btn-ig" onclick="event.stopPropagation();window.open('https://instagram.com/${(l.instagram||'').replace('@','')}','_blank')">IG</button>`:''}
+      ${!l.convertido?`<button class="k-btn k-btn-crm" onclick="event.stopPropagation();pipeConverterCRMById('${l.id}')">→ CRM</button>`:`<span style="font-size:10px;color:var(--green)">✓ CRM</span>`}
+    </div>
+    <div class="k-card-date">${l.cidade||''} · ${l.criadoEm?new Date(l.criadoEm).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}):''}</div>
+  </div>`;
+}
+
+// drag
+function pipeDragStart(e,id){ pipeDragId=id; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function pipeDragEnd(e){ e.currentTarget.classList.remove('dragging'); document.querySelectorAll('.k-col-body').forEach(c=>c.classList.remove('drag-over')); }
+function pipeDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function pipeDragLeave(e){ e.currentTarget.classList.remove('drag-over'); }
+function pipeDrop(e,status){
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  if(!pipeDragId) return;
+  const l = pipeLeads.find(x=>x.id===pipeDragId);
+  if(l && l.status!==status){ l.status=status; pipeSave(); pipeRender(); toast(PIPE_COLS.find(c=>c.status===status)?.label+' ✓'); }
+  pipeDragId=null;
+}
+
+// filters
+function pipeSearch(v){ pipeSearchVal=v; pipeRender(); }
+function pipeFilterNicho(v){ pipeNichoVal=v; pipeRender(); }
+
+// novo
+function pipeAbrirNovo(){ R('pipe-overlay-novo').classList.add('open'); setTimeout(()=>{ const f=document.getElementById('pf-nome'); if(f)f.focus(); },60); }
+function pipeFecharNovo(){ R('pipe-overlay-novo').classList.remove('open'); ['pf-nome','pf-nicho','pf-whatsapp','pf-cidade','pf-site','pf-problema','pf-mensagem'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; }); }
+function pipeSalvarNovo(){
+  const nome  = (document.getElementById('pf-nome')||{}).value?.trim();
+  const nicho = (document.getElementById('pf-nicho')||{}).value;
+  if(!nome||!nicho){ toast('Nome e nicho obrigatórios',false); return; }
+  pipeLeads.unshift({ id:uid(), nome, nicho,
+    whatsapp: document.getElementById('pf-whatsapp').value.trim(),
+    cidade:   document.getElementById('pf-cidade').value.trim(),
+    site:     document.getElementById('pf-site').value.trim(),
+    instagram:'', canal:'', presencaDigital:'', notas:'',
+    problema: document.getElementById('pf-problema').value.trim(),
+    mensagem: document.getElementById('pf-mensagem').value.trim(),
+    status:   'encontrado', criadoEm: new Date().toISOString(),
+  });
+  pipeSave(); pipeFecharNovo(); pipeRender(); toast('Lead adicionado!');
+}
+
+// detalhe
+function pipeAbrirDet(id){
+  pipeCurrent = pipeLeads.find(l=>l.id===id);
+  if(!pipeCurrent) return;
+  const l = pipeCurrent;
+  document.getElementById('pd-nome').textContent = l.nome;
+  document.getElementById('pd-sub').textContent  = `${l.nicho}${l.cidade?' · '+l.cidade:''}`;
+  document.getElementById('pd-whatsapp').value   = l.whatsapp   ||'';
+  document.getElementById('pd-instagram').value  = l.instagram  ||'';
+  document.getElementById('pd-site').value       = l.site       ||'';
+  document.getElementById('pd-cidade').value     = l.cidade     ||'';
+  document.getElementById('pd-problema').value   = l.problema   ||'';
+  document.getElementById('pd-mensagem').value   = l.mensagem   ||'';
+  document.getElementById('pd-notas').value      = l.notas      ||'';
+  const pw = document.getElementById('pd-presenca-wrap');
+  if(l.presencaDigital){ pw.style.display=''; document.getElementById('pd-presenca').innerHTML = l.presencaDigital.split(' | ').map(p=>`<div>· ${p}</div>`).join(''); }
+  else pw.style.display='none';
+  const bWA=document.getElementById('pd-btn-wa'); const bIG=document.getElementById('pd-btn-ig');
+  bWA.style.display=l.whatsapp?'':'none'; bIG.style.display=l.instagram?'':'none';
+  document.getElementById('pd-btn-crm').textContent = l.convertido ? '✓ No CRM' : '→ CRM';
+  const steps = document.getElementById('pd-steps');
+  steps.innerHTML = PIPE_COLS.map(c=>`<button onclick="pipeMudarStatus('${c.status}')"
+    style="padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid ${l.status===c.status?c.cor:'var(--border)'};background:${l.status===c.status?'rgba(255,255,255,.05)':'transparent'};color:${l.status===c.status?c.cor:'var(--muted2)'};">${c.label}</button>`).join('');
+  R('pipe-overlay-det').classList.add('open');
+}
+function pipeFecharDet(){ R('pipe-overlay-det').classList.remove('open'); pipeCurrent=null; }
+function pipeSalvarCampo(k,v){ if(!pipeCurrent)return; pipeCurrent[k]=v; pipeSave(); pipeRender(); }
+function pipeMudarStatus(s){ if(!pipeCurrent)return; pipeCurrent.status=s; pipeSave(); pipeAbrirDet(pipeCurrent.id); pipeRender(); toast('Status atualizado'); }
+function pipeCopiarMsg(){ const m=document.getElementById('pd-mensagem')?.value; if(m){navigator.clipboard.writeText(m);toast('Mensagem copiada');}else toast('Sem mensagem',false); }
+function pipeAbrirWA(){ if(pipeCurrent?.whatsapp)window.open(`https://wa.me/${pipeCurrent.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent(pipeCurrent.mensagem||'')}`, '_blank'); }
+function pipeAbrirIG(){ const ig=(pipeCurrent?.instagram||'').replace('@',''); if(ig)window.open(`https://instagram.com/${ig}/`,'_blank'); }
+function pipeDel(id){ if(!confirm('Remover lead?'))return; pipeLeads=pipeLeads.filter(l=>l.id!==id); pipeSave(); pipeRender(); toast('Lead removido'); }
+function pipeDeletarAtual(){ if(!pipeCurrent)return; pipeDel(pipeCurrent.id); pipeFecharDet(); }
+
+function pipeConverterCRMById(id){ const l=pipeLeads.find(x=>x.id===id); if(l) _pipeConverterCRM(l); }
+function pipeConverterCRM(){ if(pipeCurrent) _pipeConverterCRM(pipeCurrent); pipeFecharDet(); }
+function _pipeConverterCRM(lead){
+  const ja = D.clientes.find(c=>c.nome===lead.nome||(lead.whatsapp&&c.telefone===lead.whatsapp));
+  let clienteId;
+  if(ja){ clienteId=ja.id; toast('Já existe no CRM — proposta vinculada'); }
+  else {
+    clienteId = uid();
+    D.clientes.push({ id:clienteId, nome:lead.nome, empresa:lead.nome, email:'', telefone:lead.whatsapp||'',
+      notas: [lead.nicho?`Nicho: ${lead.nicho}`:'', lead.cidade?`Cidade: ${lead.cidade}`:'', lead.problema?`Dor: ${lead.problema}`:'', '\nOrigem: Pipeline de Prospecção'].filter(Boolean).join('\n') });
+    toast(`"${lead.nome}" criado no CRM`);
+  }
+  if(lead.problema && !ja){
+    D.propostas.push({ id:uid(), titulo:`Automação — ${lead.nome}`, clienteId, status:'Rascunho', valor:'', data:new Date().toISOString().slice(0,10), notas:lead.problema });
+  }
+  lead.convertido=true; lead.status='fechado';
+  pipeSave(); pipeSave(); save();
+  R('b-cli').textContent = D.clientes.length;
+  pipeRender();
+  if(cur!=='dashboard') renderDash();
+  logAct(`Lead <strong>${lead.nome}</strong> convertido para cliente`,'var(--green)');
+}
+
+// worker sync
+const WORKER_URL = 'https://andarilho-prospecao.andarilhodigital92.workers.dev';
+async function syncWorker(){
+  const secret = localStorage.getItem('worker_secret') || prompt('Worker secret (SYNC_SECRET):','');
+  if(!secret) return;
+  localStorage.setItem('worker_secret', secret);
+  const btn = R('btn-sync'); if(btn){ btn.textContent='⟳ Sincronizando...'; btn.disabled=true; }
+  try {
+    const r = await fetch(`${WORKER_URL}/sync`,{ method:'POST', headers:{'Content-Type':'application/json','x-sync-secret':secret}, body:JSON.stringify({leads:pipeLeads}) });
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    if(data.novosParaCliente?.length){ const ids=new Set(pipeLeads.map(l=>l.id)); pipeLeads=[...data.novosParaCliente.filter(l=>!ids.has(l.id)),...pipeLeads]; }
+    if(data.mapaStatus) pipeLeads=pipeLeads.map(l=>data.mapaStatus[l.id]?{...l,status:data.mapaStatus[l.id]}:l);
+    pipeSave(); pipeRender();
+    toast(`Sync OK · ${data.novosParaCliente?.length||0} novos leads`);
+  } catch(e){ toast(`Erro: ${e.message}`,false); }
+  finally { if(btn){ btn.textContent='⟳ Sync Worker'; btn.disabled=false; } }
+}
+
 // ── GCAL ────────────────────────────────────────────────
 const GCAL_KEY = 'ad_gcal_url';
+
 
 function gcalUrl(r) {
   if(!r.data) return null;
@@ -1214,119 +1532,6 @@ async function importWhatsAppLeads() {
   }
 }
 
-// ── PIPELINE ────────────────────────────────────────────
-const PIPE_KEY = 'pipeline_leads';
-let pipeFilter = 'todos';
-
-function loadPipeline() {
-  try { return JSON.parse(localStorage.getItem(PIPE_KEY) || '[]'); } catch(e) { return []; }
-}
-
-function savePipeline(leads) {
-  localStorage.setItem(PIPE_KEY, JSON.stringify(leads));
-}
-
-function setPipeFilter(f, el) {
-  pipeFilter = f;
-  document.querySelectorAll('#s-pipeline .ftab').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderPipeline();
-}
-
-function renderPipeline() {
-  const leads = loadPipeline();
-  const badge = R('b-pipe');
-  const ativos = leads.filter(l => ['respondeu','reuniao'].includes(l.status)).length;
-  badge.textContent = ativos;
-  badge.style.display = ativos > 0 ? 'inline-block' : 'none';
-
-  const lista = leads.filter(l => pipeFilter === 'todos' || l.status === pipeFilter);
-  const el = R('pipe-list');
-  if (!el) return;
-
-  if (lista.length === 0) {
-    el.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted);font-size:13px;">
-      Nenhum lead encontrado.<br><a href="leads-pipeline.html" style="color:var(--rust);margin-top:8px;display:inline-block;">Abrir pipeline para adicionar leads</a>
-    </div>`;
-    return;
-  }
-
-  const STATUS_LABEL = { encontrado:'Encontrado', contatado:'Contatado', respondeu:'Respondeu', video:'Vídeo enviado', reuniao:'Reunião', fechado:'Fechado' };
-  const STATUS_COLOR = { encontrado:'var(--muted)', contatado:'var(--blue)', respondeu:'var(--yellow)', video:'#a855f7', reuniao:'#06b6d4', fechado:'var(--green)' };
-
-  el.innerHTML = lista.map(lead => `
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;">
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-          <span style="font-size:13px;font-weight:700;">${lead.nome}</span>
-          <span style="font-size:10px;background:var(--rust-dim);color:#ff8c69;border:1px solid rgba(193,61,20,.2);border-radius:20px;padding:1px 8px;">${lead.nicho}</span>
-          <span style="font-size:10px;font-weight:700;color:${STATUS_COLOR[lead.status] || 'var(--muted)'};">${STATUS_LABEL[lead.status] || lead.status}</span>
-          ${lead.convertido ? '<span style="font-size:10px;color:var(--green);">✓ No CRM</span>' : ''}
-        </div>
-        <div style="font-size:12px;color:var(--muted2);">${lead.cidade || ''} ${lead.dor ? '· ' + lead.dor : ''}</div>
-        ${lead.score > 0 ? `<div style="display:flex;align-items:center;gap:6px;margin-top:6px;"><div style="width:80px;height:3px;background:var(--bg3);border-radius:2px;"><div style="width:${lead.score*10}%;height:100%;background:var(--rust);border-radius:2px;"></div></div><span style="font-size:10px;color:var(--muted2);">Dor ${lead.score}/10</span></div>` : ''}
-      </div>
-      <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;">
-        ${lead.whatsapp ? `<a href="https://wa.me/${lead.whatsapp.replace(/\D/g,'')}" target="_blank" style="font-size:11px;padding:5px 10px;border-radius:7px;background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.2);text-decoration:none;font-weight:600;">WhatsApp</a>` : ''}
-        ${!lead.convertido ? `<button onclick="converterParaCRM('${lead.id}')" style="font-size:11px;padding:5px 10px;border-radius:7px;background:var(--rust-dim);color:var(--gold);border:1px solid rgba(193,61,20,.25);cursor:pointer;font-weight:700;">→ CRM</button>` : ''}
-      </div>
-    </div>`).join('');
-}
-
-function converterParaCRM(leadId) {
-  const leads = loadPipeline();
-  const lead = leads.find(l => l.id === leadId);
-  if (!lead) return;
-
-  // Verifica se já existe cliente com mesmo nome ou telefone
-  const jaExiste = D.clientes.find(c => c.nome === lead.nome || (lead.whatsapp && c.telefone === lead.whatsapp));
-  let clienteId;
-
-  if (jaExiste) {
-    clienteId = jaExiste.id;
-    toast('Cliente já existe no CRM — proposta vinculada', true);
-  } else {
-    clienteId = uid();
-    D.clientes.push({
-      id: clienteId,
-      nome: lead.nome,
-      empresa: lead.nome,
-      email: '',
-      telefone: lead.whatsapp || '',
-      notas: [
-        `Nicho: ${lead.nicho}`,
-        lead.cidade ? `Cidade: ${lead.cidade}` : '',
-        lead.dor ? `Dor: ${lead.dor}` : '',
-        lead.analise ? `\nAnálise:\n${lead.analise}` : '',
-        `\nOrigem: Pipeline de Prospecção`
-      ].filter(Boolean).join('\n')
-    });
-    toast(`Cliente "${lead.nome}" criado no CRM`, true);
-  }
-
-  // Cria proposta rascunho se tiver análise
-  if (lead.analise && !jaExiste) {
-    D.propostas.push({
-      id: uid(),
-      titulo: `Automação — ${lead.nome}`,
-      clienteId,
-      status: 'Rascunho',
-      valor: '',
-      data: new Date().toISOString().slice(0,10),
-      notas: lead.analise
-    });
-  }
-
-  // Marca como convertido no pipeline
-  lead.convertido = true;
-  lead.status = 'fechado';
-  savePipeline(leads);
-
-  save();
-  R('b-cli').textContent = D.clientes.length;
-  renderPipeline();
-  logAct(`Lead <strong>${lead.nome}</strong> convertido para cliente`, 'var(--green)');
-}
 
 // ── SEED PETS GO ────────────────────────────────────────
 function seedPetsGo() {
@@ -1456,7 +1661,7 @@ PENDENTE ❌
 load();
 seedPetsGo();
 renderDash();
-renderPipeline();
+pipeRender();
 </script>
 </body>
 </html>
