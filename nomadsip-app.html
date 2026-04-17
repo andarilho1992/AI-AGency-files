@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NomadSip — App UI Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:  #0F1A14;
+  --deep:    #1F3528;
+  --sage:    #4A6B57;
+  --gold:    #C4A563;
+  --cream:   #F5EDD8;
+  --espresso:#1A0F08;
+  /* App UI colors */
+  --app-bg:      #0D1610;
+  --app-surface: #162019;
+  --app-card:    #1C2B21;
+  --app-border:  rgba(196,165,99,.12);
+  --app-text:    #F0EBE0;
+  --app-sub:     rgba(240,235,224,.42);
+  --app-gold:    #C4A563;
+  --app-sage:    #6B9B7A;
+  --app-red:     #E07070;
+  --app-green:   #7ABF8E;
+}
+
+html { scroll-behavior: smooth; background: var(--forest); }
+body { font-family: 'DM Sans', sans-serif; color: var(--cream); -webkit-font-smoothing: antialiased; }
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal.visible { opacity:1; transform:none; }
+.rv1{transition-delay:.1s}.rv2{transition-delay:.2s}.rv3{transition-delay:.3s}.rv4{transition-delay:.4s}
+
+/* ── PROGRESS BAR ── */
+#spb{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--sage),var(--gold));z-index:9999;width:0%;pointer-events:none;}
+
+/* ── HEADER ── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;height:60px;
+  background:rgba(13,22,16,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(196,165,99,.1);
+}
+.h-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:8px;}
+.h-logo span{color:rgba(245,237,216,.3);font-weight:400;font-size:14px;}
+.h-tag{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,237,216,.25);}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1120px;margin:0 auto;padding:0 56px;}
+.sec-label{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.sec-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4.5vw,60px);font-weight:600;line-height:1.05;letter-spacing:-.01em;}
+.sec-h em{font-style:italic;color:var(--gold);}
+.sec-body{font-size:16px;line-height:1.8;color:rgba(245,237,216,.42);max-width:520px;margin-top:18px;}
+.divider{width:32px;height:2px;border-radius:1px;background:var(--gold);margin:20px 0;}
+
+/* ══════════════════════════
+   PHONE SHELL
+══════════════════════════ */
+.phone-shell{
+  width:280px;
+  background:#0A0A0A;
+  border-radius:48px;
+  padding:14px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08),
+    0 40px 100px rgba(0,0,0,.7),
+    0 0 0 10px #111,
+    0 0 0 11px rgba(255,255,255,.05);
+  flex-shrink:0;
+  position:relative;
+}
+.phone-notch{
+  width:88px;height:28px;
+  background:#0A0A0A;
+  border-radius:0 0 20px 20px;
+  margin:0 auto -4px;
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;
+}
+.notch-camera{width:10px;height:10px;border-radius:50%;background:#1a1a1a;border:1px solid rgba(255,255,255,.06);}
+.notch-speaker{width:36px;height:5px;border-radius:3px;background:#1a1a1a;}
+.phone-screen{
+  background:var(--app-bg);
+  border-radius:36px;
+  overflow:hidden;
+  height:560px;
+  position:relative;
+}
+.phone-status{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px 4px;
+  font-size:10px;font-weight:600;color:var(--app-text);
+}
+.status-time{font-size:12px;font-weight:700;}
+.status-icons{display:flex;align-items:center;gap:4px;font-size:9px;}
+
+/* ══════════════════════════
+   SCREEN CONTENT BASE
+══════════════════════════ */
+.screen-scroll{height:calc(100% - 48px);overflow:hidden;display:flex;flex-direction:column;}
+.screen-inner{flex:1;overflow-y:auto;scrollbar-width:none;}
+.screen-inner::-webkit-scrollbar{display:none;}
+
+/* ══════════════════════════
+   BOTTOM NAV
+══════════════════════════ */
+.bottom-nav{
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px 0 12px;
+  background:rgba(22,32,25,.97);
+  border-top:1px solid rgba(196,165,99,.08);
+}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
+.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
+.nav-label{font-size:8px;font-weight:500;letter-spacing:.04em;}
+.nav-item.active .nav-label{color:var(--app-gold);}
+.nav-item:not(.active) .nav-label{color:rgba(240,235,224,.3);}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--app-gold);margin-top:1px;}
+
+/* ══════════════════════════
+   SCREEN 1 — DISCOVER
+══════════════════════════ */
+.discover-header{
+  padding:16px 18px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.discover-greeting{font-size:10px;color:var(--app-sub);letter-spacing:.06em;}
+.discover-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--app-text);line-height:1.1;}
+.discover-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--deep));border:1.5px solid var(--app-gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--app-gold);}
+
+/* Map area */
+.map-area{
+  margin:0 14px;border-radius:16px;overflow:hidden;
+  height:140px;background:var(--app-card);
+  position:relative;border:1px solid var(--app-border);
+}
+.map-bg{
+  width:100%;height:100%;
+  background:
+    repeating-linear-gradient(0deg,rgba(196,165,99,.04) 0px,rgba(196,165,99,.04) 1px,transparent 1px,transparent 32px),
+    repeating-linear-gradient(90deg,rgba(196,165,99,.04) 0px,rgba(196,165,99,.04) 1px,transparent 1px,transparent 32px),
+    var(--app-card);
+  position:relative;
+}
+.map-road-h{position:absolute;left:0;right:0;top:55%;height:18px;background:rgba(74,107,87,.18);border-top:1px solid rgba(196,165,99,.08);border-bottom:1px solid rgba(196,165,99,.08);}
+.map-road-v{position:absolute;top:0;bottom:0;left:38%;width:14px;background:rgba(74,107,87,.18);border-left:1px solid rgba(196,165,99,.08);border-right:1px solid rgba(196,165,99,.08);}
+.map-pin{position:absolute;display:flex;flex-direction:column;align-items:center;}
+.map-pin-dot{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.4);}
+.map-pin-dot svg{transform:rotate(45deg);}
+.map-pin-label{font-size:7px;font-weight:700;color:var(--app-text);margin-top:3px;white-space:nowrap;background:rgba(22,32,25,.9);padding:2px 5px;border-radius:3px;}
+.map-you{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--app-gold);border:2px solid rgba(245,237,216,.8);box-shadow:0 0 0 4px rgba(196,165,99,.2);}
+
+/* Nearby list */
+.nearby-title{padding:12px 18px 8px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--app-sub);}
+.cafe-card{
+  margin:0 14px 10px;
+  background:var(--app-card);
+  border-radius:14px;
+  padding:12px 14px;
+  border:1px solid var(--app-border);
+  display:flex;align-items:center;gap:12px;
+}
+.cafe-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cafe-name{font-size:12px;font-weight:700;color:var(--app-text);margin-bottom:2px;}
+.cafe-dist{font-size:10px;color:var(--app-sub);}
+.cafe-badges{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.badge-small{font-size:8px;font-weight:600;padding:2px 7px;border-radius:6px;}
+.badge-wifi{background:rgba(107,155,122,.15);color:var(--app-sage);border:1px solid rgba(107,155,122,.2);}
+.badge-quiet{background:rgba(196,165,99,.1);color:var(--app-gold);border:1px solid rgba(196,165,99,.18);}
+.badge-busy{background:rgba(224,112,112,.1);color:var(--app-red);border:1px solid rgba(224,112,112,.18);}
+.badge-outlet{background:rgba(240,235,224,.06);color:rgba(240,235,224,.5);border:1px solid rgba(240,235,224,.1);}
+.cafe-arrow{margin-left:auto;color:var(--app-sub);font-size:14px;flex-shrink:0;}
+
+/* ══════════════════════════
+   SCREEN 2 — MENU
+══════════════════════════ */
+.menu-hero{
+  height:90px;
+  background:linear-gradient(180deg,var(--deep) 0%,rgba(31,53,40,.6) 100%);
+  position:relative;
+  overflow:hidden;
+  display:flex;align-items:flex-end;
+  padding:12px 16px;
+}
+.menu-hero::before{
+  content:'GS';
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:700;
+  color:rgba(196,165,99,.08);letter-spacing:.05em;
+}
+.menu-hero-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--app-text);position:relative;z-index:1;}
+.menu-hero-sub{font-size:9px;color:var(--app-gold);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;position:relative;z-index:1;}
+
+.table-chip{
+  margin:12px 16px 0;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(196,165,99,.1);border:1px solid rgba(196,165,99,.2);
+  border-radius:20px;padding:5px 12px;
+}
+.table-chip-label{font-size:10px;font-weight:600;color:var(--app-gold);}
+.table-chip-num{font-size:10px;color:var(--app-sub);}
+.table-dot{width:6px;height:6px;border-radius:50%;background:var(--app-green);}
+
+.menu-cat-tabs{
+  display:flex;gap:6px;overflow-x:auto;padding:12px 16px 0;scrollbar-width:none;
+}
+.menu-cat-tabs::-webkit-scrollbar{display:none;}
+.cat-tab{
+  font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;white-space:nowrap;flex-shrink:0;
+}
+.cat-tab.active{background:var(--app-gold);color:var(--espresso);}
+.cat-tab:not(.active){background:rgba(240,235,224,.06);color:var(--app-sub);border:1px solid rgba(240,235,224,.08);}
+
+.menu-section-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--app-sub);padding:12px 16px 6px;}
+.menu-item{
+  margin:0 14px 8px;
+  background:var(--app-card);border-radius:12px;padding:11px 12px;
+  border:1px solid var(--app-border);
+  display:flex;align-items:center;gap:10px;
+}
+.menu-item-icon{width:36px;height:36px;border-radius:10px;background:rgba(196,165,99,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+.menu-item-name{font-size:12px;font-weight:600;color:var(--app-text);}
+.menu-item-desc{font-size:10px;color:var(--app-sub);margin-top:1px;line-height:1.3;}
+.menu-item-price{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--app-gold);margin-left:auto;flex-shrink:0;}
+.add-btn{
+  width:24px;height:24px;border-radius:8px;
+  background:var(--app-gold);display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:var(--espresso);flex-shrink:0;margin-left:6px;
+}
+
+.order-bar{
+  background:var(--deep);
+  margin:10px 14px;
+  border-radius:14px;
+  padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border:1px solid rgba(196,165,99,.2);
+}
+.order-bar-left{font-size:11px;color:var(--app-sub);}
+.order-bar-count{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--app-text);line-height:1;}
+.order-bar-btn{background:var(--app-gold);color:var(--espresso);font-size:10px;font-weight:700;padding:8px 14px;border-radius:10px;}
+
+/* ══════════════════════════
+   SCREEN 3 — PEDIDO ATIVO
+══════════════════════════ */
+.order-header{padding:14px 18px;display:flex;align-items:center;gap:10px;}
+.back-btn{width:28px;height:28px;border-radius:8px;background:var(--app-card);display:flex;align-items:center;justify-content:center;color:var(--app-text);font-size:14px;}
+.order-header-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--app-text);}
+.order-header-sub{font-size:9px;color:var(--app-sub);margin-top:1px;}
+
+/* Progress track */
+.order-progress{margin:0 18px 16px;position:relative;}
+.progress-track{height:3px;background:rgba(240,235,224,.08);border-radius:2px;margin:20px 0 8px;position:relative;}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--sage),var(--app-gold));}
+.progress-steps{display:flex;justify-content:space-between;}
+.progress-step{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.step-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--app-border);}
+.step-dot.done{background:var(--app-gold);border-color:var(--app-gold);}
+.step-dot.active{background:transparent;border-color:var(--app-gold);box-shadow:0 0 0 3px rgba(196,165,99,.2);}
+.step-label{font-size:8px;color:var(--app-sub);font-weight:500;}
+.step-label.active{color:var(--app-gold);font-weight:700;}
+
+/* ETA card */
+.eta-card{
+  margin:0 14px 12px;
+  background:linear-gradient(135deg,var(--deep) 0%,#1a3020 100%);
+  border-radius:16px;padding:16px;
+  border:1px solid rgba(196,165,99,.18);
+  display:flex;align-items:center;gap:14px;
+}
+.eta-time{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--app-gold);line-height:1;}
+.eta-unit{font-size:10px;color:var(--app-sub);margin-top:2px;}
+.eta-msg{font-size:12px;font-weight:600;color:var(--app-text);margin-bottom:4px;}
+.eta-sub{font-size:10px;color:var(--app-sub);line-height:1.5;}
+.eta-pulse{
+  width:8px;height:8px;border-radius:50%;background:var(--app-green);
+  box-shadow:0 0 0 4px rgba(122,191,142,.15);
+  animation:pulse 2s ease-in-out infinite;
+  flex-shrink:0;margin-left:auto;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(122,191,142,.15)}50%{box-shadow:0 0 0 8px rgba(122,191,142,.05)}}
+
+/* Order items list */
+.order-item-row{
+  margin:0 14px 8px;
+  background:var(--app-card);border-radius:12px;padding:10px 12px;
+  border:1px solid var(--app-border);
+  display:flex;align-items:center;gap:10px;
+}
+.order-item-qty{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--app-gold);color:var(--espresso);
+  font-size:10px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.order-item-name{font-size:12px;font-weight:600;color:var(--app-text);flex:1;}
+.order-item-price{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--app-gold);}
+
+.order-total{
+  margin:10px 14px;padding:12px 14px;
+  background:rgba(196,165,99,.06);border-radius:12px;
+  border:1px solid rgba(196,165,99,.1);
+}
+.order-total-row{display:flex;justify-content:space-between;font-size:11px;color:var(--app-sub);margin-bottom:6px;}
+.order-total-final{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--app-text);}
+.order-total-final span:last-child{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--app-gold);}
+
+/* ══════════════════════════
+   SCREEN 4 — PERFIL
+══════════════════════════ */
+.profile-header{
+  padding:16px 18px;
+  background:linear-gradient(180deg,var(--deep) 0%,var(--app-bg) 100%);
+}
+.profile-avatar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.profile-avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--sage),var(--deep));
+  border:2px solid var(--app-gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--app-gold);
+}
+.profile-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--app-text);}
+.profile-since{font-size:10px;color:var(--app-sub);}
+.profile-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(196,165,99,.1);border:1px solid rgba(196,165,99,.2);
+  border-radius:20px;padding:4px 10px;
+  font-size:9px;font-weight:700;color:var(--app-gold);letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* Stats row */
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
+.profile-stat{background:var(--app-card);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--app-border);}
+.profile-stat-num{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--app-gold);line-height:1;}
+.profile-stat-label{font-size:8px;color:var(--app-sub);margin-top:3px;}
+
+/* Spending chart */
+.spending-section{padding:12px 16px 0;}
+.spending-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--app-sub);margin-bottom:10px;}
+.chart-bars{display:flex;gap:5px;align-items:flex-end;height:56px;}
+.chart-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.chart-bar{width:100%;border-radius:3px 3px 0 0;background:rgba(196,165,99,.15);position:relative;overflow:hidden;}
+.chart-bar-fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,var(--app-gold),rgba(196,165,99,.6));border-radius:3px 3px 0 0;}
+.chart-bar.current .chart-bar-fill{background:linear-gradient(180deg,var(--app-gold),#e4b86d);}
+.chart-month{font-size:7px;color:var(--app-sub);font-weight:500;}
+.chart-total{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--app-text);margin-top:8px;}
+.chart-total-label{font-size:9px;color:var(--app-sub);}
+
+/* Preferences */
+.pref-section{padding:10px 16px 0;}
+.pref-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--app-sub);margin-bottom:8px;}
+.pref-item{
+  background:var(--app-card);border-radius:10px;padding:10px 12px;margin-bottom:7px;
+  border:1px solid var(--app-border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pref-key{font-size:11px;font-weight:600;color:var(--app-text);}
+.pref-val{font-size:10px;color:var(--app-gold);}
+
+/* History list */
+.history-section{padding:10px 16px 12px;}
+.history-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--app-sub);margin-bottom:8px;}
+.history-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 0;border-bottom:1px solid rgba(240,235,224,.05);
+}
+.history-icon{width:28px;height:28px;border-radius:8px;background:var(--app-card);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.history-cafe{font-size:11px;font-weight:600;color:var(--app-text);}
+.history-items{font-size:10px;color:var(--app-sub);}
+.history-date{font-size:9px;color:rgba(240,235,224,.2);margin-left:auto;}
+.history-price{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--app-gold);}
+
+/* ══════════════════════════
+   PAGE SECTIONS
+══════════════════════════ */
+.page-section{padding:100px 0;}
+.phones-row{
+  display:flex;gap:48px;align-items:flex-start;justify-content:center;
+  flex-wrap:wrap;margin-top:72px;
+}
+.phone-frame{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.phone-frame-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,165,99,.4);}
+.screen-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--cream);margin-top:8px;}
+.screen-desc{font-size:13px;color:rgba(245,237,216,.38);line-height:1.6;max-width:240px;text-align:center;margin-top:6px;}
+
+/* ── HERO SECTION ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:100px 56px 80px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse at 30% 60%,rgba(74,107,87,.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 30%,rgba(196,165,99,.06) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:24px;height:1px;background:rgba(196,165,99,.4);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(56px,8vw,110px);font-weight:600;line-height:.95;letter-spacing:-.03em;margin-bottom:24px;}
+.hero-title strong{font-weight:700;display:block;}
+.hero-title em{font-style:italic;color:var(--gold);display:block;}
+.hero-sub{font-size:18px;color:rgba(245,237,216,.38);line-height:1.7;max-width:500px;margin:0 auto 40px;}
+.hero-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hero-pill{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:7px 18px;border-radius:40px;border:1px solid rgba(196,165,99,.2);color:rgba(196,165,99,.55);}
+
+/* ── FEATURE SECTION ── */
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px;}
+.feature-card{
+  background:rgba(28,43,33,.6);border:1px solid var(--app-border);border-radius:16px;padding:28px 24px;
+  transition:border-color .3s,transform .3s cubic-bezier(.22,1,.36,1);
+}
+.feature-card:hover{border-color:rgba(196,165,99,.28);transform:translateY(-4px);}
+.feature-icon{width:40px;height:40px;border-radius:12px;background:rgba(196,165,99,.08);border:1px solid rgba(196,165,99,.15);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.feature-title{font-size:15px;font-weight:600;color:var(--cream);margin-bottom:8px;}
+.feature-body{font-size:13px;color:rgba(245,237,216,.38);line-height:1.65;}
+
+/* ── FLOW SECTION ── */
+.flow-steps{display:flex;flex-direction:column;gap:0;position:relative;}
+.flow-steps::before{content:'';position:absolute;left:19px;top:20px;bottom:20px;width:1px;background:linear-gradient(180deg,var(--app-gold),rgba(196,165,99,.1));}
+.flow-step{display:flex;gap:20px;padding:0 0 36px;position:relative;}
+.flow-step:last-child{padding-bottom:0;}
+.flow-num{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(196,165,99,.08);border:1px solid rgba(196,165,99,.25);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--app-gold);
+  position:relative;z-index:1;background:var(--forest);
+}
+.flow-content{padding-top:8px;}
+.flow-title{font-size:15px;font-weight:600;color:var(--cream);margin-bottom:6px;}
+.flow-body{font-size:13px;color:rgba(245,237,216,.38);line-height:1.6;}
+
+/* ── BRAND BRIDGE ── */
+.bridge-section{
+  background:linear-gradient(135deg,var(--deep) 0%,#1a3020 100%);
+  padding:80px 0;
+  border-top:1px solid rgba(196,165,99,.08);
+  border-bottom:1px solid rgba(196,165,99,.08);
+}
+.bridge-inner{
+  max-width:1120px;margin:0 auto;padding:0 56px;
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;
+}
+.bridge-logo-pair{display:flex;align-items:center;gap:20px;}
+.bridge-logo-sep{font-size:24px;color:rgba(196,165,99,.2);font-weight:300;}
+
+/* FOOTER */
+.site-footer{
+  padding:40px 56px;border-top:1px solid rgba(196,165,99,.08);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:rgba(245,237,216,.2);
+}
+.site-footer strong{color:rgba(196,165,99,.45);}
+</style>
+</head>
+<body>
+<div id="spb"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="h-logo">NomadSip <span>by GreenSip</span></div>
+  <div class="h-tag">App UI Design · Case Study</div>
+</header>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-eyebrow reveal">App UI Design · 2026</div>
+  <h1 class="hero-title reveal rv1">
+    <span>Nomad</span>
+    <strong>Sip</strong>
+    <em>your coffee, your way.</em>
+  </h1>
+  <p class="hero-sub reveal rv2">O café que não interrompe seu flow. Peça da mesa, acompanhe, pague — sem perder sua concentração.</p>
+  <div class="hero-pills reveal rv3">
+    <span class="hero-pill">iOS · Android</span>
+    <span class="hero-pill">Nômades Digitais</span>
+    <span class="hero-pill">Cafés Especiais</span>
+    <span class="hero-pill">SaaS B2B</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     4 TELAS — PRINCIPAL SHOWCASE
+══════════════════════════════════════ -->
+<section style="padding:80px 0 100px;background:rgba(15,26,20,.5);">
+  <div class="wrap">
+    <div class="sec-label reveal">Interface</div>
+    <h2 class="sec-h reveal rv1">Quatro telas.<br><em>Uma experiência.</em></h2>
+  </div>
+
+  <div class="phones-row">
+
+    <!-- ── TELA 1: DISCOVER ── -->
+    <div class="phone-frame reveal rv1">
+      <div class="phone-shell">
+        <div class="phone-notch"><div class="notch-camera"></div><div class="notch-speaker"></div></div>
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span class="status-time">9:41</span>
+            <div class="status-icons">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="#F0EBE0"><rect x="0" y="2" width="2" height="6" rx="1"/><rect x="3" y="1" width="2" height="7" rx="1"/><rect x="6" y="0" width="2" height="8" rx="1"/><rect x="9" y="0" width="2" height="8" rx="1" opacity=".3"/></svg>
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" stroke="#F0EBE0" stroke-width="1.2"><path d="M5 7 Q2 4 5 1 Q8 4 5 7Z"/><path d="M5 7 Q0 2 5 -1 Q10 2 5 7" opacity=".3"/></svg>
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".5" y=".5" width="17" height="9" rx="2" stroke="#F0EBE0" stroke-opacity=".4"/><rect x="1.5" y="1.5" width="12" height="7" rx="1.2" fill="#F0EBE0"/><rect x="18" y="3" width="1.5" height="4" rx=".75" fill="#F0EBE0" opacity=".4"/></svg>
+            </div>
+          </div>
+          <div class="screen-scroll">
+            <div class="screen-inner">
+              <div class="discover-header">
+                <div>
+                  <div class="discover-greeting">Bom dia, nômade ☀️</div>
+                  <div class="discover-name">Cafés perto de você</div>
+                </div>
+                <div class="discover-avatar">G</div>
+              </div>
+              <!-- Map -->
+              <div class="map-area">
+                <div class="map-bg">
+                  <div class="map-road-h"></div>
+                  <div class="map-road-v"></div>
+                  <!-- Pins -->
+                  <div class="map-pin" style="left:32%;top:18%;">
+                    <div class="map-pin-dot" style="background:var(--app-gold);">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1" stroke="var(--espresso)" stroke-width="2"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke="var(--espresso)" stroke-width="2"/></svg>
+                    </div>
+                    <div class="map-pin-label">Green Sip</div>
+                  </div>
+                  <div class="map-pin" style="left:58%;top:38%;">
+                    <div class="map-pin-dot" style="background:var(--app-surface);">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1" stroke="rgba(240,235,224,.5)" stroke-width="2"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke="rgba(240,235,224,.5)" stroke-width="2"/></svg>
+                    </div>
+                    <div class="map-pin-label">Café Roots</div>
+                  </div>
+                  <div class="map-pin" style="left:18%;top:60%;">
+                    <div class="map-pin-dot" style="background:var(--app-surface);">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1" stroke="rgba(240,235,224,.5)" stroke-width="2"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke="rgba(240,235,224,.5)" stroke-width="2"/></svg>
+                    </div>
+                    <div class="map-pin-label">Brewed</div>
+                  </div>
+                  <!-- You -->
+                  <div class="map-you" style="position:absolute;left:37%;top:52%;"></div>
+                </div>
+              </div>
+              <!-- Nearby list -->
+              <div class="nearby-title">3 cafés disponíveis</div>
+              <div class="cafe-card">
+                <div class="cafe-icon" style="background:linear-gradient(135deg,var(--deep),#2E5240);">
+                  <svg viewBox="0 0 200 240" width="24" height="28"><ellipse cx="100" cy="118" rx="88" ry="108" fill="none" stroke="#C4A563" stroke-width="5"/><line x1="12" y1="118" x2="188" y2="118" stroke="#C4A563" stroke-width="3" opacity=".4"/><line x1="100" y1="10" x2="100" y2="226" stroke="#C4A563" stroke-width="3" opacity=".4"/></svg>
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <div class="cafe-name">Green Sip</div>
+                  <div class="cafe-dist">120m · Aberto</div>
+                  <div class="cafe-badges">
+                    <span class="badge-small badge-wifi">WiFi 5★</span>
+                    <span class="badge-small badge-quiet">Silencioso</span>
+                    <span class="badge-small badge-outlet">⚡ tomadas</span>
+                  </div>
+                </div>
+                <div class="cafe-arrow">›</div>
+              </div>
+              <div class="cafe-card">
+                <div class="cafe-icon" style="background:rgba(240,235,224,.04);">☕</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="cafe-name">Café Roots</div>
+                  <div class="cafe-dist">340m · Aberto</div>
+                  <div class="cafe-badges">
+                    <span class="badge-small badge-wifi">WiFi 4★</span>
+                    <span class="badge-small badge-busy">Movimentado</span>
+                  </div>
+                </div>
+                <div class="cafe-arrow">›</div>
+              </div>
+              <div class="cafe-card">
+                <div class="cafe-icon" style="background:rgba(240,235,224,.04);">🌿</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="cafe-name">Brewed Daily</div>
+                  <div class="cafe-dist">510m · Fecha 18h</div>
+                  <div class="cafe-badges">
+                    <span class="badge-small badge-wifi">WiFi 3★</span>
+                    <span class="badge-small badge-quiet">Tranquilo</span>
+                  </div>
+                </div>
+                <div class="cafe-arrow">›</div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item active">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4A563" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <span class="nav-label">Descobrir</span>
+                <div class="nav-dot"></div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+                <span class="nav-label">Menu</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+                <span class="nav-label">Pedidos</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                <span class="nav-label">Perfil</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-name">Discover</div>
+      <div class="screen-desc">Explore cafés ao redor com dados reais de WiFi, ruído e disponibilidade.</div>
+    </div>
+
+    <!-- ── TELA 2: MENU ── -->
+    <div class="phone-frame reveal rv2">
+      <div class="phone-shell">
+        <div class="phone-notch"><div class="notch-camera"></div><div class="notch-speaker"></div></div>
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span class="status-time">9:43</span>
+            <div class="status-icons">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="#F0EBE0"><rect x="0" y="2" width="2" height="6" rx="1"/><rect x="3" y="1" width="2" height="7" rx="1"/><rect x="6" y="0" width="2" height="8" rx="1"/><rect x="9" y="0" width="2" height="8" rx="1" opacity=".3"/></svg>
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".5" y=".5" width="17" height="9" rx="2" stroke="#F0EBE0" stroke-opacity=".4"/><rect x="1.5" y="1.5" width="14" height="7" rx="1.2" fill="#F0EBE0"/><rect x="18" y="3" width="1.5" height="4" rx=".75" fill="#F0EBE0" opacity=".4"/></svg>
+            </div>
+          </div>
+          <div class="screen-scroll">
+            <div class="screen-inner">
+              <div class="menu-hero">
+                <div>
+                  <div class="menu-hero-name">Green Sip</div>
+                  <div class="menu-hero-sub">Coffee Space · Chiang Mai</div>
+                </div>
+              </div>
+              <div class="table-chip">
+                <div class="table-dot"></div>
+                <span class="table-chip-label">Mesa 7</span>
+                <span class="table-chip-num">· conectado</span>
+              </div>
+              <div class="menu-cat-tabs">
+                <div class="cat-tab active">Espresso</div>
+                <div class="cat-tab">Filtrado</div>
+                <div class="cat-tab">Cold Brew</div>
+                <div class="cat-tab">Comidas</div>
+              </div>
+              <div class="menu-section-title">Espresso</div>
+              <div class="menu-item">
+                <div class="menu-item-icon">☕</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="menu-item-name">Espresso Simples</div>
+                  <div class="menu-item-desc">30ml · single origin</div>
+                </div>
+                <div class="menu-item-price">R$8</div>
+                <div class="add-btn">+</div>
+              </div>
+              <div class="menu-item" style="border-color:rgba(196,165,99,.3);background:rgba(196,165,99,.05);">
+                <div class="menu-item-icon">🥛</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="menu-item-name">Cappuccino</div>
+                  <div class="menu-item-desc">Leite integral · 180ml</div>
+                </div>
+                <div class="menu-item-price">R$14</div>
+                <div class="add-btn" style="background:var(--deep);color:var(--app-gold);border:1px solid rgba(196,165,99,.3);">2</div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-item-icon">🍫</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="menu-item-name">Mocha</div>
+                  <div class="menu-item-desc">Espresso · chocolate · leite</div>
+                </div>
+                <div class="menu-item-price">R$16</div>
+                <div class="add-btn">+</div>
+              </div>
+              <div class="menu-section-title">Filtrado</div>
+              <div class="menu-item">
+                <div class="menu-item-icon">🫗</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="menu-item-name">V60 Pour Over</div>
+                  <div class="menu-item-desc">Etiópia Yirgacheffe · frutal</div>
+                </div>
+                <div class="menu-item-price">R$18</div>
+                <div class="add-btn">+</div>
+              </div>
+              <div class="order-bar">
+                <div>
+                  <div class="order-bar-left">2 itens no pedido</div>
+                  <div class="order-bar-count">R$28</div>
+                </div>
+                <div class="order-bar-btn">Pedir →</div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <span class="nav-label">Descobrir</span>
+              </div>
+              <div class="nav-item active">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4A563" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+                <span class="nav-label">Menu</span>
+                <div class="nav-dot"></div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+                <span class="nav-label">Pedidos</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                <span class="nav-label">Perfil</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-name">Menu</div>
+      <div class="screen-desc">Cardápio do café com pedido direto da mesa via QR. Sem fila.</div>
+    </div>
+
+    <!-- ── TELA 3: PEDIDO ATIVO ── -->
+    <div class="phone-frame reveal rv3">
+      <div class="phone-shell">
+        <div class="phone-notch"><div class="notch-camera"></div><div class="notch-speaker"></div></div>
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span class="status-time">9:46</span>
+            <div class="status-icons">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="#F0EBE0"><rect x="0" y="2" width="2" height="6" rx="1"/><rect x="3" y="1" width="2" height="7" rx="1"/><rect x="6" y="0" width="2" height="8" rx="1"/><rect x="9" y="0" width="2" height="8" rx="1"/></svg>
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".5" y=".5" width="17" height="9" rx="2" stroke="#F0EBE0" stroke-opacity=".4"/><rect x="1.5" y="1.5" width="16" height="7" rx="1.2" fill="#F0EBE0"/><rect x="18" y="3" width="1.5" height="4" rx=".75" fill="#F0EBE0" opacity=".4"/></svg>
+            </div>
+          </div>
+          <div class="screen-scroll">
+            <div class="screen-inner">
+              <div class="order-header">
+                <div class="back-btn">‹</div>
+                <div>
+                  <div class="order-header-title">Seu pedido</div>
+                  <div class="order-header-sub">Green Sip · Mesa 7</div>
+                </div>
+              </div>
+              <!-- Progress -->
+              <div class="order-progress">
+                <div class="progress-steps">
+                  <div class="progress-step">
+                    <div class="step-dot done"></div>
+                    <div class="step-label done" style="color:rgba(196,165,99,.6);">Recebido</div>
+                  </div>
+                  <div class="progress-step">
+                    <div class="step-dot done"></div>
+                    <div class="step-label" style="color:rgba(196,165,99,.6);">Confirmado</div>
+                  </div>
+                  <div class="progress-step">
+                    <div class="step-dot active"></div>
+                    <div class="step-label active">Preparando</div>
+                  </div>
+                  <div class="progress-step">
+                    <div class="step-dot"></div>
+                    <div class="step-label">Entregue</div>
+                  </div>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width:62%;"></div>
+                </div>
+              </div>
+              <!-- ETA -->
+              <div class="eta-card">
+                <div>
+                  <div class="eta-time">4<span style="font-size:20px;color:rgba(196,165,99,.5);">min</span></div>
+                  <div class="eta-unit">estimativa</div>
+                </div>
+                <div style="flex:1;">
+                  <div class="eta-msg">Sendo preparado ✦</div>
+                  <div class="eta-sub">Seu barista está trabalhando nos seus pedidos. Pode continuar trabalhando.</div>
+                </div>
+                <div class="eta-pulse"></div>
+              </div>
+              <!-- Items -->
+              <div style="padding:0 14px 8px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--app-sub);">Itens</div>
+              <div class="order-item-row">
+                <div class="order-item-qty">2</div>
+                <div class="order-item-name">Cappuccino</div>
+                <div class="order-item-price">R$28</div>
+              </div>
+              <div class="order-item-row">
+                <div class="order-item-qty">1</div>
+                <div class="order-item-name">Água com gás</div>
+                <div class="order-item-price">R$6</div>
+              </div>
+              <!-- Total -->
+              <div class="order-total">
+                <div class="order-total-row"><span>Subtotal</span><span>R$34</span></div>
+                <div class="order-total-row"><span>Taxa de serviço</span><span>R$0</span></div>
+                <div style="height:1px;background:rgba(240,235,224,.08);margin:8px 0;"></div>
+                <div class="order-total-final"><span>Total</span><span>R$34</span></div>
+              </div>
+              <!-- Payment note -->
+              <div style="margin:0 14px 12px;padding:10px 12px;background:rgba(122,191,142,.06);border:1px solid rgba(122,191,142,.15);border-radius:10px;font-size:11px;color:rgba(122,191,142,.8);">
+                ✓ Pago via app · Nenhuma conta na saída
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <span class="nav-label">Descobrir</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+                <span class="nav-label">Menu</span>
+              </div>
+              <div class="nav-item active">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4A563" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+                <span class="nav-label">Pedidos</span>
+                <div class="nav-dot"></div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                <span class="nav-label">Perfil</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-name">Pedido Ativo</div>
+      <div class="screen-desc">Acompanhe em tempo real sem sair do lugar. ETA ao vivo.</div>
+    </div>
+
+    <!-- ── TELA 4: PERFIL ── -->
+    <div class="phone-frame reveal rv4">
+      <div class="phone-shell">
+        <div class="phone-notch"><div class="notch-camera"></div><div class="notch-speaker"></div></div>
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span class="status-time">9:51</span>
+            <div class="status-icons">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="#F0EBE0"><rect x="0" y="2" width="2" height="6" rx="1"/><rect x="3" y="1" width="2" height="7" rx="1"/><rect x="6" y="0" width="2" height="8" rx="1"/><rect x="9" y="0" width="2" height="8" rx="1"/></svg>
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".5" y=".5" width="17" height="9" rx="2" stroke="#F0EBE0" stroke-opacity=".4"/><rect x="1.5" y="1.5" width="16" height="7" rx="1.2" fill="#F0EBE0"/><rect x="18" y="3" width="1.5" height="4" rx=".75" fill="#F0EBE0" opacity=".4"/></svg>
+            </div>
+          </div>
+          <div class="screen-scroll">
+            <div class="screen-inner">
+              <div class="profile-header">
+                <div class="profile-avatar-row">
+                  <div class="profile-avatar">G</div>
+                  <div>
+                    <div class="profile-name">Guilherme A.</div>
+                    <div class="profile-since">Nômade desde Mar 2024</div>
+                    <div style="margin-top:5px;"><span class="profile-badge">☕ Nível Barista</span></div>
+                  </div>
+                </div>
+                <div class="profile-stats">
+                  <div class="profile-stat">
+                    <div class="profile-stat-num">47</div>
+                    <div class="profile-stat-label">visitas</div>
+                  </div>
+                  <div class="profile-stat">
+                    <div class="profile-stat-num">12</div>
+                    <div class="profile-stat-label">cafés explorados</div>
+                  </div>
+                  <div class="profile-stat">
+                    <div class="profile-stat-num">3</div>
+                    <div class="profile-stat-label">países</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Spending -->
+              <div class="spending-section">
+                <div class="spending-title">Gasto mensal</div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+                  <div>
+                    <div class="chart-total">R$312</div>
+                    <div class="chart-total-label">em Abril · +12% vs Março</div>
+                  </div>
+                </div>
+                <div class="chart-bars" style="margin-top:14px;">
+                  <div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:56px;"><div class="chart-bar-fill" style="height:55%;"></div></div>
+                    <div class="chart-month">Nov</div>
+                  </div>
+                  <div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:56px;"><div class="chart-bar-fill" style="height:70%;"></div></div>
+                    <div class="chart-month">Dez</div>
+                  </div>
+                  <div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:56px;"><div class="chart-bar-fill" style="height:42%;"></div></div>
+                    <div class="chart-month">Jan</div>
+                  </div>
+                  <div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:56px;"><div class="chart-bar-fill" style="height:62%;"></div></div>
+                    <div class="chart-month">Fev</div>
+                  </div>
+                  <div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:56px;"><div class="chart-bar-fill" style="height:75%;"></div></div>
+                    <div class="chart-month">Mar</div>
+                  </div>
+                  <div class="chart-bar chart-bar current" style="height:56px;flex:1;border-radius:3px 3px 0 0;position:relative;overflow:hidden;">
+                    <div class="chart-bar-fill" style="height:88%;background:linear-gradient(180deg,var(--app-gold),#b8964f);"></div>
+                    <div class="chart-month" style="text-align:center;margin-top:4px;font-size:7px;color:var(--app-gold);font-weight:700;">Abr ▲</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Preferences -->
+              <div class="pref-section">
+                <div class="pref-title">Preferências salvas</div>
+                <div class="pref-item">
+                  <span class="pref-key">Bebida favorita</span>
+                  <span class="pref-val">Cappuccino</span>
+                </div>
+                <div class="pref-item">
+                  <span class="pref-key">Leite</span>
+                  <span class="pref-val">Integral</span>
+                </div>
+                <div class="pref-item">
+                  <span class="pref-key">Nível de ruído</span>
+                  <span class="pref-val">Silencioso</span>
+                </div>
+              </div>
+              <!-- History -->
+              <div class="history-section">
+                <div class="history-title">Histórico</div>
+                <div class="history-item">
+                  <div class="history-icon">🌿</div>
+                  <div>
+                    <div class="history-cafe">Green Sip</div>
+                    <div class="history-items">2x Cappuccino</div>
+                  </div>
+                  <div class="history-date">hoje</div>
+                  <div class="history-price" style="margin-left:8px;">R$28</div>
+                </div>
+                <div class="history-item">
+                  <div class="history-icon">☕</div>
+                  <div>
+                    <div class="history-cafe">Café Roots</div>
+                    <div class="history-items">V60 · Água</div>
+                  </div>
+                  <div class="history-date">ontem</div>
+                  <div class="history-price" style="margin-left:8px;">R$24</div>
+                </div>
+                <div class="history-item" style="border:none;">
+                  <div class="history-icon">🫗</div>
+                  <div>
+                    <div class="history-cafe">Brewed Daily</div>
+                    <div class="history-items">Espresso · Snack</div>
+                  </div>
+                  <div class="history-date">qui</div>
+                  <div class="history-price" style="margin-left:8px;">R$22</div>
+                </div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <span class="nav-label">Descobrir</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+                <span class="nav-label">Menu</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,235,224,.28)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+                <span class="nav-label">Pedidos</span>
+              </div>
+              <div class="nav-item active">
+                <div class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4A563" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                <span class="nav-label">Perfil</span>
+                <div class="nav-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-name">Perfil</div>
+      <div class="screen-desc">Histórico, gasto mensal e preferências que viajam com você.</div>
+    </div>
+
+  </div><!-- /phones-row -->
+</section>
+
+<!-- ══════════════════════════════════════
+     FEATURES
+══════════════════════════════════════ -->
+<section class="page-section">
+  <div class="wrap">
+    <div class="sec-label reveal">Features</div>
+    <h2 class="sec-h reveal rv1">Construído pra<br><em>quem não para.</em></h2>
+    <div class="feature-grid">
+      <div class="feature-card reveal rv1">
+        <div class="feature-icon"><svg width="18" height="18" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="feature-title">QR fixo na mesa</div>
+        <div class="feature-body">Cada mesa tem um QR permanente. Você escaneia uma vez e fica conectado durante toda a sessão — sem reconectar a cada pedido.</div>
+      </div>
+      <div class="feature-card reveal rv2">
+        <div class="feature-icon"><svg width="18" height="18" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><path d="M1.05 1h13.9c0 0 6.05 2.86 6.05 11s-6.05 11-6.05 11H1.05"/><path d="M13 7H7M13 12H7M13 17H7"/></svg></div>
+        <div class="feature-title">WiFi score ao vivo</div>
+        <div class="feature-body">Antes de entrar, você vê a velocidade do WiFi, disponibilidade de tomadas e nível de ruído atual — dados coletados em tempo real.</div>
+      </div>
+      <div class="feature-card reveal rv1">
+        <div class="feature-icon"><svg width="18" height="18" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="feature-title">Perfil portátil</div>
+        <div class="feature-body">Suas preferências viajam com você. Em qualquer café parceiro, o sistema já sabe que você prefere oat milk e cappuccino sem açúcar.</div>
+      </div>
+      <div class="feature-card reveal rv2">
+        <div class="feature-icon"><svg width="18" height="18" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="feature-title">Controle de gasto</div>
+        <div class="feature-body">Dashboard com histórico por café, gasto mensal e projeções. Para o nômade que quer saber exatamente onde vai o dinheiro.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     USER FLOW
+══════════════════════════════════════ -->
+<section style="padding:80px 0 100px;background:rgba(31,53,40,.2);">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;">
+      <div>
+        <div class="sec-label reveal">Fluxo</div>
+        <h2 class="sec-h reveal rv1">Do café<br><em>à xícara.</em></h2>
+        <p class="sec-body reveal rv2">Cinco passos. Menos de 60 segundos. Você não levanta da cadeira.</p>
+      </div>
+      <div class="flow-steps reveal rv2">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Escolha o café</div>
+            <div class="flow-body">Veja no mapa ou na lista os cafés próximos com WiFi score, nível de ruído e disponibilidade ao vivo.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Escaneie o QR da mesa</div>
+            <div class="flow-body">Câmera abre o cardápio diretamente na mesa onde você está. Sem baixar app separado — web app instantâneo.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-title">Monte e confirme</div>
+            <div class="flow-body">Escolha os itens, confirme preferências salvas ou ajuste. Pedido vai direto para o barista.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-title">Acompanhe em tempo real</div>
+            <div class="flow-body">ETA ao vivo, notificação quando o pedido sai. Você continua trabalhando.</div>
+          </div>
+        </div>
+        <div class="flow-step" style="padding-bottom:0;">
+          <div class="flow-num">5</div>
+          <div class="flow-content">
+            <div class="flow-title">Pague sem conta</div>
+            <div class="flow-body">Pagamento integrado. Quando for embora, não há conta para pedir. Só fechar o laptop e ir.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     BRAND BRIDGE
+══════════════════════════════════════ -->
+<div class="bridge-section">
+  <div class="bridge-inner">
+    <div>
+      <div class="sec-label reveal" style="color:var(--gold);">Sistema de Marca</div>
+      <h2 class="sec-h reveal rv1" style="color:var(--cream);">Green Sip<br><em>+ NomadSip.</em></h2>
+      <p class="sec-body reveal rv2" style="color:rgba(245,237,216,.42);">O Green Sip é o café físico — a experiência no espaço. O NomadSip é a camada digital que escala para qualquer café parceiro. Mesma família, propósitos complementares.</p>
+    </div>
+    <div class="reveal rv3" style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:rgba(196,165,99,.05);border:1px solid rgba(196,165,99,.12);border-radius:14px;padding:20px 22px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Green Sip</div>
+        <div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:4px;">Identidade física e premium</div>
+        <div style="font-size:12px;color:rgba(245,237,216,.38);line-height:1.5;">Brand system completo · Espaço físico · Experiência presencial</div>
+      </div>
+      <div style="text-align:center;color:rgba(196,165,99,.25);font-size:18px;">+</div>
+      <div style="background:rgba(107,155,122,.05);border:1px solid rgba(107,155,122,.15);border-radius:14px;padding:20px 22px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--app-sage);margin-bottom:8px;">NomadSip</div>
+        <div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:4px;">Plataforma digital escalável</div>
+        <div style="font-size:12px;color:rgba(245,237,216,.38);line-height:1.5;">App B2B2C · SaaS para cafés · Rede de nômades digitais</div>
+      </div>
+      <div style="text-align:center;color:rgba(196,165,99,.25);font-size:18px;">=</div>
+      <div style="background:linear-gradient(135deg,rgba(196,165,99,.08),rgba(74,107,87,.08));border:1px solid rgba(196,165,99,.18);border-radius:14px;padding:20px 22px;">
+        <div style="font-size:14px;font-weight:700;color:var(--cream);margin-bottom:4px;">Um case de design completo</div>
+        <div style="font-size:12px;color:rgba(245,237,216,.38);line-height:1.5;">Branding → UI Design → Estratégia de produto → Portfólio</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-copy">UI Design por <strong>Guilherme Andrade</strong> · Andarilho Digital · 2026</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:rgba(196,165,99,.35);">NomadSip</div>
+</footer>
+
+<script>
+const pb = document.getElementById('spb');
+window.addEventListener('scroll',()=>{ pb.style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%'; },{passive:true});
+const io = new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}}),{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

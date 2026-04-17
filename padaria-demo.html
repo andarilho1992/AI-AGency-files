@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PãoNosso — Sistema de Pedidos para Padaria</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f0a00;
+    --bg-2: #1a1200;
+    --bg-3: #221900;
+    --bg-4: #2e2200;
+    --border: rgba(255,255,255,0.07);
+    --text: #f5efe0;
+    --muted: rgba(245,239,224,0.45);
+    --accent: #f59e0b;
+    --accent-2: #fbbf24;
+    --green: #34d399;
+    --red: #f87171;
+    --orange: #fb923c;
+    --blue: #60a5fa;
+    --brown: #d97706;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(15,10,0,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 60px; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  .nav-logo-dot { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .nav-tabs { display: flex; gap: 4px; }
+  .nav-tab { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all .2s; }
+  .nav-tab:hover { color: var(--text); background: var(--bg-3); }
+  .nav-tab.active { color: var(--text); background: var(--bg-4); }
+  .nav-badge { background: linear-gradient(135deg, var(--accent), var(--orange)); color: #0f0a00; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  .screen { display: none; min-height: 100vh; padding-top: 60px; }
+  .screen.active { display: block; }
+
+  /* HERO */
+  .hero { min-height: calc(100vh - 60px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.09) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(--accent-2); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 28px; }
+  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; max-width: 720px; margin-bottom: 20px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 17px; color: var(--muted); max-width: 540px; line-height: 1.65; margin-bottom: 44px; }
+  .hero-stats { display: flex; gap: 40px; margin-bottom: 52px; }
+  .hero-stat { text-align: center; }
+  .hero-stat-value { font-size: 36px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .hero-divider { width: 1px; background: var(--border); height: 50px; align-self: center; }
+  .hero-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 960px; }
+  .hero-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; text-align: left; flex: 1; min-width: 170px; max-width: 200px; transition: all .2s; }
+  .hero-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-2px); }
+  .hero-card-icon { font-size: 24px; margin-bottom: 10px; }
+  .hero-card-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .hero-card-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  .screen-title { text-align: center; margin-bottom: 40px; }
+  .screen-title h2 { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 8px; }
+  .screen-title p { color: var(--muted); font-size: 14px; }
+
+  .card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .card-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .btn { padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--orange)); color: #0f0a00; }
+  .btn-ghost { background: var(--bg-3); color: var(--muted); border: 1px solid var(--border); }
+
+  .prog-bar { height: 5px; background: var(--bg-4); border-radius: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 10px; transition: width 1s; }
+
+  /* CARDAPIO */
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; max-width: 1100px; margin: 0 auto; }
+  .menu-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: all .2s; cursor: pointer; }
+  .menu-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-2px); }
+  .menu-card-img { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+  .menu-card-body { padding: 14px 16px; }
+  .menu-card-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .menu-card-desc { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.4; }
+  .menu-card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .menu-card-price { font-size: 16px; font-weight: 800; color: var(--accent); }
+  .menu-card-add { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--orange)); border: none; color: #0f0a00; font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .menu-badge { padding: 3px 8px; border-radius: 20px; font-size: 9px; font-weight: 700; }
+
+  /* PEDIDOS */
+  .pedidos-screen { padding: 40px 32px; }
+  .pedidos-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; max-width: 1100px; margin: 0 auto; }
+  .kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .kanban-col { background: var(--bg-3); border-radius: 14px; padding: 14px; }
+  .kanban-col-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .pedido-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
+  .pedido-card:hover { border-color: rgba(245,158,11,0.3); }
+  .pedido-num { font-size: 10px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+  .pedido-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .pedido-items { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+  .pedido-footer { display: flex; align-items: center; justify-content: space-between; }
+  .pedido-value { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .pedido-time { font-size: 10px; color: var(--muted); font-family: monospace; }
+  .pedido-type { font-size: 9px; padding: 2px 7px; border-radius: 20px; font-weight: 600; }
+
+  /* WHATSAPP PEDIDO */
+  .wa-pedido { display: flex; flex-direction: column; gap: 16px; }
+  .wa-phone { background: var(--bg-2); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; }
+  .wa-header { background: #1a2535; padding: 14px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+  .wa-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--orange)); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .wa-body { background: #0e1621; padding: 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .wa-msg { max-width: 85%; padding: 8px 11px; border-radius: 12px; font-size: 11px; line-height: 1.5; }
+  .wa-received { background: #1e2d3d; border-radius: 0 12px 12px 12px; align-self: flex-start; }
+  .wa-sent { background: #1d3a2a; border-radius: 12px 0 12px 12px; align-self: flex-end; text-align: right; }
+  .wa-msg-time { font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 3px; text-align: right; }
+  .wa-bot-label { font-size: 9px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
+  .wa-date-sep { text-align: center; font-size: 10px; color: var(--muted); background: rgba(255,255,255,0.04); padding: 2px 10px; border-radius: 10px; align-self: center; }
+
+  /* DASHBOARD */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 1100px; margin: 0 auto 24px; }
+  .metric-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; overflow: hidden; transition: all .2s; }
+  .metric-card:hover { border-color: rgba(245,158,11,0.2); transform: translateY(-1px); }
+  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 14px 14px 0 0; }
+  .metric-card.am::before { background: var(--accent); }
+  .metric-card.or::before { background: var(--orange); }
+  .metric-card.gr::before { background: var(--green); }
+  .metric-card.bl::before { background: var(--blue); }
+  .metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 10px; }
+  .metric-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; margin-bottom: 6px; }
+  .metric-card.am .metric-value { color: var(--accent); }
+  .metric-card.or .metric-value { color: var(--orange); }
+  .metric-card.gr .metric-value { color: var(--green); }
+  .metric-card.bl .metric-value { color: var(--blue); }
+  .metric-change { font-size: 11px; color: var(--green); }
+  .metric-icon { position: absolute; top: 18px; right: 18px; font-size: 22px; opacity: 0.2; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot">🥖</div>
+    PãoNosso
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showScreen('hero', this)">Visão Geral</button>
+    <button class="nav-tab" onclick="showScreen('cardapio', this)">Cardápio Digital</button>
+    <button class="nav-tab" onclick="showScreen('pedidos', this)">Pedidos ao Vivo</button>
+    <button class="nav-tab" onclick="showScreen('whatsapp', this)">WhatsApp Bot</button>
+    <button class="nav-tab" onclick="showScreen('painel', this)">Dashboard</button>
+  </div>
+  <div class="nav-badge">R$3.000 + R$400/mês</div>
+</nav>
+
+<!-- HERO -->
+<div class="screen active" id="screen-hero">
+  <div class="hero">
+    <div class="hero-tag">🥖 Sistema de Pedidos para Padaria — Porto Alegre</div>
+    <h1>Do xis ao pão francês — <span>pedido, pago e entregue</span> sem esforço</h1>
+    <p>Sistema completo de pedidos via WhatsApp, cardápio digital, controle de produção e entrega para padarias, lanches e distribuidores de insumos em Porto Alegre.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value">0</div><div class="hero-stat-label">ligações para pedir</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-value">24/7</div><div class="hero-stat-label">cardápio online</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-value">+35%</div><div class="hero-stat-label">ticket médio</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-value">📍</div><div class="hero-stat-label">entrega rastreada</div></div>
+    </div>
+    <div class="hero-cards">
+      <div class="hero-card"><div class="hero-card-icon">📱</div><div class="hero-card-title">Cardápio Digital</div><div class="hero-card-desc">Link do cardápio com foto, descrição e preço</div></div>
+      <div class="hero-card"><div class="hero-card-icon">🤖</div><div class="hero-card-title">Bot de Pedidos</div><div class="hero-card-desc">Cliente pede pelo WhatsApp sem precisar ligar</div></div>
+      <div class="hero-card"><div class="hero-card-icon">🍽️</div><div class="hero-card-title">Controle de Produção</div><div class="hero-card-desc">Fila de pedidos em tempo real para a cozinha</div></div>
+      <div class="hero-card"><div class="hero-card-icon">🚗</div><div class="hero-card-title">Entrega Rastreada</div><div class="hero-card-desc">Motoboy com app + cliente acompanha pelo WhatsApp</div></div>
+      <div class="hero-card"><div class="hero-card-icon">📦</div><div class="hero-card-title">Venda de Insumos</div><div class="hero-card-desc">Farinha, frios, pão francês — pedido por atacado</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CARDÁPIO -->
+<div class="screen" id="screen-cardapio">
+  <div style="padding:40px 32px">
+    <div class="screen-title">
+      <h2>Cardápio Digital</h2>
+      <p>Link único compartilhado no WhatsApp, Instagram e Google Maps — sem precisar de app</p>
+    </div>
+
+    <!-- CATEGORIAS -->
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:32px;flex-wrap:wrap">
+      <button style="padding:8px 18px;border-radius:20px;border:1px solid rgba(245,158,11,0.4);background:rgba(245,158,11,0.12);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer">🥖 Pães e Roscas</button>
+      <button style="padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:var(--bg-3);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer">🌭 Xis e Lanches</button>
+      <button style="padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:var(--bg-3);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer">🍕 Hot Dog</button>
+      <button style="padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:var(--bg-3);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer">📦 Insumos Atacado</button>
+      <button style="padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:var(--bg-3);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer">☕ Bebidas</button>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(245,158,11,0.08)">🥖</div>
+        <div class="menu-card-body">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <div class="menu-card-name">Pão Francês</div>
+            <span class="menu-badge" style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)">+ Vendido</span>
+          </div>
+          <div class="menu-card-desc">Crocante por fora, macio por dentro. Assado na hora.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$0,90 / un</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(251,146,60,0.08)">🥪</div>
+        <div class="menu-card-body">
+          <div class="menu-card-name" style="margin-bottom:6px">Xis Gaúcho</div>
+          <div class="menu-card-desc">Hambúrguer artesanal, queijo, alface, tomate, maionese especial.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$22,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(239,68,68,0.08)">🌭</div>
+        <div class="menu-card-body">
+          <div class="menu-card-name" style="margin-bottom:6px">Cachorro Quente Completo</div>
+          <div class="menu-card-desc">Salsicha, purê, milho, ervilha, batata palha, molho especial.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$18,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(245,158,11,0.08)">🥐</div>
+        <div class="menu-card-body">
+          <div class="menu-card-name" style="margin-bottom:6px">Croissant de Presunto</div>
+          <div class="menu-card-desc">Massa folhada com presunto e queijo mussarela derretido.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$12,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(139,92,246,0.08)">📦</div>
+        <div class="menu-card-body">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <div class="menu-card-name">Farinha de Trigo 5kg</div>
+            <span class="menu-badge" style="background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.2)">Atacado</span>
+          </div>
+          <div class="menu-card-desc">Ideal para produção de pão, pizza e massas. Entrega semanal.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$28,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(245,158,11,0.08)">🧀</div>
+        <div class="menu-card-body">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <div class="menu-card-name">Mussarela Fatiada 1kg</div>
+            <span class="menu-badge" style="background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.2)">Atacado</span>
+          </div>
+          <div class="menu-card-desc">Queijo mussarela fatiado. Perfeito para xis, pizza e lanches.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$45,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(251,146,60,0.08)">🌮</div>
+        <div class="menu-card-body">
+          <div class="menu-card-name" style="margin-bottom:6px">Xis Frango</div>
+          <div class="menu-card-desc">Frango grelhado, cheddar, alface, tomate, maionese de alho.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$20,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-card-img" style="background:rgba(96,165,250,0.08)">🥤</div>
+        <div class="menu-card-body">
+          <div class="menu-card-name" style="margin-bottom:6px">Suco Natural 500ml</div>
+          <div class="menu-card-desc">Laranja, abacaxi, maracujá ou limão. Feito na hora.</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">R$10,00</div>
+            <button class="menu-card-add">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PEDIDOS AO VIVO -->
+<div class="screen" id="screen-pedidos">
+  <div class="pedidos-screen">
+    <div class="screen-title">
+      <h2>Pedidos em Tempo Real</h2>
+      <p>Fila visual para a cozinha — sem papel, sem grito, sem confusão</p>
+    </div>
+    <div class="pedidos-grid">
+      <!-- KANBAN -->
+      <div class="kanban">
+        <!-- RECEBIDOS -->
+        <div class="kanban-col">
+          <div class="kanban-col-title" style="color:var(--blue)">🔵 Recebidos <span style="background:rgba(96,165,250,0.15);padding:2px 7px;border-radius:20px;font-size:10px">4</span></div>
+
+          <div class="pedido-card">
+            <div class="pedido-num">#042 • há 2 min</div>
+            <div class="pedido-name">Rodrigo Menezes</div>
+            <div class="pedido-items">2x Xis Gaúcho<br>1x Cachorro Quente<br>2x Suco Laranja</div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$72,00</div>
+              <div style="display:flex;gap:5px;align-items:center">
+                <span class="pedido-type" style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)">Entrega</span>
+                <span class="pedido-time">19:34</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pedido-card">
+            <div class="pedido-num">#041 • há 5 min</div>
+            <div class="pedido-name">Ana Beatriz (atacado)</div>
+            <div class="pedido-items">10kg Farinha de Trigo<br>2kg Mussarela</div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$146,00</div>
+              <div style="display:flex;gap:5px;align-items:center">
+                <span class="pedido-type" style="background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.2)">Atacado</span>
+                <span class="pedido-time">19:31</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pedido-card">
+            <div class="pedido-num">#040 • há 8 min</div>
+            <div class="pedido-name">Mesa 3 — Salão</div>
+            <div class="pedido-items">1x Xis Frango<br>1x Pão Francês (6 un)<br>1x Café com Leite</div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$37,40</div>
+              <div style="display:flex;gap:5px;align-items:center">
+                <span class="pedido-type" style="background:rgba(245,158,11,0.1);color:var(--accent);border:1px solid rgba(245,158,11,0.2)">Salão</span>
+                <span class="pedido-time">19:28</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUÇÃO -->
+        <div class="kanban-col" style="background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.1)">
+          <div class="kanban-col-title" style="color:var(--accent)">🟡 Em produção <span style="background:rgba(245,158,11,0.15);padding:2px 7px;border-radius:20px;font-size:10px">3</span></div>
+
+          <div class="pedido-card" style="border-color:rgba(245,158,11,0.25)">
+            <div class="pedido-num">#039 • há 12 min</div>
+            <div class="pedido-name">Carlos Pontes</div>
+            <div class="pedido-items">3x Xis Gaúcho<br>1x Hot Dog Completo</div>
+            <div style="margin:8px 0">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:10px;color:var(--muted)">Preparando</span><span style="font-size:10px;color:var(--accent)">~8 min</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:60%;background:var(--accent)"></div></div>
+            </div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$84,00</div>
+              <span class="pedido-type" style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)">Entrega</span>
+            </div>
+          </div>
+
+          <div class="pedido-card" style="border-color:rgba(245,158,11,0.2)">
+            <div class="pedido-num">#038 • há 18 min</div>
+            <div class="pedido-name">Julia Fernandez</div>
+            <div class="pedido-items">2x Cachorro Quente<br>2x Suco Abacaxi</div>
+            <div style="margin:8px 0">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:10px;color:var(--muted)">Quase pronto</span><span style="font-size:10px;color:var(--accent)">~3 min</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:85%;background:var(--accent)"></div></div>
+            </div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$56,00</div>
+              <span class="pedido-type" style="background:rgba(245,158,11,0.1);color:var(--accent);border:1px solid rgba(245,158,11,0.2)">Retirada</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRONTOS -->
+        <div class="kanban-col">
+          <div class="kanban-col-title" style="color:var(--green)">🟢 Prontos <span style="background:rgba(74,222,128,0.15);padding:2px 7px;border-radius:20px;font-size:10px">2</span></div>
+
+          <div class="pedido-card" style="border-color:rgba(74,222,128,0.25)">
+            <div class="pedido-num">#037 • 19:15</div>
+            <div class="pedido-name">Marcos Souza</div>
+            <div class="pedido-items">1x Xis Gaúcho<br>1x Xis Frango<br>2x Suco Laranja</div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$62,00</div>
+              <div style="display:flex;gap:5px;align-items:center">
+                <span class="pedido-type" style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)">Entrega</span>
+                <button style="padding:4px 10px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--orange));border:none;color:#0f0a00;font-size:10px;font-weight:700;cursor:pointer">Despachar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pedido-card" style="border-color:rgba(74,222,128,0.2)">
+            <div class="pedido-num">#036 • 19:12</div>
+            <div class="pedido-name">Retirada — Balcão</div>
+            <div class="pedido-items">6x Pão Francês<br>2x Croissant Presunto</div>
+            <div class="pedido-footer">
+              <div class="pedido-value">R$29,40</div>
+              <button style="padding:4px 10px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--orange));border:none;color:#0f0a00;font-size:10px;font-weight:700;cursor:pointer">Entregar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMO LATERAL -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Resumo do turno</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:12px;color:var(--muted)">Pedidos hoje</span>
+              <span style="font-size:13px;font-weight:700;color:var(--accent)">42</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:12px;color:var(--muted)">Via WhatsApp</span>
+              <span style="font-size:13px;font-weight:700;color:var(--green)">31 (74%)</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:12px;color:var(--muted)">Tempo médio</span>
+              <span style="font-size:13px;font-weight:700">18 min</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px">
+              <span style="font-size:13px;font-weight:700">Faturamento hoje</span>
+              <span style="font-size:14px;font-weight:800;color:var(--accent)">R$1.847</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">🏆 Mais pedidos hoje</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:18px">🥪</span>
+              <div style="flex:1"><div style="font-size:12px;font-weight:600">Xis Gaúcho</div></div>
+              <span style="font-size:12px;font-weight:700;color:var(--accent)">24 un</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:18px">🌭</span>
+              <div style="flex:1"><div style="font-size:12px;font-weight:600">Cachorro Quente</div></div>
+              <span style="font-size:12px;font-weight:700;color:var(--orange)">18 un</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:18px">🥖</span>
+              <div style="flex:1"><div style="font-size:12px;font-weight:600">Pão Francês</div></div>
+              <span style="font-size:12px;font-weight:700;color:var(--muted)">142 un</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">🚗 Entregas agora</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="padding:10px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:10px">
+              <div style="font-size:11px;color:var(--green);font-weight:700">🛵 Motoboy — Paulo</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:3px">Pedido #037 — Marcos Souza</div>
+              <div style="font-size:11px;color:var(--muted)">Rua Irmão José Otão, 12 — ~15 min</div>
+            </div>
+            <div style="padding:10px;background:var(--bg-3);border:1px solid var(--border);border-radius:10px">
+              <div style="font-size:11px;color:var(--muted);font-weight:700">🛵 Motoboy — André</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:3px">Disponível para próximo pedido</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP BOT -->
+<div class="screen" id="screen-whatsapp">
+  <div style="padding:40px 32px;display:flex;flex-direction:column;align-items:center">
+    <div class="screen-title">
+      <h2>Bot de Pedidos no WhatsApp</h2>
+      <p>Cliente pede, paga e acompanha — tudo pelo WhatsApp, sem baixar nenhum app</p>
+    </div>
+    <div style="display:flex;gap:28px;max-width:960px;width:100%;align-items:flex-start">
+      <!-- PHONE -->
+      <div class="wa-phone" style="width:300px;flex-shrink:0;border-radius:28px;box-shadow:0 32px 80px rgba(0,0,0,0.5)">
+        <div class="wa-header">
+          <div class="wa-avatar">🥖</div>
+          <div><div style="font-size:13px;font-weight:600">Padaria Central POA</div><div style="font-size:10px;color:var(--green)">● online agora</div></div>
+        </div>
+        <div class="wa-body">
+          <div class="wa-date-sep">Hoje, 19:30</div>
+
+          <div class="wa-msg wa-sent">Oi, quero pedir 2 xis e um hot dog<div class="wa-msg-time">19:30 ✓✓</div></div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente</div>
+            <div class="wa-msg wa-received">Boa noite! 🥖 Que delícia!<br><br><strong>Xis Gaúcho</strong> — R$22,00 cada<br><strong>Hot Dog Completo</strong> — R$18,00<br><br>Subtotal: 2x22 + 18 = <strong>R$62,00</strong><br><br>É para entrega ou retirada?<div class="wa-msg-time">19:30 ✓✓</div></div>
+          </div>
+
+          <div class="wa-msg wa-sent">Entrega!<div class="wa-msg-time">19:31 ✓✓</div></div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente</div>
+            <div class="wa-msg wa-received">Qual o endereço de entrega?<div class="wa-msg-time">19:31 ✓✓</div></div>
+          </div>
+
+          <div class="wa-msg wa-sent">Rua Irmão José Otão, 12 — Cidade Baixa<div class="wa-msg-time">19:32 ✓✓</div></div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente</div>
+            <div class="wa-msg wa-received">Perfeito! Aqui o resumo:<br><br>🛒 2x Xis Gaúcho — R$44<br>🌭 1x Hot Dog — R$18<br>🚗 Frete — R$6<br><strong>Total: R$68,00</strong><br><br>Como vai pagar?<br>• Pix<br>• Cartão na entrega<div class="wa-msg-time">19:32 ✓✓</div></div>
+          </div>
+
+          <div class="wa-msg wa-sent">Pix!<div class="wa-msg-time">19:33 ✓✓</div></div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente</div>
+            <div class="wa-msg wa-received">✅ <strong>Pedido #042 confirmado!</strong><br><br>🕐 Previsão: 25-35 minutos<br>📍 Cidade Baixa<br><br>Chave Pix: 51 9XXXX-XXXX<br><br>Te aviso quando sair para entrega!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚡ O que o bot faz sozinho</div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:16px">🛒</span><div><div style="font-size:12px;font-weight:600">Recebe e monta o pedido</div><div style="font-size:11px;color:var(--muted)">Entende "quero 2 xis" e já calcula o total</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:16px">🗺️</span><div><div style="font-size:12px;font-weight:600">Calcula frete por bairro</div><div style="font-size:11px;color:var(--muted)">Cada bairro de Porto Alegre com frete configurado</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:16px">💳</span><div><div style="font-size:12px;font-weight:600">Gera Pix ou indica pagamento</div><div style="font-size:11px;color:var(--muted)">Envia chave Pix e confirma quando pago</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:16px">📤</span><div><div style="font-size:12px;font-weight:600">Manda para a cozinha</div><div style="font-size:11px;color:var(--muted)">Pedido aparece no painel na mesma hora</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:16px">🛵</span><div><div style="font-size:12px;font-weight:600">Avisa saída e previsão</div><div style="font-size:11px;color:var(--muted)">"Seu pedido saiu! Chegamos em ~20 minutos"</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">📦 Vendas de insumos por atacado</div></div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:12px">Xis e hot dog da vizinhança, pequenos comércios e feirantes podem pedir insumos direto pelo WhatsApp:</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)"><span style="color:var(--green)">✓</span> Farinha, frios, pão francês em quantidade</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)"><span style="color:var(--green)">✓</span> Pedido semanal recorrente com 1 mensagem</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)"><span style="color:var(--green)">✓</span> Entrega programada + nota fiscal automática</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">🔄 Fidelização automática</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="padding:10px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;font-size:12px;color:var(--muted)">7 dias sem pedir → <strong style="color:var(--text)">"Saudade de você! Xis Gaúcho com 10% off hoje 🥪"</strong></div>
+            <div style="padding:10px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:10px;font-size:12px;color:var(--muted)">10º pedido → <strong style="color:var(--text)">"Parabéns! Ganhou um cachorro quente grátis no próximo pedido 🎁"</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="screen-painel">
+  <div style="padding:40px 32px">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
+        <div><h2 style="font-size:22px;font-weight:700;letter-spacing:-0.4px">Dashboard — Padaria Central POA</h2><p style="font-size:12px;color:var(--muted);margin-top:2px">Domingo, 06 de Abril • Turno da noite</p></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost">Relatório</button>
+          <button class="btn btn-primary">Cardápio</button>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card am"><div class="metric-icon">🥪</div><div class="metric-label">Pedidos hoje</div><div class="metric-value">42</div><div class="metric-change">↑ 8 a mais que ontem</div></div>
+        <div class="metric-card or"><div class="metric-icon">🛵</div><div class="metric-label">Entregas realizadas</div><div class="metric-value">31</div><div class="metric-change">↑ 74% via WhatsApp</div></div>
+        <div class="metric-card gr"><div class="metric-icon">💰</div><div class="metric-label">Faturamento hoje</div><div class="metric-value">R$1.8k</div><div class="metric-change">↑ recorde da semana</div></div>
+        <div class="metric-card bl"><div class="metric-icon">📦</div><div class="metric-label">Atacado — semana</div><div class="metric-value">R$3.2k</div><div class="metric-change">↑ 4 clientes recorrentes</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📈 Horários de pico</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--muted)">06h — 09h (café da manhã)</span><span style="font-size:11px;font-weight:700;color:var(--accent)">38 pedidos</span></div><div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--accent)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--muted)">11h — 14h (almoço)</span><span style="font-size:11px;font-weight:700;color:var(--orange)">52 pedidos</span></div><div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--orange)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--muted)">18h — 22h (noite — xis e hot dog)</span><span style="font-size:11px;font-weight:700;color:var(--accent-2)">71 pedidos</span></div><div class="prog-bar"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,var(--accent),var(--orange))"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--muted)">Outros horários</span><span style="font-size:11px;font-weight:700;color:var(--muted)">24 pedidos</span></div><div class="prog-bar"><div class="prog-fill" style="width:35%;background:var(--bg-4)"></div></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">💰 Receita por categoria</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:12px">🥪 Xis e lanches</span>
+              <span style="font-size:13px;font-weight:700;color:var(--accent)">R$4.840</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:12px">📦 Insumos atacado</span>
+              <span style="font-size:13px;font-weight:700;color:var(--orange)">R$3.200</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg-3);border-radius:8px">
+              <span style="font-size:12px">🥖 Pães e confeitaria</span>
+              <span style="font-size:13px;font-weight:700;color:var(--accent-2)">R$2.100</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px">
+              <span style="font-size:13px;font-weight:700">Total do mês</span>
+              <span style="font-size:16px;font-weight:800;color:var(--accent)">R$10.140</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showScreen(name, btn) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

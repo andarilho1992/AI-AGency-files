@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pets Go — Configuração do Sistema</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f6fa;
+    color: #1a1a2e;
+    min-height: 100vh;
+    padding: 32px 16px 64px;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .logo {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .section {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid #e8eaf0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+
+  label .required {
+    color: #e74c3c;
+    margin-left: 2px;
+  }
+
+  label .hint {
+    font-weight: 400;
+    color: #999;
+    font-size: 11px;
+    margin-left: 6px;
+  }
+
+  input[type="text"],
+  input[type="color"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e0e3eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1a1a2e;
+    background: #fafbfd;
+    transition: border-color 0.2s;
+    font-family: inherit;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: #fff;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+  }
+
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .color-row input[type="color"] {
+    width: 48px;
+    height: 40px;
+    padding: 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .color-row input[type="text"] {
+    flex: 1;
+    font-family: monospace;
+  }
+
+  /* Lista dinâmica */
+  .list-container { display: flex; flex-direction: column; gap: 8px; }
+
+  .list-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .list-item input { flex: 1; }
+
+  .btn-remove {
+    background: none;
+    border: 1.5px solid #e0e3eb;
+    border-radius: 6px;
+    color: #bbb;
+    cursor: pointer;
+    font-size: 15px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .btn-remove:hover { border-color: #e74c3c; color: #e74c3c; }
+
+  .btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px dashed #c0c4d0;
+    border-radius: 8px;
+    color: #888;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    cursor: pointer;
+    margin-top: 6px;
+    width: 100%;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .btn-add:hover { border-color: #4f46e5; color: #4f46e5; }
+
+  /* Serviços */
+  .service-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .service-item input[type="text"] { width: 100%; }
+  .service-item input.price {
+    width: 100px;
+    text-align: right;
+  }
+
+  /* PIN */
+  .pin-field {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .pin-field input {
+    width: 100px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-align: center;
+  }
+
+  .pin-field .pin-hint {
+    font-size: 12px;
+    color: #999;
+  }
+
+  /* Botão gerar */
+  .btn-gerar {
+    width: 100%;
+    padding: 16px;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-gerar:hover { background: #4338ca; }
+
+  /* Output */
+  .output-box {
+    display: none;
+    margin-top: 24px;
+    background: #1a1a2e;
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+  }
+
+  .output-box.visible { display: block; }
+
+  .output-box h3 {
+    color: #a5b4fc;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 14px;
+  }
+
+  .output-text {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #c7d2fe;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    word-break: break-word;
+  }
+
+  .btn-copy {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(165,180,252,0.15);
+    border: 1px solid rgba(165,180,252,0.3);
+    color: #a5b4fc;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-copy:hover { background: rgba(165,180,252,0.25); }
+  .btn-copy.copied { color: #6ee7b7; border-color: #6ee7b7; background: rgba(110,231,183,0.1); }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 32px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    .service-item { grid-template-columns: 1fr auto; }
+    .service-item input.price { width: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🐾</div>
+    <h1>Configuração do Sistema Pets Go</h1>
+    <p>Preencha as informações abaixo para personalizar<br>o sistema de gestão do seu petshop.</p>
+    <span class="badge">Ficha de Onboarding — Agência Guilherme Andrade</span>
+  </div>
+
+  <!-- SEÇÃO 1: IDENTIDADE -->
+  <div class="section">
+    <div class="section-title">1. Identidade do negócio</div>
+
+    <div class="field">
+      <label>Nome do petshop <span class="required">*</span></label>
+      <input type="text" id="nome" placeholder="ex: Pets Go Club" />
+    </div>
+
+    <div class="field">
+      <label>Slogan ou frase curta <span class="hint">opcional</span></label>
+      <input type="text" id="slogan" placeholder="ex: Cuidando com amor" />
+    </div>
+
+    <div class="field">
+      <label>Cor principal da marca <span class="hint">use o seletor ou cole o código hex</span></label>
+      <div class="color-row">
+        <input type="color" id="corPicker1" value="#FFD600" oninput="syncColor(this,'corHex1')" />
+        <input type="text" id="corHex1" value="#FFD600" placeholder="#FFD600" oninput="syncPicker(this,'corPicker1')" maxlength="7" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Cor secundária <span class="hint">fundo ou destaque</span></label>
+      <div class="color-row">
+        <input type="color" id="corPicker2" value="#1A2B6B" oninput="syncColor(this,'corHex2')" />
+        <input type="text" id="corHex2" value="#1A2B6B" placeholder="#1A2B6B" oninput="syncPicker(this,'corPicker2')" maxlength="7" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Dispositivo principal de uso <span class="required">*</span></label>
+      <select id="dispositivo">
+        <option value="">Selecione...</option>
+        <option value="celular">Celular (Android ou iPhone)</option>
+        <option value="computador">Computador / Notebook</option>
+        <option value="ambos">Ambos</option>
+        <option value="tablet">Tablet</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 2: FILIAIS -->
+  <div class="section">
+    <div class="section-title">2. Unidades / Filiais</div>
+
+    <div class="field">
+      <label>Nome de cada unidade <span class="required">*</span> <span class="hint">adicione quantas tiver</span></label>
+      <div class="list-container" id="filiais-list">
+        <div class="list-item">
+          <input type="text" placeholder="ex: Matriz — Centro" />
+          <button class="btn-remove" onclick="removeItem(this)">✕</button>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addFilial()">+ Adicionar unidade</button>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 3: SERVIÇOS -->
+  <div class="section">
+    <div class="section-title">3. Serviços e preços</div>
+
+    <div class="field">
+      <label>Lista de serviços <span class="required">*</span> <span class="hint">nome + preço de referência</span></label>
+      <div class="list-container" id="servicos-list">
+        <div class="service-item">
+          <input type="text" placeholder="ex: Banho Pequeno" />
+          <input type="text" class="price" placeholder="R$ 0,00" />
+          <button class="btn-remove" onclick="removeItem(this)">✕</button>
+        </div>
+        <div class="service-item">
+          <input type="text" placeholder="ex: Tosa Completa Médio" />
+          <input type="text" class="price" placeholder="R$ 0,00" />
+          <button class="btn-remove" onclick="removeItem(this)">✕</button>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addServico()">+ Adicionar serviço</button>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 4: ACESSO E SEGURANÇA -->
+  <div class="section">
+    <div class="section-title">4. Acesso e segurança</div>
+
+    <div class="field">
+      <label>Nome do responsável principal <span class="required">*</span> <span class="hint">quem vai administrar o sistema</span></label>
+      <input type="text" id="operador" placeholder="ex: Junior" />
+    </div>
+
+    <div class="field">
+      <label>PIN do financeiro <span class="required">*</span></label>
+      <div class="pin-field">
+        <input type="text" id="pin" maxlength="6" placeholder="••••" oninput="this.value=this.value.replace(/\D/g,'')" />
+        <span class="pin-hint">Apenas números. Quem souber esse PIN acessa o painel de faturamentos.</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Quem além de você terá acesso ao financeiro? <span class="hint">opcional</span></label>
+      <input type="text" id="acesso-fin" placeholder="ex: Maria (sócia), Fernanda (gerente)" />
+    </div>
+  </div>
+
+  <!-- SEÇÃO 5: OPERAÇÃO -->
+  <div class="section">
+    <div class="section-title">5. Operação atual</div>
+
+    <div class="field">
+      <label>Como vocês controlam os pets e atendimentos hoje?</label>
+      <textarea id="controle-atual" placeholder="ex: Caderno, WhatsApp, Excel, sistema antigo..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Qual é o maior problema que você quer resolver com o sistema? <span class="required">*</span></label>
+      <textarea id="problema-principal" placeholder="ex: Não sei quanto cada filial faturou no mês, perco histórico dos pets quando mudam de filial..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Tem alguma informação específica que quer registrar nos pets?</label>
+      <textarea id="info-extra" placeholder="ex: raça, veterinário de referência, comportamento, vacinas..."></textarea>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 6: ESTOQUE (OPCIONAL) -->
+  <div class="section">
+    <div class="section-title">6. Estoque <span style="font-weight:400;color:#aaa;text-transform:none;letter-spacing:0">(opcional — preencha se quiser controlar produtos)</span></div>
+
+    <div class="field">
+      <label>Vai usar controle de estoque? <span class="required">*</span></label>
+      <select id="usa-estoque">
+        <option value="">Selecione...</option>
+        <option value="sim">Sim — quero controlar produtos e quantidades</option>
+        <option value="nao">Não por enquanto</option>
+        <option value="futuro">Futuramente</option>
+      </select>
+    </div>
+
+    <div class="field" id="categorias-field">
+      <label>Principais categorias de produto <span class="hint">se respondeu Sim acima</span></label>
+      <textarea id="categorias" placeholder="ex: Shampoo, Condicionador, Antipulgas, Ração, Acessórios..."></textarea>
+    </div>
+  </div>
+
+  <!-- GERAR -->
+  <button class="btn-gerar" onclick="gerarResumo()">Gerar resumo de configuração ✓</button>
+
+  <!-- OUTPUT -->
+  <div class="output-box" id="output-box">
+    <h3>Resumo gerado — copie e envie</h3>
+    <button class="btn-copy" id="btn-copy" onclick="copiarResumo()">Copiar</button>
+    <pre class="output-text" id="output-text"></pre>
+  </div>
+
+  <div class="footer-note">
+    Agência Guilherme Andrade · Sistemas de Automação para Pequenos Negócios<br>
+    Todas as informações são usadas apenas para configurar o seu sistema.
+  </div>
+
+</div>
+
+<script>
+  function syncColor(picker, hexId) {
+    document.getElementById(hexId).value = picker.value.toUpperCase();
+  }
+
+  function syncPicker(hex, pickerId) {
+    const val = hex.value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+      document.getElementById(pickerId).value = val;
+    }
+  }
+
+  function addFilial() {
+    const list = document.getElementById('filiais-list');
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = `
+      <input type="text" placeholder="ex: Filial — Bairro" />
+      <button class="btn-remove" onclick="removeItem(this)">✕</button>
+    `;
+    list.appendChild(div);
+    div.querySelector('input').focus();
+  }
+
+  function addServico() {
+    const list = document.getElementById('servicos-list');
+    const div = document.createElement('div');
+    div.className = 'service-item';
+    div.innerHTML = `
+      <input type="text" placeholder="ex: Banho Grande" />
+      <input type="text" class="price" placeholder="R$ 0,00" />
+      <button class="btn-remove" onclick="removeItem(this)">✕</button>
+    `;
+    list.appendChild(div);
+    div.querySelector('input').focus();
+  }
+
+  function removeItem(btn) {
+    const parent = btn.parentElement;
+    const list = parent.parentElement;
+    if (list.children.length > 1) {
+      parent.remove();
+    } else {
+      parent.querySelectorAll('input').forEach(i => i.value = '');
+    }
+  }
+
+  function gerarResumo() {
+    const nome = document.getElementById('nome').value.trim();
+    if (!nome) { alert('Por favor, preencha o nome do petshop.'); document.getElementById('nome').focus(); return; }
+
+    const operador = document.getElementById('operador').value.trim();
+    if (!operador) { alert('Por favor, preencha o nome do responsável.'); document.getElementById('operador').focus(); return; }
+
+    const pin = document.getElementById('pin').value.trim();
+    if (!pin) { alert('Por favor, defina o PIN do financeiro.'); document.getElementById('pin').focus(); return; }
+
+    const problema = document.getElementById('problema-principal').value.trim();
+    if (!problema) { alert('Por favor, descreva o principal problema a resolver.'); document.getElementById('problema-principal').focus(); return; }
+
+    // Filiais
+    const filiaisInputs = document.querySelectorAll('#filiais-list input[type="text"]');
+    const filiais = Array.from(filiaisInputs).map(i => i.value.trim()).filter(Boolean);
+    if (filiais.length === 0) { alert('Adicione pelo menos uma unidade/filial.'); return; }
+
+    // Serviços
+    const servicoItems = document.querySelectorAll('#servicos-list .service-item');
+    const servicos = [];
+    servicoItems.forEach(item => {
+      const [nome_s, preco] = item.querySelectorAll('input');
+      if (nome_s.value.trim()) {
+        servicos.push({ nome: nome_s.value.trim(), preco: preco.value.trim() || '—' });
+      }
+    });
+
+    const slogan       = document.getElementById('slogan').value.trim();
+    const cor1         = document.getElementById('corHex1').value.trim() || '#FFD600';
+    const cor2         = document.getElementById('corHex2').value.trim() || '#1A2B6B';
+    const dispositivo  = document.getElementById('dispositivo').value;
+    const acessoFin    = document.getElementById('acesso-fin').value.trim();
+    const controle     = document.getElementById('controle-atual').value.trim();
+    const infoExtra    = document.getElementById('info-extra').value.trim();
+    const usaEstoque   = document.getElementById('usa-estoque').value;
+    const categorias   = document.getElementById('categorias').value.trim();
+
+    const disp = { celular: 'Celular', computador: 'Computador / Notebook', ambos: 'Celular + Computador', tablet: 'Tablet' };
+    const est  = { sim: 'Sim', nao: 'Não por enquanto', futuro: 'Futuramente', '': '—' };
+
+    const agora = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+    let txt = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FICHA DE CONFIGURAÇÃO — PETS GO
+Gerado em ${agora}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🏪 IDENTIDADE
+Nome: ${nome}${slogan ? '\nSlogan: ' + slogan : ''}
+Cor principal: ${cor1}
+Cor secundária: ${cor2}
+Dispositivo principal: ${disp[dispositivo] || '—'}
+
+👤 RESPONSÁVEL
+Operador: ${operador}
+PIN do financeiro: ${pin}${acessoFin ? '\nAcesso financeiro extra: ' + acessoFin : ''}
+
+🏬 FILIAIS (${filiais.length})
+${filiais.map((f, i) => `${i + 1}. ${f}`).join('\n')}
+
+🛁 SERVIÇOS (${servicos.length})
+${servicos.length > 0
+  ? servicos.map((s, i) => `${i + 1}. ${s.nome} — ${s.preco}`).join('\n')
+  : '(nenhum informado)'}
+
+📦 ESTOQUE
+Vai usar: ${est[usaEstoque]}${categorias ? '\nCategorias: ' + categorias : ''}
+
+📋 OPERAÇÃO
+Controle atual: ${controle || '—'}
+
+🎯 PRINCIPAL PROBLEMA A RESOLVER
+${problema}
+${infoExtra ? '\n📌 INFORMAÇÕES EXTRAS SOBRE PETS\n' + infoExtra : ''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+    const box = document.getElementById('output-box');
+    document.getElementById('output-text').textContent = txt;
+    box.classList.add('visible');
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const btnCopy = document.getElementById('btn-copy');
+    btnCopy.textContent = 'Copiar';
+    btnCopy.className = 'btn-copy';
+  }
+
+  function copiarResumo() {
+    const txt = document.getElementById('output-text').textContent;
+    navigator.clipboard.writeText(txt).then(() => {
+      const btn = document.getElementById('btn-copy');
+      btn.textContent = '✓ Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2500);
+    }).catch(() => {
+      const el = document.createElement('textarea');
+      el.value = txt;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    });
+  }
+</script>
+
+</body>
+</html>

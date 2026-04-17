@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClinicBot — Sistema de Atendimento Automatizado</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0d14;
+    --bg-2: #111520;
+    --bg-3: #161c2d;
+    --bg-4: #1e2640;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8eef8;
+    --muted: rgba(232,238,248,0.45);
+    --accent: #7c6af7;
+    --accent-2: #a78bfa;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --blue: #60a5fa;
+    --pink: #f472b6;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,13,20,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 60px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+  }
+
+  .nav-logo-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+  }
+
+  .nav-tab {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all .2s;
+    letter-spacing: 0.2px;
+  }
+
+  .nav-tab:hover { color: var(--text); background: var(--bg-3); }
+  .nav-tab.active { color: var(--text); background: var(--bg-4); }
+
+  .nav-badge {
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    color: white;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* SCREENS */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding-top: 60px;
+  }
+  .screen.active { display: block; }
+
+  /* ==================== SCREEN 1 — HERO ==================== */
+  .hero {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124,106,247,0.12);
+    border: 1px solid rgba(124,106,247,0.25);
+    color: var(--accent-2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent-2), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 44px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 52px;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat-value {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--accent-2), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-divider {
+    width: 1px;
+    background: var(--border);
+    height: 50px;
+    align-self: center;
+  }
+
+  .hero-cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+  }
+
+  .hero-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    text-align: left;
+    flex: 1;
+    min-width: 200px;
+    max-width: 240px;
+    transition: all .2s;
+  }
+
+  .hero-card:hover {
+    border-color: rgba(124,106,247,0.3);
+    transform: translateY(-2px);
+  }
+
+  .hero-card-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .hero-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .hero-card-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ==================== SCREEN 2 — WHATSAPP ==================== */
+  .whatsapp-screen {
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .screen-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .screen-title h2 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    margin-bottom: 8px;
+  }
+
+  .screen-title p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .wa-container {
+    display: flex;
+    gap: 32px;
+    max-width: 1000px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .wa-phone {
+    flex-shrink: 0;
+    width: 320px;
+    background: var(--bg-2);
+    border-radius: 36px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  }
+
+  .wa-header {
+    background: #1a2535;
+    padding: 16px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wa-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .wa-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .wa-status {
+    font-size: 10px;
+    color: var(--green);
+    margin-top: 1px;
+  }
+
+  .wa-body {
+    background: #0e1621;
+    padding: 16px 12px;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .wa-msg {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .wa-msg-time {
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 3px;
+    text-align: right;
+  }
+
+  .wa-received {
+    background: #1e2d3d;
+    border-radius: 0 12px 12px 12px;
+    align-self: flex-start;
+  }
+
+  .wa-sent {
+    background: #1d3a2a;
+    border-radius: 12px 0 12px 12px;
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  .wa-bot-label {
+    font-size: 9px;
+    color: var(--accent-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .wa-date-sep {
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    padding: 3px 10px;
+    border-radius: 10px;
+    align-self: center;
+    margin: 4px 0;
+  }
+
+  .wa-typing {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 10px 14px;
+    background: #1e2d3d;
+    border-radius: 0 12px 12px 12px;
+    width: fit-content;
+  }
+
+  .wa-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: typing 1.2s infinite;
+  }
+
+  .wa-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .wa-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  .wa-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .wa-info-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .wa-info-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .wa-flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wa-flow-step:last-child { border-bottom: none; }
+
+  .wa-flow-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(124,106,247,0.2);
+    border: 1px solid rgba(124,106,247,0.3);
+    color: var(--accent-2);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wa-flow-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  .wa-flow-text strong { color: var(--text); }
+
+  /* ==================== SCREEN 3 — PAINEL ==================== */
+  .painel-screen {
+    padding: 40px 32px;
+  }
+
+  .painel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .painel-greeting h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+  }
+
+  .painel-greeting p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .painel-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #6366f1);
+    color: white;
+  }
+
+  .btn-ghost {
+    background: var(--bg-3);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-green {
+    background: rgba(52,211,153,0.15);
+    color: var(--green);
+    border: 1px solid rgba(52,211,153,0.2);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+  }
+
+  .metric-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all .2s;
+  }
+
+  .metric-card:hover {
+    border-color: rgba(124,106,247,0.25);
+    transform: translateY(-1px);
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .metric-card.purple::before { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+  .metric-card.green::before { background: var(--green); }
+  .metric-card.yellow::before { background: var(--yellow); }
+  .metric-card.blue::before { background: var(--blue); }
+
+  .metric-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .metric-value {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-card.purple .metric-value { color: var(--accent-2); }
+  .metric-card.green .metric-value { color: var(--green); }
+  .metric-card.yellow .metric-value { color: var(--yellow); }
+  .metric-card.blue .metric-value { color: var(--blue); }
+
+  .metric-change {
+    font-size: 11px;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .metric-icon {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 22px;
+    opacity: 0.25;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .agenda-day {
+    text-align: center;
+  }
+
+  .agenda-day-name {
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+  }
+
+  .agenda-day-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 auto 4px;
+    cursor: pointer;
+  }
+
+  .agenda-day-num.today {
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    color: white;
+  }
+
+  .agenda-day-num.has-event {
+    background: var(--bg-4);
+    color: var(--text);
+  }
+
+  .agenda-day-num.past { color: var(--muted); }
+
+  .agenda-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
+  .agenda-dot.green { background: var(--green); }
+  .agenda-dot.yellow { background: var(--yellow); }
+  .agenda-dot.empty { background: transparent; }
+
+  .agenda-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+  }
+
+  .slot-time {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    font-family: monospace;
+    width: 38px;
+    flex-shrink: 0;
+  }
+
+  .slot-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .slot-info { flex: 1; }
+
+  .slot-name {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .slot-proc {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .slot-badge {
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .slot-badge.confirmed {
+    background: rgba(52,211,153,0.12);
+    color: var(--green);
+    border: 1px solid rgba(52,211,153,0.2);
+  }
+
+  .slot-badge.pending {
+    background: rgba(251,191,36,0.12);
+    color: var(--yellow);
+    border: 1px solid rgba(251,191,36,0.2);
+  }
+
+  /* LEADS */
+  .lead-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .lead-item:last-child { border-bottom: none; }
+
+  .lead-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .lead-info { flex: 1; }
+
+  .lead-name {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .lead-last {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+
+  .lead-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .lead-time {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: monospace;
+  }
+
+  /* ==================== SCREEN 4 — AUTOMAÇÃO ==================== */
+  .auto-screen {
+    padding: 40px 32px;
+  }
+
+  .auto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    position: relative;
+  }
+
+  .timeline-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .timeline-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .timeline-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+
+  .timeline-content {
+    padding-bottom: 24px;
+    flex: 1;
+  }
+
+  .timeline-when {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .timeline-msg {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  .timeline-msg strong { color: var(--green); }
+
+  /* ==================== SCREEN 5 — COMPARATIVO ==================== */
+  .compare-screen {
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .compare-table {
+    max-width: 800px;
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-row:last-child { border-bottom: none; }
+
+  .compare-cell {
+    padding: 14px 20px;
+    font-size: 12px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .compare-cell:last-child { border-right: none; }
+
+  .compare-row.header .compare-cell {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--bg-3);
+  }
+
+  .compare-row.header .compare-cell:nth-child(3) {
+    background: rgba(124,106,247,0.08);
+    color: var(--accent-2);
+  }
+
+  .compare-row .compare-cell:nth-child(3) {
+    background: rgba(124,106,247,0.04);
+  }
+
+  .check { color: var(--green); font-size: 14px; }
+  .cross { color: var(--red); font-size: 14px; }
+  .neutral { color: var(--yellow); }
+
+  .roi-card {
+    max-width: 800px;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(124,106,247,0.1), rgba(244,114,182,0.08));
+    border: 1px solid rgba(124,106,247,0.25);
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .roi-left { flex: 1; }
+
+  .roi-left h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.4px;
+  }
+
+  .roi-left p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .roi-right {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .roi-number {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, var(--green), #6ee7b7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .roi-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* progress bar */
+  .prog-bar {
+    height: 6px;
+    background: var(--bg-4);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 12px;
+  }
+
+  .prog-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent), var(--pink));
+    transition: width 1s ease;
+  }
+
+  .adaptable-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 800px;
+    width: 100%;
+    margin-top: 24px;
+  }
+
+  .adaptable-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    transition: all .2s;
+  }
+
+  .adaptable-card:hover {
+    border-color: rgba(124,106,247,0.3);
+    transform: translateY(-2px);
+  }
+
+  .adaptable-card .icon { font-size: 22px; margin-bottom: 6px; }
+  .adaptable-card .name { font-size: 11px; font-weight: 600; }
+  .adaptable-card .desc { font-size: 10px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot">⚡</div>
+    ClinicBot
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showScreen('hero', this)">Visão Geral</button>
+    <button class="nav-tab" onclick="showScreen('whatsapp', this)">Bot WhatsApp</button>
+    <button class="nav-tab" onclick="showScreen('painel', this)">Painel Web</button>
+    <button class="nav-tab" onclick="showScreen('automacao', this)">Automação</button>
+    <button class="nav-tab" onclick="showScreen('comparativo', this)">Resultado</button>
+  </div>
+  <div class="nav-badge">R$3.000 + R$400/mês</div>
+</nav>
+
+<!-- ==================== SCREEN 1 — HERO ==================== -->
+<div class="screen active" id="screen-hero">
+  <div class="hero">
+    <div class="hero-tag">⚡ Sistema de Atendimento Automatizado</div>
+    <h1>Nunca mais perca um <span>lead no WhatsApp</span></h1>
+    <p>Bot inteligente que responde, qualifica e agenda clientes em menos de 30 segundos — enquanto você está em atendimento.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">30s</div>
+        <div class="hero-stat-label">tempo de resposta</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">24/7</div>
+        <div class="hero-stat-label">disponibilidade</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">9x</div>
+        <div class="hero-stat-label">mais conversão</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">R$0</div>
+        <div class="hero-stat-label">secretária necessária</div>
+      </div>
+    </div>
+
+    <div class="hero-cards">
+      <div class="hero-card">
+        <div class="hero-card-icon">🤖</div>
+        <div class="hero-card-title">Bot Inteligente</div>
+        <div class="hero-card-desc">Responde leads, tira dúvidas e agenda horários automaticamente</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">📅</div>
+        <div class="hero-card-title">Agenda Automática</div>
+        <div class="hero-card-desc">Lembretes e confirmações sem você tocar no celular</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">📊</div>
+        <div class="hero-card-title">Painel de Gestão</div>
+        <div class="hero-card-desc">Leads, agenda e métricas do negócio em tempo real</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🔄</div>
+        <div class="hero-card-title">Retorno Automático</div>
+        <div class="hero-card-desc">Lembra o cliente de voltar em 4 meses sem você fazer nada</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 2 — WHATSAPP ==================== -->
+<div class="screen" id="screen-whatsapp">
+  <div class="whatsapp-screen">
+    <div class="screen-title">
+      <h2>Bot de Atendimento no WhatsApp</h2>
+      <p>Conversa real simulada — o que o lead vê quando manda mensagem</p>
+    </div>
+
+    <div class="wa-container">
+      <!-- PHONE -->
+      <div class="wa-phone">
+        <div class="wa-header">
+          <div class="wa-avatar">💆</div>
+          <div>
+            <div class="wa-name">Clínica Dra. Ana Paula</div>
+            <div class="wa-status">● online agora</div>
+          </div>
+        </div>
+        <div class="wa-body">
+          <div class="wa-date-sep">Hoje, 14:23</div>
+
+          <div class="wa-msg wa-sent">
+            Oi, quanto custa o botox?
+            <div class="wa-msg-time">14:23 ✓✓</div>
+          </div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente Virtual</div>
+            <div class="wa-msg wa-received">
+              Olá! Seja bem-vinda 💜<br><br>
+              Sou a assistente da Dra. Ana Paula. Vou te ajudar agora mesmo!<br><br>
+              <strong>Nossos procedimentos:</strong><br>
+              • Botox facial — a partir de R$350<br>
+              • Botox masseter — a partir de R$420<br>
+              • Preenchimento labial — a partir de R$480<br><br>
+              Gostaria de agendar uma avaliação ou tem alguma dúvida?
+              <div class="wa-msg-time">14:23 ✓✓</div>
+            </div>
+          </div>
+
+          <div class="wa-msg wa-sent">
+            Dói muito? E quanto dura?
+            <div class="wa-msg-time">14:25 ✓✓</div>
+          </div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente Virtual</div>
+            <div class="wa-msg wa-received">
+              Ótima pergunta! 😊<br><br>
+              A <strong>aplicação é rápida</strong> e causa apenas um leve desconforto — como uma picadinha. A maioria das clientes considera bem tranquilo!<br><br>
+              O efeito dura em média <strong>4 a 6 meses</strong>, variando de pessoa para pessoa.<br><br>
+              Quer agendar sua avaliação gratuita? 🗓
+              <div class="wa-msg-time">14:25 ✓✓</div>
+            </div>
+          </div>
+
+          <div class="wa-msg wa-sent">
+            Sim quero agendar!
+            <div class="wa-msg-time">14:26 ✓✓</div>
+          </div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente Virtual</div>
+            <div class="wa-msg wa-received">
+              Perfeito! 🎉<br><br>
+              <strong>Horários disponíveis:</strong><br>
+              • Terça-feira — 10h ou 14h<br>
+              • Quinta-feira — 09h ou 16h<br>
+              • Sexta-feira — 11h<br><br>
+              Qual prefere?
+              <div class="wa-msg-time">14:26 ✓✓</div>
+            </div>
+          </div>
+
+          <div class="wa-msg wa-sent">
+            Quinta às 16h perfeito!
+            <div class="wa-msg-time">14:27 ✓✓</div>
+          </div>
+
+          <div style="align-self:flex-start">
+            <div class="wa-bot-label">🤖 Assistente Virtual</div>
+            <div class="wa-msg wa-received">
+              ✅ <strong>Agendado!</strong><br><br>
+              📅 Quinta-feira, 10/04<br>
+              🕓 16h00<br>
+              📍 Rua das Flores, 142 — Sala 08<br><br>
+              <em>Dica: evite maquiagem no dia do procedimento.</em><br><br>
+              Te envio um lembrete amanhã. Até lá! 💜
+              <div class="wa-msg-time">14:27 ✓✓</div>
+            </div>
+          </div>
+
+          <div class="wa-typing">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="wa-info">
+        <div class="wa-info-card">
+          <h3>⚡ O que o bot faz nessa conversa</h3>
+          <div class="wa-flow-step">
+            <div class="wa-flow-num">1</div>
+            <div class="wa-flow-text"><strong>Responde em 30 segundos</strong> — mesmo com a profissional em atendimento</div>
+          </div>
+          <div class="wa-flow-step">
+            <div class="wa-flow-num">2</div>
+            <div class="wa-flow-text"><strong>Apresenta serviços e preços</strong> configurados pela profissional</div>
+          </div>
+          <div class="wa-flow-step">
+            <div class="wa-flow-num">3</div>
+            <div class="wa-flow-text"><strong>Responde dúvidas com IA</strong> — dói? dura quanto? tem contraindicação?</div>
+          </div>
+          <div class="wa-flow-step">
+            <div class="wa-flow-num">4</div>
+            <div class="wa-flow-text"><strong>Agenda o horário</strong> diretamente no chat, sem intermediário</div>
+          </div>
+          <div class="wa-flow-step">
+            <div class="wa-flow-num">5</div>
+            <div class="wa-flow-text"><strong>Confirma com endereço e instruções</strong> — sem a profissional fazer nada</div>
+          </div>
+        </div>
+
+        <div class="wa-info-card">
+          <h3>🎛 Totalmente personalizado</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+            <span style="background:var(--bg-4);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)">Nome da clínica</span>
+            <span style="background:var(--bg-4);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)">Serviços e preços</span>
+            <span style="background:var(--bg-4);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)">Tom de voz</span>
+            <span style="background:var(--bg-4);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)">Horários disponíveis</span>
+            <span style="background:var(--bg-4);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)">FAQ específico</span>
+            <span style="background:var(--bg-4);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)">Endereço e instruções</span>
+          </div>
+        </div>
+
+        <div class="wa-info-card">
+          <h3>🔒 Quando o bot passa para a profissional</h3>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            Se o lead fizer uma pergunta fora do roteiro, o bot avisa a profissional e ela assume a conversa com um clique. O bot não inventa resposta — ele redireciona com segurança.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 3 — PAINEL ==================== -->
+<div class="screen" id="screen-painel">
+  <div class="painel-screen">
+    <div class="painel-header">
+      <div class="painel-greeting">
+        <h2>Bom dia, Ana Paula 👋</h2>
+        <p>Domingo, 06 de Abril • 3 agendamentos hoje</p>
+      </div>
+      <div class="painel-actions">
+        <button class="btn btn-ghost">Exportar relatório</button>
+        <button class="btn btn-primary">+ Novo agendamento</button>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card purple">
+        <div class="metric-icon">💬</div>
+        <div class="metric-label">Leads esse mês</div>
+        <div class="metric-value">47</div>
+        <div class="metric-change">↑ 12 a mais que mês passado</div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-icon">✅</div>
+        <div class="metric-label">Taxa de conversão</div>
+        <div class="metric-value">68%</div>
+        <div class="metric-change">↑ era 41% antes do bot</div>
+      </div>
+      <div class="metric-card yellow">
+        <div class="metric-icon">📅</div>
+        <div class="metric-label">Agendamentos</div>
+        <div class="metric-value">32</div>
+        <div class="metric-change">↑ 8 retornos automáticos</div>
+      </div>
+      <div class="metric-card blue">
+        <div class="metric-icon">💰</div>
+        <div class="metric-label">Receita estimada</div>
+        <div class="metric-value">R$14k</div>
+        <div class="metric-change">↑ mês melhor do ano</div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-grid">
+      <!-- AGENDA -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📅 Agenda — Abril 2025</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:5px 12px">Ver mês completo</button>
+        </div>
+
+        <div class="agenda-grid">
+          <div class="agenda-day">
+            <div class="agenda-day-name">Seg</div>
+            <div class="agenda-day-num has-event">7</div>
+            <div class="agenda-dot green"></div>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-name">Ter</div>
+            <div class="agenda-day-num has-event">8</div>
+            <div class="agenda-dot green"></div>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-name">Qua</div>
+            <div class="agenda-day-num has-event">9</div>
+            <div class="agenda-dot yellow"></div>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-name">Qui</div>
+            <div class="agenda-day-num has-event">10</div>
+            <div class="agenda-dot green"></div>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-name">Sex</div>
+            <div class="agenda-day-num has-event">11</div>
+            <div class="agenda-dot green"></div>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-name">Sáb</div>
+            <div class="agenda-day-num past">12</div>
+            <div class="agenda-dot empty"></div>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Hoje — 06 de Abril</div>
+
+        <div class="agenda-slots">
+          <div class="slot">
+            <div class="slot-time">09:00</div>
+            <div class="slot-dot" style="background:var(--green)"></div>
+            <div class="slot-info">
+              <div class="slot-name">Maria Fernanda</div>
+              <div class="slot-proc">Botox facial · 1h</div>
+            </div>
+            <span class="slot-badge confirmed">Confirmada</span>
+          </div>
+          <div class="slot">
+            <div class="slot-time">11:00</div>
+            <div class="slot-dot" style="background:var(--yellow)"></div>
+            <div class="slot-info">
+              <div class="slot-name">Carla Souza</div>
+              <div class="slot-proc">Preenchimento labial · 45min</div>
+            </div>
+            <span class="slot-badge pending">Pendente</span>
+          </div>
+          <div class="slot">
+            <div class="slot-time">14:00</div>
+            <div class="slot-dot" style="background:var(--green)"></div>
+            <div class="slot-info">
+              <div class="slot-name">Juliana Alves</div>
+              <div class="slot-proc">Botox masseter · 1h</div>
+            </div>
+            <span class="slot-badge confirmed">Confirmada</span>
+          </div>
+          <div class="slot">
+            <div class="slot-time">16:00</div>
+            <div class="slot-dot" style="background:var(--accent-2)"></div>
+            <div class="slot-info">
+              <div class="slot-name">Patrícia Lima</div>
+              <div class="slot-proc">Avaliação gratuita · 30min</div>
+            </div>
+            <span class="slot-badge" style="background:rgba(167,139,250,0.1);color:var(--accent-2);border:1px solid rgba(167,139,250,0.2)">Nova cliente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADS -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">💬 Leads de hoje</div>
+            <span style="font-size:10px;background:rgba(52,211,153,0.1);color:var(--green);border:1px solid rgba(52,211,153,0.2);padding:3px 8px;border-radius:20px">6 novos</span>
+          </div>
+
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:rgba(52,211,153,0.15);color:var(--green)">M</div>
+            <div class="lead-info">
+              <div class="lead-name">Maria Clara</div>
+              <div class="lead-last">Agendou para quinta às 16h</div>
+            </div>
+            <div class="lead-time">09:14</div>
+            <div class="lead-status" style="background:var(--green)"></div>
+          </div>
+
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:rgba(251,191,36,0.15);color:var(--yellow)">R</div>
+            <div class="lead-info">
+              <div class="lead-name">Roberta P.</div>
+              <div class="lead-last">Perguntou sobre preenchimento</div>
+            </div>
+            <div class="lead-time">10:52</div>
+            <div class="lead-status" style="background:var(--yellow)"></div>
+          </div>
+
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:rgba(96,165,250,0.15);color:var(--blue)">L</div>
+            <div class="lead-info">
+              <div class="lead-name">Letícia S.</div>
+              <div class="lead-last">Quer agendar a avaliação</div>
+            </div>
+            <div class="lead-time">11:30</div>
+            <div class="lead-status" style="background:var(--yellow)"></div>
+          </div>
+
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:rgba(52,211,153,0.15);color:var(--green)">A</div>
+            <div class="lead-info">
+              <div class="lead-name">Amanda T.</div>
+              <div class="lead-last">✅ Confirmada para segunda</div>
+            </div>
+            <div class="lead-time">13:05</div>
+            <div class="lead-status" style="background:var(--green)"></div>
+          </div>
+
+          <div class="lead-item">
+            <div class="lead-avatar" style="background:rgba(248,113,113,0.15);color:var(--red)">F</div>
+            <div class="lead-info">
+              <div class="lead-name">Fernanda M.</div>
+              <div class="lead-last">Não respondeu após horários</div>
+            </div>
+            <div class="lead-time">14:20</div>
+            <div class="lead-status" style="background:var(--red)"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📈 Conversão do mês</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:11px;color:var(--muted)">47 leads → 32 agendamentos</span>
+            <span style="font-size:11px;font-weight:700;color:var(--green)">68%</span>
+          </div>
+          <div class="prog-bar">
+            <div class="prog-fill" style="width:68%"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px">Antes do bot: 41% de conversão</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 4 — AUTOMAÇÃO ==================== -->
+<div class="screen" id="screen-automacao">
+  <div class="auto-screen">
+    <div class="screen-title">
+      <h2>Automação Pós-agendamento</h2>
+      <p>Tudo que acontece automaticamente após o cliente agendar — sem a profissional fazer nada</p>
+    </div>
+
+    <div class="auto-grid" style="max-width:900px;margin:0 auto">
+      <!-- TIMELINE -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📱 Mensagens automáticas para o cliente</div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-icon" style="background:rgba(52,211,153,0.15);font-size:18px">✅</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-when">Imediatamente após agendar</div>
+              <div class="timeline-msg">
+                ✅ <strong>Agendamento confirmado!</strong><br><br>
+                📅 Quinta, 10/04 às 16h00<br>
+                📍 Rua das Flores, 142 — Sala 08<br><br>
+                <em>Evite maquiagem no dia e beba bastante água 💧</em>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-icon" style="background:rgba(251,191,36,0.15);font-size:18px">🔔</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-when">2 dias antes</div>
+              <div class="timeline-msg">
+                Oi Patrícia! Lembrando que seu horário é <strong>quinta-feira às 16h</strong> com a Dra. Ana Paula 😊<br><br>
+                Confirma sua presença? Responda <strong>SIM</strong> ou <strong>NÃO</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-icon" style="background:rgba(96,165,250,0.15);font-size:18px">💆</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-when">1 dia antes</div>
+              <div class="timeline-msg">
+                Seu procedimento é <strong>amanhã!</strong> 🎉<br><br>
+                Lembrete rápido:<br>
+                • Não use maquiagem no rosto<br>
+                • Evite álcool no dia<br>
+                • Venha com a pele limpa<br><br>
+                Qualquer dúvida é só chamar 💜
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-icon" style="background:rgba(167,139,250,0.15);font-size:18px">⭐</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-when">7 dias depois</div>
+              <div class="timeline-msg">
+                Oi Patrícia! Faz uma semana do seu procedimento 🌟<br><br>
+                Como está o resultado? Ficou alguma dúvida?<br><br>
+                Seu retorno ideal é em <strong>4 meses</strong> — em outubro vou te avisar 😊
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-icon" style="background:rgba(244,114,182,0.15);font-size:18px">🔄</div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-when">4 meses depois — o mais importante</div>
+              <div class="timeline-msg">
+                Oi Patrícia! Seu botox está chegando no <strong>ponto de retorno</strong> 💉<br><br>
+                Para manter o resultado, o ideal é reaplicar agora. Quer agendar?<br><br>
+                <strong>Temos horários essa semana disponíveis!</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO CARDS -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">💡 Por que o retorno de 4 meses é o maior diferencial</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px">
+            Sem automação, a profissional precisaria lembrar manualmente de cada cliente. Com centenas de pessoas na agenda, isso nunca acontece.
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px">
+            Com o ClinicBot, <strong style="color:var(--text)">100% dos clientes recebem o lembrete de retorno</strong> — automaticamente, sem esforço algum.
+          </div>
+          <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px">
+            <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px">IMPACTO REAL</div>
+            <div style="font-size:13px;color:var(--text)">Se a profissional tem 50 clientes ativos, o sistema gera automaticamente ~12 retornos por mês sem ela fazer absolutamente nada.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📊 Redução de no-show</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+                <span style="font-size:11px;color:var(--muted)">Sem lembrete automático</span>
+                <span style="font-size:11px;color:var(--red)">~30% faltam</span>
+              </div>
+              <div class="prog-bar">
+                <div class="prog-fill" style="width:30%;background:var(--red)"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+                <span style="font-size:11px;color:var(--muted)">Com lembrete 48h antes</span>
+                <span style="font-size:11px;color:var(--yellow)">~12% faltam</span>
+              </div>
+              <div class="prog-bar">
+                <div class="prog-fill" style="width:12%;background:var(--yellow)"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+                <span style="font-size:11px;color:var(--muted)">Com lembrete + confirmação</span>
+                <span style="font-size:11px;color:var(--green)">~5% faltam</span>
+              </div>
+              <div class="prog-bar">
+                <div class="prog-fill" style="width:5%;background:var(--green)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">⚙️ Tudo configurado uma vez</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            A profissional configura nome, horários e serviços uma única vez durante a implementação. Depois disso, o sistema roda sozinho. Nenhuma mensagem precisa ser enviada manualmente.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 5 — COMPARATIVO ==================== -->
+<div class="screen" id="screen-comparativo">
+  <div class="compare-screen">
+    <div class="screen-title" style="margin-bottom:32px">
+      <h2>Por que vale R$3.000 + R$400/mês</h2>
+      <p>Comparativo direto com as alternativas atuais</p>
+    </div>
+
+    <div class="compare-table">
+      <div class="compare-row header">
+        <div class="compare-cell">Critério</div>
+        <div class="compare-cell">Secretária</div>
+        <div class="compare-cell">⚡ ClinicBot</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Custo mensal</div>
+        <div class="compare-cell" style="color:var(--red)">R$1.500 – R$2.500</div>
+        <div class="compare-cell"><span class="check">✓</span> R$400/mês</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Horário de atendimento</div>
+        <div class="compare-cell" style="color:var(--muted)">08h às 18h</div>
+        <div class="compare-cell"><span class="check">✓</span> 24h / 7 dias</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Tempo de resposta</div>
+        <div class="compare-cell" style="color:var(--yellow)">5 a 30 minutos</div>
+        <div class="compare-cell"><span class="check">✓</span> Menos de 30 segundos</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Consistência</div>
+        <div class="compare-cell" style="color:var(--muted)">Variável (humano)</div>
+        <div class="compare-cell"><span class="check">✓</span> 100% consistente</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Retorno de 4 meses</div>
+        <div class="compare-cell"><span class="cross">✗</span> Quase nunca acontece</div>
+        <div class="compare-cell"><span class="check">✓</span> 100% automático</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Métricas e relatórios</div>
+        <div class="compare-cell"><span class="cross">✗</span> Não tem</div>
+        <div class="compare-cell"><span class="check">✓</span> Painel em tempo real</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell" style="font-weight:600">Escala sem custo extra</div>
+        <div class="compare-cell"><span class="cross">✗</span> Precisa contratar mais</div>
+        <div class="compare-cell"><span class="check">✓</span> Ilimitado</div>
+      </div>
+    </div>
+
+    <div class="roi-card">
+      <div class="roi-left">
+        <h3>Quanto custa não ter o sistema?</h3>
+        <p>Se a profissional perde <strong style="color:var(--text)">3 leads por mês</strong> por demora de resposta, e cada procedimento vale em média <strong style="color:var(--text)">R$400</strong>, isso são <strong style="color:var(--red)">R$1.200/mês perdidos</strong>.<br><br>O ClinicBot custa R$400/mês. O ROI começa <strong style="color:var(--green)">na primeira semana.</strong></p>
+      </div>
+      <div class="roi-right">
+        <div class="roi-number">3x</div>
+        <div class="roi-label">retorno no 1º mês</div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;text-align:center">
+      <div style="font-size:14px;font-weight:700;margin-bottom:16px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Funciona para qualquer prestador de serviço autônomo</div>
+    </div>
+
+    <div class="adaptable-grid">
+      <div class="adaptable-card">
+        <div class="icon">💉</div>
+        <div class="name">Botox / Estética</div>
+        <div class="desc">retorno em 4 meses</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">✂️</div>
+        <div class="name">Sobrancelha / Lash</div>
+        <div class="desc">retorno em 30 dias</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">💅</div>
+        <div class="name">Nail Designer</div>
+        <div class="desc">retorno em 3 semanas</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">🧘</div>
+        <div class="name">Fisioterapia</div>
+        <div class="desc">sessões recorrentes</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">🧠</div>
+        <div class="name">Psicólogo</div>
+        <div class="desc">sessões semanais</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">💪</div>
+        <div class="name">Personal Trainer</div>
+        <div class="desc">mensalidade + agenda</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">🦷</div>
+        <div class="name">Dentista</div>
+        <div class="desc">retorno semestral</div>
+      </div>
+      <div class="adaptable-card">
+        <div class="icon">🌿</div>
+        <div class="name">Nutricionista</div>
+        <div class="desc">acompanhamento mensal</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showScreen(name, btn) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

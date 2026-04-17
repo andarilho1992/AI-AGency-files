@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema para Clínicas de Estética — Andarilho Digital</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b0f;
+  --bg2:#0d1117;
+  --bg3:#131920;
+  --bg4:#1a2230;
+  --border:rgba(255,255,255,.06);
+  --border2:rgba(255,255,255,.1);
+  --text:#eef2f7;
+  --muted:#6b7a8d;
+  --muted2:#9aa5b4;
+  --accent:#ae330a;
+  --accent2:rgba(174,51,10,.12);
+  --accent3:rgba(174,51,10,.25);
+  --gold:#e8a045;
+  --gold2:rgba(232,160,69,.12);
+  --green:#22c55e;
+  --green2:rgba(34,197,94,.12);
+  --blue:#3b82f6;
+  --blue2:rgba(59,130,246,.1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh}
+
+/* ── HEADER ── */
+header{
+  padding:20px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{
+  width:36px;height:36px;background:var(--accent);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.logo-name{font-size:14px;font-weight:700;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.header-tag{
+  font-size:11px;font-weight:600;padding:5px 12px;
+  background:var(--accent2);color:#ff8c69;
+  border:1px solid var(--accent3);border-radius:20px;
+}
+
+/* ── HERO ── */
+.hero{
+  padding:80px 40px 64px;
+  max-width:900px;margin:0 auto;text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;padding:5px 14px;
+  background:var(--gold2);color:var(--gold);
+  border:1px solid rgba(232,160,69,.25);border-radius:20px;
+  margin-bottom:28px;
+}
+.hero h1{
+  font-size:clamp(28px,5vw,52px);font-weight:900;
+  line-height:1.1;letter-spacing:-.02em;
+  margin-bottom:20px;
+}
+.hero h1 span{color:var(--accent);}
+.hero p{
+  font-size:18px;color:var(--muted2);max-width:600px;
+  margin:0 auto 40px;line-height:1.7;font-weight:400;
+}
+.hero-cta{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+}
+.btn-primary{
+  background:var(--accent);color:#fff;border:none;
+  padding:14px 28px;border-radius:10px;font-size:14px;
+  font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:inherit;text-decoration:none;display:inline-block;
+}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-ghost{
+  background:transparent;color:var(--muted2);
+  border:1px solid var(--border2);
+  padding:14px 28px;border-radius:10px;font-size:14px;
+  font-weight:600;cursor:pointer;transition:all .2s;
+  font-family:inherit;text-decoration:none;display:inline-block;
+}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
+
+/* ── PROBLEMA ── */
+.section{padding:60px 40px;max-width:1000px;margin:0 auto}
+.section-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);margin-bottom:12px;
+}
+.section h2{
+  font-size:clamp(22px,3.5vw,36px);font-weight:800;
+  line-height:1.2;margin-bottom:16px;
+}
+.section p.sub{font-size:16px;color:var(--muted2);max-width:600px;margin-bottom:48px;line-height:1.7}
+
+.dores-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;
+}
+.dor-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  transition:border-color .2s;
+}
+.dor-card:hover{border-color:var(--border2)}
+.dor-icon{font-size:28px;margin-bottom:14px}
+.dor-titulo{font-size:15px;font-weight:700;margin-bottom:8px}
+.dor-desc{font-size:13px;color:var(--muted2);line-height:1.6}
+.dor-stat{
+  margin-top:12px;font-size:12px;font-weight:700;
+  color:var(--accent);background:var(--accent2);
+  padding:4px 10px;border-radius:20px;display:inline-block;
+}
+
+/* ── DIVISOR ── */
+.divisor{
+  height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);
+  margin:0 40px;
+}
+
+/* ── MÓDULOS ── */
+.modulos{display:flex;flex-direction:column;gap:0}
+.modulo{
+  display:grid;grid-template-columns:64px 1fr;gap:24px;
+  padding:32px 0;border-bottom:1px solid var(--border);
+  align-items:start;
+}
+.modulo:last-child{border-bottom:none}
+.modulo-num{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;flex-shrink:0;margin-top:4px;
+}
+.modulo-num.m1{background:rgba(59,130,246,.15);color:#60a5fa;}
+.modulo-num.m2{background:rgba(34,197,94,.15);color:#4ade80;}
+.modulo-num.m3{background:rgba(232,160,69,.15);color:var(--gold);}
+.modulo-num.m4{background:rgba(168,85,247,.15);color:#c084fc;}
+.modulo-num.m5{background:var(--accent2);color:#ff8c69;}
+.modulo-titulo{font-size:18px;font-weight:700;margin-bottom:6px}
+.modulo-sub{font-size:13px;color:var(--muted);margin-bottom:14px}
+.modulo-items{display:flex;flex-direction:column;gap:6px}
+.modulo-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;color:var(--muted2);
+}
+.modulo-item::before{content:'→';color:var(--accent);flex-shrink:0;margin-top:1px}
+.modulo-resultado{
+  margin-top:16px;padding:12px 16px;
+  background:var(--green2);border:1px solid rgba(34,197,94,.2);
+  border-radius:8px;font-size:13px;color:var(--green);font-weight:600;
+}
+.modulo-resultado span{color:var(--muted2);font-weight:400}
+
+/* ── PACOTES ── */
+.pacotes{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;
+}
+.pacote{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:28px;position:relative;
+  transition:all .2s;
+}
+.pacote:hover{border-color:var(--border2);transform:translateY(-2px)}
+.pacote.destaque{
+  border-color:var(--accent);
+  background:linear-gradient(135deg,var(--bg2),rgba(174,51,10,.05));
+}
+.pacote-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;font-size:11px;font-weight:700;
+  padding:3px 14px;border-radius:20px;white-space:nowrap;
+}
+.pacote-nome{font-size:13px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.pacote-preco{
+  font-size:32px;font-weight:900;line-height:1;margin-bottom:4px;
+}
+.pacote-preco span{font-size:14px;font-weight:500;color:var(--muted2)}
+.pacote-retainer{font-size:13px;color:var(--muted);margin-bottom:20px}
+.pacote-retainer b{color:var(--muted2)}
+.pacote-sep{height:1px;background:var(--border);margin-bottom:20px}
+.pacote-lista{display:flex;flex-direction:column;gap:8px}
+.pacote-item{display:flex;align-items:flex-start;gap:8px;font-size:13px}
+.pacote-item .check{color:var(--green);flex-shrink:0;margin-top:2px}
+.pacote-item .muted{color:var(--muted)}
+
+/* ── ROI ── */
+.roi-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:40px;
+}
+.roi-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px;
+}
+@media(max-width:600px){.roi-grid{grid-template-columns:1fr}}
+.roi-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+.roi-col-title.red{color:#ef4444}
+.roi-col-title.green{color:var(--green)}
+.roi-item{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:14px}
+.roi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.roi-dot.red{background:#ef4444}
+.roi-dot.green{background:var(--green)}
+.roi-total{
+  border-top:1px solid var(--border);padding-top:24px;
+  text-align:center;
+}
+.roi-total-num{font-size:42px;font-weight:900;color:var(--green);line-height:1}
+.roi-total-label{font-size:14px;color:var(--muted2);margin-top:6px}
+
+/* ── PROCESSO ── */
+.etapas{display:flex;flex-direction:column;gap:0}
+.etapa{
+  display:grid;grid-template-columns:48px 1fr;gap:20px;
+  padding:20px 0;border-bottom:1px solid var(--border);
+  align-items:start;
+}
+.etapa:last-child{border-bottom:none}
+.etapa-num{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--muted2);flex-shrink:0;
+}
+.etapa-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.etapa-desc{font-size:13px;color:var(--muted2);line-height:1.6}
+.etapa-prazo{
+  margin-top:6px;font-size:11px;font-weight:700;
+  color:var(--gold);background:var(--gold2);
+  padding:2px 8px;border-radius:10px;display:inline-block;
+}
+
+/* ── CTA FINAL ── */
+.cta-final{
+  padding:80px 40px;text-align:center;
+  background:linear-gradient(180deg,var(--bg),var(--bg3));
+}
+.cta-final h2{font-size:clamp(24px,4vw,40px);font-weight:900;margin-bottom:16px}
+.cta-final p{font-size:16px;color:var(--muted2);margin-bottom:36px}
+
+/* ── FOOTER ── */
+footer{
+  padding:24px 40px;border-top:1px solid var(--border);
+  background:var(--bg2);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--muted);flex-wrap:wrap;gap:8px;
+}
+
+@media(max-width:640px){
+  header{padding:16px 20px}
+  .hero{padding:48px 20px 40px}
+  .section{padding:48px 20px}
+  .modulo{grid-template-columns:1fr;gap:12px}
+  .modulo-num{display:none}
+  .cta-final{padding:48px 20px}
+  footer{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">⚡</div>
+    <div>
+      <div class="logo-name">Andarilho Digital</div>
+      <div class="logo-sub">Automação & Inteligência Artificial</div>
+    </div>
+  </div>
+  <div class="header-tag">Solução para Clínicas</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ Sistema de Atendimento Inteligente</div>
+  <h1>Sua clínica nunca mais perde<br><span>paciente por falta de resposta</span></h1>
+  <p>Um sistema completo de automação que atende, agenda, confirma e reativa pacientes — enquanto você foca no que realmente importa: os procedimentos.</p>
+  <div class="hero-cta">
+    <a href="#pacotes" class="btn-primary">Ver pacotes e preços</a>
+    <a href="#como-funciona" class="btn-ghost">Como funciona →</a>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- PROBLEMA -->
+<section class="section">
+  <div class="section-label">O problema</div>
+  <h2>Quanto sua clínica perde<br>sem perceber todo mês?</h2>
+  <p class="sub">Clínicas de estética perdem receita em 5 pontos que raramente aparecem no financeiro — mas aparecem no faturamento.</p>
+
+  <div class="dores-grid">
+    <div class="dor-card">
+      <div class="dor-icon">🌙</div>
+      <div class="dor-titulo">Lead fora do horário</div>
+      <div class="dor-desc">Paciente manda DM ou WhatsApp às 21h. Não recebe resposta. De manhã já agendou com outra clínica.</div>
+      <div class="dor-stat">~40% dos contatos chegam fora do horário</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">🚫</div>
+      <div class="dor-titulo">No-show</div>
+      <div class="dor-desc">Horário confirmado na boca. Paciente não aparece. Horário vira prejuízo. Sem aviso prévio.</div>
+      <div class="dor-stat">Clínicas sem sistema: 20-30% de no-show</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">⏰</div>
+      <div class="dor-titulo">Paciente some entre retornos</div>
+      <div class="dor-desc">Botox precisa de retorno em 4-6 meses. Ninguém avisa. Paciente retorna quando lembra — ou vai pra concorrente.</div>
+      <div class="dor-stat">Sem follow-up: 35% não retornam</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">⭐</div>
+      <div class="dor-titulo">Google sem avaliação</div>
+      <div class="dor-desc">Paciente satisfeita raramente avalia por conta própria. Insatisfeita avalia sempre. Resultado: Google mostra desequilíbrio.</div>
+      <div class="dor-stat">Clínica sem sistema: 1 avaliação a cada 50 atendimentos</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">🔄</div>
+      <div class="dor-titulo">Você no gargalo</div>
+      <div class="dor-desc">Toda mensagem passa por você. Toda confirmação é manual. Cada hora no WhatsApp é uma hora fora da cadeira gerando receita.</div>
+      <div class="dor-stat">Média: 2-3h/dia em atendimento administrativo</div>
+    </div>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- MÓDULOS -->
+<section class="section" id="como-funciona">
+  <div class="section-label">A solução</div>
+  <h2>5 módulos que trabalham<br>enquanto você atende</h2>
+  <p class="sub">Cada módulo resolve um problema específico. Você escolhe o pacote que faz sentido para o momento da sua clínica.</p>
+
+  <div class="modulos">
+
+    <div class="modulo">
+      <div class="modulo-num m1">1</div>
+      <div>
+        <div class="modulo-titulo">Atendente 24/7 no WhatsApp</div>
+        <div class="modulo-sub">Responde qualquer mensagem, a qualquer hora</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Responde dúvidas sobre procedimentos, valores e disponibilidade automaticamente</div>
+          <div class="modulo-item">Coleta nome, interesse e disponibilidade antes de passar para você</div>
+          <div class="modulo-item">Fora do horário: atende, qualifica e avisa você quando o lead está pronto</div>
+          <div class="modulo-item">Dentro do horário: pode atuar em paralelo com a recepção</div>
+        </div>
+        <div class="modulo-resultado">✓ Resultado esperado: <span>zero lead perdido por falta de resposta</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m2">2</div>
+      <div>
+        <div class="modulo-titulo">Confirmação de Agenda + Anti No-Show</div>
+        <div class="modulo-sub">Lembrete automático que reduz falta em até 80%</div>
+        <div class="modulo-items">
+          <div class="modulo-item">7 dias antes: confirmação inicial com data e horário</div>
+          <div class="modulo-item">24h antes: lembrete com endereço e instruções de preparo</div>
+          <div class="modulo-item">4h antes: lembrete final com link do Google Maps</div>
+          <div class="modulo-item">Se não confirmar: alerta para você reagendar ou liberar o horário</div>
+        </div>
+        <div class="modulo-resultado">✓ Resultado esperado: <span>redução de 60-80% no no-show</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m3">3</div>
+      <div>
+        <div class="modulo-titulo">Reativação Automática de Retorno</div>
+        <div class="modulo-sub">Avisa cada paciente no momento certo de cada procedimento</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Botox: lembrete em 4 meses, aviso de urgência em 5 meses</div>
+          <div class="modulo-item">Bioestimulador (Sculptra, Radiesse): lembrete em 5-6 meses</div>
+          <div class="modulo-item">Preenchimento labial: lembrete em 8 meses</div>
+          <div class="modulo-item">Fios de sustentação: lembrete em 10-12 meses</div>
+        </div>
+        <div class="modulo-resultado">✓ Resultado esperado: <span>paciente retorna antes de pesquisar concorrente</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m4">4</div>
+      <div>
+        <div class="modulo-titulo">Reputação no Google no Piloto Automático</div>
+        <div class="modulo-sub">Avaliações positivas chegam sem você pedir pessoalmente</div>
+        <div class="modulo-items">
+          <div class="modulo-item">48h após o procedimento: mensagem de follow-up personalizada</div>
+          <div class="modulo-item">Se a resposta for positiva: link direto para avaliar no Google</div>
+          <div class="modulo-item">Se houver problema: alerta para você resolver antes de virar reclamação pública</div>
+          <div class="modulo-item">Resultado: fluxo consistente de avaliações reais de pacientes satisfeitas</div>
+        </div>
+        <div class="modulo-resultado">✓ Resultado esperado: <span>Google da clínica cresce organicamente toda semana</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m5">5</div>
+      <div>
+        <div class="modulo-titulo">Painel de Gestão de Pacientes</div>
+        <div class="modulo-sub">Visão completa da clínica em uma tela</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Agenda da semana: quem está confirmado, quem ainda não confirmou</div>
+          <div class="modulo-item">Lista de reativação: quem está há mais de X meses sem retornar</div>
+          <div class="modulo-item">Histórico por paciente: todos os procedimentos e datas</div>
+          <div class="modulo-item">Origem dos agendamentos: WhatsApp, Instagram, indicação, Google</div>
+        </div>
+        <div class="modulo-resultado">✓ Resultado esperado: <span>decisão baseada em dado, não em sensação</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- ROI -->
+<section class="section">
+  <div class="section-label">O número que importa</div>
+  <h2>Quanto custa não ter o sistema</h2>
+  <p class="sub">Exemplo real: clínica com 15 agendamentos/semana, ticket médio R$350 por procedimento.</p>
+
+  <div class="roi-box">
+    <div class="roi-grid">
+      <div>
+        <div class="roi-col-title red">Sem o sistema</div>
+        <div class="roi-item"><div class="roi-dot red"></div>3 no-shows/semana = R$1.050 perdidos</div>
+        <div class="roi-item"><div class="roi-dot red"></div>5 leads sem resposta à noite = R$1.750/mês</div>
+        <div class="roi-item"><div class="roi-dot red"></div>35% das pacientes não retornam = R$2.100/mês</div>
+        <div class="roi-item"><div class="roi-dot red"></div>2h/dia no WhatsApp = 40h/mês do seu tempo</div>
+      </div>
+      <div>
+        <div class="roi-col-title green">Com o sistema</div>
+        <div class="roi-item"><div class="roi-dot green"></div>No-show cai para 1 ou menos/semana</div>
+        <div class="roi-item"><div class="roi-dot green"></div>Leads noturnos são atendidos e qualificados</div>
+        <div class="roi-item"><div class="roi-dot green"></div>Reativação automática traz 3-5 pacientes/mês de volta</div>
+        <div class="roi-item"><div class="roi-dot green"></div>WhatsApp administrativo reduz para 20min/dia</div>
+      </div>
+    </div>
+    <div class="roi-total">
+      <div class="roi-total-num">R$4.900–R$6.500</div>
+      <div class="roi-total-label">de impacto mensal estimado para uma clínica com esse perfil<br><small style="color:var(--muted)">O pacote Completo custa R$1.100/mês. ROI em menos de 10 dias.</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- PACOTES -->
+<section class="section" id="pacotes">
+  <div class="section-label">Investimento</div>
+  <h2>Escolha o pacote certo<br>para sua clínica</h2>
+  <p class="sub">Setup único + retainer mensal. Sem contrato de longo prazo. Sem fidelidade obrigatória.</p>
+
+  <div class="pacotes">
+
+    <div class="pacote">
+      <div class="pacote-nome">Essencial</div>
+      <div class="pacote-preco">R$ 2.200 <span>setup</span></div>
+      <div class="pacote-retainer">+ <b>R$ 700/mês</b> retainer</div>
+      <div class="pacote-sep"></div>
+      <div class="pacote-lista">
+        <div class="pacote-item"><span class="check">✓</span><span>Atendente 24/7 no WhatsApp</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Confirmação de agenda + anti no-show</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>30 dias de suporte incluso</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Treinamento completo</span></div>
+        <div class="pacote-item"><span class="muted">—</span><span class="muted">Reativação de retorno</span></div>
+        <div class="pacote-item"><span class="muted">—</span><span class="muted">Reputação no Google</span></div>
+        <div class="pacote-item"><span class="muted">—</span><span class="muted">Painel de gestão</span></div>
+      </div>
+    </div>
+
+    <div class="pacote destaque">
+      <div class="pacote-badge">Mais escolhido</div>
+      <div class="pacote-nome">Completo</div>
+      <div class="pacote-preco">R$ 3.500 <span>setup</span></div>
+      <div class="pacote-retainer">+ <b>R$ 1.100/mês</b> retainer</div>
+      <div class="pacote-sep"></div>
+      <div class="pacote-lista">
+        <div class="pacote-item"><span class="check">✓</span><span>Atendente 24/7 no WhatsApp</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Confirmação de agenda + anti no-show</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Reativação automática de retorno</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Reputação no Google no piloto automático</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>30 dias de suporte incluso</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Treinamento completo</span></div>
+        <div class="pacote-item"><span class="muted">—</span><span class="muted">Painel de gestão</span></div>
+      </div>
+    </div>
+
+    <div class="pacote">
+      <div class="pacote-nome">Clínica Inteligente</div>
+      <div class="pacote-preco">R$ 4.800 <span>setup</span></div>
+      <div class="pacote-retainer">+ <b>R$ 1.500/mês</b> retainer</div>
+      <div class="pacote-sep"></div>
+      <div class="pacote-lista">
+        <div class="pacote-item"><span class="check">✓</span><span>Atendente 24/7 no WhatsApp</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Confirmação de agenda + anti no-show</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Reativação automática de retorno</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Reputação no Google no piloto automático</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Painel completo de gestão de pacientes</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>30 dias de suporte incluso</span></div>
+        <div class="pacote-item"><span class="check">✓</span><span>Treinamento completo</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="text-align:center;margin-top:24px;font-size:13px;color:var(--muted)">
+    Pagamento: 50% no contrato + 50% na entrega &nbsp;·&nbsp; Retainer mês a mês, sem fidelidade &nbsp;·&nbsp; Pix ou cartão em até 3x
+  </p>
+</section>
+
+<div class="divisor"></div>
+
+<!-- PROCESSO -->
+<section class="section">
+  <div class="section-label">Como acontece</div>
+  <h2>Do contrato ao sistema no ar</h2>
+  <p class="sub">Processo simples, sem reuniões desnecessárias. Você faz uma hora de briefing. O resto é com a gente.</p>
+
+  <div class="etapas">
+    <div class="etapa">
+      <div class="etapa-num">1</div>
+      <div>
+        <div class="etapa-title">Contrato + primeiro pagamento</div>
+        <div class="etapa-desc">Assinatura digital (1 página, linguagem simples) e pagamento de 50% do setup. Trabalho começa no mesmo dia.</div>
+        <div class="etapa-prazo">D0 — mesma hora</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">2</div>
+      <div>
+        <div class="etapa-title">Briefing</div>
+        <div class="etapa-desc">Chamada de 45 minutos onde você nos passa tudo: serviços, preços, horários, perguntas frequentes das pacientes, procedimentos que oferece. Você nunca mais precisa repetir essa informação.</div>
+        <div class="etapa-prazo">D1–2 — 45 minutos do seu tempo</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">3</div>
+      <div>
+        <div class="etapa-title">Configuração e testes</div>
+        <div class="etapa-desc">Construímos e testamos tudo internamente. Simulamos múltiplos cenários de conversa antes de você ver qualquer coisa.</div>
+        <div class="etapa-prazo">D3–12 — você não precisa fazer nada</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">4</div>
+      <div>
+        <div class="etapa-title">Revisão com você</div>
+        <div class="etapa-desc">Você testa o sistema como se fosse uma paciente nova. Nos diz o que ajustar. Fazemos as correções antes de ativar.</div>
+        <div class="etapa-prazo">D13–14 — 30 minutos do seu tempo</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">5</div>
+      <div>
+        <div class="etapa-title">Sistema no ar + treinamento</div>
+        <div class="etapa-desc">Ativamos tudo. Fazemos uma sessão de treinamento de 1 hora com você e sua equipe. Segundo pagamento liberado.</div>
+        <div class="etapa-prazo">D15 — sistema funcionando</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">6</div>
+      <div>
+        <div class="etapa-title">30 dias de suporte incluso</div>
+        <div class="etapa-desc">Qualquer ajuste, dúvida ou problema nos primeiros 30 dias está coberto. Você nunca fica sozinha com o sistema.</div>
+        <div class="etapa-prazo">D15–45 — suporte garantido</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>Pronta para parar de perder<br>paciente por falta de resposta?</h2>
+  <p>Primeira conversa sem compromisso. Em 30 minutos você entende se faz sentido para a sua clínica.</p>
+  <a href="https://wa.me/55SEUNUMERO" class="btn-primary" style="font-size:15px;padding:16px 36px;">
+    Quero conhecer o sistema →
+  </a>
+</section>
+
+<footer>
+  <span>Andarilho Digital · Automação & Inteligência Artificial</span>
+  <span>andarilhodigital.com</span>
+</footer>
+
+</body>
+</html>

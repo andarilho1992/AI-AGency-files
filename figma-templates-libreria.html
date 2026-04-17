@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Trindade: Master Templates Figma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0A0A0C;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --surface-border: rgba(255, 255, 255, 0.06);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --accent-glow: rgba(139, 92, 246, 0.15); /* Purple accent */
+            --accent-color: #8B5CF6;
+            --accent-gradient: linear-gradient(135deg, #8B5CF6, #F43F5E, #F59E0B);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(244, 63, 94, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        header { text-align: center; padding: 80px 20px 40px; }
+
+        .pill-badge {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #C4B5FD;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-sub {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+        }
+
+        /* The Trinity Layout */
+        .trinity-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .template-card {
+            background: rgba(15, 15, 20, 0.6);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(139, 92, 246, 0.1);
+        }
+
+        .card-header {
+            padding: 32px;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ch-bg1 { background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent); }
+        .ch-bg2 { background: radial-gradient(circle at top right, rgba(236, 72, 153, 0.15), transparent); }
+        .ch-bg3 { background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.15), transparent); }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .card-body {
+            padding: 32px;
+            flex-grow: 1;
+        }
+
+        .blueprint-group {
+            margin-bottom: 24px;
+        }
+
+        .blueprint-group h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            color: #E2E8F0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .blueprint-group h4::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .list-items {
+            list-style: none;
+        }
+
+        .list-items li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: #CBD5E1;
+            font-size: 0.9rem;
+        }
+
+        .list-items li::before {
+            content: '╰';
+            position: absolute;
+            left: 0;
+            color: #475569;
+        }
+
+        .plugin-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: auto;
+        }
+
+        .plugin-box h5 {
+            color: #A78BFA;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .plugin-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="pill-badge">A Fábrica de Templates • Nomenclatura Padrão</div>
+        <h1>A "Trindade" do Figma</h1>
+        <p class="header-sub">O segredo das grandes agências não é desenhar rápido, é nunca começar do zero. Esta é a configuração exata dos 3 Arquivos Mestres que você deve deixar salvos eternamente nos seus Rascunhos.</p>
+    </header>
+
+    <div class="container">
+        <div class="trinity-layout">
+
+            <!-- Template 1: Landing Pages -->
+            <div class="template-card">
+                <div class="card-header ch-bg1">
+                    <div class="card-icon">💻</div>
+                    <h2 class="card-title">T1. LP & Sites</h2>
+                    <p class="card-desc">Focado em agilidade visual. Sites que precisam vender rápido, gerar leads ou apresentar serviços.</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="blueprint-group">
+                        <h4>P.1: Engenharia (Setup)</h4>
+                        <ul class="list-items">
+                            <li>Seção: <b>Benchmarking & Referências</b> (Limpo)</li>
+                            <li>Seção: <b>Wireframe Sitemap</b> (Use a árvore de Pág Institucional e E-commerce clone da comunidade)</li>
+                        </ul>
+                    </div>
+
+                    <div class="blueprint-group">
+                        <h4>P.2: Rascunhos Criativos</h4>
+                        <ul class="list-items">
+                            <li>Seção: <b>Cores da Marca e Typescales</b></li>
+                            <li>Seção: <b>Botões Base (CTA Verde/Preto)</b></li>
+                            <li>Seção: <b>Estruturas Relume</b> (Deixe colado as caixas básicas de Hero e FAQ do plugin)</li>
+                        </ul>
+                    </div>
+
+                    <div class="blueprint-group">
+                        <h4>P.3: Entrega Oficial (Handoff)</h4>
+                        <ul class="list-items">
+                            <li>Apenas frames Desktop 1440px e Mobile 390px finais perfeitos.</li>
+                        </ul>
+                    </div>
+
+                    <div class="plugin-box">
+                        <h5>Plugins Anexados Mentalmente</h5>
+                        <div class="plugin-tag">html.to.design</div>
+                        <div class="plugin-tag">Unsplash</div>
+                        <div class="plugin-tag">Relume</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 2: Identidade Visual -->
+            <div class="template-card">
+                <div class="card-header ch-bg2">
+                    <div class="card-icon">🎨</div>
+                    <h2 class="card-title">T2. Branding & IV</h2>
+                    <p class="card-desc">Focado em exportação e apresentação. Aqui as lousas são galerias de aprovação emocional.</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="blueprint-group">
+                        <h4>P.1: Essência & Discovery</h4>
+                        <ul class="list-items">
+                            <li>Seção: <b>Moodboard Dinâmico</b> (Mesa livre pra imagens do Dribbble/Pinterest)</li>
+                            <li>Seção: <b>Estudo Tipográfico Cego</b> (Comparar 5 fontes diferentes com o nome da marca escrito nelas)</li>
+                        </ul>
+                    </div>
+
+                    <div class="blueprint-group">
+                        <h4>P.2: Laboratório (WIP)</h4>
+                        <ul class="list-items">
+                            <li>Seção: <b>Mesa de Desenho Pura</b> (Onde você destrói vetores de logo e mescla símbolos)</li>
+                            <li>Seção: <b>Teste de Stress</b> (A logo sobre preto, branco e reduzida a 16px)</li>
+                        </ul>
+                    </div>
+
+                    <div class="blueprint-group">
+                        <h4>P.3: Manual de Marca & Mockups</h4>
+                        <ul class="list-items">
+                            <li>Deixe salvo: Pranchas retangulares padrão (A4 HD) para a <b>Apresentação do Projeto</b> (Behance).</li>
+                            <li>Frames pré-desenhados para Instagram Grid (1080x1080).</li>
+                        </ul>
+                    </div>
+
+                    <div class="plugin-box">
+                        <h5>Plugins Anexados Mentalmente</h5>
+                        <div class="plugin-tag">Artboard Mockups 3D</div>
+                        <div class="plugin-tag">Color Chroma</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template 3: SaaS / Web Apps -->
+            <div class="template-card">
+                <div class="card-header ch-bg3">
+                    <div class="card-icon">⚙️</div>
+                    <h2 class="card-title">T3. Paineis & SaaS</h2>
+                    <p class="card-desc">O gigante matemático. Arquivos pesados construídos sob lógica, bancos de dados e Auto Layout cravado.</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="blueprint-group">
+                        <h4>P.1: Arquitetura Bruta</h4>
+                        <ul class="list-items">
+                            <li><b>O Sitemap Complexo</b> (Essencial, aqui entram dezenas de ramificações do Software)</li>
+                            <li>Seção: <b>Design System Rigoroso</b> (Variáveis de Tokens setadas para Base 8 fixas)</li>
+                        </ul>
+                    </div>
+
+                    <div class="blueprint-group">
+                        <h4>P.2: A Biblioteca Viva (Componentes)</h4>
+                        <ul class="list-items">
+                            <li>Seção: <b>Data Tables e Campos</b> (Tabelas de dados extensíveis)</li>
+                            <li>Seção: <b>Modais e Alertas</b> (Erro, Sucesso, Aviso).</li>
+                            <li>Seção: <b>Navbar e Sidebars</b> (Menu lateral trancado no mestre).</li>
+                        </ul>
+                    </div>
+
+                    <div class="blueprint-group">
+                        <h4>P.3: As Telas do App</h4>
+                        <ul class="list-items">
+                            <li>Os frames nunca devem ter componentes soltos, apenas "filhos" (instâncias) da biblioteca viva. Se clica e edita a master, o dashboard todo muda.</li>
+                        </ul>
+                    </div>
+
+                    <div class="plugin-box">
+                        <h5>Plugins Anexados Mentalmente</h5>
+                        <div class="plugin-tag">Content Reel</div>
+                        <div class="plugin-tag">Stark (Acessibilidade)</div>
+                        <div class="plugin-tag">Rename It</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

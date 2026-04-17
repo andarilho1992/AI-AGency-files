@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireframe - Nutrição Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* Design System & Reset */
+    :root {
+      --primary: #1F3F2F; /* Dark Green */
+      --primary-light: #2A5A41;
+      --accent: #D4AF37; /* Elegant Gold */
+      --bg-color: #FDFCF8; /* Warm Off-white */
+      --text-dark: #1A1A1A;
+      --text-light: #666666;
+      --surface: #FFFFFF;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Inter', sans-serif;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 32px;
+      --spacing-xl: 64px;
+      --spacing-xxl: 128px;
+      --radius: 12px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--primary);
+    }
+
+    p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+
+    /* Utility */
+    .btn-primary {
+      display: inline-block;
+      background-color: var(--primary);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 4px; /* Mais sério, sem ser super arredondado */
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      display: inline-block;
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 16px 32px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    /* Navbar */
+    header {
+      padding: var(--spacing-lg) 0;
+      background: rgba(253, 252, 248, 0.9);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .nav-links {
+      display: flex;
+      gap: var(--spacing-lg);
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover {
+      opacity: 1;
+    }
+    
+    /* Hero */
+    .hero {
+      padding: var(--spacing-xxl) 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+    }
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+    .hero-content p {
+      margin-bottom: var(--spacing-lg);
+      font-size: 1.25rem;
+    }
+    .hero-image {
+      width: 100%;
+      height: 600px;
+      background: url('https://images.unsplash.com/photo-1594824436952-ce3732d8471c?auto=format&fit=crop&q=80&w=800') center/cover;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    /* Dor Section */
+    .dor-section {
+      background: var(--surface);
+      padding: var(--spacing-xxl) 0;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto var(--spacing-xl);
+    }
+    .section-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+    }
+    .card {
+      padding: var(--spacing-xl) var(--spacing-lg);
+      background: var(--bg-color);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h4 {
+      font-size: 1.25rem;
+      margin-bottom: var(--spacing-md);
+      font-family: var(--font-body);
+      font-weight: 600;
+    }
+
+    /* Método */
+    .method-section {
+      padding: var(--spacing-xxl) 0;
+      background-color: var(--primary);
+      color: white;
+    }
+    .method-section h2, .method-section h3 {
+      color: white;
+    }
+    .method-section p {
+      color: rgba(255,255,255,0.8);
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    .step {
+      text-align: left;
+    }
+    .step-number {
+      font-size: 2.5rem;
+      font-family: var(--font-heading);
+      color: var(--accent);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    /* About */
+    .about-section {
+      padding: var(--spacing-xxl) 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+    }
+    .about-image {
+      width: 100%;
+      height: 500px;
+      background: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=600') center/cover;
+      border-radius: var(--radius);
+    }
+    .benefits-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .benefits-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+    .benefits-list li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* FAQ */
+    .faq-section {
+      padding: var(--spacing-xxl) 0;
+      background-color: var(--surface);
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding: var(--spacing-lg) 0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .faq-item:hover {
+      background: rgba(0,0,0,0.01);
+    }
+    .faq-item:first-child {
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    
+    /* Footer CTA */
+    footer {
+      background: var(--bg-color);
+      padding: var(--spacing-xxl) 0;
+      text-align: center;
+    }
+    footer h2 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero, .about-section {
+        grid-template-columns: 1fr;
+      }
+      .hero-image {
+        height: 400px;
+        order: -1; /* Imagem primeiro no mobile */
+      }
+      .about-image {
+        height: 400px;
+      }
+      .cards-grid, .steps {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">Dra. Nome</div>
+        <div class="nav-links">
+          <a href="#dor">O Problema</a>
+          <a href="#metodo">O Método</a>
+          <a href="#sobre">Biografia</a>
+          <a href="#faq">Dúvidas Frequentes</a>
+        </div>
+        <button class="btn-primary" style="padding: 10px 24px; font-size: 0.9rem;">Agendar Avaliação</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero container">
+    <div class="hero-content">
+      <h1>Saúde plena e estética são <em>consequências</em> da sua rotina.</h1>
+      <p>Um acompanhamento terapêutico e nutricional projetado para quem cansou do ciclo vicioso de dietas restritivas e do efeito sanfona.</p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <button class="btn-primary">Quero Transformar Minha Vida</button>
+        <button class="btn-secondary">Como funciona o método?</button>
+      </div>
+    </div>
+    <div class="hero-image"></div>
+  </section>
+
+  <section class="dor-section" id="dor">
+    <div class="container">
+      <div class="section-header">
+        <h2>Você se identifica com algum desses cenários?</h2>
+        <p>A maioria das pessoas falha porque tenta forçar a rotina a caber na dieta, quando deveria ser o oposto.</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <h4>O Efeito Sanfona</h4>
+          <p>Você perde peso rápido cortando carboidratos, mas recupera tudo (e mais um pouco) quando não aguenta mais a pressão.</p>
+        </div>
+        <div class="card">
+          <h4>Falta de Energia</h4>
+          <p>Acorda cansada, sobrevive à base de café e no meio da tarde sente que a sua produtividade mental despenca.</p>
+        </div>
+        <div class="card">
+          <h4>Terrorismo Nutricional</h4>
+          <p>Sente culpa sempre que come algo fora do planejado, transformando a relação com a comida em ansiedade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="method-section" id="metodo">
+    <div class="container">
+      <div class="section-header">
+        <h2>A Jornada do Paciente Premium</h2>
+        <p>Mais do que um papel com horários. Construímos novos pilares de saúde enquanto preparamos a estrutura (futuro App) para você nunca se sentir perdido.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Avaliação 360°</h3>
+          <p>Análise clínica detalhada, compreensão da sua rotina, rotas de estresse e bioimpedância completa.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Estratégia Única</h3>
+          <p>Seu plano alimentar desenvolvido garantindo que haja espaço para a sua vida social e para alimentos que confortam.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Monitoramento</h3>
+          <p>Análise de evolução contínua, ajustes progressivos e suplementação direcionada e eficiente.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">04</div>
+          <h3>App Exclusivo <br><span style="font-size: 0.9rem; font-weight: 300;">(Em fase de desenvolvimento)</span></h3>
+          <p>Para elevar nossa retenção: Chat dinâmico, lista de supermercado automatizada e check-ins gráficos na sua mão.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section container" id="sobre">
+    <div class="about-image"></div>
+    <div>
+      <h2>A ciência como base sólida, a empatia como engrenagem.</h2>
+      <p style="margin-top: 16px; margin-bottom: 32px;">Sou Especialista em Nutrição e Saúde da Mulher. Meu foco não é apenas em "passar o que você deve comer", mas guiar o seu comportamento em relação à comida. Quero que você alcance sua melhor versão estética sem abrir mão da sua identidade.</p>
+      <ul class="benefits-list">
+        <li>Pós Graduada em Nutrição Clínica Esportiva (USP)</li>
+        <li>Metodologia Comportamental aplicada</li>
+        <li>Mais de 1.200 mulheres transformadas</li>
+        <li>Foco em Longevidade e Reprogramação Metabólica</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="faq-section" id="faq">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-header">
+        <h2>Perguntas Frequentes</h2>
+      </div>
+      <div>
+        <div class="faq-item">
+          <div class="faq-question">Você atende no formato online e presencial? <span>+</span></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Vou precisar parar de comer meu doce ou tomar meu vinho? <span>+</span></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Aceita algum plano de saúde ou convênio? <span>+</span></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Qual a duração sugerida para o programa de acompanhamento? <span>+</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <h2>Pronta para recuperar o controle total sobre o seu corpo e performance?</h2>
+      <p style="margin-bottom: 32px; font-size: 1.2rem;">Atualmente, recebemos poucos alunos por mês para garantirmos a excelência do método.</p>
+      <button class="btn-primary" style="padding: 20px 40px; font-size: 1.1rem;">Verificar Disponibilidade no WhatsApp</button>
+      <p style="margin-top: 24px; font-size: 0.9rem; opacity: 0.6;">Dra. Nome - CRN: 123456</p>
+    </div>
+  </footer>
+
+</body>
+</html>

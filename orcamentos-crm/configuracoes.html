@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações — Orçamentos Pro</title>
+
+  <!--
+    =====================================================
+    O QUE É ESSE ARQUIVO?
+    =====================================================
+    Esta é a página de CONFIGURAÇÕES da empresa.
+
+    Aqui o usuário cadastra os dados da empresa dele:
+    nome, email, telefone, endereço, site, CNPJ e cor principal.
+
+    Esses dados ficam salvos no localStorage (o banco de dados
+    do browser) e são usados em dois lugares:
+      1. No CABEÇALHO do PDF gerado para o cliente
+      2. Na SIDEBAR de todas as páginas (o nome da empresa)
+
+    Por que isso importa para o negócio?
+    Quando você vende esse sistema para um cliente, a primeira
+    coisa que ele vai querer é colocar o nome e logo da empresa
+    dele. Sem essa página, o sistema parece genérico demais.
+    =====================================================
+  -->
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /*
+      Estilos específicos desta página.
+      O CSS global (style.css) cuida do layout base.
+      Aqui só adicionamos o que é único desta tela.
+    */
+
+    /* Preview do PDF: mostra como vai aparecer no documento */
+    .preview-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      border: 2px dashed #e5e7eb;
+      color: #1f2937;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--preview-cor, #2563eb);
+    }
+
+    .preview-empresa-nome {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .preview-contato {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+
+    .preview-badge {
+      background: var(--preview-cor, #2563eb);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Seletor de cor: input[type=color] estilizado */
+    .color-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="color"] {
+      width: 48px;
+      height: 40px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 2px;
+      cursor: pointer;
+      background: white;
+    }
+
+    .color-hex {
+      font-family: monospace;
+      font-size: 14px;
+      padding: 9px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      width: 110px;
+      color: #374151;
+    }
+
+    /* Upload de logo: área de arrastar e soltar */
+    .upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .upload-area:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-preview {
+      max-width: 200px;
+      max-height: 80px;
+      margin: 0 auto 12px;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .upload-text { font-size: 14px; color: #6b7280; }
+    .upload-text strong { color: #374151; }
+
+    /* Botão de remover logo */
+    .btn-remove-logo {
+      margin-top: 8px;
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Label de seção dentro do form */
+    .form-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      margin-bottom: 12px;
+      margin-top: 4px;
+    }
+
+    /* Grid de 2 colunas no preview de info */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================================================
+    SIDEBAR — barra lateral de navegação
+    A sidebar é igual em todas as páginas.
+    Ela mostra o menu e o nome da empresa no rodapé.
+    O link "Configurações" agora aparece aqui.
+  ====================================================== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">📋</span>
+      <span class="logo-text">Orçamentos<strong>Pro</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon">◼</span> Dashboard
+      </a>
+      <a href="novo-orcamento.html" class="nav-item">
+        <span class="nav-icon">＋</span> Novo Orçamento
+      </a>
+      <a href="orcamentos.html" class="nav-item">
+        <span class="nav-icon">📄</span> Orçamentos
+      </a>
+      <a href="clientes.html" class="nav-item">
+        <span class="nav-icon">👥</span> Clientes
+      </a>
+      <a href="configuracoes.html" class="nav-item active">
+        <span class="nav-icon">⚙️</span> Configurações
+      </a>
+    </nav>
+    <div class="sidebar-empresa">
+      <span id="empresa-nome">Minha Empresa</span>
+    </div>
+  </aside>
+
+  <!-- =====================================================
+    CONTEÚDO PRINCIPAL
+    Dividido em 2 colunas:
+    - Esquerda: formulário de edição
+    - Direita: preview de como vai aparecer no PDF
+  ====================================================== -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <h1>Configurações</h1>
+        <p class="subtitle">Dados da sua empresa — aparecem no PDF enviado ao cliente</p>
+      </div>
+      <button onclick="salvarConfiguracoes()" class="btn btn-primary">
+        ✓ Salvar Configurações
+      </button>
+    </header>
+
+    <div style="display:grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start;">
+
+      <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+      <div style="display:flex; flex-direction:column; gap:20px;">
+
+        <!-- BLOCO 1: IDENTIDADE DA EMPRESA -->
+        <div class="section-card">
+          <!--
+            O que é uma "section-card"?
+            É uma classe CSS do style.css que cria uma caixa branca
+            com bordas arredondadas e sombra sutil.
+            Usamos ela em todas as páginas para agrupar conteúdo relacionado.
+          -->
+          <h2 class="section-title">Identidade da Empresa</h2>
+
+          <!-- LOGO DA EMPRESA -->
+          <div class="form-section-label">Logo</div>
+          <div class="upload-area" id="upload-area">
+            <!--
+              input[type="file"] com opacity:0 e position:absolute
+              cobre toda a área invisível. Quando o usuário clica
+              em qualquer lugar da caixa, abre o seletor de arquivo.
+              O atributo "accept" limita para imagens apenas.
+            -->
+            <input
+              type="file"
+              id="logo-input"
+              accept="image/png, image/jpeg, image/svg+xml, image/webp"
+              onchange="carregarLogo(event)"
+            />
+            <img id="logo-preview" class="upload-preview" style="display:none" />
+            <div id="upload-placeholder">
+              <div style="font-size:32px;margin-bottom:8px">🖼️</div>
+              <div class="upload-text">
+                <strong>Clique para selecionar o logo</strong><br />
+                PNG, JPG ou SVG — recomendado fundo transparente
+              </div>
+            </div>
+            <button
+              id="btn-remover-logo"
+              class="btn-remove-logo"
+              style="display:none"
+              onclick="removerLogo(event)"
+            >
+              ✕ Remover logo
+            </button>
+          </div>
+
+          <div style="height:16px"></div>
+
+          <!-- NOME E SLOGAN -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cfg-empresa">Nome da Empresa <span class="required">*</span></label>
+              <!--
+                oninput="atualizarPreview()" — cada vez que o usuário
+                digita algo neste campo, a função atualizarPreview()
+                roda e atualiza a pré-visualização da direita em tempo real.
+                Isso é chamado de "two-way binding" manual em JS puro.
+              -->
+              <input
+                type="text"
+                id="cfg-empresa"
+                placeholder="Ex: Silva & Associados"
+                oninput="atualizarPreview()"
+              />
+            </div>
+            <div class="form-group">
+              <label for="cfg-slogan">Slogan (opcional)</label>
+              <input
+                type="text"
+                id="cfg-slogan"
+                placeholder="Ex: Soluções em construção civil"
+                oninput="atualizarPreview()"
+              />
+            </div>
+          </div>
+
+          <!-- COR PRINCIPAL -->
+          <div class="form-group" style="margin-top:4px">
+            <label>Cor principal da empresa</label>
+            <!--
+              input[type="color"] é um seletor de cor nativo do browser.
+              O valor é um código hexadecimal (#2563eb = azul).
+              Quando o usuário escolhe uma cor, atualizamos o preview
+              e a variável CSS --preview-cor para refletir a mudança.
+            -->
+            <div class="color-picker-wrapper">
+              <input
+                type="color"
+                id="cfg-cor"
+                value="#2563eb"
+                oninput="atualizarCor()"
+              />
+              <input
+                type="text"
+                class="color-hex"
+                id="cfg-cor-hex"
+                value="#2563eb"
+                placeholder="#2563eb"
+                oninput="sincronizarCor()"
+              />
+              <span style="font-size:13px;color:#9ca3af">Aparece no cabeçalho e detalhes do PDF</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCO 2: CONTATO -->
+        <div class="section-card">
+          <h2 class="section-title">Contato</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cfg-email">E-mail</label>
+              <input
+                type="email"
+                id="cfg-email"
+                placeholder="contato@suaempresa.com.br"
+                oninput="atualizarPreview()"
+              />
+            </div>
+            <div class="form-group">
+              <label for="cfg-telefone">Telefone / WhatsApp</label>
+              <!--
+                O telefone é importante porque usamos ele para
+                gerar o link do WhatsApp automaticamente nos orçamentos.
+                Formato: só números com DDD — ex: 11999998888
+              -->
+              <input
+                type="tel"
+                id="cfg-telefone"
+                placeholder="(11) 99999-9999"
+                oninput="atualizarPreview()"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cfg-site">Site</label>
+              <input
+                type="url"
+                id="cfg-site"
+                placeholder="www.suaempresa.com.br"
+                oninput="atualizarPreview()"
+              />
+            </div>
+            <div class="form-group">
+              <label for="cfg-cnpj">CNPJ / CPF</label>
+              <input
+                type="text"
+                id="cfg-cnpj"
+                placeholder="00.000.000/0001-00"
+                oninput="atualizarPreview()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCO 3: ENDEREÇO -->
+        <div class="section-card">
+          <h2 class="section-title">Endereço</h2>
+          <div class="form-row">
+            <div class="form-group" style="flex:3">
+              <label for="cfg-rua">Rua e número</label>
+              <input
+                type="text"
+                id="cfg-rua"
+                placeholder="Rua das Flores, 123"
+                oninput="atualizarPreview()"
+              />
+            </div>
+            <div class="form-group" style="flex:1">
+              <label for="cfg-bairro">Bairro</label>
+              <input
+                type="text"
+                id="cfg-bairro"
+                placeholder="Centro"
+                oninput="atualizarPreview()"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex:2">
+              <label for="cfg-cidade">Cidade</label>
+              <input
+                type="text"
+                id="cfg-cidade"
+                placeholder="São Paulo"
+                oninput="atualizarPreview()"
+              />
+            </div>
+            <div class="form-group" style="flex:1">
+              <label for="cfg-estado">Estado</label>
+              <input
+                type="text"
+                id="cfg-estado"
+                placeholder="SP"
+                maxlength="2"
+                oninput="atualizarPreview()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCO 4: TEXTO PADRÃO DOS ORÇAMENTOS -->
+        <div class="section-card">
+          <h2 class="section-title">Textos Padrão</h2>
+          <p style="font-size:13px;color:#6b7280;margin-bottom:16px">
+            Esses textos aparecem automaticamente em todo orçamento novo.
+            Você pode editá-los em cada orçamento individualmente.
+          </p>
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label for="cfg-obs-padrao">Observações padrão</label>
+              <textarea
+                id="cfg-obs-padrao"
+                rows="3"
+                placeholder="Ex: Pagamento em até 3x no cartão. Prazo de execução: 15 dias úteis após aprovação."
+              ></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label for="cfg-validade-dias">Validade padrão dos orçamentos</label>
+              <div style="display:flex;align-items:center;gap:10px">
+                <input
+                  type="number"
+                  id="cfg-validade-dias"
+                  value="30"
+                  min="1"
+                  max="365"
+                  style="width:80px"
+                />
+                <span style="font-size:14px;color:#6b7280">dias após a criação</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- FIM COLUNA ESQUERDA -->
+
+      <!-- COLUNA DIREITA: PREVIEW -->
+      <div style="position:sticky; top:24px;">
+        <div class="section-card">
+          <h2 class="section-title">Preview — Como aparece no PDF</h2>
+          <!--
+            Este bloco mostra em tempo real como o cabeçalho do PDF
+            vai ficar conforme o usuário preenche os campos.
+            A função atualizarPreview() é chamada a cada tecla digitada
+            e atualiza os elementos dentro desta div.
+          -->
+          <div class="preview-card" id="preview-pdf">
+            <div class="preview-header" id="preview-header">
+              <div>
+                <div id="pv-logo-container" style="display:none;margin-bottom:8px">
+                  <img id="pv-logo" style="max-height:50px;max-width:140px" />
+                </div>
+                <div class="preview-empresa-nome" id="pv-empresa">Nome da Empresa</div>
+                <div class="preview-contato" id="pv-slogan" style="display:none;font-style:italic;color:#9ca3af"></div>
+                <div class="preview-contato" id="pv-contato"></div>
+              </div>
+              <div style="text-align:right">
+                <div class="preview-badge" id="pv-badge">ORÇAMENTO</div>
+                <div style="font-size:22px;font-weight:800;margin-top:6px" id="pv-numero">#001</div>
+                <div style="font-size:11px;color:#9ca3af;margin-top:2px">22/03/2026</div>
+              </div>
+            </div>
+
+            <div class="info-grid" id="pv-info-grid">
+              <!-- Preenchido pelo JS -->
+            </div>
+
+            <div style="margin-top:16px;padding:10px;background:#f9fafb;border-radius:8px;font-size:11px;color:#9ca3af;text-align:center">
+              [ tabela de itens e totais aparece aqui ]
+            </div>
+          </div>
+
+          <p style="font-size:12px;color:#9ca3af;margin-top:12px;text-align:center">
+            Atualiza em tempo real conforme você preenche
+          </p>
+        </div>
+      </div>
+      <!-- FIM COLUNA DIREITA -->
+
+    </div>
+  </main>
+
+  <!--
+    =====================================================
+    SCRIPTS — carregados no final do body
+    Por que no final e não no <head>?
+    Porque o browser lê o HTML de cima para baixo.
+    Se o script fosse no <head>, ele rodaria antes dos
+    elementos existirem na página e não encontraria
+    os inputs para preencher.
+    =====================================================
+  -->
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /*
+      Variável global que guarda o base64 do logo.
+      Base64 é uma forma de converter uma imagem em texto.
+      Assim podemos salvar a imagem no localStorage junto
+      com os outros dados de configuração.
+    */
+    let logoBase64 = null;
+
+    /*
+      DOMContentLoaded é um evento que dispara quando o browser
+      terminou de ler todo o HTML da página.
+      Colocamos nossa inicialização aqui para garantir que todos
+      os elementos já existem antes de tentar manipulá-los.
+    */
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarConfiguracoes();
+      const config = Storage.getConfig();
+      if (config.empresa) {
+        document.getElementById('empresa-nome').textContent = config.empresa;
+      }
+    });
+
+    /*
+      Carrega as configurações salvas e preenche o formulário.
+      Isso acontece quando o usuário abre a página —
+      os campos aparecem já preenchidos com o que foi salvo antes.
+    */
+    function carregarConfiguracoes() {
+      const c = Storage.getConfig();
+
+      // Para cada campo, verifica se tem valor salvo antes de preencher
+      // O operador || '' garante que nunca preenche com "undefined"
+      setValue('cfg-empresa',       c.empresa       || '');
+      setValue('cfg-slogan',        c.slogan        || '');
+      setValue('cfg-email',         c.email         || '');
+      setValue('cfg-telefone',      c.telefone      || '');
+      setValue('cfg-site',          c.site          || '');
+      setValue('cfg-cnpj',          c.cnpj          || '');
+      setValue('cfg-rua',           c.rua           || '');
+      setValue('cfg-bairro',        c.bairro        || '');
+      setValue('cfg-cidade',        c.cidade        || '');
+      setValue('cfg-estado',        c.estado        || '');
+      setValue('cfg-obs-padrao',    c.obsPadrao     || '');
+      setValue('cfg-validade-dias', c.validadeDias  || 30);
+
+      // Cor
+      const cor = c.cor || '#2563eb';
+      document.getElementById('cfg-cor').value = cor;
+      document.getElementById('cfg-cor-hex').value = cor;
+      document.documentElement.style.setProperty('--preview-cor', cor);
+
+      // Logo
+      if (c.logo) {
+        logoBase64 = c.logo;
+        mostrarLogoPreview(c.logo);
+      }
+
+      // Atualiza a pré-visualização com os dados carregados
+      atualizarPreview();
+    }
+
+    // Função auxiliar para setar valor em qualquer tipo de campo
+    function setValue(id, valor) {
+      const el = document.getElementById(id);
+      if (el) el.value = valor;
+    }
+
+    /*
+      Coleta os dados do formulário e salva no localStorage.
+      Chamada quando o usuário clica em "Salvar Configurações".
+    */
+    function salvarConfiguracoes() {
+      const empresa = document.getElementById('cfg-empresa').value.trim();
+      if (!empresa) {
+        alert('O nome da empresa é obrigatório.');
+        document.getElementById('cfg-empresa').focus();
+        return;
+      }
+
+      // Monta o objeto de configuração com todos os campos
+      const config = {
+        empresa,
+        slogan:       document.getElementById('cfg-slogan').value.trim(),
+        email:        document.getElementById('cfg-email').value.trim(),
+        telefone:     document.getElementById('cfg-telefone').value.trim(),
+        site:         document.getElementById('cfg-site').value.trim(),
+        cnpj:         document.getElementById('cfg-cnpj').value.trim(),
+        rua:          document.getElementById('cfg-rua').value.trim(),
+        bairro:       document.getElementById('cfg-bairro').value.trim(),
+        cidade:       document.getElementById('cfg-cidade').value.trim(),
+        estado:       document.getElementById('cfg-estado').value.trim(),
+        obsPadrao:    document.getElementById('cfg-obs-padrao').value.trim(),
+        validadeDias: parseInt(document.getElementById('cfg-validade-dias').value) || 30,
+        cor:          document.getElementById('cfg-cor').value,
+        logo:         logoBase64,
+      };
+
+      Storage.salvarConfig(config);
+
+      // Atualiza o nome da empresa na sidebar imediatamente
+      document.getElementById('empresa-nome').textContent = empresa;
+
+      mostrarToast('Configurações salvas com sucesso!');
+    }
+
+    /*
+      Atualiza o preview da direita em tempo real.
+      Chamada a cada vez que o usuário digita em qualquer campo (oninput).
+    */
+    function atualizarPreview() {
+      const empresa  = document.getElementById('cfg-empresa').value   || 'Nome da Empresa';
+      const slogan   = document.getElementById('cfg-slogan').value;
+      const email    = document.getElementById('cfg-email').value;
+      const telefone = document.getElementById('cfg-telefone').value;
+      const site     = document.getElementById('cfg-site').value;
+      const cidade   = document.getElementById('cfg-cidade').value;
+      const estado   = document.getElementById('cfg-estado').value;
+      const cnpj     = document.getElementById('cfg-cnpj').value;
+
+      document.getElementById('pv-empresa').textContent = empresa;
+
+      const sloganEl = document.getElementById('pv-slogan');
+      sloganEl.textContent = slogan;
+      sloganEl.style.display = slogan ? 'block' : 'none';
+
+      // Monta linha de contato concatenando só o que foi preenchido
+      const contato = [email, telefone, site].filter(Boolean).join(' · ');
+      document.getElementById('pv-contato').textContent = contato;
+
+      // Monta grid de info (cidade, cnpj)
+      const infoItems = [];
+      if (cidade || estado) infoItems.push(`📍 ${[cidade, estado].filter(Boolean).join(' - ')}`);
+      if (cnpj) infoItems.push(`CNPJ: ${cnpj}`);
+      document.getElementById('pv-info-grid').innerHTML = infoItems
+        .map(i => `<span>${i}</span>`)
+        .join('');
+    }
+
+    /*
+      Sincroniza o input de cor (picker visual) com o campo de texto hex.
+      Quando o usuário usa o seletor visual, atualiza o texto.
+    */
+    function atualizarCor() {
+      const cor = document.getElementById('cfg-cor').value;
+      document.getElementById('cfg-cor-hex').value = cor;
+      document.documentElement.style.setProperty('--preview-cor', cor);
+    }
+
+    /*
+      Sincroniza o campo de texto hex com o picker visual.
+      Quando o usuário digita um hex manualmente (#ff0000), atualiza o seletor.
+    */
+    function sincronizarCor() {
+      const hex = document.getElementById('cfg-cor-hex').value;
+      // Valida se é um hex válido (# seguido de 6 caracteres hex)
+      if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+        document.getElementById('cfg-cor').value = hex;
+        document.documentElement.style.setProperty('--preview-cor', hex);
+      }
+    }
+
+    /*
+      Carrega a imagem selecionada pelo usuário e converte para base64.
+
+      FileReader é uma API do browser que lê arquivos locais.
+      readAsDataURL converte o arquivo para uma string base64
+      que pode ser salva no localStorage e exibida como <img>.
+
+      Exemplo de base64: "data:image/png;base64,iVBORw0KGgo..."
+    */
+    function carregarLogo(event) {
+      const arquivo = event.target.files[0];
+      if (!arquivo) return;
+
+      // Limita tamanho a 2MB para não explodir o localStorage
+      if (arquivo.size > 2 * 1024 * 1024) {
+        alert('Logo muito grande. Use uma imagem de até 2MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        logoBase64 = e.target.result;
+        mostrarLogoPreview(logoBase64);
+      };
+      reader.readAsDataURL(arquivo);
+    }
+
+    function mostrarLogoPreview(src) {
+      document.getElementById('logo-preview').src = src;
+      document.getElementById('logo-preview').style.display = 'block';
+      document.getElementById('upload-placeholder').style.display = 'none';
+      document.getElementById('btn-remover-logo').style.display = 'inline-block';
+
+      // Mostra também no preview do PDF
+      document.getElementById('pv-logo').src = src;
+      document.getElementById('pv-logo-container').style.display = 'block';
+    }
+
+    function removerLogo(e) {
+      // e.stopPropagation() impede que o clique no botão abra
+      // o seletor de arquivo (que está por baixo do botão)
+      e.stopPropagation();
+      logoBase64 = null;
+      document.getElementById('logo-preview').style.display = 'none';
+      document.getElementById('upload-placeholder').style.display = 'block';
+      document.getElementById('btn-remover-logo').style.display = 'none';
+      document.getElementById('pv-logo-container').style.display = 'none';
+      document.getElementById('logo-input').value = '';
+    }
+  </script>
+</body>
+</html>

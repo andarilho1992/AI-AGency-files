@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico & Proposta — Rede de Pet Shop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg-1: #0a0e1a;
+    --bg-2: #111827;
+    --bg-3: #1a2235;
+    --bg-4: #222d42;
+    --border: rgba(255,255,255,0.08);
+    --border-light: rgba(255,255,255,0.14);
+    --text: #e6edf3;
+    --muted: rgba(230,237,243,0.45);
+    --accent: #4f8ef7;
+    --accent-glow: rgba(79,142,247,0.15);
+    --green: #34d399;
+    --green-glow: rgba(52,211,153,0.15);
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--sans);
+    background: #f0f2f5;
+    color: var(--text);
+  }
+
+  /* ── SLIDE SYSTEM ── */
+  .slide {
+    width: 297mm;
+    min-height: 210mm;
+    margin: 0 auto 24px;
+    background: var(--bg-1);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── COVER ── */
+  .slide-cover {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1f3d 50%, #0a0e1a 100%);
+    justify-content: center;
+    align-items: flex-start;
+    padding: 56px 64px;
+    gap: 0;
+  }
+
+  .cover-grid {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .cover-orb {
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%);
+    right: -100px; top: -100px;
+    pointer-events: none;
+  }
+  .cover-orb2 {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(52,211,153,0.08) 0%, transparent 70%);
+    left: -50px; bottom: -50px;
+    pointer-events: none;
+  }
+
+  .cover-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(79,142,247,0.1);
+    border: 1px solid rgba(79,142,247,0.3);
+    padding: 5px 14px;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .cover-title {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .cover-title span { color: var(--accent); }
+
+  .cover-sub {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .cover-stats {
+    display: flex; gap: 32px;
+    position: relative;
+  }
+
+  .cover-stat {
+    text-align: center;
+  }
+
+  .cover-stat-num {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--yellow);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .cover-stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cover-divider {
+    width: 1px; background: var(--border);
+    align-self: stretch;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 40px; left: 64px; right: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  .cover-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  .cover-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── SLIDE LAYOUT ── */
+  .slide-header {
+    padding: 32px 48px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .slide-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .15em;
+    margin-bottom: 6px;
+  }
+
+  .slide-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .slide-title span { color: var(--accent); }
+
+  .slide-body {
+    flex: 1;
+    padding: 28px 48px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── WIREFRAME COMPONENTS ── */
+  .wf-container {
+    background: var(--bg-2);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .wf-bar {
+    background: var(--bg-3);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wf-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .wf-dot.red { background: #f87171; }
+  .wf-dot.yellow { background: #fbbf24; }
+  .wf-dot.green { background: #34d399; }
+
+  .wf-url {
+    flex: 1;
+    background: var(--bg-4);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .wf-content {
+    padding: 16px;
+  }
+
+  /* Dashboard Wireframe */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    min-height: 320px;
+  }
+
+  .dash-sidebar {
+    background: var(--bg-3);
+    border-right: 1px solid var(--border);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .dash-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+    letter-spacing: .05em;
+  }
+
+  .nav-item {
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .nav-item.active {
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.2);
+  }
+
+  .nav-icon { font-size: 13px; }
+
+  .dash-main {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dash-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dash-greeting {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .dash-greeting span {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 11px;
+    font-family: var(--mono);
+    margin-left: 8px;
+  }
+
+  .tag-live {
+    background: rgba(52,211,153,0.12);
+    border: 1px solid rgba(52,211,153,0.3);
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 100px;
+    letter-spacing: .1em;
+  }
+
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .metric-card {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .metric-card.alert {
+    border-color: rgba(248,113,113,0.3);
+    background: rgba(248,113,113,0.05);
+  }
+
+  .metric-val {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 2px;
+  }
+
+  .metric-val.green { color: var(--green); }
+  .metric-val.red { color: var(--red); }
+  .metric-val.blue { color: var(--accent); }
+
+  .metric-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .metric-branch {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .filial-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .filial-card {
+    background: var(--bg-4);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .filial-name {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .filial-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+
+  .filial-stat-key {
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .filial-stat-val {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .badge-alert {
+    margin-top: 6px;
+    background: rgba(248,113,113,0.15);
+    border: 1px solid rgba(248,113,113,0.3);
+    color: var(--red);
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    font-family: var(--mono);
+  }
+
+  .badge-ok {
+    margin-top: 6px;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.25);
+    color: var(--green);
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    font-family: var(--mono);
+  }
+
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar-label {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 14px;
+    background: var(--bg-4);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent), #7cb9ff);
+  }
+
+  .bar-val {
+    font-size: 9px;
+    color: var(--text);
+    font-family: var(--mono);
+    width: 50px;
+    flex-shrink: 0;
+  }
+
+  /* CRM Wireframe */
+  .crm-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 180px;
+    gap: 0;
+    min-height: 300px;
+  }
+
+  .crm-list {
+    background: var(--bg-3);
+    border-right: 1px solid var(--border);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .crm-search {
+    background: var(--bg-4);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pet-item {
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .pet-item.active {
+    background: var(--accent-glow);
+    border: 1px solid rgba(79,142,247,0.2);
+  }
+
+  .pet-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg-4);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .pet-item.active .pet-avatar {
+    border-color: var(--accent);
+  }
+
+  .pet-info { flex: 1; min-width: 0; }
+
+  .pet-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pet-meta {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .pet-level {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--yellow);
+    flex-shrink: 0;
+  }
+
+  .crm-detail {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pet-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pet-avatar-lg {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--bg-4), var(--bg-3));
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(79,142,247,0.2);
+  }
+
+  .pet-profile-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .pet-profile-sub {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .level-bar-container { margin-top: 4px; }
+
+  .level-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 3px;
+  }
+
+  .level-track {
+    height: 5px;
+    background: var(--bg-4);
+    border-radius: 3px;
+    overflow: hidden;
+    width: 120px;
+  }
+
+  .level-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--yellow), #f59e0b);
+    border-radius: 3px;
+    width: 68%;
+  }
+
+  .badges-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .badge-pet {
+    padding: 3px 8px;
+    border-radius: 100px;
+    font-size: 9px;
+    font-family: var(--mono);
+    letter-spacing: .05em;
+  }
+
+  .badge-pet.gold {
+    background: rgba(251,191,36,0.12);
+    border: 1px solid rgba(251,191,36,0.3);
+    color: var(--yellow);
+  }
+
+  .badge-pet.purple {
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.3);
+    color: var(--purple);
+  }
+
+  .badge-pet.green {
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.25);
+    color: var(--green);
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .timeline-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-family: var(--mono);
+    margin-bottom: 4px;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .tl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .tl-dot.blue { background: var(--accent); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.purple { background: var(--purple); }
+
+  .tl-content { flex: 1; }
+
+  .tl-event {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .tl-date {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .crm-sidebar {
+    background: var(--bg-3);
+    border-left: 1px solid var(--border);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar-section-title {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 4px;
+  }
+
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+
+  .info-key { font-size: 9px; color: var(--muted); }
+  .info-val { font-size: 10px; font-weight: 600; color: var(--text); }
+
+  .next-visit {
+    background: var(--accent-glow);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .next-visit-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-bottom: 4px;
+  }
+
+  .next-visit-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* Estoque Wireframe */
+  .estoque-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    min-height: 280px;
+  }
+
+  .table-wf {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .table-header {
+    background: var(--bg-4);
+    display: grid;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    font-family: var(--mono);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-header.cols-5 { grid-template-columns: 1.5fr repeat(4, 1fr); }
+  .table-header.cols-4 { grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+
+  .table-row {
+    display: grid;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 10px;
+  }
+
+  .table-row:last-child { border-bottom: none; }
+
+  .table-row.cols-5 { grid-template-columns: 1.5fr repeat(4, 1fr); }
+  .table-row.cols-4 { grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+
+  .table-row.warning {
+    background: rgba(251,191,36,0.04);
+  }
+
+  .table-row.danger {
+    background: rgba(248,113,113,0.04);
+  }
+
+  .stock-val { font-family: var(--mono); font-size: 10px; }
+  .stock-val.low { color: var(--red); font-weight: 700; }
+  .stock-val.ok { color: var(--green); }
+  .stock-val.warn { color: var(--yellow); }
+
+  .transfer-btn {
+    font-size: 8px;
+    background: rgba(79,142,247,0.15);
+    border: 1px solid rgba(79,142,247,0.3);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--mono);
+    letter-spacing: .05em;
+  }
+
+  .flow-diagram {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .flow-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .flow-nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .flow-node {
+    background: var(--bg-4);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    width: 80%;
+  }
+
+  .flow-node.source {
+    border-color: rgba(251,191,36,0.4);
+    background: rgba(251,191,36,0.06);
+  }
+
+  .flow-node.dest {
+    border-color: rgba(52,211,153,0.4);
+    background: rgba(52,211,153,0.06);
+  }
+
+  .flow-node.sys {
+    border-color: rgba(79,142,247,0.4);
+    background: rgba(79,142,247,0.06);
+  }
+
+  .flow-node-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .flow-node-val {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .flow-arrow {
+    font-size: 16px;
+    color: var(--accent);
+    opacity: .5;
+  }
+
+  /* QR / Diferenciais Wireframe */
+  .diferenciais-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .diferencial-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .diferencial-header {
+    background: var(--bg-3);
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .diferencial-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .diferencial-icon.blue {
+    background: rgba(79,142,247,0.15);
+    border: 1px solid rgba(79,142,247,0.3);
+  }
+
+  .diferencial-icon.green {
+    background: rgba(52,211,153,0.12);
+    border: 1px solid rgba(52,211,153,0.3);
+  }
+
+  .diferencial-icon.purple {
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.3);
+  }
+
+  .diferencial-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .diferencial-body {
+    padding: 12px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* QR mock */
+  .qr-mock {
+    width: 72px; height: 72px;
+    background: #fff;
+    border-radius: 6px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 6px;
+  }
+
+  .qr-cell {
+    background: #000;
+    border-radius: 1px;
+  }
+
+  .qr-cell.w { background: #fff; }
+
+  .checkin-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .checkin-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .step-num {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 1px solid rgba(79,142,247,0.3);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Photo mock */
+  .photo-mock {
+    background: var(--bg-4);
+    border-radius: 8px;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    border: 2px dashed var(--border-light);
+  }
+
+  .photo-icon { font-size: 24px; opacity: .4; }
+
+  .photo-label {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    text-align: center;
+  }
+
+  .whatsapp-preview {
+    background: #075E54;
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 4px;
+  }
+
+  .wpp-bubble {
+    background: #dcf8c6;
+    border-radius: 0 6px 6px 6px;
+    padding: 6px 8px;
+    display: inline-block;
+    max-width: 90%;
+  }
+
+  .wpp-text {
+    font-size: 9px;
+    color: #000;
+    line-height: 1.4;
+  }
+
+  .wpp-time {
+    font-size: 8px;
+    color: rgba(0,0,0,0.4);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  /* Ociosidade mock */
+  .ocio-chart {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin-top: 4px;
+  }
+
+  .ocio-col { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+
+  .ocio-day {
+    font-size: 7px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 2px;
+  }
+
+  .ocio-cell {
+    width: 100%; height: 20px;
+    border-radius: 3px;
+    background: var(--bg-4);
+  }
+
+  .ocio-cell.busy { background: linear-gradient(180deg, var(--green), #1a8a5a); opacity: .7; }
+  .ocio-cell.idle { background: linear-gradient(180deg, var(--red), #b91c1c); opacity: .4; }
+  .ocio-cell.partial { background: linear-gradient(180deg, var(--yellow), #92400e); opacity: .5; }
+
+  .alert-box {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 6px;
+    padding: 8px;
+    margin-top: 4px;
+  }
+
+  .alert-box-title {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--yellow);
+    font-family: var(--mono);
+    margin-bottom: 3px;
+  }
+
+  .alert-box-text {
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── PROBLEM PAGE ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .problem-card {
+    background: var(--bg-2);
+    border: 1px solid rgba(248,113,113,0.15);
+    border-radius: 10px;
+    padding: 14px;
+  }
+
+  .problem-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .problem-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .problem-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .problem-tag {
+    margin-top: 8px;
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    color: var(--red);
+    font-size: 8px;
+    padding: 2px 7px;
+    border-radius: 100px;
+    display: inline-block;
+    font-family: var(--mono);
+    letter-spacing: .06em;
+  }
+
+  /* ── CLOSING SLIDE ── */
+  .slide-closing {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1f3d 60%, #0a0e1a 100%);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 48px 64px;
+  }
+
+  .closing-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .closing-title {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .closing-title span { color: var(--accent); }
+
+  .closing-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .closing-ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-block;
+  }
+
+  .cta-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--border-light);
+    display: inline-block;
+  }
+
+  .proposta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .proposta-col {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .proposta-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .proposta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 11px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .proposta-item:last-child { border-bottom: none; }
+
+  .proposta-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .proposta-dot.green { background: var(--green); }
+  .proposta-dot.red { background: var(--red); }
+
+  .roi-box {
+    background: var(--green-glow);
+    border: 1px solid rgba(52,211,153,0.3);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  .roi-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--green);
+    font-family: var(--mono);
+    margin-bottom: 6px;
+  }
+
+  .roi-val {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+
+  .roi-desc {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: #0a0e1a; }
+    .slide { margin: 0; box-shadow: none; }
+    @page { size: A4 landscape; margin: 0; }
+  }
+
+  /* Screen polish */
+  @media screen {
+    body { padding: 32px; }
+    .slide {
+      border-radius: 12px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ SLIDE 1 — CAPA ══ -->
+<div class="slide slide-cover">
+  <div class="cover-grid"></div>
+  <div class="cover-orb"></div>
+  <div class="cover-orb2"></div>
+
+  <div class="cover-tag">Diagnóstico Estratégico · Confidencial</div>
+
+  <div class="cover-title">
+    Sua Rede de<br>
+    Pet Shop <span>Precisa</span><br>
+    de Uma Upgrade.
+  </div>
+
+  <div class="cover-sub">
+    Análise completa + proposta de sistema para gestão de 4 filiais
+  </div>
+
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <div class="cover-stat-num">4</div>
+      <div class="cover-stat-label">Filiais</div>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-stat">
+      <div class="cover-stat-num">5</div>
+      <div class="cover-stat-label">Pontos Cegos</div>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-stat">
+      <div class="cover-stat-num">3</div>
+      <div class="cover-stat-label">Diferenciais Exclusivos</div>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-stat">
+      <div class="cover-stat-num">30d</div>
+      <div class="cover-stat-label">para MVP</div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="cover-brand">AGÊNCIA DE AUTOMAÇÃO · GUILHERME ANDRADE</div>
+    <div class="cover-date">Março 2026</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 2 — PROBLEMAS ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">02 / 09</div>
+      <div class="slide-title">O que o <span>sistema atual</span> não consegue fazer</div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-align:right;line-height:1.8">
+      Pet Shop Control<br>
+      <span style="color:var(--red)">Análise de falhas</span>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🏝️</div>
+        <div class="problem-title">Dados Isolados por Filial</div>
+        <div class="problem-desc">Cada unidade é uma ilha. Ver os números das 4 filiais exige abrir 4 painéis, exportar 4 relatórios e somar na mão.</div>
+        <div class="problem-tag">4–6h/SEMANA PERDIDAS</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📦</div>
+        <div class="problem-title">Estoque Sem Comunicação</div>
+        <div class="problem-desc">Filial 3 com excesso de ração. Filial 1 sem estoque. O sistema não enxerga isso. Você descobre quando o cliente reclama.</div>
+        <div class="problem-tag">CAPITAL IMOBILIZADO</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🧠</div>
+        <div class="problem-title">CRM Amnésico</div>
+        <div class="problem-desc">O tutor que frequenta a Filial 1 vai à Filial 3. O atendente não sabe o nome do pet, histórico, preferências. Experiência zerada.</div>
+        <div class="problem-tag">FIDELIDADE DESTRUÍDA</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <div class="problem-title">Custo por Licença</div>
+        <div class="problem-desc">4 filiais = 4 licenças do mesmo software genérico. Você paga mais quanto mais cresce, sem ganhar funcionalidade proporcional.</div>
+        <div class="problem-tag">CUSTO ESCALA LINEAR</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📉</div>
+        <div class="problem-title">Filial Sangrando Silencio</div>
+        <div class="problem-desc">Sem comparativo em tempo real entre unidades, uma filial pode perder faturamento por 3 meses antes de você perceber o buraco.</div>
+        <div class="problem-tag">DECISÃO NO FEELING</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🕐</div>
+        <div class="problem-title">Horário Ocioso Invisível</div>
+        <div class="problem-desc">Sem análise de padrão, você não sabe que toda terça entre 14h–17h a Filial 2 fica vazia. Custo fixo correndo sem receita.</div>
+        <div class="problem-tag">RECEITA DESPERDIÇADA</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 3 — ANÁLISE COMPETITIVA ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">03 / 09</div>
+      <div class="slide-title">Mapeamos o <span>Pet Shop Control</span> — e encontramos a brecha</div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-align:right;line-height:1.8">
+      Inteligência competitiva<br>
+      <span style="color:var(--red)">4 pontos cegos críticos</span>
+    </div>
+  </div>
+
+  <div class="slide-body" style="gap:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+      <!-- Coluna esquerda: O que o sistema concorrente FAZ -->
+      <div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+          <span style="background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.25);color:var(--red);padding:2px 8px;border-radius:4px">Pet Shop Control — Windows</span>
+          <span>O que ele entrega</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px">
+
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px">💰 Gestão Financeira</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Fluxo de Caixa</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">DRE + BI</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Contas a Pagar/Receber</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Comissões</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Crediário</span>
+            </div>
+          </div>
+
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px">📦 Controle de Estoque</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Insumos por raça/porte</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Estoque Projetado</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Entrada via XML NF</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Auditoria</span>
+            </div>
+          </div>
+
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px">🛒 PDV + Fiscal</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Venda Rápida + Balança</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">NFC-e / NF-e / SAT</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Táxi Dog</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Prontuário Vet</span>
+              <span style="background:var(--bg-4);border:1px solid var(--border);color:var(--muted);font-size:8px;padding:2px 7px;border-radius:4px;font-family:var(--mono)">Planos de Assinatura</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:10px 12px">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+              <span style="font-size:10px;font-weight:700;color:var(--red)">⚠ Ponto Fraco Declarado</span>
+            </div>
+            <div style="font-size:10px;color:var(--muted);line-height:1.5">Sistema <strong style="color:var(--text)">instalado no Windows</strong> — multifilial exige sincronização de banco de dados local. Um <strong style="color:var(--red)">gargalo técnico</strong> confirmado pelo próprio fabricante.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Coluna direita: Os 4 pontos cegos que a solução resolve -->
+      <div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+          <span style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:var(--green);padding:2px 8px;border-radius:4px">Solução Customizada — 100% Cloud</span>
+          <span>O que muda</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+
+          <div style="background:var(--bg-2);border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <div style="width:36px;height:36px;background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌐</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">Acesso Web Nativo</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.5">O deles é Windows. O seu é 100% Cloud. O dono pode estar em <strong style="color:var(--text)">qualquer lugar do mundo</strong> e ver as 4 filiais no celular — sem VPN, sem acesso remoto.</div>
+            </div>
+          </div>
+
+          <div style="background:var(--bg-2);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <div style="width:36px;height:36px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚡</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">Zero Fricção de Uso</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.5">O sistema deles é pesado e cheio de menus. O seu terá <strong style="color:var(--text)">Botão de 1-Clique</strong> para as ações mais comuns — feito para funcionário com a mão ocupada com um pet.</div>
+            </div>
+          </div>
+
+          <div style="background:var(--bg-2);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <div style="width:36px;height:36px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏗️</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">Gestão Consolidada Real</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.5">Consolidar 4 bancos locais no sistema deles é um pesadelo de TI. No seu, os dados das 4 filiais <strong style="color:var(--text)">já nascem juntos</strong> — sem sync, sem erro.</div>
+            </div>
+          </div>
+
+          <div style="background:var(--bg-2);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <div style="width:36px;height:36px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🎮</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">Gamificação de Staff</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.5">O deles só calcula comissão. O seu vai dar <strong style="color:var(--text)">XP e Conquistas</strong> para funcionários que baterem metas — reduz rotatividade, problema crônico em hotéis pet.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 4 — DASHBOARD ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">04 / 09</div>
+      <div class="slide-title">Solução 01 — <span>Dashboard Consolidada</span></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-align:right;line-height:1.8">
+      4 filiais<br>
+      <span style="color:var(--green)">1 tela</span>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <!-- WIREFRAME DASHBOARD -->
+    <div class="wf-container">
+      <div class="wf-bar">
+        <div class="wf-dot red"></div>
+        <div class="wf-dot yellow"></div>
+        <div class="wf-dot green"></div>
+        <div class="wf-url">app.petcontrol.com.br/dashboard</div>
+        <div class="tag-live">● AO VIVO</div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Sidebar -->
+        <div class="dash-sidebar">
+          <div class="dash-logo">🐾 PetControl</div>
+          <div class="nav-item active"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+
+        <!-- Main -->
+        <div class="dash-main">
+          <div class="dash-topbar">
+            <div class="dash-greeting">Bom dia, Eduardo <span>Domingo, 29 Mar 2026</span></div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div style="font-size:10px;color:var(--muted)">Período:</div>
+              <div style="background:var(--bg-4);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:9px;color:var(--text);font-family:var(--mono)">Este mês ▼</div>
+            </div>
+          </div>
+
+          <!-- Métricas globais -->
+          <div class="metric-row">
+            <div class="metric-card">
+              <div class="metric-val">R$ 16.000</div>
+              <div class="metric-label">Faturamento Total</div>
+              <div class="metric-branch" style="color:var(--green);font-size:9px;font-family:var(--mono)">▲ +12% vs mês ant.</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val green">44</div>
+              <div class="metric-label">Atend. Hoje</div>
+              <div class="metric-branch">nas 4 filiais</div>
+            </div>
+            <div class="metric-card alert">
+              <div class="metric-val red">2</div>
+              <div class="metric-label">Alertas</div>
+              <div class="metric-branch" style="color:var(--red);font-size:9px">Estoque crítico</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val blue">87%</div>
+              <div class="metric-label">Ocupação Média</div>
+              <div class="metric-branch">todas as filiais</div>
+            </div>
+          </div>
+
+          <!-- Por filial -->
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Desempenho por Filial — Hoje</div>
+          <div class="filial-row">
+            <div class="filial-card">
+              <div class="filial-name">Filial Centro</div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Faturamento</span>
+                <span class="filial-stat-val" style="color:var(--green)">R$ 4.800</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Atendimentos</span>
+                <span class="filial-stat-val">14</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Ocupação</span>
+                <span class="filial-stat-val">92%</span>
+              </div>
+              <div class="badge-ok">✓ Normal</div>
+            </div>
+            <div class="filial-card">
+              <div class="filial-name">Filial Norte</div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Faturamento</span>
+                <span class="filial-stat-val" style="color:var(--green)">R$ 3.600</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Atendimentos</span>
+                <span class="filial-stat-val">11</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Ocupação</span>
+                <span class="filial-stat-val">78%</span>
+              </div>
+              <div class="badge-alert">⚠ Estoque baixo</div>
+            </div>
+            <div class="filial-card">
+              <div class="filial-name">Filial Sul</div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Faturamento</span>
+                <span class="filial-stat-val" style="color:var(--green)">R$ 5.100</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Atendimentos</span>
+                <span class="filial-stat-val">16</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Ocupação</span>
+                <span class="filial-stat-val">95%</span>
+              </div>
+              <div class="badge-ok">✓ Melhor dia</div>
+            </div>
+            <div class="filial-card">
+              <div class="filial-name">Filial Leste</div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Faturamento</span>
+                <span class="filial-stat-val" style="color:var(--yellow)">R$ 2.500</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Atendimentos</span>
+                <span class="filial-stat-val">9</span>
+              </div>
+              <div class="filial-stat">
+                <span class="filial-stat-key">Ocupação</span>
+                <span class="filial-stat-val">61%</span>
+              </div>
+              <div class="badge-alert">⚠ Ociosidade</div>
+            </div>
+          </div>
+
+          <!-- Bar chart -->
+          <div class="bar-chart">
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Faturamento Comparativo — Últimos 30 dias</div>
+            <div class="bar-row">
+              <div class="bar-label">Centro</div>
+              <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+              <div class="bar-val" style="color:var(--green)">R$24.200</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Norte</div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+              <div class="bar-val">R$19.100</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Sul</div>
+              <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+              <div class="bar-val" style="color:var(--green)">R$27.400</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Leste</div>
+              <div class="bar-track"><div class="bar-fill" style="width:48%;background:linear-gradient(90deg,var(--yellow),#f59e0b)"></div></div>
+              <div class="bar-val" style="color:var(--yellow)">R$13.100</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 4 — CRM ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">05 / 09</div>
+      <div class="slide-title">Solução 02 — <span>CRM de Pets Gamificado</span></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-align:right;line-height:1.8">
+      Histórico completo<br>
+      <span style="color:var(--yellow)">em qualquer filial</span>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <div class="wf-container">
+      <div class="wf-bar">
+        <div class="wf-dot red"></div>
+        <div class="wf-dot yellow"></div>
+        <div class="wf-dot green"></div>
+        <div class="wf-url">app.petcontrol.com.br/pets</div>
+      </div>
+
+      <div class="crm-layout">
+        <!-- Lista de pets -->
+        <div class="crm-list">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:var(--mono);margin-bottom:6px">287 pets cadastrados</div>
+          <div class="crm-search">🔍 Buscar por nome, tutor ou QR...</div>
+
+          <div class="pet-item active">
+            <div class="pet-avatar">🐕</div>
+            <div class="pet-info">
+              <div class="pet-name">Buddy</div>
+              <div class="pet-meta">Golden · Eduardo</div>
+            </div>
+            <div class="pet-level">⭐ Nv.7</div>
+          </div>
+          <div class="pet-item">
+            <div class="pet-avatar">🐈</div>
+            <div class="pet-info">
+              <div class="pet-name">Luna</div>
+              <div class="pet-meta">Siamesa · Carla</div>
+            </div>
+            <div class="pet-level" style="color:var(--purple)">💎 Nv.12</div>
+          </div>
+          <div class="pet-item">
+            <div class="pet-avatar">🐩</div>
+            <div class="pet-info">
+              <div class="pet-name">Thor</div>
+              <div class="pet-meta">Poodle · Marcos</div>
+            </div>
+            <div class="pet-level">⭐ Nv.4</div>
+          </div>
+          <div class="pet-item">
+            <div class="pet-avatar">🐶</div>
+            <div class="pet-info">
+              <div class="pet-name">Mel</div>
+              <div class="pet-meta">Shih-tzu · Ana</div>
+            </div>
+            <div class="pet-level" style="color:var(--green)">🏆 Nv.19</div>
+          </div>
+          <div class="pet-item">
+            <div class="pet-avatar">🐱</div>
+            <div class="pet-info">
+              <div class="pet-name">Milo</div>
+              <div class="pet-meta">Persa · Roberto</div>
+            </div>
+            <div class="pet-level">⭐ Nv.3</div>
+          </div>
+        </div>
+
+        <!-- Detalhe do pet -->
+        <div class="crm-detail">
+          <div class="pet-profile-header">
+            <div class="pet-avatar-lg">🐕</div>
+            <div style="flex:1">
+              <div class="pet-profile-name">Buddy</div>
+              <div class="pet-profile-sub">Golden Retriever · 3 anos · 28kg</div>
+              <div class="level-bar-container">
+                <div class="level-label">
+                  <span>Nível 7 — Cliente Fiel</span>
+                  <span>680 / 1000 XP</span>
+                </div>
+                <div class="level-track"><div class="level-fill"></div></div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div style="background:var(--bg-4);border:1px solid var(--border);border-radius:8px;padding:8px;display:inline-flex;flex-direction:column;align-items:center;gap:3px">
+                <div style="font-size:20px">▦</div>
+                <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">QR DO PET</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="badges-row">
+            <div class="badge-pet gold">🏅 VIP Platinum</div>
+            <div class="badge-pet purple">💜 3 anos conosco</div>
+            <div class="badge-pet green">✓ Vacinação em dia</div>
+            <div class="badge-pet gold">🎂 Aniversário em 12 dias</div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-title">Histórico de Atendimentos</div>
+            <div class="timeline-item">
+              <div class="tl-dot blue"></div>
+              <div class="tl-content">
+                <div class="tl-event">🛁 Banho + Tosa — Filial Centro</div>
+                <div class="tl-date">22 Mar 2026 · Responsável: Júlia · "Pet bem comportado, prefere secador frio"</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot green"></div>
+              <div class="tl-content">
+                <div class="tl-event">💉 Vacina V10 + Antirrábica — Filial Norte</div>
+                <div class="tl-date">08 Mar 2026 · Retorno recomendado: Mar 2027</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot purple"></div>
+              <div class="tl-content">
+                <div class="tl-event">🛁 Banho — Filial Centro</div>
+                <div class="tl-date">25 Fev 2026 · "Fica agitado com outros cães na recepção"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar direita -->
+        <div class="crm-sidebar">
+          <div>
+            <div class="sidebar-section-title">Tutor</div>
+            <div class="info-row">
+              <div class="info-key">Nome</div>
+              <div class="info-val">Eduardo Pereira</div>
+            </div>
+            <div class="info-row">
+              <div class="info-key">WhatsApp</div>
+              <div class="info-val" style="color:var(--green)">● Online</div>
+            </div>
+            <div class="info-row">
+              <div class="info-key">Filial preferida</div>
+              <div class="info-val">Centro</div>
+            </div>
+            <div class="info-row">
+              <div class="info-key">Total gasto</div>
+              <div class="info-val" style="color:var(--yellow);font-family:var(--mono)">R$ 4.820</div>
+            </div>
+          </div>
+
+          <div class="next-visit">
+            <div class="next-visit-label">Próximo Retorno</div>
+            <div class="next-visit-date">10 Abr 2026</div>
+            <div style="font-size:8px;color:var(--muted);margin-top:3px">Banho agendado</div>
+          </div>
+
+          <div>
+            <div class="sidebar-section-title">Alertas</div>
+            <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:7px;font-size:9px;color:var(--yellow);margin-bottom:5px">
+              🎂 Aniversário do Buddy em 12 dias — Enviar mimo?
+            </div>
+            <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:6px;padding:7px;font-size:9px;color:var(--accent)">
+              💉 Reforço de vacina: Out/2026
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 5 — ESTOQUE ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">06 / 09</div>
+      <div class="slide-title">Solução 03 — <span>Estoque Transversal</span></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-align:right;line-height:1.8">
+      Transferência entre filiais<br>
+      <span style="color:var(--orange)">com 1 clique</span>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <div class="wf-container">
+      <div class="wf-bar">
+        <div class="wf-dot red"></div>
+        <div class="wf-dot yellow"></div>
+        <div class="wf-dot green"></div>
+        <div class="wf-url">app.petcontrol.com.br/estoque</div>
+        <div style="margin-left:auto;font-size:9px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:var(--red);padding:2px 8px;border-radius:4px;font-family:var(--mono)">⚠ 3 itens críticos</div>
+      </div>
+
+      <div style="padding:14px">
+        <div class="estoque-layout">
+          <!-- Tabela de estoque -->
+          <div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:var(--mono);margin-bottom:8px">Visão Transversal de Estoque</div>
+            <div class="table-wf">
+              <div class="table-header cols-5">
+                <span>Produto</span>
+                <span>Centro</span>
+                <span>Norte</span>
+                <span>Sul</span>
+                <span>Leste</span>
+              </div>
+              <div class="table-row cols-5">
+                <span style="font-size:10px;font-weight:600">Ração Premium 15kg</span>
+                <span class="stock-val ok">42 un</span>
+                <span class="stock-val warn">8 un</span>
+                <span class="stock-val ok">35 un</span>
+                <span class="stock-val ok">21 un</span>
+              </div>
+              <div class="table-row cols-5 danger">
+                <span style="font-size:10px;font-weight:600">Shampoo Neutro 1L</span>
+                <span class="stock-val ok">18 un</span>
+                <span class="stock-val low">2 un ⚠</span>
+                <span class="stock-val ok">27 un</span>
+                <span class="stock-val low">1 un ⚠</span>
+              </div>
+              <div class="table-row cols-5 warning">
+                <span style="font-size:10px;font-weight:600">Antipulgas Spot-on</span>
+                <span class="stock-val ok">31 un</span>
+                <span class="stock-val ok">14 un</span>
+                <span class="stock-val warn">6 un</span>
+                <span class="stock-val ok">19 un</span>
+              </div>
+              <div class="table-row cols-5">
+                <span style="font-size:10px;font-weight:600">Areia Sanitária 4kg</span>
+                <span class="stock-val ok">55 un</span>
+                <span class="stock-val ok">32 un</span>
+                <span class="stock-val ok">48 un</span>
+                <span class="stock-val ok">41 un</span>
+              </div>
+              <div class="table-row cols-5 danger">
+                <span style="font-size:10px;font-weight:600">Vacina V10 (dose)</span>
+                <span class="stock-val ok">12 un</span>
+                <span class="stock-val ok">8 un</span>
+                <span class="stock-val low">0 un ⚠</span>
+                <span class="stock-val ok">5 un</span>
+              </div>
+            </div>
+
+            <!-- Alerta de sugestão -->
+            <div style="margin-top:10px;background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:10px">
+              <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:6px;font-family:var(--mono)">💡 SUGESTÃO DO SISTEMA</div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Filial Norte tem Shampoo Neutro crítico (2 un). Filial Centro tem excedente (18 un). Deseja solicitar transferência de 8 unidades?</div>
+              <div style="display:flex;gap:8px">
+                <div style="background:var(--accent);color:#fff;padding:4px 12px;border-radius:5px;font-size:9px;font-weight:700;cursor:pointer;font-family:var(--mono)">✓ TRANSFERIR AGORA</div>
+                <div style="background:var(--bg-4);color:var(--muted);padding:4px 12px;border-radius:5px;font-size:9px;cursor:pointer;font-family:var(--mono)">Ver detalhes</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fluxo de transferência -->
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:var(--mono)">Fluxo de Transferência</div>
+            <div class="flow-diagram">
+              <div class="flow-nodes">
+                <div class="flow-node source">
+                  <div class="flow-node-name">Filial Centro</div>
+                  <div class="flow-node-val">Shampoo Neutro: 18 un → envia 8</div>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node sys">
+                  <div class="flow-node-name">Sistema registra transferência</div>
+                  <div class="flow-node-val">Responsável + data + quantidade</div>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node dest">
+                  <div class="flow-node-name">Filial Norte</div>
+                  <div class="flow-node-val">Shampoo Neutro: 2 + 8 = 10 un ✓</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Previsão -->
+            <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:8px;padding:12px">
+              <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:var(--mono);margin-bottom:8px">Previsão de Ruptura</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px">
+                  <span style="color:var(--text)">Ração Premium — Norte</span>
+                  <span style="color:var(--yellow);font-family:var(--mono)">⚠ ~8 dias</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px">
+                  <span style="color:var(--text)">Vacina V10 — Sul</span>
+                  <span style="color:var(--red);font-family:var(--mono)">⚠ ZERADO</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px">
+                  <span style="color:var(--text)">Antipulgas — Sul</span>
+                  <span style="color:var(--yellow);font-family:var(--mono)">⚠ ~5 dias</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 6 — DIFERENCIAIS ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">07 / 09</div>
+      <div class="slide-title"><span>3 Diferenciais</span> que nenhum concorrente tem</div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-align:right;line-height:1.8">
+      Exclusivo<br>
+      <span style="color:var(--purple)">Built for you</span>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <div class="diferenciais-layout">
+
+      <!-- Diferencial 1: QR Code -->
+      <div class="diferencial-card">
+        <div class="diferencial-header">
+          <div class="diferencial-icon blue">📱</div>
+          <div>
+            <div class="diferencial-title">Check-in por QR Code</div>
+            <div style="font-size:9px;color:var(--muted)">Recepção em 5 segundos</div>
+          </div>
+        </div>
+        <div class="diferencial-body">
+          <!-- QR mock visual -->
+          <div style="display:flex;justify-content:center;margin:8px 0">
+            <div style="background:#fff;border-radius:8px;padding:10px;width:80px;height:80px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px">
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+              <div style="background:#fff;border-radius:2px"></div>
+              <div style="background:#000;border-radius:2px"></div>
+            </div>
+          </div>
+
+          <div class="checkin-steps">
+            <div class="checkin-step">
+              <div class="step-num">1</div>
+              Tutor chega e mostra QR do pet no celular
+            </div>
+            <div class="checkin-step">
+              <div class="step-num">2</div>
+              Recepção escaneia — ficha completa aparece
+            </div>
+            <div class="checkin-step">
+              <div class="step-num">3</div>
+              Tutor recebe: "Buddy chegou! Previsão: 1h30"
+            </div>
+          </div>
+
+          <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:6px;padding:7px;margin-top:4px">
+            <div style="font-size:9px;color:var(--accent);font-family:var(--mono);font-weight:700">IMPACTO</div>
+            <div style="font-size:9px;color:var(--muted);margin-top:2px">–4 min por atendimento · 15 atend/dia = <strong style="color:var(--green)">+60 min recuperados</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diferencial 2: Foto automática -->
+      <div class="diferencial-card">
+        <div class="diferencial-header">
+          <div class="diferencial-icon green">📸</div>
+          <div>
+            <div class="diferencial-title">Foto Automática pós-Serviço</div>
+            <div style="font-size:9px;color:var(--muted)">Marketing grátis disfarçado de mimo</div>
+          </div>
+        </div>
+        <div class="diferencial-body">
+          <div class="photo-mock">
+            <div class="photo-icon">🐕</div>
+            <div class="photo-label">Foto tirada pelo<br>atendente ao finalizar</div>
+          </div>
+
+          <div class="whatsapp-preview">
+            <div class="wpp-bubble">
+              <div class="wpp-text">🐾 <strong>Buddy</strong> ficou incrível hoje na Filial Centro! Está pronto para buscar a partir das 16h.<br><br>📸 Olha que gracinha!</div>
+              <div class="wpp-time">15:42 ✓✓</div>
+            </div>
+          </div>
+
+          <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:6px;padding:7px;margin-top:4px">
+            <div style="font-size:9px;color:var(--green);font-family:var(--mono);font-weight:700">IMPACTO</div>
+            <div style="font-size:9px;color:var(--muted);margin-top:2px">Tutor compartilha nas redes. <strong style="color:var(--green)">Marketing orgânico com custo zero.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diferencial 3: Ociosidade -->
+      <div class="diferencial-card">
+        <div class="diferencial-header">
+          <div class="diferencial-icon purple">📊</div>
+          <div>
+            <div class="diferencial-title">Alerta de Ociosidade Preditivo</div>
+            <div style="font-size:9px;color:var(--muted)">Horário vazio → campanha automática</div>
+          </div>
+        </div>
+        <div class="diferencial-body">
+          <!-- Heatmap simplificado -->
+          <div style="font-size:8px;color:var(--muted);font-family:var(--mono);margin-bottom:4px">OCUPAÇÃO — FILIAL LESTE (última semana)</div>
+          <div class="ocio-chart">
+            <div class="ocio-col">
+              <div class="ocio-day">SEG</div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell idle"></div>
+            </div>
+            <div class="ocio-col">
+              <div class="ocio-day">TER</div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell idle"></div>
+              <div class="ocio-cell idle"></div>
+            </div>
+            <div class="ocio-col">
+              <div class="ocio-day">QUA</div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell partial"></div>
+              <div class="ocio-cell idle"></div>
+            </div>
+            <div class="ocio-col">
+              <div class="ocio-day">QUI</div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell partial"></div>
+            </div>
+            <div class="ocio-col">
+              <div class="ocio-day">SEX</div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell busy"></div>
+            </div>
+            <div class="ocio-col">
+              <div class="ocio-day">SÁB</div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell busy"></div>
+              <div class="ocio-cell busy"></div>
+            </div>
+            <div class="ocio-col">
+              <div class="ocio-day">DOM</div>
+              <div class="ocio-cell idle"></div>
+              <div class="ocio-cell idle"></div>
+              <div class="ocio-cell idle"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;font-size:8px;color:var(--muted)">
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--green);border-radius:2px;display:inline-block"></span>Cheio</span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--yellow);border-radius:2px;display:inline-block"></span>Parcial</span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--red);border-radius:2px;display:inline-block"></span>Ocioso</span>
+          </div>
+
+          <div class="alert-box">
+            <div class="alert-box-title">⚡ DISPARO AUTOMÁTICO</div>
+            <div class="alert-box-text">"Terça 14h–17h com 60% ociosidade. Enviar promoção para 24 clientes da Filial Leste?" <strong style="color:var(--yellow)">→ Você aprova com 1 clique.</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 7 — PROPOSTA ══ -->
+<div class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="slide-num">08 / 09</div>
+      <div class="slide-title">O que você <span>ganha</span> vs. o que tem hoje</div>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <div class="proposta-grid">
+      <!-- Atual -->
+      <div class="proposta-col">
+        <div class="proposta-col-title" style="color:var(--red)">🔴 Situação Atual — Pet Shop Control</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> 4 licenças separadas (custo x4)</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Sem visão consolidada das filiais</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Estoque ilhado por unidade</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> CRM não compartilha histórico entre filiais</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Sem alertas de ociosidade</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Sem check-in por QR Code</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Sem foto automática para tutor</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Relatórios manuais e lentos</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Nenhuma gamificação de fidelidade</div>
+        <div class="proposta-item"><div class="proposta-dot red"></div> Software genérico, sem identidade sua</div>
+      </div>
+
+      <!-- Proposta -->
+      <div class="proposta-col" style="border-color:rgba(52,211,153,0.25)">
+        <div class="proposta-col-title" style="color:var(--green)">🟢 Sistema Customizado — Proposta</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> 1 plano único para todas as 4 filiais</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Dashboard consolidada em tempo real</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Estoque transversal com sugestão de transferência</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> CRM unificado — histórico em qualquer filial</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Alerta de ociosidade + campanha automática</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Check-in por QR Code na recepção</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Foto automática via WhatsApp pós-serviço</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Relatórios automáticos — zero trabalho manual</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Gamificação: níveis, badges, aniversário do pet</div>
+        <div class="proposta-item"><div class="proposta-dot green"></div> Sistema com a sua marca, seu nome</div>
+      </div>
+    </div>
+
+    <!-- ROI e prazo -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:4px">
+      <div class="roi-box">
+        <div class="roi-label">Receita recuperável/mês</div>
+        <div class="roi-val">R$ 960+</div>
+        <div class="roi-desc">Só com campanhas de horário ocioso (3 atend. extras/semana · R$80)</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:var(--mono);margin-bottom:6px">Fases de Entrega</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;justify-content:space-between;font-size:10px"><span style="color:var(--muted)">MVP (Dashboard+CRM+Estoque)</span><span style="color:var(--green);font-family:var(--mono)">30 dias</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px"><span style="color:var(--muted)">Funcionalidades avançadas</span><span style="color:var(--yellow);font-family:var(--mono)">60 dias</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px"><span style="color:var(--muted)">Ajustes pós-uso real</span><span style="color:var(--accent);font-family:var(--mono)">90 dias</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--yellow);font-family:var(--mono);margin-bottom:6px">Garantia</div>
+        <div style="font-size:11px;color:var(--text);line-height:1.6">Se no <strong>primeiro mês</strong> você não ver clareza operacional que não tinha antes,<br><strong style="color:var(--green)">cancela sem multa.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ SLIDE 8 — FECHAMENTO ══ -->
+<div class="slide slide-closing">
+  <div class="cover-grid"></div>
+  <div class="cover-orb"></div>
+  <div class="cover-orb2"></div>
+
+  <div style="position:relative;max-width:680px">
+    <div class="closing-label">Próximo Passo</div>
+    <div class="closing-title">
+      Pronto para parar de<br>
+      gerenciar <span>no escuro?</span>
+    </div>
+    <div class="closing-sub">
+      30 minutos de call. A gente alinha as prioridades da sua operação<br>
+      e fecha o escopo do primeiro entregável.
+    </div>
+
+    <div class="closing-ctas">
+      <div class="cta-primary">📅 Agendar Reunião</div>
+      <div class="cta-secondary">📄 Ver Proposta Completa</div>
+    </div>
+
+    <div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:48px">
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Proposta válida até</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--red)">03 de Abril, 2026</div>
+      </div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Vagas disponíveis</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--yellow)">1 de 2</div>
+      </div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Preparado por</div>
+        <div style="font-size:14px;font-weight:700;color:#fff">Guilherme Andrade</div>
+        <div style="font-size:10px;color:var(--muted)">Agência de Automação</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

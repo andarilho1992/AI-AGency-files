@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual do Designer-Dev: Pixel Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --primary: #00ff41; /* Verde Matrix/Gameboy */
+            --secondary: #ff00ff; /* Rosa Neon */
+            --text-color: #ffffff;
+            --border-pixel: 4px solid #fff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            line-height: 1.4;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: var(--border-pixel);
+            padding: 20px;
+            box-shadow: 10px 10px 0px var(--primary);
+            background: #1a1a1a;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 28px;
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            border-bottom: 4px dashed var(--primary);
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: var(--secondary);
+            margin-top: 30px;
+        }
+
+        .code-box {
+            background: #000;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            font-family: monospace;
+            font-size: 18px;
+            color: #adff2f;
+            margin: 10px 0;
+        }
+
+        .tip {
+            background: #333;
+            border: 2px solid var(--text-color);
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .tip::before {
+            content: " [ITEM COLETADO] ";
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .container { box-shadow: none; border: 2px solid black; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>LVL 1: DESIGNER TO DEV</h1>
+    
+    <h2>1. O INVENTÁRIO (Tags & Classes)</h2>
+    <p>Pense nas <strong>Tags</strong> como os tipos de itens (Espada, Poção) e as <strong>Classes</strong> como os encantamentos (Fogo, Gelo).</p>
+    <div class="code-box">
+        &lt;button class="btn-fire"&gt;Atacar&lt;/button&gt;
+    </div>
+    
+    <h2>2. MAPA DO TESOURO (Inspecionar)</h2>
+    <p>Aperte <strong>F12</strong> no Chrome. É o seu "mapa do mundo". Clique na seta de seleção e aponte para qualquer elemento para ver as entranhas do código.</p>
+
+    <div class="tip">
+        Não tenha medo de deletar coisas no Inspecionar. Nada que você faz ali é permanente. É o seu playground!
+    </div>
+
+    <h2>3. POÇÕES DE CURA (CSS Rápido)</h2>
+    <ul>
+        <li><strong>Padding:</strong> Espaço interno (enchimento).</li>
+        <li><strong>Margin:</strong> Espaço externo (distância).</li>
+        <li><strong>Display Flex:</strong> O "Auto Layout" do código.</li>
+    </ul>
+
+    <h2>4. QUEST: O DESAFIO DO CARD</h2>
+    <p>Tente recriar um card de personagem usando apenas <code>div</code> para o box e <code>span</code> para o HP.</p>
+    <div class="code-box">
+        .card { border: 4px solid #fff; padding: 10px; }<br>
+        .hp-bar { background: red; height: 10px; }
+    </div>
+
+    <div class="footer">
+        PRESS START TO CONTINUE... OU APERTE CTRL+P PARA SALVAR EM PDF.
+    </div>
+</div>
+
+</body>
+</html>

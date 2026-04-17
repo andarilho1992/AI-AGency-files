@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go — AI Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow: #E99E22;
+  --navy: #4130B4;
+  --bg: #0b0e18;
+  --card: #131825;
+  --border: rgba(255,255,255,.07);
+  --text: #f0f2f8;
+  --muted: #6b7280;
+  --green: #22c55e;
+  --red: #ef4444;
+  --teal: #14b8a6;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+.deck { width: 100%; height: 100vh; position: relative; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 80px 100px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+  transform: translateX(48px);
+}
+.slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.out    { opacity: 0; transform: translateX(-48px); }
+
+.nav {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px; z-index: 100;
+}
+.nav-dots { display: flex; gap: 7px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); cursor: pointer; transition: all .2s; }
+.dot.active { background: var(--yellow); transform: scale(1.4); }
+.nav-btn {
+  width: 38px; height: 38px; border-radius: 9px;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text); font-size: 17px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s;
+}
+.nav-btn:hover { border-color: var(--yellow); }
+.slide-counter { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 38px; text-align: center; }
+
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--yellow); transition: width .35s ease; z-index: 200; }
+
+.logomark {
+  position: fixed; top: 22px; left: 28px;
+  font-size: 12px; font-weight: 800; color: var(--muted);
+  display: flex; align-items: center; gap: 7px;
+}
+.logomark span { color: var(--yellow); }
+
+/* ── COVER ── */
+.s1-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 20px; }
+.s1-title { font-size: clamp(48px, 8vw, 88px); font-weight: 900; line-height: 1; text-align: center; margin-bottom: 18px; }
+.s1-title .hl { color: var(--yellow); }
+.s1-sub { font-size: clamp(15px, 2.2vw, 20px); color: var(--muted); font-weight: 600; text-align: center; max-width: 580px; line-height: 1.55; margin-bottom: 48px; }
+.pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.25); border-radius: 40px; padding: 10px 24px; font-size: 13px; font-weight: 800; color: var(--yellow); }
+
+/* ── GENERICS ── */
+.s-title { font-size: clamp(30px, 4.5vw, 52px); font-weight: 900; line-height: 1.1; margin-bottom: 10px; }
+.s-sub { font-size: 15px; color: var(--muted); font-weight: 600; margin-bottom: 44px; }
+
+/* ── PROBLEM ── */
+.prob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: 100%; max-width: 880px; }
+.prob-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-align: center; }
+.prob-num { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 8px; color: var(--red); }
+.prob-label { font-size: 14px; font-weight: 700; color: var(--muted); line-height: 1.4; }
+
+/* ── REALITY ── */
+.real-layout { display: flex; gap: 48px; align-items: center; width: 100%; max-width: 940px; }
+.real-left { flex: 1; }
+.real-quote { font-size: clamp(20px, 2.8vw, 34px); font-weight: 900; line-height: 1.3; margin-bottom: 28px; }
+.real-quote .hl { color: var(--yellow); }
+.real-quote .hl2 { color: var(--red); }
+.real-list { display: flex; flex-direction: column; gap: 14px; }
+.real-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; font-weight: 600; line-height: 1.4; }
+.real-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.real-right { flex: 0 0 280px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px; text-align: center; }
+.real-stat { margin-bottom: 20px; }
+.real-stat:last-child { margin-bottom: 0; }
+.real-stat-num { font-size: 44px; font-weight: 900; color: var(--yellow); line-height: 1; }
+.real-stat-label { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 4px; line-height: 1.4; }
+
+/* ── SOLUTION ── */
+.sol-layout { display: flex; flex-direction: column; align-items: center; gap: 32px; width: 100%; max-width: 960px; }
+.sol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; }
+.sol-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; overflow: hidden; }
+.sol-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--yellow); }
+.sol-ico { font-size: 26px; margin-bottom: 10px; }
+.sol-name { font-size: 14px; font-weight: 900; margin-bottom: 5px; }
+.sol-desc { font-size: 12px; color: var(--muted); font-weight: 600; line-height: 1.5; }
+.sol-center-tag { background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.22); border-radius: 12px; padding: 14px 32px; font-size: 17px; font-weight: 800; color: var(--yellow); text-align: center; }
+
+/* ── AGENTS ── */
+.agents-grid { display: flex; flex-direction: column; gap: 9px; width: 100%; max-width: 840px; }
+.agent-row { display: flex; align-items: center; gap: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 14px 22px; }
+.agent-num { width: 34px; height: 34px; border-radius: 9px; background: var(--yellow); color: #111; font-size: 15px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.agent-info { flex: 1; }
+.agent-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.agent-desc { font-size: 12px; color: var(--muted); font-weight: 600; }
+.agent-freq { font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--yellow); background: rgba(233,158,34,.1); border-radius: 20px; padding: 4px 11px; white-space: nowrap; }
+
+/* ── PIPELINE ── */
+.pipe-layout { display: flex; flex-direction: column; align-items: center; gap: 28px; width: 100%; max-width: 960px; }
+.pipe-cols { display: flex; gap: 10px; width: 100%; }
+.pipe-col { flex: 1; border-radius: 11px; border: 1px solid var(--border); background: var(--card); overflow: hidden; }
+.pipe-col-hd { padding: 10px 14px; font-size: 11px; font-weight: 800; border-bottom: 1px solid var(--border); }
+.pipe-col-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+.pipe-mini-card { background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 9px 11px; }
+.pipe-card-name { font-size: 12px; font-weight: 800; margin-bottom: 2px; }
+.pipe-card-meta { font-size: 10px; color: var(--muted); font-weight: 600; }
+.pipe-card-dias { font-size: 10px; font-weight: 800; margin-top: 3px; }
+
+/* ── FLOW ── */
+.flow { display: flex; align-items: flex-start; gap: 0; width: 100%; max-width: 960px; }
+.flow-step { flex: 1; text-align: center; padding: 0 6px; }
+.flow-ico { width: 60px; height: 60px; border-radius: 50%; background: var(--card); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 10px; }
+.flow-ico.hl { border-color: var(--yellow); background: rgba(233,158,34,.1); }
+.flow-step-title { font-size: 12px; font-weight: 800; margin-bottom: 4px; }
+.flow-step-desc { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.4; }
+.flow-arrow { font-size: 18px; color: var(--muted); flex-shrink: 0; padding: 0 2px; margin-top: 20px; }
+
+/* ── ROI ── */
+.roi-layout { display: flex; gap: 36px; align-items: flex-start; width: 100%; max-width: 940px; }
+.roi-left { flex: 1.2; }
+.roi-right { flex: 1; }
+.roi-calc { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 14px; }
+.roi-line { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; }
+.roi-line:last-child { border-bottom: none; }
+.roi-line .val { font-weight: 900; }
+.roi-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 0; font-size: 17px; font-weight: 900; }
+.roi-total .val { color: var(--green); font-size: 26px; }
+.roi-note { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.5; }
+.roi-quote-box { background: rgba(233,158,34,.07); border: 1px solid rgba(233,158,34,.2); border-radius: 14px; padding: 24px; }
+.roi-quote-text { font-size: clamp(16px, 2.2vw, 22px); font-weight: 900; line-height: 1.4; margin-bottom: 10px; }
+.roi-quote-text .hl { color: var(--yellow); }
+.roi-quote-who { font-size: 12px; color: var(--muted); font-weight: 700; }
+
+/* ── NEXT STEPS ── */
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: 100%; max-width: 880px; }
+.step-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.step-card.active-step { border-color: var(--yellow); background: rgba(233,158,34,.04); }
+.step-badge { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 4px 11px; border-radius: 20px; background: rgba(233,158,34,.12); color: var(--yellow); margin-bottom: 14px; }
+.step-badge.done { background: rgba(34,197,94,.12); color: var(--green); }
+.step-badge.soon { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+.step-title { font-size: 17px; font-weight: 900; margin-bottom: 12px; line-height: 1.2; }
+.step-list { display: flex; flex-direction: column; gap: 8px; }
+.step-item { display: flex; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+.step-item .ico { flex-shrink: 0; }
+
+/* ── CLOSING ── */
+.closing { text-align: center; }
+.closing-big { font-size: clamp(38px, 6.5vw, 78px); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+.closing-big .hl { color: var(--yellow); }
+.closing-sub { font-size: 17px; color: var(--muted); font-weight: 600; max-width: 500px; margin: 0 auto 40px; line-height: 1.55; }
+.closing-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cpill { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 18px; font-size: 13px; font-weight: 700; }
+.cpill .dot2 { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="logomark">🐾 <span>Pets Go</span> — AI Management System</div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 — COVER -->
+  <div class="slide active" id="s0">
+    <div class="s1-eyebrow">Management System with Artificial Intelligence</div>
+    <div class="s1-title">Pet<span class="hl">shop</span><br/>on autopilot.</div>
+    <div class="s1-sub">Full CRM + 5 AI agents running 24/7. From check-in to inactive customers coming back on their own.</div>
+    <div class="pill">🐾 Pets Go — by Guilherme Andrade</div>
+  </div>
+
+  <!-- SLIDE 2 — PROBLEM -->
+  <div class="slide" id="s1">
+    <div class="s-title">The problem<br/>no one sees.</div>
+    <div class="s-sub">Pet shops lose customers every month. And they almost never know it.</div>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-num">68%</div>
+        <div class="prob-label">of customers who stop coming never received a follow-up message</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">5×</div>
+        <div class="prob-label">cheaper to reactivate a customer than to acquire a new one</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">90 days</div>
+        <div class="prob-label">average time before an "at-risk" customer is considered lost</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — REALITY -->
+  <div class="slide" id="s2">
+    <div class="real-layout">
+      <div class="real-left">
+        <div class="real-quote">You have <span class="hl">hundreds of customers</span> who already paid, already trusted you, <span class="hl2">and vanished.</span></div>
+        <div class="real-list">
+          <div class="real-item"><div class="real-ico">📋</div><div>The current system doesn't alert you when a customer stops showing up</div></div>
+          <div class="real-item"><div class="real-ico">📱</div><div>There's no way to know who's "at risk" without opening spreadsheet after spreadsheet</div></div>
+          <div class="real-item"><div class="real-ico">💬</div><div>Sending a manual message to each one is impossible — so nobody does it</div></div>
+          <div class="real-item"><div class="real-ico">🎂</div><div>Pet birthdays, grooming reminders — all kept in memory or a WhatsApp group</div></div>
+        </div>
+      </div>
+      <div class="real-right">
+        <div class="real-stat">
+          <div class="real-stat-num">1 in 3</div>
+          <div class="real-stat-label">pet shops close in the first 2 years due to lack of recurring customers</div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:16px 0"></div>
+        <div class="real-stat">
+          <div class="real-stat-num">$0</div>
+          <div class="real-stat-label">generated by customers in your database who haven't returned in the last 6 months</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — SOLUTION -->
+  <div class="slide" id="s3">
+    <div class="sol-layout">
+      <div style="text-align:center">
+        <div class="s-title">The complete solution.</div>
+        <div class="s-sub">A system that manages, alerts, and contacts. Without needing you.</div>
+      </div>
+      <div class="sol-center-tag">🐾 Pets Go CRM + 5 AI Agents</div>
+      <div class="sol-grid">
+        <div class="sol-card"><div class="sol-ico">📊</div><div class="sol-name">Real-time dashboard</div><div class="sol-desc">Pets in daycare, daily revenue, appointments. Everything on one screen, no spreadsheet.</div></div>
+        <div class="sol-card"><div class="sol-ico">🐾</div><div class="sol-name">Full pet profile</div><div class="sol-desc">Breed, vaccines, allergies, medical record, service history, and total amount spent.</div></div>
+        <div class="sol-card"><div class="sol-ico">📦</div><div class="sol-name">Inventory with alerts</div><div class="sol-desc">When shampoo runs low, the system sends a WhatsApp alert. No more surprises at the worst moment.</div></div>
+        <div class="sol-card"><div class="sol-ico">🚗</div><div class="sol-name">Pick-up & drop-off</div><div class="sol-desc">Transport management with automatic 24h reminder sent to the owner before pickup.</div></div>
+        <div class="sol-card"><div class="sol-ico">💰</div><div class="sol-name">Revenue per branch</div><div class="sol-desc">PIN-protected financial report. Each unit separate, monthly comparison.</div></div>
+        <div class="sol-card" style="border-color:rgba(233,158,34,.4);background:rgba(233,158,34,.05)"><div class="sol-ico">🔄</div><div class="sol-name" style="color:var(--yellow)">Reactivation Pipeline ⭐</div><div class="sol-desc">Inactive customers enter a pipeline. The AI reaches out with a personalized message.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — AGENTS -->
+  <div class="slide" id="s4">
+    <div class="s-title">5 agents working<br/>while you sleep.</div>
+    <div class="s-sub">Running on the server 24 hours a day, 7 days a week. Near-zero cost.</div>
+    <div class="agents-grid">
+      <div class="agent-row"><div class="agent-num">1</div><div class="agent-info"><div class="agent-name">Weekly Report</div><div class="agent-desc">Claude analyzes the week's data and sends an executive summary directly to the manager's WhatsApp</div></div><div class="agent-freq">Monday 8am</div></div>
+      <div class="agent-row"><div class="agent-num">2</div><div class="agent-info"><div class="agent-name">Pet Birthdays</div><div class="agent-desc">Detects birthdays every day and sends an automatic greeting to the owner — builds loyalty effortlessly</div></div><div class="agent-freq">Daily 9am</div></div>
+      <div class="agent-row"><div class="agent-num">3</div><div class="agent-info"><div class="agent-name">Stock Alert</div><div class="agent-desc">Checks products below minimum threshold and alerts before they run out. Never get caught without supplies again</div></div><div class="agent-freq">Daily 9am</div></div>
+      <div class="agent-row"><div class="agent-num">4</div><div class="agent-info"><div class="agent-name">Appointment Reminder</div><div class="agent-desc">Notifies the owner 24h before grooming or bath. Reduces no-shows without calling anyone</div></div><div class="agent-freq">Every hour</div></div>
+      <div class="agent-row" style="border-color:rgba(233,158,34,.35);background:rgba(233,158,34,.04)"><div class="agent-num">5</div><div class="agent-info"><div class="agent-name" style="color:var(--yellow)">Customer Reactivation ⭐</div><div class="agent-desc">Identifies inactive customers, generates a personalized message per pet and service, sends via WhatsApp. Customer disappears — the AI goes after them.</div></div><div class="agent-freq">Tue / Thu 10am</div></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — PIPELINE VISUAL -->
+  <div class="slide" id="s5">
+    <div class="pipe-layout">
+      <div style="text-align:center">
+        <div class="s-title">Reactivation Pipeline.</div>
+        <div class="s-sub">Each inactive customer gets a card. The AI moves them automatically. You track it in real time.</div>
+      </div>
+      <div class="pipe-cols">
+        <div class="pipe-col">
+          <div class="pipe-col-hd" style="color:var(--green)">✅ Active</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card"><div class="pipe-card-name">Maria S.</div><div class="pipe-card-meta">🐾 Rex · grooming</div><div class="pipe-card-dias" style="color:var(--green)">12d since last visit</div></div>
+          </div>
+        </div>
+        <div class="pipe-col" style="border-color:rgba(233,158,34,.3)">
+          <div class="pipe-col-hd" style="color:var(--yellow)">⚠️ At Risk</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card"><div class="pipe-card-name">João P.</div><div class="pipe-card-meta">🐾 Mel · daycare</div><div class="pipe-card-dias" style="color:var(--yellow)">54d since last visit</div></div>
+            <div class="pipe-mini-card"><div class="pipe-card-name">Ana L.</div><div class="pipe-card-meta">🐾 Thor · trim</div><div class="pipe-card-dias" style="color:var(--yellow)">71d since last visit</div></div>
+          </div>
+        </div>
+        <div class="pipe-col" style="border-color:rgba(239,68,68,.3)">
+          <div class="pipe-col-hd" style="color:var(--red)">🔴 Inactive</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card"><div class="pipe-card-name">Carlos M.</div><div class="pipe-card-meta">🐾 Bolinha · hotel</div><div class="pipe-card-dias" style="color:var(--red)">127d since last visit</div></div>
+          </div>
+        </div>
+        <div class="pipe-col">
+          <div class="pipe-col-hd" style="color:#38bdf8">📲 Contacted</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card" style="border-color:rgba(56,189,248,.2)"><div class="pipe-card-name">Sandra R. <span style="font-size:9px;background:rgba(37,211,102,.15);color:#25d366;border-radius:8px;padding:1px 5px">WA</span></div><div class="pipe-card-meta">🐾 Luna · bath+trim</div><div class="pipe-card-meta" style="color:#38bdf8;font-weight:800;margin-top:3px">AI sent message</div></div>
+          </div>
+        </div>
+        <div class="pipe-col" style="border-color:rgba(20,184,166,.3)">
+          <div class="pipe-col-hd" style="color:var(--teal)">🎉 Returned!</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card" style="border-color:rgba(20,184,166,.2)"><div class="pipe-card-name">Pedro F.</div><div class="pipe-card-meta">🐾 Frida · daycare</div><div class="pipe-card-meta" style="color:var(--teal);font-weight:800;margin-top:3px">Booked today ✓</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 — FLOW -->
+  <div class="slide" id="s6">
+    <div class="s-title" style="text-align:center;margin-bottom:10px">How it works in practice.</div>
+    <div class="s-sub" style="text-align:center;margin-bottom:48px">From missing customer to booked appointment — without you doing anything.</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-ico">📋</div>
+        <div class="flow-step-title">Data in the system</div>
+        <div class="flow-step-desc">Owner and pet registered. Service history saved.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">⏱️</div>
+        <div class="flow-step-title">90 days no visit</div>
+        <div class="flow-step-desc">System detects automatically. Card enters the reactivation pipeline.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico hl">🤖</div>
+        <div class="flow-step-title">AI writes message</div>
+        <div class="flow-step-desc">"Hey Maria! Rex hasn't been by in a while. We miss him! 🐾"</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico hl">📲</div>
+        <div class="flow-step-title">WhatsApp sent</div>
+        <div class="flow-step-desc">Personalized message with name and pet. Doesn't feel like a bot.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">🎉</div>
+        <div class="flow-step-title">Customer replies</div>
+        <div class="flow-step-desc">Status updates automatically. You close the booking.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 — ROI -->
+  <div class="slide" id="s7">
+    <div class="s-title" style="margin-bottom:28px">The financial return.</div>
+    <div class="roi-layout">
+      <div class="roi-left">
+        <div class="roi-calc">
+          <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em">Conservative scenario — 1 location</div>
+          <div class="roi-line"><span>Inactive customers in database</span><span class="val">200</span></div>
+          <div class="roi-line"><span>AI return rate (10%)</span><span class="val">20 customers</span></div>
+          <div class="roi-line"><span>Average ticket per visit</span><span class="val">~$25</span></div>
+          <div class="roi-line"><span>Revenue per campaign run</span><span class="val" style="color:var(--yellow)">~$500</span></div>
+          <div style="height:1px;background:var(--border);margin:6px 0"></div>
+          <div class="roi-total"><span>Monthly (2 runs)</span><span class="val">~$1,000</span></div>
+        </div>
+        <div class="roi-note">* Excluding retention. Customers who return stay for at least 6 months. The real annual value is 3–5× higher.</div>
+      </div>
+      <div class="roi-right">
+        <div class="roi-quote-box">
+          <div class="roi-quote-text">With <span class="hl">3 branches</span>, that's <span class="hl">$3,000+/month</span> in revenue that was sleeping in the database.</div>
+          <div class="roi-quote-who">— Estimate for the Pets Go network</div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="roi-calc" style="padding:18px">
+          <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Monthly system cost</div>
+          <div class="roi-line" style="font-size:12px"><span>CRM + AI Agents</span><span class="val">Included</span></div>
+          <div class="roi-line" style="font-size:12px"><span>Railway server</span><span class="val">~$5/mo</span></div>
+          <div class="roi-line" style="font-size:12px"><span>WhatsApp API (Evolution)</span><span class="val">~$15/mo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 — NEXT STEPS -->
+  <div class="slide" id="s8">
+    <div class="s-title" style="text-align:center;margin-bottom:10px">What's left to go live.</div>
+    <div class="s-sub" style="text-align:center;margin-bottom:36px">System is ready. Just needs the data and the WhatsApp connection.</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-badge done">✓ Done</div>
+        <div class="step-title">Full system developed</div>
+        <div class="step-list">
+          <div class="step-item"><span class="ico">✅</span>CRM with all screens</div>
+          <div class="step-item"><span class="ico">✅</span>5 AI agents configured</div>
+          <div class="step-item"><span class="ico">✅</span>Reactivation Pipeline</div>
+          <div class="step-item"><span class="ico">✅</span>Railway server (online)</div>
+          <div class="step-item"><span class="ico">✅</span>WhatsApp webhook ready</div>
+        </div>
+      </div>
+      <div class="step-card active-step">
+        <div class="step-badge">→ Next</div>
+        <div class="step-title">Import customer database</div>
+        <div class="step-list">
+          <div class="step-item"><span class="ico">📋</span>Export from Pets Control 2.0</div>
+          <div class="step-item"><span class="ico">📂</span>Import CSV into pipeline</div>
+          <div class="step-item"><span class="ico">🤖</span>AI classifies: active / at-risk / inactive</div>
+          <div class="step-item"><span class="ico">📲</span>First reactivation campaign run</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge soon">Coming soon</div>
+        <div class="step-title">Scale to other branches</div>
+        <div class="step-list">
+          <div class="step-item"><span class="ico">🏪</span>Configure each branch</div>
+          <div class="step-item"><span class="ico">📱</span>WhatsApp per location</div>
+          <div class="step-item"><span class="ico">📊</span>Consolidated dashboard</div>
+          <div class="step-item"><span class="ico">🚀</span>Franchise mode: replicate the model</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 — CLOSING -->
+  <div class="slide" id="s9">
+    <div class="closing">
+      <div class="closing-big">Your customers<br/><span class="hl">already exist.</span><br/>Just go get them.</div>
+      <div class="closing-sub">The system is ready. The agents are live. The next step is loading the data and letting the AI do the work.</div>
+      <div class="closing-pills">
+        <div class="cpill"><div class="dot2"></div>CRM online</div>
+        <div class="cpill"><div class="dot2"></div>5 agents active</div>
+        <div class="cpill"><div class="dot2"></div>Reactivation pipeline</div>
+        <div class="cpill"><div class="dot2"></div>WhatsApp webhook ready</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" onclick="navTo(cur-1)">←</button>
+  <div class="nav-dots" id="dots"></div>
+  <span class="slide-counter" id="counter"></span>
+  <button class="nav-btn" onclick="navTo(cur+1)">→</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0;
+
+const dotsEl     = document.getElementById('dots');
+const counterEl  = document.getElementById('counter');
+const progressEl = document.getElementById('progress');
+
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => navTo(i);
+  dotsEl.appendChild(d);
+});
+
+function navTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(() => slides[cur]?.classList.remove('out'), 380);
+  cur = n;
+  slides[cur].classList.add('active');
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  counterEl.textContent = `${cur + 1} / ${total}`;
+  progressEl.style.width = `${((cur + 1) / total) * 100}%`;
+}
+
+navTo(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navTo(cur + 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); navTo(cur - 1); }
+  if (e.key === 'Home') navTo(0);
+  if (e.key === 'End')  navTo(total - 1);
+  if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
+});
+
+document.getElementById('deck').addEventListener('click', e => {
+  if (!e.target.closest('.nav')) navTo(cur + 1);
+});
+</script>
+
+</body>
+</html>

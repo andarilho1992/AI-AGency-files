@@ -1,0 +1,2847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go Club — Sistema de Gestão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Pets Go — Paleta da Marca */
+  --yellow:#E99E22;
+  --yellow-dim:rgba(233,158,34,.12);
+  --yellow-mid:rgba(233,158,34,.3);
+  --navy:#4130B4;
+  --navy-dim:rgba(65,48,180,.3);
+  --bg:#0f1117;
+  --bg2:#171b24;
+  --bg3:#1e2330;
+  --card:#1a1f2e;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.13);
+  --text:#f0f0f0;
+  --muted:#6b7280;
+  --muted2:#9ca3af;
+  --green:#00C181;--green-dim:rgba(0,193,129,.12);
+  --red:#FF146D;--red-dim:rgba(255,20,109,.12);
+  --pink:#FF146D;--pink-dim:rgba(255,20,109,.12);
+  --teal:#484AB8;--teal-dim:rgba(72,74,184,.12);
+}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:240px 1fr;grid-template-rows:60px 1fr;height:100vh;overflow:hidden}
+
+/* ── TOPBAR ── */
+.topbar{
+  grid-column:1/-1;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;gap:16px;
+}
+.tb-brand{display:flex;align-items:center;gap:10px}
+.tb-logo{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.tb-name{font-size:16px;font-weight:900;letter-spacing:-.02em;color:var(--text)}
+.tb-center{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;flex:1;max-width:340px}
+.tb-center input{background:none;border:none;outline:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;width:100%}
+.tb-center input::placeholder{color:var(--muted)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-date{font-size:12px;color:var(--muted2);font-weight:600}
+.tb-avatar{width:34px;height:34px;border-radius:50%;background:var(--navy);border:2px solid var(--yellow);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--yellow);cursor:pointer}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  background:var(--bg2);border-right:1px solid var(--border);
+  padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;
+}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:12px 10px 6px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  cursor:pointer;transition:all .15s;font-size:14px;font-weight:600;color:var(--muted2);
+  position:relative;
+}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-mid)}
+.nav-item .ico{font-size:16px;width:20px;text-align:center}
+.nav-badge{
+  margin-left:auto;background:var(--yellow);color:#111;
+  font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center;
+}
+.nav-badge.red{background:var(--red);color:#fff}
+.sidebar-bottom{margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
+
+/* ── MAIN ── */
+.main{overflow-y:auto;padding:24px}
+.page{display:none}
+.page.active{display:block}
+
+/* ── COMPS ── */
+.page-title{font-size:22px;font-weight:900;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted2);margin-bottom:24px}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;
+  padding:8px 16px;border-radius:8px;border:none;cursor:pointer;transition:all .15s;
+}
+.btn-yellow{background:var(--yellow);color:#111}
+.btn-yellow:hover{background:#ffe033;box-shadow:0 4px 16px var(--yellow-mid)}
+.btn-ghost{background:var(--bg3);color:var(--muted2);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+.btn-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.btn-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.tag-green{background:var(--green-dim);color:var(--green)}
+.tag-yellow{background:var(--yellow-dim);color:var(--yellow)}
+.tag-red{background:var(--red-dim);color:var(--red)}
+.tag-pink{background:var(--pink-dim);color:var(--pink)}
+.tag-teal{background:var(--teal-dim);color:var(--teal)}
+.tag-navy{background:var(--navy-dim);color:#7b9fff}
+
+/* ══════════════════════════════════
+   DASHBOARD
+══════════════════════════════════ */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;display:flex;flex-direction:column;gap:4px;
+}
+.stat-card.hl{border-color:var(--yellow-mid);background:linear-gradient(135deg,var(--yellow-dim),var(--card))}
+.sc-val{font-size:36px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.sc-val.yellow{color:var(--yellow)}
+.sc-val.green{color:var(--green)}
+.sc-val.teal{color:var(--teal)}
+.sc-val.pink{color:var(--pink)}
+.sc-lbl{font-size:12px;color:var(--muted2);font-weight:600}
+.sc-icon{font-size:22px;margin-bottom:4px}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dash-section-title{font-size:14px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+
+/* Lista de pets hoje */
+.pet-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.pet-row:last-child{border-bottom:none}
+.pet-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--navy-dim);border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.pet-info{flex:1;min-width:0}
+.pet-name{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pet-tutor{font-size:11px;color:var(--muted2)}
+.pet-time{font-size:11px;color:var(--muted);font-weight:600}
+
+/* Tele-busca hoje */
+.tb-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.tb-row:last-child{border-bottom:none}
+.tb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tb-info{flex:1}
+.tb-pet{font-size:13px;font-weight:700}
+.tb-addr{font-size:11px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-hora{font-size:11px;font-weight:700;color:var(--yellow)}
+
+/* ══════════════════════════════════
+   PETS
+══════════════════════════════════ */
+.pets-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;flex:1;max-width:280px;
+}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;width:100%}
+.search-box input::placeholder{color:var(--muted)}
+
+.pets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.pet-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;cursor:pointer;transition:all .15s;position:relative;
+}
+.pet-card:hover{border-color:var(--yellow-mid);transform:translateY(-2px)}
+.pet-card-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),#2a3f9e);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin-bottom:12px;border:3px solid var(--yellow);
+}
+.pet-card-name{font-size:16px;font-weight:900;margin-bottom:2px}
+.pet-card-raca{font-size:12px;color:var(--muted2);margin-bottom:10px}
+.pet-card-tutor{font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.pet-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+
+/* ══════════════════════════════════
+   CHECK-IN / CHECK-OUT
+══════════════════════════════════ */
+.checkin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.checkin-col-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.checkin-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;margin-bottom:8px;
+}
+.ci-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy-dim);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:800}
+.ci-time{font-size:11px;color:var(--muted2)}
+.ci-actions{display:flex;gap:6px}
+
+/* ══════════════════════════════════
+   TELE-BUSCA
+══════════════════════════════════ */
+.telebusca-list{display:flex;flex-direction:column;gap:10px}
+.tb-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;display:flex;align-items:center;gap:16px;
+}
+.tb-card.busca{border-left:4px solid var(--teal)}
+.tb-card.entrega{border-left:4px solid var(--yellow)}
+.tb-card.concluido{border-left:4px solid var(--green);opacity:.6}
+.tb-type-badge{
+  font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;white-space:nowrap;
+}
+.tb-main{flex:1;min-width:0}
+.tb-pet-name{font-size:14px;font-weight:800;margin-bottom:2px}
+.tb-address{font-size:12px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-horario{font-size:13px;font-weight:800;color:var(--yellow);white-space:nowrap}
+.tb-actions{display:flex;gap:8px}
+
+/* ══════════════════════════════════
+   TUTORES
+══════════════════════════════════ */
+.tutor-list{display:flex;flex-direction:column;gap:10px}
+.tutor-item{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;
+  transition:border-color .15s;
+}
+.tutor-item:hover{border-color:var(--yellow-mid)}
+.tutor-av{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--navy);display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:var(--yellow);flex-shrink:0;
+}
+.tutor-info{flex:1;min-width:0}
+.tutor-name{font-size:14px;font-weight:800;margin-bottom:2px}
+.tutor-tel{font-size:12px;color:var(--muted2)}
+.tutor-pets{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tutor-right{text-align:right}
+.tutor-ultimo{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ══════════════════════════════════
+   MODAL
+══════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:16px;
+  width:100%;max-width:520px;max-height:90vh;overflow-y:auto;
+}
+.modal-header{
+  padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between;
+  font-size:18px;font-weight:900;margin-bottom:20px;
+}
+.modal-close{
+  width:32px;height:32px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted2);
+}
+.modal-close:hover{color:var(--text)}
+.modal-body{padding:0 24px 24px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:700;color:var(--muted2);letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px;display:block}
+.form-input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;
+  outline:none;transition:border-color .15s;
+}
+.form-input:focus{border-color:var(--yellow)}
+.form-input::placeholder{color:var(--muted)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-select{appearance:none;cursor:pointer}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--yellow);color:#111;
+  font-size:13px;font-weight:800;
+  padding:12px 20px;border-radius:10px;
+  z-index:2000;opacity:0;transform:translateY(10px);
+  transition:all .25s;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:48px 24px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:.4}
+.empty-text{font-size:14px;font-weight:600}
+
+/* ══════════════════════════════════
+   FICHA DO PET
+══════════════════════════════════ */
+.ficha-back{display:inline-flex;align-items:center;gap:6px;color:var(--muted2);font-size:13px;font-weight:700;cursor:pointer;margin-bottom:18px;transition:color .15s}
+.ficha-back:hover{color:var(--text)}
+.ficha-layout{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start}
+.ficha-sidebar{}
+.ficha-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--navy),#2a3f9e);border:4px solid var(--yellow);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 16px}
+.ficha-nome{font-size:22px;font-weight:900;text-align:center;margin-bottom:4px}
+.ficha-raca{font-size:13px;color:var(--muted2);text-align:center;margin-bottom:16px}
+.ficha-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.ficha-info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.ficha-info-key{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.ficha-info-val{font-size:13px;font-weight:700}
+.ficha-tabs-bar{display:flex;gap:4px;margin-bottom:16px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.ficha-tab{padding:6px 16px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted2);transition:all .15s}
+.ficha-tab.active{background:var(--yellow);color:#111}
+.ficha-tab-content{display:none}
+.ficha-tab-content.active{display:block}
+.prontuario-timeline{display:flex;flex-direction:column;gap:8px}
+.prontuario-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.pron-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.pron-main{flex:1;min-width:0}
+.pron-tipo{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-bottom:2px}
+.pron-desc{font-size:13px;font-weight:700;margin-bottom:4px}
+.pron-meta{font-size:11px;color:var(--muted2)}
+.pron-date{font-size:12px;font-weight:700;color:var(--yellow);white-space:nowrap}
+.ficha-hist-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.hist-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.hist-main{flex:1}
+.hist-label{font-size:13px;font-weight:700}
+.hist-meta{font-size:11px;color:var(--muted2)}
+.hist-valor{font-size:13px;font-weight:800;color:var(--green)}
+
+/* ══════════════════════════════════
+   FATURAMENTOS
+══════════════════════════════════ */
+.fat-pin-overlay{position:absolute;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:10;border-radius:12px}
+.fat-pin-box{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:32px;text-align:center;width:340px}
+.fat-pin-icon{font-size:48px;margin-bottom:12px}
+.fat-pin-title{font-size:18px;font-weight:900;margin-bottom:4px}
+.fat-pin-sub{font-size:13px;color:var(--muted2);margin-bottom:20px}
+.fat-pin-input{font-size:24px;text-align:center;letter-spacing:.3em;font-weight:900;width:100%;background:var(--bg3);border:2px solid var(--border2);border-radius:10px;color:var(--text);padding:12px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px}
+.fat-pin-input:focus{border-color:var(--yellow)}
+.fat-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.fat-table{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.fat-table-header{display:grid;grid-template-columns:1fr 1.5fr 1fr 1fr 1fr 80px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.fat-table-row{display:grid;grid-template-columns:1fr 1.5fr 1fr 1fr 1fr 80px;padding:10px 16px;border-bottom:1px solid var(--border);align-items:center;font-size:13px;transition:background .1s}
+.fat-table-row:hover{background:var(--bg3)}
+.fat-table-row:last-child{border-bottom:none}
+.fat-val{font-size:14px;font-weight:800;color:var(--green)}
+.fat-filters{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+
+/* ══════════════════════════════════
+   FILIAIS
+══════════════════════════════════ */
+.filiais-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.filial-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;transition:border-color .15s}
+.filial-card:hover{border-color:var(--yellow-mid)}
+.filial-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.filial-icon{width:44px;height:44px;border-radius:10px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.filial-name{font-size:15px;font-weight:900}
+.filial-resp{font-size:12px;color:var(--muted2)}
+.filial-info{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted2)}
+.filial-info span{display:flex;align-items:center;gap:6px}
+.filial-stats{display:flex;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.filial-stat{flex:1;text-align:center}
+.filial-stat-val{font-size:18px;font-weight:900;color:var(--yellow)}
+.filial-stat-lbl{font-size:10px;color:var(--muted);font-weight:600}
+.filial-actions{display:flex;gap:6px;margin-top:12px}
+
+/* ══════════════════════════════════
+   ATENDIMENTOS
+══════════════════════════════════ */
+.atend-tabs{display:flex;gap:6px;margin-bottom:18px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.atend-tab{padding:7px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted2);transition:all .15s}
+.atend-tab.active{background:var(--yellow);color:#111}
+.atend-list{display:flex;flex-direction:column;gap:8px}
+.atend-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px}
+.atend-card.banho{border-left:4px solid #38bdf8}
+.atend-card.tosa{border-left:4px solid #a78bfa}
+.atend-card.banho_tosa{border-left:4px solid var(--teal)}
+.atend-card.consulta{border-left:4px solid var(--pink)}
+.atend-card.concluido{opacity:.55}
+.atend-card.cancelado{opacity:.4}
+.atend-type-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.atend-main{flex:1;min-width:0}
+.atend-pet{font-size:14px;font-weight:800;margin-bottom:2px}
+.atend-detail{font-size:12px;color:var(--muted2)}
+.atend-preco{font-size:14px;font-weight:900;color:var(--green);white-space:nowrap}
+.atend-hora{font-size:12px;color:var(--yellow);font-weight:700}
+.atend-status-badge{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+
+/* ══════════════════════════════════
+   ESTOQUE
+══════════════════════════════════ */
+.estoque-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.estoque-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative}
+.estoque-card.baixo{border-color:rgba(239,68,68,.4);background:linear-gradient(135deg,var(--red-dim),var(--card))}
+.estoque-card.zerado{border-color:var(--red);background:var(--red-dim)}
+.estoque-cat{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.estoque-nome{font-size:14px;font-weight:800;margin-bottom:4px}
+.estoque-qtd{font-size:32px;font-weight:900;line-height:1;margin:8px 0}
+.estoque-unid{font-size:11px;color:var(--muted2);font-weight:600}
+.estoque-alert{font-size:11px;color:var(--red);font-weight:700;margin-top:4px}
+.estoque-controls{display:flex;align-items:center;gap:6px;margin-top:12px}
+.qty-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.qty-btn:hover{background:var(--yellow);color:#111;border-color:var(--yellow)}
+.qty-inp{width:60px;text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;padding:6px 4px;outline:none}
+.qty-inp:focus{border-color:var(--yellow)}
+.estoque-preco{font-size:12px;color:var(--muted2);margin-top:4px}
+
+/* ══════════════════════════════════
+   CONFIGURAÇÕES
+══════════════════════════════════ */
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.config-section-title{font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.color-pick-row{display:flex;align-items:center;gap:8px}
+.color-pick{width:48px;height:40px;border:none;border-radius:8px;cursor:pointer;padding:2px;background:var(--bg3);border:1px solid var(--border2);flex-shrink:0}
+.cfg-preview-bar{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:10px;flex-wrap:wrap}
+.cfg-tag-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:6px}
+.cfg-tag-label{flex:1;font-size:13px;font-weight:700}
+.cfg-tag-emoji{font-size:16px;width:24px;text-align:center}
+.cfg-tag-del{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:800;cursor:pointer;transition:opacity .15s}
+.cfg-tag-del:hover{opacity:.7}
+.cfg-save-bar{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;align-items:center;padding:16px 20px;background:var(--card);border:1px solid var(--border);border-radius:12px}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="tb-logo" id="tb-logo">🐾</div>
+      <div class="tb-name" id="tb-company-name">Pets Go Club</div>
+    </div>
+    <div class="tb-center">
+      <span style="color:var(--muted)">🔍</span>
+      <input type="text" placeholder="Buscar pet, tutor..." id="globalSearchInput" oninput="buscarGlobal()"/>
+    </div>
+    <div class="tb-right">
+      <div class="tb-date" id="tbDate"></div>
+      <div class="tb-avatar" id="tb-avatar" onclick="nav('config')" title="Configurações" style="cursor:pointer"><span id="tb-avatar-char">G</span></div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav-label">Principal</div>
+    <div class="nav-item active" data-page="dashboard" onclick="nav('dashboard')">
+      <span class="ico"><i class="ph ph-house"></i></span> Dashboard
+    </div>
+    <div class="nav-item" data-page="pets" onclick="nav('pets')">
+      <span class="ico"><i class="ph ph-paw-print"></i></span> Pets
+      <span class="nav-badge" id="badge-pets">0</span>
+    </div>
+    <div class="nav-item" data-page="tutores" onclick="nav('tutores')">
+      <span class="ico"><i class="ph ph-users"></i></span> Tutores
+      <span class="nav-badge" id="badge-tutores">0</span>
+    </div>
+
+    <div class="nav-label">Operação Diária</div>
+    <div class="nav-item" data-page="checkin" onclick="nav('checkin')">
+      <span class="ico"><i class="ph ph-check-circle"></i></span> Check-in / Out
+      <span class="nav-badge" id="badge-checkin">0</span>
+    </div>
+    <div class="nav-item" data-page="telebusca" onclick="nav('telebusca')">
+      <span class="ico"><i class="ph ph-car"></i></span> Tele-busca
+      <span class="nav-badge red" id="badge-telebusca">0</span>
+    </div>
+    <div class="nav-item" data-page="atendimentos" onclick="nav('atendimentos')">
+      <span class="ico"><i class="ph ph-scissors"></i></span> Atendimentos
+      <span class="nav-badge" id="badge-atendimentos">0</span>
+    </div>
+
+    <div class="nav-label">Gestão</div>
+    <div class="nav-item" data-page="filiais" onclick="nav('filiais')">
+      <span class="ico"><i class="ph ph-storefront"></i></span> Filiais
+      <span class="nav-badge" id="badge-filiais">0</span>
+    </div>
+    <div class="nav-item" data-page="estoque" onclick="nav('estoque')">
+      <span class="ico"><i class="ph ph-package"></i></span> Estoque
+      <span class="nav-badge red" id="badge-estoque">0</span>
+    </div>
+    <div class="nav-item" data-page="faturamentos" onclick="nav('faturamentos')">
+      <span class="ico"><i class="ph ph-currency-dollar"></i></span> Faturamentos
+      <span style="margin-left:auto;font-size:14px"><i class="ph ph-lock"></i></span>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="nav-item" data-page="config" onclick="nav('config')">
+        <span class="ico"><i class="ph ph-gear"></i></span> Configurações
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Bom dia!</div>
+      <div class="page-sub" id="dash-sub">Carregando resumo do dia...</div>
+
+      <div class="dash-stats">
+        <div class="stat-card hl">
+          <div class="sc-icon"><i class="ph ph-paw-print"></i></div>
+          <div class="sc-val yellow" id="d-na-creche">0</div>
+          <div class="sc-lbl">Pets na creche agora</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon"><i class="ph ph-sign-in"></i></div>
+          <div class="sc-val green" id="d-checkins">0</div>
+          <div class="sc-lbl">Check-ins hoje</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon"><i class="ph ph-car"></i></div>
+          <div class="sc-val teal" id="d-telebusca">0</div>
+          <div class="sc-lbl">Tele-buscas hoje</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon"><i class="ph ph-users"></i></div>
+          <div class="sc-val pink" id="d-tutores">0</div>
+          <div class="sc-lbl">Tutores cadastrados</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <div class="dash-section-title">
+            Pets na creche
+            <span class="tag tag-green" id="d-na-creche-count">0 hoje</span>
+          </div>
+          <div id="dash-pets-lista"><div class="empty"><div class="empty-icon"><i class="ph ph-paw-print"></i></div><div class="empty-text">Nenhum pet no momento</div></div></div>
+        </div>
+        <div class="card">
+          <div class="dash-section-title">
+            Tele-buscas do dia
+            <button class="btn btn-yellow" style="font-size:11px;padding:5px 12px" onclick="nav('telebusca')">Ver todas</button>
+          </div>
+          <div id="dash-tb-lista"><div class="empty"><div class="empty-icon"><i class="ph ph-car"></i></div><div class="empty-text">Nenhuma agendada hoje</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PETS ══ -->
+    <div class="page" id="page-pets">
+      <div class="page-title">Pets <i class="ph ph-paw-print hl-icon"></i></div>
+      <div class="page-sub">Cadastro e ficha de cada animal</div>
+      <div class="pets-toolbar">
+        <div class="search-box">
+          <span style="color:var(--muted)">🔍</span>
+          <input type="text" placeholder="Buscar pet..." id="petSearch" oninput="renderPets()"/>
+        </div>
+        <button class="btn btn-yellow" onclick="abrirModalPet()">+ Cadastrar pet</button>
+      </div>
+      <div class="pets-grid" id="pets-grid">
+        <div class="empty" style="grid-column:1/-1"><div class="empty-icon"><i class="ph ph-paw-print"></i></div><div class="empty-text">Nenhum pet cadastrado</div></div>
+      </div>
+    </div>
+
+    <!-- ══ TUTORES ══ -->
+    <div class="page" id="page-tutores">
+      <div class="page-title">Tutores <i class="ph ph-users hl-icon"></i></div>
+      <div class="page-sub">Responsáveis pelos pets</div>
+      <div class="pets-toolbar">
+        <div class="search-box">
+          <span style="color:var(--muted)">🔍</span>
+          <input type="text" placeholder="Buscar tutor..." id="tutorSearch" oninput="renderTutores()"/>
+        </div>
+        <button class="btn btn-yellow" onclick="abrirModalTutor()">+ Cadastrar tutor</button>
+      </div>
+      <div class="tutor-list" id="tutor-list">
+        <div class="empty" style="grid-column:1/-1"><div class="empty-icon"><i class="ph ph-users"></i></div><div class="empty-text">Nenhum tutor cadastrado</div></div>
+      </div>
+    </div>
+
+    <!-- ══ CHECK-IN / OUT ══ -->
+    <div class="page" id="page-checkin">
+      <div class="page-title">Check-in / Check-out <i class="ph ph-check-circle hl-icon"></i></div>
+      <div class="page-sub">Controle de entrada e saída dos pets</div>
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <button class="btn btn-yellow" onclick="abrirModalCheckin()">+ Registrar check-in</button>
+      </div>
+      <div class="checkin-grid">
+        <div class="card">
+          <div class="checkin-col-title"><span><i class="ph ph-tray-arrow-down"></i></span> Na creche agora</div>
+          <div id="list-na-creche"><div class="empty"><div class="empty-icon"><i class="ph ph-paw-print"></i></div><div class="empty-text">Nenhum pet</div></div></div>
+        </div>
+        <div class="card">
+          <div class="checkin-col-title"><span><i class="ph ph-clipboard-text"></i></span> Histórico hoje</div>
+          <div id="list-historico"><div class="empty"><div class="empty-icon"><i class="ph ph-clipboard-text"></i></div><div class="empty-text">Sem registros hoje</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TELE-BUSCA ══ -->
+    <div class="page" id="page-telebusca">
+      <div class="page-title">Tele-busca <i class="ph ph-car hl-icon"></i></div>
+      <div class="page-sub">Agendamento de busca e entrega de pets</div>
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <button class="btn btn-yellow" onclick="abrirModalTelebusca('busca')">+ Agendar busca</button>
+        <button class="btn btn-ghost" onclick="abrirModalTelebusca('entrega')">+ Agendar entrega</button>
+      </div>
+      <div class="telebusca-list" id="telebusca-list">
+        <div class="empty"><div class="empty-icon"><i class="ph ph-car"></i></div><div class="empty-text">Nenhuma tele-busca agendada</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FILIAIS ══ -->
+    <div class="page" id="page-filiais">
+      <div class="page-title">Filiais <i class="ph ph-storefront hl-icon"></i></div>
+      <div class="page-sub">Gerencie todas as unidades do negócio</div>
+      <div style="display:flex;gap:10px;margin-bottom:18px">
+        <button class="btn btn-yellow" onclick="abrirModalFilial()">+ Nova filial</button>
+      </div>
+      <div class="filiais-grid" id="filiais-grid">
+        <div class="empty"><div class="empty-icon"><i class="ph ph-storefront"></i></div><div class="empty-text">Nenhuma filial cadastrada</div></div>
+      </div>
+    </div>
+
+    <!-- ══ ATENDIMENTOS ══ -->
+    <div class="page" id="page-atendimentos">
+      <div class="page-title">Atendimentos <i class="ph ph-scissors hl-icon"></i></div>
+      <div class="page-sub">Banhos, tosas, consultas e serviços</div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-yellow" onclick="abrirModalAtendimento()">+ Agendar serviço</button>
+      </div>
+      <div class="atend-tabs">
+        <div class="atend-tab active" id="tab-todos" onclick="filtroAtend('todos',this)">Todos</div>
+        <div class="atend-tab" id="tab-banho" onclick="filtroAtend('banho',this)"><i class="ph ph-drop"></i> Banho</div>
+        <div class="atend-tab" id="tab-tosa" onclick="filtroAtend('tosa',this)"><i class="ph ph-scissors"></i> Tosa</div>
+        <div class="atend-tab" id="tab-banho_tosa" onclick="filtroAtend('banho_tosa',this)"><i class="ph ph-scissors"></i><i class="ph ph-drop"></i> Banho+Tosa</div>
+        <div class="atend-tab" id="tab-consulta" onclick="filtroAtend('consulta',this)"><i class="ph ph-stethoscope"></i> Consulta</div>
+      </div>
+      <div class="atend-list" id="atend-list">
+        <div class="empty"><div class="empty-icon"><i class="ph ph-scissors"></i></div><div class="empty-text">Nenhum atendimento</div></div>
+      </div>
+    </div>
+
+    <!-- ══ ESTOQUE ══ -->
+    <div class="page" id="page-estoque">
+      <div class="page-title">Estoque <i class="ph ph-package hl-icon"></i></div>
+      <div class="page-sub">Controle de produtos e suprimentos</div>
+      <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="btn btn-yellow" onclick="abrirModalEstoque()">+ Adicionar produto</button>
+        <div class="search-box" style="max-width:280px">
+          <span style="color:var(--muted)">🔍</span>
+          <input type="text" placeholder="Buscar produto..." id="estoqueSearch" oninput="renderEstoque()"/>
+        </div>
+      </div>
+      <div class="estoque-grid" id="estoque-grid">
+        <div class="empty" style="grid-column:1/-1"><div class="empty-icon"><i class="ph ph-package"></i></div><div class="empty-text">Nenhum produto cadastrado</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FICHA DO PET ══ -->
+    <div class="page" id="page-pet-ficha" style="position:relative">
+      <div class="ficha-back" onclick="nav('pets')">← Voltar para Pets</div>
+      <div id="ficha-content"></div>
+    </div>
+
+    <!-- ══ FATURAMENTOS ══ -->
+    <div class="page" id="page-faturamentos" style="position:relative">
+      <!-- PIN overlay -->
+      <div class="fat-pin-overlay" id="fat-pin-overlay">
+        <div class="fat-pin-box">
+          <div class="fat-pin-icon">🔒</div>
+          <div class="fat-pin-title">Área Restrita</div>
+          <div class="fat-pin-sub">Digite o PIN de acesso para continuar</div>
+          <input class="fat-pin-input" id="fat-pin-input" type="password" maxlength="6"
+            placeholder="••••" onkeydown="if(event.key==='Enter')verificarPin()"/>
+          <button class="btn btn-yellow" style="width:100%;font-size:15px;padding:12px" onclick="verificarPin()">Acessar</button>
+          <div id="fat-pin-erro" style="color:var(--red);font-size:12px;margin-top:8px;display:none">PIN incorreto. Tente novamente.</div>
+        </div>
+      </div>
+      <!-- Conteúdo -->
+      <div id="fat-conteudo" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div>
+            <div class="page-title">Faturamentos <i class="ph ph-currency-dollar hl-icon"></i></div>
+            <div class="page-sub">Receitas, atendimentos e fluxo financeiro</div>
+          </div>
+          <button class="btn btn-ghost" onclick="bloquearFaturamentos()" style="font-size:12px">🔒 Bloquear</button>
+        </div>
+        <div class="fat-filters">
+          <select class="form-input form-select" id="fat-filtro-mes" onchange="renderFaturamentos()" style="width:160px">
+          </select>
+          <select class="form-input form-select" id="fat-filtro-filial" onchange="renderFaturamentos()" style="width:160px">
+            <option value="todas">Todas as filiais</option>
+          </select>
+          <select class="form-input form-select" id="fat-filtro-tipo" onchange="renderFaturamentos()" style="width:160px">
+            <option value="todos">Todos os tipos</option>
+            <option value="banho">Banho</option>
+            <option value="tosa">Tosa</option>
+            <option value="banho_tosa">Banho+Tosa</option>
+            <option value="consulta">Consulta</option>
+            <option value="vacinacao">Vacinação</option>
+          </select>
+          <button class="btn btn-yellow" onclick="abrirModalLancamento()">+ Lançamento</button>
+        </div>
+        <div class="fat-summary" id="fat-summary"></div>
+        <div class="fat-table">
+          <div class="fat-table-header">
+            <span>Data</span><span>Pet / Serviço</span><span>Filial</span>
+            <span>Forma Pgto</span><span>Valor</span><span>Status</span>
+          </div>
+          <div id="fat-rows"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CONFIGURAÇÕES ══ -->
+    <div class="page" id="page-config">
+      <div class="page-title">Configurações ⚙️</div>
+      <div class="page-sub">Personalize o sistema para o seu negócio</div>
+
+      <div class="config-grid">
+
+        <!-- Identidade -->
+        <div class="card">
+          <div class="config-section-title">🏢 Identidade</div>
+          <div class="form-group">
+            <label class="form-label">Nome do negócio</label>
+            <input class="form-input" id="cfg-nome" placeholder="Ex: Pets Go Club"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Ícone do Negócio (Emoji, ph-icone ou tag SVG)</label>
+              <input class="form-input" id="cfg-emoji" placeholder="ph-paw-print" style="font-size:16px;text-align:center"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Iniciais do operador</label>
+              <input class="form-input" id="cfg-operador" placeholder="G" maxlength="2" style="text-align:center;font-weight:900;font-size:16px"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ou URL de uma logo (Imagem)</label>
+            <input class="form-input" id="cfg-logo-url" placeholder="https://exemplo.com/logo.png"/>
+          </div>
+        </div>
+
+        <!-- Cores e Estilo -->
+        <div class="card">
+          <div class="config-section-title">🎨 Cores & Estilo</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Cor primária (destaque)</label>
+              <div class="color-pick-row">
+                <input type="color" class="color-pick" id="cfg-cor-primaria" value="#E99E22" oninput="previewCor(this,'primaria')"/>
+                <input class="form-input" id="cfg-cor-primaria-hex" placeholder="#E99E22" oninput="syncColorFromHex('primaria')"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cor secundária</label>
+              <div class="color-pick-row">
+                <input type="color" class="color-pick" id="cfg-cor-secundaria" value="#4130B4" oninput="previewCor(this,'secundaria')"/>
+                <input class="form-input" id="cfg-cor-secundaria-hex" placeholder="#4130B4" oninput="syncColorFromHex('secundaria')"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Cor do Fundo Geral (Bg)</label>
+              <div class="color-pick-row">
+                <input type="color" class="color-pick" id="cfg-cor-bg" value="#0f1117" oninput="previewCor(this,'bg')"/>
+                <input class="form-input" id="cfg-cor-bg-hex" placeholder="#0f1117" oninput="syncColorFromHex('bg')"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cor do Fundo de Cartões</label>
+              <div class="color-pick-row">
+                <input type="color" class="color-pick" id="cfg-cor-card" value="#1a1f2e" oninput="previewCor(this,'card')"/>
+                <input class="form-input" id="cfg-cor-card-hex" placeholder="#1a1f2e" oninput="syncColorFromHex('card')"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fonte do Sistema</label>
+            <select class="form-input form-select" id="cfg-font-family">
+              <option value="'Nunito', sans-serif">Nunito (Padrão)</option>
+              <option value="'Inter', sans-serif">Inter (Moderno & Limpo)</option>
+              <option value="'Roboto', sans-serif">Roboto</option>
+              <option value="'Outfit', sans-serif">Outfit (Arrojado)</option>
+              <option value="system-ui, sans-serif">System UI (Nativo veloz)</option>
+            </select>
+          </div>
+          <div class="cfg-preview-bar">
+            <span style="font-size:12px;font-weight:700;color:var(--muted2)">Prévia:</span>
+            <button class="btn btn-yellow" style="pointer-events:none;font-size:11px">Botão principal</button>
+            <span class="tag tag-yellow">Tag accent</span>
+            <span class="tag tag-navy">Unidade</span>
+            <span class="nav-badge" style="margin-left:0">99</span>
+          </div>
+        </div>
+
+        <!-- Unidades -->
+        <div class="card">
+          <div class="config-section-title">📍 Unidades / Filiais</div>
+          <div id="cfg-unidades-list"></div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <input class="form-input" id="cfg-nova-unidade" placeholder="Nome da unidade..." style="flex:1" onkeydown="if(event.key==='Enter')adicionarUnidade()"/>
+            <button class="btn btn-yellow" onclick="adicionarUnidade()">+ Adicionar</button>
+          </div>
+        </div>
+
+        <!-- Serviços -->
+        <div class="card">
+          <div class="config-section-title">🛠 Tipos de serviço</div>
+          <div id="cfg-servicos-list"></div>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
+            <input class="form-input" id="cfg-novo-servico-emoji" placeholder="✂️" style="width:58px;text-align:center;font-size:18px" maxlength="2"/>
+            <input class="form-input" id="cfg-novo-servico-label" placeholder="Nome do serviço..." style="flex:1" onkeydown="if(event.key==='Enter')adicionarServico()"/>
+            <button class="btn btn-yellow" onclick="adicionarServico()">+ Adicionar</button>
+          </div>
+        </div>
+
+      </div><!-- /config-grid -->
+
+      <!-- Segurança -->
+      <div class="card" style="margin-top:16px">
+        <div class="config-section-title">🔒 Segurança — Faturamentos</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">PIN de acesso (4–6 dígitos)</label>
+            <input class="form-input" id="cfg-pin" type="password" placeholder="••••" maxlength="6" style="letter-spacing:.3em;text-align:center;font-size:18px;font-weight:900"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmar PIN</label>
+            <input class="form-input" id="cfg-pin-conf" type="password" placeholder="••••" maxlength="6" style="letter-spacing:.3em;text-align:center;font-size:18px;font-weight:900"/>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted2)">PIN atual: <strong>${'•'.repeat(D.config.pinFaturamento?.length||4)}</strong> — deixe em branco para manter o atual</div>
+      </div>
+
+      <div class="cfg-save-bar">
+        <button class="btn btn-yellow" onclick="salvarConfig()" style="font-size:14px;padding:11px 28px">💾 Salvar configurações</button>
+        <button class="btn btn-ghost" onclick="exportarDados()">📦 Exportar backup</button>
+        <label class="btn btn-ghost" style="cursor:pointer">
+          📂 Importar dados
+          <input type="file" accept=".json" id="importar-input" style="display:none" onchange="importarDados(this)"/>
+        </label>
+        <button class="btn btn-red" onclick="limparTudo()" style="margin-left:auto">🗑 Limpar tudo</button>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div>
+
+<!-- MODAIS -->
+
+<!-- Modal Pet -->
+<div class="modal-overlay" id="modal-pet">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-pet-title">Cadastrar Pet</span>
+      <div class="modal-close" onclick="fecharModal('modal-pet')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="pet-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nome do pet *</label>
+          <input class="form-input" id="pet-nome" placeholder="Ex: Rex"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Raça</label>
+          <input class="form-input" id="pet-raca" placeholder="Ex: Golden Retriever"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Porte</label>
+          <select class="form-input form-select" id="pet-porte">
+            <option value="pequeno">Pequeno</option>
+            <option value="medio">Médio</option>
+            <option value="grande">Grande</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Idade</label>
+          <input class="form-input" id="pet-idade" placeholder="Ex: 3 anos"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tutor responsável *</label>
+        <select class="form-input form-select" id="pet-tutor-id"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Vacinas em dia?</label>
+          <select class="form-input form-select" id="pet-vacinas">
+            <option value="sim">Sim ✓</option>
+            <option value="nao">Não</option>
+            <option value="parcial">Parcialmente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Serviço principal</label>
+          <select class="form-input form-select" id="pet-servico">
+            <option value="creche">Creche</option>
+            <option value="hotel">Hotel</option>
+            <option value="banho_tosa">Banho & Tosa</option>
+            <option value="veterinario">Veterinário</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Castrado/a?</label>
+          <select class="form-input form-select" id="pet-castrado">
+            <option value="nao">Não</option>
+            <option value="sim">Sim</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Peso (kg)</label>
+          <input class="form-input" id="pet-peso" type="number" placeholder="Ex: 12.5" step="0.1"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data de nasc.</label>
+          <input class="form-input" id="pet-dtnasc" type="date"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Cor / Pelagem</label>
+          <input class="form-input" id="pet-pelagem" placeholder="Ex: Caramelo"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Microchip</label>
+          <input class="form-input" id="pet-microchip" placeholder="Número do chip"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Alergias</label>
+        <input class="form-input" id="pet-alergias" placeholder="Ex: Pelo de gato, proteína de frango..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Medicamentos em uso</label>
+        <input class="form-input" id="pet-medicamentos" placeholder="Ex: Apoquel 16mg (1x/dia)"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Veterinário de referência</label>
+        <input class="form-input" id="pet-veterinario" placeholder="Dr(a). Nome — Clínica"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comportamento / Observações</label>
+        <textarea class="form-input" id="pet-obs" rows="2" placeholder="Temperamento, reações a outros pets, cuidados especiais..." style="resize:vertical"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-pet')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarPet()">Salvar pet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tutor -->
+<div class="modal-overlay" id="modal-tutor">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Cadastrar Tutor</span>
+      <div class="modal-close" onclick="fecharModal('modal-tutor')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tutor-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nome completo *</label>
+          <input class="form-input" id="tutor-nome" placeholder="Ex: João Silva"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp *</label>
+          <input class="form-input" id="tutor-tel" placeholder="Ex: 51999999999"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Endereço</label>
+        <input class="form-input" id="tutor-end" placeholder="Rua, número, bairro"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Bairro</label>
+          <input class="form-input" id="tutor-bairro" placeholder="Ex: Petrópolis"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Unidade preferida</label>
+          <select class="form-input form-select" id="tutor-unidade">
+            <option>Petrópolis</option>
+            <option>Teresópolis</option>
+            <option>Higienópolis</option>
+            <option>Partenon</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input class="form-input" id="tutor-email" placeholder="email@exemplo.com"/>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-tutor')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarTutor()">Salvar tutor</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Check-in -->
+<div class="modal-overlay" id="modal-checkin">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Registrar Check-in</span>
+      <div class="modal-close" onclick="fecharModal('modal-checkin')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Pet *</label>
+        <select class="form-input form-select" id="ci-pet-id"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Horário de entrada</label>
+          <input class="form-input" id="ci-hora" type="time"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de serviço</label>
+          <select class="form-input form-select" id="ci-servico">
+            <option value="creche">Creche</option>
+            <option value="hotel">Hotel</option>
+            <option value="banho_tosa">Banho & Tosa</option>
+            <option value="veterinario">Veterinário</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observação</label>
+        <input class="form-input" id="ci-obs" placeholder="Algo a observar nesse check-in..."/>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-checkin')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarCheckin()">Registrar entrada</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tele-busca -->
+<div class="modal-overlay" id="modal-telebusca">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-tb-title">Agendar Tele-busca</span>
+      <div class="modal-close" onclick="fecharModal('modal-telebusca')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tb-tipo"/>
+      <div class="form-group">
+        <label class="form-label">Pet *</label>
+        <select class="form-input form-select" id="tb-pet-id"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input class="form-input" id="tb-data" type="date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Horário</label>
+          <input class="form-input" id="tb-hora" type="time"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Endereço de busca/entrega</label>
+        <input class="form-input" id="tb-end" placeholder="Rua, número, bairro"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observação</label>
+        <input class="form-input" id="tb-obs" placeholder="Portão, interfone, referência..."/>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-telebusca')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarTelebusca()">Agendar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Prontuário -->
+<div class="modal-overlay" id="modal-prontuario">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-pron-title">Novo Registro de Saúde</span>
+      <div class="modal-close" onclick="fecharModal('modal-prontuario')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="pron-id"/>
+      <input type="hidden" id="pron-pet-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo *</label>
+          <select class="form-input form-select" id="pron-tipo">
+            <option value="vacina">💉 Vacina</option>
+            <option value="consulta">🩺 Consulta</option>
+            <option value="exame">🔬 Exame</option>
+            <option value="medicamento">💊 Medicamento</option>
+            <option value="cirurgia">🏥 Cirurgia</option>
+            <option value="outro">📝 Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data *</label>
+          <input class="form-input" id="pron-data" type="date"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descrição *</label>
+        <input class="form-input" id="pron-desc" placeholder="Ex: Vacina V10 · Reforço anual"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Médico / Clínica</label>
+          <input class="form-input" id="pron-medico" placeholder="Dr(a). Nome"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Peso na consulta (kg)</label>
+          <input class="form-input" id="pron-peso" type="number" placeholder="0.0" step="0.1"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Próxima data</label>
+          <input class="form-input" id="pron-proxima" type="date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor (R$)</label>
+          <input class="form-input" id="pron-valor" type="number" placeholder="0.00" step="0.01"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observações</label>
+        <textarea class="form-input" id="pron-obs" rows="2" placeholder="Detalhes adicionais..." style="resize:vertical"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-prontuario')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarProntuario()">Salvar registro</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Lançamento Manual (Faturamentos) -->
+<div class="modal-overlay" id="modal-lancamento">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Novo Lançamento</span>
+      <div class="modal-close" onclick="fecharModal('modal-lancamento')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="lanc-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Descrição *</label>
+          <input class="form-input" id="lanc-desc" placeholder="Ex: Banho Rex — João Silva"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-input form-select" id="lanc-tipo">
+            <option value="banho">🛁 Banho</option>
+            <option value="tosa">✂️ Tosa</option>
+            <option value="banho_tosa">🛁✂️ Banho+Tosa</option>
+            <option value="consulta">🩺 Consulta</option>
+            <option value="vacinacao">💉 Vacinação</option>
+            <option value="creche">🏫 Creche</option>
+            <option value="hotel">🏨 Hotel</option>
+            <option value="outro">📝 Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Valor (R$) *</label>
+          <input class="form-input" id="lanc-valor" type="number" placeholder="0.00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data *</label>
+          <input class="form-input" id="lanc-data" type="date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Forma de pagamento</label>
+          <select class="form-input form-select" id="lanc-forma">
+            <option value="pix">PIX</option>
+            <option value="cartao">Cartão</option>
+            <option value="dinheiro">Dinheiro</option>
+            <option value="fiado">Fiado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Filial</label>
+          <select class="form-input form-select" id="lanc-filial"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-input form-select" id="lanc-status">
+            <option value="pago">✅ Pago</option>
+            <option value="pendente">⏳ Pendente</option>
+            <option value="fiado">🤝 Fiado</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-lancamento')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarLancamento()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Filial -->
+<div class="modal-overlay" id="modal-filial">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-filial-title">Nova Filial</span>
+      <div class="modal-close" onclick="fecharModal('modal-filial')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="filial-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nome da filial *</label>
+          <input class="form-input" id="filial-nome" placeholder="Ex: Petrópolis"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Responsável</label>
+          <input class="form-input" id="filial-resp" placeholder="Ex: Maria Silva"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Endereço</label>
+        <input class="form-input" id="filial-end" placeholder="Rua, número, bairro"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Telefone</label>
+          <input class="form-input" id="filial-tel" placeholder="51 9999-9999"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Horário</label>
+          <input class="form-input" id="filial-horario" placeholder="Seg-Sex 7h–18h"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-filial')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarFilial()">Salvar filial</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Atendimento -->
+<div class="modal-overlay" id="modal-atendimento">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Agendar Atendimento</span>
+      <div class="modal-close" onclick="fecharModal('modal-atendimento')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="atend-id"/>
+      <div class="form-group">
+        <label class="form-label">Pet *</label>
+        <select class="form-input form-select" id="atend-pet-id"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo de serviço *</label>
+          <select class="form-input form-select" id="atend-tipo">
+            <option value="banho">🛁 Banho</option>
+            <option value="tosa">✂️ Tosa</option>
+            <option value="banho_tosa">🛁✂️ Banho + Tosa</option>
+            <option value="consulta">🩺 Consulta</option>
+            <option value="vacinacao">💉 Vacinação</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Filial</label>
+          <select class="form-input form-select" id="atend-filial"></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data *</label>
+          <input class="form-input" id="atend-data" type="date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Horário *</label>
+          <input class="form-input" id="atend-hora" type="time"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Valor (R$)</label>
+          <input class="form-input" id="atend-preco" type="number" placeholder="0.00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-input form-select" id="atend-status">
+            <option value="agendado">Agendado</option>
+            <option value="em_andamento">Em andamento</option>
+            <option value="concluido">Concluído</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observação</label>
+        <textarea class="form-input" id="atend-obs" rows="2" placeholder="Tipo de corte, cuidados especiais..." style="resize:vertical"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-atendimento')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarAtendimento()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Estoque -->
+<div class="modal-overlay" id="modal-estoque">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-estoque-title">Adicionar Produto</span>
+      <div class="modal-close" onclick="fecharModal('modal-estoque')">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="estoque-id"/>
+      <div class="form-row">
+        <div class="form-group" style="flex:2">
+          <label class="form-label">Nome do produto *</label>
+          <input class="form-input" id="estoque-nome" placeholder="Ex: Shampoo Neutro 1L"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-input form-select" id="estoque-cat">
+            <option>Banho & Tosa</option>
+            <option>Alimentação</option>
+            <option>Medicamentos</option>
+            <option>Materiais</option>
+            <option>Limpeza</option>
+            <option>Outros</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Quantidade atual</label>
+          <input class="form-input" id="estoque-qtd" type="number" placeholder="0" min="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estoque mínimo</label>
+          <input class="form-input" id="estoque-min" type="number" placeholder="3" min="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Unidade</label>
+          <select class="form-input form-select" id="estoque-unid">
+            <option value="un">Unidade</option>
+            <option value="ml">ml</option>
+            <option value="L">Litro</option>
+            <option value="kg">kg</option>
+            <option value="g">gramas</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Preço unitário (R$)</label>
+          <input class="form-input" id="estoque-preco" type="number" placeholder="0.00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Filial</label>
+          <select class="form-input form-select" id="estoque-filial"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="fecharModal('modal-estoque')">Cancelar</button>
+        <button class="btn btn-yellow" onclick="salvarEstoque()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════════════
+const DB_KEY = 'petsgo_crm';
+let D = carregar();
+
+// ── SYNC CONFIG ─────────────────────────────────────────────
+// Após deploy no Railway, preencha as duas variáveis abaixo:
+const SYNC_URL    = 'https://petsgo-agents-production.up.railway.app';
+const SYNC_SECRET = 'petsgo-mude-essa-chave-2026';
+
+// Envia dados para o servidor de agentes sempre que salvar()
+// Falha silenciosamente — o CRM continua funcionando offline
+function syncToServer() {
+  if (!SYNC_URL || !SYNC_SECRET) return;
+  fetch(SYNC_URL + '/sync', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-sync-secret': SYNC_SECRET },
+    body: JSON.stringify(D)
+  }).catch(() => {}); // falha silenciosa
+}
+
+function renderIcon(iconDef) {
+  if (!iconDef) return '';
+  if (iconDef.startsWith('<svg')) return iconDef;
+  if (iconDef.startsWith('ph-')) return `<i class="ph ${iconDef}"></i>`;
+  return iconDef; // emoji fallback
+}
+
+function defaultConfig() {
+  return {
+    nome: 'Pets Go Club',
+    emoji: '🐾',
+    logoUrl: './assets/logo-petsgo.png',
+    corPrimaria: '#E99E22',
+    corSecundaria: '#4130B4',
+    corBg: '#0f1117',
+    corCard: '#1a1f2e',
+    fontFamily: "'Nunito', sans-serif",
+    operador: 'G',
+    unidades: ['Petrópolis','Teresópolis','Higienópolis','Partenon'],
+    servicos: [
+      {id:'creche', label:'Creche', emoji:'ph-house'},
+      {id:'hotel', label:'Hotel', emoji:'ph-bed'},
+      {id:'banho_tosa', label:'Banho & Tosa', emoji:'ph-scissors'},
+      {id:'veterinario', label:'Veterinário', emoji:'ph-stethoscope'}
+    ]
+  };
+}
+
+function carregar() {
+  const raw = localStorage.getItem(DB_KEY);
+  if (raw) {
+    const parsed = JSON.parse(raw);
+    if (!parsed.config) parsed.config = defaultConfig();
+    if (parsed.config.corPrimaria === '#FFD600') {
+      parsed.config.corPrimaria = '#E99E22';
+      parsed.config.corSecundaria = '#4130B4';
+    }
+    if (parsed.config.logoUrl === '' || !parsed.config.logoUrl) parsed.config.logoUrl = './assets/logo-petsgo.png';
+    if (!parsed.estoque) parsed.estoque = [];
+    if (!parsed.atendimentos) parsed.atendimentos = [];
+    if (!parsed.filiais) parsed.filiais = [];
+    if (!parsed.prontuario) parsed.prontuario = [];
+    if (!parsed.lancamentos) parsed.lancamentos = [];
+    if (!parsed.config.pinFaturamento) parsed.config.pinFaturamento = '1234';
+    return parsed;
+  }
+  return { tutores:[], pets:[], checkins:[], telebuscas:[], estoque:[], atendimentos:[], filiais:[], prontuario:[], lancamentos:[], config:defaultConfig() };
+}
+function salvar() {
+  localStorage.setItem(DB_KEY, JSON.stringify(D));
+  atualizarBadges();
+  syncToServer();
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// ══════════════════════════════════════════════════════
+// APPLY CONFIG — aplica cores e identidade em tempo real
+// ══════════════════════════════════════════════════════
+function hexToRgb(hex) {
+  hex = hex.replace('#','');
+  if (hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+}
+
+function applyConfig() {
+  const c = D.config;
+  const root = document.documentElement;
+  // Cor primária + derivadas
+  const [r,g,b] = hexToRgb(c.corPrimaria);
+  root.style.setProperty('--yellow', c.corPrimaria);
+  root.style.setProperty('--yellow-dim', `rgba(${r},${g},${b},.12)`);
+  root.style.setProperty('--yellow-mid', `rgba(${r},${g},${b},.3)`);
+  // Cor secundária + derivadas
+  const [r2,g2,b2] = hexToRgb(c.corSecundaria);
+  root.style.setProperty('--navy', c.corSecundaria);
+  root.style.setProperty('--navy-dim', `rgba(${r2},${g2},${b2},.3)`);
+  // Fundos & Font
+  root.style.setProperty('--bg', c.corBg || '#0f1117');
+  root.style.setProperty('--card', c.corCard || '#1a1f2e');
+  
+  // Apenas gera bg2 e bg3 se for parecido com dark; caso contrário, será útil o card.
+  // Como são cores próximas, vamos derivar se houver bg, ou fixar o base.
+  root.style.setProperty('--bg2', c.corCard || '#171b24');
+  root.style.setProperty('--bg3', c.corBg || '#1e2330');
+
+  document.body.style.fontFamily = c.fontFamily || "'Nunito', sans-serif";
+  const inputsEtc = document.querySelectorAll('input, button, select, textarea');
+  inputsEtc.forEach(el => el.style.fontFamily = c.fontFamily || "'Nunito', sans-serif");
+  
+  // Topbar
+  const tbLogo = document.getElementById('tb-logo');
+  if (c.logoUrl && c.logoUrl.trim() !== '') {
+    tbLogo.innerHTML = `<img src="${c.logoUrl}" style="max-width:100%;max-height:100%;border-radius:10px;object-fit:cover" />`;
+    tbLogo.style.background = 'transparent';
+  } else {
+    tbLogo.innerHTML = renderIcon(c.emoji || '🐾');
+    tbLogo.style.background = 'var(--yellow)';
+  }
+  document.getElementById('tb-company-name').textContent = c.nome || 'CRM';
+  document.getElementById('tb-avatar-char').textContent = (c.operador || 'U')[0].toUpperCase();
+  document.title = (c.nome || 'CRM') + ' — Sistema de Gestão';
+}
+
+// ══════════════════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════════════════
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page)?.classList.add('active');
+  document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+  const renders = {
+    dashboard: renderDashboard,
+    pets: renderPets,
+    tutores: renderTutores,
+    checkin: renderCheckin,
+    telebusca: renderTelebusca,
+    config: renderConfig,
+    filiais: renderFiliais,
+    atendimentos: renderAtendimentos,
+    estoque: renderEstoque,
+    faturamentos: () => {
+      if (!fatAutenticado) bloquearFaturamentos();
+      else renderFaturamentos();
+    },
+    'pet-ficha': () => {}
+  };
+  renders[page]?.();
+}
+
+// ══════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════
+function abrirModal(id) { document.getElementById(id).classList.add('open'); }
+function fecharModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ══════════════════════════════════════════════════════
+// TUTORES
+// ══════════════════════════════════════════════════════
+function populateUnidadeSelect(selId, valorAtual) {
+  const sel = document.getElementById(selId);
+  const opcoes = D.filiais.length
+    ? D.filiais.filter(f => f.ativa !== false).map(f => f.nome)
+    : D.config.unidades;
+  sel.innerHTML = opcoes.map(u => `<option value="${u}" ${u===valorAtual?'selected':''}>${u}</option>`).join('');
+}
+
+function filialOptions(selecionado) {
+  const opcoes = D.filiais.length
+    ? D.filiais.map(f => `<option value="${f.id}" ${f.id===selecionado?'selected':''}>${f.nome}</option>`)
+    : D.config.unidades.map(u => `<option value="${u}" ${u===selecionado?'selected':''}>${u}</option>`);
+  return `<option value="geral" ${!selecionado||selecionado==='geral'?'selected':''}>Geral (todas)</option>` + opcoes.join('');
+}
+
+function populateServicoSelect(selId, valorAtual) {
+  const sel = document.getElementById(selId);
+  sel.innerHTML = D.config.servicos.map(s => `<option value="${s.id}" ${s.id===valorAtual?'selected':''}>${s.emoji} ${s.label}</option>`).join('');
+}
+
+function abrirModalTutor(id = null) {
+  document.getElementById('tutor-id').value = '';
+  document.getElementById('tutor-nome').value = '';
+  document.getElementById('tutor-tel').value = '';
+  document.getElementById('tutor-end').value = '';
+  document.getElementById('tutor-bairro').value = '';
+  document.getElementById('tutor-email').value = '';
+  populateUnidadeSelect('tutor-unidade');
+  if (id) {
+    const t = D.tutores.find(t => t.id === id);
+    if (t) {
+      document.getElementById('tutor-id').value = t.id;
+      document.getElementById('tutor-nome').value = t.nome;
+      document.getElementById('tutor-tel').value = t.tel;
+      document.getElementById('tutor-end').value = t.end || '';
+      document.getElementById('tutor-bairro').value = t.bairro || '';
+      document.getElementById('tutor-email').value = t.email || '';
+    }
+  }
+  abrirModal('modal-tutor');
+}
+
+function salvarTutor() {
+  const nome = document.getElementById('tutor-nome').value.trim();
+  const tel = document.getElementById('tutor-tel').value.trim();
+  if (!nome || !tel) { toast('⚠️ Nome e WhatsApp são obrigatórios'); return; }
+  const id = document.getElementById('tutor-id').value || uid();
+  const obj = {
+    id, nome, tel,
+    end: document.getElementById('tutor-end').value.trim(),
+    bairro: document.getElementById('tutor-bairro').value.trim(),
+    email: document.getElementById('tutor-email').value.trim(),
+    unidade: document.getElementById('tutor-unidade').value,
+    criadoEm: new Date().toISOString()
+  };
+  const idx = D.tutores.findIndex(t => t.id === id);
+  if (idx >= 0) D.tutores[idx] = obj; else D.tutores.push(obj);
+  salvar();
+  fecharModal('modal-tutor');
+  renderTutores();
+  toast('✅ Tutor salvo!');
+}
+
+function renderTutores() {
+  const q = (document.getElementById('tutorSearch')?.value || '').toLowerCase();
+  const lista = D.tutores.filter(t => !q || t.nome.toLowerCase().includes(q) || t.tel.includes(q));
+  const el = document.getElementById('tutor-list');
+  if (!lista.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">👤</div><div class="empty-text">Nenhum tutor cadastrado</div></div>'; return; }
+  el.innerHTML = lista.map(t => {
+    const pets = D.pets.filter(p => p.tutorId === t.id);
+    const ini = t.nome.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+    return `<div class="tutor-item" onclick="abrirModalTutor('${t.id}')">
+      <div class="tutor-av">${ini}</div>
+      <div class="tutor-info">
+        <div class="tutor-name">${t.nome}</div>
+        <div class="tutor-tel">📱 ${t.tel}${t.bairro ? ' · ' + t.bairro : ''}</div>
+        <div class="tutor-pets">${pets.map(p => `<span class="tag tag-yellow">${icoPet(p.porte)} ${p.nome}</span>`).join('')}</div>
+      </div>
+      <div class="tutor-right">
+        <span class="tag tag-navy">${t.unidade || 'Petrópolis'}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// PETS
+// ══════════════════════════════════════════════════════
+function icoPet(porte) {
+  return porte === 'pequeno' ? '🐕' : porte === 'grande' ? '🦮' : '🐩';
+}
+
+function abrirModalPet(id = null) {
+  document.getElementById('modal-pet-title').textContent = id ? 'Editar Pet' : 'Cadastrar Pet';
+  document.getElementById('pet-id').value = '';
+  document.getElementById('pet-nome').value = '';
+  document.getElementById('pet-raca').value = '';
+  document.getElementById('pet-obs').value = '';
+  document.getElementById('pet-idade').value = '';
+  // Popula select de tutores
+  const sel = document.getElementById('pet-tutor-id');
+  sel.innerHTML = D.tutores.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+  if (!D.tutores.length) sel.innerHTML = '<option value="">— Cadastre um tutor primeiro —</option>';
+  populateServicoSelect('pet-servico');
+  if (id) {
+    const p = D.pets.find(p => p.id === id);
+    if (p) {
+      document.getElementById('pet-id').value = p.id;
+      document.getElementById('pet-nome').value = p.nome;
+      document.getElementById('pet-raca').value = p.raca || '';
+      document.getElementById('pet-porte').value = p.porte || 'medio';
+      document.getElementById('pet-idade').value = p.idade || '';
+      document.getElementById('pet-tutor-id').value = p.tutorId || '';
+      document.getElementById('pet-vacinas').value = p.vacinas || 'sim';
+      document.getElementById('pet-servico').value = p.servico || 'creche';
+      document.getElementById('pet-castrado').value = p.castrado || 'nao';
+      document.getElementById('pet-peso').value = p.peso || '';
+      document.getElementById('pet-dtnasc').value = p.dtnasc || '';
+      document.getElementById('pet-pelagem').value = p.pelagem || '';
+      document.getElementById('pet-microchip').value = p.microchip || '';
+      document.getElementById('pet-alergias').value = p.alergias || '';
+      document.getElementById('pet-medicamentos').value = p.medicamentos || '';
+      document.getElementById('pet-veterinario').value = p.veterinario || '';
+      document.getElementById('pet-obs').value = p.obs || '';
+    }
+  }
+  abrirModal('modal-pet');
+}
+
+function salvarPet() {
+  const nome = document.getElementById('pet-nome').value.trim();
+  const tutorId = document.getElementById('pet-tutor-id').value;
+  if (!nome) { toast('⚠️ Nome do pet é obrigatório'); return; }
+  const id = document.getElementById('pet-id').value || uid();
+  const obj = {
+    id, nome, tutorId,
+    raca: document.getElementById('pet-raca').value.trim(),
+    porte: document.getElementById('pet-porte').value,
+    idade: document.getElementById('pet-idade').value.trim(),
+    vacinas: document.getElementById('pet-vacinas').value,
+    servico: document.getElementById('pet-servico').value,
+    castrado: document.getElementById('pet-castrado').value,
+    peso: parseFloat(document.getElementById('pet-peso').value) || null,
+    dtnasc: document.getElementById('pet-dtnasc').value,
+    pelagem: document.getElementById('pet-pelagem').value.trim(),
+    microchip: document.getElementById('pet-microchip').value.trim(),
+    alergias: document.getElementById('pet-alergias').value.trim(),
+    medicamentos: document.getElementById('pet-medicamentos').value.trim(),
+    veterinario: document.getElementById('pet-veterinario').value.trim(),
+    obs: document.getElementById('pet-obs').value.trim(),
+    criadoEm: new Date().toISOString()
+  };
+  const idx = D.pets.findIndex(p => p.id === id);
+  if (idx >= 0) D.pets[idx] = obj; else D.pets.push(obj);
+  salvar();
+  fecharModal('modal-pet');
+  renderPets();
+  toast('✅ Pet salvo!');
+}
+
+function renderPets() {
+  const q = (document.getElementById('petSearch')?.value || '').toLowerCase();
+  const lista = D.pets.filter(p => !q || p.nome.toLowerCase().includes(q) || (p.raca||'').toLowerCase().includes(q));
+  const grid = document.getElementById('pets-grid');
+  if (!lista.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🐾</div><div class="empty-text">Nenhum pet cadastrado</div></div>'; return; }
+  grid.innerHTML = lista.map(p => {
+    const tutor = D.tutores.find(t => t.id === p.tutorId);
+    const naCreche = D.checkins.some(c => c.petId === p.id && !c.saida && isHoje(c.entrada));
+    const vacinaTag = p.vacinas === 'sim' ? '<span class="tag tag-green">✓ Vacinas ok</span>' :
+                      p.vacinas === 'nao' ? '<span class="tag tag-red">⚠ Sem vacina</span>' :
+                      '<span class="tag tag-yellow">Parcial</span>';
+    return `<div class="pet-card" onclick="abrirFicha('${p.id}')">
+      <div class="pet-card-avatar">${icoPet(p.porte)}</div>
+      <div class="pet-card-name">${p.nome}</div>
+      <div class="pet-card-raca">${p.raca || 'Raça não informada'}${p.idade ? ' · ' + p.idade : ''}${p.peso ? ' · ' + p.peso + 'kg' : ''}</div>
+      <div class="pet-card-tutor">👤 ${tutor ? tutor.nome : 'Sem tutor'}</div>
+      ${vacinaTag}
+      <div class="pet-card-footer">
+        <span class="tag ${naCreche ? 'tag-green' : 'tag-navy'}">
+          <span class="status-dot" style="background:${naCreche ? 'var(--green)' : '#7b9fff'}"></span>
+          ${naCreche ? 'Na creche' : 'Em casa'}
+        </span>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="event.stopPropagation();abrirModalPet('${p.id}')">✏️ Editar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function servicoLabel(s) {
+  const found = D.config.servicos.find(sv => sv.id === s);
+  return found ? `${found.emoji} ${found.label}` : s;
+}
+
+// ══════════════════════════════════════════════════════
+// CHECK-IN / OUT
+// ══════════════════════════════════════════════════════
+function isHoje(ts) {
+  const d = new Date(ts), h = new Date();
+  return d.toDateString() === h.toDateString();
+}
+
+function abrirModalCheckin() {
+  const sel = document.getElementById('ci-pet-id');
+  sel.innerHTML = D.pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+  if (!D.pets.length) sel.innerHTML = '<option value="">— Cadastre um pet primeiro —</option>';
+  populateServicoSelect('ci-servico');
+  const now = new Date();
+  document.getElementById('ci-hora').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('ci-obs').value = '';
+  abrirModal('modal-checkin');
+}
+
+function salvarCheckin() {
+  const petId = document.getElementById('ci-pet-id').value;
+  if (!petId) { toast('⚠️ Selecione um pet'); return; }
+  const hora = document.getElementById('ci-hora').value;
+  const hoje = new Date().toDateString();
+  const dt = new Date(`${hoje} ${hora}`);
+  D.checkins.push({
+    id: uid(), petId,
+    entrada: dt.toISOString(),
+    saida: null,
+    servico: document.getElementById('ci-servico').value,
+    obs: document.getElementById('ci-obs').value.trim()
+  });
+  salvar();
+  fecharModal('modal-checkin');
+  renderCheckin();
+  renderDashboard();
+  toast('✅ Check-in registrado!');
+}
+
+function checkout(checkinId) {
+  const ci = D.checkins.find(c => c.id === checkinId);
+  if (ci) { ci.saida = new Date().toISOString(); salvar(); renderCheckin(); renderDashboard(); toast('👋 Check-out realizado!'); }
+}
+
+function renderCheckin() {
+  const naCreche = D.checkins.filter(c => !c.saida && isHoje(c.entrada));
+  const historico = D.checkins.filter(c => c.saida && isHoje(c.entrada));
+  const elNa = document.getElementById('list-na-creche');
+  const elHist = document.getElementById('list-historico');
+
+  if (!naCreche.length) {
+    elNa.innerHTML = '<div class="empty"><div class="empty-icon"><i class="ph ph-paw-print"></i></div><div class="empty-text">Nenhum pet</div></div>';
+  } else {
+    elNa.innerHTML = naCreche.map(c => {
+      const pet = D.pets.find(p => p.id === c.petId);
+      const tutor = pet ? D.tutores.find(t => t.id === pet.tutorId) : null;
+      const hora = new Date(c.entrada).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+      return `<div class="checkin-item">
+        <div class="ci-avatar">${icoPet(pet?.porte||'medio')}</div>
+        <div class="ci-info">
+          <div class="ci-name">${pet?.nome || 'Pet'}</div>
+          <div class="ci-time">Entrou às ${hora} · ${tutor?.nome || ''}</div>
+        </div>
+        <div class="ci-actions">
+          <button class="btn btn-red" style="font-size:11px;padding:5px 10px" onclick="checkout('${c.id}')">Check-out</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  if (!historico.length) {
+    elHist.innerHTML = '<div class="empty"><div class="empty-icon"><i class="ph ph-clipboard-text"></i></div><div class="empty-text">Sem registros hoje</div></div>';
+  } else {
+    elHist.innerHTML = historico.map(c => {
+      const pet = D.pets.find(p => p.id === c.petId);
+      const entrada = new Date(c.entrada).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+      const saida = new Date(c.saida).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+      return `<div class="checkin-item">
+        <div class="ci-avatar">${icoPet(pet?.porte||'medio')}</div>
+        <div class="ci-info">
+          <div class="ci-name">${pet?.nome || 'Pet'}</div>
+          <div class="ci-time">${entrada} → ${saida} · <span class="tag tag-green" style="font-size:10px">Saiu</span></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// TELE-BUSCA
+// ══════════════════════════════════════════════════════
+function abrirModalTelebusca(tipo) {
+  document.getElementById('tb-tipo').value = tipo;
+  document.getElementById('modal-tb-title').textContent = tipo === 'busca' ? '🚗 Agendar Busca' : '📦 Agendar Entrega';
+  const sel = document.getElementById('tb-pet-id');
+  sel.innerHTML = D.pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+  if (!D.pets.length) sel.innerHTML = '<option value="">— Cadastre um pet primeiro —</option>';
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('tb-data').value = hoje;
+  document.getElementById('tb-hora').value = '';
+  document.getElementById('tb-end').value = '';
+  document.getElementById('tb-obs').value = '';
+  abrirModal('modal-telebusca');
+}
+
+function salvarTelebusca() {
+  const petId = document.getElementById('tb-pet-id').value;
+  const data = document.getElementById('tb-data').value;
+  const hora = document.getElementById('tb-hora').value;
+  if (!petId || !data || !hora) { toast('⚠️ Pet, data e horário são obrigatórios'); return; }
+  D.telebuscas.push({
+    id: uid(), petId,
+    tipo: document.getElementById('tb-tipo').value,
+    data, hora,
+    end: document.getElementById('tb-end').value.trim(),
+    obs: document.getElementById('tb-obs').value.trim(),
+    status: 'agendado',
+    criadoEm: new Date().toISOString()
+  });
+  salvar();
+  fecharModal('modal-telebusca');
+  renderTelebusca();
+  renderDashboard();
+  toast('✅ Tele-busca agendada!');
+}
+
+function concluirTelebusca(id) {
+  const tb = D.telebuscas.find(t => t.id === id);
+  if (tb) { tb.status = 'concluido'; salvar(); renderTelebusca(); renderDashboard(); toast('✅ Concluída!'); }
+}
+
+function renderTelebusca() {
+  const hoje = new Date().toISOString().split('T')[0];
+  const lista = [...D.telebuscas].sort((a,b) => {
+    if (a.status === 'concluido' && b.status !== 'concluido') return 1;
+    if (b.status === 'concluido' && a.status !== 'concluido') return -1;
+    return (a.data + a.hora).localeCompare(b.data + b.hora);
+  });
+  const el = document.getElementById('telebusca-list');
+  if (!lista.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-text">Nenhuma tele-busca agendada</div></div>'; return; }
+  el.innerHTML = lista.map(tb => {
+    const pet = D.pets.find(p => p.id === tb.petId);
+    const tutor = pet ? D.tutores.find(t => t.id === pet.tutorId) : null;
+    const isBusca = tb.tipo === 'busca';
+    const cor = tb.status === 'concluido' ? 'concluido' : isBusca ? 'busca' : 'entrega';
+    const badgeCor = isBusca ? 'tag-teal' : 'tag-yellow';
+    const dataFmt = tb.data === hoje ? 'Hoje' : new Date(tb.data + 'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    return `<div class="tb-card ${cor}">
+      <span class="tag ${badgeCor} tb-type-badge">${isBusca ? '🚗 Busca' : '📦 Entrega'}</span>
+      <div class="tb-main">
+        <div class="tb-pet-name">${pet?.nome || 'Pet'} ${tutor ? '· ' + tutor.nome : ''}</div>
+        <div class="tb-address">📍 ${tb.end || 'Endereço não informado'}${tb.obs ? ' · ' + tb.obs : ''}</div>
+      </div>
+      <div class="tb-horario">${dataFmt} às ${tb.hora}</div>
+      <div class="tb-actions">
+        ${tb.status !== 'concluido' ? `<button class="btn btn-green" style="font-size:11px;padding:5px 10px" onclick="concluirTelebusca('${tb.id}')">✓ Concluir</button>` : '<span class="tag tag-green">✓ Feito</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════
+function renderDashboard() {
+  const naCreche = D.checkins.filter(c => !c.saida && isHoje(c.entrada));
+  const checkinsHoje = D.checkins.filter(c => isHoje(c.entrada));
+  const hoje = new Date().toISOString().split('T')[0];
+  const tbHoje = D.telebuscas.filter(tb => tb.data === hoje);
+
+  document.getElementById('d-na-creche').textContent = naCreche.length;
+  document.getElementById('d-na-creche-count').textContent = `${naCreche.length} agora`;
+  document.getElementById('d-checkins').textContent = checkinsHoje.length;
+  document.getElementById('d-telebusca').textContent = tbHoje.length;
+  document.getElementById('d-tutores').textContent = D.tutores.length;
+
+  const hora = new Date().getHours();
+  const saud = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
+  document.querySelector('#page-dashboard .page-title').innerHTML = `${saud}! ${renderIcon(D.config.emoji)}`;
+  document.getElementById('dash-sub').textContent = `${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} · ${naCreche.length} pets na creche agora`;
+
+  const elPets = document.getElementById('dash-pets-lista');
+  if (!naCreche.length) {
+    elPets.innerHTML = '<div class="empty"><div class="empty-icon"><i class="ph ph-paw-print"></i></div><div class="empty-text">Nenhum pet no momento</div></div>';
+  } else {
+    elPets.innerHTML = naCreche.map(c => {
+      const pet = D.pets.find(p => p.id === c.petId);
+      const tutor = pet ? D.tutores.find(t => t.id === pet.tutorId) : null;
+      const hora = new Date(c.entrada).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+      return `<div class="pet-row">
+        <div class="pet-avatar">${icoPet(pet?.porte||'medio')}</div>
+        <div class="pet-info">
+          <div class="pet-name">${pet?.nome || 'Pet'}</div>
+          <div class="pet-tutor">${tutor?.nome || ''}</div>
+        </div>
+        <div class="pet-time">desde ${hora}</div>
+      </div>`;
+    }).join('');
+  }
+
+  const elTb = document.getElementById('dash-tb-lista');
+  if (!tbHoje.length) {
+    elTb.innerHTML = '<div class="empty"><div class="empty-icon"><i class="ph ph-car"></i></div><div class="empty-text">Nenhuma agendada hoje</div></div>';
+  } else {
+    elTb.innerHTML = tbHoje.map(tb => {
+      const pet = D.pets.find(p => p.id === tb.petId);
+      const dotCor = tb.tipo === 'busca' ? 'var(--teal)' : 'var(--yellow)';
+      const conc = tb.status === 'concluido';
+      return `<div class="tb-row" style="${conc ? 'opacity:.5' : ''}">
+        <div class="tb-dot" style="background:${dotCor}"></div>
+        <div class="tb-info">
+          <div class="tb-pet">${tb.tipo === 'busca' ? '<i class="ph ph-car" style="vertical-align:middle;margin-right:4px"></i>' : '<i class="ph ph-package" style="vertical-align:middle;margin-right:4px"></i>'} ${pet?.nome || 'Pet'}</div>
+          <div class="tb-addr">${tb.end || 'Endereço não informado'}</div>
+        </div>
+        <div class="tb-hora">${tb.hora}${conc ? ' ✓' : ''}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// BADGES + BUSCA + MISC
+// ══════════════════════════════════════════════════════
+function atualizarBadges() {
+  document.getElementById('badge-pets').textContent = D.pets.length;
+  document.getElementById('badge-tutores').textContent = D.tutores.length;
+  const naCreche = D.checkins.filter(c => !c.saida && isHoje(c.entrada)).length;
+  document.getElementById('badge-checkin').textContent = naCreche;
+  const hoje = new Date().toISOString().split('T')[0];
+  const tbPend = D.telebuscas.filter(tb => tb.data === hoje && tb.status !== 'concluido').length;
+  document.getElementById('badge-telebusca').textContent = tbPend;
+  const atendHoje = D.atendimentos.filter(a => a.data === hoje && a.status === 'agendado').length;
+  document.getElementById('badge-atendimentos').textContent = atendHoje;
+  document.getElementById('badge-filiais').textContent = D.filiais.length;
+  const semEstoque = D.estoque.filter(e => e.quantidade <= e.minimo).length;
+  const badgeEst = document.getElementById('badge-estoque');
+  badgeEst.textContent = semEstoque;
+  badgeEst.style.display = semEstoque ? '' : 'none';
+}
+
+function buscarGlobal() {
+  const q = document.getElementById('globalSearchInput').value.toLowerCase();
+  if (!q) return;
+  const pet = D.pets.find(p => p.nome.toLowerCase().includes(q));
+  if (pet) { nav('pets'); setTimeout(() => { document.getElementById('petSearch').value = q; renderPets(); }, 50); return; }
+  const tutor = D.tutores.find(t => t.nome.toLowerCase().includes(q));
+  if (tutor) { nav('tutores'); setTimeout(() => { document.getElementById('tutorSearch').value = q; renderTutores(); }, 50); }
+}
+
+function exportarDados() {
+  const blob = new Blob([JSON.stringify(D, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `petsgo-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  toast('💾 Dados exportados!');
+}
+
+// Data no topbar
+function atualizarData() {
+  const d = new Date();
+  document.getElementById('tbDate').textContent = d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'}).replace(/^\w/,c=>c.toUpperCase());
+}
+
+// ══════════════════════════════════════════════════════
+// FILIAIS
+// ══════════════════════════════════════════════════════
+function abrirModalFilial(id = null) {
+  document.getElementById('filial-id').value = '';
+  document.getElementById('filial-nome').value = '';
+  document.getElementById('filial-resp').value = '';
+  document.getElementById('filial-end').value = '';
+  document.getElementById('filial-tel').value = '';
+  document.getElementById('filial-horario').value = '';
+  document.getElementById('modal-filial-title').textContent = id ? 'Editar Filial' : 'Nova Filial';
+  if (id) {
+    const f = D.filiais.find(f => f.id === id);
+    if (f) {
+      document.getElementById('filial-id').value = f.id;
+      document.getElementById('filial-nome').value = f.nome;
+      document.getElementById('filial-resp').value = f.resp || '';
+      document.getElementById('filial-end').value = f.end || '';
+      document.getElementById('filial-tel').value = f.tel || '';
+      document.getElementById('filial-horario').value = f.horario || '';
+    }
+  }
+  abrirModal('modal-filial');
+}
+
+function salvarFilial() {
+  const nome = document.getElementById('filial-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome da filial é obrigatório'); return; }
+  const id = document.getElementById('filial-id').value || uid();
+  const obj = { id, nome,
+    resp: document.getElementById('filial-resp').value.trim(),
+    end: document.getElementById('filial-end').value.trim(),
+    tel: document.getElementById('filial-tel').value.trim(),
+    horario: document.getElementById('filial-horario').value.trim(),
+    ativa: true, criadoEm: new Date().toISOString()
+  };
+  const idx = D.filiais.findIndex(f => f.id === id);
+  if (idx >= 0) D.filiais[idx] = obj; else D.filiais.push(obj);
+  // Sync config.unidades
+  D.config.unidades = D.filiais.filter(f => f.ativa).map(f => f.nome);
+  salvar();
+  fecharModal('modal-filial');
+  renderFiliais();
+  toast('✅ Filial salva!');
+}
+
+function deletarFilial(id) {
+  if (!confirm('Remover esta filial?')) return;
+  D.filiais = D.filiais.filter(f => f.id !== id);
+  D.config.unidades = D.filiais.filter(f => f.ativa).map(f => f.nome);
+  salvar();
+  renderFiliais();
+  toast('🗑 Filial removida');
+}
+
+function renderFiliais() {
+  const grid = document.getElementById('filiais-grid');
+  if (!D.filiais.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🏪</div><div class="empty-text">Nenhuma filial cadastrada</div></div>';
+    return;
+  }
+  grid.innerHTML = D.filiais.map(f => {
+    const petsNaFilial = D.checkins.filter(c => {
+      const pet = D.pets.find(p => p.id === c.petId);
+      const tutor = pet ? D.tutores.find(t => t.id === pet.tutorId) : null;
+      return !c.saida && isHoje(c.entrada) && (tutor?.unidade === f.nome);
+    }).length;
+    const atendHoje = D.atendimentos.filter(a => a.filialId === f.id && a.data === new Date().toISOString().split('T')[0]).length;
+    return `<div class="filial-card">
+      <div class="filial-header">
+        <div class="filial-icon">🏪</div>
+        <div>
+          <div class="filial-name">${f.nome}</div>
+          <div class="filial-resp">${f.resp || 'Sem responsável'}</div>
+        </div>
+      </div>
+      <div class="filial-info">
+        ${f.end ? `<span>📍 ${f.end}</span>` : ''}
+        ${f.tel ? `<span>📱 ${f.tel}</span>` : ''}
+        ${f.horario ? `<span>🕐 ${f.horario}</span>` : ''}
+      </div>
+      <div class="filial-stats">
+        <div class="filial-stat"><div class="filial-stat-val">${petsNaFilial}</div><div class="filial-stat-lbl">Pets agora</div></div>
+        <div class="filial-stat"><div class="filial-stat-val">${atendHoje}</div><div class="filial-stat-lbl">Atend. hoje</div></div>
+      </div>
+      <div class="filial-actions">
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="abrirModalFilial('${f.id}')">✏️ Editar</button>
+        <button class="btn btn-red" style="font-size:12px" onclick="deletarFilial('${f.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// ATENDIMENTOS
+// ══════════════════════════════════════════════════════
+let filtroAtendAtivo = 'todos';
+
+function filtroAtend(tipo, el) {
+  filtroAtendAtivo = tipo;
+  document.querySelectorAll('.atend-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderAtendimentos();
+}
+
+function abrirModalAtendimento(id = null) {
+  const petSel = document.getElementById('atend-pet-id');
+  petSel.innerHTML = D.pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+  if (!D.pets.length) petSel.innerHTML = '<option value="">— Cadastre um pet —</option>';
+
+  document.getElementById('atend-filial').innerHTML = filialOptions();
+
+  document.getElementById('atend-id').value = '';
+  document.getElementById('atend-data').value = new Date().toISOString().split('T')[0];
+  document.getElementById('atend-hora').value = '';
+  document.getElementById('atend-preco').value = '';
+  document.getElementById('atend-obs').value = '';
+  document.getElementById('atend-status').value = 'agendado';
+
+  if (id) {
+    const a = D.atendimentos.find(a => a.id === id);
+    if (a) {
+      document.getElementById('atend-id').value = a.id;
+      document.getElementById('atend-pet-id').value = a.petId;
+      document.getElementById('atend-tipo').value = a.tipo;
+      document.getElementById('atend-filial').value = a.filialId || 'geral';
+      document.getElementById('atend-data').value = a.data;
+      document.getElementById('atend-hora').value = a.hora;
+      document.getElementById('atend-preco').value = a.preco || '';
+      document.getElementById('atend-status').value = a.status;
+      document.getElementById('atend-obs').value = a.obs || '';
+    }
+  }
+  abrirModal('modal-atendimento');
+}
+
+function salvarAtendimento() {
+  const petId = document.getElementById('atend-pet-id').value;
+  const data = document.getElementById('atend-data').value;
+  const hora = document.getElementById('atend-hora').value;
+  if (!petId || !data || !hora) { toast('⚠️ Pet, data e horário são obrigatórios'); return; }
+  const id = document.getElementById('atend-id').value || uid();
+  const obj = { id, petId,
+    tipo: document.getElementById('atend-tipo').value,
+    filialId: document.getElementById('atend-filial').value,
+    data, hora,
+    preco: parseFloat(document.getElementById('atend-preco').value) || 0,
+    status: document.getElementById('atend-status').value,
+    obs: document.getElementById('atend-obs').value.trim(),
+    criadoEm: new Date().toISOString()
+  };
+  const idx = D.atendimentos.findIndex(a => a.id === id);
+  if (idx >= 0) D.atendimentos[idx] = obj; else D.atendimentos.push(obj);
+  salvar();
+  fecharModal('modal-atendimento');
+  renderAtendimentos();
+  toast('✅ Atendimento salvo!');
+}
+
+function atualizarStatusAtend(id, novoStatus) {
+  const a = D.atendimentos.find(a => a.id === id);
+  if (a) { a.status = novoStatus; salvar(); renderAtendimentos(); toast(`✅ Status: ${novoStatus}`); }
+}
+
+function deletarAtendimento(id) {
+  D.atendimentos = D.atendimentos.filter(a => a.id !== id);
+  salvar();
+  renderAtendimentos();
+  toast('🗑 Removido');
+}
+
+function atendTipoConfig(tipo) {
+  const map = {
+    banho: {emoji:'<i class="ph ph-drop"></i>', label:'Banho', cor:'#38bdf8'},
+    tosa: {emoji:'<i class="ph ph-scissors"></i>', label:'Tosa', cor:'#a78bfa'},
+    banho_tosa: {emoji:'<i class="ph ph-scissors"></i><i class="ph ph-drop"></i>', label:'Banho+Tosa', cor:'var(--teal)'},
+    consulta: {emoji:'<i class="ph ph-stethoscope"></i>', label:'Consulta', cor:'var(--pink)'},
+    vacinacao: {emoji:'<i class="ph ph-syringe"></i>', label:'Vacinação', cor:'var(--green)'}
+  };
+  return map[tipo] || {emoji:'<i class="ph ph-paw-print"></i>', label:tipo, cor:'var(--muted2)'};
+}
+
+function atendStatusTag(status) {
+  const map = {
+    agendado: 'background:var(--yellow-dim);color:var(--yellow)',
+    em_andamento: 'background:rgba(56,189,248,.15);color:#38bdf8',
+    concluido: 'background:var(--green-dim);color:var(--green)',
+    cancelado: 'background:var(--red-dim);color:var(--red)'
+  };
+  return map[status] || '';
+}
+
+function renderAtendimentos() {
+  const hoje = new Date().toISOString().split('T')[0];
+  let lista = [...D.atendimentos].sort((a,b) => (a.data+a.hora).localeCompare(b.data+b.hora));
+  if (filtroAtendAtivo !== 'todos') lista = lista.filter(a => a.tipo === filtroAtendAtivo);
+
+  const el = document.getElementById('atend-list');
+  if (!lista.length) { el.innerHTML = '<div class="empty"><div class="empty-icon"><i class="ph ph-scissors"></i></div><div class="empty-text">Nenhum atendimento</div></div>'; return; }
+
+  el.innerHTML = lista.map(a => {
+    const pet = D.pets.find(p => p.id === a.petId);
+    const tutor = pet ? D.tutores.find(t => t.id === pet.tutorId) : null;
+    const filial = D.filiais.find(f => f.id === a.filialId);
+    const tc = atendTipoConfig(a.tipo);
+    const dataFmt = a.data === hoje ? 'Hoje' : new Date(a.data+'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    const conc = a.status === 'concluido' || a.status === 'cancelado';
+    return `<div class="atend-card ${a.tipo} ${a.status}">
+      <div class="atend-type-ico" style="background:${tc.cor}22">${tc.emoji}</div>
+      <div class="atend-main">
+        <div class="atend-pet">${pet?.nome || 'Pet'} <span style="font-size:11px;color:var(--muted2);font-weight:600">· ${tutor?.nome || ''}</span></div>
+        <div class="atend-detail">${tc.label}${filial ? ' · ' + filial.nome : a.filialId && a.filialId !== 'geral' ? ' · ' + a.filialId : ''}${a.obs ? ' · ' + a.obs : ''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="atend-hora">${dataFmt} ${a.hora}</div>
+        ${a.preco ? `<div class="atend-preco">R$ ${a.preco.toFixed(2)}</div>` : ''}
+        <div class="atend-status-badge" style="${atendStatusTag(a.status)}">${a.status.replace('_',' ')}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+        ${!conc ? `<button class="btn btn-green" style="font-size:10px;padding:4px 8px" onclick="atualizarStatusAtend('${a.id}','concluido')">✓ Concluir</button>` : ''}
+        <button class="btn btn-ghost" style="font-size:10px;padding:4px 8px" onclick="abrirModalAtendimento('${a.id}')">✏️</button>
+        <button class="btn btn-red" style="font-size:10px;padding:4px 8px" onclick="deletarAtendimento('${a.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// ESTOQUE
+// ══════════════════════════════════════════════════════
+function abrirModalEstoque(id = null) {
+  document.getElementById('estoque-filial').innerHTML = filialOptions();
+
+  document.getElementById('estoque-id').value = '';
+  document.getElementById('estoque-nome').value = '';
+  document.getElementById('estoque-qtd').value = '';
+  document.getElementById('estoque-min').value = '3';
+  document.getElementById('estoque-preco').value = '';
+  document.getElementById('modal-estoque-title').textContent = id ? 'Editar Produto' : 'Adicionar Produto';
+
+  if (id) {
+    const p = D.estoque.find(e => e.id === id);
+    if (p) {
+      document.getElementById('estoque-id').value = p.id;
+      document.getElementById('estoque-nome').value = p.nome;
+      document.getElementById('estoque-cat').value = p.categoria;
+      document.getElementById('estoque-qtd').value = p.quantidade;
+      document.getElementById('estoque-min').value = p.minimo;
+      document.getElementById('estoque-unid').value = p.unidade;
+      document.getElementById('estoque-preco').value = p.preco || '';
+      document.getElementById('estoque-filial').value = p.filialId || 'geral';
+    }
+  }
+  abrirModal('modal-estoque');
+}
+
+function salvarEstoque() {
+  const nome = document.getElementById('estoque-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome do produto é obrigatório'); return; }
+  const id = document.getElementById('estoque-id').value || uid();
+  const obj = { id, nome,
+    categoria: document.getElementById('estoque-cat').value,
+    quantidade: parseInt(document.getElementById('estoque-qtd').value) || 0,
+    minimo: parseInt(document.getElementById('estoque-min').value) || 3,
+    unidade: document.getElementById('estoque-unid').value,
+    preco: parseFloat(document.getElementById('estoque-preco').value) || 0,
+    filialId: document.getElementById('estoque-filial').value,
+    criadoEm: new Date().toISOString()
+  };
+  const idx = D.estoque.findIndex(e => e.id === id);
+  if (idx >= 0) D.estoque[idx] = obj; else D.estoque.push(obj);
+  salvar();
+  fecharModal('modal-estoque');
+  renderEstoque();
+  toast('✅ Produto salvo!');
+}
+
+function alterarQtd(id, delta) {
+  const p = D.estoque.find(e => e.id === id);
+  if (!p) return;
+  p.quantidade = Math.max(0, p.quantidade + delta);
+  salvar();
+  renderEstoque();
+  atualizarBadges();
+}
+
+function renderEstoque() {
+  const q = (document.getElementById('estoqueSearch')?.value || '').toLowerCase();
+  const lista = D.estoque.filter(e => !q || e.nome.toLowerCase().includes(q) || e.categoria.toLowerCase().includes(q));
+  const grid = document.getElementById('estoque-grid');
+  if (!lista.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon"><i class="ph ph-package"></i></div><div class="empty-text">Nenhum produto cadastrado</div></div>';
+    return;
+  }
+  grid.innerHTML = lista.map(e => {
+    const baixo = e.quantidade > 0 && e.quantidade <= e.minimo;
+    const zerado = e.quantidade === 0;
+    const cls = zerado ? 'zerado' : baixo ? 'baixo' : '';
+    const filial = D.filiais.find(f => f.id === e.filialId);
+    return `<div class="estoque-card ${cls}" onclick="abrirModalEstoque('${e.id}')">
+      <div class="estoque-cat">${e.categoria}${filial ? ' · ' + filial.nome : ''}</div>
+      <div class="estoque-nome">${e.nome}</div>
+      <div class="estoque-qtd" style="color:${zerado?'var(--red)':baixo?'var(--yellow)':'var(--text)'}">${e.quantidade}</div>
+      <div class="estoque-unid">${e.unidade}${zerado ? ' · <span style="color:var(--red)">SEM ESTOQUE</span>' : baixo ? ' · ⚠️ baixo' : ''}</div>
+      ${e.preco ? `<div class="estoque-preco">R$ ${e.preco.toFixed(2)} / un</div>` : ''}
+      <div class="estoque-controls" onclick="event.stopPropagation()">
+        <button class="qty-btn" onclick="alterarQtd('${e.id}',-1)">−</button>
+        <input class="qty-inp" type="number" value="${e.quantidade}" min="0"
+          onchange="D.estoque.find(x=>x.id==='${e.id}').quantidade=Math.max(0,parseInt(this.value)||0);salvar();renderEstoque()" />
+        <button class="qty-btn" onclick="alterarQtd('${e.id}',1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// CONFIGURAÇÕES
+// ══════════════════════════════════════════════════════
+function renderConfig() {
+  const c = D.config;
+  document.getElementById('cfg-nome').value = c.nome || '';
+  document.getElementById('cfg-emoji').value = c.emoji || '';
+  document.getElementById('cfg-logo-url').value = c.logoUrl || '';
+  document.getElementById('cfg-operador').value = c.operador || '';
+  document.getElementById('cfg-cor-primaria').value = c.corPrimaria || '#FFD600';
+  document.getElementById('cfg-cor-primaria-hex').value = c.corPrimaria || '#FFD600';
+  document.getElementById('cfg-cor-secundaria').value = c.corSecundaria || '#1A2B6B';
+  document.getElementById('cfg-cor-secundaria-hex').value = c.corSecundaria || '#1A2B6B';
+  document.getElementById('cfg-cor-bg').value = c.corBg || '#0f1117';
+  document.getElementById('cfg-cor-bg-hex').value = c.corBg || '#0f1117';
+  document.getElementById('cfg-cor-card').value = c.corCard || '#1a1f2e';
+  document.getElementById('cfg-cor-card-hex').value = c.corCard || '#1a1f2e';
+  document.getElementById('cfg-font-family').value = c.fontFamily || "'Nunito', sans-serif";
+  renderUnidadesList();
+  renderServicosList();
+}
+
+function renderUnidadesList() {
+  const el = document.getElementById('cfg-unidades-list');
+  if (!D.config.unidades.length) { el.innerHTML = '<div class="empty" style="padding:16px"><div class="empty-text">Nenhuma unidade</div></div>'; return; }
+  el.innerHTML = D.config.unidades.map((u, i) => `
+    <div class="cfg-tag-item">
+      <span class="cfg-tag-emoji">📍</span>
+      <span class="cfg-tag-label">${u}</span>
+      <button class="cfg-tag-del" onclick="removerUnidade(${i})">✕</button>
+    </div>`).join('');
+}
+
+function renderServicosList() {
+  const el = document.getElementById('cfg-servicos-list');
+  if (!D.config.servicos.length) { el.innerHTML = '<div class="empty" style="padding:16px"><div class="empty-text">Nenhum serviço</div></div>'; return; }
+  el.innerHTML = D.config.servicos.map((s, i) => `
+    <div class="cfg-tag-item">
+      <span class="cfg-tag-emoji">${s.emoji}</span>
+      <span class="cfg-tag-label">${s.label}</span>
+      <button class="cfg-tag-del" onclick="removerServico(${i})">✕</button>
+    </div>`).join('');
+}
+
+function adicionarUnidade() {
+  const inp = document.getElementById('cfg-nova-unidade');
+  const val = inp.value.trim();
+  if (!val) { toast('⚠️ Digite o nome da unidade'); return; }
+  if (D.config.unidades.includes(val)) { toast('⚠️ Unidade já existe'); return; }
+  D.config.unidades.push(val);
+  inp.value = '';
+  renderUnidadesList();
+  toast('📍 Unidade adicionada');
+}
+
+function removerUnidade(i) {
+  D.config.unidades.splice(i, 1);
+  renderUnidadesList();
+}
+
+function adicionarServico() {
+  const emoji = document.getElementById('cfg-novo-servico-emoji').value.trim() || '🔧';
+  const label = document.getElementById('cfg-novo-servico-label').value.trim();
+  if (!label) { toast('⚠️ Digite o nome do serviço'); return; }
+  const id = label.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');
+  if (D.config.servicos.find(s => s.id === id)) { toast('⚠️ Serviço já existe'); return; }
+  D.config.servicos.push({id, label, emoji});
+  document.getElementById('cfg-novo-servico-emoji').value = '';
+  document.getElementById('cfg-novo-servico-label').value = '';
+  renderServicosList();
+  toast('🛠 Serviço adicionado');
+}
+
+function removerServico(i) {
+  D.config.servicos.splice(i, 1);
+  renderServicosList();
+}
+
+function previewCor(input, tipo) {
+  const hex = input.value;
+  document.getElementById(`cfg-cor-${tipo}-hex`).value = hex;
+  D.config[tipo === 'primaria' ? 'corPrimaria' : 'corSecundaria'] = hex;
+  applyConfig();
+}
+
+function syncColorFromHex(tipo) {
+  const hexEl = document.getElementById(`cfg-cor-${tipo}-hex`);
+  const val = hexEl.value.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById(`cfg-cor-${tipo}`).value = val;
+    D.config[tipo==='primaria'?'corPrimaria':'corSecundaria'] = val;
+    applyConfig();
+  }
+}
+
+function salvarConfig() {
+  D.config.nome = document.getElementById('cfg-nome').value.trim() || D.config.nome;
+  D.config.emoji = document.getElementById('cfg-emoji').value.trim() || D.config.emoji;
+  D.config.logoUrl = document.getElementById('cfg-logo-url').value.trim();
+  D.config.operador = document.getElementById('cfg-operador').value.trim() || D.config.operador;
+  D.config.corPrimaria = document.getElementById('cfg-cor-primaria').value;
+  D.config.corSecundaria = document.getElementById('cfg-cor-secundaria').value;
+  D.config.corBg = document.getElementById('cfg-cor-bg').value;
+  D.config.corCard = document.getElementById('cfg-cor-card').value;
+  D.config.fontFamily = document.getElementById('cfg-font-family').value;
+  
+  // PIN — só atualiza se preenchido e confirmado
+  const pin = document.getElementById('cfg-pin').value;
+  const conf = document.getElementById('cfg-pin-conf').value;
+  if (pin) {
+    if (pin.length < 4) { toast('⚠️ PIN deve ter pelo menos 4 dígitos'); return; }
+    if (pin !== conf) { toast('⚠️ PINs não coincidem'); return; }
+    D.config.pinFaturamento = pin;
+    fatAutenticado = false; // força re-autenticação
+  }
+  salvar();
+  applyConfig();
+  toast('✅ Configurações salvas!');
+}
+
+function importarDados(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed.tutores && !parsed.pets) { toast('⚠️ Arquivo inválido'); return; }
+      if (!parsed.config) parsed.config = defaultConfig();
+      D = parsed;
+      salvar();
+      applyConfig();
+      renderDashboard();
+      toast('✅ Dados importados!');
+    } catch { toast('⚠️ Erro ao ler arquivo'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function limparTudo() {
+  if (!confirm('Apagar TODOS os dados? Esta ação não pode ser desfeita.')) return;
+  D = { tutores:[], pets:[], checkins:[], telebuscas:[], estoque:[], atendimentos:[], filiais: D.filiais, config: D.config };
+  salvar();
+  renderDashboard();
+  toast('🗑 Dados apagados');
+}
+
+// ══════════════════════════════════════════════════════
+// FICHA DO PET
+// ══════════════════════════════════════════════════════
+let fichaAtivaPetId = null;
+let fichaTabAtiva = 'geral';
+
+function abrirFicha(petId) {
+  fichaAtivaPetId = petId;
+  fichaTabAtiva = 'geral';
+  nav('pet-ficha');
+  renderFicha();
+}
+
+function fichaTab(tab) {
+  fichaTabAtiva = tab;
+  document.querySelectorAll('.ficha-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.ficha-tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('ficha-tab-' + tab)?.classList.add('active');
+  document.getElementById('ficha-tc-' + tab)?.classList.add('active');
+}
+
+function pronTipoConfig(tipo) {
+  const map = {
+    vacina: {emoji:'<i class="ph ph-syringe"></i>', cor:'var(--green)', bg:'var(--green-dim)'},
+    consulta: {emoji:'<i class="ph ph-stethoscope"></i>', cor:'var(--pink)', bg:'var(--pink-dim)'},
+    exame: {emoji:'<i class="ph ph-microscope"></i>', cor:'#38bdf8', bg:'rgba(56,189,248,.12)'},
+    medicamento: {emoji:'<i class="ph ph-pill"></i>', cor:'#a78bfa', bg:'rgba(167,139,250,.12)'},
+    cirurgia: {emoji:'<i class="ph ph-hospital"></i>', cor:'var(--red)', bg:'var(--red-dim)'},
+    outro: {emoji:'<i class="ph ph-file-text"></i>', cor:'var(--muted2)', bg:'var(--bg3)'}
+  };
+  return map[tipo] || map.outro;
+}
+
+function renderFicha() {
+  const p = D.pets.find(x => x.id === fichaAtivaPetId);
+  if (!p) { document.getElementById('ficha-content').innerHTML = '<div class="empty">Pet não encontrado</div>'; return; }
+  const tutor = D.tutores.find(t => t.id === p.tutorId);
+  const checkins = D.checkins.filter(c => c.petId === p.id).sort((a,b) => new Date(b.entrada)-new Date(a.entrada));
+  const atendimentos = D.atendimentos.filter(a => a.petId === p.id).sort((a,b) => (b.data+b.hora).localeCompare(a.data+a.hora));
+  const prontuarios = (D.prontuario || []).filter(pr => pr.petId === p.id).sort((a,b) => b.data.localeCompare(a.data));
+  const totalGasto = atendimentos.reduce((acc, a) => acc + (a.preco || 0), 0);
+  const naCreche = D.checkins.some(c => c.petId === p.id && !c.saida && isHoje(c.entrada));
+  const idadeAnos = p.dtnasc ? Math.floor((Date.now() - new Date(p.dtnasc)) / (365.25*24*3600*1000)) + ' anos' : p.idade || '—';
+  const proxPron = prontuarios.find(pr => pr.proxima && pr.proxima > new Date().toISOString().split('T')[0]);
+
+  document.getElementById('ficha-content').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div>
+        <div class="page-title">${p.nome} ${naCreche ? '<span class="tag tag-green" style="font-size:13px;vertical-align:middle">Na creche</span>' : ''}</div>
+        <div class="page-sub">${p.raca || 'Sem raça'} · ${icoPet(p.porte)} ${p.porte}</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-yellow" onclick="abrirModalProntuario('${p.id}')">+ Prontuário</button>
+        <button class="btn btn-ghost" onclick="abrirModalPet('${p.id}')">✏️ Editar</button>
+      </div>
+    </div>
+
+    <div class="ficha-layout">
+      <!-- Sidebar com info básica -->
+      <div class="card">
+        <div style="text-align:center;margin-bottom:16px">
+          <div class="ficha-avatar">${icoPet(p.porte)}</div>
+          <div class="ficha-nome">${p.nome}</div>
+          <div class="ficha-raca">${p.raca || 'Raça não informada'}</div>
+          <div class="ficha-badges">
+            ${p.vacinas === 'sim' ? '<span class="tag tag-green">✓ Vacinas ok</span>' : '<span class="tag tag-red">⚠ Vacinas</span>'}
+            ${p.castrado === 'sim' ? '<span class="tag tag-teal">Castrado</span>' : ''}
+            ${atendimentos.length > 5 ? '<span class="tag tag-yellow">⭐ Cliente VIP</span>' : ''}
+          </div>
+        </div>
+        <div class="ficha-info-row"><span class="ficha-info-key">Idade</span><span class="ficha-info-val">${idadeAnos}</span></div>
+        ${p.peso ? `<div class="ficha-info-row"><span class="ficha-info-key">Peso</span><span class="ficha-info-val">${p.peso} kg</span></div>` : ''}
+        ${p.pelagem ? `<div class="ficha-info-row"><span class="ficha-info-key">Pelagem</span><span class="ficha-info-val">${p.pelagem}</span></div>` : ''}
+        ${p.microchip ? `<div class="ficha-info-row"><span class="ficha-info-key">Microchip</span><span class="ficha-info-val" style="font-size:11px">${p.microchip}</span></div>` : ''}
+        <div class="ficha-info-row"><span class="ficha-info-key">Tutor</span><span class="ficha-info-val">${tutor ? tutor.nome : '—'}</span></div>
+        ${tutor ? `<div class="ficha-info-row"><span class="ficha-info-key">WhatsApp</span><span class="ficha-info-val" style="font-size:11px">${tutor.tel}</span></div>` : ''}
+        ${tutor?.unidade ? `<div class="ficha-info-row"><span class="ficha-info-key">Unidade</span><span class="ficha-info-val">${tutor.unidade}</span></div>` : ''}
+        ${p.veterinario ? `<div class="ficha-info-row"><span class="ficha-info-key">Veterinário</span><span class="ficha-info-val" style="font-size:11px">${p.veterinario}</span></div>` : ''}
+        ${proxPron ? `<div style="margin-top:14px;background:var(--yellow-dim);border:1px solid var(--yellow-mid);border-radius:8px;padding:10px;text-align:center"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);margin-bottom:4px">Próx. consulta</div><div style="font-weight:900;color:var(--yellow)">${new Date(proxPron.proxima+'T12:00').toLocaleDateString('pt-BR')}</div><div style="font-size:11px;color:var(--muted2)">${proxPron.descricao}</div></div>` : ''}
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center">
+          <div><div style="font-size:22px;font-weight:900;color:var(--yellow)">${atendimentos.length}</div><div style="font-size:10px;color:var(--muted)">Atendimentos</div></div>
+          <div><div style="font-size:22px;font-weight:900;color:var(--green)">R$${totalGasto.toFixed(0)}</div><div style="font-size:10px;color:var(--muted)">Total gasto</div></div>
+        </div>
+      </div>
+
+      <!-- Área principal com tabs -->
+      <div>
+        <div class="ficha-tabs-bar">
+          <div class="ficha-tab active" id="ficha-tab-geral" onclick="fichaTab('geral')">Geral</div>
+          <div class="ficha-tab" id="ficha-tab-saude" onclick="fichaTab('saude')">🩺 Saúde</div>
+          <div class="ficha-tab" id="ficha-tab-historico" onclick="fichaTab('historico')">📋 Histórico</div>
+        </div>
+
+        <!-- TAB: GERAL -->
+        <div class="ficha-tab-content active" id="ficha-tc-geral">
+          ${p.alergias ? `<div class="card" style="border-color:rgba(239,68,68,.3);background:var(--red-dim);margin-bottom:12px"><div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:4px">⚠ ALERGIAS</div><div style="font-size:13px">${p.alergias}</div></div>` : ''}
+          ${p.medicamentos ? `<div class="card" style="border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.08);margin-bottom:12px"><div style="font-size:12px;font-weight:800;color:#a78bfa;margin-bottom:4px">💊 MEDICAMENTOS EM USO</div><div style="font-size:13px">${p.medicamentos}</div></div>` : ''}
+          ${p.obs ? `<div class="card" style="margin-bottom:12px"><div style="font-size:12px;font-weight:800;color:var(--muted2);margin-bottom:4px">📝 COMPORTAMENTO / OBS</div><div style="font-size:13px;line-height:1.6">${p.obs}</div></div>` : ''}
+          ${!p.alergias && !p.medicamentos && !p.obs ? `<div class="card"><div class="empty-text" style="text-align:center;padding:20px;color:var(--muted)">Sem alertas ou observações registradas</div></div>` : ''}
+          <div class="card" style="margin-top:12px">
+            <div style="font-size:12px;font-weight:800;color:var(--muted2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em">Últimos atendimentos</div>
+            ${atendimentos.slice(0,3).map(a => {
+              const tc = atendTipoConfig(a.tipo);
+              return `<div class="ficha-hist-item">
+                <div class="hist-dot" style="background:${tc.cor}"></div>
+                <div class="hist-main">
+                  <div class="hist-label">${tc.emoji} ${tc.label}</div>
+                  <div class="hist-meta">${new Date(a.data+'T12:00').toLocaleDateString('pt-BR')} ${a.hora ? '· ' + a.hora : ''}${a.filialId && a.filialId !== 'geral' ? ' · ' + (D.filiais.find(f=>f.id===a.filialId)?.nome || a.filialId) : ''}</div>
+                </div>
+                ${a.preco ? `<div class="hist-valor">R$ ${a.preco.toFixed(2)}</div>` : ''}
+              </div>`;
+            }).join('') || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:12px">Nenhum atendimento</div>'}
+          </div>
+        </div>
+
+        <!-- TAB: SAÚDE / PRONTUÁRIO -->
+        <div class="ficha-tab-content" id="ficha-tc-saude">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div style="font-size:14px;font-weight:800">Prontuário médico</div>
+            <button class="btn btn-yellow" onclick="abrirModalProntuario('${p.id}')">+ Novo registro</button>
+          </div>
+          ${prontuarios.length ? `<div class="prontuario-timeline">${prontuarios.map(pr => {
+            const tc = pronTipoConfig(pr.tipo);
+            return `<div class="prontuario-item">
+              <div class="pron-icon" style="background:${tc.bg};color:${tc.cor}">${tc.emoji}</div>
+              <div class="pron-main">
+                <div class="pron-tipo">${pr.tipo}</div>
+                <div class="pron-desc">${pr.descricao}</div>
+                <div class="pron-meta">${pr.medico ? '👨‍⚕️ ' + pr.medico : ''}${pr.peso ? ' · ' + pr.peso + 'kg' : ''}${pr.obs ? ' · ' + pr.obs : ''}</div>
+                ${pr.proxima ? `<div style="margin-top:6px;font-size:11px;color:var(--teal)">🗓 Retorno: ${new Date(pr.proxima+'T12:00').toLocaleDateString('pt-BR')}</div>` : ''}
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div class="pron-date">${new Date(pr.data+'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})}</div>
+                ${pr.valor ? `<div style="font-size:12px;color:var(--muted2)">R$ ${pr.valor.toFixed(2)}</div>` : ''}
+                <button class="cfg-tag-del" style="margin-top:4px" onclick="deletarProntuario('${pr.id}')">✕</button>
+              </div>
+            </div>`;
+          }).join('')}</div>` : '<div class="empty"><div class="empty-icon"><i class="ph ph-stethoscope"></i></div><div class="empty-text">Nenhum registro médico</div></div>'}
+        </div>
+
+        <!-- TAB: HISTÓRICO COMPLETO -->
+        <div class="ficha-tab-content" id="ficha-tc-historico">
+          <div style="font-size:14px;font-weight:800;margin-bottom:14px">Histórico de visitas</div>
+          ${[...atendimentos, ...checkins.map(c => ({
+            data: c.entrada.split('T')[0], hora: c.entrada.split('T')[1]?.slice(0,5),
+            tipo: '_checkin', servico: c.servico, saida: c.saida, id: c.id
+          }))].sort((a,b) => (b.data||'').localeCompare(a.data||'')).slice(0,20).map(item => {
+            if (item.tipo === '_checkin') {
+              const saida = item.saida ? new Date(item.saida).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : null;
+              return `<div class="ficha-hist-item"><div class="hist-dot" style="background:var(--green)"></div>
+                <div class="hist-main"><div class="hist-label">🏫 Check-in / Creche</div>
+                <div class="hist-meta">${new Date((item.data)+'T12:00').toLocaleDateString('pt-BR')} · ${item.hora}${saida ? ' → ' + saida : ' (em curso)'}</div></div></div>`;
+            }
+            const tc = atendTipoConfig(item.tipo);
+            return `<div class="ficha-hist-item"><div class="hist-dot" style="background:${tc.cor}"></div>
+              <div class="hist-main"><div class="hist-label">${tc.emoji} ${tc.label}</div>
+              <div class="hist-meta">${new Date(item.data+'T12:00').toLocaleDateString('pt-BR')} ${item.hora ? '· ' + item.hora : ''}</div></div>
+              ${item.preco ? `<div class="hist-valor">R$ ${item.preco.toFixed(2)}</div>` : ''}</div>`;
+          }).join('') || '<div class="empty"><div class="empty-icon"><i class="ph ph-clock-counter-clockwise"></i></div><div class="empty-text">Nenhum histórico</div></div>'}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// PRONTUÁRIO
+// ══════════════════════════════════════════════════════
+function abrirModalProntuario(petId, id = null) {
+  document.getElementById('pron-pet-id').value = petId;
+  document.getElementById('pron-id').value = '';
+  document.getElementById('pron-data').value = new Date().toISOString().split('T')[0];
+  document.getElementById('pron-desc').value = '';
+  document.getElementById('pron-medico').value = '';
+  document.getElementById('pron-peso').value = '';
+  document.getElementById('pron-proxima').value = '';
+  document.getElementById('pron-valor').value = '';
+  document.getElementById('pron-obs').value = '';
+  if (id) {
+    const pr = D.prontuario.find(x => x.id === id);
+    if (pr) {
+      document.getElementById('pron-id').value = pr.id;
+      document.getElementById('pron-tipo').value = pr.tipo;
+      document.getElementById('pron-data').value = pr.data;
+      document.getElementById('pron-desc').value = pr.descricao;
+      document.getElementById('pron-medico').value = pr.medico || '';
+      document.getElementById('pron-peso').value = pr.peso || '';
+      document.getElementById('pron-proxima').value = pr.proxima || '';
+      document.getElementById('pron-valor').value = pr.valor || '';
+      document.getElementById('pron-obs').value = pr.obs || '';
+    }
+  }
+  abrirModal('modal-prontuario');
+}
+
+function salvarProntuario() {
+  const descricao = document.getElementById('pron-desc').value.trim();
+  const data = document.getElementById('pron-data').value;
+  if (!descricao || !data) { toast('⚠️ Descrição e data são obrigatórios'); return; }
+  const id = document.getElementById('pron-id').value || uid();
+  const obj = {
+    id, petId: document.getElementById('pron-pet-id').value,
+    tipo: document.getElementById('pron-tipo').value,
+    data, descricao,
+    medico: document.getElementById('pron-medico').value.trim(),
+    peso: parseFloat(document.getElementById('pron-peso').value) || null,
+    proxima: document.getElementById('pron-proxima').value || null,
+    valor: parseFloat(document.getElementById('pron-valor').value) || 0,
+    obs: document.getElementById('pron-obs').value.trim(),
+    criadoEm: new Date().toISOString()
+  };
+  if (!D.prontuario) D.prontuario = [];
+  const idx = D.prontuario.findIndex(x => x.id === id);
+  if (idx >= 0) D.prontuario[idx] = obj; else D.prontuario.push(obj);
+  salvar();
+  fecharModal('modal-prontuario');
+  renderFicha();
+  toast('✅ Registro salvo!');
+}
+
+function deletarProntuario(id) {
+  D.prontuario = D.prontuario.filter(x => x.id !== id);
+  salvar();
+  renderFicha();
+  toast('🗑 Registro removido');
+}
+
+// ══════════════════════════════════════════════════════
+// FATURAMENTOS (acesso restrito por PIN)
+// ══════════════════════════════════════════════════════
+let fatAutenticado = false;
+
+function verificarPin() {
+  const pin = document.getElementById('fat-pin-input').value;
+  if (pin === D.config.pinFaturamento) {
+    fatAutenticado = true;
+    document.getElementById('fat-pin-overlay').style.display = 'none';
+    document.getElementById('fat-conteudo').style.display = 'block';
+    renderFaturamentos();
+  } else {
+    document.getElementById('fat-pin-erro').style.display = 'block';
+    document.getElementById('fat-pin-input').value = '';
+    document.getElementById('fat-pin-input').focus();
+  }
+}
+
+function bloquearFaturamentos() {
+  fatAutenticado = false;
+  document.getElementById('fat-pin-overlay').style.display = 'flex';
+  document.getElementById('fat-conteudo').style.display = 'none';
+  document.getElementById('fat-pin-input').value = '';
+  document.getElementById('fat-pin-erro').style.display = 'none';
+}
+
+function renderFaturamentos() {
+  if (!fatAutenticado) return;
+  // Popula filtros
+  const mesSelect = document.getElementById('fat-filtro-mes');
+  const meses = [...new Set(D.atendimentos.map(a => a.data.slice(0,7))
+    .concat(D.lancamentos ? D.lancamentos.map(l => l.data.slice(0,7)) : []))].sort().reverse();
+  const mesSel = mesSelect.value || (meses[0] || new Date().toISOString().slice(0,7));
+  mesSelect.innerHTML = meses.map(m => `<option value="${m}" ${m===mesSel?'selected':''}>${fmtMes(m)}</option>`).join('') ||
+    `<option value="${new Date().toISOString().slice(0,7)}">${fmtMes(new Date().toISOString().slice(0,7))}</option>`;
+
+  const filialSelect = document.getElementById('fat-filtro-filial');
+  filialSelect.innerHTML = '<option value="todas">Todas as filiais</option>' +
+    D.filiais.map(f => `<option value="${f.id}">${f.nome}</option>`).join('');
+
+  const filtroMes = mesSelect.value;
+  const filtroFilial = filialSelect.value;
+  const filtroTipo = document.getElementById('fat-filtro-tipo').value;
+
+  // Combina atendimentos + lançamentos manuais
+  const lancamentos = D.lancamentos || [];
+  const todasTrans = [
+    ...D.atendimentos.filter(a => a.preco > 0).map(a => ({
+      id: a.id, data: a.data, hora: a.hora,
+      desc: (() => { const pet = D.pets.find(p => p.id === a.petId); return (pet?.nome || 'Pet') + ' · ' + atendTipoConfig(a.tipo).label; })(),
+      tipo: a.tipo, filialId: a.filialId || 'geral',
+      valor: a.preco, forma: a.formaPagamento || '—', status: a.status || 'pago',
+      fonte: 'atendimento'
+    })),
+    ...lancamentos.map(l => ({...l, fonte: 'lancamento'}))
+  ];
+
+  let filtradas = todasTrans.filter(t => t.data.startsWith(filtroMes));
+  if (filtroFilial !== 'todas') filtradas = filtradas.filter(t => t.filialId === filtroFilial);
+  if (filtroTipo !== 'todos') filtradas = filtradas.filter(t => t.tipo === filtroTipo);
+  filtradas.sort((a,b) => (b.data+b.hora).localeCompare(a.data+a.hora));
+
+  // Summary
+  const totalPago = filtradas.filter(t => t.status === 'pago' || t.status === 'concluido').reduce((s,t) => s + (t.valor||0), 0);
+  const totalPend = filtradas.filter(t => t.status !== 'pago' && t.status !== 'concluido' && t.status !== 'cancelado').reduce((s,t) => s + (t.valor||0), 0);
+  const totalMes = filtradas.filter(t => t.status !== 'cancelado').reduce((s,t) => s + (t.valor||0), 0);
+  const qtdAtend = filtradas.length;
+
+  document.getElementById('fat-summary').innerHTML = `
+    <div class="stat-card hl"><div class="sc-icon"><i class="ph ph-currency-dollar"></i></div><div class="sc-val yellow">R$${totalMes.toFixed(2)}</div><div class="sc-lbl">Total no período</div></div>
+    <div class="stat-card"><div class="sc-icon"><i class="ph ph-check-circle"></i></div><div class="sc-val green">R$${totalPago.toFixed(2)}</div><div class="sc-lbl">Recebido</div></div>
+    <div class="stat-card"><div class="sc-icon"><i class="ph ph-hourglass-high"></i></div><div class="sc-val" style="color:#38bdf8">R$${totalPend.toFixed(2)}</div><div class="sc-lbl">Pendente</div></div>
+    <div class="stat-card"><div class="sc-icon"><i class="ph ph-clipboard-text"></i></div><div class="sc-val pink">${qtdAtend}</div><div class="sc-lbl">Atendimentos</div></div>`;
+
+  const formaIcon = {pix:'🟦',cartao:'💳',dinheiro:'💵',fiado:'🤝','—':'—'};
+  document.getElementById('fat-rows').innerHTML = filtradas.length ? filtradas.map(t => {
+    const statusCor = t.status==='pago'||t.status==='concluido' ? 'var(--green)' : t.status==='cancelado' ? 'var(--red)' : '#38bdf8';
+    const filial = D.filiais.find(f => f.id === t.filialId);
+    return `<div class="fat-table-row">
+      <span style="color:var(--muted2);font-size:12px">${new Date(t.data+'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span>
+      <span style="font-weight:700">${t.desc}</span>
+      <span style="color:var(--muted2);font-size:12px">${filial?.nome || t.filialId || 'Geral'}</span>
+      <span style="font-size:12px">${formaIcon[t.forma]||''} ${t.forma}</span>
+      <span class="fat-val">R$ ${(t.valor||0).toFixed(2)}</span>
+      <span style="font-size:11px;font-weight:700;color:${statusCor}">${t.status}</span>
+    </div>`;
+  }).join('') : '<div class="empty" style="grid-column:1/-1"><div class="empty-icon"><i class="ph ph-currency-dollar"></i></div><div class="empty-text">Nenhum lançamento no período</div></div>';
+}
+
+function fmtMes(ym) {
+  const [y, m] = ym.split('-');
+  const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  return `${meses[parseInt(m)-1]} ${y}`;
+}
+
+function abrirModalLancamento(id = null) {
+  document.getElementById('lanc-id').value = '';
+  document.getElementById('lanc-desc').value = '';
+  document.getElementById('lanc-valor').value = '';
+  document.getElementById('lanc-data').value = new Date().toISOString().split('T')[0];
+  document.getElementById('lanc-forma').value = 'pix';
+  document.getElementById('lanc-status').value = 'pago';
+  document.getElementById('lanc-filial').innerHTML = filialOptions();
+  abrirModal('modal-lancamento');
+}
+
+function salvarLancamento() {
+  const desc = document.getElementById('lanc-desc').value.trim();
+  const valor = parseFloat(document.getElementById('lanc-valor').value);
+  const data = document.getElementById('lanc-data').value;
+  if (!desc || !valor || !data) { toast('⚠️ Descrição, valor e data são obrigatórios'); return; }
+  if (!D.lancamentos) D.lancamentos = [];
+  const id = document.getElementById('lanc-id').value || uid();
+  const obj = { id, desc, valor, data, tipo: document.getElementById('lanc-tipo').value,
+    forma: document.getElementById('lanc-forma').value, status: document.getElementById('lanc-status').value,
+    filialId: document.getElementById('lanc-filial').value, fonte: 'lancamento', hora: '00:00', criadoEm: new Date().toISOString() };
+  const idx = D.lancamentos.findIndex(x => x.id === id);
+  if (idx >= 0) D.lancamentos[idx] = obj; else D.lancamentos.push(obj);
+  salvar();
+  fecharModal('modal-lancamento');
+  renderFaturamentos();
+  toast('✅ Lançamento salvo!');
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+atualizarData();
+applyConfig();
+atualizarBadges();
+renderDashboard();
+</script>
+</body>
+</html>

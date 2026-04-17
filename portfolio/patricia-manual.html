@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patricia Fernandes — Manual de Marca</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --rose:   #C17A6F;
+  --rose-d: #A35F54;
+  --rose-l: #D4958B;
+  --blush:  #F5EAE6;
+  --blush-d:#EAD5CE;
+  --sage:   #7A9E7E;
+  --sage-d: #5C7D60;
+  --sage-l: #C8D9C9;
+  --dark:   #1A1614;
+  --mid:    #252120;
+  --card:   #1F1C1B;
+  --muted:  #7A6E6A;
+  --line:   rgba(255,255,255,0.06);
+  --white:  #FAF7F5;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--dark); color: var(--white); font-family: 'Inter', sans-serif; }
+
+/* ── TIPOGRAFIA ── */
+.f-cor  { font-family: 'Cormorant Garamond', serif; }
+.f-int  { font-family: 'Inter', sans-serif; }
+.tag    { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); display: block; }
+.tag-rose { color: var(--rose); }
+
+/* ── LAYOUT ── */
+.page   { max-width: 960px; margin: 0 auto; }
+.sec    { padding: 100px 48px; border-bottom: 1px solid var(--line); }
+.sec:last-child { border-bottom: none; }
+
+/* ── LOGO INLINE ── */
+.logo { display: flex; flex-direction: column; align-items: center; }
+.logo-top { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; color: var(--rose); line-height: 1; }
+.logo-bot { font-family: 'Cormorant Garamond', serif; font-style: normal; font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: var(--rose-d); line-height: 1; margin-top: 3px; }
+.logo-hr  { width: 100%; height: 1px; background: var(--sage); opacity: .4; margin: 8px 0; }
+.logo-sub { font-family: 'Inter', sans-serif; font-weight: 300; letter-spacing: .35em; text-transform: uppercase; color: var(--sage); }
+
+/* ── GRID ── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.card-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-top: 20px; }
+
+/* ── SVG SYMBOL ── */
+.sym { display: block; }
+
+/* ── PALETA ── */
+.swatch { border-radius: 50%; margin: 0 auto 12px; }
+.swatch-name { font-size: 12px; color: var(--white); margin-bottom: 2px; }
+.swatch-hex  { font-size: 10px; color: var(--muted); font-family: monospace; letter-spacing: .05em; }
+.swatch-use  { font-size: 9px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+/* ── TIPOGRAFIA DEMO ── */
+.type-demo { text-align: left; padding: 32px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.type-name { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.type-sample { margin-bottom: 8px; }
+.type-meta { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+/* ── SIMBOLOGIA ── */
+.simbologia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+.simb-item { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: flex; gap: 20px; align-items: flex-start; }
+.simb-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(193,122,111,0.1); border: 1px solid rgba(193,122,111,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.simb-title { font-size: 13px; font-weight: 500; color: var(--white); margin-bottom: 6px; }
+.simb-body { font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+/* ── PROTECTION AREA ── */
+.protect-wrap { background: var(--blush); border-radius: 16px; padding: 60px; display: flex; align-items: center; justify-content: center; position: relative; }
+.protect-box { border: 1px dashed rgba(163,95,84,0.4); padding: 32px; position: relative; }
+.protect-arrow { position: absolute; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: rgba(163,95,84,0.5); font-family: 'Inter', sans-serif; }
+
+/* ── USO CORRETO / INCORRETO ── */
+.uso-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+.uso-card { border-radius: 16px; padding: 32px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; min-height: 180px; }
+.uso-tag  { font-size: 9px; letter-spacing: .15em; text-transform: uppercase; border-radius: 4px; padding: 4px 10px; }
+.uso-ok  { background: rgba(122,158,126,0.08); border: 1px solid rgba(122,158,126,0.2); }
+.uso-err { background: rgba(180,60,60,0.06); border: 1px solid rgba(180,60,60,0.15); }
+.uso-tag-ok  { background: rgba(122,158,126,0.15); color: var(--sage); }
+.uso-tag-err { background: rgba(180,60,60,0.15); color: #C47070; }
+.uso-desc { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+/* ── COVER ── */
+#cover {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+#cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(193,122,111,0.07) 0%, transparent 70%);
+}
+.cover-inner { text-align: center; position: relative; z-index: 1; padding: 60px 40px; }
+.cover-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(12px,2vw,16px); font-weight: 300; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-top: 48px; margin-bottom: 8px; }
+.cover-sub { font-size: 11px; letter-spacing: .15em; color: rgba(122,110,106,0.5); text-transform: uppercase; }
+.cover-year { position: absolute; bottom: 40px; right: 48px; font-size: 10px; letter-spacing: .15em; color: rgba(122,110,106,0.3); text-transform: uppercase; }
+
+/* ── SECTION HEADER ── */
+.sh { margin-bottom: 48px; }
+.sh-num { font-family: 'Cormorant Garamond', serif; font-size: 80px; font-weight: 300; font-style: italic; color: var(--rose); opacity: .12; line-height: 1; margin-bottom: -16px; }
+.sh-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,4vw,42px); font-weight: 300; color: var(--white); }
+.sh-title em { font-style: italic; color: var(--rose); }
+.sh-body { font-size: 14px; line-height: 1.8; color: var(--muted); max-width: 560px; margin-top: 12px; }
+
+/* ── DIVIDER ── */
+.hr { width: 40px; height: 1px; background: var(--rose); opacity: .3; margin: 24px 0; }
+
+/* ── NAV LATERAL ── */
+.nav-side {
+  position: fixed; left: 20px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 6px; z-index: 100;
+}
+.nav-side a {
+  width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.1);
+  display: block; transition: all .3s; text-decoration: none;
+}
+.nav-side a:hover,
+.nav-side a.active { background: var(--rose); transform: scale(1.4); }
+
+/* ── HIGHLIGHT BOX ── */
+.hl { background: rgba(193,122,111,0.06); border: 1px solid rgba(193,122,111,0.15); border-radius: 16px; padding: 32px 36px; }
+.hl p { font-size: 14px; line-height: 1.9; color: var(--muted); }
+.hl strong { color: var(--white); font-weight: 500; }
+
+/* ── APLICACOES ── */
+.app-card { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; position: relative; }
+
+@media (max-width: 700px) {
+  .g2, .g3, .g4, .simbologia-grid, .uso-grid { grid-template-columns: 1fr; }
+  .sec { padding: 60px 24px; }
+  .nav-side { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav-side" id="nav">
+  <a href="#cover" title="Capa"></a>
+  <a href="#posicionamento" title="Posicionamento"></a>
+  <a href="#logo" title="Logo"></a>
+  <a href="#simbolo" title="Símbolo"></a>
+  <a href="#cores" title="Cores"></a>
+  <a href="#tipografia" title="Tipografia"></a>
+  <a href="#protecao" title="Proteção"></a>
+  <a href="#uso" title="Uso correto"></a>
+  <a href="#aplicacoes" title="Aplicações"></a>
+</nav>
+
+<!-- ══════════════════════════════════════
+     CAPA
+══════════════════════════════════════ -->
+<section id="cover" class="sec">
+  <div class="cover-inner page">
+
+    <div class="logo" style="margin-bottom:0;">
+      <svg width="56" height="70" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:28px;">
+        <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M40 76 L40 90" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+        <path d="M40 84 C37 80 32 79 30 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M40 82 C43 78 48 77 50 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="logo-top" style="font-size:clamp(42px,6vw,72px);">Patricia</span>
+      <span class="logo-bot" style="font-size:clamp(28px,4vw,48px);">Fernandes</span>
+      <div class="logo-hr" style="width:280px;margin:12px auto;"></div>
+      <span class="logo-sub" style="font-size:12px;">Nutricionista</span>
+    </div>
+
+    <p class="cover-title">Manual de Identidade Visual</p>
+    <p class="cover-sub">Versão 1.0 · 2025</p>
+    <span class="cover-year">Andarilho Digital</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     POSICIONAMENTO
+══════════════════════════════════════ -->
+<section id="posicionamento" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">01</div>
+      <h2 class="sh-title">Essência<br><em>da marca</em></h2>
+    </div>
+
+    <div class="g2" style="margin-bottom:24px;">
+      <div class="hl">
+        <span class="tag tag-rose" style="margin-bottom:12px;">Palavra-chave central</span>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;font-style:italic;color:var(--rose);margin-bottom:12px;line-height:1.1;">"Acolhimento<br>com segurança"</p>
+        <p style="font-size:13px;line-height:1.8;color:var(--muted);">Toda decisão visual — cor, forma, traço, espaço — deve equilibrar esses dois polos. Se faltar um, a marca perde força.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="hl" style="flex:1;">
+          <span class="tag" style="margin-bottom:8px;">Arquétipo principal</span>
+          <p style="font-size:16px;font-weight:500;color:var(--white);margin-bottom:4px;">A Cuidadora</p>
+          <p style="font-size:12px;line-height:1.7;color:var(--muted);">Acolhe, escuta, orienta sem julgar, cria espaço seguro.</p>
+        </div>
+        <div class="hl" style="flex:1;">
+          <span class="tag" style="margin-bottom:8px;">Arquétipo secundário</span>
+          <p style="font-size:16px;font-weight:500;color:var(--white);margin-bottom:4px;">A Sábia</p>
+          <p style="font-size:12px;line-height:1.7;color:var(--muted);">Tem conhecimento, transmite clareza, ensina com simplicidade, gera confiança.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="g4" style="margin-top:24px;">
+      <div class="card">
+        <span style="font-size:24px;margin-bottom:12px;">🌿</span>
+        <span style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:6px;">Humana</span>
+        <span style="font-size:11px;color:var(--muted);">Próxima e empática</span>
+      </div>
+      <div class="card">
+        <span style="font-size:24px;margin-bottom:12px;">🛡</span>
+        <span style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:6px;">Segura</span>
+        <span style="font-size:11px;color:var(--muted);">Conhecimento e clareza</span>
+      </div>
+      <div class="card">
+        <span style="font-size:24px;margin-bottom:12px;">🕊</span>
+        <span style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:6px;">Calma</span>
+        <span style="font-size:11px;color:var(--muted);">Sem pressão, sem julgamento</span>
+      </div>
+      <div class="card">
+        <span style="font-size:24px;margin-bottom:12px;">📖</span>
+        <span style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:6px;">Didática</span>
+        <span style="font-size:11px;color:var(--muted);">Ensina com simplicidade</span>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 32px;text-align:center;">
+      <span class="tag" style="margin-bottom:16px;">Promessa da marca</span>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.5vw,22px);font-weight:300;font-style:italic;color:var(--white);line-height:1.5;">
+        "Oferecer orientação nutricional clara, humana e segura,<br>respeitando o tempo, a história e a individualidade de cada pessoa."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     LOGO
+══════════════════════════════════════ -->
+<section id="logo" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">02</div>
+      <h2 class="sh-title">O <em>logotipo</em></h2>
+      <p class="sh-body">A identidade é construída sobre o nome. A tipografia foi escolhida para equilibrar os dois polos da marca: o itálico traz o acolhimento, o caixa-alta traz a autoridade.</p>
+    </div>
+
+    <!-- Logo principal -->
+    <div class="card" style="padding:72px 48px;margin-bottom:16px;background:var(--blush);">
+      <div class="logo">
+        <span class="logo-top" style="font-size:clamp(44px,6vw,72px);color:var(--rose);">Patricia</span>
+        <span class="logo-bot" style="font-size:clamp(28px,4vw,48px);color:var(--rose-d);">Fernandes</span>
+        <div class="logo-hr" style="width:320px;"></div>
+        <span class="logo-sub" style="font-size:12px;color:var(--sage);">Nutricionista</span>
+      </div>
+      <span class="card-label" style="color:#A08070;">Versão principal — fundo blush</span>
+    </div>
+
+    <!-- Variações -->
+    <div class="g3">
+      <div class="card" style="background:var(--rose);padding:48px 28px;">
+        <div class="logo">
+          <span class="logo-top" style="font-size:32px;color:#F5EAE6;">Patricia</span>
+          <span class="logo-bot" style="font-size:21px;color:rgba(245,234,230,.75);">Fernandes</span>
+          <div class="logo-hr" style="background:rgba(245,234,230,.3);"></div>
+          <span class="logo-sub" style="font-size:9px;color:rgba(245,234,230,.5);">Nutricionista</span>
+        </div>
+        <span class="card-label" style="color:rgba(245,234,230,.3);">Fundo primário</span>
+      </div>
+
+      <div class="card" style="background:var(--sage-d);padding:48px 28px;">
+        <div class="logo">
+          <span class="logo-top" style="font-size:32px;color:#F5EAE6;">Patricia</span>
+          <span class="logo-bot" style="font-size:21px;color:rgba(245,234,230,.75);">Fernandes</span>
+          <div class="logo-hr" style="background:rgba(245,234,230,.3);"></div>
+          <span class="logo-sub" style="font-size:9px;color:rgba(245,234,230,.5);">Nutricionista</span>
+        </div>
+        <span class="card-label" style="color:rgba(245,234,230,.3);">Fundo sálvia</span>
+      </div>
+
+      <div class="card" style="background:#0E0C0B;padding:48px 28px;border-color:rgba(255,255,255,.04);">
+        <div class="logo">
+          <span class="logo-top" style="font-size:32px;color:var(--rose);">Patricia</span>
+          <span class="logo-bot" style="font-size:21px;color:var(--rose-d);">Fernandes</span>
+          <div class="logo-hr"></div>
+          <span class="logo-sub" style="font-size:9px;color:var(--sage);">Nutricionista</span>
+        </div>
+        <span class="card-label">Fundo escuro</span>
+      </div>
+    </div>
+
+    <!-- Com símbolo -->
+    <div style="margin-top:16px;">
+      <div class="card" style="background:var(--blush);padding:56px 48px;flex-direction:row;gap:28px;">
+        <svg width="52" height="65" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 33 79 31 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="logo" style="align-items:flex-start;text-align:left;">
+          <span class="logo-top" style="font-size:34px;color:var(--rose);">Patricia</span>
+          <span class="logo-bot" style="font-size:22px;color:var(--rose-d);">Fernandes</span>
+          <div class="logo-hr" style="width:220px;"></div>
+          <span class="logo-sub" style="font-size:9px;color:var(--sage);">Nutricionista</span>
+        </div>
+        <span class="card-label" style="position:absolute;bottom:16px;color:#A08070;">Versão com símbolo — horizontal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SÍMBOLO
+══════════════════════════════════════ -->
+<section id="simbolo" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">03</div>
+      <h2 class="sh-title">O <em>símbolo</em></h2>
+      <p class="sh-body">Marca secundária para uso em redes sociais, watermark, bordado e aplicações onde o nome completo não cabe. Fine line botânico — elegante, escalável, atemporal.</p>
+    </div>
+
+    <!-- Símbolo grande com anotações -->
+    <div style="background:var(--blush);border-radius:20px;padding:60px;display:flex;align-items:center;justify-content:center;gap:80px;margin-bottom:24px;flex-wrap:wrap;">
+
+      <!-- Símbolo anotado -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:200px;height:250px;">
+        <svg width="120" height="150" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 90" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <!-- Linha anotação topo -->
+        <div style="position:absolute;top:12px;right:0;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:8px;color:#A35F54;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;">Miolo · sálvia</span>
+          <div style="width:20px;height:1px;background:#A35F54;opacity:.4;"></div>
+        </div>
+        <!-- Linha anotação meio-esq -->
+        <div style="position:absolute;top:40%;left:0;display:flex;align-items:center;gap:6px;">
+          <div style="width:16px;height:1px;background:#A35F54;opacity:.4;"></div>
+          <span style="font-size:8px;color:#A35F54;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;">Pétalas · rose</span>
+        </div>
+        <!-- Linha anotação caule -->
+        <div style="position:absolute;bottom:8px;right:0;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:8px;color:#5C7D60;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;">Caule · sálvia</span>
+          <div style="width:16px;height:1px;background:#5C7D60;opacity:.4;"></div>
+        </div>
+      </div>
+
+      <!-- Simbologia explicada -->
+      <div style="max-width:280px;">
+        <span class="tag tag-rose" style="margin-bottom:20px;">Leitura do símbolo</span>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--rose);margin-top:5px;flex-shrink:0;"></div>
+            <div>
+              <p style="font-size:12px;font-weight:500;color:#1A1614;margin-bottom:2px;">3 pétalas abertas</p>
+              <p style="font-size:11px;color:#8A7570;line-height:1.5;">Receptividade e acolhimento — a marca está aberta, não fechada.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--rose-d);margin-top:5px;flex-shrink:0;"></div>
+            <div>
+              <p style="font-size:12px;font-weight:500;color:#1A1614;margin-bottom:2px;">Pétala central firme</p>
+              <p style="font-size:11px;color:#8A7570;line-height:1.5;">Estrutura e segurança — o eixo que sustenta sem dominar.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--sage);margin-top:5px;flex-shrink:0;"></div>
+            <div>
+              <p style="font-size:12px;font-weight:500;color:#1A1614;margin-bottom:2px;">Miolo em losango</p>
+              <p style="font-size:11px;color:#8A7570;line-height:1.5;">O núcleo do cuidado — presença, atenção, intenção.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--sage-d);margin-top:5px;flex-shrink:0;"></div>
+            <div>
+              <p style="font-size:12px;font-weight:500;color:#1A1614;margin-bottom:2px;">Caule com folhinhas</p>
+              <p style="font-size:11px;color:#8A7570;line-height:1.5;">Crescimento orgânico — a jornada, não o resultado rápido.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simbologia em cards -->
+    <div class="simbologia-grid">
+      <div class="simb-item">
+        <div class="simb-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 22 C9 18 4 14 4 9 C4 5 7 2 12 2 C17 2 20 5 20 9 C20 14 15 18 12 22Z" stroke="#C17A6F" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <p class="simb-title">Fine line — por que traço fino?</p>
+          <p class="simb-body">Traço fino comunica elegância e maturidade. Marcas preenchidas parecem pesadas e datadas. O fine line funciona em qualquer escala — de um crachá de 2cm a um banner de 2 metros.</p>
+        </div>
+      </div>
+      <div class="simb-item">
+        <div class="simb-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="#C17A6F" stroke-width="1.5" fill="none"/>
+            <path d="M12 7 L12 17 M7 12 L17 12" stroke="#7A9E7E" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <p class="simb-title">Duas cores — dois polos</p>
+          <p class="simb-body">Rosa nas pétalas = acolhimento, calor, proximidade. Verde no miolo e caule = crescimento, saúde, equilíbrio. Os dois juntos formam a essência da marca.</p>
+        </div>
+      </div>
+      <div class="simb-item">
+        <div class="simb-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3 L12 21 M5 8 L12 3 L19 8" stroke="#C17A6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <p class="simb-title">Forma aberta — não fechada</p>
+          <p class="simb-body">As pétalas não fecham completamente — estão em abertura. Representa o movimento contínuo do cuidado: sempre receptivo, nunca finalizado, sempre evoluindo.</p>
+        </div>
+      </div>
+      <div class="simb-item">
+        <div class="simb-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 L15 9 L22 9 L16 14 L18 21 L12 17 L6 21 L8 14 L2 9 L9 9 Z" stroke="#C17A6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <p class="simb-title">Sem simbolismo óbvio</p>
+          <p class="simb-body">Não é uma borboleta, não é um garfo, não é um coração explícito. É uma forma botânica abstrata — permite que a marca seja lida além do segmento de nutrição.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Versões do símbolo -->
+    <div class="g3" style="margin-top:24px;">
+      <div class="card" style="background:var(--blush);padding:48px 24px;">
+        <svg width="72" height="90" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 90" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="card-label" style="color:#A08070;">Colorido</span>
+      </div>
+
+      <div class="card" style="padding:48px 24px;">
+        <svg width="72" height="90" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#FAF7F5" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".8"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#FAF7F5" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".8"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#FAF7F5" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".8"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#FAF7F5" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/>
+          <path d="M40 76 L40 90" stroke="#FAF7F5" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="#FAF7F5" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".5"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="#FAF7F5" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".5"/>
+        </svg>
+        <span class="card-label">Monocromático claro</span>
+      </div>
+
+      <div class="card" style="background:var(--blush);padding:48px 24px;">
+        <svg width="72" height="90" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#1A1614" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".6"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#1A1614" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".6"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#1A1614" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".6"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#1A1614" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".35"/>
+          <path d="M40 76 L40 90" stroke="#1A1614" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="#1A1614" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".35"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="#1A1614" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".35"/>
+        </svg>
+        <span class="card-label" style="color:#A08070;">Monocromático escuro</span>
+      </div>
+    </div>
+
+    <!-- Perfil de rede social -->
+    <div style="margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:40px;display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:100px;height:100px;border-radius:50%;background:var(--blush);display:flex;align-items:center;justify-content:center;">
+          <svg width="56" height="70" viewBox="0 0 80 100" fill="none">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;">100px — perfil</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--rose-d);display:flex;align-items:center;justify-content:center;">
+          <svg width="36" height="45" viewBox="0 0 80 100" fill="none">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="rgba(245,234,230,.5)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;">64px — highlight</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--sage-d);display:flex;align-items:center;justify-content:center;">
+          <svg width="22" height="28" viewBox="0 0 80 100" fill="none">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="4" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;">40px — favicon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CORES
+══════════════════════════════════════ -->
+<section id="cores" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">04</div>
+      <h2 class="sh-title">Paleta<br><em>de cores</em></h2>
+      <p class="sh-body">Duas famílias cromáticas em equilíbrio — o rosa terracota traz calor e proximidade, o verde sálvia traz saúde e serenidade. Juntos comunicam acolhimento com segurança.</p>
+    </div>
+
+    <!-- Primárias -->
+    <span class="tag" style="margin-bottom:20px;">Cores primárias</span>
+    <div class="g3" style="margin-bottom:32px;">
+      <div class="card" style="background:var(--rose);padding:48px 24px;">
+        <div style="height:60px;"></div>
+        <span style="font-size:14px;font-weight:500;color:#F5EAE6;margin-bottom:4px;">Rosa Terracota</span>
+        <span style="font-size:11px;color:rgba(245,234,230,.6);font-family:monospace;">#C17A6F</span>
+        <span style="font-size:10px;color:rgba(245,234,230,.45);margin-top:6px;line-height:1.5;text-align:center;">Logo · Pétalas · CTAs · Destaques</span>
+      </div>
+      <div class="card" style="background:var(--blush);padding:48px 24px;">
+        <div style="height:60px;"></div>
+        <span style="font-size:14px;font-weight:500;color:var(--rose-d);margin-bottom:4px;">Blush</span>
+        <span style="font-size:11px;color:var(--rose);font-family:monospace;">#F5EAE6</span>
+        <span style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5;text-align:center;">Fundo principal · Stories · Papelaria</span>
+      </div>
+      <div class="card" style="background:var(--sage-d);padding:48px 24px;">
+        <div style="height:60px;"></div>
+        <span style="font-size:14px;font-weight:500;color:#C8D9C9;margin-bottom:4px;">Sálvia</span>
+        <span style="font-size:11px;color:var(--sage-l);font-family:monospace;">#5C7D60</span>
+        <span style="font-size:10px;color:rgba(200,217,201,.5);margin-top:6px;line-height:1.5;text-align:center;">Caule · Textos secundários · Fundos</span>
+      </div>
+    </div>
+
+    <!-- Secundárias -->
+    <span class="tag" style="margin-bottom:20px;">Cores secundárias</span>
+    <div class="g4">
+      <div class="card" style="padding:32px 16px;background:var(--rose-d);">
+        <span style="font-size:12px;font-weight:500;color:#F5EAE6;">Rosa Escuro</span>
+        <span style="font-size:9px;color:rgba(245,234,230,.55);font-family:monospace;margin-top:4px;">#A35F54</span>
+      </div>
+      <div class="card" style="padding:32px 16px;background:var(--rose-l);">
+        <span style="font-size:12px;font-weight:500;color:#F5EAE6;">Rosa Claro</span>
+        <span style="font-size:9px;color:rgba(245,234,230,.6);font-family:monospace;margin-top:4px;">#D4958B</span>
+      </div>
+      <div class="card" style="padding:32px 16px;background:var(--sage);">
+        <span style="font-size:12px;font-weight:500;color:#F5EAE6;">Sálvia Médio</span>
+        <span style="font-size:9px;color:rgba(245,234,230,.6);font-family:monospace;margin-top:4px;">#7A9E7E</span>
+      </div>
+      <div class="card" style="padding:32px 16px;background:var(--sage-l);">
+        <span style="font-size:12px;font-weight:500;color:var(--sage-d);">Sálvia Claro</span>
+        <span style="font-size:9px;color:var(--sage);font-family:monospace;margin-top:4px;">#C8D9C9</span>
+      </div>
+    </div>
+
+    <!-- Neutras -->
+    <span class="tag" style="margin-top:24px;margin-bottom:20px;">Neutras</span>
+    <div class="g3">
+      <div class="card" style="padding:32px;background:#1A1614;">
+        <span style="font-size:12px;font-weight:500;color:var(--white);">Escuro</span>
+        <span style="font-size:9px;color:var(--muted);font-family:monospace;margin-top:4px;">#1A1614</span>
+        <span style="font-size:9px;color:var(--muted);margin-top:4px;">Fundo dark · textos</span>
+      </div>
+      <div class="card" style="padding:32px;background:#FAF7F5;border-color:rgba(0,0,0,.06);">
+        <span style="font-size:12px;font-weight:500;color:var(--dark);">Off-White</span>
+        <span style="font-size:9px;color:var(--muted);font-family:monospace;margin-top:4px;">#FAF7F5</span>
+        <span style="font-size:9px;color:var(--muted);margin-top:4px;">Textos claros</span>
+      </div>
+      <div class="card" style="padding:32px;background:#7A6E6A;">
+        <span style="font-size:12px;font-weight:500;color:var(--white);">Cinza Quente</span>
+        <span style="font-size:9px;color:rgba(255,255,255,.6);font-family:monospace;margin-top:4px;">#7A6E6A</span>
+        <span style="font-size:9px;color:rgba(255,255,255,.5);margin-top:4px;">Textos secundários</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TIPOGRAFIA
+══════════════════════════════════════ -->
+<section id="tipografia" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">05</div>
+      <h2 class="sh-title"><em>Tipografia</em></h2>
+      <p class="sh-body">Duas famílias tipográficas com papéis claros: Cormorant Garamond para personalidade e alma, Inter para clareza e leitura.</p>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px;">
+      <div class="type-demo">
+        <p class="type-name">Cormorant Garamond — Títulos & Logo</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;font-style:italic;color:var(--rose);line-height:1;">Patricia</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;letter-spacing:.2em;color:var(--white);text-transform:uppercase;margin-top:4px;">Fernandes</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--muted);margin-top:16px;line-height:1.4;">"Cuidar da alimentação é um gesto diário de atenção consigo mesmo."</p>
+        <div style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;">
+          <span class="type-meta">Light 300 · Regular 400 · Italic · Uso: Logo, títulos, citações</span>
+        </div>
+      </div>
+
+      <div class="type-demo">
+        <p class="type-name">Inter — Corpo & Interface</p>
+        <p style="font-size:24px;font-weight:500;color:var(--white);margin-bottom:8px;">Nutricionista</p>
+        <p style="font-size:14px;font-weight:400;color:var(--muted);line-height:1.8;margin-bottom:12px;">Orientação nutricional clara, humana e segura, respeitando o tempo e a individualidade de cada pessoa.</p>
+        <p style="font-size:11px;font-weight:300;letter-spacing:.3em;text-transform:uppercase;color:var(--sage);">PATRICIA FERNANDES · NUTRICIONISTA</p>
+        <div style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;">
+          <span class="type-meta">Light 300 · Regular 400 · Medium 500 · Uso: Corpo, legendas, UI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hierarquia -->
+    <div class="card" style="align-items:flex-start;text-align:left;padding:40px 48px;">
+      <span class="tag" style="margin-bottom:24px;">Hierarquia tipográfica</span>
+      <div style="display:flex;flex-direction:column;gap:20px;width:100%;">
+        <div style="display:flex;align-items:baseline;gap:20px;border-bottom:1px solid var(--line);padding-bottom:16px;">
+          <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;width:80px;flex-shrink:0;">H1</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;font-style:italic;color:var(--white);line-height:1;">Título principal</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:20px;border-bottom:1px solid var(--line);padding-bottom:16px;">
+          <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;width:80px;flex-shrink:0;">H2</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--white);">Título de seção</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:20px;border-bottom:1px solid var(--line);padding-bottom:16px;">
+          <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;width:80px;flex-shrink:0;">H3</span>
+          <span style="font-size:18px;font-weight:500;color:var(--white);">Subtítulo</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:20px;border-bottom:1px solid var(--line);padding-bottom:16px;">
+          <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;width:80px;flex-shrink:0;">Body</span>
+          <span style="font-size:15px;font-weight:400;color:var(--muted);line-height:1.7;">Texto corrido para parágrafos e descrições. Sempre Inter, 400 ou 300, cor muted.</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:20px;">
+          <span style="font-size:9px;color:var(--muted);letter-spacing:.1em;width:80px;flex-shrink:0;">Label</span>
+          <span style="font-size:10px;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);">Categoria · Seção · Rótulo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PROTEÇÃO
+══════════════════════════════════════ -->
+<section id="protecao" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">06</div>
+      <h2 class="sh-title">Área de<br><em>proteção</em></h2>
+      <p class="sh-body">Respeite o espaço ao redor do logo. A distância mínima equivale à altura da letra "P" do nome.</p>
+    </div>
+
+    <div style="background:var(--blush);border-radius:20px;padding:60px;display:flex;align-items:center;justify-content:center;">
+      <div style="position:relative;padding:40px;border:1.5px dashed rgba(163,95,84,0.35);border-radius:4px;">
+        <!-- Setas indicadoras -->
+        <div style="position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(163,95,84,.5);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;">↕ Espaço = altura do "P"</div>
+        <div style="position:absolute;left:-90px;top:50%;transform:translateY(-50%);font-size:9px;color:rgba(163,95,84,.5);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;writing-mode:vertical-rl;text-orientation:mixed;">↔ Espaço = altura do "P"</div>
+        <div class="logo">
+          <span class="logo-top" style="font-size:38px;color:var(--rose);">Patricia</span>
+          <span class="logo-bot" style="font-size:25px;color:var(--rose-d);">Fernandes</span>
+          <div class="logo-hr" style="width:220px;"></div>
+          <span class="logo-sub" style="font-size:10px;color:var(--sage);">Nutricionista</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hl" style="margin-top:24px;">
+      <p>O logo <strong>nunca deve ser comprimido, distorcido ou rotacionado</strong>. Não adicione sombras, contornos externos ou efeitos. Não altere as cores individualmente. O logo existe como um sistema — itálico + caixa-alta + linha + subtítulo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     USO CORRETO
+══════════════════════════════════════ -->
+<section id="uso" class="sec">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">07</div>
+      <h2 class="sh-title">Uso<br><em>correto</em></h2>
+    </div>
+
+    <div class="uso-grid">
+      <div class="uso-card uso-ok">
+        <div style="background:var(--blush);padding:24px 32px;border-radius:12px;">
+          <div class="logo">
+            <span class="logo-top" style="font-size:28px;color:var(--rose);">Patricia</span>
+            <span class="logo-bot" style="font-size:18px;color:var(--rose-d);">Fernandes</span>
+            <div class="logo-hr"></div>
+            <span class="logo-sub" style="font-size:8px;color:var(--sage);">Nutricionista</span>
+          </div>
+        </div>
+        <span class="uso-tag uso-tag-ok">✓ Correto</span>
+        <span class="uso-desc">Logo na versão aprovada, cores originais, fundo compatível</span>
+      </div>
+
+      <div class="uso-card uso-err">
+        <div style="background:var(--blush);padding:24px 32px;border-radius:12px;">
+          <div class="logo">
+            <span class="logo-top" style="font-size:28px;color:#1d7bff;">Patricia</span>
+            <span class="logo-bot" style="font-size:18px;color:#1d7bff;">Fernandes</span>
+            <div class="logo-hr" style="background:#1d7bff;"></div>
+            <span class="logo-sub" style="font-size:8px;color:#1d7bff;">Nutricionista</span>
+          </div>
+        </div>
+        <span class="uso-tag uso-tag-err">✗ Incorreto</span>
+        <span class="uso-desc">Nunca altere as cores do logo para fora da paleta da marca</span>
+      </div>
+
+      <div class="uso-card uso-ok">
+        <div style="background:var(--rose);padding:24px 32px;border-radius:12px;">
+          <div class="logo">
+            <span class="logo-top" style="font-size:28px;color:#F5EAE6;">Patricia</span>
+            <span class="logo-bot" style="font-size:18px;color:rgba(245,234,230,.75);">Fernandes</span>
+            <div class="logo-hr" style="background:rgba(245,234,230,.3);"></div>
+            <span class="logo-sub" style="font-size:8px;color:rgba(245,234,230,.5);">Nutricionista</span>
+          </div>
+        </div>
+        <span class="uso-tag uso-tag-ok">✓ Correto</span>
+        <span class="uso-desc">Versão para fundos escuros e coloridos — monocromático claro</span>
+      </div>
+
+      <div class="uso-card uso-err">
+        <div style="background:var(--blush);padding:24px 32px;border-radius:12px;">
+          <div class="logo" style="transform:scaleX(1.4);">
+            <span class="logo-top" style="font-size:28px;color:var(--rose);">Patricia</span>
+            <span class="logo-bot" style="font-size:18px;color:var(--rose-d);">Fernandes</span>
+            <div class="logo-hr"></div>
+            <span class="logo-sub" style="font-size:8px;color:var(--sage);">Nutricionista</span>
+          </div>
+        </div>
+        <span class="uso-tag uso-tag-err">✗ Incorreto</span>
+        <span class="uso-desc">Nunca distorça, comprima ou estique o logo em nenhuma direção</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     APLICAÇÕES
+══════════════════════════════════════ -->
+<section id="aplicacoes" class="sec" style="border-bottom:none;">
+  <div class="page">
+    <div class="sh">
+      <div class="sh-num">08</div>
+      <h2 class="sh-title"><em>Aplicações</em></h2>
+      <p class="sh-body">Como a marca se apresenta nos diferentes pontos de contato com o paciente.</p>
+    </div>
+
+    <div class="g2">
+
+      <!-- Cartão de visita -->
+      <div class="card" style="padding:0;overflow:hidden;aspect-ratio:3/2;">
+        <div style="width:100%;height:100%;background:var(--rose-d);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;">
+          <svg width="40" height="50" viewBox="0 0 80 100" fill="none">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="rgba(245,234,230,.5)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="rgba(245,234,230,.4)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="logo">
+            <span class="logo-top" style="font-size:24px;color:#F5EAE6;">Patricia</span>
+            <span class="logo-bot" style="font-size:15px;color:rgba(245,234,230,.75);">Fernandes</span>
+            <div class="logo-hr" style="background:rgba(245,234,230,.25);"></div>
+            <span class="logo-sub" style="font-size:8px;color:rgba(245,234,230,.5);">Nutricionista</span>
+          </div>
+        </div>
+        <span class="card-label" style="position:absolute;bottom:12px;">Cartão de visita — verso</span>
+      </div>
+
+      <!-- Story Instagram -->
+      <div class="card" style="padding:0;overflow:hidden;aspect-ratio:3/2;">
+        <div style="width:100%;height:100%;background:var(--blush);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:32px;">
+          <div style="width:60px;height:60px;border-radius:50%;background:var(--rose);display:flex;align-items:center;justify-content:center;">
+            <svg width="34" height="43" viewBox="0 0 80 100" fill="none">
+              <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="3" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--rose-d);text-align:center;line-height:1.4;">patricia_fernandes<br><span style="font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage);font-style:normal;">Nutricionista</span></p>
+        </div>
+        <span class="card-label" style="position:absolute;bottom:12px;">Perfil — Instagram</span>
+      </div>
+
+      <!-- Watermark -->
+      <div class="card" style="aspect-ratio:3/2;background:linear-gradient(135deg,var(--sage-d),var(--sage));">
+        <svg width="90" height="112" viewBox="0 0 80 100" fill="none" opacity=".25">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 90" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="white" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="white" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;display:flex;align-items:center;gap:8px;">
+          <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,.5);">Patricia</span>
+          <span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);">Fernandes · Nutricionista</span>
+        </div>
+        <span class="card-label" style="position:absolute;bottom:12px;color:rgba(255,255,255,.3);">Watermark — conteúdo</span>
+      </div>
+
+      <!-- Fundo padrão -->
+      <div class="card" style="aspect-ratio:3/2;background:var(--blush);overflow:hidden;">
+        <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);opacity:.06;">
+          <svg width="80" height="100" viewBox="0 0 80 100" fill="none" style="position:absolute;top:10%;left:10%">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+          <svg width="80" height="100" viewBox="0 0 80 100" fill="none" style="position:absolute;top:10%;left:50%">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+          <svg width="80" height="100" viewBox="0 0 80 100" fill="none" style="position:absolute;bottom:10%;left:30%">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#A35F54" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <span style="font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);">Patricia Fernandes</span>
+          <div style="width:30px;height:1px;background:var(--sage);opacity:.4;"></div>
+          <span style="font-family:'Inter',sans-serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--sage);">Nutricionista</span>
+        </div>
+        <span class="card-label" style="position:absolute;bottom:12px;color:#A08070;">Padrão de fundo — papelaria</span>
+      </div>
+    </div>
+
+    <!-- Quote final -->
+    <div style="margin-top:48px;text-align:center;padding:60px 40px;border:1px solid var(--line);border-radius:20px;background:var(--card);">
+      <svg width="40" height="50" viewBox="0 0 80 100" fill="none" style="margin-bottom:24px;">
+        <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".5"/>
+        <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".5"/>
+        <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".5"/>
+        <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".5"/>
+        <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+      </svg>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,28px);font-weight:300;font-style:italic;color:var(--white);line-height:1.5;max-width:560px;margin:0 auto 20px;">
+        "Cuidar da alimentação é um gesto diário<br>de atenção consigo mesmo."
+      </p>
+      <div style="width:40px;height:1px;background:var(--rose);opacity:.3;margin:0 auto 16px;"></div>
+      <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);">Patricia Fernandes · Nutricionista</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const links    = document.querySelectorAll('.nav-side a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

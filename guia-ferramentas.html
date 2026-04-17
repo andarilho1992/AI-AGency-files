@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia de Ferramentas — Material de Estudo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --bg:#0c0e1a; --bg2:#131828; --bg3:#1b2240; --border:#1e2840; --border2:#253560;
+      --text:#f0ede6; --muted:#6b7080; --muted2:#9098a8;
+      --gold:#C8892C; --gold-light:#D9A850; --gold-dark:#7a5010; --gold-bg:#1a1208;
+      --blue:#60a5fa; --blue-dark:#1d4ed8; --blue-bg:#0a1628;
+      --green:#4ade80; --green-dark:#15803d; --green-bg:#061a0c;
+      --purple:#a78bfa; --purple-dark:#5b21b6; --purple-bg:#1a0d35;
+      --orange:#fb923c; --orange-dark:#c2410c; --orange-bg:#1c0e06;
+      --red:#f87171; --red-dark:#b91c1c; --red-bg:#1c0808;
+      --cyan:#38bdf8; --cyan-dark:#0e7490; --cyan-bg:#071820;
+      --pink:#f472b6; --pink-dark:#9d174d; --pink-bg:#1c0814;
+      --yellow:#fbbf24; --yellow-bg:#1c1608;
+    }
+
+    body {
+      font-family:'Inter',sans-serif; background:var(--bg); color:var(--text);
+      line-height:1.8;
+    }
+
+    /* ── LAYOUT ── */
+    .container { max-width:820px; margin:0 auto; padding:60px 48px 120px; }
+    @media(max-width:600px) { .container { padding:40px 24px 80px; } }
+
+    /* ── CAPA ── */
+    .capa { margin-bottom:80px; padding-bottom:60px; border-bottom:1px solid var(--border); }
+    .capa-badge { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--gold); display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+    .capa-badge::before { content:''; width:32px; height:1px; background:var(--gold); }
+    .capa h1 { font-family:'Cinzel',serif; font-size:clamp(28px,5vw,52px); font-weight:900; line-height:1.05; margin-bottom:20px; }
+    .capa h1 em { color:var(--gold); font-style:normal; }
+    .capa-sub { font-size:16px; color:var(--muted2); line-height:1.9; max-width:640px; }
+    .capa-sub strong { color:var(--text); }
+
+    /* ── ÍNDICE ── */
+    .indice { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; padding:28px 32px; margin-bottom:80px; }
+    .indice-title { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:20px; }
+    .indice-lista { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+    @media(max-width:580px) { .indice-lista { grid-template-columns:1fr; } }
+    .indice-item a { font-size:14px; color:var(--muted2); text-decoration:none; display:flex; align-items:center; gap:8px; padding:6px 0; border-radius:6px; transition:color .15s; }
+    .indice-item a:hover { color:var(--gold); }
+    .indice-num { font-size:11px; font-weight:800; color:var(--muted); min-width:24px; }
+    .indice-cat { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-top:16px; margin-bottom:6px; grid-column:1/-1; }
+
+    /* ── FERRAMENTA ── */
+    .tool-section { margin-bottom:80px; scroll-margin-top:32px; }
+    .tool-header { display:flex; align-items:flex-start; gap:18px; margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+    .tool-icon-big { width:52px; height:52px; min-width:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; border:2px solid; }
+    .tool-title-block { flex:1; }
+    .tool-num { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:6px; }
+    .tool-nome { font-family:'Cinzel',serif; font-size:26px; font-weight:700; line-height:1.1; margin-bottom:6px; }
+    .tool-subtitulo { font-size:14px; color:var(--muted2); }
+    .tool-custo-badge { flex-shrink:0; text-align:right; }
+    .custo-label { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:4px; }
+    .custo-val { font-size:16px; font-weight:900; font-family:'Cinzel',serif; }
+
+    /* ── BLOCOS DE CONTEÚDO ── */
+    .bloco { margin-bottom:28px; }
+    .bloco-label {
+      font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em;
+      color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:8px;
+    }
+    .bloco-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .texto { font-size:15px; color:var(--muted2); line-height:1.9; margin-bottom:14px; }
+    .texto strong { color:var(--text); }
+    .texto em { color:var(--gold-light); font-style:normal; font-weight:600; }
+
+    .lista { list-style:none; margin-bottom:14px; }
+    .lista li { font-size:14px; color:var(--muted2); line-height:1.7; padding:7px 0; border-bottom:1px solid rgba(255,255,255,.04); display:flex; gap:10px; align-items:flex-start; }
+    .lista li:last-child { border-bottom:none; }
+    .lista li::before { content:'→'; color:var(--gold); font-weight:700; flex-shrink:0; margin-top:1px; }
+    .lista li strong { color:var(--text); }
+
+    .lista-check li::before { content:'✓'; color:var(--green); }
+    .lista-warn li::before { content:'⚠'; color:var(--orange); }
+
+    /* ── DESTAQUE / CALLOUT ── */
+    .callout { border-radius:12px; padding:18px 22px; border:1px solid; margin-bottom:20px; }
+    .callout-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-bottom:10px; }
+    .callout-text { font-size:14px; line-height:1.8; }
+    .callout-text strong { font-weight:800; }
+
+    /* ── CÓDIGO ── */
+    .code-block {
+      background:var(--bg3); border:1px solid var(--border2); border-radius:10px;
+      padding:18px 20px; font-family:'Courier New',monospace; font-size:13px;
+      color:var(--cyan); line-height:1.7; overflow-x:auto; margin-bottom:20px;
+    }
+    .code-block .comment { color:var(--muted); }
+    .code-block .key { color:var(--gold-light); }
+    .code-block .val { color:var(--green); }
+
+    /* ── SEPARADOR ── */
+    .sep { border:none; border-top:1px solid var(--border); margin:60px 0; }
+
+    /* ── CUSTO TABLE ── */
+    .custo-table { width:100%; border-collapse:collapse; margin-bottom:16px; font-size:13px; }
+    .custo-table th { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); padding:8px 12px; text-align:left; border-bottom:1px solid var(--border2); }
+    .custo-table td { padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.04); color:var(--muted2); vertical-align:top; }
+    .custo-table tr:last-child td { border-bottom:none; }
+    .custo-table td:first-child { color:var(--text); font-weight:700; }
+    .custo-table td.verde { color:var(--green); font-weight:700; }
+    .custo-table td.ouro { color:var(--gold); font-weight:700; }
+    .custo-table td.muted { color:var(--muted); }
+
+    /* ── FLUXO SIMPLES ── */
+    .flow-inline { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:16px 0 20px; }
+    .flow-pill { background:var(--bg3); border:1px solid var(--border2); border-radius:8px; padding:6px 14px; font-size:12px; font-weight:700; }
+    .flow-arr { color:var(--muted); font-size:16px; }
+
+    /* ── PROGRESS ÂNCORA ── */
+    .top-link { font-size:11px; color:var(--muted); text-decoration:none; display:inline-flex; align-items:center; gap:4px; margin-bottom:40px; }
+    .top-link:hover { color:var(--gold); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ████ CAPA ████ -->
+  <div class="capa">
+    <div class="capa-badge">Material de Estudo · Guilherme Andrade</div>
+    <h1>As ferramentas da<br><em>agência de automação & SaaS</em></h1>
+    <p class="capa-sub">Para cada ferramenta que uso nos projetos: <strong>o que é, por que usar, o que faz, como encaixa no meu trabalho de automação e SaaS, quanto custa e como começar</strong>. Linguagem direta, sem enrolação. Material de referência para estudo e explicação para clientes.</p>
+    <div style="background:var(--gold-bg);border:1px solid var(--gold-dark);border-radius:12px;padding:16px 20px;margin-top:24px">
+      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:8px">📌 Contexto de uso</div>
+      <div style="font-size:14px;color:var(--muted2);line-height:1.7">Essas ferramentas servem qualquer projeto da agência: <strong style="color:var(--text)">automação de processos B2B</strong> (atendimento, vendas, relatórios, prospecção), <strong style="color:var(--text)">SaaS verticais</strong> (portais de gestão para nichos específicos), e <strong style="color:var(--text)">produtos próprios</strong>. Os exemplos cobrem diferentes tipos de clientes — não estão amarrados a um nicho só.</div>
+    </div>
+  </div>
+
+  <!-- ████ ÍNDICE ████ -->
+  <div class="indice">
+    <div class="indice-title">Índice</div>
+    <ul class="indice-lista">
+      <div class="indice-cat">Orquestração</div>
+      <li class="indice-item"><a href="#n8n"><span class="indice-num">01</span> n8n — O hub central</a></li>
+
+      <div class="indice-cat">Inteligência Artificial</div>
+      <li class="indice-item"><a href="#claude"><span class="indice-num">02</span> Claude API (Anthropic)</a></li>
+
+      <div class="indice-cat">Comunicação / WhatsApp</div>
+      <li class="indice-item"><a href="#zapi"><span class="indice-num">03</span> Z-API / Evolution API</a></li>
+      <li class="indice-item"><a href="#typebot"><span class="indice-num">04</span> Typebot</a></li>
+
+      <div class="indice-cat">Prospecção</div>
+      <li class="indice-item"><a href="#clay"><span class="indice-num">05</span> Clay</a></li>
+      <li class="indice-item"><a href="#apollo"><span class="indice-num">06</span> Apollo.io</a></li>
+
+      <div class="indice-cat">Dados</div>
+      <li class="indice-item"><a href="#sheets"><span class="indice-num">07</span> Google Sheets</a></li>
+      <li class="indice-item"><a href="#d1"><span class="indice-num">08</span> Cloudflare D1</a></li>
+      <li class="indice-item"><a href="#r2"><span class="indice-num">09</span> Cloudflare R2</a></li>
+
+      <div class="indice-cat">Infraestrutura</div>
+      <li class="indice-item"><a href="#workers"><span class="indice-num">10</span> Cloudflare Workers</a></li>
+      <li class="indice-item"><a href="#pages"><span class="indice-num">11</span> Cloudflare Pages</a></li>
+      <li class="indice-item"><a href="#astro"><span class="indice-num">12</span> Astro</a></li>
+    </ul>
+  </div>
+
+
+  <!-- ████ 01 · N8N ████ -->
+  <div class="tool-section" id="n8n">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">⚙️</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 01 · Orquestração</div>
+        <div class="tool-nome">n8n</div>
+        <div class="tool-subtitulo">O sistema nervoso central de todas as automações</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Grátis*</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">n8n (pronuncia-se "n-eight-n") é uma ferramenta de automação de fluxo de trabalho — o que o pessoal de automação mais antigo chamaria de "Zapier, mas poderoso". Você cria <strong>"workflows"</strong> visuais que conectam ferramentas diferentes: quando algo acontece no ponto A, o n8n executa ações no ponto B, C e D.</p>
+      <p class="texto">Pensa assim: você tem WhatsApp, Claude IA, Google Sheets e um banco de dados. Cada um faz a própria coisa. Quem faz eles se conversarem é o n8n. Ele recebe dados de um, transforma, decide o que fazer, e manda para o próximo. <strong>É o maestro que rege todos os outros instrumentos.</strong></p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Por que uso e não outra ferramenta</div>
+      <ul class="lista">
+        <li><strong>Open source e self-hosted:</strong> posso rodar no meu próprio servidor. Zapier e Make cobram por operação — n8n não tem limite de execuções no plano self-hosted.</li>
+        <li><strong>400+ integrações nativas:</strong> WhatsApp, Gmail, Sheets, bancos de dados, APIs personalizadas, Claude IA — tudo já tem "node" (bloco) pronto.</li>
+        <li><strong>Lógica real:</strong> tem condições if/else, loops, variáveis, manipulação de JSON. Não é só "conecta A com B" — é programação visual de verdade.</li>
+        <li><strong>Self-hosted = dados não saem do servidor:</strong> para clientes que têm dados sensíveis, isso é argumento de venda.</li>
+        <li><strong>Comunidade grande:</strong> muito conteúdo no YouTube, Discord ativo, templates prontos.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">O n8n é o centro de tudo. Cada tipo de projeto usa ele de uma forma, mas a lógica é sempre a mesma: <em>recebe dado → processa → executa ação</em>.</p>
+      <ul class="lista">
+        <li><strong>Automação de atendimento:</strong> cliente manda mensagem no WhatsApp → n8n recebe via webhook → consulta Claude → responde, registra, notifica responsável. Funciona para clínicas, escritórios, prestadores de serviço, e-commerce.</li>
+        <li><strong>Geração automática de documentos:</strong> formulário preenchido (proposta, contrato, relatório, orçamento) → n8n monta o HTML → gera PDF → envia por e-mail ou WhatsApp. Qualquer negócio que gera documento repetitivo é candidato.</li>
+        <li><strong>CRM e pipeline de vendas:</strong> novo lead chega de qualquer fonte (site, WhatsApp, LinkedIn, formulário) → n8n unifica no mesmo lugar, classifica, atribui ao vendedor e agenda follow-up automático.</li>
+        <li><strong>Relatórios automáticos agendados:</strong> todo dia 1, ou toda segunda, ou diariamente — n8n acorda, coleta dados de onde estiverem (Sheets, banco, API do cliente), processa com Claude e envia o relatório formatado.</li>
+        <li><strong>Motor de prospecção outbound:</strong> pega lista de leads do Clay → personaliza mensagem com Claude → dispara via e-mail ou WhatsApp → monitora respostas → move no CRM automaticamente.</li>
+        <li><strong>Webhooks entre SaaS:</strong> no produto SaaS próprio, quando o usuário faz uma ação (compra, cadastro, atinge uma meta), n8n dispara o fluxo correspondente — e-mail de boas-vindas, notificação para o time, atualização no banco.</li>
+        <li><strong>Integrações de sistemas legados:</strong> cliente tem ERP, planilha ou sistema antigo que não tem API. n8n faz a ponte — lê os dados de onde estão e distribui para onde precisam ir.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como usar — passo a passo inicial</div>
+      <p class="texto">A curva de aprendizado do n8n é de uns 3 a 7 dias para criar os primeiros fluxos funcionais. O caminho:</p>
+      <ul class="lista">
+        <li><strong>Instalar:</strong> a forma mais rápida é pelo Railway.app ou Render.com — clica, conecta GitHub, sobe em 5 minutos. Ou instala local com Docker.</li>
+        <li><strong>Primeiro workflow:</strong> comece com algo simples — formulário Google → Sheets → notificação no WPP. Funciona em 30 minutos.</li>
+        <li><strong>Entender nodes:</strong> cada "bloco" é um node. Tem nodes de trigger (o que inicia o fluxo), de ação (o que executa), e de lógica (if/else, loop, merge).</li>
+        <li><strong>Webhooks:</strong> são a fundação de tudo. Qualquer ferramenta externa manda dados para o n8n por webhook. Aprende isso primeiro.</li>
+        <li><strong>Credenciais:</strong> cada integração pede credenciais (API key, OAuth). O n8n salva e reutiliza em todos os workflows.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo detalhado</div>
+      <table class="custo-table">
+        <tr><th>Modalidade</th><th>Custo</th><th>Ideal para</th></tr>
+        <tr><td>Self-hosted (VPS)</td><td class="verde">Grátis</td><td>Quando você tem um servidor ($5/mês no Digital Ocean ou Hetzner)</td></tr>
+        <tr><td>Self-hosted (Railway/Render)</td><td class="ouro">~US$ 5–10/mês</td><td>Início rápido sem gerenciar servidor</td></tr>
+        <tr><td>n8n Cloud</td><td class="ouro">US$ 20–50/mês</td><td>Sem manutenção, suporte incluído</td></tr>
+        <tr><td>Cloudflare Workers (integrado)</td><td class="verde">Grátis até 100k req/dia</td><td>Para workflows serverless leves</td></tr>
+      </table>
+      <p class="texto">Recomendação para início: Railway.app com o template oficial do n8n. Custa ~$5/mês e sobe em 10 minutos sem precisar saber DevOps.</p>
+    </div>
+
+    <div class="callout" style="background:var(--gold-bg);border-color:var(--gold-dark)">
+      <div class="callout-label" style="color:var(--gold)">💡 Como eu explico para o cliente</div>
+      <div class="callout-text" style="color:var(--muted2)">"Pensa no n8n como o gerente de processos digital da sua empresa. Quando um cliente manda mensagem, o gerente recebe, lê, classifica, avisa o técnico certo, registra tudo e atualiza o sistema. Sem o gerente, cada ferramenta fica sozinha. Com ele, tudo conversa."</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 02 · CLAUDE API ████ -->
+  <div class="tool-section" id="claude">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">🧠</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 02 · Inteligência Artificial</div>
+        <div class="tool-nome">Claude API</div>
+        <div class="tool-subtitulo">O cérebro de linguagem que lê, interpreta, escreve e decide</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--gold)">Por uso</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">Claude é o modelo de inteligência artificial da Anthropic — a empresa co-fundada por ex-pesquisadores da OpenAI. O <strong>Claude.ai</strong> é a interface de chat (como o ChatGPT). A <strong>Claude API</strong> é o acesso programático: você manda texto, o Claude processa e devolve uma resposta. É isso que uso nas automações.</p>
+      <p class="texto">A diferença entre usar o chat e usar a API: no chat, você digita e recebe resposta. Pela API, o <em>n8n ou o código</em> faz isso automaticamente, sem ninguém digitar. É o que permite o sistema responder às 3h da madrugada sem ninguém acordado.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Por que Claude e não GPT da OpenAI</div>
+      <ul class="lista">
+        <li><strong>Instrução mais precisa:</strong> Claude segue instruções complexas com mais fidelidade — fundamental quando você quer que a proposta siga um formato exato.</li>
+        <li><strong>Janela de contexto maior:</strong> consegue processar documentos longos. Útil para analisar vários meses de dados de impressão de uma vez.</li>
+        <li><strong>Tom mais natural em português:</strong> nas minhas experiências, Claude escreve português mais fluido que o GPT em maioria dos casos.</li>
+        <li><strong>Modelos diferentes para casos diferentes:</strong> Haiku (barato/rápido), Sonnet (equilíbrio), Opus (máxima qualidade). Você escolhe conforme a tarefa.</li>
+        <li><strong>Preços competitivos:</strong> Haiku custa ~$0,25 por milhão de tokens de entrada — basicamente grátis para volumes normais de automação.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Claude é o que transforma automação burra em automação inteligente. Sem IA, o n8n só consegue mover dados de um lugar para outro. Com Claude, o sistema entende contexto, escreve, decide e raciocina.</p>
+      <ul class="lista">
+        <li><strong>Atendimento inteligente (qualquer nicho):</strong> clínica — entende se é urgência ou agendamento comum. Escritório — identifica se é dúvida jurídica ou pedido administrativo. Loja — classifica reclamação, elogio ou dúvida sobre produto.</li>
+        <li><strong>Geração de documentos personalizados:</strong> proposta comercial, relatório de desempenho, laudo técnico, e-mail de follow-up — Claude recebe os dados brutos e escreve o texto final em linguagem profissional, adaptado ao segmento do cliente.</li>
+        <li><strong>Qualificação de leads:</strong> recebe a conversa que o lead teve com o bot e classifica: quente, morno, frio. Extrai as informações relevantes (problema, orçamento, urgência) em formato estruturado para o CRM.</li>
+        <li><strong>Análise de dados em linguagem natural:</strong> no SaaS, o usuário pergunta "por que meu custo subiu esse mês?" — Claude recebe os dados do banco e responde com análise real, não só números.</li>
+        <li><strong>Personalização em escala:</strong> 500 leads na lista de prospecção — Claude escreve 500 mensagens diferentes, cada uma citando o segmento, a cidade e uma dor específica da empresa. Não é template, é texto genuinamente personalizado.</li>
+        <li><strong>Extração de dados não-estruturados:</strong> cliente tem e-mails, PDFs, formulários com texto livre. Claude lê e extrai informações em JSON estruturado para o n8n usar.</li>
+        <li><strong>Suporte de primeiro nível:</strong> responde as 80% de perguntas repetitivas que chegam no WhatsApp ou chat do SaaS. Só escala para humano quando realmente necessário.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como usar na prática</div>
+      <p class="texto">A Claude API funciona por requisições HTTP simples. Você manda um JSON com o modelo que quer usar, o "system prompt" (as instruções de comportamento) e a mensagem do usuário. Ela responde com texto.</p>
+      <p class="texto">No n8n, existe um node "HTTP Request" que faz isso por você. Você coloca a API key, configura o JSON, e pronto — qualquer workflow pode consultar Claude.</p>
+      <div class="code-block">
+<span class="comment">// Exemplo de chamada à Claude API via n8n (HTTP Request node)</span>
+<span class="comment">// POST https://api.anthropic.com/v1/messages</span>
+
+{
+  <span class="key">"model"</span>: <span class="val">"claude-haiku-4-5-20251001"</span>,
+  <span class="key">"max_tokens"</span>: <span class="val">1024</span>,
+  <span class="key">"system"</span>: <span class="val">"Você é um classificador de chamados técnicos de impressão. Responda apenas em JSON."</span>,
+  <span class="key">"messages"</span>: [
+    {
+      <span class="key">"role"</span>: <span class="val">"user"</span>,
+      <span class="key">"content"</span>: <span class="val">"A impressora do setor RH está piscando a luz de erro."</span>
+    }
+  ]
+}
+
+<span class="comment">// Resposta esperada:</span>
+{
+  <span class="key">"tipo"</span>: <span class="val">"hardware"</span>,
+  <span class="key">"urgencia"</span>: <span class="val">"media"</span>,
+  <span class="key">"solucao_remota"</span>: <span class="val">false</span>,
+  <span class="key">"proximo_passo"</span>: <span class="val">"Agendar visita técnica"</span>
+}
+      </div>
+      <p class="texto">O <strong>system prompt</strong> é o mais importante — é onde você define quem o Claude vai "ser" naquela tarefa. Quanto mais específico e exemplificado o system prompt, mais precisa e confiável a resposta.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Os 3 modelos e quando usar cada um</div>
+      <table class="custo-table">
+        <tr><th>Modelo</th><th>Velocidade</th><th>Custo</th><th>Quando usar</th></tr>
+        <tr><td>Claude Haiku 4.5</td><td class="verde">Muito rápido</td><td class="verde">~$0,25/1M tokens</td><td>Classificação de chamados, respostas curtas, volume alto</td></tr>
+        <tr><td>Claude Sonnet 4.6</td><td class="ouro">Rápido</td><td class="ouro">~$3/1M tokens</td><td>Relatórios, propostas, mensagens outbound</td></tr>
+        <tr><td>Claude Opus 4.6</td><td class="muted">Mais lento</td><td style="color:var(--red);font-weight:700">~$15/1M tokens</td><td>Análises complexas, decisões críticas, qualidade máxima</td></tr>
+      </table>
+      <p class="texto">Na prática, 90% do projeto usa Haiku ou Sonnet. Opus só quando o cliente pagar por algo que exige qualidade máxima — e mesmo assim, raramente.</p>
+    </div>
+
+    <div class="callout" style="background:var(--purple-bg);border-color:var(--purple-dark)">
+      <div class="callout-label" style="color:var(--purple)">💡 Como eu explico para o cliente</div>
+      <div class="callout-text" style="color:var(--muted2)">"Claude é a inteligência que entende texto em português como um humano. Ela lê a mensagem do seu cliente e entende se é uma reclamação, um chamado urgente, ou uma dúvida simples. Depois escreve a resposta certa. Isso que antes precisava de uma pessoa para fazer, agora acontece em menos de 2 segundos, a qualquer hora."</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 03 · Z-API ████ -->
+  <div class="tool-section" id="zapi">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">📲</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 03 · Comunicação</div>
+        <div class="tool-nome">Z-API / Evolution API</div>
+        <div class="tool-subtitulo">A ponte entre o WhatsApp e a automação</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Z-API</div>
+        <div class="custo-val" style="color:var(--gold)">R$100–150/mês</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é e por que precisa disso</div>
+      <p class="texto">O WhatsApp não tem uma API pública aberta para pequenas empresas. A WhatsApp Business API oficial (Meta) exige aprovação, processo burocrático e custa caro para volumes pequenos. <strong>Z-API e Evolution API são soluções alternativas</strong> que conectam um número real de WhatsApp (via QR code, como o WhatsApp Web) a um sistema de automação.</p>
+      <p class="texto">Em vez de você abrir o celular, ver a mensagem e responder manualmente, o Z-API intercepta essa mensagem e manda para o n8n por webhook. O n8n processa, decide o que responder, e manda de volta para o Z-API enviar a resposta. <strong>O cliente não percebe diferença — continua conversando no WhatsApp normal.</strong></p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Z-API vs Evolution API — qual escolher</div>
+      <ul class="lista">
+        <li><strong>Z-API (pago, R$100–150/mês):</strong> mais simples de configurar, suporte em português, mais estável para começar. Recomendo para o primeiro projeto com cliente.</li>
+        <li><strong>Evolution API (grátis, self-hosted):</strong> open source, você roda no seu servidor. Mais poderoso, mais customizável, mais complexo. Recomendo quando tiver familiaridade com servidores.</li>
+        <li><strong>Diferença prática:</strong> as duas fazem a mesma coisa. A diferença está em quem gerencia a infraestrutura — Z-API gerencia por você, Evolution API você gerencia.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">WhatsApp é o canal de comunicação dominante no Brasil. Qualquer automação que precisa falar com pessoas — clientes, leads, equipe interna — passa pelo Z-API.</p>
+      <ul class="lista">
+        <li><strong>Atendimento automático 24/7:</strong> cliente manda mensagem fora do horário → sistema responde, coleta informações, resolve ou agenda para o próximo dia útil. Funciona para qualquer negócio com atendimento via WPP.</li>
+        <li><strong>Notificações operacionais:</strong> pedido confirmado, pagamento aprovado, agendamento criado, prazo próximo — o n8n dispara a notificação no WPP da pessoa certa na hora certa.</li>
+        <li><strong>Follow-up comercial automatizado:</strong> lead recebeu proposta → 24h sem resposta → Z-API envia mensagem de acompanhamento. 72h → segunda mensagem. Sem vendedor precisar lembrar de ligar.</li>
+        <li><strong>Entrega de conteúdo/documentos:</strong> relatório gerado, contrato pronto, boleto emitido — link enviado direto no WhatsApp do cliente. Mais rápido e mais lido do que e-mail.</li>
+        <li><strong>Comunicação interna:</strong> novo lead qualificado → avisa o time de vendas. Ticket de suporte aberto → avisa o responsável. Integração com qualquer fluxo interno do cliente.</li>
+        <li><strong>Sequências de onboarding:</strong> novo cliente assinou o SaaS → Z-API envia sequência de mensagens ao longo dos primeiros 7 dias para guiar o uso do produto.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como configurar (passo a passo básico)</div>
+      <ul class="lista">
+        <li><strong>Criar conta no Z-API:</strong> z-api.io → criar instância → escanear QR code com o número do cliente.</li>
+        <li><strong>Pegar o webhook URL do n8n:</strong> no n8n, criar um node "Webhook", copiar a URL gerada.</li>
+        <li><strong>Configurar no Z-API:</strong> colar a URL do n8n como "webhook de recebimento". A partir daí, toda mensagem dispara o n8n.</li>
+        <li><strong>Testar:</strong> mandar mensagem no WPP → ver o n8n receber os dados → construir o fluxo de resposta.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo</div>
+      <table class="custo-table">
+        <tr><th>Opção</th><th>Custo</th><th>Observação</th></tr>
+        <tr><td>Z-API</td><td class="ouro">R$ 100–150/mês por instância</td><td>1 instância = 1 número de WPP. Cliente paga isso.</td></tr>
+        <tr><td>Evolution API</td><td class="verde">Grátis</td><td>Self-hosted. Precisa de VPS (~$5/mês).</td></tr>
+        <tr><td>Meta Business API</td><td class="muted">Varia por volume</td><td>Oficial, aprovação necessária, viável em escala.</td></tr>
+      </table>
+    </div>
+
+    <div class="callout" style="background:var(--green-bg);border-color:var(--green-dark)">
+      <div class="callout-label" style="color:var(--green)">⚠ Ponto de atenção</div>
+      <div class="callout-text" style="color:var(--muted2)">Z-API e Evolution API são conexões não-oficiais. O WhatsApp pode banir o número se detectar volume anormal de mensagens automatizadas. Para evitar isso: não envie mensagens em massa (blast), mantenha conversas naturais, e prefira responder mensagens recebidas em vez de iniciar contatos do zero em escala. Para prospecção em escala, use e-mail — não WhatsApp.</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 04 · TYPEBOT ████ -->
+  <div class="tool-section" id="typebot">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">🤖</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 04 · Comunicação</div>
+        <div class="tool-nome">Typebot</div>
+        <div class="tool-subtitulo">Construtor visual de fluxos de conversa</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Grátis*</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">Typebot é um construtor de chatbots baseado em fluxo visual. Você arrasta blocos que representam mensagens, perguntas, condições e ações — e o resultado é uma conversa estruturada que o bot vai seguir. <strong>É o "rosto" do bot</strong>: a lógica de o que perguntar, em que ordem, e o que fazer com a resposta.</p>
+      <p class="texto">Diferente de um chatbot baseado em IA livre (onde o usuário pode falar qualquer coisa), o Typebot guia a conversa por um fluxo definido. Isso dá previsibilidade — você sabe exatamente o que o cliente vai responder, porque as opções são controladas.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Por que usar junto com Claude e não só Claude</div>
+      <p class="texto">Claude é ótimo para processar linguagem livre. Mas para coletar dados estruturados — tipo de problema, equipamento, urgência — é melhor <strong>guiar o usuário com opções do que deixar ele escrever qualquer coisa</strong>. O Typebot faz isso. Claude só entra quando a pergunta é aberta e precisa de raciocínio.</p>
+      <ul class="lista">
+        <li><strong>Typebot faz:</strong> "Qual o tipo de problema? (1) Toner (2) Papel (3) Hardware (4) Outro"</li>
+        <li><strong>Claude faz:</strong> "Descreva o problema e eu analiso"</li>
+        <li><strong>Combinação ideal:</strong> Typebot coleta os dados estruturados → Claude analisa a parte livre → n8n age com base em tudo.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Typebot é a interface da conversa. Sempre que precisar coletar informações do usuário de forma estruturada via WhatsApp ou site, Typebot é a resposta.</p>
+      <ul class="lista">
+        <li><strong>Qualificação de leads:</strong> novo contato no WPP → Typebot pergunta nome, empresa, segmento, problema, orçamento → dados chegam no CRM já organizados. Funciona para qualquer tipo de negócio que recebe leads pelo WhatsApp.</li>
+        <li><strong>Atendimento de suporte primeiro nível:</strong> usuário reporta problema → Typebot coleta: qual módulo, qual erro, qual impacto → categoriza e direciona para o técnico certo ou resolve sozinho com respostas pré-definidas.</li>
+        <li><strong>Coleta de dados para automação interna:</strong> vendedor precisa criar proposta → preenche Typebot com dados do lead → n8n gera o documento automaticamente. Elimina o "template no Word".</li>
+        <li><strong>Onboarding de novos usuários do SaaS:</strong> usuário acabou de criar conta → Typebot via WhatsApp pergunta suas metas e preferências → personaliza a experiência inicial no produto.</li>
+        <li><strong>Agendamento e pré-triagem:</strong> clínica, salão, consultório — Typebot coleta o motivo da consulta, dados do paciente/cliente e preferência de horário antes de qualquer humano entrar na conversa.</li>
+        <li><strong>Pesquisa de satisfação:</strong> após entrega de serviço, Typebot envia NPS e coleta feedback estruturado → n8n salva e analisa com Claude.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como usar</div>
+      <ul class="lista">
+        <li><strong>Self-hosted:</strong> tem imagem Docker, sobe em qualquer VPS. Grátis, sem limite de bots ou respostas.</li>
+        <li><strong>Cloud:</strong> typebot.io → plano free com limites, plano pago US$39/mês.</li>
+        <li><strong>Conectar no WhatsApp:</strong> via Z-API — o Typebot tem integração nativa com a Evolution API e pode ser conectado ao Z-API via webhook.</li>
+        <li><strong>Conectar no n8n:</strong> no final do fluxo, Typebot dispara um webhook para o n8n com todos os dados coletados.</li>
+        <li><strong>Aprendizado:</strong> é visual, intuitivo. Em 1 dia você cria o primeiro bot funcional.</li>
+      </ul>
+    </div>
+
+    <div class="callout" style="background:var(--blue-bg);border-color:var(--blue-dark)">
+      <div class="callout-label" style="color:var(--blue)">💡 Como eu explico para o cliente</div>
+      <div class="callout-text" style="color:var(--muted2)">"Typebot é o roteiro da conversa. Ele garante que o atendente virtual sempre pergunta as informações certas, na ordem certa. Sem Typebot, o cliente pode escrever qualquer coisa e o sistema não entende. Com ele, a conversa é guiada — como um formulário inteligente dentro do WhatsApp."</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 05 · CLAY ████ -->
+  <div class="tool-section" id="clay">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--cyan-bg);border-color:var(--cyan-dark);color:var(--cyan)">🧱</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 05 · Prospecção</div>
+        <div class="tool-nome">Clay</div>
+        <div class="tool-subtitulo">A planilha inteligente que encontra, enriquece e personaliza leads</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--orange)">US$149/mês</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">Clay é uma ferramenta de prospecção outbound que combina banco de dados de empresas, enriquecimento automático de dados e inteligência artificial em uma interface de planilha. Você define quem quer prospectar (segmento, cidade, porte), o Clay encontra as empresas, busca os dados de contato dos decisores, e com IA já prepara a mensagem personalizada para cada um.</p>
+      <p class="texto">É a ferramenta que profissionalizou o outbound moderno. <strong>Antes, prospectar era trabalho manual — pesquisar empresa por empresa no LinkedIn, anotar em planilha, escrever mensagem na mão</strong>. Com Clay, esse processo roda automaticamente para centenas de empresas de uma vez.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Clay é a ferramenta central do Sistema 4 da agência — o motor de prospecção. Serve para vender os sistemas de automação para novos clientes E para oferecer como serviço para clientes que precisam crescer a carteira.</p>
+      <ul class="lista">
+        <li><strong>Prospecção para a agência:</strong> define o perfil de cliente ideal (PME com 5–50 funcionários, setor de serviços, cidade alvo) → Clay encontra as empresas, busca o decisor, enriquece → Claude escreve mensagem → n8n dispara. Isso é o motor de crescimento da própria agência.</li>
+        <li><strong>Produto vendido para clientes B2B:</strong> qualquer cliente da agência que precisa de prospecção ativa recebe esse sistema. Clay + Claude + n8n montam a máquina de leads para o nicho dele.</li>
+        <li><strong>Pesquisa de mercado:</strong> antes de entrar em um nicho novo, usa Clay para mapear quantas empresas existem, quem são os players, qual o porte médio. Inteligência de mercado em horas.</li>
+        <li><strong>Alimentar CRM automaticamente:</strong> em vez de o vendedor digitar dados no CRM, Clay já entrega o lead completo — nome, cargo, empresa, LinkedIn, e-mail verificado — e n8n insere diretamente.</li>
+        <li><strong>Encontrar parceiros e fornecedores:</strong> não só para vendas — serve para mapear possíveis parceiros de integração, revendedores ou fornecedores para o SaaS.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como funciona na prática</div>
+      <p class="texto">Clay funciona como uma tabela onde cada linha é uma empresa ou contato. Para cada linha, você define "colunas" que buscam dados automaticamente. Cada coluna é uma "pesquisa" ou "transformação":</p>
+      <ul class="lista">
+        <li>Coluna A: nome da empresa (preenchida por você ou por uma fonte como Apollo)</li>
+        <li>Coluna B: "buscar site da empresa" → Clay pesquisa na internet</li>
+        <li>Coluna C: "nome do decisor" → Clay scrapa o LinkedIn ou Apollo</li>
+        <li>Coluna D: "e-mail verificado" → Clay usa Hunter.io ou outra fonte</li>
+        <li>Coluna E: "mensagem personalizada" → Claude API escreve usando contexto das colunas anteriores</li>
+      </ul>
+      <p class="texto">O resultado é uma tabela de 200 empresas, cada uma com dados completos e mensagem pronta. Você exporta e o n8n dispara.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo</div>
+      <table class="custo-table">
+        <tr><th>Plano</th><th>Custo</th><th>Créditos/mês</th></tr>
+        <tr><td>Free</td><td class="verde">Grátis</td><td>100 créditos (para testar)</td></tr>
+        <tr><td>Starter</td><td class="ouro">US$ 149/mês</td><td>2.000 créditos</td></tr>
+        <tr><td>Explorer</td><td class="ouro">US$ 349/mês</td><td>10.000 créditos</td></tr>
+      </table>
+      <p class="texto">Cada enriquecimento (buscar e-mail, LinkedIn, etc.) custa 1 crédito. Para 200 empresas com 5 enriquecimentos cada = 1.000 créditos. O plano Starter comporta 2 campanhas dessas por mês.</p>
+    </div>
+
+    <div class="callout" style="background:var(--cyan-bg);border-color:var(--cyan-dark)">
+      <div class="callout-label" style="color:var(--cyan)">💡 Como eu explico para o cliente</div>
+      <div class="callout-text" style="color:var(--muted2)">"Clay é como ter um estagiário que passa 8 horas por dia pesquisando empresas no Google, LinkedIn e outros sites — copiando nome, e-mail e telefone do responsável por compras. Só que mais rápido, mais preciso e sem precisar pagar salário. Com Clay, você prospecta 500 empresas em um fim de semana."</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 06 · APOLLO ████ -->
+  <div class="tool-section" id="apollo">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--pink-bg);border-color:var(--pink-dark);color:var(--pink)">🚀</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 06 · Prospecção</div>
+        <div class="tool-nome">Apollo.io</div>
+        <div class="tool-subtitulo">Base de dados com 275 milhões de contatos B2B prontos para usar</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--gold)">US$49+/mês</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">Apollo.io é um banco de dados de vendas B2B com mais de 275 milhões de contatos e 60 milhões de empresas. Você filtra por setor, cargo, cidade, número de funcionários, receita e dezenas de outros critérios — e exporta a lista de contatos pronta para uso.</p>
+      <p class="texto">A diferença para o Clay: <strong>Apollo tem uma base própria de dados</strong>. Clay é uma ferramenta de enriquecimento que busca dados de várias fontes (incluindo Apollo). Os dois se complementam: Apollo dá a lista inicial, Clay enriquece e personaliza.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Apollo é o ponto de partida da prospecção. Clay enriquece e personaliza — mas precisa de uma lista para começar. Apollo é onde essa lista vem.</p>
+      <ul class="lista">
+        <li><strong>Primeiro passo de qualquer campanha outbound:</strong> define o ICP (perfil de cliente ideal) → filtra no Apollo → exporta lista com e-mails verificados → importa no Clay para personalizar com Claude → n8n dispara.</li>
+        <li><strong>Prospecção internacional:</strong> como o trabalho é feito de fora do Brasil (Tailândia), Apollo serve para prospectar clientes em qualquer país — filtros por país, cidade, idioma.</li>
+        <li><strong>Sequências de e-mail sem n8n:</strong> para clientes que precisam de uma solução mais simples, Apollo já tem cadência de e-mail embutida. Não precisa de n8n para o disparo — só para integrações mais complexas.</li>
+        <li><strong>Pesquisa de concorrentes:</strong> Apollo mostra tecnologias que cada empresa usa. Você filtra por "empresas que usam Salesforce mas não têm automação de WhatsApp" — esses são leads quentes para vender o sistema de automação.</li>
+        <li><strong>Validação de mercado:</strong> antes de criar um SaaS para um nicho, verifica no Apollo quantas empresas desse nicho existem e qual o porte médio. Valida se há mercado antes de construir.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo</div>
+      <table class="custo-table">
+        <tr><th>Plano</th><th>Custo</th><th>Limite</th></tr>
+        <tr><td>Free</td><td class="verde">Grátis</td><td>50 e-mails/mês, 5 sequências</td></tr>
+        <tr><td>Basic</td><td class="ouro">US$ 49/mês</td><td>Ilimitado (fair use)</td></tr>
+        <tr><td>Professional</td><td class="ouro">US$ 79/mês</td><td>Recursos avançados de analytics</td></tr>
+      </table>
+      <p class="texto">Para começar, o plano Free do Apollo combinado com o Clay pago é suficiente para prospectar até 500 empresas por mês.</p>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 07 · GOOGLE SHEETS ████ -->
+  <div class="tool-section" id="sheets">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">📊</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 07 · Dados</div>
+        <div class="tool-nome">Google Sheets</div>
+        <div class="tool-subtitulo">A planilha como banco de dados leve e CRM inicial</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Grátis</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Por que usar planilha quando tem banco de dados</div>
+      <p class="texto">Google Sheets não substitui um banco de dados — mas para começar um projeto com cliente, é a opção mais rápida e acessível. O cliente já sabe usar, já tem os dados lá, não precisa aprender nada novo. <strong>Integrar Sheets com n8n é fácil e o resultado já é automação real.</strong></p>
+      <p class="texto">A estratégia é: começa com Sheets para validar o processo e provar o valor. Quando o cliente cresce e precisa de mais estrutura (mais clientes, mais dados, dashboard), migra para o Cloudflare D1.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz no meu projeto</div>
+      <ul class="lista">
+        <li><strong>Base de dados de impressão:</strong> páginas por equipamento, por cliente, por mês. O n8n lê para gerar o relatório.</li>
+        <li><strong>CRM simples:</strong> lista de leads com nome, empresa, data de contato, status, próximo follow-up. n8n lê e atualiza automaticamente.</li>
+        <li><strong>Tabela de preços:</strong> o n8n consulta o Sheets para calcular automaticamente o valor da proposta com base no perfil do lead.</li>
+        <li><strong>Log de chamados:</strong> backup de todos os chamados atendidos — data, tipo, resolução, técnico, tempo de resposta.</li>
+        <li><strong>Configurações do sistema:</strong> variáveis que o n8n usa (nome da empresa, responsável, dias de follow-up) ficam no Sheets para o cliente alterar sem precisar de técnico.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Sheets é o banco de dados de entrada — o lugar mais simples de começar para qualquer cliente, porque eles já têm e já sabem usar. O n8n lê e escreve no Sheets como se fosse um banco de dados.</p>
+      <ul class="lista">
+        <li><strong>CRM leve para clientes menores:</strong> pipeline de vendas, status de leads, histórico de contatos. n8n atualiza automaticamente — vendedor só consulta.</li>
+        <li><strong>Base de configuração do sistema:</strong> variáveis que o cliente controla sem precisar de técnico (valores de planos, textos de mensagens, dias de follow-up, lista de responsáveis). n8n lê o Sheets para saber como se comportar.</li>
+        <li><strong>Input de dados de clientes:</strong> cliente que não tem sistema lança dados manualmente no Sheets. n8n monitora e age quando nova linha é adicionada — dispara boas-vindas, gera documento, notifica equipe.</li>
+        <li><strong>Log e auditoria:</strong> tudo que o sistema faz fica registrado em uma aba de log. Útil para provar para o cliente que o sistema está funcionando e para diagnosticar problemas.</li>
+        <li><strong>Prototipagem rápida de SaaS:</strong> antes de construir o banco de dados D1, valida o produto com Sheets. Se o cliente usar e pagar, aí investe na infraestrutura mais robusta.</li>
+      </ul>
+
+      <div class="bloco-label" style="margin-top:20px">Como o n8n usa o Sheets</div>
+      <p class="texto">n8n tem um node nativo do Google Sheets. Você autoriza com OAuth, escolhe a planilha e a aba — e pode ler, escrever, atualizar e filtrar linhas. Nenhum código necessário.</p>
+      <ul class="lista">
+        <li><strong>Ler:</strong> "pega todas as linhas onde status = 'ativo'" → n8n lista os registros ativos</li>
+        <li><strong>Escrever:</strong> evento aconteceu → n8n adiciona linha com data, tipo, dados relevantes</li>
+        <li><strong>Atualizar:</strong> lead respondeu → n8n muda o status na coluna correspondente</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 08 · CLOUDFLARE D1 ████ -->
+  <div class="tool-section" id="d1">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">🗃️</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 08 · Dados</div>
+        <div class="tool-nome">Cloudflare D1</div>
+        <div class="tool-subtitulo">Banco de dados SQL que roda na borda da internet</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Grátis (5GB)</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">D1 é o banco de dados da Cloudflare. Ele usa SQLite — o mesmo banco de dados que roda dentro de aplicativos mobile e é um dos mais usados no mundo. A diferença é que o D1 é <strong>serverless e edge</strong>: não precisa de servidor dedicado, e os dados ficam distribuídos próximos dos usuários para velocidade máxima.</p>
+      <p class="texto">Para o Sistema 5 (Dashboard de Gestão), onde o prestador e seus clientes precisam acessar dados em tempo real, o D1 é a base de dados correta. Enquanto o Sheets serve para processos simples e times pequenos, o D1 serve para o produto escalável.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">D1 é o banco de dados do produto SaaS. Quando a automação cresce e o Sheets não é mais suficiente — muitos usuários, consultas complexas, histórico longo — D1 é o próximo passo.</p>
+      <ul class="lista">
+        <li><strong>Backend do SaaS vertical:</strong> qualquer produto SaaS construído em Astro + Workers usa D1 como banco. Tabelas de usuários, planos, eventos, histórico — tudo estruturado em SQL.</li>
+        <li><strong>Multi-tenant por design:</strong> cada cliente do SaaS tem seus dados isolados no D1 por `client_id`. Um banco serve múltiplos clientes com segurança.</li>
+        <li><strong>Consultado em tempo real pelo dashboard:</strong> usuário abre o painel → Workers busca no D1 → retorna dados frescos em milissegundos. Sem cache stale, sem planilha desatualizada.</li>
+        <li><strong>Alimentado pelas automações do n8n:</strong> n8n registra no D1 tudo que acontece nas automações — leads qualificados, mensagens enviadas, documentos gerados, eventos do sistema.</li>
+        <li><strong>Analytics e relatórios:</strong> com os dados no D1, Claude pode fazer análises sob demanda. "Quais clientes têm maior taxa de churn?" → Workers consulta D1 → Claude interpreta → retorna insight.</li>
+        <li><strong>Evolução natural do Sheets:</strong> o produto começa em Sheets para validar, migra para D1 quando escala. A estrutura de dados é a mesma — só a camada de armazenamento muda.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como usar — nível básico</div>
+      <p class="texto">Você cria um banco D1 no painel do Cloudflare, define as tabelas com SQL padrão, e acessa via o Workers usando a binding D1. Para quem sabe SQL básico (SELECT, INSERT, UPDATE), a curva de aprendizado é mínima.</p>
+      <div class="code-block">
+<span class="comment">-- Criar tabela de chamados (SQL padrão)</span>
+CREATE TABLE chamados (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  cliente_id  INTEGER,
+  equipamento TEXT,
+  tipo        TEXT,
+  status      TEXT DEFAULT 'aberto',
+  criado_em   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+<span class="comment">-- Inserir chamado (via Workers ou n8n)</span>
+INSERT INTO chamados (cliente_id, equipamento, tipo)
+VALUES (42, 'HP LaserJet 402', 'toner');
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo</div>
+      <table class="custo-table">
+        <tr><th>Tier</th><th>Limite</th><th>Custo</th></tr>
+        <tr><td>Free</td><td>5GB storage · 25M leituras/dia · 100k escritas/dia</td><td class="verde">Grátis</td></tr>
+        <tr><td>Pago (Workers Paid)</td><td>5GB incluídos, US$0,75/GB adicional</td><td class="ouro">US$5/mês + uso</td></tr>
+      </table>
+      <p class="texto">Para o Sistema 5 com até 50 clientes e histórico de 2 anos, 5GB é mais do que suficiente. Você vai ficar no free tier por um bom tempo.</p>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 09 · CLOUDFLARE R2 ████ -->
+  <div class="tool-section" id="r2">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">📁</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 09 · Dados</div>
+        <div class="tool-nome">Cloudflare R2</div>
+        <div class="tool-subtitulo">Armazenamento de arquivos sem custo de transferência</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Grátis (10GB)</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é e por que não usar AWS S3</div>
+      <p class="texto">R2 é o serviço de armazenamento de arquivos da Cloudflare — equivalente ao Amazon S3. Você guarda PDFs, imagens, documentos, e eles ficam disponíveis por URL.</p>
+      <p class="texto">A vantagem principal sobre o S3 da AWS: <strong>R2 não cobra "egress"</strong> — o custo de baixar os arquivos. No S3, você paga para armazenar E para cada vez que alguém baixa o arquivo. No R2, baixar é grátis. Para um sistema que envia relatórios em PDF para clientes todo mês, isso faz diferença significativa.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">R2 é o repositório de arquivos de toda a operação. Qualquer coisa que o sistema gera e precisa guardar — vai para o R2.</p>
+      <ul class="lista">
+        <li><strong>PDFs gerados automaticamente:</strong> proposta comercial, relatório mensal, contrato, orçamento, NF, laudo — o n8n gera e salva no R2. O link é enviado por WPP ou e-mail. O arquivo fica acessível pelo tempo que precisar.</li>
+        <li><strong>Assets do SaaS:</strong> imagens de perfil, logos de clientes, arquivos enviados pelos usuários no produto — tudo fica no R2 e é servido pelo Workers sem custo de egress.</li>
+        <li><strong>Backups automáticos:</strong> n8n exporta os dados críticos em JSON/CSV toda semana e salva no R2 como backup. Custo: praticamente zero.</li>
+        <li><strong>Histórico de comunicações:</strong> transcrições de conversa, gravações de áudio enviadas por clientes, documentos recebidos — R2 guarda com URL permanente para consulta futura.</li>
+        <li><strong>Entrega de conteúdo do SaaS:</strong> produto que entrega material (relatório, análise, exportação de dados) para o usuário — Workers busca no R2 e entrega direto. Sem pagar por transferência.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo</div>
+      <table class="custo-table">
+        <tr><th>Categoria</th><th>Grátis</th><th>Custo excedente</th></tr>
+        <tr><td>Storage</td><td>10GB/mês</td><td class="ouro">US$0,015/GB</td></tr>
+        <tr><td>Operações (upload/download)</td><td>1M/mês</td><td class="ouro">US$0,36/1M ops</td></tr>
+        <tr><td>Egress (transferência de saída)</td><td>Ilimitado</td><td class="verde">Grátis sempre</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 10 · CLOUDFLARE WORKERS ████ -->
+  <div class="tool-section" id="workers">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">⚡</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 10 · Infraestrutura</div>
+        <div class="tool-nome">Cloudflare Workers</div>
+        <div class="tool-subtitulo">Código que roda em 200+ países sem servidor para gerenciar</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">100k req/dia grátis</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é — o conceito de "serverless"</div>
+      <p class="texto">Servidores tradicionais ficam ligados 24h esperando requisições. Você paga por hora, independente de ter tráfego ou não. <strong>Serverless é o oposto: o código só roda quando alguém chama</strong>. Sem tráfego, não gasta nada. Com tráfego, escala automaticamente.</p>
+      <p class="texto">Cloudflare Workers é serverless na borda ("edge"): o código roda no servidor Cloudflare mais próximo do usuário final, em milissegundos. Para alguém no Brasil, o código roda no Brasil. Para alguém na Tailândia, roda na Tailândia. <strong>Velocidade máxima, custo mínimo.</strong></p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Workers é o backend de qualquer produto construído na stack Cloudflare. É onde vive a lógica de negócio — o código que decide o que fazer com cada requisição.</p>
+      <ul class="lista">
+        <li><strong>API de qualquer SaaS:</strong> o frontend Astro não acessa o banco diretamente — chama o Workers, que valida, processa e retorna os dados. Workers é a camada de segurança e lógica entre a interface e o banco.</li>
+        <li><strong>Autenticação e autorização:</strong> valida login, emite tokens JWT, controla quem pode ver o quê. Cada usuário do SaaS vê só os próprios dados.</li>
+        <li><strong>Webhook receiver para n8n e terceiros:</strong> quando o n8n termina um processo, manda os dados para o Workers salvar no D1. Quando o Z-API recebe mensagem, pode chamar Workers antes de passar para o n8n.</li>
+        <li><strong>IA on-demand no produto:</strong> usuário do SaaS clica em "analisar" → Workers chama Claude com o contexto certo → retorna análise para o frontend. Sem expor a API key do Claude no frontend.</li>
+        <li><strong>Lógica de negócio complexa:</strong> cálculo de preços, regras de acesso por plano, geração de links temporários do R2, envio de e-mails transacionais — qualquer coisa que não deve rodar no frontend vai no Workers.</li>
+        <li><strong>Integração entre serviços externos:</strong> Workers como hub de integração entre Stripe (pagamentos), Resend (e-mail), Z-API (WhatsApp) e o resto da stack.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como é o código de um Worker</div>
+      <p class="texto">Workers usam JavaScript (ou TypeScript). A estrutura básica é uma função que recebe uma requisição e retorna uma resposta — igual a uma função de servidor Node.js, mas sem servidor.</p>
+      <div class="code-block">
+<span class="comment">// Worker simples: endpoint que retorna chamados de um cliente</span>
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const clienteId = url.searchParams.get('cliente_id');
+
+    <span class="comment">// Consulta o banco D1</span>
+    const { results } = await env.DB.prepare(
+      'SELECT * FROM chamados WHERE cliente_id = ? ORDER BY criado_em DESC LIMIT 20'
+    ).bind(clienteId).all();
+
+    return Response.json({ chamados: results });
+  }
+};
+      </div>
+      <p class="texto">Para quem está começando em código: Workers são o melhor lugar para aprender backend. A sintaxe é simples, o deploy é instantâneo, e o feedback é imediato.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Custo</div>
+      <table class="custo-table">
+        <tr><th>Tier</th><th>Requisições</th><th>Custo</th></tr>
+        <tr><td>Free</td><td>100.000/dia</td><td class="verde">Grátis</td></tr>
+        <tr><td>Workers Paid</td><td>10M/mês incluídas</td><td class="ouro">US$5/mês</td></tr>
+        <tr><td>Excedente</td><td>A partir de 10M</td><td class="ouro">US$0,30 por 1M</td></tr>
+      </table>
+      <p class="texto">Para o Sistema 5 com 50 clientes ativos: estimativa de 50.000 requisições/mês. Muito abaixo do free tier. O Workers Paid (US$5/mês) só vale quando você tem tráfego relevante.</p>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 11 · CLOUDFLARE PAGES ████ -->
+  <div class="tool-section" id="pages">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">🌐</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 11 · Infraestrutura</div>
+        <div class="tool-nome">Cloudflare Pages</div>
+        <div class="tool-subtitulo">Hospedagem gratuita e global com deploy automático pelo Git</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Grátis</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">Cloudflare Pages é onde o frontend (o que o usuário vê no navegador) fica hospedado. Você conecta com o seu repositório GitHub, e toda vez que fizer push no código, o deploy acontece automaticamente em segundos. O site fica disponível globalmente na rede da Cloudflare — o mesmo CDN que serve sites com bilhões de visitantes.</p>
+      <p class="texto"><strong>Hosting gratuito, ilimitado, com HTTPS automático e domínio próprio grátis.</strong> Para um freelancer ou agência pequena, elimina completamente o custo de hospedagem de sites estáticos e aplicações frontend.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que faz nos projetos de automação & SaaS</div>
+      <p class="texto">Pages é onde qualquer frontend da stack fica hospedado. É a "vitrine" — tudo que o usuário acessa pelo navegador passa pelo Pages.</p>
+      <ul class="lista">
+        <li><strong>Hospeda o SaaS:</strong> o dashboard do produto, o portal do cliente, a área de admin — tudo em Pages. Grátis, global, sem configurar servidor.</li>
+        <li><strong>Landing pages da agência e dos produtos:</strong> site de apresentação da agência, landing page de cada produto SaaS vertical — deploy em segundos pelo GitHub.</li>
+        <li><strong>Deploy automático para cada cliente:</strong> cada cliente do SaaS tem sua própria instância? Cada push no código atualiza todos automaticamente. Sem processo manual de atualização.</li>
+        <li><strong>Ambiente de staging gratuito:</strong> cada branch do Git gera uma URL de preview única. Mostra o cliente a nova feature antes de publicar — sem precisar de servidor separado de staging.</li>
+        <li><strong>Domínio próprio do cliente:</strong> `sistema.empresacliente.com.br` — DNS apontado para Pages, SSL configurado automaticamente. O cliente vê o produto no próprio domínio.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Fluxo de desenvolvimento com Pages</div>
+      <div class="flow-inline">
+        <span class="flow-pill">💻 Edita o código</span>
+        <span class="flow-arr">→</span>
+        <span class="flow-pill">📤 git push</span>
+        <span class="flow-arr">→</span>
+        <span class="flow-pill">⚙️ Pages faz o build</span>
+        <span class="flow-arr">→</span>
+        <span class="flow-pill">🌐 Site ao vivo</span>
+      </div>
+      <p class="texto">Para o cliente: o site tem um domínio tipo <code style="font-family:monospace;font-size:13px;color:var(--cyan)">empresa.pages.dev</code> ou você aponta o domínio próprio do cliente. A configuração de DNS fica no Cloudflare também — tudo no mesmo painel.</p>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ 12 · ASTRO ████ -->
+  <div class="tool-section" id="astro">
+    <div class="tool-header">
+      <div class="tool-icon-big" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">🚀</div>
+      <div class="tool-title-block">
+        <div class="tool-num">Ferramenta 12 · Infraestrutura</div>
+        <div class="tool-nome">Astro</div>
+        <div class="tool-subtitulo">O framework que constrói sites e dashboards ultrarrápidos</div>
+      </div>
+      <div class="tool-custo-badge">
+        <div class="custo-label">Custo</div>
+        <div class="custo-val" style="color:var(--green)">Open source · Grátis</div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que é</div>
+      <p class="texto">Astro é um framework web moderno para construir sites e aplicações que precisam ser rápidas. A filosofia dele é simples: <strong>"envie o mínimo de JavaScript possível para o navegador"</strong>. Ao contrário de React ou Next.js, Astro por padrão gera HTML puro no servidor — o que resulta em páginas que carregam instantaneamente.</p>
+      <p class="texto">Para o Sistema 5 (Dashboard), Astro é o framework perfeito porque integra nativamente com Cloudflare Workers e D1, tem suporte a Server-Side Rendering (SSR) e é moderno o suficiente para criar interfaces profissionais com componentes reutilizáveis.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Por que Astro e não React/Next.js</div>
+      <ul class="lista">
+        <li><strong>Mais rápido por padrão:</strong> sem bundle de JavaScript pesado. O dashboard carrega em menos de 1 segundo mesmo em conexão lenta.</li>
+        <li><strong>Integração nativa com Cloudflare:</strong> tem adapter oficial para Workers e Pages. Funciona sem configuração extra.</li>
+        <li><strong>Mais simples para quem está aprendendo:</strong> você escreve HTML, CSS e JavaScript padrão. Não precisa aprender o ecossistema React do zero.</li>
+        <li><strong>Flexível:</strong> se quiser usar um componente React ou Vue em alguma parte, Astro deixa. Você mistura o que precisar.</li>
+        <li><strong>EmDash (Abr/2026):</strong> o novo adapter da Cloudflare para Astro simplificou ainda mais a integração com Workers, D1 e R2 — deploy em um comando.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">O que constrói nos projetos de automação & SaaS</div>
+      <p class="texto">Astro é o framework de escolha para qualquer interface que vai para produção — desde uma landing page até o dashboard completo do SaaS.</p>
+      <ul class="lista">
+        <li><strong>Dashboard do SaaS vertical:</strong> painel de gestão para o nicho do produto. Dados em tempo real do D1 via Workers. Componentes reutilizáveis (tabelas, gráficos, filtros) que funcionam em qualquer vertical.</li>
+        <li><strong>Portal multi-tenant para clientes:</strong> cada cliente do SaaS tem login próprio e vê só os próprios dados. Astro + Workers gerenciam a sessão e o roteamento por `client_id`.</li>
+        <li><strong>Ferramentas internas da agência:</strong> o sistema de diagnóstico, gerador de proposta, calculadora de ROI — tudo construído em Astro e hospedado no Pages para uso interno.</li>
+        <li><strong>Formulários que disparam automações:</strong> qualquer ponto onde um humano precisa inserir dados para iniciar um processo automatizado (proposta, contrato, briefing, onboarding) vira uma página Astro.</li>
+        <li><strong>Sites de clientes:</strong> além do SaaS, a agência constrói sites institucionais e landing pages. Astro é o framework padrão — rápido, barato de hospedar, fácil de manter.</li>
+        <li><strong>Produto próprio escalável:</strong> quando o SaaS de um nicho validado precisa crescer para múltiplos clientes, Astro + Workers + D1 é a stack que escala sem mudar de tecnologia.</li>
+      </ul>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Como é o código Astro — básico</div>
+      <div class="code-block">
+<span class="comment">// src/pages/dashboard.astro</span>
+---
+<span class="comment">// Esta parte roda no servidor (Cloudflare Workers)</span>
+const clienteId = Astro.locals.usuario.id;
+const chamados = await env.DB.prepare(
+  'SELECT * FROM chamados WHERE cliente_id = ? AND status = "aberto"'
+).bind(clienteId).all();
+---
+
+<span class="comment">&lt;!-- Esta parte é o HTML que vai para o navegador --&gt;</span>
+&lt;h1&gt;Chamados Abertos&lt;/h1&gt;
+{chamados.results.map(c =&gt; (
+  &lt;div class="chamado"&gt;
+    &lt;span&gt;{c.equipamento}&lt;/span&gt;
+    &lt;span&gt;{c.tipo}&lt;/span&gt;
+  &lt;/div&gt;
+))}
+      </div>
+      <p class="texto">O bloco entre <code style="font-family:monospace;font-size:13px;color:var(--cyan)">---</code> roda no servidor antes de enviar para o usuário. O HTML abaixo é o que aparece na tela. Isso é SSR — Server-Side Rendering — dados frescos, sem necessidade de JavaScript no navegador para buscar.</p>
+    </div>
+
+    <div class="bloco">
+      <div class="bloco-label">Curva de aprendizado</div>
+      <p class="texto">Para quem já sabe HTML e CSS básico: Astro é o framework mais gentil para aprender. Em 2 a 3 dias de estudo você consegue criar um site funcional. Em 2 semanas, um dashboard básico integrado com D1.</p>
+      <ul class="lista">
+        <li>Dia 1–2: instalar Astro, criar páginas, entender layouts e componentes</li>
+        <li>Dia 3–5: aprender SSR, formulários, comunicação com API</li>
+        <li>Semana 2: integrar com Workers e D1, autenticação simples</li>
+        <li>Semana 3+: dashboard completo com dados reais</li>
+      </ul>
+      <p class="texto">Recurso principal: <strong>docs.astro.build</strong> — documentação em inglês excelente. No YouTube, canal do Astro tem tutoriais oficiais.</p>
+    </div>
+
+    <div class="callout" style="background:var(--purple-bg);border-color:var(--purple-dark)">
+      <div class="callout-label" style="color:var(--purple)">💡 Como eu explico para o cliente</div>
+      <div class="callout-text" style="color:var(--muted2)">"Astro é o que constroí o painel que você vai usar. É como o React, mas mais rápido e mais simples. Para você, o resultado é: um dashboard que abre em menos de 1 segundo em qualquer dispositivo, com todos os dados da sua empresa em tempo real."</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+
+  <!-- ████ RESUMO FINAL ████ -->
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:36px;margin-top:20px">
+    <div class="eyebrow" style="margin-bottom:20px">Resumo · Custo Total da Stack</div>
+    <table class="custo-table">
+      <tr><th>Ferramenta</th><th>Função</th><th>Custo estimado</th></tr>
+      <tr><td>n8n (Railway)</td><td>Orquestração central</td><td class="ouro">~US$5–10/mês</td></tr>
+      <tr><td>Claude API (Haiku+Sonnet)</td><td>Inteligência artificial</td><td class="ouro">~R$50–150/mês</td></tr>
+      <tr><td>Z-API</td><td>Gateway WhatsApp</td><td class="ouro">R$100–150/mês</td></tr>
+      <tr><td>Typebot (self-hosted)</td><td>Chatbot visual</td><td class="verde">Grátis</td></tr>
+      <tr><td>Clay</td><td>Enriquecimento de leads</td><td class="ouro">US$149/mês (só para prospecção)</td></tr>
+      <tr><td>Apollo.io (Free)</td><td>Base de leads B2B</td><td class="verde">Grátis</td></tr>
+      <tr><td>Google Sheets</td><td>Dados e CRM simples</td><td class="verde">Grátis</td></tr>
+      <tr><td>Cloudflare D1 + R2 + Workers + Pages</td><td>Infraestrutura completa</td><td class="verde">Grátis (até limite generoso)</td></tr>
+      <tr><td>Astro</td><td>Framework frontend</td><td class="verde">Open source · Grátis</td></tr>
+    </table>
+    <div style="background:var(--gold-bg);border:1px solid var(--gold-dark);border-radius:12px;padding:18px 22px;margin-top:20px">
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:16px">💰 Custo por fase da agência</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px">Fase 1 · Primeiros clientes</div>
+          <div style="font-size:20px;font-weight:900;font-family:'Cinzel',serif;color:var(--gold)">~R$350–500/mês</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:4px">n8n + Claude + Z-API. Cloudflare grátis. Sem Clay ainda.</div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px">Fase 2 · Prospecção ativa</div>
+          <div style="font-size:20px;font-weight:900;font-family:'Cinzel',serif;color:var(--gold)">~R$1.100–1.500/mês</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:4px">+ Clay (US$149). Clay se paga com 1 cliente fechado.</div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px">Fase 3 · SaaS em produção</div>
+          <div style="font-size:20px;font-weight:900;font-family:'Cinzel',serif;color:var(--gold)">~R$600–800/mês</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:4px">Workers Paid (US$5) + D1 + R2. Cloudflare escala com o produto sem salto de custo.</div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px">Custo que vai para o cliente</div>
+          <div style="font-size:20px;font-weight:900;font-family:'Cinzel',serif;color:var(--green)">Z-API: R$100–150/mês</div>
+          <div style="font-size:12px;color:var(--muted2);margin-top:4px">Repassado na mensalidade. O resto da stack é custo fixo da agência.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+</body>
+</html>

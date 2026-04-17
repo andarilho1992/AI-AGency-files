@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do Zero à Primeira Tela | Figma Onboarding</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0A0A0B;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #F4F4F5;
+            --text-secondary: #A1A1AA;
+            --accent-glow: rgba(16, 185, 129, 0.15); /* Greenish accent */
+            --accent-color: #10B981;
+            --accent-gradient: linear-gradient(135deg, #10B981, #06b6d4, #3b82f6);
+            --figma-dark: #1E1E1E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 80% 20%, var(--accent-glow) 0%, transparent 40%),
+                radial-gradient(circle at 10% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .pill-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #34D399;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-sub {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+            display: gap;
+        }
+
+        /* Mermaid Graph Section */
+        .mindmap-container {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .mindmap-container h2 {
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Step Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .step-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .step-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.05);
+            position: absolute;
+            top: 20px;
+            right: 32px;
+            line-height: 1;
+        }
+
+        .step-card:hover .step-num {
+            color: rgba(16, 185, 129, 0.2);
+        }
+
+        .step-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 16px;
+            z-index: 1;
+            padding-right: 40px;
+        }
+
+        .checklist {
+            list-style: none;
+            margin-top: auto;
+            z-index: 1;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            color: #CBD5E1;
+            font-size: 0.95rem;
+        }
+
+        .checklist li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .copy-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.2);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 60px;
+            font-family: monospace;
+            color: #94A3B8;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="pill-badge">Base Absoluta • Setup Inicial</div>
+        <h1>Do Zero à Primeira Tela</h1>
+        <p class="header-sub">O fluxo linear de inicialização do Figma, construído como um mapa mental interativo e passos mecânicos perfeitos para arquitetura Sênior.</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Interactive Mindmap -->
+        <div class="mindmap-container">
+            <h2>🧠 Mapa Mental do Fluxo (Interativo)</h2>
+            <p style="color:#94a3b8; margin-bottom: 24px; font-size: 0.9rem;">(A arquitetura visual do que fazemos na segunda-feira de manhã)</p>
+            <div class="mermaid">
+                mindmap
+                  root((Figma_ <br/>A Primeira<br/>Tela))
+                    1. O Terreno
+                      P1 Referências
+                      P2 Design System
+                      P3 UI Oficial Final
+                    2. A Máquina
+                      Preferences _ Nudge
+                      Big Nudge _ 8px
+                    3. Textos (Cozinha)
+                      Plugin Typescales
+                      Ratio 1.25
+                      Salvar H1 em Local Styles
+                    4. Cores (Cozinha)
+                      Criar 3 Quadrados
+                      Pintar (Marca, Fundo e Texto)
+                      Salvar Cor no Fill Styles
+                    5. O Botão (Acabamento)
+                      Jogar Texto Limpo
+                      Shift A (Auto Layout)
+                      Paddings (X: 24, Y:16)
+                      Border Radius 8px
+            </div>
+        </div>
+
+        <!-- Cards com o passo a passo Masterclass -->
+        <div class="steps-grid">
+            
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <h3>O Terreno e as Gavetas</h3>
+                <ul class="checklist">
+                    <li>Abra os <b>Rascunhos (Drafts)</b> e crie um Arquivo Novo.</li>
+                    <li>No painel esquerdo, renomeie a Page 1 para <b>Referências</b>.</li>
+                    <li>Crie a Page 2: <b>Design System</b> e Page 3: <b>UI Oficial</b>. <i>(Nunca desenhe e guarde pedaços na mesma gaveta).</i></li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <h3>O Freio Matemático (Nudge)</h3>
+                <ul class="checklist">
+                    <li>Clique no menu global Figma > Preferências > <b>Valor de deslocamento</b> (Nudge).</li>
+                    <li>Troque o valor Maior (Big Nudge) de 10 para <b>8</b>.</li>
+                    <li><i>Resultado: O `Shift+Setas` do seu teclado agora respeitará a regra de ouro de 8px e as distâncias do código renderizarão perfeitas.</i></li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <h3>Tipografia: A Receita</h3>
+                <ul class="checklist">
+                    <li>Pressione `Ctrl+P` e abra <b>Typescales</b>. Crie a lista base 1.25.</li>
+                    <li>Selecione o título gigante. Vá no painel direito (Text), clique nos <b>4 pontinhos</b>.</li>
+                    <li>Aperte [+] e armazene como `H1 - Título Primário`. Repita para o texto normal.</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-num">04</div>
+                <h3>Cores: Os Potes de Tinta</h3>
+                <ul class="checklist">
+                    <li>Pressione <b>R</b> e crie 3 quadrados: (1 Principal, 1 Fundo Cinza papel, 1 Grafite texto).</li>
+                    <li>Pinte-os nos hexadecimais no painel Fill.</li>
+                    <li>Assim como nas fontes, acesse os <b>4 pontinhos</b> do Fill e cadastre seus 3 tons vitais no Style local para nunca mais errar o código rgb.</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-num">05</div>
+                <h3>Prancheta do Produto</h3>
+                <ul class="checklist">
+                    <li>Vá para a página "UI Oficial". Tecle <b>F</b> (Frame) e clique em <b>Desktop</b>.</li>
+                    <li>Puxe no painel de tintas que você gravou (Fill) a cor Cinza claríssima de Papel para forrar toda a tela de fundo.</li>
+                    <li>Puxe a sua fonte H1 batizada e digite a manchete no meio da página.</li>
+                </ul>
+            </div>
+
+            <div class="step-card" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
+                <div class="step-num" style="color: rgba(16, 185, 129, 0.2);">06</div>
+                <h3>Engenharia do Botão Vivo</h3>
+                <ul class="checklist">
+                    <li>Digite <b>Acessar Conta</b> perdido na tela. Pressione as teclas <b>Shift + A</b> juntas e invoque o Deus <i>Auto Layout</i>.</li>
+                    <li>Preencha a cor da caixa (Fill) de verde. Mude a cor do texto interno pra branco.</li>
+                    <li>Vá na lateral em Auto Layout: digite Gap Horizontal <b>24</b> e Vertical <b>16</b>. Coloque Border-radius de <b>8</b>. <i>Você criou design indestrutível!</i></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script para renderizar o diagrama Mermaid no Browser Magic -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

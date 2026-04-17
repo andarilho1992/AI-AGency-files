@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações — Prospecção Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0b0d14; --bg2:#111522; --bg3:#1a1f30; --border:#1e2436;
+      --border2:#2d3454; --text:#e8dcc8; --muted:#7a7a8a; --muted2:#a09880;
+      --gold:#D9A168; --gold-dark:#8A5C2A; --gold-bg:#1E1208;
+      --purple:#C890D8; --purple-dark:#784898; --purple-bg:#1A0828;
+      --green:#68D990; --green-dark:#208850; --green-bg:#081E12;
+      --orange:#D97840; --orange-dark:#884020; --orange-bg:#1C1008;
+      --red:#D96848; --red-dark:#983828; --red-bg:#1C0C08;
+      --yellow:#E8C490; --yellow-bg:#201808;
+      --cyan:#60B8D9; --cyan-bg:#081820;
+    }
+    body { font-family:'Roboto',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; }
+
+    .sidebar { width:240px; min-height:100vh; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; bottom:0; }
+    .sidebar-logo { padding:24px 20px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+    .logo-text { font-size:15px; font-weight:700; }
+    .logo-text strong { color:var(--gold); }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:11px 20px; color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; transition:all .15s; border-left:3px solid transparent; }
+    .nav-item:hover { color:var(--text); background:var(--bg3); }
+    .nav-item.active { color:var(--gold); background:var(--gold-bg); border-left-color:var(--gold); }
+    .nav-icon { font-size:16px; width:20px; text-align:center; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); }
+    .sidebar-footer a { color:var(--gold); text-decoration:none; }
+
+    .main { margin-left:240px; flex:1; }
+    .page-header { padding:28px 32px 24px; border-bottom:1px solid var(--border); }
+    .page-header h1 { font-size:22px; font-weight:800; }
+    .page-header .subtitle { font-size:13px; color:var(--muted2); margin-top:4px; }
+    .content { padding:28px 32px 60px; max-width:700px; }
+
+    .card { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; padding:24px; margin-bottom:20px; }
+    .card-title { font-size:16px; font-weight:700; margin-bottom:4px; }
+    .card-desc { font-size:13px; color:var(--muted2); margin-bottom:20px; line-height:1.6; }
+
+    .form-group { margin-bottom:16px; }
+    label { display:block; font-size:12px; font-weight:700; color:var(--muted2); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+    input[type=text], input[type=password] { width:100%; background:var(--bg3); border:1px solid var(--border2); color:var(--text); border-radius:8px; padding:10px 14px; font-size:14px; font-family:inherit; outline:none; transition:border .15s; }
+    input:focus { border-color:var(--gold); }
+    input::placeholder { color:var(--muted); }
+    .hint { font-size:12px; color:var(--muted); margin-top:5px; line-height:1.6; }
+
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:8px; border:none; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .btn-primary { background:var(--gold); color:#000; }
+    .btn-primary:hover { background:var(--yellow); }
+
+    .passo { display:flex; gap:14px; margin-bottom:16px; align-items:flex-start; }
+    .passo-num { width:28px; height:28px; border-radius:50%; background:var(--gold-bg); border:1px solid var(--gold-dark); color:var(--gold); font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .passo-body h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+    .passo-body p { font-size:13px; color:var(--muted2); line-height:1.6; }
+    .passo-body a { color:var(--gold); }
+    .passo-body code { background:var(--bg3); padding:2px 6px; border-radius:4px; font-size:12px; font-family:monospace; color:var(--yellow); }
+
+    .status-ok { background:var(--green-bg); border:1px solid var(--green-dark); color:var(--green); border-radius:8px; padding:10px 14px; font-size:13px; display:none; margin-top:10px; }
+    .status-err { background:var(--red-bg); border:1px solid var(--red-dark); color:var(--red); border-radius:8px; padding:10px 14px; font-size:13px; display:none; margin-top:10px; }
+
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--gold-dark); color:var(--text); padding:12px 20px; border-radius:10px; font-size:14px; font-weight:500; z-index:9999; display:none; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span style="font-size:22px">🔍</span>
+      <span class="logo-text">Prospecção<strong>Pro</strong></span>
+    </div>
+    <nav style="flex:1;padding:12px 0">
+      <a href="index.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="buscar.html" class="nav-item"><span class="nav-icon">🔎</span> Buscar Comentários</a>
+      <a href="leads.html" class="nav-item"><span class="nav-icon">🎯</span> Leads Salvos</a>
+      <a href="configuracoes.html" class="nav-item active"><span class="nav-icon">⚙️</span> Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      Andarilho Digital · Agência<br>
+      <a href="../orcamentos-crm/index.html">→ Sistema de Orçamentos</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <h1>⚙️ Configurações</h1>
+      <p class="subtitle">Configure sua API Key do YouTube para começar</p>
+    </header>
+
+    <div class="content">
+
+      <!-- COMO OBTER A API KEY -->
+      <div class="card">
+        <div class="card-title">🔑 Como obter a API Key (gratuita, 5 min)</div>
+        <div class="card-desc">A YouTube Data API v3 é gratuita. Você tem 10.000 unidades por dia — suficiente para analisar centenas de comentários diariamente.</div>
+
+        <div class="passo">
+          <div class="passo-num">1</div>
+          <div class="passo-body">
+            <h4>Acesse o Google Cloud Console</h4>
+            <p>Vá em <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> e faça login com sua conta Google.</p>
+          </div>
+        </div>
+
+        <div class="passo">
+          <div class="passo-num">2</div>
+          <div class="passo-body">
+            <h4>Crie um projeto</h4>
+            <p>Clique em "Selecionar projeto" → "Novo projeto" → dê um nome (ex: <code>prospeccao-andarilho</code>) → Criar.</p>
+          </div>
+        </div>
+
+        <div class="passo">
+          <div class="passo-num">3</div>
+          <div class="passo-body">
+            <h4>Ative a YouTube Data API v3</h4>
+            <p>No menu lateral: "APIs e serviços" → "Biblioteca" → busque <code>YouTube Data API v3</code> → clique → "Ativar".</p>
+          </div>
+        </div>
+
+        <div class="passo">
+          <div class="passo-num">4</div>
+          <div class="passo-body">
+            <h4>Crie a credencial (API Key)</h4>
+            <p>"APIs e serviços" → "Credenciais" → "+ Criar credenciais" → "Chave de API". A chave aparece na tela — copie ela.</p>
+          </div>
+        </div>
+
+        <div class="passo">
+          <div class="passo-num">5</div>
+          <div class="passo-body">
+            <h4>Cole a chave abaixo e salve</h4>
+            <p>Pronto. A chave fica salva só no seu navegador, nunca vai para a internet.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <div class="card">
+        <div class="card-title">Sua API Key</div>
+        <div class="card-desc">Fica salva localmente no navegador. Nunca é enviada para nenhum servidor externo.</div>
+
+        <div class="form-group">
+          <label>YouTube Data API v3 Key</label>
+          <input type="password" id="api-key" placeholder="AIza..." autocomplete="off" />
+          <p class="hint">Começa com <code style="background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--yellow)">AIza</code> e tem 39 caracteres.</p>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="salvar()">💾 Salvar API Key</button>
+          <button class="btn" style="background:var(--bg3);color:var(--muted2);border:1px solid var(--border2)" onclick="testar()">🧪 Testar conexão</button>
+        </div>
+
+        <div class="status-ok" id="status-ok">✅ API Key válida! Você pode começar a buscar comentários.</div>
+        <div class="status-err" id="status-err" id="status-err"></div>
+      </div>
+
+      <!-- DADOS -->
+      <div class="card">
+        <div class="card-title">🗄️ Dados armazenados</div>
+        <div id="info-dados" style="font-size:13px;color:var(--muted2);line-height:1.8;margin-bottom:16px"></div>
+        <button class="btn" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-dark);font-size:13px;padding:8px 14px" onclick="limparTudo()">
+          🗑 Limpar todos os dados
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/youtube.js"></script>
+  <script>
+    function toast(msg, ms = 2500) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', ms);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const cfg = Storage.getConfig();
+      if (cfg.apiKey) {
+        document.getElementById('api-key').value = cfg.apiKey;
+      }
+
+      const comentarios = Storage.getComentarios();
+      const leads = Storage.getLeads();
+      const hist = Storage.getHistorico();
+      const comDores = comentarios.filter(c => c.dores?.length > 0);
+
+      document.getElementById('info-dados').innerHTML = `
+        <div>💬 <strong>${comentarios.length}</strong> comentários analisados (${comDores.length} com dores)</div>
+        <div>🎯 <strong>${leads.length}</strong> leads salvos</div>
+        <div>📋 <strong>${hist.length}</strong> buscas no histórico</div>
+      `;
+    });
+
+    function salvar() {
+      const key = document.getElementById('api-key').value.trim();
+      if (!key) {
+        toast('Cole a API Key antes de salvar.');
+        return;
+      }
+      Storage.salvarConfig({ ...Storage.getConfig(), apiKey: key });
+      toast('✓ API Key salva!');
+    }
+
+    async function testar() {
+      const key = document.getElementById('api-key').value.trim();
+      if (!key) {
+        toast('Cole a API Key antes de testar.');
+        return;
+      }
+
+      document.getElementById('status-ok').style.display = 'none';
+      document.getElementById('status-err').style.display = 'none';
+
+      try {
+        // Testa com um vídeo público qualquer
+        const info = await buscarInfoVideo('dQw4w9WgXcQ', key);
+        document.getElementById('status-ok').style.display = 'block';
+        // Salva automaticamente se válida
+        Storage.salvarConfig({ ...Storage.getConfig(), apiKey: key });
+      } catch(e) {
+        const el = document.getElementById('status-err');
+        el.textContent = `❌ Erro: ${e.message}`;
+        el.style.display = 'block';
+      }
+    }
+
+    function limparTudo() {
+      if (!confirm('Apagar TODOS os dados? (comentários, leads, histórico, API key)')) return;
+      ['prosp_config','prosp_comentarios','prosp_leads','prosp_historico'].forEach(k => localStorage.removeItem(k));
+      toast('Todos os dados foram apagados.');
+      setTimeout(() => location.reload(), 1000);
+    }
+  </script>
+</body>
+</html>

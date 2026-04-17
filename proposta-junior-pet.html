@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Proposta — Junior & Pets Go Company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0b;
+  --bg2:#111113;
+  --bg3:#17171a;
+  --card:#141416;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.14);
+  --gold:#e7c9a3;
+  --gold-dim:rgba(231,201,163,.08);
+  --rust:#C13D14;
+  --rust-dim:rgba(193,61,20,.12);
+  --rust-glow:rgba(193,61,20,.3);
+  --text:#f0ede6;
+  --muted:#5e5e64;
+  --muted2:#9898a0;
+  --green:#4ade80;
+  --green-dim:rgba(74,222,128,.1);
+  --blue:#60a5fa;
+  --blue-dim:rgba(96,165,250,.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 24px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+  width:800px;height:800px;border-radius:50%;
+  background:radial-gradient(circle,rgba(193,61,20,.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--rust-dim);border:1px solid rgba(193,61,20,.3);
+  color:var(--rust);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 16px;border-radius:20px;margin-bottom:32px;
+}
+.badge span{width:6px;height:6px;border-radius:50%;background:var(--rust);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--rust)}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--muted2);max-width:560px;line-height:1.6;margin-bottom:48px}
+.hero-name{
+  font-size:13px;color:var(--muted);border-top:1px solid var(--border);
+  padding-top:24px;margin-top:8px;letter-spacing:.05em;
+}
+.hero-name strong{color:var(--gold)}
+
+/* ── SECTION ── */
+.section{padding:100px 24px;max-width:1000px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--rust);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--muted2);line-height:1.7;max-width:580px;margin-bottom:48px}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:0}
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:28px;transition:border-color .2s,transform .2s;
+}
+.card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.card-icon{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.ci-rust{background:var(--rust-dim)}
+.ci-gold{background:rgba(231,201,163,.1)}
+.ci-green{background:var(--green-dim)}
+.ci-blue{background:var(--blue-dim)}
+.card-icon svg{width:20px;height:20px;stroke-width:1.8;fill:none}
+.ci-rust svg{stroke:var(--rust)}
+.ci-gold svg{stroke:var(--gold)}
+.ci-green svg{stroke:var(--green)}
+.ci-blue svg{stroke:var(--blue)}
+.card h3{font-size:15px;font-weight:700;margin-bottom:8px}
+.card p{font-size:13px;color:var(--muted2);line-height:1.6}
+
+/* ── FLOW ── */
+.flow{display:flex;flex-direction:column;gap:0;margin:48px 0}
+.flow-item{display:flex;gap:20px;align-items:flex-start;position:relative}
+.flow-item:not(:last-child)::before{
+  content:'';position:absolute;left:19px;top:44px;width:2px;height:calc(100% + 0px);
+  background:linear-gradient(var(--border2),transparent);
+}
+.flow-dot{
+  width:40px;height:40px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:13px;font-weight:800;color:var(--rust);
+}
+.flow-content{padding:8px 0 40px}
+.flow-content h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.flow-content p{font-size:13px;color:var(--muted2);line-height:1.6}
+
+/* ── DIVIDER ── */
+.divider{border:none;border-top:1px solid var(--border);margin:0}
+
+/* ── PRICING ── */
+.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:48px}
+.price-card{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;
+  position:relative;
+}
+.price-card.featured{border-color:var(--rust);background:linear-gradient(135deg,rgba(193,61,20,.06),var(--card))}
+.price-tag{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--rust);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;
+  padding:4px 16px;border-radius:20px;white-space:nowrap;
+}
+.price-phase{font-size:11px;font-weight:700;color:var(--rust);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.price-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.price-desc{font-size:13px;color:var(--muted2);margin-bottom:28px;line-height:1.5}
+.price-main{margin-bottom:8px}
+.price-val{font-size:42px;font-weight:900;letter-spacing:-.03em}
+.price-val span{font-size:16px;font-weight:500;color:var(--muted2)}
+.price-recur{font-size:13px;color:var(--muted2);margin-bottom:28px}
+.price-recur strong{color:var(--gold)}
+.price-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.price-list li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted2);line-height:1.5}
+.price-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* ── HIGHLIGHT ── */
+.highlight{
+  background:linear-gradient(135deg,rgba(193,61,20,.08),rgba(231,201,163,.04));
+  border:1px solid rgba(193,61,20,.2);border-radius:20px;padding:48px;
+  margin:48px 0;text-align:center;
+}
+.highlight h3{font-size:28px;font-weight:900;margin-bottom:12px;letter-spacing:-.02em}
+.highlight p{font-size:16px;color:var(--muted2);line-height:1.7;max-width:540px;margin:0 auto 32px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--rust);color:#fff;font-size:14px;font-weight:700;
+  padding:14px 28px;border-radius:12px;border:none;cursor:pointer;
+  transition:all .2s;text-decoration:none;
+}
+.btn:hover{background:#d4451a;box-shadow:0 8px 24px var(--rust-glow);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{background:var(--gold-dim);border-color:var(--gold);box-shadow:none}
+
+/* ── SAAS ── */
+.saas-vision{
+  background:var(--bg2);border:1px solid var(--border);border-radius:24px;
+  padding:48px;margin:48px 0;
+}
+.saas-vision h3{font-size:24px;font-weight:900;margin-bottom:8px;letter-spacing:-.02em}
+.saas-vision .sub{font-size:14px;color:var(--muted2);margin-bottom:32px;line-height:1.6}
+.saas-features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sf{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.sf-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:12px}
+.sf h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.sf p{font-size:12px;color:var(--muted2);line-height:1.5}
+
+/* ── TIMELINE ── */
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
+.tl-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative}
+.tl-step{font-size:10px;font-weight:700;color:var(--rust);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.tl-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.tl-desc{font-size:12px;color:var(--muted2);line-height:1.5}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:60px 24px;border-top:1px solid var(--border)}
+.footer p{font-size:13px;color:var(--muted);line-height:1.7}
+.footer strong{color:var(--gold)}
+
+/* ── QUOTE ── */
+.quote{
+  border-left:3px solid var(--rust);padding:20px 24px;
+  background:var(--rust-dim);border-radius:0 12px 12px 0;
+  margin:32px 0;font-size:15px;color:var(--muted2);line-height:1.7;font-style:italic;
+}
+.quote strong{color:var(--text);font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><span></span>Proposta Exclusiva · Abril 2026</div>
+  <h1>Junior, imagina a <em>Pets Go Company</em><br/>trabalhando pra ti enquanto você dorme</h1>
+  <p class="hero-sub">Um sistema de IA que responde clientes e capta leads<br/>no WhatsApp — 24h por dia, sem tu precisar estar online.</p>
+</section>
+
+<hr class="divider"/>
+
+<!-- O PROBLEMA -->
+<section class="section">
+  <div class="section-label">O cenário atual</div>
+  <h2 class="section-title">Quantos clientes somem<br/>antes de você responder?</h2>
+  <p class="section-sub">Tu sabe disso melhor do que ninguém. O tutor manda mensagem, tu tá ocupado, e quando vai responder — ele já escolheu outra creche.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon ci-rust">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>Tempo médio de resposta manual</h3>
+      <p>A maioria dos negócios demora 2–4 horas pra responder no WhatsApp. O cliente já decidiu em menos de 10 minutos.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon ci-gold">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>Lead quente esfria rápido</h3>
+      <p>Um tutor que perguntou o preço agora e não recebeu resposta em 15 minutos tem 80% menos chance de fechar.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon ci-green">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h3>Receita invisível sendo perdida</h3>
+      <p>Cada cliente que some no WhatsApp representa R$300–800 em serviços mensais que simplesmente evaporaram.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- A SOLUÇÃO -->
+<section class="section">
+  <div class="section-label">A solução</div>
+  <h2 class="section-title">Um funcionário de IA que<br/>nunca dorme, nunca erra</h2>
+  <p class="section-sub">Enquanto tu tá no banho, no atendimento ou dormindo — o sistema já respondeu, já anotou o lead e já deixou tudo pronto pra tu fechar.</p>
+
+  <div class="flow">
+    <div class="flow-item">
+      <div class="flow-dot">1</div>
+      <div class="flow-content">
+        <h4>Tutor manda mensagem no WhatsApp</h4>
+        <p>Qualquer horário, qualquer dia. Pergunta sobre preço, disponibilidade, serviços — o sistema captura tudo.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">2</div>
+      <div class="flow-content">
+        <h4>IA responde em segundos com contexto real</h4>
+        <p>Não é um chatbot genérico. A IA conhece seus serviços, preços, diferenciais e responde como um atendente treinado da Pets Go Company.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">3</div>
+      <div class="flow-content">
+        <h4>Lead qualificado e registrado automaticamente</h4>
+        <p>Nome, contato e mensagem do cliente entram direto no sistema de gestão. Nenhum lead esquecido, nenhum post-it perdido.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">4</div>
+      <div class="flow-content">
+        <h4>Você fecha a venda com quem já está aquecido</h4>
+        <p>Quando você entrar na conversa, o cliente já foi atendido, já tem informação, já está pronto pra decidir.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote">
+    <strong>Na prática:</strong> tu acorda de manhã, abre o WhatsApp e já tem 3 leads respondidos e anotados. A IA trabalhou a noite toda enquanto tu dormia.
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- INVESTIMENTO FASE 1 -->
+<section class="section">
+  <div class="section-label">Investimento</div>
+  <h2 class="section-title">Fase 1 — Sistema na<br/>Pets Go Company</h2>
+  <p class="section-sub">Tu é o primeiro. E isso tem um valor real — tu vira o case que vai abrir porta pra outros negócios. Por isso o preço é de amigo.</p>
+
+  <div class="pricing">
+    <div class="price-card featured">
+      <div class="price-tag">Preço de parceiro</div>
+      <div class="price-phase">Setup único</div>
+      <div class="price-title">Implementação completa</div>
+      <div class="price-desc">Configuração, personalização e entrega do sistema funcionando na sua empresa.</div>
+      <div class="price-main">
+        <div class="price-val">R$2.000 <span>setup</span></div>
+      </div>
+      <div class="price-recur">+ <strong>R$400/mês</strong> de manutenção</div>
+      <ul class="price-list">
+        <li>Atendimento automático via WhatsApp 24h</li>
+        <li>IA treinada com os serviços e preços da Pets Go Company</li>
+        <li>Registro automático de todos os leads</li>
+        <li>Painel de gestão de clientes e contatos</li>
+        <li>Suporte direto comigo pra ajustes</li>
+        <li>Atualizações inclusas na mensalidade</li>
+      </ul>
+    </div>
+
+    <div class="price-card">
+      <div class="price-phase">Comparativo de mercado</div>
+      <div class="price-title">Preço normal do serviço</div>
+      <div class="price-desc">O que outros negócios pagam pela mesma solução, sem o desconto de parceiro.</div>
+      <div class="price-main">
+        <div class="price-val" style="color:var(--muted2)">R$4.000 <span>setup</span></div>
+      </div>
+      <div class="price-recur">+ <strong style="color:var(--muted2)">R$900/mês</strong> de manutenção</div>
+      <ul class="price-list">
+        <li style="color:var(--muted)">Mesmo sistema</li>
+        <li style="color:var(--muted)">Mesma qualidade</li>
+        <li style="color:var(--muted)">Mesmo suporte</li>
+        <li style="color:var(--muted)">Sem o desconto de amigo</li>
+        <li style="color:var(--muted)">Sem participação no que vem depois</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:48px">
+    <h3>Tu economiza R$2.000 no setup<br/>e R$500 todo mês</h3>
+    <p>Em 12 meses, a diferença chega a R$8.000. Isso é o preço de amigo — e do que a gente constrói junto depois disso.</p>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- FASE 2 — SAAS -->
+<section class="section">
+  <div class="section-label">O que vem depois</div>
+  <h2 class="section-title">Fase 2 — O SaaS que<br/>domina o nicho pet</h2>
+  <p class="section-sub">O sistema que você vai ter na Pets Go Company é só o começo. A próxima etapa é transformar isso num produto vendido para centenas de creches pets no Brasil.</p>
+
+  <div class="saas-vision">
+    <h3>Gestão completa para creches pet</h3>
+    <p class="sub">Uma plataforma que todo pet business vai querer — construída a partir da experiência real da Pets Go Company.</p>
+
+    <div class="saas-features">
+      <div class="sf">
+        <div class="sf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+        </div>
+        <h4>Atendimento com IA</h4>
+        <p>O mesmo sistema que tu vai ter, disponível como produto pra qualquer creche pet do Brasil.</p>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        </div>
+        <h4>Gestão de check-in/out</h4>
+        <p>Registro de entrada e saída dos pets, fichas, histórico e notificação automática pro tutor.</p>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <h4>Cobranças automáticas</h4>
+        <p>Mensalidades, diárias e pacotes cobrados automaticamente via PIX ou cartão.</p>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h4>Relatórios e receita</h4>
+        <p>Dashboard com faturamento, ocupação, leads e métricas do negócio em tempo real.</p>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5-7-5"/><rect x="1" y="4" width="22" height="16" rx="2"/></svg>
+        </div>
+        <h4>Updates pra tutores</h4>
+        <p>Envio automático de fotos e status do pet via WhatsApp durante o dia na creche.</p>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h4>Agendamento online</h4>
+        <p>Tutores agendam diretamente pelo link, sem precisar de WhatsApp manual.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:48px">Roadmap</div>
+  <h3 style="font-size:20px;font-weight:800;margin-bottom:24px">Como chegamos lá</h3>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-step">Agora — Mês 1</div>
+      <div class="tl-title">Sistema na Pets Go Company</div>
+      <div class="tl-desc">Implantamos, testamos e ajustamos. Você vira o case real.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-step">Mês 2–3</div>
+      <div class="tl-title">Validação e primeiros resultados</div>
+      <div class="tl-desc">Documentamos o que funcionou. Leads gerados, tempo economizado, receita recuperada.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-step">Mês 4–6</div>
+      <div class="tl-title">Desenvolvimento do SaaS</div>
+      <div class="tl-desc">Construímos a plataforma completa baseada na experiência real do seu negócio.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-step">Mês 7+</div>
+      <div class="tl-title">Lançamento e escala</div>
+      <div class="tl-desc">Venda pra outras creches pets. Você como primeiro usuário e parceiro do produto.</div>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:48px">
+    <h3>Tua posição no SaaS</h3>
+    <p>Por ser o primeiro — o case real, o cara que acreditou antes de todo mundo — tu não é só cliente. Tu entra como parte da história. Os detalhes a gente acerta junto, mas tua posição é de quem estava lá desde o começo.</p>
+    <a href="https://wa.me/5551995478349" class="btn" style="margin-top:8px">Vamos conversar →</a>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- PRÓXIMOS PASSOS -->
+<section class="section">
+  <div class="section-label">Próximos passos</div>
+  <h2 class="section-title">Como a gente começa<br/>essa semana</h2>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon ci-rust">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>1. Confirma o projeto</h3>
+      <p>Você topa e a gente define data de início. Setup em até 7 dias após confirmação.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon ci-gold">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <h3>2. Personalizamos o sistema</h3>
+      <p>Treinamos a IA com os serviços, preços e jeito de atender da Pets Go Company.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon ci-green">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.6 4.9a2 2 0 0 1 1.95-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
+      </div>
+      <h3>3. Liga e já funciona</h3>
+      <p>Primeiro atendimento automático rodando. Você vê ao vivo o sistema trabalhando por você.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p><strong>Guilherme</strong> · Andarilho Digital<br/>
+  Automação e IA pra negócio que quer crescer sem contratar mais gente.<br/><br/>
+  <span style="color:var(--muted)">Proposta válida por 7 dias · Só pra ti</span></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Um Forasteiro — Identidade Visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --asfalto:#1C1C1C;
+  --amber:#E8820A;
+  --amber-dim:rgba(232,130,10,.12);
+  --amber-mid:rgba(232,130,10,.35);
+  --offwhite:#F2EDE6;
+  --chumbo:#4A5568;
+  --bg:#111111;
+  --surface:#1E1E1E;
+  --card:#252525;
+  --border:rgba(242,237,230,.07);
+  --text:#F2EDE6;
+  --muted:#8A8A8A;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+
+/* Progress bar */
+#spb{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--amber),#F2C77A);z-index:1000;transition:width .1s linear}
+
+/* Header */
+.site-header{padding:80px 7vw 60px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border)}
+.case-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.2em;text-transform:uppercase}
+.case-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,96px);line-height:1;color:var(--offwhite);margin-top:12px}
+.case-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.meta-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);border-radius:2px}
+
+/* Sections */
+.section{padding:100px 7vw;border-bottom:1px solid var(--border)}
+.section-number{font-family:'DM Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.25em;text-transform:uppercase;margin-bottom:16px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1;color:var(--offwhite);margin-bottom:48px}
+.section-sub{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3vw,40px);color:var(--offwhite);margin:56px 0 24px;letter-spacing:.02em}
+
+/* Grid layouts */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+.four-col{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px}
+@media(max-width:760px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:32px;transition:border-color .3s}
+.card:hover{border-color:var(--amber-mid)}
+.card-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.card-value{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--offwhite)}
+
+/* ========== 01 CONTEXTO ========== */
+.context-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start}
+.context-text p{color:var(--muted);line-height:1.8;margin-bottom:16px;font-size:15px}
+.context-text strong{color:var(--offwhite);font-weight:500}
+.contrast-block{background:var(--amber-dim);border-left:3px solid var(--amber);padding:24px 28px;border-radius:0 4px 4px 0;margin-top:32px}
+.contrast-block p{color:var(--offwhite);font-size:15px;line-height:1.7;font-style:italic}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stat-item{background:var(--card);border:1px solid var(--border);padding:24px;border-radius:4px}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--amber);line-height:1}
+.stat-desc{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+
+/* ========== 02 MARCA ========== */
+/* Logo display */
+.logo-stage{background:var(--asfalto);border:1px solid var(--border);border-radius:4px;padding:64px 40px;display:flex;justify-content:center;align-items:center;gap:60px;flex-wrap:wrap}
+.logo-variations{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:1px}
+.logo-var{padding:48px 32px;display:flex;flex-direction:column;align-items:center;gap:16px;border-right:1px solid var(--border)}
+.logo-var:last-child{border-right:none}
+.logo-var-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+.logo-var.on-light{background:var(--offwhite)}
+.logo-var.on-amber{background:var(--amber)}
+
+/* Palette */
+.palette-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:1px}
+.swatch{padding:48px 24px 24px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;border-right:1px solid var(--border)}
+.swatch:last-child{border-right:none}
+.swatch-name{font-family:'Bebas Neue',sans-serif;font-size:18px}
+.swatch-hex{font-family:'DM Mono',monospace;font-size:11px;opacity:.7}
+.swatch-role{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.5;margin-top:4px}
+
+/* Typography */
+.type-showcase{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.type-block{background:var(--bg);padding:48px 40px}
+.type-family{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px}
+.type-sample-bb{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,80px);color:var(--offwhite);line-height:1;letter-spacing:.02em}
+.type-sample-mono{font-family:'DM Mono',monospace;font-size:clamp(14px,2vw,22px);color:var(--offwhite);line-height:1.6;letter-spacing:.08em}
+.type-meta{margin-top:24px}
+.type-meta span{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--border);padding:3px 8px;margin-right:6px;margin-bottom:6px;border-radius:2px}
+
+/* ========== 03 YOUTUBE ========== */
+/* Banner */
+.yt-monitor{background:#0a0a0a;border-radius:8px;padding:16px;border:2px solid #333;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.yt-screen{position:relative;width:100%;padding-bottom:25.8%;overflow:hidden;border-radius:4px;background:#0d0d0d}
+.yt-banner-inner{position:absolute;inset:0;display:flex;align-items:center;padding:0 8%}
+.yt-left{flex:1}
+.yt-banner-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3.5vw,52px);color:var(--offwhite);line-height:1;letter-spacing:.03em}
+.yt-banner-tag{font-family:'DM Mono',monospace;font-size:clamp(8px,1.1vw,14px);color:var(--amber);letter-spacing:.2em;text-transform:uppercase;margin-top:6px}
+.yt-banner-line{width:40px;height:2px;background:var(--amber);margin:10px 0}
+.yt-banner-sched{font-family:'DM Mono',monospace;font-size:clamp(7px,.9vw,11px);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;line-height:1.8}
+.yt-banner-bg{position:absolute;right:0;top:0;bottom:0;width:40%;opacity:.08}
+.yt-banner-pattern{width:100%;height:100%;background-image:repeating-linear-gradient(45deg,var(--amber) 0,var(--amber) 1px,transparent 0,transparent 50%);background-size:12px 12px}
+.yt-banner-coords{position:absolute;right:5%;bottom:12%;font-family:'DM Mono',monospace;font-size:clamp(6px,.8vw,10px);color:var(--amber);letter-spacing:.1em}
+.yt-stand{width:40%;height:8px;background:#222;margin:0 auto;border-radius:0 0 4px 4px}
+.yt-base{width:60%;height:4px;background:#1a1a1a;margin:0 auto;border-radius:2px}
+
+/* Thumbnails */
+.thumb-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.thumb{position:relative;padding-bottom:56.25%;overflow:hidden;border-radius:4px;border:1px solid var(--border)}
+.thumb-inner{position:absolute;inset:0;display:flex;align-items:flex-end;padding:12px}
+.thumb-1{background:linear-gradient(135deg,#0d0d0d 0%,#1C1C1C 100%)}
+.thumb-2{background:linear-gradient(135deg,#1C1C1C 0%,#2a1800 100%)}
+.thumb-3{background:linear-gradient(135deg,#0a1520 0%,#1C1C1C 100%)}
+.thumb-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.8vw,22px);color:var(--offwhite);line-height:1.1;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.thumb-num{position:absolute;top:8px;right:10px;font-family:'DM Mono',monospace;font-size:clamp(8px,1vw,11px);color:var(--amber);letter-spacing:.1em}
+.thumb-tag{display:inline-block;background:var(--amber);color:#000;font-family:'DM Mono',monospace;font-size:clamp(6px,.8vw,9px);letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:2px;margin-bottom:6px}
+.thumb-accent-line{position:absolute;top:0;left:0;width:3px;height:100%;background:var(--amber)}
+
+/* ========== INSTAGRAM ========== */
+.ig-phone{width:280px;background:#111;border-radius:36px;padding:16px;border:8px solid #2a2a2a;box-shadow:0 0 0 2px #1a1a1a,0 20px 60px rgba(0,0,0,.5);margin:0 auto}
+.ig-screen{background:#fff;border-radius:24px;overflow:hidden}
+.ig-header{background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
+.ig-avatar{width:30px;height:30px;border-radius:50%;background:conic-gradient(#E8820A,#F2C77A,#E8820A);display:flex;align-items:center;justify-content:center}
+.ig-avatar-inner{width:26px;height:26px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--amber);font-weight:500}
+.ig-username{font-size:10px;font-weight:700;color:#111;font-family:'DM Sans',sans-serif;letter-spacing:.02em}
+.ig-follow{background:#111;color:#fff;font-size:8px;font-weight:600;padding:4px 10px;border-radius:4px;font-family:'DM Sans',sans-serif}
+.ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:#ddd}
+.ig-cell{aspect-ratio:1;overflow:hidden;position:relative}
+.ig-cell-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.ig-type{position:absolute;top:4px;right:4px;font-size:5px;color:rgba(255,255,255,.8)}
+/* cell backgrounds */
+.ic1{background:linear-gradient(135deg,#1C1C1C,#111)}
+.ic2{background:linear-gradient(135deg,#2a1800,#1C1C1C)}
+.ic3{background:linear-gradient(135deg,#111,#1a1a2e)}
+.ic4{background:linear-gradient(180deg,#E8820A,#c45f00)}
+.ic5{background:linear-gradient(135deg,#F2EDE6,#e8e0d5)}
+.ic6{background:linear-gradient(135deg,#1C1C1C,#0d0d0d)}
+.ic7{background:linear-gradient(135deg,#0a1a0a,#1C1C1C)}
+.ic8{background:linear-gradient(135deg,#1a1000,#2a1800)}
+.ic9{background:linear-gradient(135deg,#111,#1C1C1C)}
+.ig-cell-text{font-family:'Bebas Neue',sans-serif;font-size:9px;color:#fff;text-align:center;line-height:1.2;padding:4px;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.ic5 .ig-cell-text{color:#111}
+.ic4 .ig-cell-text{color:#000}
+
+/* Story */
+.story-wrap{display:flex;gap:20px;align-items:flex-start}
+.story-phone{width:180px;background:#111;border-radius:28px;padding:12px;border:6px solid #2a2a2a;box-shadow:0 0 0 2px #1a1a1a,0 16px 40px rgba(0,0,0,.5)}
+.story-screen{border-radius:18px;overflow:hidden;aspect-ratio:9/16;position:relative}
+.story-bg{position:absolute;inset:0;background:linear-gradient(180deg,#0d0d0d 0%,#1C1C1C 40%,#2a1800 100%)}
+.story-top{position:absolute;top:0;left:0;right:0;padding:10px 10px 0;display:flex;justify-content:space-between;align-items:center}
+.story-prog{flex:1;height:2px;background:rgba(255,255,255,.3);border-radius:1px;margin-right:8px}
+.story-prog-fill{width:35%;height:100%;background:#fff;border-radius:1px}
+.story-user{display:flex;align-items:center;gap:5px}
+.story-av{width:16px;height:16px;border-radius:50%;background:conic-gradient(var(--amber),#F2C77A,var(--amber));padding:1px}
+.story-av-inner{width:14px;height:14px;border-radius:50%;background:#111}
+.story-name{font-size:6px;color:#fff;font-family:'DM Sans',sans-serif;font-weight:600}
+.story-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.story-big-text{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--offwhite);text-align:center;line-height:1}
+.story-sub-text{font-family:'DM Mono',monospace;font-size:6px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-top:6px}
+.story-tag-bottom{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:8px}
+.story-sticker{background:var(--amber);color:#000;font-family:'DM Mono',monospace;font-size:6px;font-weight:500;padding:3px 8px;border-radius:10px;letter-spacing:.05em}
+
+/* Highlights */
+.highlights-row{display:flex;gap:16px;margin-top:24px;flex-wrap:wrap}
+.highlight-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+.highlight-ring{width:54px;height:54px;border-radius:50%;background:conic-gradient(var(--amber),#F2C77A 30%,var(--amber) 60%,rgba(232,130,10,.2));display:flex;align-items:center;justify-content:center}
+.highlight-inner{width:46px;height:46px;border-radius:50%;overflow:hidden;border:2px solid var(--bg)}
+.highlight-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-align:center}
+
+/* ========== 04 PRODUTOS ========== */
+/* Sticker */
+.sticker-stage{background:repeating-conic-gradient(#1a1a1a 0% 25%,#222 0% 50%) 0 0/20px 20px;border-radius:4px;padding:60px;display:flex;justify-content:center;align-items:center;gap:48px;border:1px solid var(--border)}
+.sticker-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.sticker-desc{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;text-align:center}
+/* Drop shadow for sticker */
+.sticker-shadow{filter:drop-shadow(0 8px 24px rgba(0,0,0,.6)) drop-shadow(0 2px 6px rgba(232,130,10,.2))}
+
+/* Mousepad */
+.mousepad-stage{background:var(--card);border-radius:4px;padding:48px;display:flex;justify-content:center;align-items:center;border:1px solid var(--border)}
+.mousepad{width:100%;max-width:480px;aspect-ratio:3/2;background:linear-gradient(135deg,#1C1C1C 0%,#141414 50%,#1a1a1a 100%);border-radius:12px;border:1px solid #333;box-shadow:0 4px 24px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+.mousepad::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(232,130,10,.02) 0,rgba(232,130,10,.02) 1px,transparent 0,transparent 8px)}
+.mousepad-left{display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.mousepad-name{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--offwhite);line-height:1;letter-spacing:.03em}
+.mousepad-coords{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.12em;margin-top:4px}
+.mousepad-line{width:32px;height:1px;background:var(--amber);opacity:.5;margin-top:12px}
+.mousepad-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:8px}
+.mousepad-right{display:flex;align-items:center;justify-content:center}
+.mousepad-edge{position:absolute;bottom:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--amber),rgba(232,130,10,.3),var(--amber));opacity:.3}
+
+/* ========== 05 CHARLES FANTASY ========== */
+.cf-intro{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:start}
+.cf-text p{color:var(--muted);font-size:15px;line-height:1.8;margin-bottom:16px}
+.cf-text strong{color:var(--offwhite);font-weight:500}
+.cf-text .amber{color:var(--amber)}
+.arch-files{display:flex;flex-direction:column;gap:8px;margin-top:24px}
+.arch-file{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:16px 20px;display:flex;align-items:center;gap:12px}
+.arch-file:first-child{border-color:var(--amber-mid)}
+.file-icon{width:28px;height:28px;background:var(--amber-dim);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.file-icon svg{width:14px;height:14px;stroke:var(--amber);fill:none;stroke-width:1.5}
+.file-name{font-family:'DM Mono',monospace;font-size:13px;color:var(--offwhite);font-weight:500}
+.file-desc{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.05em}
+
+/* CF app mockup */
+.cf-mockup{background:#080a0f;border-radius:12px;border:1px solid rgba(200,169,110,.15);overflow:hidden;box-shadow:0 0 40px rgba(200,169,110,.06)}
+.cf-topbar{background:#0d0f14;border-bottom:1px solid rgba(200,169,110,.1);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.cf-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#c8a96e;letter-spacing:.08em}
+.cf-level{font-family:'DM Mono',monospace;font-size:9px;color:rgba(200,169,110,.6);letter-spacing:.1em}
+.cf-body{display:grid;grid-template-columns:140px 1fr;min-height:280px}
+.cf-sidebar{background:#0a0c11;border-right:1px solid rgba(200,169,110,.07);padding:16px 0}
+.cf-nav-item{padding:8px 16px;font-family:'DM Mono',monospace;font-size:9px;color:rgba(200,169,110,.5);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+.cf-nav-item.active{color:#c8a96e;background:rgba(200,169,110,.07);border-right:2px solid #c8a96e}
+.cf-nav-dot{width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
+.cf-main{padding:16px}
+.cf-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.cf-stat{background:#0d0f14;border:1px solid rgba(200,169,110,.08);border-radius:6px;padding:10px}
+.cf-stat-label{font-family:'DM Mono',monospace;font-size:7px;color:rgba(200,169,110,.4);letter-spacing:.1em;text-transform:uppercase}
+.cf-stat-value{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#c8a96e;line-height:1;margin-top:2px}
+.cf-stat-sub{font-family:'DM Mono',monospace;font-size:7px;color:rgba(200,169,110,.3)}
+.cf-xp-row{background:#0d0f14;border:1px solid rgba(200,169,110,.08);border-radius:6px;padding:10px;margin-bottom:12px}
+.cf-xp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.cf-xp-label{font-family:'DM Mono',monospace;font-size:8px;color:rgba(200,169,110,.5);letter-spacing:.1em;text-transform:uppercase}
+.cf-xp-val{font-family:'DM Mono',monospace;font-size:8px;color:#c8a96e}
+.cf-xp-track{height:4px;background:rgba(200,169,110,.1);border-radius:2px;overflow:hidden}
+.cf-xp-fill{height:100%;background:linear-gradient(90deg,#c8a96e,#f0c87a);border-radius:2px}
+.cf-mission-row{display:flex;flex-direction:column;gap:6px}
+.cf-mission{background:#0d0f14;border:1px solid rgba(200,169,110,.08);border-radius:6px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.cf-mission-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cf-mission-name{font-family:'DM Sans',sans-serif;font-size:9px;color:rgba(242,237,230,.7);flex:1}
+.cf-mission-xp{font-family:'DM Mono',monospace;font-size:8px;color:rgba(200,169,110,.6)}
+
+/* ========== 06 ECOSYSTEM ========== */
+.ecosystem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.eco-node{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:24px;text-align:center;transition:border-color .3s,transform .3s}
+.eco-node:hover{border-color:var(--amber-mid);transform:translateY(-4px)}
+.eco-icon{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--amber);margin-bottom:12px}
+.eco-name{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--offwhite);letter-spacing:.03em;margin-bottom:6px}
+.eco-desc{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;line-height:1.6}
+.eco-arrow{display:flex;align-items:center;justify-content:center;color:var(--amber-mid);font-size:24px;align-self:center}
+
+/* Footer */
+.site-footer{padding:60px 7vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-mark{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+.footer-coords{font-family:'DM Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.1em}
+
+/* Animations */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+.anim-fade{opacity:0;transition:opacity .8s ease}
+.anim-fade.visible{opacity:1}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--amber-mid),transparent);margin:40px 0}
+
+/* Tag */
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--amber-mid);padding:3px 10px;border-radius:2px;margin-right:8px;margin-bottom:8px}
+
+/* Body text utility */
+.body-text{color:var(--muted);font-size:15px;line-height:1.8;max-width:600px}
+.body-text + .body-text{margin-top:12px}
+</style>
+</head>
+<body>
+<div id="spb"></div>
+
+<!-- HEADER -->
+<header class="site-header reveal">
+  <div>
+    <div class="case-label">Case 04 — Identidade Visual</div>
+    <div class="case-title">Um Forasteiro</div>
+    <div style="margin-top:20px">
+      <span class="tag">Branding</span>
+      <span class="tag">YouTube</span>
+      <span class="tag">Instagram</span>
+      <span class="tag">Product Design</span>
+      <span class="tag">SaaS</span>
+    </div>
+  </div>
+  <div class="case-meta">
+    <span class="meta-tag">Guilherme Andrade</span>
+    <span class="meta-tag">18.796°N · 98.979°E</span>
+    <span class="meta-tag">Chiang Mai, 2026</span>
+  </div>
+</header>
+
+<!-- 01 CONTEXTO -->
+<section class="section" id="s01">
+  <div class="section-number reveal">01 — O Contexto</div>
+  <div class="section-title reveal">O Forasteiro<br/>Precisa de Uma Voz</div>
+
+  <div class="context-grid reveal">
+    <div class="context-text">
+      <p>Guilherme Andrade saiu do Brasil no meio de uma crise. <strong>Designer industrial com 9 anos de experiência</strong>, projetos nacionais e internacionais — e decidiu trocar o escritório por uma mochila 60L.</p>
+      <p>Na Suíça, cortou grama. Em Londres, pintou paredes com spray machine. Nos Alpes, virou subgerente de hostel. Não por falta de opção — por escolha de vida.</p>
+      <p>O problema: tudo isso estava acontecendo sem identidade. Sem marca. Sem sistema visual que traduzisse a seriedade do projeto e a crudeza da jornada.</p>
+      <p>O desafio era criar um ecossistema visual que funcionasse no YouTube, no Instagram, em produtos físicos — e que fosse honesto o suficiente para não parecer mais um canal de viagem.</p>
+      <div class="contrast-block">
+        <p>"Não é sobre viajar. É sobre construir uma vida onde o movimento é o padrão, não o prêmio."</p>
+      </div>
+    </div>
+    <div>
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <div class="stat-num" data-count="9">0</div>
+          <div class="stat-desc">anos como designer</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num" data-count="8">0</div>
+          <div class="stat-desc">países percorridos</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num">R$0</div>
+          <div class="stat-desc">de herança ou investimento</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num" data-count="33">0</div>
+          <div class="stat-desc">anos, recomeçando</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 MARCA -->
+<section class="section" id="s02">
+  <div class="section-number reveal">02 — A Marca</div>
+  <div class="section-title reveal">Carimbo<br/>de Fronteira</div>
+  <p class="body-text reveal">O conceito: um <strong style="color:var(--offwhite)">carimbo de passaporte</strong>. Duro, específico, burocrático. Porque toda vez que você cruza uma fronteira, alguém te olha e decide se você entra ou não. O Forasteiro entra sempre.</p>
+
+  <!-- Logo principal -->
+  <div class="section-sub reveal">Logo Principal</div>
+  <div class="logo-stage reveal">
+    <!-- LOGO SVG GRANDE -->
+    <svg width="240" height="240" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="topArc" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+        <path id="bottomArc" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+      </defs>
+      <!-- Outer ring -->
+      <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+      <!-- Dashed decorative ring -->
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+      <!-- Inner content circle -->
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#E8820A" stroke-width="0.4" opacity="0.25"/>
+      <!-- Fill background -->
+      <circle cx="100" cy="100" r="91" fill="#1C1C1C"/>
+      <!-- Re-draw rings on top -->
+      <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#E8820A" stroke-width="0.4" opacity="0.25"/>
+      <!-- Tick marks at cardinal points -->
+      <line x1="100" y1="8" x2="100" y2="16" stroke="#E8820A" stroke-width="1.5"/>
+      <line x1="100" y1="184" x2="100" y2="192" stroke="#E8820A" stroke-width="1.5"/>
+      <line x1="8" y1="100" x2="16" y2="100" stroke="#E8820A" stroke-width="1.5"/>
+      <line x1="184" y1="100" x2="192" y2="100" stroke="#E8820A" stroke-width="1.5"/>
+      <!-- Small tick marks at 45° -->
+      <line x1="35.1" y1="35.1" x2="40.8" y2="40.8" stroke="#E8820A" stroke-width="0.8" opacity="0.4"/>
+      <line x1="164.9" y1="35.1" x2="159.2" y2="40.8" stroke="#E8820A" stroke-width="0.8" opacity="0.4"/>
+      <line x1="35.1" y1="164.9" x2="40.8" y2="159.2" stroke="#E8820A" stroke-width="0.8" opacity="0.4"/>
+      <line x1="164.9" y1="164.9" x2="159.2" y2="159.2" stroke="#E8820A" stroke-width="0.8" opacity="0.4"/>
+      <!-- Arc text top: UM FORASTEIRO -->
+      <text font-family="'Bebas Neue', sans-serif" font-size="13.5" fill="#E8820A" letter-spacing="5">
+        <textPath href="#topArc" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath>
+      </text>
+      <!-- Arc text bottom: coordinates -->
+      <text font-family="'DM Mono', monospace" font-size="8" fill="#E8820A" letter-spacing="2" opacity="0.8">
+        <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath>
+      </text>
+      <!-- Crosshair -->
+      <line x1="100" y1="46" x2="100" y2="72" stroke="#E8820A" stroke-width="1.2"/>
+      <line x1="100" y1="128" x2="100" y2="154" stroke="#E8820A" stroke-width="1.2"/>
+      <line x1="46" y1="100" x2="72" y2="100" stroke="#E8820A" stroke-width="1.2"/>
+      <line x1="128" y1="100" x2="154" y2="100" stroke="#E8820A" stroke-width="1.2"/>
+      <!-- Cardinal letters -->
+      <text x="100" y="43" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.7">N</text>
+      <text x="100" y="163" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.7">S</text>
+      <text x="41" y="103" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.7">O</text>
+      <text x="159" y="103" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.7">E</text>
+      <!-- Center cross -->
+      <line x1="88" y1="100" x2="112" y2="100" stroke="#E8820A" stroke-width="0.6" opacity="0.4"/>
+      <line x1="100" y1="88" x2="100" y2="112" stroke="#E8820A" stroke-width="0.6" opacity="0.4"/>
+      <!-- Center diamond -->
+      <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#E8820A" stroke-width="1" opacity="0.6"/>
+      <!-- Center dot -->
+      <circle cx="100" cy="100" r="3" fill="#E8820A"/>
+      <!-- Small decorative dots on outer ring -->
+      <circle cx="100" cy="8" r="2" fill="#E8820A"/>
+      <circle cx="100" cy="192" r="2" fill="#E8820A"/>
+      <circle cx="8" cy="100" r="2" fill="#E8820A"/>
+      <circle cx="192" cy="100" r="2" fill="#E8820A"/>
+    </svg>
+    <!-- Symbol isolated -->
+    <svg width="120" height="120" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+      <circle cx="100" cy="100" r="91" fill="#1C1C1C"/>
+      <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+      <line x1="100" y1="8" x2="100" y2="16" stroke="#E8820A" stroke-width="1.5"/>
+      <line x1="100" y1="184" x2="100" y2="192" stroke="#E8820A" stroke-width="1.5"/>
+      <line x1="8" y1="100" x2="16" y2="100" stroke="#E8820A" stroke-width="1.5"/>
+      <line x1="184" y1="100" x2="192" y2="100" stroke="#E8820A" stroke-width="1.5"/>
+      <circle cx="100" cy="8" r="2" fill="#E8820A"/>
+      <circle cx="100" cy="192" r="2" fill="#E8820A"/>
+      <circle cx="8" cy="100" r="2" fill="#E8820A"/>
+      <circle cx="192" cy="100" r="2" fill="#E8820A"/>
+      <line x1="100" y1="40" x2="100" y2="78" stroke="#E8820A" stroke-width="1.2"/>
+      <line x1="100" y1="122" x2="100" y2="160" stroke="#E8820A" stroke-width="1.2"/>
+      <line x1="40" y1="100" x2="78" y2="100" stroke="#E8820A" stroke-width="1.2"/>
+      <line x1="122" y1="100" x2="160" y2="100" stroke="#E8820A" stroke-width="1.2"/>
+      <polygon points="100,84 116,100 100,116 84,100" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="4" fill="#E8820A"/>
+    </svg>
+  </div>
+
+  <!-- Variations -->
+  <div class="logo-variations reveal" style="border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:1px">
+    <div class="logo-var" style="background:#1C1C1C">
+      <!-- negativo: amber on dark -->
+      <svg width="80" height="80" viewBox="0 0 200 200">
+        <defs>
+          <path id="ta2" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+          <path id="ba2" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+        </defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+        <circle cx="100" cy="100" r="91" fill="#1C1C1C"/>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+        <line x1="100" y1="8" x2="100" y2="16" stroke="#E8820A" stroke-width="2"/><line x1="100" y1="184" x2="100" y2="192" stroke="#E8820A" stroke-width="2"/><line x1="8" y1="100" x2="16" y2="100" stroke="#E8820A" stroke-width="2"/><line x1="184" y1="100" x2="192" y2="100" stroke="#E8820A" stroke-width="2"/>
+        <circle cx="100" cy="8" r="2" fill="#E8820A"/><circle cx="100" cy="192" r="2" fill="#E8820A"/><circle cx="8" cy="100" r="2" fill="#E8820A"/><circle cx="192" cy="100" r="2" fill="#E8820A"/>
+        <text font-family="'Bebas Neue',sans-serif" font-size="13.5" fill="#E8820A" letter-spacing="5"><textPath href="#ta2" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath></text>
+        <text font-family="'DM Mono',monospace" font-size="8" fill="#E8820A" letter-spacing="2" opacity="0.8"><textPath href="#ba2" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath></text>
+        <line x1="100" y1="46" x2="100" y2="72" stroke="#E8820A" stroke-width="1.2"/><line x1="100" y1="128" x2="100" y2="154" stroke="#E8820A" stroke-width="1.2"/><line x1="46" y1="100" x2="72" y2="100" stroke="#E8820A" stroke-width="1.2"/><line x1="128" y1="100" x2="154" y2="100" stroke="#E8820A" stroke-width="1.2"/>
+        <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#E8820A" stroke-width="1" opacity="0.6"/>
+        <circle cx="100" cy="100" r="3" fill="#E8820A"/>
+      </svg>
+      <div class="logo-var-label" style="color:var(--muted)">Principal</div>
+    </div>
+    <div class="logo-var on-light" style="border-right:1px solid #ddd">
+      <!-- positivo: dark on light -->
+      <svg width="80" height="80" viewBox="0 0 200 200">
+        <defs>
+          <path id="ta3" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+          <path id="ba3" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+        </defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#1C1C1C" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#1C1C1C" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+        <circle cx="100" cy="100" r="91" fill="#F2EDE6"/>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#1C1C1C" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#1C1C1C" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+        <line x1="100" y1="8" x2="100" y2="16" stroke="#1C1C1C" stroke-width="2"/><line x1="100" y1="184" x2="100" y2="192" stroke="#1C1C1C" stroke-width="2"/><line x1="8" y1="100" x2="16" y2="100" stroke="#1C1C1C" stroke-width="2"/><line x1="184" y1="100" x2="192" y2="100" stroke="#1C1C1C" stroke-width="2"/>
+        <circle cx="100" cy="8" r="2" fill="#1C1C1C"/><circle cx="100" cy="192" r="2" fill="#1C1C1C"/><circle cx="8" cy="100" r="2" fill="#1C1C1C"/><circle cx="192" cy="100" r="2" fill="#1C1C1C"/>
+        <text font-family="'Bebas Neue',sans-serif" font-size="13.5" fill="#1C1C1C" letter-spacing="5"><textPath href="#ta3" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath></text>
+        <text font-family="'DM Mono',monospace" font-size="8" fill="#1C1C1C" letter-spacing="2" opacity="0.7"><textPath href="#ba3" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath></text>
+        <line x1="100" y1="46" x2="100" y2="72" stroke="#1C1C1C" stroke-width="1.2"/><line x1="100" y1="128" x2="100" y2="154" stroke="#1C1C1C" stroke-width="1.2"/><line x1="46" y1="100" x2="72" y2="100" stroke="#1C1C1C" stroke-width="1.2"/><line x1="128" y1="100" x2="154" y2="100" stroke="#1C1C1C" stroke-width="1.2"/>
+        <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#1C1C1C" stroke-width="1" opacity="0.5"/>
+        <circle cx="100" cy="100" r="3" fill="#1C1C1C"/>
+      </svg>
+      <div class="logo-var-label" style="color:var(--chumbo)">Positivo</div>
+    </div>
+    <div class="logo-var on-amber">
+      <!-- on amber -->
+      <svg width="80" height="80" viewBox="0 0 200 200">
+        <defs>
+          <path id="ta4" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+          <path id="ba4" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+        </defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#000" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#000" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+        <circle cx="100" cy="100" r="91" fill="#E8820A"/>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#000" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#000" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+        <line x1="100" y1="8" x2="100" y2="16" stroke="#000" stroke-width="2"/><line x1="100" y1="184" x2="100" y2="192" stroke="#000" stroke-width="2"/><line x1="8" y1="100" x2="16" y2="100" stroke="#000" stroke-width="2"/><line x1="184" y1="100" x2="192" y2="100" stroke="#000" stroke-width="2"/>
+        <circle cx="100" cy="8" r="2" fill="#000"/><circle cx="100" cy="192" r="2" fill="#000"/><circle cx="8" cy="100" r="2" fill="#000"/><circle cx="192" cy="100" r="2" fill="#000"/>
+        <text font-family="'Bebas Neue',sans-serif" font-size="13.5" fill="#000" letter-spacing="5"><textPath href="#ta4" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath></text>
+        <text font-family="'DM Mono',monospace" font-size="8" fill="#000" letter-spacing="2" opacity="0.7"><textPath href="#ba4" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath></text>
+        <line x1="100" y1="46" x2="100" y2="72" stroke="#000" stroke-width="1.2"/><line x1="100" y1="128" x2="100" y2="154" stroke="#000" stroke-width="1.2"/><line x1="46" y1="100" x2="72" y2="100" stroke="#000" stroke-width="1.2"/><line x1="128" y1="100" x2="154" y2="100" stroke="#000" stroke-width="1.2"/>
+        <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#000" stroke-width="1" opacity="0.5"/>
+        <circle cx="100" cy="100" r="3" fill="#000"/>
+      </svg>
+      <div class="logo-var-label" style="color:rgba(0,0,0,.5)">Âmbar</div>
+    </div>
+  </div>
+
+  <!-- Palette -->
+  <div class="section-sub reveal">Paleta de Cores</div>
+  <div class="palette-row reveal">
+    <div class="swatch" style="background:#1C1C1C">
+      <div class="swatch-name" style="color:#F2EDE6">Asfalto</div>
+      <div class="swatch-hex" style="color:#F2EDE6">#1C1C1C</div>
+      <div class="swatch-role" style="color:#F2EDE6">Fundo principal</div>
+    </div>
+    <div class="swatch" style="background:#E8820A">
+      <div class="swatch-name" style="color:#000">Âmbar</div>
+      <div class="swatch-hex" style="color:#000">#E8820A</div>
+      <div class="swatch-role" style="color:#000">Destaque único</div>
+    </div>
+    <div class="swatch" style="background:#F2EDE6">
+      <div class="swatch-name" style="color:#1C1C1C">Off-White</div>
+      <div class="swatch-hex" style="color:#1C1C1C">#F2EDE6</div>
+      <div class="swatch-role" style="color:#1C1C1C">Tipografia principal</div>
+    </div>
+    <div class="swatch" style="background:#4A5568">
+      <div class="swatch-name" style="color:#F2EDE6">Chumbo</div>
+      <div class="swatch-hex" style="color:#F2EDE6">#4A5568</div>
+      <div class="swatch-role" style="color:#F2EDE6">Apoio e sombra</div>
+    </div>
+  </div>
+
+  <!-- Typography -->
+  <div class="section-sub reveal">Tipografia</div>
+  <div class="type-showcase reveal">
+    <div class="type-block">
+      <div class="type-family">Display — Bebas Neue</div>
+      <div class="type-sample-bb">ABCDE<br/>FGHIJ</div>
+      <div class="type-sample-bb" style="font-size:clamp(28px,3.5vw,48px);color:var(--amber);margin-top:12px">UM FORASTEIRO</div>
+      <div class="type-meta">
+        <span>Display</span><span>Headings</span><span>Stamp</span><span>Títulos de vídeo</span>
+      </div>
+    </div>
+    <div class="type-block" style="border-left:1px solid var(--border)">
+      <div class="type-family">Mono — DM Mono</div>
+      <div class="type-sample-mono">18.796°N<br/>98.979°E<br/>Chiang Mai, TH</div>
+      <div class="type-sample-mono" style="font-size:clamp(10px,1.2vw,15px);color:var(--amber);margin-top:12px;opacity:.8">IDENTIDADE · COORDENADAS<br/>DADOS · LABELS · DATAS</div>
+      <div class="type-meta">
+        <span>Coordenadas</span><span>Labels</span><span>Dados reais</span><span>Código</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ECOSSISTEMA DIGITAL -->
+<section class="section" id="s03">
+  <div class="section-number reveal">03 — Ecossistema Digital</div>
+  <div class="section-title reveal">YouTube<br/>+ Instagram</div>
+
+  <!-- YouTube -->
+  <div class="section-sub reveal">YouTube — Canal</div>
+  <div class="yt-monitor reveal">
+    <div class="yt-screen">
+      <div class="yt-banner-bg"><div class="yt-banner-pattern"></div></div>
+      <div class="yt-banner-inner">
+        <div class="yt-left">
+          <div class="yt-banner-name">Um Forasteiro</div>
+          <div class="yt-banner-tag">Design · Nomadismo · Renda Real</div>
+          <div class="yt-banner-line"></div>
+          <div class="yt-banner-sched">
+            Segunda a Sexta — Reels<br/>
+            Fim de Semana — YouTube
+          </div>
+        </div>
+        <div class="yt-banner-coords">18.796°N · 98.979°E</div>
+      </div>
+    </div>
+    <div class="yt-stand"></div>
+    <div class="yt-base"></div>
+  </div>
+
+  <!-- Thumbnails -->
+  <div class="section-sub reveal" style="margin-top:48px">Templates de Thumbnail</div>
+  <div class="thumb-row reveal">
+    <div class="thumb thumb-1">
+      <div class="thumb-accent-line"></div>
+      <div class="thumb-inner">
+        <div>
+          <div class="thumb-tag">Episódio 01</div>
+          <div class="thumb-text">Designer<br/>que Cortou<br/>Grama na Suíça</div>
+        </div>
+        <div class="thumb-num">R$0→</div>
+      </div>
+    </div>
+    <div class="thumb thumb-2">
+      <div class="thumb-accent-line"></div>
+      <div class="thumb-inner">
+        <div>
+          <div class="thumb-tag">Finanças</div>
+          <div class="thumb-text">R$400<br/>em Janeiro.<br/>O que deu errado</div>
+        </div>
+        <div class="thumb-num">Jan 26</div>
+      </div>
+    </div>
+    <div class="thumb thumb-3">
+      <div class="thumb-accent-line"></div>
+      <div class="thumb-inner">
+        <div>
+          <div class="thumb-tag">Tailândia</div>
+          <div class="thumb-text">Chiang Mai<br/>por R$5.650<br/>por mês</div>
+        </div>
+        <div class="thumb-num">TH</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram -->
+  <div class="section-sub reveal" style="margin-top:64px">Instagram — Grid</div>
+  <div class="two-col reveal" style="align-items:center">
+    <div>
+      <div class="ig-phone">
+        <div class="ig-screen">
+          <div class="ig-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="ig-avatar"><div class="ig-avatar-inner">UF</div></div>
+              <div>
+                <div class="ig-username">umforasteiro</div>
+                <div style="font-family:'DM Mono',monospace;font-size:7px;color:#888">Chiang Mai, Tailândia</div>
+              </div>
+            </div>
+            <div class="ig-follow">Seguir</div>
+          </div>
+          <!-- Stats bar -->
+          <div style="display:flex;justify-content:space-around;padding:10px 8px;border-bottom:1px solid #eee">
+            <div style="text-align:center"><div style="font-weight:700;font-size:11px;color:#111">47</div><div style="font-size:8px;color:#888;font-family:'DM Sans',sans-serif">posts</div></div>
+            <div style="text-align:center"><div style="font-weight:700;font-size:11px;color:#111">2.1K</div><div style="font-size:8px;color:#888;font-family:'DM Sans',sans-serif">seguidores</div></div>
+            <div style="text-align:center"><div style="font-weight:700;font-size:11px;color:#111">312</div><div style="font-size:8px;color:#888;font-family:'DM Sans',sans-serif">seguindo</div></div>
+          </div>
+          <!-- Grid -->
+          <div class="ig-grid">
+            <div class="ig-cell ic1"><div class="ig-cell-inner"><div class="ig-cell-text" style="font-size:11px;color:var(--amber)">UF</div></div><div class="ig-type">▶</div></div>
+            <div class="ig-cell ic2"><div class="ig-cell-inner"><div class="ig-cell-text">R$ 400<br/><span style="font-size:6px;opacity:.7">em jan 26</span></div></div><div class="ig-type">▶</div></div>
+            <div class="ig-cell ic3"><div class="ig-cell-inner"><div class="ig-cell-text">Suíça<br/><span style="font-size:6px;opacity:.7">cortando grama</span></div></div></div>
+            <div class="ig-cell ic4"><div class="ig-cell-inner"><div class="ig-cell-text" style="color:#000">SEMANA<br/>3</div></div><div class="ig-type">▶</div></div>
+            <div class="ig-cell ic5"><div class="ig-cell-inner"><div class="ig-cell-text" style="color:#1C1C1C;font-size:8px">18.796°N<br/>98.979°E</div></div></div>
+            <div class="ig-cell ic6"><div class="ig-cell-inner"><div class="ig-cell-text">Design<br/><span style="font-size:6px;opacity:.7">→ mochila</span></div></div><div class="ig-type">▶</div></div>
+            <div class="ig-cell ic7"><div class="ig-cell-inner"><div class="ig-cell-text">Tailândia<br/><span style="font-size:6px;opacity:.7">chegando</span></div></div></div>
+            <div class="ig-cell ic8"><div class="ig-cell-inner"><div class="ig-cell-text">R$<br/>5.650</div></div><div class="ig-type">▶</div></div>
+            <div class="ig-cell ic9"><div class="ig-cell-inner"><div class="ig-cell-text">9 anos<br/><span style="font-size:6px;opacity:.7">de design</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card-label" style="margin-bottom:8px">Sistema de Grid</div>
+      <p style="color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:20px">O grid segue um ritmo visual: conteúdo denso (Reels) alternado com respiros visuais. A paleta âmbar + asfalto garante reconhecimento imediato no feed.</p>
+      <div class="divider"></div>
+      <div class="card-label" style="margin-bottom:12px">Tipos de Post</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Reels — segunda a sexta (rotina real)</div></div>
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:var(--offwhite);flex-shrink:0"></div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Carrossel — dados, números, decisões</div></div>
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:var(--chumbo);flex-shrink:0"></div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Foto estática — locais, bastidores</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story format -->
+  <div class="section-sub reveal" style="margin-top:64px">Stories + Destaques</div>
+  <div class="story-wrap reveal">
+    <div class="story-phone">
+      <div class="story-screen">
+        <div class="story-bg"></div>
+        <div class="story-top">
+          <div class="story-prog"><div class="story-prog-fill"></div></div>
+          <div class="story-user">
+            <div class="story-av"><div class="story-av-inner"></div></div>
+            <div class="story-name">umforasteiro</div>
+          </div>
+        </div>
+        <div class="story-content">
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">SEMANA 12</div>
+          <div class="story-big-text">Fiz<br/>R$500<br/>esse mês.</div>
+          <div class="story-sub-text">Conto tudo no<br/>YouTube domingo.</div>
+        </div>
+        <div class="story-tag-bottom">
+          <div class="story-sticker">🔗 Link na bio</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card-label" style="margin-bottom:16px">Destaques</div>
+      <div class="highlights-row">
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-inner" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+            </div>
+          </div>
+          <div class="highlight-label">Países</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-inner" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+          </div>
+          <div class="highlight-label">YouTube</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-inner" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="highlight-label">Grana</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-inner" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+          </div>
+          <div class="highlight-label">Projetos</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-inner" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+          </div>
+          <div class="highlight-label">Sobre</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 PRODUTOS -->
+<section class="section" id="s04">
+  <div class="section-number reveal">04 — Produtos</div>
+  <div class="section-title reveal">Adesivo<br/>+ Mousepad</div>
+
+  <!-- Sticker -->
+  <div class="section-sub reveal">Adesivo Circular</div>
+  <div class="sticker-stage reveal">
+    <div class="sticker-wrap">
+      <div class="sticker-shadow">
+        <svg width="220" height="220" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="ta5" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+            <path id="ba5" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+          </defs>
+          <circle cx="100" cy="100" r="98" fill="#1C1C1C"/>
+          <circle cx="100" cy="100" r="93" fill="none" stroke="#E8820A" stroke-width="2"/>
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#E8820A" stroke-width="0.7" stroke-dasharray="3 4" opacity="0.5"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="#E8820A" stroke-width="0.4" opacity="0.2"/>
+          <line x1="100" y1="7" x2="100" y2="17" stroke="#E8820A" stroke-width="2"/><line x1="100" y1="183" x2="100" y2="193" stroke="#E8820A" stroke-width="2"/>
+          <line x1="7" y1="100" x2="17" y2="100" stroke="#E8820A" stroke-width="2"/><line x1="183" y1="100" x2="193" y2="100" stroke="#E8820A" stroke-width="2"/>
+          <circle cx="100" cy="7" r="2.5" fill="#E8820A"/><circle cx="100" cy="193" r="2.5" fill="#E8820A"/><circle cx="7" cy="100" r="2.5" fill="#E8820A"/><circle cx="193" cy="100" r="2.5" fill="#E8820A"/>
+          <text font-family="'Bebas Neue',sans-serif" font-size="13.5" fill="#E8820A" letter-spacing="5"><textPath href="#ta5" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath></text>
+          <text font-family="'DM Mono',monospace" font-size="8" fill="#E8820A" letter-spacing="2" opacity="0.8"><textPath href="#ba5" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath></text>
+          <line x1="100" y1="46" x2="100" y2="72" stroke="#E8820A" stroke-width="1.5"/><line x1="100" y1="128" x2="100" y2="154" stroke="#E8820A" stroke-width="1.5"/>
+          <line x1="46" y1="100" x2="72" y2="100" stroke="#E8820A" stroke-width="1.5"/><line x1="128" y1="100" x2="154" y2="100" stroke="#E8820A" stroke-width="1.5"/>
+          <text x="100" y="43" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.6">N</text>
+          <text x="100" y="163" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.6">S</text>
+          <text x="41" y="103" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.6">O</text>
+          <text x="159" y="103" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="#E8820A" opacity="0.6">E</text>
+          <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#E8820A" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="100" cy="100" r="3.5" fill="#E8820A"/>
+        </svg>
+      </div>
+      <div class="sticker-desc">9cm · Vinil Fosco</div>
+    </div>
+    <div class="sticker-wrap">
+      <!-- White version sticker -->
+      <div class="sticker-shadow">
+        <svg width="160" height="160" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="ta6" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+            <path id="ba6" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+          </defs>
+          <circle cx="100" cy="100" r="98" fill="#F2EDE6"/>
+          <circle cx="100" cy="100" r="93" fill="none" stroke="#1C1C1C" stroke-width="2"/>
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#1C1C1C" stroke-width="0.7" stroke-dasharray="3 4" opacity="0.4"/>
+          <line x1="100" y1="7" x2="100" y2="17" stroke="#1C1C1C" stroke-width="2"/><line x1="100" y1="183" x2="100" y2="193" stroke="#1C1C1C" stroke-width="2"/>
+          <line x1="7" y1="100" x2="17" y2="100" stroke="#1C1C1C" stroke-width="2"/><line x1="183" y1="100" x2="193" y2="100" stroke="#1C1C1C" stroke-width="2"/>
+          <circle cx="100" cy="7" r="2.5" fill="#1C1C1C"/><circle cx="100" cy="193" r="2.5" fill="#1C1C1C"/><circle cx="7" cy="100" r="2.5" fill="#1C1C1C"/><circle cx="193" cy="100" r="2.5" fill="#1C1C1C"/>
+          <text font-family="'Bebas Neue',sans-serif" font-size="13.5" fill="#1C1C1C" letter-spacing="5"><textPath href="#ta6" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath></text>
+          <text font-family="'DM Mono',monospace" font-size="8" fill="#1C1C1C" letter-spacing="2" opacity="0.6"><textPath href="#ba6" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath></text>
+          <line x1="100" y1="46" x2="100" y2="72" stroke="#1C1C1C" stroke-width="1.5"/><line x1="100" y1="128" x2="100" y2="154" stroke="#1C1C1C" stroke-width="1.5"/>
+          <line x1="46" y1="100" x2="72" y2="100" stroke="#1C1C1C" stroke-width="1.5"/><line x1="128" y1="100" x2="154" y2="100" stroke="#1C1C1C" stroke-width="1.5"/>
+          <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#1C1C1C" stroke-width="1.2" opacity="0.6"/>
+          <circle cx="100" cy="100" r="3.5" fill="#1C1C1C"/>
+        </svg>
+      </div>
+      <div class="sticker-desc">Off-White · 7cm</div>
+    </div>
+  </div>
+
+  <!-- Mousepad -->
+  <div class="section-sub reveal" style="margin-top:56px">Mousepad</div>
+  <div class="mousepad-stage reveal">
+    <div class="mousepad">
+      <div class="mousepad-left">
+        <div>
+          <div class="mousepad-name">Um<br/>Forasteiro</div>
+          <div class="mousepad-coords">18.796°N · 98.979°E</div>
+        </div>
+        <div>
+          <div class="mousepad-line"></div>
+          <div class="mousepad-sub">Chiang Mai · Tailândia</div>
+        </div>
+      </div>
+      <div class="mousepad-right">
+        <svg width="130" height="130" viewBox="0 0 200 200" opacity="0.85">
+          <defs>
+            <path id="ta7" d="M 18,100 A 82,82 0 1,1 182,100" fill="none"/>
+            <path id="ba7" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+          </defs>
+          <circle cx="100" cy="100" r="92" fill="none" stroke="#E8820A" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="84" fill="none" stroke="#E8820A" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.4"/>
+          <line x1="100" y1="8" x2="100" y2="16" stroke="#E8820A" stroke-width="1.5"/><line x1="100" y1="184" x2="100" y2="192" stroke="#E8820A" stroke-width="1.5"/>
+          <line x1="8" y1="100" x2="16" y2="100" stroke="#E8820A" stroke-width="1.5"/><line x1="184" y1="100" x2="192" y2="100" stroke="#E8820A" stroke-width="1.5"/>
+          <circle cx="100" cy="8" r="2" fill="#E8820A"/><circle cx="100" cy="192" r="2" fill="#E8820A"/><circle cx="8" cy="100" r="2" fill="#E8820A"/><circle cx="192" cy="100" r="2" fill="#E8820A"/>
+          <text font-family="'Bebas Neue',sans-serif" font-size="13.5" fill="#E8820A" letter-spacing="5"><textPath href="#ta7" startOffset="50%" text-anchor="middle">UM FORASTEIRO</textPath></text>
+          <text font-family="'DM Mono',monospace" font-size="8" fill="#E8820A" letter-spacing="2" opacity="0.7"><textPath href="#ba7" startOffset="50%" text-anchor="middle">18.796°N  ·  98.979°E</textPath></text>
+          <line x1="100" y1="46" x2="100" y2="72" stroke="#E8820A" stroke-width="1.2"/><line x1="100" y1="128" x2="100" y2="154" stroke="#E8820A" stroke-width="1.2"/>
+          <line x1="46" y1="100" x2="72" y2="100" stroke="#E8820A" stroke-width="1.2"/><line x1="128" y1="100" x2="154" y2="100" stroke="#E8820A" stroke-width="1.2"/>
+          <polygon points="100,90 108,100 100,110 92,100" fill="none" stroke="#E8820A" stroke-width="1" opacity="0.6"/>
+          <circle cx="100" cy="100" r="3" fill="#E8820A"/>
+        </svg>
+      </div>
+      <div class="mousepad-edge"></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:16px">
+    <span class="tag">900×400mm</span>
+    <span class="tag">Borracha Natural</span>
+    <span class="tag">Superfície Cloth</span>
+  </div>
+</section>
+
+<!-- 05 CHARLES FANTASY -->
+<section class="section" id="s05">
+  <div class="section-number reveal">05 — A Ferramenta</div>
+  <div class="section-title reveal">Charles<br/>Fantasy</div>
+
+  <div class="cf-intro reveal">
+    <div class="cf-text">
+      <p>Enquanto construía o canal, <strong>precisava de um sistema para não perder o controle</strong>. Planilha era complicado demais. App de produtividade era genérico demais.</p>
+      <p>A solução foi construir o próprio sistema — um app RPG de produtividade onde <span class="amber">missões = tarefas reais</span>, <span class="amber">XP = progresso real</span>, e os números financeiros verdadeiros ficam visíveis o tempo todo.</p>
+      <p>Roda no browser. Sem servidor. Sem conta. <strong>Três arquivos.</strong></p>
+      <div class="arch-files" style="margin-top:28px">
+        <div class="arch-file">
+          <div class="file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="file-name">index.html</div><div class="file-desc">Estrutura completa · sidebar · modais · topbar</div></div>
+        </div>
+        <div class="arch-file">
+          <div class="file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="file-name">script.js</div><div class="file-desc">Toda a lógica · estado global · localStorage · ~4800 linhas</div></div>
+        </div>
+        <div class="arch-file">
+          <div class="file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="file-name">style.css</div><div class="file-desc">Visual dark RPG · variáveis CSS · responsivo</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App mockup -->
+    <div class="cf-mockup reveal">
+      <div class="cf-topbar">
+        <div class="cf-logo">Charles Fantasy</div>
+        <div class="cf-level">Lv.33 · FORASTEIRO · 32.190 XP</div>
+      </div>
+      <div class="cf-body">
+        <div class="cf-sidebar">
+          <div class="cf-nav-item active"><div class="cf-nav-dot"></div>Dashboard</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Missões</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Áreas</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Skills</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Inventário</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Viagem</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Dados</div>
+          <div class="cf-nav-item"><div class="cf-nav-dot"></div>Config</div>
+        </div>
+        <div class="cf-main">
+          <div class="cf-stat-row">
+            <div class="cf-stat">
+              <div class="cf-stat-label">Saldo</div>
+              <div class="cf-stat-value">1.4k</div>
+              <div class="cf-stat-sub">R$ BRL</div>
+            </div>
+            <div class="cf-stat">
+              <div class="cf-stat-label">Custo/mês</div>
+              <div class="cf-stat-value">5.6k</div>
+              <div class="cf-stat-sub">R$ mensal</div>
+            </div>
+            <div class="cf-stat">
+              <div class="cf-stat-label">Gold</div>
+              <div class="cf-stat-value">32.1k</div>
+              <div class="cf-stat-sub">XP total</div>
+            </div>
+          </div>
+          <div class="cf-xp-row">
+            <div class="cf-xp-header">
+              <div class="cf-xp-label">XP — Forasteiro Lv.33</div>
+              <div class="cf-xp-val">32.190 / 35.000</div>
+            </div>
+            <div class="cf-xp-track"><div class="cf-xp-fill" style="width:92%"></div></div>
+          </div>
+          <div class="cf-mission-row">
+            <div class="cf-mission">
+              <div class="cf-mission-dot" style="background:#E8820A"></div>
+              <div class="cf-mission-name">Fechar 1º cliente da agência</div>
+              <div class="cf-mission-xp">500 XP</div>
+            </div>
+            <div class="cf-mission">
+              <div class="cf-mission-dot" style="background:#4A90D9"></div>
+              <div class="cf-mission-name">Postar Reel hoje (seg)</div>
+              <div class="cf-mission-xp">100 XP</div>
+            </div>
+            <div class="cf-mission">
+              <div class="cf-mission-dot" style="background:#4A5568"></div>
+              <div class="cf-mission-name">Editar vídeo do domingo</div>
+              <div class="cf-mission-xp">200 XP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CF tags -->
+  <div style="margin-top:40px" class="reveal">
+    <span class="tag">Zero dependências externas</span>
+    <span class="tag">localStorage puro</span>
+    <span class="tag">Dark RPG UI</span>
+    <span class="tag">i18n PT/EN</span>
+    <span class="tag">Calculadora de gastos diários</span>
+    <span class="tag">Analytics de viagem</span>
+    <span class="tag">Missões com XP real</span>
+  </div>
+</section>
+
+<!-- 06 ECOSSISTEMA -->
+<section class="section" id="s06">
+  <div class="section-number reveal">06 — O Ecossistema</div>
+  <div class="section-title reveal">Tudo<br/>Conectado</div>
+  <p class="body-text reveal" style="margin-bottom:56px">Uma identidade que funciona do carimbo no passaporte ao app de produtividade. Cada peça reforça a mesma ideia: <strong style="color:var(--offwhite)">movimento com intenção, não aventura sem destino.</strong></p>
+
+  <div class="ecosystem-grid reveal">
+    <div class="eco-node">
+      <div class="eco-icon">
+        <svg width="36" height="36" viewBox="0 0 200 200" style="display:inline-block">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#E8820A" stroke-width="6"/>
+          <line x1="100" y1="10" x2="100" y2="40" stroke="#E8820A" stroke-width="4"/><line x1="100" y1="160" x2="100" y2="190" stroke="#E8820A" stroke-width="4"/>
+          <line x1="10" y1="100" x2="40" y2="100" stroke="#E8820A" stroke-width="4"/><line x1="160" y1="100" x2="190" y2="100" stroke="#E8820A" stroke-width="4"/>
+          <circle cx="100" cy="100" r="12" fill="#E8820A"/>
+        </svg>
+      </div>
+      <div class="eco-name">Logo & ID</div>
+      <div class="eco-desc">Carimbo de<br/>Fronteira</div>
+    </div>
+    <div class="eco-node">
+      <div class="eco-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5" style="display:inline-block"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </div>
+      <div class="eco-name">YouTube</div>
+      <div class="eco-desc">Banner · Thumbnails<br/>Vídeo semanal</div>
+    </div>
+    <div class="eco-node">
+      <div class="eco-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5" style="display:inline-block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </div>
+      <div class="eco-name">Instagram</div>
+      <div class="eco-desc">Grid · Stories<br/>Reels diários</div>
+    </div>
+    <div class="eco-node">
+      <div class="eco-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5" style="display:inline-block"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+      </div>
+      <div class="eco-name">Produtos</div>
+      <div class="eco-desc">Adesivo circular<br/>Mousepad</div>
+    </div>
+    <div class="eco-node" style="grid-column:span 2;background:var(--amber-dim);border-color:var(--amber-mid)">
+      <div class="eco-icon">⚔</div>
+      <div class="eco-name" style="color:var(--amber)">Charles Fantasy</div>
+      <div class="eco-desc" style="color:var(--muted)">App RPG de produtividade · 3 arquivos · Zero dependências<br/>Missões · XP · Finanças reais · Analytics de viagem</div>
+    </div>
+    <div class="eco-node" style="grid-column:span 2">
+      <div class="eco-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8820A" stroke-width="1.5" style="display:inline-block"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="eco-name">O Sistema Completo</div>
+      <div class="eco-desc">Marca pessoal → Conteúdo → Ferramenta de gestão → Audiência real → Renda recorrente</div>
+    </div>
+  </div>
+
+  <!-- Final statement -->
+  <div style="margin-top:80px;padding:48px;background:var(--amber-dim);border:1px solid var(--amber-mid);border-radius:4px" class="reveal">
+    <div class="case-label" style="margin-bottom:16px">Resultado</div>
+    <div class="section-title" style="margin-bottom:0;font-size:clamp(28px,4vw,52px)">Um Designer que Saiu do Brasil<br/>com uma Mochila e Construiu<br/>um Ecossistema do Zero.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-mark">Guilherme Andrade · 2026</div>
+  <div class="footer-coords">18.796°N · 98.979°E · Chiang Mai, TH</div>
+</footer>
+
+<script>
+// Progress bar
+const spb = document.getElementById('spb');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  spb.style.width = pct + '%';
+});
+
+// IntersectionObserver for reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        e.target.classList.add('visible');
+      }, (e.target.dataset.delay || 0) * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  // Add stagger delay for sibling elements
+  obs.observe(el);
+});
+
+// Counter animation
+function animCount(el, target, duration = 1200) {
+  let start = 0;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    el.textContent = Math.floor(progress * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+
+const countObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const target = parseInt(e.target.dataset.count);
+      if (!isNaN(target)) animCount(e.target, target);
+      countObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(el => countObs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe — SaaS Pet Shop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:     #f0f2f5;
+    --wf-bg:  #1a1a2e;
+    --wf-s1:  #16213e;
+    --wf-s2:  #0f3460;
+    --border: rgba(255,255,255,0.08);
+    --bd2:    rgba(255,255,255,0.14);
+    --text:   #e0e0e0;
+    --muted:  rgba(224,224,224,0.45);
+    --accent: #4f8ef7;
+    --green:  #34d399;
+    --yellow: #fbbf24;
+    --red:    #f87171;
+    --purple: #a78bfa;
+    --mono:   'JetBrains Mono', monospace;
+    --sans:   'Inter', sans-serif;
+    /* wireframe palette */
+    --wf-fill:    #2a2d3e;
+    --wf-fill2:   #222538;
+    --wf-fill3:   #1e2130;
+    --wf-stroke:  rgba(255,255,255,0.10);
+    --wf-stroke2: rgba(255,255,255,0.18);
+    --ph:         rgba(255,255,255,0.06); /* placeholder block */
+    --ph2:        rgba(255,255,255,0.10);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    padding: 40px;
+    color: var(--text);
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content:'';
+    flex:1;
+    height:1px;
+    background:#ddd;
+  }
+
+  /* ── SCREEN CONTAINER ── */
+  .screen-wrap {
+    margin-bottom: 56px;
+  }
+
+  .screen {
+    background: var(--wf-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Browser chrome */
+  .chrome {
+    background: #111;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .chrome-dot { width:10px; height:10px; border-radius:50%; }
+  .chrome-dot.r { background:#f87171; }
+  .chrome-dot.y { background:#fbbf24; }
+  .chrome-dot.g { background:#34d399; }
+  .chrome-url {
+    flex:1; margin:0 12px;
+    background:rgba(255,255,255,0.06);
+    border-radius:5px;
+    padding:4px 12px;
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--muted);
+  }
+  .chrome-tag {
+    background:rgba(52,211,153,0.12);
+    border:1px solid rgba(52,211,153,0.3);
+    color:var(--green);
+    font-family:var(--mono);
+    font-size:9px;
+    padding:2px 8px;
+    border-radius:100px;
+    letter-spacing:.08em;
+  }
+
+  /* App shell */
+  .app-shell {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    flex: 1;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--wf-fill3);
+    border-right: 1px solid var(--wf-stroke);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .sidebar-logo {
+    padding: 18px 16px 16px;
+    border-bottom: 1px solid var(--wf-stroke);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .logo-sub {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: .05em;
+  }
+
+  .nav-section {
+    padding: 12px 10px;
+    flex: 1;
+  }
+
+  .nav-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--muted);
+    font-family: var(--mono);
+    padding: 0 6px;
+    margin-bottom: 4px;
+    margin-top: 10px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .nav-item.active {
+    background: rgba(79,142,247,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.2);
+  }
+
+  .nav-icon { font-size: 14px; flex-shrink: 0; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 9px;
+    font-family: var(--mono);
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 100px;
+  }
+
+  .sidebar-footer {
+    padding: 12px;
+    border-top: 1px solid var(--wf-stroke);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .user-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--wf-fill2);
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 11px; font-weight: 600; color: var(--text); }
+  .user-role { font-size: 9px; color: var(--muted); font-family: var(--mono); }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    display: flex;
+    flex-direction: column;
+    background: var(--wf-bg);
+    overflow: hidden;
+  }
+
+  /* Topbar */
+  .topbar {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--wf-stroke);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--wf-fill3);
+    flex-shrink: 0;
+  }
+
+  .topbar-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    flex: 1;
+  }
+
+  .topbar-title span {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+    font-family: var(--mono);
+    margin-left: 8px;
+  }
+
+  .filial-selector {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke2);
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+  }
+
+  .selector-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .topbar-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--mono);
+    letter-spacing: .04em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+
+  .btn-ghost {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke2);
+    color: var(--muted);
+  }
+
+  /* Page content */
+  .page-content {
+    flex: 1;
+    padding: 18px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ── KPI CARDS ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .kpi-card {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+  }
+
+  .kpi-card.blue::before  { background: var(--accent); }
+  .kpi-card.green::before { background: var(--green); }
+  .kpi-card.yellow::before{ background: var(--yellow); }
+  .kpi-card.red::before   { background: var(--red); }
+
+  .kpi-icon {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-val {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    line-height: 1;
+  }
+
+  .kpi-val.blue   { color: var(--accent); }
+  .kpi-val.green  { color: var(--green); }
+  .kpi-val.yellow { color: var(--yellow); }
+  .kpi-val.red    { color: var(--red); }
+
+  .kpi-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 6px;
+  }
+
+  .kpi-delta {
+    font-size: 10px;
+    font-family: var(--mono);
+  }
+
+  .kpi-delta.up   { color: var(--green); }
+  .kpi-delta.down { color: var(--red); }
+  .kpi-delta.warn { color: var(--yellow); }
+
+  /* ── TWO-COL LAYOUT ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--wf-stroke);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--wf-fill2);
+    flex-shrink: 0;
+  }
+
+  .panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-family: var(--mono);
+  }
+
+  .panel-action {
+    font-size: 10px;
+    color: var(--accent);
+    font-family: var(--mono);
+    cursor: pointer;
+  }
+
+  .panel-body {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── TABLE WIREFRAME ── */
+  .wf-table { width: 100%; }
+
+  .wf-thead {
+    background: var(--wf-fill3);
+    display: grid;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--wf-stroke);
+  }
+
+  .wf-thead .wf-th {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .wf-row {
+    display: grid;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--wf-stroke);
+    align-items: center;
+  }
+
+  .wf-row:hover { background: rgba(255,255,255,0.02); }
+  .wf-row:last-child { border-bottom: none; }
+
+  .pet-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--wf-fill2);
+    border: 2px solid var(--wf-stroke2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .pet-nm {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .pet-breed {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 100px;
+    font-size: 9px;
+    font-family: var(--mono);
+    letter-spacing: .05em;
+    font-weight: 600;
+  }
+
+  .status-pill.ok     { background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.25); color:var(--green); }
+  .status-pill.warn   { background:rgba(251,191,36,.1);  border:1px solid rgba(251,191,36,.25); color:var(--yellow); }
+  .status-pill.blue   { background:rgba(79,142,247,.12); border:1px solid rgba(79,142,247,.25); color:var(--accent); }
+  .status-pill.purple { background:rgba(167,139,250,.1); border:1px solid rgba(167,139,250,.25); color:var(--purple); }
+
+  .status-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+  .ok .status-dot     { background: var(--green); }
+  .warn .status-dot   { background: var(--yellow); }
+  .blue .status-dot   { background: var(--accent); }
+  .purple .status-dot { background: var(--purple); }
+
+  /* ── ALERT LIST ── */
+  .alert-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--wf-stroke);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .alert-item:last-child { border-bottom: none; }
+
+  .alert-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .alert-icon.red    { background:rgba(248,113,113,.12); border:1px solid rgba(248,113,113,.25); }
+  .alert-icon.yellow { background:rgba(251,191,36,.1);   border:1px solid rgba(251,191,36,.25);  }
+
+  .alert-text {
+    font-size: 10px;
+    color: var(--text);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .alert-text strong { color: #fff; }
+  .alert-meta { font-size: 9px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+
+  .alert-cta {
+    font-size: 9px;
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke2);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: var(--mono);
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* ── CRM SCREEN ── */
+  .crm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .pet-card {
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .pet-card:hover { border-color: var(--wf-stroke2); }
+
+  .pet-card-photo {
+    height: 90px;
+    background: var(--wf-fill3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    border-bottom: 1px solid var(--wf-stroke);
+    position: relative;
+  }
+
+  .pet-card-level {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--wf-stroke2);
+    color: var(--yellow);
+    font-size: 9px;
+    font-family: var(--mono);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .pet-card-body {
+    padding: 10px;
+  }
+
+  .pet-card-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+
+  .pet-card-owner {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 6px;
+  }
+
+  .pet-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Quick Action FAB */
+  .fab-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .fab {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.4);
+    font-family: var(--mono);
+  }
+
+  .fab-mini {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke2);
+    color: var(--text);
+    border-radius: 100px;
+    padding: 7px 14px;
+    font-size: 10px;
+    cursor: pointer;
+    font-family: var(--mono);
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  /* ── PET PROFILE SCREEN ── */
+  .profile-shell {
+    display: grid;
+    grid-template-columns: 280px 1fr 260px;
+    height: 100%;
+  }
+
+  .profile-left {
+    background: var(--wf-fill3);
+    border-right: 1px solid var(--wf-stroke);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .profile-photo-large {
+    width: 100%;
+    height: 160px;
+    background: var(--wf-fill2);
+    border-radius: 10px;
+    border: 2px solid var(--wf-stroke2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px;
+    position: relative;
+  }
+
+  .profile-badge {
+    position: absolute;
+    bottom: -10px; right: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-family: var(--mono);
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 2px solid var(--wf-bg);
+  }
+
+  .profile-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .profile-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+    text-align: center;
+  }
+
+  .xp-bar-wrap {
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .xp-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 5px;
+  }
+
+  .xp-track {
+    height: 6px;
+    background: var(--wf-fill3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--yellow), #f59e0b);
+    border-radius: 3px;
+  }
+
+  .profile-info-block {
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--wf-stroke);
+    font-size: 10px;
+  }
+
+  .info-row:last-child { border-bottom: none; }
+  .info-key { color: var(--muted); }
+  .info-val { color: var(--text); font-weight: 600; font-family: var(--mono); }
+
+  .badges-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  /* Profile center */
+  .profile-center {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+  }
+
+  /* Profile right */
+  .profile-right {
+    background: var(--wf-fill3);
+    border-left: 1px solid var(--wf-stroke);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overflow-y: auto;
+  }
+
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+
+  .tl-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    position: relative;
+  }
+
+  .tl-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 11px; top: 28px; bottom: -10px;
+    width: 1px;
+    background: var(--wf-stroke);
+  }
+
+  .tl-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tl-dot.blue   { background:rgba(79,142,247,.15);  border:1px solid rgba(79,142,247,.4); }
+  .tl-dot.green  { background:rgba(52,211,153,.12);  border:1px solid rgba(52,211,153,.35); }
+  .tl-dot.purple { background:rgba(167,139,250,.12); border:1px solid rgba(167,139,250,.35); }
+  .tl-dot.yellow { background:rgba(251,191,36,.1);   border:1px solid rgba(251,191,36,.35); }
+
+  .tl-content { flex: 1; }
+  .tl-event { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .tl-date  { font-size: 9px; color: var(--muted); font-family: var(--mono); }
+  .tl-note  {
+    margin-top: 5px;
+    background: var(--wf-fill2);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 5px 5px 0;
+    padding: 5px 8px;
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* Health grid */
+  .health-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .health-card {
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .health-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 4px;
+  }
+
+  .health-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .health-val.ok     { color: var(--green); }
+  .health-val.warn   { color: var(--yellow); }
+
+  .health-sub {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 2px;
+  }
+
+  /* Notes */
+  .note-block {
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+    border-left: 3px solid var(--yellow);
+  }
+
+  /* Next appt */
+  .next-appt {
+    background: rgba(79,142,247,0.08);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .next-appt-label { font-size: 8px; text-transform:uppercase; letter-spacing:.12em; color:var(--accent); font-family:var(--mono); margin-bottom:4px; }
+  .next-appt-date  { font-family:var(--mono); font-size:15px; font-weight:700; color:#fff; }
+  .next-appt-type  { font-size:9px; color:var(--muted); margin-top:3px; }
+
+  .tutor-card {
+    background: var(--wf-fill2);
+    border: 1px solid var(--wf-stroke);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .tutor-header {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--wf-stroke);
+    background: var(--wf-fill3);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── ANNOTATION LAYER ── */
+  .annotation-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .annotation {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 10px;
+    color: #777;
+    line-height: 1.4;
+  }
+
+  .ann-num {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #e8e8e8;
+    color: #444;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--mono);
+  }
+
+  /* Screen title */
+  .screen-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  .screen-desc {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-bar {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke2);
+    border-radius: 7px;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .search-bar input-placeholder { flex: 1; }
+
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .filter-chip {
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-stroke2);
+    border-radius: 100px;
+    padding: 4px 10px;
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--mono);
+    cursor: pointer;
+  }
+
+  .filter-chip.active {
+    background: rgba(79,142,247,0.12);
+    border-color: rgba(79,142,247,0.3);
+    color: var(--accent);
+  }
+
+  /* Spec table */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .spec-table th {
+    background: #f7f8fa;
+    padding: 8px 12px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: #666;
+    border-bottom: 1px solid #eee;
+  }
+
+  .spec-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table tr:hover td { background: #fafbfc; }
+
+  .spec-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: #aaa;
+    margin: 16px 0 6px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ══════════════════════ SCREEN 1 — DASHBOARD ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 01 / Dashboard Consolidado</div>
+  <div class="screen-desc">Home do sistema. Header com seletor de filial · 4 KPI cards · Pets em Hospedagem · Alertas ativos.</div>
+
+  <div class="screen" style="height:640px">
+    <!-- Chrome -->
+    <div class="chrome">
+      <div class="chrome-dot r"></div>
+      <div class="chrome-dot y"></div>
+      <div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/dashboard</div>
+      <div class="chrome-tag">● AO VIVO</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">🐾</div>
+          <div>
+            <div class="logo-text">PetControl</div>
+            <div class="logo-sub">v1.0 · Cloud</div>
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item active">
+            <span class="nav-icon">📊</span> Dashboard
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">🐶</span> Pets / CRM
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">📅</span> Agenda
+            <span class="nav-badge">4</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">📦</span> Estoque
+            <span class="nav-badge">2</span>
+          </div>
+
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item">
+            <span class="nav-icon">💰</span> Faturamento
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">📈</span> Relatórios
+          </div>
+
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item">
+            <span class="nav-icon">💬</span> WhatsApp
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">⚙️</span> Filiais
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="user-avatar">👤</div>
+          <div class="user-info">
+            <div class="user-name">Eduardo</div>
+            <div class="user-role">Admin · Todas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="main">
+        <!-- Topbar -->
+        <div class="topbar">
+          <div class="topbar-title">
+            Dashboard
+            <span>Segunda, 30 Mar 2026</span>
+          </div>
+
+          <div class="filial-selector">
+            <div class="selector-dot"></div>
+            Todas as Filiais ▾
+          </div>
+
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">↓ Relatório</div>
+            <div class="btn btn-primary">+ Check-in</div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="page-content">
+
+          <!-- 4 KPI Cards -->
+          <div class="kpi-row">
+            <div class="kpi-card blue">
+              <div class="kpi-icon">🏨</div>
+              <div class="kpi-val blue">87%</div>
+              <div class="kpi-label">Ocupação Média</div>
+              <div class="kpi-delta up">▲ +6% vs semana ant.</div>
+            </div>
+            <div class="kpi-card green">
+              <div class="kpi-icon">💰</div>
+              <div class="kpi-val green">R$ 4.320</div>
+              <div class="kpi-label">Faturamento Hoje</div>
+              <div class="kpi-delta up">▲ +12% vs ontem</div>
+            </div>
+            <div class="kpi-card yellow">
+              <div class="kpi-icon">✅</div>
+              <div class="kpi-val yellow">44</div>
+              <div class="kpi-label">Check-ins Hoje</div>
+              <div class="kpi-delta" style="color:var(--muted)">nas 4 filiais</div>
+            </div>
+            <div class="kpi-card red">
+              <div class="kpi-icon">🔔</div>
+              <div class="kpi-val red">3</div>
+              <div class="kpi-label">Alertas Ativos</div>
+              <div class="kpi-delta warn">2 estoque · 1 vacina</div>
+            </div>
+          </div>
+
+          <!-- Two columns -->
+          <div class="two-col" style="flex:1">
+
+            <!-- Pets em Hospedagem -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">🏠 Pets em Hospedagem Agora</div>
+                <div class="panel-action">Ver todos →</div>
+              </div>
+              <div class="panel-body">
+                <div class="wf-table">
+                  <div class="wf-thead" style="grid-template-columns:32px 1fr 1fr 110px 90px 80px">
+                    <div class="wf-th"></div>
+                    <div class="wf-th">Pet</div>
+                    <div class="wf-th">Tutor</div>
+                    <div class="wf-th">Status</div>
+                    <div class="wf-th">Filial</div>
+                    <div class="wf-th">Entrada</div>
+                  </div>
+
+                  <div class="wf-row" style="grid-template-columns:32px 1fr 1fr 110px 90px 80px">
+                    <div class="pet-thumb">🐕</div>
+                    <div><div class="pet-nm">Buddy</div><div class="pet-breed">Golden · 3 anos</div></div>
+                    <div style="font-size:11px;color:var(--muted)">Eduardo P.</div>
+                    <div><span class="status-pill ok"><span class="status-dot"></span>Alimentado</span></div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">Centro</div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">08:30</div>
+                  </div>
+
+                  <div class="wf-row" style="grid-template-columns:32px 1fr 1fr 110px 90px 80px">
+                    <div class="pet-thumb">🐈</div>
+                    <div><div class="pet-nm">Luna</div><div class="pet-breed">Siamesa · 2 anos</div></div>
+                    <div style="font-size:11px;color:var(--muted)">Carla M.</div>
+                    <div><span class="status-pill blue"><span class="status-dot"></span>Passeio</span></div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">Norte</div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">09:15</div>
+                  </div>
+
+                  <div class="wf-row" style="grid-template-columns:32px 1fr 1fr 110px 90px 80px">
+                    <div class="pet-thumb">🐩</div>
+                    <div><div class="pet-nm">Thor</div><div class="pet-breed">Poodle · 1 ano</div></div>
+                    <div style="font-size:11px;color:var(--muted)">Marcos S.</div>
+                    <div><span class="status-pill purple"><span class="status-dot"></span>Banho</span></div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">Sul</div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">10:00</div>
+                  </div>
+
+                  <div class="wf-row" style="grid-template-columns:32px 1fr 1fr 110px 90px 80px">
+                    <div class="pet-thumb">🐶</div>
+                    <div><div class="pet-nm">Mel</div><div class="pet-breed">Shih-tzu · 4 anos</div></div>
+                    <div style="font-size:11px;color:var(--muted)">Ana L.</div>
+                    <div><span class="status-pill ok"><span class="status-dot"></span>Alimentado</span></div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">Leste</div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">07:45</div>
+                  </div>
+
+                  <div class="wf-row" style="grid-template-columns:32px 1fr 1fr 110px 90px 80px">
+                    <div class="pet-thumb">🐱</div>
+                    <div><div class="pet-nm">Milo</div><div class="pet-breed">Persa · 5 anos</div></div>
+                    <div style="font-size:11px;color:var(--muted)">Roberto K.</div>
+                    <div><span class="status-pill warn"><span class="status-dot"></span>Aguardando</span></div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">Centro</div>
+                    <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">11:20</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alertas -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">🔔 Alertas</div>
+                <div class="panel-action">Resolver todos</div>
+              </div>
+              <div class="panel-body">
+                <div class="alert-item">
+                  <div class="alert-icon red">📦</div>
+                  <div style="flex:1">
+                    <div class="alert-text"><strong>Shampoo Neutro — Filial Norte</strong></div>
+                    <div class="alert-meta">2 unidades · crítico</div>
+                  </div>
+                  <div class="alert-cta">Transferir</div>
+                </div>
+                <div class="alert-item">
+                  <div class="alert-icon red">📦</div>
+                  <div style="flex:1">
+                    <div class="alert-text"><strong>Vacina V10 — Filial Sul</strong></div>
+                    <div class="alert-meta">0 unidades · zerado</div>
+                  </div>
+                  <div class="alert-cta">Pedir</div>
+                </div>
+                <div class="alert-item">
+                  <div class="alert-icon yellow">💉</div>
+                  <div style="flex:1">
+                    <div class="alert-text"><strong>Vacina vencendo — Buddy</strong></div>
+                    <div class="alert-meta">Reforço em 12 dias</div>
+                  </div>
+                  <div class="alert-cta">Avisar</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annotations -->
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Seletor de filial no topbar — filtra toda a tela. Default: "Todas".</div>
+    <div class="annotation"><div class="ann-num">2</div>4 KPI cards: Ocupação / Faturamento / Check-ins / Alertas. Barra colorida = categoria.</div>
+    <div class="annotation"><div class="ann-num">3</div>Status dos pets: 4 estados — Alimentado · Passeio · Banho · Aguardando. Atualizado pelo staff.</div>
+    <div class="annotation"><div class="ann-num">4</div>Alertas: gerados automaticamente por regras de estoque e calendário de vacinas.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 2 — CRM LISTING ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 02 / CRM de Pets — Listagem</div>
+  <div class="screen-desc">Cards de pets com foto · busca e filtros · botão flutuante Quick Action para registro rápido de comportamento/uso.</div>
+
+  <div class="screen" style="height:640px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div>
+      <div class="chrome-dot y"></div>
+      <div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/pets</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <!-- Sidebar (same) -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">🐾</div>
+          <div>
+            <div class="logo-text">PetControl</div>
+            <div class="logo-sub">v1.0 · Cloud</div>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item active"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="user-avatar">👤</div>
+          <div class="user-info">
+            <div class="user-name">Eduardo</div>
+            <div class="user-role">Admin · Todas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">
+            Pets &amp; CRM
+            <span>287 cadastrados</span>
+          </div>
+          <div class="filial-selector"><div class="selector-dot"></div> Todas as Filiais ▾</div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">↓ Exportar</div>
+            <div class="btn btn-primary">+ Novo Pet</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Search + filters -->
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="search-bar" style="flex:1">
+              🔍 &nbsp;<span style="color:var(--muted)">Buscar por nome, tutor, raça ou QR code...</span>
+            </div>
+            <div class="filter-row">
+              <div class="filter-chip active">Todos</div>
+              <div class="filter-chip">Em Hospedagem</div>
+              <div class="filter-chip">Vacina Vencendo</div>
+              <div class="filter-chip">VIP</div>
+              <div class="filter-chip">Aniversário ▾</div>
+            </div>
+          </div>
+
+          <!-- Pet cards grid -->
+          <div class="crm-grid" style="position:relative;flex:1">
+
+            <div class="pet-card">
+              <div class="pet-card-photo">🐕 <div class="pet-card-level">⭐ Nv.7</div></div>
+              <div class="pet-card-body">
+                <div class="pet-card-name">Buddy</div>
+                <div class="pet-card-owner">Eduardo Pereira</div>
+                <div class="pet-card-footer">
+                  <span class="status-pill ok"><span class="status-dot"></span>Hospedado</span>
+                  <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Centro</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pet-card">
+              <div class="pet-card-photo">🐈 <div class="pet-card-level">💎 Nv.12</div></div>
+              <div class="pet-card-body">
+                <div class="pet-card-name">Luna</div>
+                <div class="pet-card-owner">Carla Mendes</div>
+                <div class="pet-card-footer">
+                  <span class="status-pill blue"><span class="status-dot"></span>Passeio</span>
+                  <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Norte</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pet-card">
+              <div class="pet-card-photo">🐩 <div class="pet-card-level">⭐ Nv.4</div></div>
+              <div class="pet-card-body">
+                <div class="pet-card-name">Thor</div>
+                <div class="pet-card-owner">Marcos Silva</div>
+                <div class="pet-card-footer">
+                  <span class="status-pill purple"><span class="status-dot"></span>Banho</span>
+                  <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Sul</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pet-card">
+              <div class="pet-card-photo">🐶 <div class="pet-card-level">🏆 Nv.19</div></div>
+              <div class="pet-card-body">
+                <div class="pet-card-name">Mel</div>
+                <div class="pet-card-owner">Ana Lima</div>
+                <div class="pet-card-footer">
+                  <span class="status-pill ok"><span class="status-dot"></span>Alimentado</span>
+                  <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Leste</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pet-card">
+              <div class="pet-card-photo">🐱 <div class="pet-card-level">⭐ Nv.3</div></div>
+              <div class="pet-card-body">
+                <div class="pet-card-name">Milo</div>
+                <div class="pet-card-owner">Roberto Klein</div>
+                <div class="pet-card-footer">
+                  <span class="status-pill warn"><span class="status-dot"></span>Aguardando</span>
+                  <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Centro</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pet-card" style="opacity:0.5;border-style:dashed">
+              <div class="pet-card-photo" style="font-size:22px;color:var(--muted)">+ Novo Pet</div>
+              <div class="pet-card-body">
+                <div class="pet-card-name" style="color:var(--muted)">Cadastrar</div>
+                <div class="pet-card-owner" style="color:rgba(224,224,224,0.3)">Novo tutor</div>
+              </div>
+            </div>
+
+            <!-- FAB Quick Action -->
+            <div style="position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+              <!-- Expanded options (visible on hover state) -->
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <div style="background:var(--wf-fill);border:1px solid var(--wf-stroke2);color:var(--text);border-radius:100px;padding:6px 14px;font-size:10px;cursor:pointer;font-family:var(--mono);display:flex;align-items:center;gap:6px">🍽️ Registrar Alimentação</div>
+                <div style="background:var(--wf-fill);border:1px solid var(--wf-stroke2);color:var(--text);border-radius:100px;padding:6px 14px;font-size:10px;cursor:pointer;font-family:var(--mono);display:flex;align-items:center;gap:6px">🚶 Registrar Passeio</div>
+                <div style="background:var(--wf-fill);border:1px solid var(--wf-stroke2);color:var(--text);border-radius:100px;padding:6px 14px;font-size:10px;cursor:pointer;font-family:var(--mono);display:flex;align-items:center;gap:6px">📝 Nota de Comportamento</div>
+                <div style="background:var(--wf-fill);border:1px solid var(--wf-stroke2);color:var(--text);border-radius:100px;padding:6px 14px;font-size:10px;cursor:pointer;font-family:var(--mono);display:flex;align-items:center;gap:6px">📸 Foto do Serviço</div>
+              </div>
+              <div class="fab">⚡ Quick Action +</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Cards com foto placeholder (emoji) — em produção, foto real do pet.</div>
+    <div class="annotation"><div class="ann-num">2</div>Nível visível no card — fidelização gamificada.</div>
+    <div class="annotation"><div class="ann-num">3</div>FAB "Quick Action" — expande 4 ações rápidas sem abrir a ficha completa.</div>
+    <div class="annotation"><div class="ann-num">4</div>Filtros por status: Em Hospedagem / Vacina Vencendo / VIP / Aniversário.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 3 — PET PROFILE ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 03 / Ficha do Pet — Expandida</div>
+  <div class="screen-desc">3 colunas: perfil + foto + XP · histórico de saúde e atendimentos · notas de comportamento · info do tutor.</div>
+
+  <div class="screen" style="height:700px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div>
+      <div class="chrome-dot y"></div>
+      <div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/pets/buddy</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">🐾</div>
+          <div>
+            <div class="logo-text">PetControl</div>
+            <div class="logo-sub">v1.0 · Cloud</div>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item active"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="user-avatar">👤</div>
+          <div class="user-info">
+            <div class="user-name">Eduardo</div>
+            <div class="user-role">Admin · Todas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="main">
+        <!-- Topbar with breadcrumb -->
+        <div class="topbar">
+          <div class="topbar-title">
+            <span style="color:var(--muted);cursor:pointer">Pets</span>
+            <span style="color:var(--muted);margin:0 6px">/</span>
+            Buddy
+            <span>Golden Retriever · 3 anos</span>
+          </div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">← Voltar</div>
+            <div class="btn btn-ghost">✎ Editar</div>
+            <div class="btn btn-primary">⚡ Quick Action</div>
+          </div>
+        </div>
+
+        <!-- 3-col profile layout -->
+        <div class="profile-shell" style="flex:1;min-height:0">
+
+          <!-- LEFT: Photo + info -->
+          <div class="profile-left">
+            <div class="profile-photo-large">
+              🐕
+              <div class="profile-badge">Nível 7</div>
+            </div>
+
+            <div style="margin-top:14px">
+              <div class="profile-name">Buddy</div>
+              <div class="profile-sub">Golden Retriever · 3 anos · 28kg</div>
+            </div>
+
+            <div class="xp-bar-wrap">
+              <div class="xp-label">
+                <span>Nível 7 — Cliente Fiel</span>
+                <span>680 / 1000 XP</span>
+              </div>
+              <div class="xp-track"><div class="xp-fill" style="width:68%"></div></div>
+            </div>
+
+            <div class="badges-wrap">
+              <span class="status-pill" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:var(--yellow)">🏅 VIP Platinum</span>
+              <span class="status-pill" style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--purple)">3 anos conosco</span>
+              <span class="status-pill ok">✓ Vacinado</span>
+              <span class="status-pill warn">🎂 Aniversário em 12d</span>
+            </div>
+
+            <div class="profile-info-block">
+              <div class="info-row"><div class="info-key">Sexo</div><div class="info-val">Macho</div></div>
+              <div class="info-row"><div class="info-key">Nascimento</div><div class="info-val">Mar / 2023</div></div>
+              <div class="info-row"><div class="info-key">Porte</div><div class="info-val">Grande</div></div>
+              <div class="info-row"><div class="info-key">Filial preferida</div><div class="info-val">Centro</div></div>
+              <div class="info-row"><div class="info-key">Total gasto</div><div class="info-val" style="color:var(--yellow)">R$ 4.820</div></div>
+            </div>
+
+            <!-- QR -->
+            <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke2);border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">QR de Check-in</div>
+              <div style="background:#fff;border-radius:6px;padding:8px;width:64px;height:64px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px">
+                <div style="background:#000;border-radius:1px"></div><div style="background:#000"></div><div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div>
+                <div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div>
+                <div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div>
+                <div style="background:#fff"></div><div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div><div style="background:#000"></div>
+                <div style="background:#000"></div><div style="background:#000"></div><div style="background:#000"></div><div style="background:#fff"></div><div style="background:#000"></div>
+              </div>
+              <div style="font-size:9px;color:var(--muted);font-family:var(--mono);margin-top:6px">buddy_3a7f2k</div>
+            </div>
+          </div>
+
+          <!-- CENTER: Health + History -->
+          <div class="profile-center">
+
+            <!-- Health grid -->
+            <div>
+              <div class="panel-header" style="border-radius:8px 8px 0 0;background:var(--wf-fill2);padding:8px 12px;border:1px solid var(--wf-stroke)">
+                <div class="panel-title">🏥 Ficha de Saúde</div>
+                <div class="panel-action">+ Registrar</div>
+              </div>
+              <div class="health-grid" style="background:var(--wf-fill);border:1px solid var(--wf-stroke);border-top:none;border-radius:0 0 8px 8px;padding:10px;gap:8px">
+                <div class="health-card">
+                  <div class="health-label">Vacina V10</div>
+                  <div class="health-val ok">Em dia</div>
+                  <div class="health-sub">Próximo: Out / 2026</div>
+                </div>
+                <div class="health-card">
+                  <div class="health-label">Antirrábica</div>
+                  <div class="health-val ok">Em dia</div>
+                  <div class="health-sub">Próximo: Mar / 2027</div>
+                </div>
+                <div class="health-card">
+                  <div class="health-label">Antiparasitário</div>
+                  <div class="health-val warn">Vencendo</div>
+                  <div class="health-sub">Recomendado esta semana</div>
+                </div>
+                <div class="health-card">
+                  <div class="health-label">Peso</div>
+                  <div class="health-val">28 kg</div>
+                  <div class="health-sub">Última medição: Mar 2026</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Behavior notes -->
+            <div>
+              <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:var(--mono);margin-bottom:6px">📝 Notas de Comportamento</div>
+              <div class="note-block">
+                "Muito dócil e brincalhão. Prefere secador no modo frio. Fica agitado com cães desconhecidos na recepção — ideal chegar com agenda confirmada. Aceita bem banho, mas precisa de mais paciência na tosa do rabo."
+              </div>
+            </div>
+
+            <!-- History timeline -->
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:var(--mono)">📋 Histórico de Atendimentos</div>
+                <div style="font-size:10px;color:var(--accent);font-family:var(--mono);cursor:pointer">Ver todos (18)</div>
+              </div>
+              <div class="timeline">
+                <div class="tl-item">
+                  <div class="tl-dot blue">🛁</div>
+                  <div class="tl-content">
+                    <div class="tl-event">Banho + Tosa — Filial Centro</div>
+                    <div class="tl-date">22 Mar 2026 · Responsável: Júlia · R$ 90</div>
+                    <div class="tl-note">"Preferiu secador frio. Ficou bem tranquilo."</div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot green">💉</div>
+                  <div class="tl-content">
+                    <div class="tl-event">Vacina V10 + Antirrábica — Filial Norte</div>
+                    <div class="tl-date">08 Mar 2026 · Dr. Paulo · Retorno: Mar/2027</div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot blue">🛁</div>
+                  <div class="tl-content">
+                    <div class="tl-event">Banho — Filial Centro</div>
+                    <div class="tl-date">25 Fev 2026 · R$ 60</div>
+                    <div class="tl-note">"Agitou com outro cão na recepção — avisar ao tutor."</div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot yellow">🏨</div>
+                  <div class="tl-content">
+                    <div class="tl-event">Hospedagem 3 dias — Filial Centro</div>
+                    <div class="tl-date">10–12 Fev 2026 · R$ 240</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Tutor + Next + Actions -->
+          <div class="profile-right">
+
+            <div class="next-appt">
+              <div class="next-appt-label">Próximo Retorno</div>
+              <div class="next-appt-date">10 Abr 2026</div>
+              <div class="next-appt-type">Banho agendado · Filial Centro</div>
+            </div>
+
+            <div class="tutor-card">
+              <div class="tutor-header">Tutor</div>
+              <div style="padding:10px">
+                <div class="info-row" style="padding:5px 0;border-bottom:1px solid var(--wf-stroke)">
+                  <div class="info-key">Nome</div>
+                  <div class="info-val">Eduardo Pereira</div>
+                </div>
+                <div class="info-row" style="padding:5px 0;border-bottom:1px solid var(--wf-stroke)">
+                  <div class="info-key">WhatsApp</div>
+                  <div class="info-val" style="color:var(--green)">● Online</div>
+                </div>
+                <div class="info-row" style="padding:5px 0;border-bottom:1px solid var(--wf-stroke)">
+                  <div class="info-key">Outros pets</div>
+                  <div class="info-val">1 (Max)</div>
+                </div>
+                <div class="info-row" style="padding:5px 0">
+                  <div class="info-key">Total gasto</div>
+                  <div class="info-val" style="color:var(--yellow)">R$ 4.820</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:var(--mono);margin-bottom:8px">Alertas do Pet</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:8px;font-size:10px;color:var(--yellow)">
+                  🎂 Aniversário em 12 dias — Enviar mimo?
+                </div>
+                <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:6px;padding:8px;font-size:10px;color:var(--red)">
+                  🦟 Antiparasitário vencendo — Avisar tutor
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:var(--mono);margin-bottom:8px">Ações Rápidas</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div class="btn btn-primary" style="text-align:center;border-radius:7px">📸 Enviar Foto por WhatsApp</div>
+                <div class="btn btn-ghost" style="text-align:center;border-radius:7px">📅 Novo Agendamento</div>
+                <div class="btn btn-ghost" style="text-align:center;border-radius:7px">💬 Mensagem ao Tutor</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Coluna esquerda: identidade do pet — foto, nível XP, badges de fidelização, ficha básica, QR de check-in.</div>
+    <div class="annotation"><div class="ann-num">2</div>Centro: Ficha de Saúde em grid 2x2 + Notas de Comportamento (editável pelo staff) + Timeline de atendimentos.</div>
+    <div class="annotation"><div class="ann-num">3</div>Coluna direita: próximo retorno, dados do tutor, alertas ativos, ações rápidas (foto/WhatsApp/agendamento).</div>
+    <div class="annotation"><div class="ann-num">4</div>Breadcrumb no topbar: Pets → Buddy. Navegação por teclado (← → entre pets).</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SPEC TABLE ══════════════════════ -->
+<div style="margin-bottom:40px">
+  <div class="section-label">Especificação para Figma — Coordenadas e Dimensões</div>
+
+  <div class="spec-label">FRAME STRUCTURE (1440 × 900px, cada tela)</div>
+  <table class="spec-table">
+    <tr><th>Tela</th><th>Frame X</th><th>Frame Y</th><th>W</th><th>H</th><th>Nota</th></tr>
+    <tr><td>01 — Dashboard</td><td>0</td><td>0</td><td>1440</td><td>900</td><td>Background: #1a1a2e</td></tr>
+    <tr><td>02 — CRM Listing</td><td>1520</td><td>0</td><td>1440</td><td>900</td><td>80px gap entre telas</td></tr>
+    <tr><td>03 — Pet Profile</td><td>3040</td><td>0</td><td>1440</td><td>900</td><td>3 colunas internas</td></tr>
+  </table>
+
+  <div class="spec-label">LAYOUT BASE (compartilhado nas 3 telas)</div>
+  <table class="spec-table">
+    <tr><th>Elemento</th><th>X</th><th>Y</th><th>W</th><th>H</th><th>Fill</th></tr>
+    <tr><td>Browser Chrome</td><td>0</td><td>0</td><td>1440</td><td>36</td><td>#111111</td></tr>
+    <tr><td>Sidebar</td><td>0</td><td>36</td><td>220</td><td>864</td><td>#1e2130</td></tr>
+    <tr><td>Topbar</td><td>220</td><td>36</td><td>1220</td><td>52</td><td>#1e2130 + border-bottom</td></tr>
+    <tr><td>Page Content</td><td>220</td><td>88</td><td>1220</td><td>812</td><td>#1a1a2e</td></tr>
+  </table>
+
+  <div class="spec-label">SCREEN 01 — DASHBOARD (elementos internos ao Page Content)</div>
+  <table class="spec-table">
+    <tr><th>Componente</th><th>X rel.</th><th>Y rel.</th><th>W</th><th>H</th><th>Nota</th></tr>
+    <tr><td>KPI Row (container)</td><td>20</td><td>14</td><td>1180</td><td>110</td><td>grid 4 cols, gap 10</td></tr>
+    <tr><td>KPI Card (cada)</td><td>—</td><td>—</td><td>287</td><td>110</td><td>Fill #2a2d3e + top border 3px</td></tr>
+    <tr><td>Panel Pets em Hospedagem</td><td>20</td><td>138</td><td>820</td><td>650</td><td>Fill #2a2d3e</td></tr>
+    <tr><td>Panel Alertas</td><td>852</td><td>138</td><td>348</td><td>300</td><td>Fill #2a2d3e</td></tr>
+    <tr><td>Table Row (cada)</td><td>0</td><td>—</td><td>100%</td><td>50</td><td>grid 6 cols</td></tr>
+  </table>
+
+  <div class="spec-label">SCREEN 02 — CRM LISTING</div>
+  <table class="spec-table">
+    <tr><th>Componente</th><th>X rel.</th><th>Y rel.</th><th>W</th><th>H</th><th>Nota</th></tr>
+    <tr><td>Search + Filters</td><td>20</td><td>14</td><td>1180</td><td>36</td><td>flex row, gap 10</td></tr>
+    <tr><td>Pet Card Grid</td><td>20</td><td>64</td><td>1180</td><td>720</td><td>auto-fill, minmax 200px</td></tr>
+    <tr><td>Pet Card (cada)</td><td>—</td><td>—</td><td>210</td><td>175</td><td>Fill #222538, radius 10</td></tr>
+    <tr><td>Card Photo Area</td><td>0</td><td>0</td><td>210</td><td>90</td><td>Fill #1e2130</td></tr>
+    <tr><td>FAB Button</td><td>1096</td><td>660</td><td>160</td><td>40</td><td>Fill #4f8ef7, radius 100px</td></tr>
+    <tr><td>FAB Mini (cada)</td><td>—</td><td>—</td><td>200</td><td>32</td><td>4 ações, aparecem ao clicar FAB</td></tr>
+  </table>
+
+  <div class="spec-label">SCREEN 03 — PET PROFILE</div>
+  <table class="spec-table">
+    <tr><th>Componente</th><th>X rel.</th><th>Y rel.</th><th>W</th><th>H</th><th>Nota</th></tr>
+    <tr><td>Col Esquerda (perfil)</td><td>0</td><td>0</td><td>280</td><td>812</td><td>Fill #1e2130 + right border</td></tr>
+    <tr><td>Col Centro (histórico)</td><td>280</td><td>0</td><td>680</td><td>812</td><td>Fill #1a1a2e, padding 16px</td></tr>
+    <tr><td>Col Direita (tutor/ações)</td><td>960</td><td>0</td><td>260</td><td>812</td><td>Fill #1e2130 + left border</td></tr>
+    <tr><td>Photo Large</td><td>16</td><td>16</td><td>248</td><td>160</td><td>radius 10, border accent</td></tr>
+    <tr><td>XP Bar Track</td><td>0</td><td>0</td><td>100%</td><td>6</td><td>Fill #1e2130, fill fill: yellow</td></tr>
+    <tr><td>Health Grid (2x2)</td><td>0</td><td>—</td><td>100%</td><td>auto</td><td>4 cards, gap 8</td></tr>
+    <tr><td>Timeline Item</td><td>0</td><td>—</td><td>100%</td><td>auto</td><td>dot 22px + connector line</td></tr>
+    <tr><td>Next Appt Card</td><td>0</td><td>16</td><td>228</td><td>80</td><td>Fill accent/08, border accent/25</td></tr>
+  </table>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 4 — AGENDA ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 04 / Agenda de Serviços</div>
+  <div class="screen-desc">Visão semanal de agendamentos por filial · status por slot · painel lateral de detalhes do agendamento selecionado.</div>
+
+  <div class="screen" style="height:680px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/agenda</div>
+      <div style="margin-left:auto;font-size:9px;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);padding:2px 8px;border-radius:4px;font-family:var(--mono)">4 pendentes hoje</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-mark">🐾</div><div><div class="logo-text">PetControl</div><div class="logo-sub">v1.0 · Cloud</div></div></div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item active"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer"><div class="user-avatar">👤</div><div class="user-info"><div class="user-name">Eduardo</div><div class="user-role">Admin · Todas</div></div></div>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">Agenda <span>Semana de 30 Mar – 05 Abr, 2026</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="btn btn-ghost">← Semana</div>
+            <div class="filial-selector"><div class="selector-dot"></div> Filial Centro ▾</div>
+            <div class="btn btn-ghost">Semana →</div>
+          </div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">Dia | <strong>Semana</strong> | Mês</div>
+            <div class="btn btn-primary">+ Agendar</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 300px;flex:1;min-height:0;overflow:hidden">
+
+          <!-- Calendar grid -->
+          <div style="overflow-y:auto;padding:14px 12px 14px 14px">
+            <!-- Week header -->
+            <div style="display:grid;grid-template-columns:56px repeat(7,1fr);gap:0;margin-bottom:2px">
+              <div></div>
+              <div style="text-align:center;padding:6px 4px">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase">SEG</div>
+                <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">30</div>
+              </div>
+              <div style="text-align:center;padding:6px 4px">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase">TER</div>
+                <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">31</div>
+              </div>
+              <div style="text-align:center;padding:6px 4px;background:rgba(79,142,247,0.1);border-radius:6px 6px 0 0;border:1px solid rgba(79,142,247,0.2);border-bottom:none">
+                <div style="font-size:9px;color:var(--accent);font-family:var(--mono);text-transform:uppercase">QUA</div>
+                <div style="font-size:16px;font-weight:700;color:var(--accent);line-height:1.2">01</div>
+              </div>
+              <div style="text-align:center;padding:6px 4px">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase">QUI</div>
+                <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">02</div>
+              </div>
+              <div style="text-align:center;padding:6px 4px">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase">SEX</div>
+                <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">03</div>
+              </div>
+              <div style="text-align:center;padding:6px 4px;opacity:0.5">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase">SÁB</div>
+                <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">04</div>
+              </div>
+              <div style="text-align:center;padding:6px 4px;opacity:0.3">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase">DOM</div>
+                <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">05</div>
+              </div>
+            </div>
+
+            <!-- Time slots -->
+            <div style="display:grid;grid-template-columns:56px repeat(7,1fr);gap:0;border:1px solid var(--wf-stroke);border-radius:0 0 8px 8px;overflow:hidden">
+
+              <!-- 08:00 -->
+              <div style="padding:6px 8px;border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);display:flex;align-items:flex-start">
+                <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">08:00</span>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px">
+                <div style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--green)">🛁 Buddy — Banho+Tosa</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">08:00–09:30 · Júlia</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;background:rgba(79,142,247,0.04)">
+                <div style="background:rgba(79,142,247,0.14);border:1px solid rgba(79,142,247,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--accent)">🏨 Luna — Hospedagem</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">Check-in 08:30 · Ana</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px">
+                <div style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--purple)">💉 Thor — Vacina</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">08:00–08:30 · Dr. Paulo</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.5"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.3"></div>
+
+              <!-- 09:00 -->
+              <div style="padding:6px 8px;border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);display:flex;align-items:flex-start">
+                <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">09:00</span>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px">
+                <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--red)">⚠ Mel — Pendente</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">09:00 · Confirmar tutor</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px">
+                <div style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--green)">🛁 Milo — Banho</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">09:00–10:00 · Carol</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;background:rgba(79,142,247,0.04)"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px">
+                <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--yellow)">✂ Rex — Tosa</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">09:30–11:00 · Júlia</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.5"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.3"></div>
+
+              <!-- 10:00 -->
+              <div style="padding:6px 8px;border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);display:flex;align-items:flex-start">
+                <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">10:00</span>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;background:rgba(79,142,247,0.04)">
+                <div style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--green)">🛁 Bella — Banho</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">10:00–11:00 · Carol</div>
+                </div>
+              </div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.5"></div>
+              <div style="border-bottom:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.3"></div>
+
+              <!-- 11:00 -->
+              <div style="padding:6px 8px;border-right:1px solid var(--wf-stroke);display:flex;align-items:flex-start">
+                <span style="font-size:9px;color:var(--muted);font-family:var(--mono)">11:00</span>
+              </div>
+              <div style="border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;background:rgba(79,142,247,0.04)"></div>
+              <div style="border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px"></div>
+              <div style="border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px">
+                <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:5px;padding:5px 7px;cursor:pointer">
+                  <div style="font-size:9px;font-weight:700;color:var(--red)">⚠ Max — Pendente</div>
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono)">11:00 · Aguardando</div>
+                </div>
+              </div>
+              <div style="border-right:1px solid var(--wf-stroke);padding:4px;min-height:54px;opacity:0.5"></div>
+              <div style="padding:4px;min-height:54px;opacity:0.3"></div>
+            </div>
+          </div>
+
+          <!-- Detail panel -->
+          <div style="background:var(--wf-fill3);border-left:1px solid var(--wf-stroke);padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto">
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px">Agendamento Selecionado</div>
+
+            <div style="background:var(--wf-fill);border:1px solid rgba(52,211,153,0.25);border-radius:8px;padding:12px">
+              <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">🛁 Banho + Tosa</div>
+              <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">Seg, 30 Mar · 08:00 – 09:30</div>
+              <div style="margin-top:8px;display:flex;gap:6px">
+                <span class="status-pill ok"><span class="status-dot"></span>Confirmado</span>
+              </div>
+            </div>
+
+            <div class="profile-info-block">
+              <div class="info-row"><div class="info-key">Pet</div><div class="info-val">🐕 Buddy</div></div>
+              <div class="info-row"><div class="info-key">Tutor</div><div class="info-val">Eduardo P.</div></div>
+              <div class="info-row"><div class="info-key">Responsável</div><div class="info-val">Júlia</div></div>
+              <div class="info-row"><div class="info-key">Filial</div><div class="info-val">Centro</div></div>
+              <div class="info-row"><div class="info-key">Valor</div><div class="info-val" style="color:var(--green)">R$ 90,00</div></div>
+            </div>
+
+            <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:8px;font-size:9px;color:var(--yellow)">
+              📝 "Prefere secador frio. Fica agitado com outros cães."
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+              <div class="btn btn-primary" style="text-align:center;border-radius:7px;padding:8px">✓ Confirmar Check-in</div>
+              <div class="btn btn-ghost" style="text-align:center;border-radius:7px;padding:8px">✎ Editar</div>
+              <div class="btn btn-ghost" style="text-align:center;border-radius:7px;padding:8px;color:var(--red);border-color:rgba(248,113,113,0.3)">✕ Cancelar</div>
+            </div>
+
+            <!-- Legend -->
+            <div style="border-top:1px solid var(--wf-stroke);padding-top:10px">
+              <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Legenda</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--muted)"><span style="width:10px;height:10px;background:rgba(52,211,153,0.3);border-radius:2px;display:inline-block"></span>Banho / Tosa</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--muted)"><span style="width:10px;height:10px;background:rgba(79,142,247,0.3);border-radius:2px;display:inline-block"></span>Hospedagem</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--muted)"><span style="width:10px;height:10px;background:rgba(167,139,250,0.3);border-radius:2px;display:inline-block"></span>Veterinário</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--muted)"><span style="width:10px;height:10px;background:rgba(251,191,36,0.3);border-radius:2px;display:inline-block"></span>Tosa</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--muted)"><span style="width:10px;height:10px;background:rgba(248,113,113,0.3);border-radius:2px;display:inline-block"></span>Pendente</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Visualização semanal com slots de 1h. Hoje destacado em azul.</div>
+    <div class="annotation"><div class="ann-num">2</div>Cards por tipo de serviço: cor diferente para Banho / Hospedagem / Vacina / Tosa / Pendente.</div>
+    <div class="annotation"><div class="ann-num">3</div>Painel lateral: detalha agendamento selecionado + nota de comportamento + ações (check-in / editar / cancelar).</div>
+    <div class="annotation"><div class="ann-num">4</div>Seletor de filial no topbar filtra a agenda para aquela unidade. "Todas" mostra com badge de filial em cada card.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 5 — ESTOQUE ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 05 / Controle de Estoque Transversal</div>
+  <div class="screen-desc">Visão consolidada de todas as filiais · alertas de ruptura · transferência entre unidades com 1 clique.</div>
+
+  <div class="screen" style="height:660px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/estoque</div>
+      <div style="margin-left:auto;font-size:9px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:var(--red);padding:2px 8px;border-radius:4px;font-family:var(--mono)">⚠ 2 itens críticos</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-mark">🐾</div><div><div class="logo-text">PetControl</div><div class="logo-sub">v1.0 · Cloud</div></div></div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item active"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer"><div class="user-avatar">👤</div><div class="user-info"><div class="user-name">Eduardo</div><div class="user-role">Admin · Todas</div></div></div>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">Estoque <span>Visão consolidada · 4 filiais</span></div>
+          <div class="filial-selector"><div class="selector-dot"></div> Todas as Filiais ▾</div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">🔍 Buscar produto</div>
+            <div class="btn btn-ghost">↓ Exportar</div>
+            <div class="btn btn-primary">+ Entrada</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+
+          <!-- Alertas críticos -->
+          <div style="background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center">
+            <div style="font-size:12px;font-weight:700;color:var(--red);font-family:var(--mono)">⚠ ALERTAS CRÍTICOS</div>
+            <div style="display:flex;gap:8px;flex:1;flex-wrap:wrap">
+              <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);border-radius:6px;padding:5px 10px;font-size:10px;color:var(--text)">
+                <strong>Shampoo Neutro</strong> — Filial Norte: 2 un
+                <span style="background:var(--accent);color:#fff;font-size:8px;padding:2px 8px;border-radius:4px;margin-left:6px;font-family:var(--mono);cursor:pointer">TRANSFERIR</span>
+              </div>
+              <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);border-radius:6px;padding:5px 10px;font-size:10px;color:var(--text)">
+                <strong>Vacina V10</strong> — Filial Sul: 0 un
+                <span style="background:var(--yellow);color:#000;font-size:8px;padding:2px 8px;border-radius:4px;margin-left:6px;font-family:var(--mono);cursor:pointer">PEDIR</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabs categorias -->
+          <div style="display:flex;gap:0;border-bottom:1px solid var(--wf-stroke)">
+            <div style="padding:8px 16px;font-size:11px;font-weight:600;color:var(--accent);border-bottom:2px solid var(--accent);font-family:var(--mono);cursor:pointer">Todos</div>
+            <div style="padding:8px 16px;font-size:11px;color:var(--muted);font-family:var(--mono);cursor:pointer">Higiene</div>
+            <div style="padding:8px 16px;font-size:11px;color:var(--muted);font-family:var(--mono);cursor:pointer">Alimentação</div>
+            <div style="padding:8px 16px;font-size:11px;color:var(--muted);font-family:var(--mono);cursor:pointer">Medicamentos</div>
+            <div style="padding:8px 16px;font-size:11px;color:var(--muted);font-family:var(--mono);cursor:pointer">Acessórios</div>
+          </div>
+
+          <!-- Tabela transversal -->
+          <div class="panel" style="flex:1">
+            <div class="panel-header">
+              <div class="panel-title">Inventário por Filial</div>
+              <div class="panel-action">⚙ Definir mínimos</div>
+            </div>
+            <div class="panel-body">
+              <div class="wf-table">
+                <div class="wf-thead" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px">
+                  <div class="wf-th">Produto</div>
+                  <div class="wf-th">Centro</div>
+                  <div class="wf-th">Norte</div>
+                  <div class="wf-th">Sul</div>
+                  <div class="wf-th">Leste</div>
+                  <div class="wf-th">Ruptura</div>
+                  <div class="wf-th">Ação</div>
+                </div>
+                <div class="wf-row" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px">
+                  <div><div style="font-size:11px;font-weight:600;color:var(--text)">Ração Premium 15kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Alimentação</div></div>
+                  <div class="stock-val ok">42 un</div><div class="stock-val warn">8 un</div><div class="stock-val ok">35 un</div><div class="stock-val ok">21 un</div>
+                  <div style="font-size:9px;color:var(--yellow);font-family:var(--mono)">Norte ~8d</div>
+                  <div><span style="font-size:9px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);padding:2px 6px;border-radius:4px;cursor:pointer;font-family:var(--mono)">Transferir</span></div>
+                </div>
+                <div class="wf-row" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px;background:rgba(248,113,113,0.04)">
+                  <div><div style="font-size:11px;font-weight:600;color:var(--text)">Shampoo Neutro 1L</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Higiene</div></div>
+                  <div class="stock-val ok">18 un</div><div class="stock-val low">2 un ⚠</div><div class="stock-val ok">27 un</div><div class="stock-val low">1 un ⚠</div>
+                  <div style="font-size:9px;color:var(--red);font-family:var(--mono)">CRÍTICO</div>
+                  <div><span style="font-size:9px;background:rgba(79,142,247,0.15);border:1px solid rgba(79,142,247,0.3);color:var(--accent);padding:2px 6px;border-radius:4px;cursor:pointer;font-family:var(--mono)">Transferir</span></div>
+                </div>
+                <div class="wf-row" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px">
+                  <div><div style="font-size:11px;font-weight:600;color:var(--text)">Antipulgas Spot-on</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Medicamentos</div></div>
+                  <div class="stock-val ok">31 un</div><div class="stock-val ok">14 un</div><div class="stock-val warn">6 un</div><div class="stock-val ok">19 un</div>
+                  <div style="font-size:9px;color:var(--yellow);font-family:var(--mono)">Sul ~5d</div>
+                  <div><span style="font-size:9px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);padding:2px 6px;border-radius:4px;cursor:pointer;font-family:var(--mono)">Transferir</span></div>
+                </div>
+                <div class="wf-row" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px;background:rgba(248,113,113,0.04)">
+                  <div><div style="font-size:11px;font-weight:600;color:var(--text)">Vacina V10 (dose)</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Medicamentos · Refrigerado</div></div>
+                  <div class="stock-val ok">12 un</div><div class="stock-val ok">8 un</div><div class="stock-val low">0 un ⚠</div><div class="stock-val ok">5 un</div>
+                  <div style="font-size:9px;color:var(--red);font-family:var(--mono)">ZERADO</div>
+                  <div><span style="font-size:9px;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.3);color:var(--red);padding:2px 6px;border-radius:4px;cursor:pointer;font-family:var(--mono)">Pedir</span></div>
+                </div>
+                <div class="wf-row" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px">
+                  <div><div style="font-size:11px;font-weight:600;color:var(--text)">Areia Sanitária 4kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Higiene</div></div>
+                  <div class="stock-val ok">55 un</div><div class="stock-val ok">32 un</div><div class="stock-val ok">48 un</div><div class="stock-val ok">41 un</div>
+                  <div style="font-size:9px;color:var(--green);font-family:var(--mono)">OK</div>
+                  <div>—</div>
+                </div>
+                <div class="wf-row" style="grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 100px 80px">
+                  <div><div style="font-size:11px;font-weight:600;color:var(--text)">Toalha de Banho P</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Higiene</div></div>
+                  <div class="stock-val ok">24 un</div><div class="stock-val ok">18 un</div><div class="stock-val ok">22 un</div><div class="stock-val warn">7 un</div>
+                  <div style="font-size:9px;color:var(--yellow);font-family:var(--mono)">Leste ~6d</div>
+                  <div><span style="font-size:9px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);padding:2px 6px;border-radius:4px;cursor:pointer;font-family:var(--mono)">Transferir</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Banner de alertas críticos fixo no topo — ação rápida inline (Transferir / Pedir) sem abrir modal.</div>
+    <div class="annotation"><div class="ann-num">2</div>Tabela transversal: produto × filial numa mesma linha — impossível no Pet Shop Control.</div>
+    <div class="annotation"><div class="ann-num">3</div>Coluna "Ruptura": sistema calcula velocidade de consumo e projeta quando vai acabar.</div>
+    <div class="annotation"><div class="ann-num">4</div>Tabs por categoria para filtrar. Estoque mínimo configurável por produto por filial.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 6 — WHATSAPP / AUTOMAÇÕES ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 06 / WhatsApp & Automações</div>
+  <div class="screen-desc">Central de mensagens automáticas · confirmações · campanhas de horário ocioso · histórico de disparos.</div>
+
+  <div class="screen" style="height:660px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/whatsapp</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-mark">🐾</div><div><div class="logo-text">PetControl</div><div class="logo-sub">v1.0 · Cloud</div></div></div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item active"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer"><div class="user-avatar">👤</div><div class="user-info"><div class="user-name">Eduardo</div><div class="user-role">Admin · Todas</div></div></div>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">WhatsApp & Automações <span>3 fluxos ativos</span></div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">📊 Relatório de disparos</div>
+            <div class="btn btn-primary">+ Nova Automação</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1">
+
+            <!-- Fluxos automáticos -->
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em">Fluxos Automáticos Ativos</div>
+
+              <!-- Fluxo 1: Confirmação de agendamento -->
+              <div style="background:var(--wf-fill);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:32px;height:32px;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">📅</div>
+                    <div>
+                      <div style="font-size:11px;font-weight:700;color:#fff">Confirmação de Agendamento</div>
+                      <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Disparo: 24h antes</div>
+                    </div>
+                  </div>
+                  <div style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);color:var(--green);font-size:9px;padding:3px 8px;border-radius:100px;font-family:var(--mono)">● ATIVO</div>
+                </div>
+                <div style="background:#075E54;border-radius:8px;padding:8px">
+                  <div style="background:#dcf8c6;border-radius:0 6px 6px 6px;padding:7px 10px;display:inline-block;max-width:90%">
+                    <div style="font-size:9px;color:#333;line-height:1.5">🐾 Olá Eduardo! Buddy tem <strong>Banho + Tosa amanhã às 08:00</strong> na Filial Centro.<br>Confirmar: Responda <strong>SIM</strong> · Cancelar: Responda <strong>NÃO</strong></div>
+                    <div style="font-size:8px;color:rgba(0,0,0,0.4);text-align:right;margin-top:2px">Enviado ✓✓</div>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-family:var(--mono)">
+                  <span>Enviados hoje: <strong style="color:var(--text)">12</strong></span>
+                  <span>Confirmados: <strong style="color:var(--green)">9 (75%)</strong></span>
+                  <span>Cancelados: <strong style="color:var(--red)">2</strong></span>
+                </div>
+              </div>
+
+              <!-- Fluxo 2: Foto pós serviço -->
+              <div style="background:var(--wf-fill);border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:32px;height:32px;background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">📸</div>
+                    <div>
+                      <div style="font-size:11px;font-weight:700;color:#fff">Foto Automática Pós-Serviço</div>
+                      <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Disparo: ao finalizar serviço</div>
+                    </div>
+                  </div>
+                  <div style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);color:var(--green);font-size:9px;padding:3px 8px;border-radius:100px;font-family:var(--mono)">● ATIVO</div>
+                </div>
+                <div style="background:#075E54;border-radius:8px;padding:8px">
+                  <div style="background:#dcf8c6;border-radius:0 6px 6px 6px;padding:7px 10px;display:inline-block;max-width:90%">
+                    <div style="font-size:9px;color:#333;line-height:1.5">🐾 <strong>Buddy</strong> ficou incrível hoje! Está pronto pra buscar a partir das 10h na Filial Centro. 📸</div>
+                    <div style="background:#eee;border-radius:4px;margin-top:5px;padding:16px;text-align:center;font-size:9px;color:#999">[📷 Foto do pet]</div>
+                    <div style="font-size:8px;color:rgba(0,0,0,0.4);text-align:right;margin-top:2px">Enviado ✓✓</div>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-family:var(--mono)">
+                  <span>Enviados hoje: <strong style="color:var(--text)">7</strong></span>
+                  <span>Taxa de resposta: <strong style="color:var(--green)">42%</strong></span>
+                </div>
+              </div>
+
+              <!-- Fluxo 3: Campanha de ociosidade -->
+              <div style="background:var(--wf-fill);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:32px;height:32px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">⚡</div>
+                    <div>
+                      <div style="font-size:11px;font-weight:700;color:#fff">Campanha Anti-Ociosidade</div>
+                      <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Trigger: &lt;40% ocupação</div>
+                    </div>
+                  </div>
+                  <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);font-size:9px;padding:3px 8px;border-radius:100px;font-family:var(--mono)">⏸ AGUARDA APROVAÇÃO</div>
+                </div>
+                <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:9px">
+                  <div style="font-size:10px;color:var(--text);margin-bottom:6px">Sistema detectou: Filial Leste com 35% ocupação amanhã 14h–17h</div>
+                  <div style="font-size:10px;color:var(--muted);margin-bottom:8px">Proposta: enviar promoção para <strong style="color:var(--text)">24 tutores</strong> da Filial Leste com 20% de desconto em banho.</div>
+                  <div style="display:flex;gap:6px">
+                    <div class="btn btn-primary" style="font-size:10px;padding:5px 14px;border-radius:6px">✓ Aprovar e Disparar</div>
+                    <div class="btn btn-ghost" style="font-size:10px;padding:5px 14px;border-radius:6px">✎ Editar mensagem</div>
+                    <div class="btn btn-ghost" style="font-size:10px;padding:5px 14px;border-radius:6px;color:var(--muted)">✕ Ignorar</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Painel direito: histórico + aniversários -->
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em">Disparos Recentes</div>
+
+              <div class="panel" style="flex:0 0 auto">
+                <div class="panel-header"><div class="panel-title">📬 Últimas Mensagens</div><div class="panel-action">Ver histórico</div></div>
+                <div class="panel-body">
+                  <div class="wf-row" style="grid-template-columns:28px 1fr 60px 60px;align-items:center">
+                    <div style="font-size:14px">🐕</div>
+                    <div><div style="font-size:10px;font-weight:600;color:var(--text)">Confirmação — Buddy</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Hoje 08:00</div></div>
+                    <span class="status-pill ok" style="font-size:8px;padding:2px 6px"><span class="status-dot"></span>Confirmou</span>
+                    <span style="font-size:8px;color:var(--muted);font-family:var(--mono)">SIM ✓✓</span>
+                  </div>
+                  <div class="wf-row" style="grid-template-columns:28px 1fr 60px 60px;align-items:center">
+                    <div style="font-size:14px">🐈</div>
+                    <div><div style="font-size:10px;font-weight:600;color:var(--text)">Foto pós-serviço — Luna</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Hoje 10:30</div></div>
+                    <span class="status-pill blue" style="font-size:8px;padding:2px 6px"><span class="status-dot"></span>Enviado</span>
+                    <span style="font-size:8px;color:var(--muted);font-family:var(--mono)">✓✓</span>
+                  </div>
+                  <div class="wf-row" style="grid-template-columns:28px 1fr 60px 60px;align-items:center">
+                    <div style="font-size:14px">🐶</div>
+                    <div><div style="font-size:10px;font-weight:600;color:var(--text)">Confirmação — Rex</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Hoje 11:00</div></div>
+                    <span class="status-pill warn" style="font-size:8px;padding:2px 6px"><span class="status-dot"></span>Sem resposta</span>
+                    <span style="font-size:8px;color:var(--muted);font-family:var(--mono)">✓</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Aniversários -->
+              <div>
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">🎂 Aniversários Próximos</div>
+                <div class="panel">
+                  <div class="panel-body">
+                    <div class="wf-row" style="grid-template-columns:28px 1fr 70px 70px">
+                      <div style="font-size:14px">🐕</div>
+                      <div><div style="font-size:10px;font-weight:600;color:var(--text)">Buddy</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Eduardo · Centro</div></div>
+                      <div style="font-size:9px;color:var(--yellow);font-family:var(--mono)">em 12 dias</div>
+                      <div class="btn btn-ghost" style="font-size:8px;padding:3px 8px;border-radius:5px">Enviar mimo</div>
+                    </div>
+                    <div class="wf-row" style="grid-template-columns:28px 1fr 70px 70px">
+                      <div style="font-size:14px">🐈</div>
+                      <div><div style="font-size:10px;font-weight:600;color:var(--text)">Nala</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Fernanda · Norte</div></div>
+                      <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">em 21 dias</div>
+                      <div class="btn btn-ghost" style="font-size:8px;padding:3px 8px;border-radius:5px">Enviar mimo</div>
+                    </div>
+                    <div class="wf-row" style="grid-template-columns:28px 1fr 70px 70px">
+                      <div style="font-size:14px">🐩</div>
+                      <div><div style="font-size:10px;font-weight:600;color:var(--text)">Princesa</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Rita · Sul</div></div>
+                      <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">em 28 dias</div>
+                      <div class="btn btn-ghost" style="font-size:8px;padding:3px 8px;border-radius:5px">Enviar mimo</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stats -->
+              <div style="background:var(--wf-fill);border:1px solid var(--wf-stroke);border-radius:8px;padding:12px">
+                <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Resumo do Mês</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent)">284</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Mensagens enviadas</div></div>
+                  <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--green)">78%</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Taxa confirmação</div></div>
+                  <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--yellow)">12</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Campanhas ativas</div></div>
+                  <div style="text-align:center"><div style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--purple)">R$ 1.280</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Receita gerada</div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Fluxos automáticos: Confirmação 24h antes / Foto pós-serviço / Campanha anti-ociosidade.</div>
+    <div class="annotation"><div class="ann-num">2</div>Campanha anti-ociosidade entra em modo "aguarda aprovação" — dono aprova com 1 clique ou edita antes de disparar.</div>
+    <div class="annotation"><div class="ann-num">3</div>Aniversários próximos com ação direta de "Enviar mimo" — gera mensagem personalizada automaticamente.</div>
+    <div class="annotation"><div class="ann-num">4</div>Histórico de disparos com status de entrega e resposta do tutor (SIM/NÃO/Sem resposta).</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 7 — RELATÓRIOS / BI ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 07 / Relatórios & BI</div>
+  <div class="screen-desc">Comparativo de faturamento entre filiais · heatmap de ocupação · ranking de serviços · DRE simplificado.</div>
+
+  <div class="screen" style="height:680px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/relatorios</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-mark">🐾</div><div><div class="logo-text">PetControl</div><div class="logo-sub">v1.0 · Cloud</div></div></div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item active"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer"><div class="user-avatar">👤</div><div class="user-info"><div class="user-name">Eduardo</div><div class="user-role">Admin · Todas</div></div></div>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">Relatórios & BI <span>Março 2026</span></div>
+          <div class="filial-selector"><div class="selector-dot"></div> Todas as Filiais ▾</div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">Período: Março ▾</div>
+            <div class="btn btn-ghost">↓ Exportar PDF</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+
+          <!-- Faturamento Comparativo + KPIs linha -->
+          <div style="display:grid;grid-template-columns:1fr 240px;gap:12px">
+
+            <!-- Gráfico de barras comparativo -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">💰 Faturamento por Filial — Março 2026</div>
+                <div style="display:flex;gap:6px">
+                  <div class="filter-chip active">Mês</div>
+                  <div class="filter-chip">Semana</div>
+                  <div class="filter-chip">Dia</div>
+                </div>
+              </div>
+              <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+                <!-- Bar rows -->
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:70px;font-size:10px;font-weight:600;color:var(--text);text-align:right;font-family:var(--mono)">Centro</div>
+                  <div style="flex:1;height:28px;background:var(--wf-fill3);border-radius:5px;overflow:hidden">
+                    <div style="width:88%;height:100%;background:linear-gradient(90deg,var(--accent),#7cb9ff);border-radius:5px;display:flex;align-items:center;padding:0 10px">
+                      <span style="font-size:10px;font-weight:700;color:#fff;font-family:var(--mono)">R$ 24.200</span>
+                    </div>
+                  </div>
+                  <div style="font-size:9px;color:var(--green);font-family:var(--mono)">▲ +8%</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:70px;font-size:10px;font-weight:600;color:var(--text);text-align:right;font-family:var(--mono)">Sul</div>
+                  <div style="flex:1;height:28px;background:var(--wf-fill3);border-radius:5px;overflow:hidden">
+                    <div style="width:100%;height:100%;background:linear-gradient(90deg,var(--green),#1a8a5a);border-radius:5px;display:flex;align-items:center;padding:0 10px">
+                      <span style="font-size:10px;font-weight:700;color:#fff;font-family:var(--mono)">R$ 27.400 ★</span>
+                    </div>
+                  </div>
+                  <div style="font-size:9px;color:var(--green);font-family:var(--mono)">▲ +14%</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:70px;font-size:10px;font-weight:600;color:var(--text);text-align:right;font-family:var(--mono)">Norte</div>
+                  <div style="flex:1;height:28px;background:var(--wf-fill3);border-radius:5px;overflow:hidden">
+                    <div style="width:70%;height:100%;background:linear-gradient(90deg,#6366f1,#818cf8);border-radius:5px;display:flex;align-items:center;padding:0 10px">
+                      <span style="font-size:10px;font-weight:700;color:#fff;font-family:var(--mono)">R$ 19.100</span>
+                    </div>
+                  </div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">→ +1%</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:70px;font-size:10px;font-weight:600;color:var(--text);text-align:right;font-family:var(--mono)">Leste</div>
+                  <div style="flex:1;height:28px;background:var(--wf-fill3);border-radius:5px;overflow:hidden">
+                    <div style="width:48%;height:100%;background:linear-gradient(90deg,var(--yellow),#f59e0b);border-radius:5px;display:flex;align-items:center;padding:0 10px">
+                      <span style="font-size:10px;font-weight:700;color:#000;font-family:var(--mono)">R$ 13.100</span>
+                    </div>
+                  </div>
+                  <div style="font-size:9px;color:var(--red);font-family:var(--mono)">▼ -5%</div>
+                </div>
+                <div style="border-top:1px solid var(--wf-stroke);padding-top:8px;display:flex;justify-content:space-between;align-items:center">
+                  <div style="font-size:10px;color:var(--muted)">Total consolidado</div>
+                  <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--green)">R$ 83.800</div>
+                  <div style="font-size:9px;color:var(--green);font-family:var(--mono)">▲ +6.4% vs fev</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ranking de serviços -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">🏆 Top Serviços</div></div>
+              <div style="padding:10px;display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 4px">
+                  <div style="font-size:10px;color:var(--text)">🥇 Banho + Tosa</div>
+                  <div style="font-family:var(--mono);font-size:10px;color:var(--yellow)">R$ 31.200</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 4px">
+                  <div style="font-size:10px;color:var(--text)">🥈 Hospedagem</div>
+                  <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">R$ 24.600</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 4px">
+                  <div style="font-size:10px;color:var(--text)">🥉 Banho Simples</div>
+                  <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">R$ 14.800</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 4px">
+                  <div style="font-size:10px;color:var(--muted)">4. Consulta Vet</div>
+                  <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">R$ 8.400</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 4px">
+                  <div style="font-size:10px;color:var(--muted)">5. Vacinação</div>
+                  <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">R$ 4.800</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Heatmap + DRE -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+            <!-- Heatmap de ocupação -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">🔥 Heatmap de Ocupação — Filial Leste</div><div class="panel-action">Trocar filial ▾</div></div>
+              <div style="padding:14px">
+                <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px">
+                  <div></div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">SEG</div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">TER</div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">QUA</div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">QUI</div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">SEX</div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">SÁB</div>
+                  <div style="text-align:center;font-size:8px;color:var(--muted);font-family:var(--mono)">DOM</div>
+                </div>
+                <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-top:3px">
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono);display:flex;align-items:center">08h</div>
+                  <div style="height:22px;background:rgba(52,211,153,0.6);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.7);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.5);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.8);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.9);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,1);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.2);border-radius:3px"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-top:3px">
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono);display:flex;align-items:center">10h</div>
+                  <div style="height:22px;background:rgba(52,211,153,0.7);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.4);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.6);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.6);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.8);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,1);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.2);border-radius:3px"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-top:3px">
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono);display:flex;align-items:center">14h</div>
+                  <div style="height:22px;background:rgba(52,211,153,0.5);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.4);border-radius:3px;border:1px solid rgba(248,113,113,0.5)"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.35);border-radius:3px;border:1px solid rgba(248,113,113,0.5)"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.4);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.5);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.7);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.15);border-radius:3px"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-top:3px">
+                  <div style="font-size:8px;color:var(--muted);font-family:var(--mono);display:flex;align-items:center">17h</div>
+                  <div style="height:22px;background:rgba(52,211,153,0.3);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.3);border-radius:3px;border:1px solid rgba(248,113,113,0.5)"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.25);border-radius:3px;border:1px solid rgba(248,113,113,0.5)"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.3);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.4);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(52,211,153,0.6);border-radius:3px"></div>
+                  <div style="height:22px;background:rgba(248,113,113,0.1);border-radius:3px"></div>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:8px;font-size:8px;color:var(--muted)">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="width:10px;height:10px;background:rgba(52,211,153,0.8);border-radius:2px;display:inline-block"></span>Cheio</span>
+                  <span style="display:flex;align-items:center;gap:3px"><span style="width:10px;height:10px;background:rgba(248,113,113,0.4);border-radius:2px;display:inline-block"></span>Ocioso</span>
+                </div>
+                <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:6px;padding:7px;margin-top:8px;font-size:9px;color:var(--yellow)">
+                  ⚡ Ter e Qua 14h–17h com ociosidade recorrente → <strong style="color:var(--text)">enviar campanha automática?</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- DRE simplificado -->
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">📊 DRE Simplificado — Março</div><div class="panel-action">↓ Exportar</div></div>
+              <div style="padding:10px">
+                <div class="wf-table">
+                  <div style="display:flex;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--wf-stroke)">
+                    <div style="font-size:10px;font-weight:700;color:var(--green)">Receita Bruta Total</div>
+                    <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green)">R$ 83.800</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--wf-stroke)">
+                    <div style="font-size:10px;color:var(--muted);padding-left:12px">(-) Insumos</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--red)">- R$ 12.400</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--wf-stroke)">
+                    <div style="font-size:10px;color:var(--muted);padding-left:12px">(-) Folha de pagamento</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--red)">- R$ 24.000</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--wf-stroke)">
+                    <div style="font-size:10px;color:var(--muted);padding-left:12px">(-) Aluguel 4 filiais</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--red)">- R$ 16.000</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--wf-stroke)">
+                    <div style="font-size:10px;color:var(--muted);padding-left:12px">(-) Outras despesas</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--red)">- R$ 4.200</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:8px 10px;background:rgba(52,211,153,0.06);border-radius:0 0 6px 6px">
+                    <div style="font-size:11px;font-weight:700;color:#fff">Lucro Líquido</div>
+                    <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green)">R$ 27.200</div>
+                  </div>
+                </div>
+                <div style="margin-top:8px;display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-family:var(--mono);padding:0 2px">
+                  <span>Margem: <strong style="color:var(--green)">32.5%</strong></span>
+                  <span>vs fev: <strong style="color:var(--green)">▲ +4.1pp</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Gráfico de barras comparativo entre filiais com delta percentual vs mês anterior.</div>
+    <div class="annotation"><div class="ann-num">2</div>Heatmap de ocupação por horário × dia da semana — detecta padrão de ociosidade recorrente.</div>
+    <div class="annotation"><div class="ann-num">3</div>DRE simplificado com margens — sem precisar exportar pro Excel. Exportável em PDF.</div>
+    <div class="annotation"><div class="ann-num">4</div>Filtro de período (Dia / Semana / Mês) e seletor de filial no topbar controlam todos os gráficos.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ SCREEN 8 — GESTÃO DE FILIAIS ══════════════════════ -->
+<div class="screen-wrap">
+  <div class="screen-title">Screen 08 / Gestão de Filiais</div>
+  <div class="screen-desc">Configuração de cada unidade · equipe por filial · níveis de acesso · status operacional em tempo real.</div>
+
+  <div class="screen" style="height:660px">
+    <div class="chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">app.petcontrol.com.br/filiais</div>
+    </div>
+
+    <div class="app-shell" style="flex:1;min-height:0">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-mark">🐾</div><div><div class="logo-text">PetControl</div><div class="logo-sub">v1.0 · Cloud</div></div></div>
+        <div class="nav-section">
+          <div class="nav-label">Principal</div>
+          <div class="nav-item"><span class="nav-icon">📊</span> Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🐶</span> Pets / CRM</div>
+          <div class="nav-item"><span class="nav-icon">📅</span> Agenda <span class="nav-badge">4</span></div>
+          <div class="nav-item"><span class="nav-icon">📦</span> Estoque <span class="nav-badge">2</span></div>
+          <div class="nav-label" style="margin-top:16px">Financeiro</div>
+          <div class="nav-item"><span class="nav-icon">💰</span> Faturamento</div>
+          <div class="nav-item"><span class="nav-icon">📈</span> Relatórios</div>
+          <div class="nav-label" style="margin-top:16px">Gestão</div>
+          <div class="nav-item"><span class="nav-icon">💬</span> WhatsApp</div>
+          <div class="nav-item active"><span class="nav-icon">⚙️</span> Filiais</div>
+        </div>
+        <div class="sidebar-footer"><div class="user-avatar">👤</div><div class="user-info"><div class="user-name">Eduardo</div><div class="user-role">Admin · Todas</div></div></div>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">Gestão de Filiais <span>4 unidades ativas</span></div>
+          <div class="topbar-actions">
+            <div class="btn btn-ghost">👥 Gerenciar Equipe</div>
+            <div class="btn btn-primary">+ Nova Filial</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+
+          <!-- Cards das 4 filiais -->
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+
+            <!-- Filial Centro -->
+            <div style="background:var(--wf-fill);border:1px solid rgba(52,211,153,0.2);border-radius:12px;overflow:hidden">
+              <div style="background:rgba(52,211,153,0.06);border-bottom:1px solid rgba(52,211,153,0.15);padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#fff">Filial Centro</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Av. Principal, 450 · São Paulo</div>
+                </div>
+                <span class="status-pill ok"><span class="status-dot"></span>Aberta</span>
+              </div>
+              <div style="padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)">R$ 4.800</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Faturamento hoje</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent)">92%</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Ocupação</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;display:flex;flex-direction:column;gap:3px">
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em">Equipe hoje</div>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap">
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Júlia</span>
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Carol</span>
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Pedro</span>
+                  </div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--yellow)">14</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Atend. hoje</div>
+                </div>
+              </div>
+              <div style="padding:0 12px 10px;display:flex;gap:6px">
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px">⚙ Configurar</div>
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px">📊 Relatório</div>
+              </div>
+            </div>
+
+            <!-- Filial Norte -->
+            <div style="background:var(--wf-fill);border:1px solid rgba(248,113,113,0.2);border-radius:12px;overflow:hidden">
+              <div style="background:rgba(248,113,113,0.05);border-bottom:1px solid rgba(248,113,113,0.15);padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#fff">Filial Norte</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Rua das Flores, 120 · São Paulo</div>
+                </div>
+                <span class="status-pill" style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:var(--red)"><span style="width:5px;height:5px;border-radius:50%;background:var(--red);display:inline-block;margin-right:4px"></span>Alerta Estoque</span>
+              </div>
+              <div style="padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--yellow)">R$ 3.600</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Faturamento hoje</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--yellow)">78%</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Ocupação</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;display:flex;flex-direction:column;gap:3px">
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em">Equipe hoje</div>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap">
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Ana</span>
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Rafa</span>
+                  </div>
+                </div>
+                <div style="background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">⚠ 2 itens</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Estoque crítico</div>
+                </div>
+              </div>
+              <div style="padding:0 12px 10px;display:flex;gap:6px">
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px">⚙ Configurar</div>
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px;color:var(--red);border-color:rgba(248,113,113,0.3)">⚠ Ver Alertas</div>
+              </div>
+            </div>
+
+            <!-- Filial Sul -->
+            <div style="background:var(--wf-fill);border:1px solid rgba(52,211,153,0.2);border-radius:12px;overflow:hidden">
+              <div style="background:rgba(52,211,153,0.06);border-bottom:1px solid rgba(52,211,153,0.15);padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#fff">Filial Sul <span style="font-size:10px;color:var(--yellow);font-family:var(--mono)">★ Melhor desempenho</span></div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Av. Paulista, 900 · São Paulo</div>
+                </div>
+                <span class="status-pill ok"><span class="status-dot"></span>Aberta</span>
+              </div>
+              <div style="padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)">R$ 5.100</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Faturamento hoje</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)">95%</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Ocupação</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;display:flex;flex-direction:column;gap:3px">
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em">Equipe hoje</div>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap">
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Bruna</span>
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Lucas</span>
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Tati</span>
+                  </div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)">16</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Atend. hoje</div>
+                </div>
+              </div>
+              <div style="padding:0 12px 10px;display:flex;gap:6px">
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px">⚙ Configurar</div>
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px">📊 Relatório</div>
+              </div>
+            </div>
+
+            <!-- Filial Leste -->
+            <div style="background:var(--wf-fill);border:1px solid rgba(251,191,36,0.2);border-radius:12px;overflow:hidden">
+              <div style="background:rgba(251,191,36,0.05);border-bottom:1px solid rgba(251,191,36,0.15);padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#fff">Filial Leste</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Rua Nova, 55 · São Paulo</div>
+                </div>
+                <span class="status-pill warn"><span style="width:5px;height:5px;border-radius:50%;background:var(--yellow);display:inline-block;margin-right:4px"></span>Ociosidade</span>
+              </div>
+              <div style="padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--yellow)">R$ 2.500</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Faturamento hoje</div>
+                </div>
+                <div style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.15);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--red)">61%</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Ocupação</div>
+                </div>
+                <div style="background:var(--wf-fill2);border:1px solid var(--wf-stroke);border-radius:7px;padding:8px;display:flex;flex-direction:column;gap:3px">
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em">Equipe hoje</div>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap">
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Dani</span>
+                    <span style="background:var(--wf-fill3);border:1px solid var(--wf-stroke2);border-radius:100px;padding:2px 7px;font-size:9px;color:var(--text)">Igor</span>
+                  </div>
+                </div>
+                <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:7px;padding:8px;text-align:center">
+                  <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--yellow)">9</div>
+                  <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">Atend. hoje</div>
+                </div>
+              </div>
+              <div style="padding:0 12px 10px;display:flex;gap:6px">
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px">⚙ Configurar</div>
+                <div class="btn btn-ghost" style="flex:1;text-align:center;padding:5px;font-size:10px;border-radius:6px;color:var(--yellow);border-color:rgba(251,191,36,0.3)">⚡ Campanha</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="ann-num">1</div>Cada filial tem card próprio com status (Aberta / Alerta / Ociosidade) e cor de borda correspondente.</div>
+    <div class="annotation"><div class="ann-num">2</div>Filial Leste com 61% ocupação recebe CTA "Campanha" direto no card — disparo anti-ociosidade com 1 clique.</div>
+    <div class="annotation"><div class="ann-num">3</div>Filial Norte com alerta de estoque tem CTA "Ver Alertas" destacado em vermelho.</div>
+    <div class="annotation"><div class="ann-num">4</div>Equipe do dia visível por filial — acesso rápido a quem está trabalhando em cada unidade agora.</div>
+  </div>
+</div>
+
+</body>
+</html>

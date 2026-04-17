@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prospecção Inteligente — Andarilho Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0c0e1a;
+      --bg2:         #131828;
+      --bg3:         #1b2240;
+      --border:      #1e2840;
+      --border2:     #253560;
+      --text:        #f0ede6;
+      --muted:       #6b7080;
+      --muted2:      #9098a8;
+      --gold:        #C8892C;
+      --gold-light:  #D9A850;
+      --gold-dark:   #7a5010;
+      --gold-bg:     #1a1208;
+      --purple:      #a78bfa;
+      --purple-dark: #5b21b6;
+      --purple-bg:   #1a0d35;
+      --green:       #4ade80;
+      --green-dark:  #15803d;
+      --green-bg:    #061a0c;
+      --orange:      #fb923c;
+      --orange-dark: #c2410c;
+      --orange-bg:   #1c0e06;
+      --red:         #f87171;
+      --red-dark:    #b91c1c;
+      --red-bg:      #1c0808;
+      --yellow:      #fbbf24;
+      --yellow-bg:   #1c1608;
+      --cyan:        #38bdf8;
+      --cyan-bg:     #071820;
+      --blue:        #60a5fa;
+      --blue-dark:   #1d4ed8;
+      --blue-bg:     #0a1628;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────── */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+    }
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon { font-size: 22px; }
+    .logo-text { font-family:'Cinzel',serif; font-size:13px; font-weight:700; color:var(--muted2); line-height:1.2; letter-spacing:0.04em; }
+    .logo-text strong { color:var(--gold); display:block; font-size:15px; }
+    .sidebar-nav { flex: 1; padding: 12px 0; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+      margin: 1px 0;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(200,137,44,0.08); border-left-color: var(--gold-dark); }
+    .nav-item.active {
+      color: #0c0e1a;
+      background: var(--gold);
+      border-left-color: var(--gold);
+      font-weight: 700;
+    }
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .sidebar-footer a { color: var(--gold); text-decoration: none; }
+
+    /* ── MAIN ────────────────────────────────── */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-header {
+      padding: 28px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .page-header h1 { font-family:'Cinzel',serif; font-size: 20px; font-weight: 700; letter-spacing:0.03em; }
+    .page-header .subtitle { font-size: 13px; color: var(--muted2); margin-top: 4px; }
+    .content { padding: 28px 32px 60px; }
+
+    /* ── BOTÕES ──────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--gold); color: #000; }
+    .btn-primary:hover { background: var(--yellow); }
+    .btn-secondary {
+      background: var(--bg3);
+      color: var(--muted2);
+      border: 1px solid var(--border2);
+    }
+    .btn-secondary:hover { color: var(--text); border-color: var(--gold); }
+    .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+
+    /* ── CARDS MÉTRICA ───────────────────────── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .metric-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .metric-icon { font-size: 22px; margin-bottom: 10px; }
+    .metric-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .metric-label { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── SEÇÃO ───────────────────────────────── */
+    .section-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-title { font-size: 14px; font-weight: 700; }
+
+    /* ── BARRA DE DORES ──────────────────────── */
+    .dores-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+    }
+    .dor-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dor-emoji { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+    .dor-label { font-size: 13px; color: var(--muted2); width: 180px; flex-shrink: 0; }
+    .dor-bar-wrap {
+      flex: 1;
+      background: var(--bg3);
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .dor-bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+    .dor-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      width: 40px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ── TABELA DE COMENTÁRIOS ───────────────── */
+    .comment-list { display: flex; flex-direction: column; }
+    .comment-item {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .comment-item:last-child { border-bottom: none; }
+    .comment-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--bg3);
+    }
+    .comment-avatar-fallback {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .comment-body { flex: 1; min-width: 0; }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .comment-autor { font-size: 13px; font-weight: 700; color: var(--text); }
+    .comment-data { font-size: 11px; color: var(--muted); }
+    .comment-video { font-size: 11px; color: var(--gold); }
+    .comment-texto {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+    .comment-dores { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .dor-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .dor-badge.orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-dark); }
+    .dor-badge.blue   { background: var(--gold-bg);   color: var(--gold);   border: 1px solid var(--gold-dark); }
+    .dor-badge.purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-dark); }
+    .dor-badge.cyan   { background: var(--cyan-bg);   color: var(--cyan);   border: 1px solid #1870A0; }
+    .dor-badge.yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--gold-dark); }
+    .comment-actions { display: flex; gap: 8px; }
+    .btn-link {
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .btn-link:hover { color: var(--yellow); }
+    .btn-link.danger { color: var(--red); }
+    .btn-link.danger:hover { color: #f87171; }
+
+    /* ── FILTROS ─────────────────────────────── */
+    .filtros {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+    .filtros input, .filtros select {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+    .filtros input::placeholder { color: var(--muted); }
+    .filtros input:focus, .filtros select:focus { border-color: var(--gold); }
+    .filtros select option { background: var(--bg2); }
+    .filtro-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border2);
+      background: var(--bg3);
+      color: var(--muted2);
+      transition: all 0.15s;
+    }
+    .filtro-tag.active { border-color: var(--gold); color: var(--gold); background: var(--gold-bg); }
+
+    /* ── ESTADO VAZIO ────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .empty-desc { font-size: 14px; color: var(--muted2); max-width: 400px; margin: 0 auto 24px; line-height: 1.6; }
+
+    /* ── TOAST ───────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--gold-dark);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">🔍</span>
+      <span class="logo-text">Prospecção<strong>Pro</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item active">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="buscar.html" class="nav-item">
+        <span class="nav-icon">🔎</span> Buscar Comentários
+      </a>
+      <a href="leads.html" class="nav-item">
+        <span class="nav-icon">🎯</span> Leads Salvos
+      </a>
+      <a href="diagnostico.html" class="nav-item">
+        <span class="nav-icon">🩺</span> Diagnóstico
+      </a>
+      <a href="video-audit.html" class="nav-item">
+        <span class="nav-icon">🎬</span> Video Audit
+      </a>
+      <a href="estrategia.html" class="nav-item">
+        <span class="nav-icon">🗺️</span> Estratégia
+      </a>
+      <a href="configuracoes.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Configurações
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      Andarilho Digital · Agência<br>
+      <a href="../orcamentos-crm/index.html">→ Sistema de Orçamentos</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="page-header">
+      <div>
+        <h1>Dashboard de Prospecção</h1>
+        <p class="subtitle">Dores detectadas em comentários — YouTube e Reddit · PT-BR e EN</p>
+      </div>
+      <a href="buscar.html" class="btn btn-primary">+ Nova Busca</a>
+    </header>
+
+    <div class="content">
+
+      <!-- MÉTRICAS -->
+      <div class="metrics">
+        <div class="metric-card">
+          <div class="metric-icon">💬</div>
+          <div class="metric-value" id="m-total">0</div>
+          <div class="metric-label">Comentários analisados</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">🚨</div>
+          <div class="metric-value" id="m-dores">0</div>
+          <div class="metric-label">Com dores detectadas</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">🎯</div>
+          <div class="metric-value" id="m-leads">0</div>
+          <div class="metric-label">Leads salvos</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">📡</div>
+          <div class="metric-value" id="m-videos">0</div>
+          <div class="metric-label">Fontes analisadas</div>
+        </div>
+      </div>
+
+      <!-- DISTRIBUIÇÃO DE DORES -->
+      <div class="section-card" style="margin-bottom:24px">
+        <div class="section-header">
+          <span class="section-title">🔥 Distribuição de Dores</span>
+        </div>
+        <div class="dores-bar" id="barra-dores">
+          <div class="empty-state" style="padding:30px 20px">
+            <div style="color:var(--muted);font-size:14px">Nenhuma análise ainda. <a href="buscar.html" style="color:var(--gold)">Fazer primeira busca →</a></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMENTÁRIOS COM DORES -->
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-title">💬 Comentários com Dores Detectadas</span>
+          <span id="total-label" style="font-size:12px;color:var(--muted)"></span>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="filtros">
+          <input type="text" id="busca" placeholder="Buscar em comentários..." oninput="filtrar()" style="flex:1;min-width:200px" />
+          <select id="filtro-dor" onchange="filtrar()">
+            <option value="">Todas as dores</option>
+            <option value="cobranca">💰 Cobrança / Valor</option>
+            <option value="presenca">🌐 Presença Digital</option>
+            <option value="captacao">🎯 Captação de Clientes</option>
+            <option value="operacional">⚙️ Operacional / Gestão</option>
+            <option value="credibilidade">🏆 Credibilidade</option>
+          </select>
+          <select id="filtro-fonte" onchange="filtrar()">
+            <option value="">Todas as fontes</option>
+            <option value="youtube">▶ YouTube</option>
+            <option value="reddit">🟠 Reddit</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="limparTudo()">🗑 Limpar dados</button>
+        </div>
+
+        <!-- LISTA -->
+        <div class="comment-list" id="lista-comentarios">
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">Nenhum comentário analisado</div>
+            <div class="empty-desc">Vá em "Buscar Comentários", cole uma URL do YouTube ou escolha um subreddit para começar.</div>
+            <a href="buscar.html" class="btn btn-primary">Começar agora</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/analise.js"></script>
+  <script>
+
+    function toast(msg, ms = 2500) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', ms);
+    }
+
+    function formatarData(iso) {
+      if (!iso) return '';
+      return new Date(iso).toLocaleDateString('pt-BR');
+    }
+
+    // ── CARREGAR E RENDERIZAR ──────────────────────────────────
+    let todosComentarios = [];
+
+    function carregar() {
+      todosComentarios = Storage.getComentarios().filter(c => c.dores?.length > 0);
+      const todosSemFiltro = Storage.getComentarios();
+      const leads = Storage.getLeads();
+
+      // Métricas
+      document.getElementById('m-total').textContent = todosSemFiltro.length;
+      document.getElementById('m-dores').textContent = todosComentarios.length;
+      document.getElementById('m-leads').textContent = leads.length;
+      const videos = [...new Set(todosSemFiltro.map(c => c.videoId))].length;
+      document.getElementById('m-videos').textContent = videos;
+
+      // Barra de dores
+      renderizarBarraDores(todosComentarios);
+
+      // Lista
+      filtrar();
+    }
+
+    function renderizarBarraDores(comentarios) {
+      const stats = calcularEstatisticas(comentarios);
+      const max = Math.max(...stats.map(s => s.total), 1);
+      const wrap = document.getElementById('barra-dores');
+
+      if (stats.every(s => s.total === 0)) {
+        wrap.innerHTML = `<div style="padding:20px;color:var(--muted);font-size:14px;text-align:center">Nenhuma análise ainda. <a href="buscar.html" style="color:var(--gold)">Fazer primeira busca →</a></div>`;
+        return;
+      }
+
+      const cores = { cobranca:'var(--orange)', presenca:'var(--gold)', captacao:'var(--purple)', operacional:'var(--cyan)', credibilidade:'var(--yellow)' };
+
+      wrap.innerHTML = stats.map(s => `
+        <div class="dor-row">
+          <span class="dor-emoji">${s.emoji}</span>
+          <span class="dor-label">${s.label}</span>
+          <div class="dor-bar-wrap">
+            <div class="dor-bar-fill" style="width:${(s.total/max)*100}%;background:${cores[s.key] || 'var(--gold)'}"></div>
+          </div>
+          <span class="dor-count">${s.total}</span>
+        </div>
+      `).join('');
+    }
+
+    function filtrar() {
+      const busca = document.getElementById('busca').value.toLowerCase();
+      const filtroDor = document.getElementById('filtro-dor').value;
+      const filtroFonte = document.getElementById('filtro-fonte').value;
+
+      let lista = todosComentarios;
+
+      if (busca) {
+        lista = lista.filter(c =>
+          c.texto.toLowerCase().includes(busca) ||
+          c.autor.toLowerCase().includes(busca) ||
+          (c.videoTitle || '').toLowerCase().includes(busca)
+        );
+      }
+
+      if (filtroDor) {
+        lista = lista.filter(c => c.dores?.some(d => d.key === filtroDor));
+      }
+
+      if (filtroFonte) {
+        lista = lista.filter(c => c.fonte === filtroFonte);
+      }
+
+      document.getElementById('total-label').textContent =
+        lista.length > 0 ? `${lista.length} comentário(s)` : '';
+
+      const container = document.getElementById('lista-comentarios');
+
+      if (lista.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">${busca || filtroDor ? 'Nenhum resultado para esse filtro' : 'Nenhum comentário analisado'}</div>
+            <div class="empty-desc">${busca || filtroDor ? 'Tente outros termos.' : 'Vá em "Buscar Comentários" para começar.'}</div>
+            ${!busca && !filtroDor ? '<a href="buscar.html" class="btn btn-primary">Começar agora</a>' : ''}
+          </div>`;
+        return;
+      }
+
+      const leads = Storage.getLeads();
+
+      container.innerHTML = lista.slice(0, 100).map(c => {
+        const jaLead = leads.some(l => l.channelId === c.autorUrl && l.videoId === c.videoId);
+        const foto = c.autorFoto
+          ? `<img class="comment-avatar" src="${c.autorFoto}" alt="${c.autor}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          : '';
+        const inicial = c.autor?.[0]?.toUpperCase() || '?';
+
+        return `
+          <div class="comment-item">
+            ${foto}
+            <div class="comment-avatar-fallback" ${c.autorFoto ? 'style="display:none"' : ''}>${inicial}</div>
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-autor">${c.autor || 'Anônimo'}</span>
+                <span class="comment-data">${formatarData(c.data)}</span>
+                ${c.videoTitle ? `<span class="comment-video">${c.fonte === 'reddit' ? '🟠' : '📹'} ${c.videoTitle.slice(0,40)}${c.videoTitle.length > 40 ? '…' : ''}</span>` : ''}
+              </div>
+              <div class="comment-texto">${c.texto}</div>
+              <div class="comment-dores">
+                ${(c.dores || []).map(d => `<span class="dor-badge ${d.cor}">${d.emoji} ${d.label}</span>`).join('')}
+              </div>
+              <div class="comment-actions">
+                ${!jaLead
+                  ? `<button class="btn-link" onclick="salvarLead(${JSON.stringify(c).replace(/"/g, '&quot;')})">⭐ Salvar como Lead</button>`
+                  : `<span style="font-size:12px;color:var(--green)">✓ Já é lead</span>`}
+                ${c.autorUrl
+                  ? `<a href="${c.autorUrl}" target="_blank" class="btn-link">${c.fonte === 'reddit' ? 'Ver perfil →' : 'Ver canal →'}</a>`
+                  : ''}
+                <a href="${c.fonte === 'reddit' ? (c.permalink || '#') : 'https://youtube.com/watch?v=' + c.videoId}" target="_blank" class="btn-link">${c.fonte === 'reddit' ? 'Ver post →' : 'Ver vídeo →'}</a>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function salvarLead(c) {
+      const ok = Storage.salvarLead({
+        nome: c.autor,
+        canal: c.autorUrl,
+        foto: c.autorFoto,
+        channelId: c.autorUrl,
+        videoId: c.videoId,
+        videoTitle: c.videoTitle,
+        comentario: c.texto,
+        dores: c.dores,
+        status: 'novo',
+      });
+      if (ok) {
+        toast('✓ Lead salvo!');
+        carregar();
+      } else {
+        toast('Esse lead já foi salvo.');
+      }
+    }
+
+    function limparTudo() {
+      if (!confirm('Limpar todos os comentários analisados? Os leads salvos não serão apagados.')) return;
+      Storage.limparComentarios();
+      carregar();
+      toast('Dados limpos.');
+    }
+
+    carregar();
+  </script>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patricia Fernandes — Símbolo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --rose:   #C17A6F;
+    --rose-d: #A35F54;
+    --blush:  #F5EAE6;
+    --sage:   #7A9E7E;
+    --sage-d: #5C7D60;
+    --sage-l: #C8D9C9;
+    --dark:   #1A1614;
+    --mid:    #2E2825;
+    --muted:  #7A6E6A;
+    --white:  #FAF7F5;
+  }
+  body { background: var(--dark); color: var(--white); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+
+  /* ── HEADER ── */
+  .hd { text-align: center; margin-bottom: 80px; }
+  .hd-tag { font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: block; }
+  .hd-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,4vw,44px); font-weight: 300; color: var(--white); }
+  .hd-title em { font-style: italic; color: var(--rose); }
+
+  /* ── SECTION ── */
+  .sec { margin-bottom: 100px; }
+  .sec-label { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-bottom: 32px; display: block; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+  /* ── GRID ── */
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+  /* ── SYMBOL CARD ── */
+  .sym-card {
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 32px 32px;
+    gap: 20px;
+    position: relative;
+  }
+  .sym-card-label {
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    opacity: .5;
+    margin-top: 4px;
+  }
+
+  /* BG VARIANTS */
+  .bg-blush  { background: var(--blush); }
+  .bg-rose   { background: var(--rose); }
+  .bg-sage   { background: var(--sage-d); }
+  .bg-dark2  { background: #0E0C0B; border: 1px solid rgba(255,255,255,0.04); }
+  .bg-mid    { background: var(--mid); }
+  .bg-sage-l { background: var(--sage-l); }
+  .bg-cream  { background: #F0EBE0; }
+
+  /* ── LOGO TEXTO ── */
+  .logo-text { text-align: center; }
+  .lt-name { font-family: 'Cormorant Garamond', serif; }
+  .lt-top  { font-style: italic; font-weight: 300; }
+  .lt-bot  { font-weight: 400; letter-spacing: .2em; text-transform: uppercase; }
+  .lt-line { height: 1px; background: currentColor; opacity: .35; margin: 7px 0; }
+  .lt-sub  { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: .35em; text-transform: uppercase; opacity: .7; }
+
+  /* ── SIZES ── */
+  .size-row { display: flex; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .size-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .size-tag { font-size: 9px; letter-spacing: .1em; color: var(--muted); }
+
+  /* ── CIRCULAR SEAL ── */
+  .seal-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+
+  /* ── DOWNLOAD BTN ── */
+  .dl-row { display: flex; gap: 12px; justify-content: center; margin-top: 48px; }
+  .dl-btn {
+    background: rgba(193,122,111,0.1);
+    border: 1px solid rgba(193,122,111,0.25);
+    color: var(--rose);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .dl-btn:hover { background: rgba(193,122,111,0.2); }
+
+  @media (max-width: 640px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .page { padding: 48px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hd">
+    <span class="hd-tag">Patricia Fernandes · Nutricionista</span>
+    <h1 class="hd-title">Símbolo de marca —<br><em>marca secundária</em></h1>
+  </div>
+
+  <!-- ══ 1. O SÍMBOLO ══ -->
+  <section class="sec">
+    <span class="sec-label">01 · O símbolo isolado</span>
+    <div class="grid-3">
+
+      <!-- Fundo blush — versão principal -->
+      <div class="sym-card bg-blush">
+        <svg width="80" height="100" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pétala esquerda -->
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48"
+                stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Pétala direita -->
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48"
+                stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Pétala central -->
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z"
+                stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Miolo -->
+          <path d="M40 24 L43 17 L40 10 L37 17 Z"
+                stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Caule -->
+          <path d="M40 76 L40 90"
+                stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          <!-- Folhinhas do caule -->
+          <path d="M40 84 C37 80 32 79 30 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 48 77 50 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="sym-card-label" style="color:var(--muted);">Fundo principal</span>
+      </div>
+
+      <!-- Fundo rose -->
+      <div class="sym-card bg-rose">
+        <svg width="80" height="100" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48"
+                stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48"
+                stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z"
+                stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z"
+                stroke="rgba(245,234,230,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 76 L40 90" stroke="rgba(245,234,230,0.5)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 48 77 50 78" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="sym-card-label" style="color:rgba(245,234,230,0.4);">Fundo primário</span>
+      </div>
+
+      <!-- Fundo escuro -->
+      <div class="sym-card bg-dark2">
+        <svg width="80" height="100" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48"
+                stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48"
+                stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z"
+                stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z"
+                stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M40 76 L40 90" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 32 79 30 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 48 77 50 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="sym-card-label">Fundo escuro</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2. VERSÃO CIRCULAR — REDES SOCIAIS ══ -->
+  <section class="sec">
+    <span class="sec-label">02 · Versão circular — perfil & redes sociais</span>
+    <div class="grid-3">
+
+      <!-- Círculo blush -->
+      <div class="sym-card bg-mid" style="padding:40px;">
+        <div style="width:200px;height:200px;border-radius:50%;background:var(--blush);display:flex;align-items:center;justify-content:center;position:relative;">
+          <svg width="90" height="112" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40 84 C37 80 33 79 31 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M40 82 C43 78 47 77 49 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="sym-card-label">Foto de perfil — Instagram</span>
+      </div>
+
+      <!-- Círculo rose escuro -->
+      <div class="sym-card bg-mid" style="padding:40px;">
+        <div style="width:200px;height:200px;border-radius:50%;background:var(--rose-d);display:flex;align-items:center;justify-content:center;">
+          <svg width="90" height="112" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="rgba(245,234,230,0.6)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="rgba(245,234,230,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40 84 C37 80 33 79 31 80" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M40 82 C43 78 47 77 49 78" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="sym-card-label">Alternativa escura</span>
+      </div>
+
+      <!-- Círculo sage -->
+      <div class="sym-card bg-mid" style="padding:40px;">
+        <div style="width:200px;height:200px;border-radius:50%;background:var(--sage-d);display:flex;align-items:center;justify-content:center;">
+          <svg width="90" height="112" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="rgba(245,234,230,0.6)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="rgba(245,234,230,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40 84 C37 80 33 79 31 80" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M40 82 C43 78 47 77 49 78" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="sym-card-label">Alternativa sálvia</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3. SELO CIRCULAR ══ -->
+  <section class="sec">
+    <span class="sec-label">03 · Selo circular — watermark & carimbo</span>
+    <div class="grid-2">
+
+      <div class="sym-card bg-blush" style="padding:60px 40px;">
+        <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Círculo externo -->
+          <circle cx="110" cy="110" r="104" stroke="#C17A6F" stroke-width="1" opacity="0.4"/>
+          <!-- Círculo interno -->
+          <circle cx="110" cy="110" r="96" stroke="#C17A6F" stroke-width="0.5" opacity="0.25"/>
+          <!-- Texto circular -->
+          <defs>
+            <path id="topArc" d="M 110,110 m -88,0 a 88,88 0 1,1 176,0"/>
+            <path id="botArc" d="M 110,110 m -88,0 a 88,88 0 0,0 176,0"/>
+          </defs>
+          <text font-family="Inter, sans-serif" font-size="9" font-weight="400" letter-spacing="5" fill="#A35F54" opacity="0.7">
+            <textPath href="#topArc" startOffset="8%">PATRICIA FERNANDES · NUTRICIONISTA ·</textPath>
+          </text>
+          <!-- Símbolo centro -->
+          <g transform="translate(75, 68) scale(0.88)">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </g>
+        </svg>
+        <span class="sym-card-label" style="color:var(--muted);">Versão clara</span>
+      </div>
+
+      <div class="sym-card bg-rose" style="padding:60px 40px;">
+        <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="110" cy="110" r="104" stroke="#F5EAE6" stroke-width="1" opacity="0.35"/>
+          <circle cx="110" cy="110" r="96" stroke="#F5EAE6" stroke-width="0.5" opacity="0.2"/>
+          <defs>
+            <path id="topArc2" d="M 110,110 m -88,0 a 88,88 0 1,1 176,0"/>
+          </defs>
+          <text font-family="Inter, sans-serif" font-size="9" font-weight="400" letter-spacing="5" fill="#F5EAE6" opacity="0.6">
+            <textPath href="#topArc2" startOffset="8%">PATRICIA FERNANDES · NUTRICIONISTA ·</textPath>
+          </text>
+          <g transform="translate(75, 68) scale(0.88)">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="rgba(245,234,230,0.6)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </g>
+        </svg>
+        <span class="sym-card-label" style="color:rgba(245,234,230,0.4);">Versão colorida</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. LOGO COMPLETO COM SÍMBOLO ══ -->
+  <section class="sec">
+    <span class="sec-label">04 · Logo completo — símbolo + tipografia</span>
+    <div class="grid-2">
+
+      <!-- Horizontal -->
+      <div class="sym-card bg-blush" style="flex-direction:row; gap:20px; padding:48px 40px; align-items:center;">
+        <svg width="52" height="65" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 33 79 31 80" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="logo-text" style="text-align:left; color:var(--rose);">
+          <div class="lt-name lt-top" style="font-size:28px; line-height:1;">Patricia</div>
+          <div class="lt-name lt-bot" style="font-size:19px; line-height:1; margin-top:2px; color:var(--rose-d);">Fernandes</div>
+          <div class="lt-line" style="background:var(--sage); margin: 7px 0;"></div>
+          <div class="lt-sub" style="color:var(--sage);">Nutricionista</div>
+        </div>
+        <span class="sym-card-label" style="position:absolute;bottom:16px;color:var(--muted);">Horizontal</span>
+      </div>
+
+      <!-- Vertical -->
+      <div class="sym-card bg-sage" style="padding:48px 32px;">
+        <svg width="56" height="70" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#F5EAE6" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="rgba(245,234,230,0.6)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="rgba(245,234,230,0.5)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M40 84 C37 80 33 79 31 80" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M40 82 C43 78 47 77 49 78" stroke="rgba(245,234,230,0.5)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="logo-text" style="color:#F5EAE6;">
+          <div class="lt-name lt-top" style="font-size:28px; line-height:1;">Patricia</div>
+          <div class="lt-name lt-bot" style="font-size:19px; line-height:1; margin-top:2px; color:rgba(245,234,230,0.75);">Fernandes</div>
+          <div class="lt-line" style="background:rgba(245,234,230,0.3); margin: 7px 0;"></div>
+          <div class="lt-sub" style="color:rgba(245,234,230,0.55);">Nutricionista</div>
+        </div>
+        <span class="sym-card-label" style="position:absolute;bottom:16px;color:rgba(245,234,230,0.3);">Vertical · fundo sálvia</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5. TESTE DE ESCALA ══ -->
+  <section class="sec">
+    <span class="sec-label">05 · Teste de escala — funciona em qualquer tamanho</span>
+    <div class="sym-card bg-mid" style="flex-direction:row; gap:48px; padding:48px; justify-content:center; align-items:flex-end; border-radius:16px;">
+
+      <div class="size-item">
+        <svg width="120" height="150" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="size-tag">120px</span>
+      </div>
+
+      <div class="size-item">
+        <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="size-tag">80px</span>
+      </div>
+
+      <div class="size-item">
+        <svg width="48" height="60" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="size-tag">48px</span>
+      </div>
+
+      <div class="size-item">
+        <svg width="32" height="40" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span class="size-tag">32px</span>
+      </div>
+
+      <div class="size-item">
+        <svg width="20" height="25" viewBox="0 0 80 100" fill="none">
+          <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <span class="size-tag">20px</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ 6. BORBOLETA FINE LINE ══ -->
+  <section class="sec">
+    <span class="sec-label">06 · Borboleta — versão fine line para comparação</span>
+    <div class="grid-3">
+
+      <!-- Blush -->
+      <div class="sym-card bg-blush">
+        <svg width="100" height="90" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Asa superior esquerda -->
+          <path d="M50 48 C44 40 28 28 16 24 C8 21 4 26 6 34 C8 42 20 50 34 52 C42 54 48 52 50 48Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Asa superior direita -->
+          <path d="M50 48 C56 40 72 28 84 24 C92 21 96 26 94 34 C92 42 80 50 66 52 C58 54 52 52 50 48Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Asa inferior esquerda -->
+          <path d="M50 52 C45 58 34 68 24 70 C16 72 12 67 14 61 C16 55 26 50 38 50 C44 50 48 51 50 52Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Asa inferior direita -->
+          <path d="M50 52 C55 58 66 68 76 70 C84 72 88 67 86 61 C84 55 74 50 62 50 C56 50 52 51 50 52Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Corpo -->
+          <path d="M50 28 C51.5 28 53 30 53 34 C53 44 52 52 50 62 C48 52 47 44 47 34 C47 30 48.5 28 50 28Z"
+                stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <!-- Antenas -->
+          <path d="M50 28 C47 22 42 17 40 13" stroke="#7A9E7E" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <path d="M50 28 C53 22 58 17 60 13" stroke="#7A9E7E" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <!-- Bolinhas antenas -->
+          <circle cx="40" cy="13" r="2" fill="#7A9E7E" opacity=".7"/>
+          <circle cx="60" cy="13" r="2" fill="#7A9E7E" opacity=".7"/>
+          <!-- Detalhe interno asa superior esq -->
+          <path d="M50 48 C46 43 36 35 28 32" stroke="#C17A6F" stroke-width="1" opacity=".35" stroke-linecap="round" fill="none"/>
+          <!-- Detalhe interno asa superior dir -->
+          <path d="M50 48 C54 43 64 35 72 32" stroke="#C17A6F" stroke-width="1" opacity=".35" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="sym-card-label" style="color:var(--muted);">Fundo principal</span>
+      </div>
+
+      <!-- Rose -->
+      <div class="sym-card bg-rose">
+        <svg width="100" height="90" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 48 C44 40 28 28 16 24 C8 21 4 26 6 34 C8 42 20 50 34 52 C42 54 48 52 50 48Z"
+                stroke="#F5EAE6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 48 C56 40 72 28 84 24 C92 21 96 26 94 34 C92 42 80 50 66 52 C58 54 52 52 50 48Z"
+                stroke="#F5EAE6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 52 C45 58 34 68 24 70 C16 72 12 67 14 61 C16 55 26 50 38 50 C44 50 48 51 50 52Z"
+                stroke="#F5EAE6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 52 C55 58 66 68 76 70 C84 72 88 67 86 61 C84 55 74 50 62 50 C56 50 52 51 50 52Z"
+                stroke="#F5EAE6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 28 C51.5 28 53 30 53 34 C53 44 52 52 50 62 C48 52 47 44 47 34 C47 30 48.5 28 50 28Z"
+                stroke="rgba(245,234,230,0.6)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M50 28 C47 22 42 17 40 13" stroke="rgba(245,234,230,0.6)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <path d="M50 28 C53 22 58 17 60 13" stroke="rgba(245,234,230,0.6)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <circle cx="40" cy="13" r="2" fill="rgba(245,234,230,0.5)"/>
+          <circle cx="60" cy="13" r="2" fill="rgba(245,234,230,0.5)"/>
+          <path d="M50 48 C46 43 36 35 28 32" stroke="#F5EAE6" stroke-width="1" opacity=".25" stroke-linecap="round" fill="none"/>
+          <path d="M50 48 C54 43 64 35 72 32" stroke="#F5EAE6" stroke-width="1" opacity=".25" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="sym-card-label" style="color:rgba(245,234,230,0.4);">Fundo primário</span>
+      </div>
+
+      <!-- Dark -->
+      <div class="sym-card bg-dark2">
+        <svg width="100" height="90" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 48 C44 40 28 28 16 24 C8 21 4 26 6 34 C8 42 20 50 34 52 C42 54 48 52 50 48Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 48 C56 40 72 28 84 24 C92 21 96 26 94 34 C92 42 80 50 66 52 C58 54 52 52 50 48Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 52 C45 58 34 68 24 70 C16 72 12 67 14 61 C16 55 26 50 38 50 C44 50 48 51 50 52Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 52 C55 58 66 68 76 70 C84 72 88 67 86 61 C84 55 74 50 62 50 C56 50 52 51 50 52Z"
+                stroke="#C17A6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M50 28 C51.5 28 53 30 53 34 C53 44 52 52 50 62 C48 52 47 44 47 34 C47 30 48.5 28 50 28Z"
+                stroke="#7A9E7E" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M50 28 C47 22 42 17 40 13" stroke="#7A9E7E" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <path d="M50 28 C53 22 58 17 60 13" stroke="#7A9E7E" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <circle cx="40" cy="13" r="2" fill="#7A9E7E" opacity=".7"/>
+          <circle cx="60" cy="13" r="2" fill="#7A9E7E" opacity=".7"/>
+          <path d="M50 48 C46 43 36 35 28 32" stroke="#C17A6F" stroke-width="1" opacity=".3" stroke-linecap="round" fill="none"/>
+          <path d="M50 48 C54 43 64 35 72 32" stroke="#C17A6F" stroke-width="1" opacity=".3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="sym-card-label">Fundo escuro</span>
+      </div>
+    </div>
+
+    <!-- Comparação lado a lado -->
+    <div style="margin-top:16px;">
+      <div class="sym-card bg-mid" style="flex-direction:row;gap:80px;padding:48px;justify-content:center;border-radius:16px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+          <svg width="64" height="80" viewBox="0 0 80 100" fill="none">
+            <path d="M40 76 C35 70 19 63 13 51 C7 39 12 26 21 24 C30 22 37 35 39 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C45 70 61 63 67 51 C73 39 68 26 59 24 C50 22 43 35 41 48" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 C32 67 30 54 33 42 C35 32 40 24 40 24 C40 24 45 32 47 42 C50 54 48 67 40 76Z" stroke="#C17A6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M40 24 L43 17 L40 10 L37 17 Z" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M40 76 L40 88" stroke="#7A9E7E" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);">Botânico</span>
+        </div>
+
+        <div style="width:1px;background:rgba(255,255,255,0.05);align-self:stretch;"></div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+          <svg width="72" height="65" viewBox="0 0 100 90" fill="none">
+            <path d="M50 48 C44 40 28 28 16 24 C8 21 4 26 6 34 C8 42 20 50 34 52 C42 54 48 52 50 48Z" stroke="#C17A6F" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M50 48 C56 40 72 28 84 24 C92 21 96 26 94 34 C92 42 80 50 66 52 C58 54 52 52 50 48Z" stroke="#C17A6F" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M50 52 C45 58 34 68 24 70 C16 72 12 67 14 61 C16 55 26 50 38 50 C44 50 48 51 50 52Z" stroke="#C17A6F" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M50 52 C55 58 66 68 76 70 C84 72 88 67 86 61 C84 55 74 50 62 50 C56 50 52 51 50 52Z" stroke="#C17A6F" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M50 28 C51.5 28 53 30 53 34 C53 44 52 52 50 62 C48 52 47 44 47 34 C47 30 48.5 28 50 28Z" stroke="#7A9E7E" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M50 28 C47 22 42 17 40 13" stroke="#7A9E7E" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+            <path d="M50 28 C53 22 58 17 60 13" stroke="#7A9E7E" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+            <circle cx="40" cy="13" r="2" fill="#7A9E7E" opacity=".7"/>
+            <circle cx="60" cy="13" r="2" fill="#7A9E7E" opacity=".7"/>
+          </svg>
+          <span style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);">Borboleta</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ NOTA CONCEITUAL ══ -->
+  <section class="sec" style="margin-bottom:0;">
+    <div style="background:rgba(193,122,111,0.06);border:1px solid rgba(193,122,111,0.15);border-radius:16px;padding:36px 40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+      <div>
+        <span class="sec-label" style="border:none;padding:0;margin-bottom:16px;">O conceito do símbolo</span>
+        <p style="font-size:14px;line-height:1.8;color:var(--muted);">
+          Três pétalas em fine line representam os três pilares da marca: <strong style="color:var(--white);">acolhimento</strong> (pétalas abertas, receptivas), <strong style="color:var(--white);">segurança</strong> (estrutura central firme) e <strong style="color:var(--white);">crescimento</strong> (caule com folhas). O miolo em losango em verde sálvia sugere o núcleo do cuidado — sem ser literal, sem ser óbvio.
+        </p>
+      </div>
+      <div>
+        <span class="sec-label" style="border:none;padding:0;margin-bottom:16px;">Por que fine line</span>
+        <p style="font-size:14px;line-height:1.8;color:var(--muted);">
+          Traço fino comunica <strong style="color:var(--white);">elegância e maturidade</strong>. Marcas preenchidas parecem pesadas e datadas. O fine line permite que o símbolo funcione como <strong style="color:var(--white);">watermark</strong>, como <strong style="color:var(--white);">carimbo</strong>, em fundo escuro ou claro — sempre mantendo leveza e sofisticação.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

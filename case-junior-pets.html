@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creche Pet — Andarilho Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:   #0d0d0e;
+      --bg2:  #1a1a1c;
+      --gold: #e7c9a3;
+      --rust: #ae330a;
+      --white:#ffffff;
+      --max:  1100px;
+      --px:   clamp(20px, 5vw, 80px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    .wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--px); }
+
+    .tag {
+      display: inline-block;
+      background: var(--rust);
+      color: var(--gold);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 6px;
+    }
+    .tag-dev {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3);
+      color: #fbbf24; font-size: 11px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 6px;
+    }
+    .tag-dev::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #fbbf24; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .prancheta {
+      padding-block: 100px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .section-header { margin-bottom: 56px; }
+    .section-header h2 {
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 800; line-height: 1.1;
+      margin-top: 16px; color: var(--gold);
+    }
+    .section-header p {
+      font-size: 16px; color: rgba(255,255,255,.6);
+      margin-top: 12px; max-width: 560px; line-height: 1.75;
+    }
+
+    /* ── BACK NAV ── */
+    .back-nav {
+      position: fixed; top: 24px; left: 24px; z-index: 100;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(13,13,14,.85); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 100px;
+      padding: 8px 16px; font-size: 13px; color: rgba(255,255,255,.6);
+      transition: color .2s;
+    }
+    .back-nav:hover { color: var(--gold); }
+
+    /* ── WIP BANNER ── */
+    .wip-banner {
+      background: rgba(251,191,36,.07); border-bottom: 1px solid rgba(251,191,36,.2);
+      padding: 14px var(--px); display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .wip-banner p { font-size: 13px; color: rgba(251,191,36,.8); font-weight: 500; }
+    .wip-banner strong { color: #fbbf24; }
+
+    /* ── COVER ── */
+    #cover {
+      min-height: 100vh; display: flex; align-items: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.28) 0%, var(--bg) 65%);
+      padding-block: 140px;
+    }
+    .cover-inner { display: flex; flex-direction: column; gap: 28px; }
+    .cover-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .cover-num { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.35); letter-spacing: .1em; text-transform: uppercase; }
+    .cover-title {
+      font-size: clamp(28px, 3.8vw, 52px);
+      font-weight: 900; line-height: 1.1; letter-spacing: -.02em;
+    }
+    .cover-title .gold { color: var(--gold); }
+    .cover-sub {
+      font-size: clamp(13px, 1vw, 15px);
+      color: rgba(255,255,255,.6); max-width: 480px; line-height: 1.7;
+    }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cover-tag {
+      padding: 6px 14px; border: 1px solid rgba(231,201,163,.2);
+      border-radius: 100px; font-size: 12px; font-weight: 500; color: var(--gold);
+    }
+    .cover-stats { display: flex; gap: 48px; padding-top: 8px; }
+    .stat-num { font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ── PROBLEMA ── */
+    #problema { background: var(--bg2); }
+    .prob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .prob-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .prob-icon {
+      width: 44px; height: 44px; background: rgba(174,51,10,.15);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .prob-card h3 { font-size: 17px; font-weight: 700; color: var(--gold); }
+    .prob-card p { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.65; }
+
+    /* ── FLUXO ── */
+    #fluxo { background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.18) 0%, var(--bg) 65%); }
+    .flow-list { display: flex; flex-direction: column; gap: 0; margin-top: 48px; }
+    .flow-item {
+      display: flex; gap: 24px; align-items: flex-start;
+      position: relative; padding-bottom: 40px;
+    }
+    .flow-item:last-child { padding-bottom: 0; }
+    .flow-item:not(:last-child)::before {
+      content: ''; position: absolute; left: 19px; top: 44px;
+      width: 2px; height: calc(100% - 20px);
+      background: linear-gradient(rgba(174,51,10,.4), transparent);
+    }
+    .flow-dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(174,51,10,.15); border: 2px solid rgba(174,51,10,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--rust); flex-shrink: 0;
+    }
+    .flow-body { padding-top: 8px; }
+    .flow-body h4 { font-size: 17px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+    .flow-body p { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.65; max-width: 580px; }
+
+    /* ── STACK ── */
+    #stack { background: var(--bg2); }
+    .stack-flow { display: flex; align-items: center; gap: 0; margin-top: 48px; flex-wrap: wrap; }
+    .stack-item { display: flex; flex-direction: column; align-items: center; gap: 12px; flex: 1; min-width: 120px; }
+    .stack-icon {
+      width: 72px; height: 72px; background: var(--bg);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stack-name { font-size: 13px; font-weight: 600; color: var(--gold); text-align: center; }
+    .stack-role { font-size: 11px; color: rgba(255,255,255,.4); text-align: center; }
+    .stack-arrow { font-size: 22px; color: rgba(174,51,10,.6); padding: 0 4px; flex-shrink: 0; margin-bottom: 36px; }
+
+    /* ── SAAS ── */
+    #saas { background: var(--bg); }
+    .saas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+    .saas-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 24px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: border-color .2s;
+    }
+    .saas-card:hover { border-color: rgba(174,51,10,.3); }
+    .saas-icon {
+      width: 44px; height: 44px; background: rgba(174,51,10,.12);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .saas-card h3 { font-size: 15px; font-weight: 700; color: var(--gold); }
+    .saas-card p { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+    /* ── MOCKUPS ── */
+    #mockups { background: var(--bg2); }
+    .mock-placeholder {
+      width: 100%; aspect-ratio: 16/7;
+      background: rgba(255,255,255,.02); border: 1px dashed rgba(231,201,163,.12);
+      border-radius: 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      margin-bottom: 20px;
+    }
+    .mock-placeholder-sm {
+      aspect-ratio: 4/3; background: rgba(255,255,255,.02);
+      border: 1px dashed rgba(231,201,163,.12); border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .mock-ph-label { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .mock-ph-label svg { opacity: .18; }
+    .mock-ph-label span { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(231,201,163,.3); }
+    .mock-ph-label small { font-size: 10px; color: rgba(255,255,255,.18); }
+    .mock-row { display: grid; gap: 16px; margin-bottom: 16px; }
+    .mock-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+    /* ── ENTREGÁVEIS ── */
+    #entregaveis { background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.14) 0%, var(--bg2) 70%); }
+    .deliverables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 48px; }
+    .deliver-block h3 { font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 20px; letter-spacing: .16em; text-transform: uppercase; }
+    .deliver-list { display: flex; flex-direction: column; gap: 14px; }
+    .deliver-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.5; }
+    .deliver-item::before { content: ''; width: 6px; height: 6px; background: var(--rust); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+    .result-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px; padding: 20px 24px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .result-num { font-size: 32px; font-weight: 800; color: var(--gold); line-height: 1; min-width: 56px; }
+    .result-label { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5; }
+
+    /* ── STATUS ── */
+    #status-final {
+      background: radial-gradient(ellipse at 50% 100%, rgba(174,51,10,.18) 0%, var(--bg) 65%);
+      text-align: center;
+    }
+    .status-badge-wrap { display: flex; justify-content: center; margin-bottom: 24px; }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25);
+      color: #fbbf24; font-size: 12px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: 10px 20px; border-radius: 100px;
+    }
+    .status-badge::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: #fbbf24; animation: pulse 2s infinite;
+    }
+    #status-final h2 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: var(--gold); margin-bottom: 16px; }
+    #status-final p { font-size: 16px; color: rgba(255,255,255,.6); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
+    .timeline-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; text-align: left; }
+    .tl-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px; padding: 20px; position: relative;
+    }
+    .tl-card.active { border-color: rgba(174,51,10,.4); background: rgba(174,51,10,.06); }
+    .tl-step { font-size: 10px; font-weight: 700; color: var(--rust); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+    .tl-step.done { color: rgba(74,222,128,.8); }
+    .tl-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .tl-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.5; }
+    .tl-dot {
+      position: absolute; top: 20px; right: 20px;
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .tl-dot.active { background: var(--rust); animation: pulse 2s infinite; }
+    .tl-dot.done { background: #4ade80; }
+    .tl-dot.pending { background: rgba(255,255,255,.2); }
+
+    /* ── EXPORT ── */
+    .export-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100;
+      background: var(--bg2); color: rgba(255,255,255,.5);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 100px;
+      padding: 10px 18px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+    }
+    .export-btn:hover { color: var(--gold); border-color: rgba(231,201,163,.3); }
+    body.prancheta-mode .back-nav,
+    body.prancheta-mode .export-btn,
+    body.prancheta-mode .wip-banner { display: none; }
+
+    @media (max-width: 768px) {
+      .prob-grid, .saas-grid { grid-template-columns: 1fr; }
+      .deliverables-grid { grid-template-columns: 1fr; gap: 40px; }
+      .mock-row.cols-2 { grid-template-columns: 1fr; }
+      .cover-stats { gap: 28px; }
+      .timeline-mini { grid-template-columns: 1fr 1fr; }
+      .stack-flow { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- WIP BANNER -->
+<div class="wip-banner">
+  <p><strong>Em desenvolvimento</strong> — este projeto está em andamento. Mockups e resultados serão adicionados conforme a entrega evolui.</p>
+</div>
+
+<a href="lp-andarilho.html#portfolio" class="back-nav">← Voltar ao portfólio</a>
+
+<!-- PRANCHETA 1 — COVER -->
+<section id="cover" class="prancheta">
+  <div class="wrap">
+    <div class="cover-inner">
+      <div class="cover-meta">
+        <span class="tag">Projeto 03</span>
+        <span class="cover-num">Bot IA · CRM · SaaS</span>
+        <span class="tag-dev">Em desenvolvimento</span>
+      </div>
+      <h1 class="cover-title">Creche Pet<br><span class="gold">— IA que nunca dorme</span></h1>
+      <p class="cover-sub">Sistema completo de atendimento automatizado via WhatsApp, captação de leads e visão de SaaS para creches pet em todo o Brasil.</p>
+      <div class="cover-tags">
+        <span class="cover-tag">n8n</span>
+        <span class="cover-tag">Z-API</span>
+        <span class="cover-tag">Claude Haiku</span>
+        <span class="cover-tag">WhatsApp</span>
+        <span class="cover-tag">SaaS</span>
+      </div>
+      <div class="cover-stats">
+        <div>
+          <div class="stat-num">24h</div>
+          <div class="stat-label">Atendimento</div>
+        </div>
+        <div>
+          <div class="stat-num">0</div>
+          <div class="stat-label">Leads perdidos</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Escala SaaS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 2 — PROBLEMA -->
+<section id="problema" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O Problema</span>
+      <h2>Quantos clientes somem<br>antes de você responder?</h2>
+      <p>O tutor manda mensagem, você está no atendimento, e quando vai responder — ele já escolheu outra creche.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Tempo de resposta manual</h3>
+        <p>A maioria dos negócios demora 2–4 horas pra responder no WhatsApp. O cliente já decidiu em menos de 10 minutos.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <h3>Lead quente esfria rápido</h3>
+        <p>Um tutor que perguntou o preço agora e não recebeu resposta em 15 minutos tem 80% menos chance de fechar.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Receita invisível evaporando</h3>
+        <p>Cada cliente que some no WhatsApp representa R$300–800 em serviços mensais perdidos. Sem rastreamento, sem controle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 3 — FLUXO -->
+<section id="fluxo" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">A Solução</span>
+      <h2>Um funcionário de IA que<br>nunca dorme, nunca erra</h2>
+      <p>Enquanto você está no banho, no atendimento ou dormindo — o sistema já respondeu, já anotou o lead e deixou tudo pronto pra fechar.</p>
+    </div>
+    <div class="flow-list">
+      <div class="flow-item">
+        <div class="flow-dot">1</div>
+        <div class="flow-body">
+          <h4>Tutor manda mensagem no WhatsApp</h4>
+          <p>Qualquer horário, qualquer dia. Pergunta sobre preço, disponibilidade, serviços — o sistema captura tudo automaticamente.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-dot">2</div>
+        <div class="flow-body">
+          <h4>IA responde em segundos com contexto real</h4>
+          <p>Não é um chatbot genérico. A IA conhece os serviços, preços e diferenciais do cliente — responde como um atendente treinado da creche.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-dot">3</div>
+        <div class="flow-body">
+          <h4>Lead qualificado e registrado automaticamente</h4>
+          <p>Nome, contato e mensagem do cliente entram direto no sistema de gestão. Nenhum lead esquecido, nenhum post-it perdido.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-dot">4</div>
+        <div class="flow-body">
+          <h4>Você fecha a venda com quem já está aquecido</h4>
+          <p>Quando você entrar na conversa, o cliente já foi atendido, já tem informação, já está pronto pra decidir. Você só fecha.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 4 — STACK -->
+<section id="stack" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Stack</span>
+      <h2>Ferramentas que fazem<br>o trabalho pesado</h2>
+      <p>Cada peça escolhida pra ser robusta, confiável e escalável — da primeira mensagem até o SaaS.</p>
+    </div>
+    <div class="stack-flow">
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="stack-name">WhatsApp</div>
+        <div class="stack-role">Canal de entrada</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="6" height="6" rx="1"/><rect x="16" y="7" width="6" height="6" rx="1"/>
+            <line x1="8" y1="10" x2="16" y2="10"/>
+            <rect x="9" y="14" width="6" height="6" rx="1"/>
+            <line x1="12" y1="13" x2="12" y2="14"/>
+          </svg>
+        </div>
+        <div class="stack-name">Z-API</div>
+        <div class="stack-role">Conector WhatsApp</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+            <line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="6" y2="17"/><line x1="12" y1="12" x2="18" y2="17"/>
+          </svg>
+        </div>
+        <div class="stack-name">n8n</div>
+        <div class="stack-role">Orquestrador de fluxo</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="10" r="3"/>
+            <path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+          </svg>
+        </div>
+        <div class="stack-name">Claude Haiku</div>
+        <div class="stack-role">Inteligência artificial</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </div>
+        <div class="stack-name">CRM</div>
+        <div class="stack-role">Gestão de leads</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 5 — SAAS VISION -->
+<section id="saas" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Visão de futuro</span>
+      <h2>Fase 2 — O SaaS que<br>domina o nicho pet</h2>
+      <p>A próxima etapa é transformar o sistema num produto vendido para centenas de creches pet no Brasil.</p>
+    </div>
+    <div class="saas-grid">
+      <div class="saas-card">
+        <div class="saas-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae330a" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+        </div>
+        <h3>Atendimento com IA</h3>
+        <p>O mesmo sistema, disponível como produto para qualquer creche pet do Brasil.</p>
+      </div>
+      <div class="saas-card">
+        <div class="saas-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae330a" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        </div>
+        <h3>Gestão de check-in/out</h3>
+        <p>Registro de entrada e saída dos pets, fichas, histórico e notificação automática pro tutor.</p>
+      </div>
+      <div class="saas-card">
+        <div class="saas-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae330a" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <h3>Cobranças automáticas</h3>
+        <p>Mensalidades, diárias e pacotes cobrados automaticamente via PIX ou cartão.</p>
+      </div>
+      <div class="saas-card">
+        <div class="saas-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae330a" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>Relatórios e receita</h3>
+        <p>Dashboard com faturamento, ocupação, leads e métricas do negócio em tempo real.</p>
+      </div>
+      <div class="saas-card">
+        <div class="saas-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae330a" stroke-width="1.8"><path d="M23 7l-7 5-7-5"/><rect x="1" y="4" width="22" height="16" rx="2"/></svg>
+        </div>
+        <h3>Updates pra tutores</h3>
+        <p>Envio automático de fotos e status do pet via WhatsApp durante o dia na creche.</p>
+      </div>
+      <div class="saas-card">
+        <div class="saas-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae330a" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>Agendamento online</h3>
+        <p>Tutores agendam diretamente pelo link, sem precisar de WhatsApp manual.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 6 — MOCKUPS -->
+<section id="mockups" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Mockups</span>
+      <h2>Visual do projeto<br>em construção</h2>
+      <p>As telas serão adicionadas conforme o projeto avança. Abaixo os slots reservados para cada etapa da experiência.</p>
+    </div>
+
+    <!-- Mockup principal — conversa WhatsApp -->
+    <div class="mock-placeholder">
+      <div class="mock-ph-label">
+        <svg width="32" height="32" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Mockup 01</span>
+        <small>Conversa WhatsApp — Bot em ação · 16:7</small>
+      </div>
+    </div>
+
+    <!-- Mockup 2 e 3 — Fluxo n8n + CRM -->
+    <div class="mock-row cols-2">
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="6" y2="17"/><line x1="12" y1="12" x2="18" y2="17"/></svg>
+          <span>Mockup 02</span>
+          <small>Fluxo n8n · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span>Mockup 03</span>
+          <small>Painel de Leads · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mockup 4 e 5 — SaaS dashboard -->
+    <div class="mock-row cols-2">
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Mockup 04</span>
+          <small>Dashboard SaaS · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Mockup 05</span>
+          <small>Relatórios e métricas · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRANCHETA 7 — ENTREGÁVEIS -->
+<section id="entregaveis" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O que é entregue</span>
+      <h2>Um sistema completo.<br>Uma operação transformada.</h2>
+    </div>
+    <div class="deliverables-grid">
+      <div class="deliver-block">
+        <h3>Entregáveis Fase 1</h3>
+        <div class="deliver-list">
+          <div class="deliver-item">Bot de atendimento no WhatsApp 24/7</div>
+          <div class="deliver-item">IA treinada com serviços e preços do cliente</div>
+          <div class="deliver-item">Registro automático de todos os leads</div>
+          <div class="deliver-item">Painel de gestão de clientes e contatos</div>
+          <div class="deliver-item">Suporte direto e ajustes inclusos</div>
+          <div class="deliver-item">Base para escala do produto SaaS</div>
+        </div>
+      </div>
+      <div class="deliver-block">
+        <h3>Resultados esperados</h3>
+        <div class="deliver-list" style="gap:14px">
+          <div class="result-card">
+            <div class="result-num">&lt;3s</div>
+            <div class="result-label">Tempo de resposta para qualquer lead no WhatsApp</div>
+          </div>
+          <div class="result-card">
+            <div class="result-num">24h</div>
+            <div class="result-label">Atendimento ativo sem precisar estar online</div>
+          </div>
+          <div class="result-card">
+            <div class="result-num">+∞</div>
+            <div class="result-label">Escalabilidade como SaaS para creches pet no Brasil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 8 — STATUS -->
+<section id="status-final" class="prancheta" style="border-bottom:none">
+  <div class="wrap" style="text-align:center">
+    <div class="status-badge-wrap">
+      <div class="status-badge">Em desenvolvimento</div>
+    </div>
+    <h2>Projeto em andamento<br>com o cliente</h2>
+    <p>O sistema está sendo construído e configurado. Esta página será atualizada com resultados reais, gravações do bot em ação e dados de conversão assim que a primeira fase for entregue.</p>
+
+    <div class="timeline-mini">
+      <div class="tl-card">
+        <div class="tl-dot done"></div>
+        <div class="tl-step done">Concluído</div>
+        <div class="tl-title">Proposta aprovada</div>
+        <div class="tl-desc">Escopo e investimento definidos com o cliente. Projeto iniciado.</div>
+      </div>
+      <div class="tl-card active">
+        <div class="tl-dot active"></div>
+        <div class="tl-step">Agora</div>
+        <div class="tl-title">Configuração e treinamento</div>
+        <div class="tl-desc">IA sendo treinada com os serviços, preços e tom de voz do cliente.</div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-dot pending"></div>
+        <div class="tl-step">Próximo</div>
+        <div class="tl-title">Primeira entrega</div>
+        <div class="tl-desc">Bot funcionando, leads capturados. Coleta de resultados reais.</div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-dot pending"></div>
+        <div class="tl-step">Futuro</div>
+        <div class="tl-title">SaaS para o nicho pet</div>
+        <div class="tl-desc">Plataforma completa de gestão para creches pet no Brasil inteiro.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button class="export-btn" onclick="document.body.classList.toggle('prancheta-mode'); this.textContent = document.body.classList.contains('prancheta-mode') ? '✕ Sair do modo' : '⊞ Modo Prancheta'">
+  ⊞ Modo Prancheta
+</button>
+
+</body>
+</html>

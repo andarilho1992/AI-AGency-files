@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Audit — Prospecção Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0c0e1a;
+      --bg2:        #131828;
+      --bg3:        #1b2240;
+      --border:     #1e2840;
+      --border2:    #253560;
+      --text:       #f0ede6;
+      --muted:      #6b7080;
+      --muted2:     #9098a8;
+      --gold:       #C8892C;
+      --gold-light: #D9A850;
+      --gold-dark:  #7a5010;
+      --gold-bg:    #1a1208;
+      --purple:     #a78bfa;
+      --purple-dark:#5b21b6;
+      --purple-bg:  #1a0d35;
+      --green:      #4ade80;
+      --green-dark: #15803d;
+      --green-bg:   #061a0c;
+      --orange:     #fb923c;
+      --orange-dark:#c2410c;
+      --orange-bg:  #1c0e06;
+      --red:        #f87171;
+      --red-dark:   #b91c1c;
+      --red-bg:     #1c0808;
+      --blue:       #60a5fa;
+      --blue-dark:  #1d4ed8;
+      --blue-bg:    #0a1628;
+      --cyan:       #38bdf8;
+      --cyan-bg:    #071820;
+      --yellow:     #fbbf24;
+      --yellow-bg:  #1c1608;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ──────────────────────────── */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: #0a0c18;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+    }
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon { font-size: 22px; }
+    .logo-text {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted2);
+      line-height: 1.2;
+      letter-spacing: 0.04em;
+    }
+    .logo-text strong { color: var(--gold); display: block; font-size: 15px; }
+    .sidebar-nav { flex: 1; padding: 12px 0; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 20px; color: var(--muted2);
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      transition: all .15s; border-left: 2px solid transparent; margin: 1px 0;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(200,137,44,0.08); border-left-color: var(--gold-dark); }
+    .nav-item.active { color: #0c0e1a; background: var(--gold); border-left-color: var(--gold); font-weight: 700; }
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .sidebar-footer a { color: var(--gold); text-decoration: none; }
+
+    /* ── MAIN ─────────────────────────────── */
+    .main { margin-left: 240px; flex: 1; }
+
+    /* ── HERO ─────────────────────────────── */
+    .hero {
+      padding: 52px 48px 40px;
+      background: linear-gradient(135deg, #0f0a00 0%, var(--bg) 60%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(200,137,44,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--gold); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--gold); }
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero p {
+      font-size: 15px;
+      color: var(--muted2);
+      max-width: 580px;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+    .hero-badge {
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    /* ── TABS ─────────────────────────────── */
+    .tabs-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 0 48px;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 14px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted2);
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── SECTIONS ─────────────────────────── */
+    .section { display: none; padding: 40px 48px 60px; }
+    .section.active { display: block; }
+
+    /* ── TIPOGRAFIA ───────────────────────── */
+    .sec-eyebrow {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gold); margin-bottom: 8px;
+    }
+    .sec-title {
+      font-family: 'Cinzel', serif;
+      font-size: 22px; font-weight: 700;
+      margin-bottom: 8px; letter-spacing: 0.02em;
+    }
+    .sec-sub {
+      font-size: 14px; color: var(--muted2); margin-bottom: 36px;
+      max-width: 620px; line-height: 1.75;
+    }
+    .label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 16px;
+    }
+
+    /* ── CARDS ────────────────────────────── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 15px; font-weight: 700;
+      margin-bottom: 8px; color: var(--text);
+    }
+    .card-body { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+
+    /* ── GRID ─────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 28px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── HIGHLIGHT BOX ────────────────────── */
+    .highlight {
+      border-radius: 14px;
+      padding: 22px 26px;
+      border: 1px solid;
+      margin-bottom: 24px;
+    }
+    .highlight .hl-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .highlight .hl-body { font-size: 14px; color: var(--muted2); line-height: 1.75; }
+    .highlight .hl-body strong { color: var(--text); }
+
+    /* ── COMPARE ──────────────────────────── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .compare-col { border-radius: 14px; padding: 22px; border: 1px solid; }
+    .compare-col .col-head {
+      font-size: 12px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .compare-col ul { list-style: none; }
+    .compare-col li {
+      font-size: 13px; color: var(--muted2); padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
+    }
+    .compare-col li:last-child { border-bottom: none; }
+    @media (max-width: 900px) { .compare-grid { grid-template-columns: 1fr; } }
+
+    /* ── STEPS / TIMELINE ─────────────────── */
+    .steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; }
+    .step { display: flex; gap: 20px; }
+    .step-left { display: flex; flex-direction: column; align-items: center; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+      font-family: 'Cinzel', serif;
+    }
+    .step-line { width: 2px; flex: 1; min-height: 24px; background: var(--border2); margin: 4px 0; }
+    .step:last-child .step-line { display: none; }
+    .step-body { padding: 2px 0 28px; flex: 1; }
+    .step-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .step-desc { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+    .step-detail {
+      margin-top: 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: var(--muted2);
+      font-family: 'Inter', monospace;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    /* ── SCRIPT BLOCK ─────────────────────── */
+    .script-block { margin-bottom: 20px; }
+    .script-time {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gold); margin-bottom: 8px;
+    }
+    .script-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .script-text {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.75;
+    }
+    .script-text em { color: var(--gold-light); font-style: normal; }
+    .script-tip {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      padding-left: 4px;
+    }
+
+    /* ── METRIC CARDS ─────────────────────── */
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; margin-bottom: 28px; }
+    .metric-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 22px 18px;
+      text-align: center;
+    }
+    .metric-value { font-size: 34px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+    .metric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .metric-desc { font-size: 12px; color: var(--muted2); margin-top: 6px; line-height: 1.4; }
+
+    /* ── WEEK TIMELINE ────────────────────── */
+    .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 12px; margin-bottom: 32px; }
+    .week-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 18px 16px;
+    }
+    .week-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .week-item { font-size: 12px; color: var(--muted2); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.4; }
+    .week-item:last-child { border-bottom: none; }
+
+    /* ── DIVIDER ──────────────────────────── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    /* ── BADGE ────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; border: 1px solid;
+    }
+
+    /* ── CHECKLIST ────────────────────────── */
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex; gap: 10px; padding: 8px 0;
+      font-size: 13px; color: var(--muted2);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      line-height: 1.5;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check { color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── ACTION CARD ──────────────────────── */
+    .action-card {
+      background: linear-gradient(135deg, var(--gold-bg), #1a0d35);
+      border: 1px solid var(--gold-dark);
+      border-radius: 18px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .action-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 10px; letter-spacing: 0.03em;
+    }
+    .action-card p { font-size: 14px; color: var(--muted2); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+
+    /* ── TOOL BOX ─────────────────────────── */
+    .tool-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+    .tool-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .tool-info { flex: 1; }
+    .tool-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .tool-desc { font-size: 12px; color: var(--muted2); }
+    .tool-badge { font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+    /* ── PRINT ────────────────────────────── */
+    @media print {
+      .sidebar, .tabs-bar { display: none; }
+      .main { margin-left: 0; }
+      .section { display: block !important; page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">🎯</span>
+    <span class="logo-text">Prospecção<strong>Pro</strong></span>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="index.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="buscar.html" class="nav-item"><span class="nav-icon">🔍</span> Buscar</a>
+    <a href="leads.html" class="nav-item"><span class="nav-icon">🎯</span> Leads</a>
+    <a href="diagnostico.html" class="nav-item"><span class="nav-icon">🩺</span> Diagnóstico</a>
+    <a href="video-audit.html" class="nav-item active"><span class="nav-icon">🎬</span> Video Audit</a>
+    <a href="estrategia.html" class="nav-item"><span class="nav-icon">🗺️</span> Estratégia</a>
+    <a href="configuracoes.html" class="nav-item"><span class="nav-icon">⚙️</span> Configurações</a>
+  </nav>
+  <div class="sidebar-footer">
+    Andarilho Digital · Agência
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Módulo 2 · Conversão</div>
+    <h1>Video <span>Audit</span><br>Prospecting</h1>
+    <p>A abordagem que transforma um lead frio em conversa quente — sem anúncio, sem audiência, sem cold call. Você grava 4 minutos mostrando o problema do cliente. Ele assiste. Ele responde.</p>
+    <div class="hero-badges">
+      <span class="hero-badge" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">🎬 4 min de vídeo</span>
+      <span class="hero-badge" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">✓ Taxa de resposta 3-5×</span>
+      <span class="hero-badge" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">🔍 Baseado em dados reais</span>
+      <span class="hero-badge" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">⚡ Roteiro automático</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab active" onclick="ir('conceito')">🧠 O Conceito</button>
+    <button class="tab" onclick="ir('processo')">🔄 O Processo</button>
+    <button class="tab" onclick="ir('roteiro')">📝 O Roteiro</button>
+    <button class="tab" onclick="ir('timing')">⏱️ O Timing</button>
+    <button class="tab" onclick="ir('resultados')">📈 Os Resultados</button>
+    <button class="tab" onclick="ir('ferramentas')">🛠️ Ferramentas</button>
+  </div>
+
+  <!-- ══ CONCEITO ══ -->
+  <div class="section active" id="aba-conceito">
+
+    <div class="sec-eyebrow">Por que funciona</div>
+    <div class="sec-title">A lógica por trás do Video Audit</div>
+    <div class="sec-sub">A maioria das agências manda uma mensagem genérica. Você vai mandar um vídeo de 4 minutos mostrando o site, o Instagram e os problemas específicos do cliente — antes de cobrar qualquer coisa. Isso muda completamente a dinâmica da conversa.</div>
+
+    <!-- PRINCÍPIO CENTRAL -->
+    <div class="highlight" style="background:var(--gold-bg);border-color:var(--gold-dark);margin-bottom:32px">
+      <div class="hl-label" style="color:var(--gold)">⚡ O princípio central</div>
+      <div class="hl-body">
+        <strong>Demonstrar valor antes de pedir dinheiro é a diferença entre prospecção e spam.</strong> O Video Audit não é uma proposta comercial — é um diagnóstico gratuito. Você está entregando algo útil antes de qualquer conversa de venda. Isso inverte o poder da negociação: o cliente chega na call já convencido de que você sabe o que está fazendo.
+      </div>
+    </div>
+
+    <!-- COMPARAÇÃO -->
+    <p class="label">Text DM vs Video Audit — o que o cliente vê</p>
+    <div class="compare-grid">
+      <div class="compare-col" style="background:var(--red-bg);border-color:var(--red-dark)">
+        <div class="col-head" style="color:var(--red)">✕ Mensagem de texto genérica</div>
+        <ul>
+          <li><span style="color:var(--red)">—</span> "Olá, faço sites e redes sociais..."</li>
+          <li><span style="color:var(--red)">—</span> Parece spam imediatamente</li>
+          <li><span style="color:var(--red)">—</span> Nada personalizado — igual a 50 outras msgs</li>
+          <li><span style="color:var(--red)">—</span> Zero prova de competência</li>
+          <li><span style="color:var(--red)">—</span> Cliente não se sente especial</li>
+          <li><span style="color:var(--red)">—</span> Taxa de resposta: 2–5%</li>
+        </ul>
+      </div>
+      <div class="compare-col" style="background:var(--green-bg);border-color:var(--green-dark)">
+        <div class="col-head" style="color:var(--green)">✓ Video Audit personalizado</div>
+        <ul>
+          <li><span style="color:var(--green)">+</span> "Vi você comentar que não consegue cobrar..."</li>
+          <li><span style="color:var(--green)">+</span> Referencia algo que o cliente disse</li>
+          <li><span style="color:var(--green)">+</span> Mostra o site/perfil DELE na tela</li>
+          <li><span style="color:var(--green)">+</span> Demonstra competência em 4 minutos</li>
+          <li><span style="color:var(--green)">+</span> Cliente sente que foi estudado</li>
+          <li><span style="color:var(--green)">+</span> Taxa de resposta: 15–30%</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- OS 3 EFEITOS PSICOLÓGICOS -->
+    <p class="label">Os 3 efeitos psicológicos que geram resposta</p>
+    <div class="grid-3">
+      <div class="card" style="border-color:var(--gold-dark)">
+        <div style="font-size:28px;margin-bottom:12px">🪞</div>
+        <div class="card-title" style="color:var(--gold)">Efeito Espelho</div>
+        <div class="card-body">A pessoa vê o próprio negócio sendo analisado. Não é teoria abstrata — é ela mesma. O cérebro humano presta atenção máxima quando o assunto é sobre si mesmo.</div>
+      </div>
+      <div class="card" style="border-color:var(--blue-dark)">
+        <div style="font-size:28px;margin-bottom:12px">🎁</div>
+        <div class="card-title" style="color:var(--blue)">Reciprocidade</div>
+        <div class="card-body">Você entregou valor sem pedir nada. O princípio da reciprocidade é um dos mais fortes da psicologia — quando alguém nos dá algo, sentimos necessidade de retribuir.</div>
+      </div>
+      <div class="card" style="border-color:var(--purple-dark)">
+        <div style="font-size:28px;margin-bottom:12px">🏆</div>
+        <div class="card-title" style="color:var(--purple)">Prova de Competência</div>
+        <div class="card-body">Em 4 minutos você demonstrou que sabe identificar problemas reais. O cliente não precisa confiar no que você diz — ele viu você fazendo. Isso elimina a principal barreira de compra.</div>
+      </div>
+    </div>
+
+    <!-- O QUE NÃO É -->
+    <div class="highlight" style="background:var(--bg2);border-color:var(--border2)">
+      <div class="hl-label" style="color:var(--muted2)">📌 O que o Video Audit NÃO é</div>
+      <div class="hl-body">
+        <strong>Não é um vídeo de vendas.</strong> Você não menciona preço. Não faz proposta. Não pede reunião logo de cara. É um diagnóstico gratuito, entregue como um favor entre profissionais. O CTA no final é simples: <strong>"se quiser conversar, estou aqui."</strong> Quem assistiu até o fim já está interessado — você não precisa forçar nada.
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══ PROCESSO ══ -->
+  <div class="section" id="aba-processo">
+
+    <div class="sec-eyebrow">Passo a passo</div>
+    <div class="sec-title">Do comentário ao vídeo enviado</div>
+    <div class="sec-sub">O processo completo leva de 30 a 45 minutos por lead — sendo 10 de pesquisa, 5 de revisão do roteiro e 15-20 de gravação. O sistema vai fazer a parte mais pesada.</div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark)">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Lead detectado com dor identificada</div>
+          <div class="step-desc">O sistema encontrou um comentário com dor. Você tem o nome da pessoa, a plataforma, o que foi dito e qual categoria de dor foi detectada. Esse contexto é ouro — é a abertura do vídeo.</div>
+          <div class="step-detail">DADO DISPONÍVEL NO SISTEMA:
+→ Nome/usuário: @usuario
+→ Comentou em: [título do vídeo/post]
+→ Dor detectada: Captação de Clientes
+→ O que disse: "não consigo fechar nem um cliente..."
+→ Link do perfil: instagram.com/usuario</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark)">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Pesquisa de presença digital (10 min)</div>
+          <div class="step-desc">Você ou o sistema coleta os dados públicos do lead. O objetivo é entender a presença atual antes de gravar.</div>
+          <div class="step-detail">O QUE COLETAR:
+→ Site: existe? carrega rápido? tem versão mobile? tem formulário de contato?
+→ Instagram: bio clara? frequência de posts? qualidade visual? CTA?
+→ Google Maps: aparece? tem reviews? nota? fotos?
+→ LinkedIn: existe? atualizado? tem depoimentos?
+
+FERRAMENTA: o sistema de Análise de Lead fará isso automaticamente.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--purple-bg);color:var(--purple);border:2px solid var(--purple-dark)">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Roteiro gerado automaticamente</div>
+          <div class="step-desc">Com os dados coletados e a dor identificada, o sistema gera um roteiro personalizado em português. Você lê, ajusta o tom se necessário, e vai gravar.</div>
+          <div class="step-detail">O ROTEIRO TEM:
+→ Abertura (0:00–0:30): quem você é + por que está mandando isso
+→ Referência à dor (0:30–1:00): o que você viu, sem ser invasivo
+→ Análise em tela (1:00–3:00): 3 problemas específicos com print
+→ O que fazer (3:00–4:00): direção geral, sem entregar tudo
+→ CTA (4:00–4:30): leve, sem pressão</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--green-bg);color:var(--green);border:2px solid var(--green-dark)">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Gravação do vídeo (15–20 min)</div>
+          <div class="step-desc">Você grava um screencast com seu rosto visível no canto. Tela mostrando o site/perfil do cliente. Você fala enquanto navega. Não precisa ser perfeito — precisa ser genuíno.</div>
+          <div class="step-detail">CONFIGURAÇÃO RECOMENDADA:
+→ Ferramenta: Loom (gratuito, link público instantâneo)
+→ Layout: tela cheia + câmera pequena no canto inferior
+→ Microfone: headset ou fone com microfone (nada de ruído ambiente)
+→ Edição: zero — gravar e enviar direto
+→ Duração ideal: 3:30 a 4:30 minutos</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">5</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Envio da mensagem com o link</div>
+          <div class="step-desc">Você envia uma mensagem curta com o link do vídeo. A mensagem não explica nada — ela apenas contextualiza e convida a assistir.</div>
+          <div class="step-detail">MODELO DE MENSAGEM:
+"Oi [nome], vi você comentar sobre [dor] no vídeo do [canal].
+Fiz uma análise rápida da sua presença online e gravei um vídeo
+de 4 minutos com o que encontrei. Não tem pitch, só diagnóstico.
+Se quiser dar uma olhada: [link do Loom]"</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--bg3);color:var(--muted2);border:2px solid var(--border2)">6</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Aguardar → Follow-up → Call</div>
+          <div class="step-desc">O Loom notifica quando o vídeo foi assistido. Se em 3 dias não houver resposta, você manda um follow-up curto. Quem assistiu até o fim tem 40–60% de chance de responder.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="highlight" style="background:var(--bg2);border-color:var(--border2)">
+      <div class="hl-label" style="color:var(--muted2)">⏱️ Tempo total por lead</div>
+      <div class="hl-body">
+        Pesquisa manual: <strong>10 min</strong> · Revisão do roteiro: <strong>5 min</strong> · Gravação: <strong>15–20 min</strong> · Envio: <strong>2 min</strong><br>
+        <strong>Total: ≈ 35 minutos por lead.</strong> Em 2 horas você processa 3–4 leads com vídeos personalizados de alta qualidade.
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══ ROTEIRO ══ -->
+  <div class="section" id="aba-roteiro">
+
+    <div class="sec-eyebrow">Estrutura do vídeo</div>
+    <div class="sec-title">O roteiro de 4 minutos</div>
+    <div class="sec-sub">Cada bloco tem uma função específica. Não improvise a estrutura — improvise o conteúdo dentro dela. O roteiro gerado pelo sistema vai preencher cada bloco com os dados específicos do lead.</div>
+
+    <!-- BLOCO 1 -->
+    <div class="script-block">
+      <div class="script-time">0:00 – 0:30 · Abertura</div>
+      <div class="script-title">Quem você é e por que está mandando isso</div>
+      <div class="script-text">
+        "Oi <em>[nome]</em>, meu nome é Guilherme, trabalho com presença digital para freelancers e pequenos negócios. Achei seu comentário no vídeo do <em>[canal]</em> e resolvi dar uma olhada rápida na sua presença online — fiz um vídeo curto com o que encontrei. Não é proposta de venda, é só um diagnóstico."
+      </div>
+      <div class="script-tip">💡 Seja direto. Sem enrolação. Diga o nome da pessoa, seu nome, e a razão em 3 frases.</div>
+    </div>
+
+    <!-- BLOCO 2 -->
+    <div class="script-block">
+      <div class="script-time">0:30 – 1:00 · Contexto da dor</div>
+      <div class="script-title">O que você viu — sem parecer invasivo</div>
+      <div class="script-text">
+        "Você comentou que <em>[trecho da dor em palavras do cliente]</em>. Isso chamou minha atenção porque é exatamente o tipo de problema que aparece quando a presença digital não está ajudando o negócio a crescer — e geralmente dá pra resolver com ajustes específicos."
+      </div>
+      <div class="script-tip">💡 Use as palavras exatas que a pessoa escreveu. Não parafrasear — citar. Isso cria impacto imediato.</div>
+    </div>
+
+    <!-- BLOCO 3 -->
+    <div class="script-block">
+      <div class="script-time">1:00 – 3:00 · Análise em tela</div>
+      <div class="script-title">3 problemas específicos com print ao vivo</div>
+      <div class="script-text">
+        <em>[Compartilhar a tela com o site/perfil do cliente aberto]</em><br><br>
+        "Então, aqui está o seu Instagram / site / perfil. A primeira coisa que eu vejo é <em>[problema 1 específico]</em>. Por exemplo, alguém que visita agora não consegue entender em 5 segundos o que você faz e como contratar.<br><br>
+        O segundo ponto é <em>[problema 2]</em>. Esse aqui impacta diretamente na percepção de valor — quando o cliente pesquisa você, isso é o que ele vê.<br><br>
+        E o terceiro, que provavelmente está causando o problema que você mencionou no comentário: <em>[problema 3 conectado à dor]</em>."
+      </div>
+      <div class="script-tip">💡 Mostre, não descreva. Clique nos elementos com o mouse enquanto fala. Torne visual. Fique na tela deles o tempo todo.</div>
+    </div>
+
+    <!-- BLOCO 4 -->
+    <div class="script-block">
+      <div class="script-time">3:00 – 4:00 · Direção sem entregar tudo</div>
+      <div class="script-title">O que você faria — a prévia da solução</div>
+      <div class="script-text">
+        "Se eu estivesse resolvendo isso, o primeiro passo seria <em>[direção geral, sem detalhe técnico]</em>. Não vou entrar em todos os detalhes aqui porque isso dependeria do seu contexto específico — mas o caminho está claro."
+      </div>
+      <div class="script-tip">💡 Dê a direção, não o manual. A pessoa precisa sentir que a solução existe e que você sabe qual é — mas que precisa de uma conversa para ir além.</div>
+    </div>
+
+    <!-- BLOCO 5 -->
+    <div class="script-block">
+      <div class="script-time">4:00 – 4:30 · CTA leve</div>
+      <div class="script-title">O convite — sem pressão, sem urgência artificial</div>
+      <div class="script-text">
+        "Se isso fez sentido e você quiser conversar mais sobre o que vi, é só responder essa mensagem. Não tem compromisso nenhum — só uma conversa."
+      </div>
+      <div class="script-tip">💡 Nunca diga "agende uma call de 30 min" ou "tenho vagas limitadas". Isso transforma o diagnóstico em venda e quebra o encanto. Apenas: "responda essa mensagem."</div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- REGRAS DE OURO -->
+    <p class="label">Regras de ouro da gravação</p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">✓ O que fazer</div>
+        <ul class="checklist" style="margin-top:8px">
+          <li><span class="check">✓</span> Falar com naturalidade, como explicando pra um amigo</li>
+          <li><span class="check">✓</span> Mostrar a tela do cliente durante quase todo o vídeo</li>
+          <li><span class="check">✓</span> Usar o mouse para apontar elementos específicos</li>
+          <li><span class="check">✓</span> Usar o nome da pessoa ao menos 2 vezes</li>
+          <li><span class="check">✓</span> Citar a frase exata que ela escreveu</li>
+          <li><span class="check">✓</span> Encerrar com leveza — zero pressão</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">✕ O que evitar</div>
+        <ul class="checklist" style="margin-top:8px">
+          <li><span style="color:var(--red)">✕</span> Falar de preço ou pacotes no vídeo</li>
+          <li><span style="color:var(--red)">✕</span> Usar script robotizado, lido palavra por palavra</li>
+          <li><span style="color:var(--red)">✕</span> Fazer críticas sem apontar a solução</li>
+          <li><span style="color:var(--red)">✕</span> Vídeo com mais de 5 minutos</li>
+          <li><span style="color:var(--red)">✕</span> Fundo bagunçado, microfone ruim</li>
+          <li><span style="color:var(--red)">✕</span> CTA com urgência falsa ("só essa semana")</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══ TIMING ══ -->
+  <div class="section" id="aba-timing">
+
+    <div class="sec-eyebrow">Quando agir</div>
+    <div class="sec-title">O timing que maximiza resposta</div>
+    <div class="sec-sub">A maioria dos erros de prospecção não é no conteúdo — é no timing. Mandar o vídeo certo na hora errada é quase tão ruim quanto não mandar.</div>
+
+    <!-- JANELA DE OPORTUNIDADE -->
+    <div class="highlight" style="background:var(--gold-bg);border-color:var(--gold-dark);margin-bottom:32px">
+      <div class="hl-label" style="color:var(--gold)">⚡ A janela de oportunidade</div>
+      <div class="hl-body">
+        A dor verbalizada num comentário tem <strong>vida curta</strong>. Quando uma pessoa escreve "não consigo cobrar o que vale", ela está com esse problema ativo naquele momento. Em 3–5 dias, ou ela resolve, ou esquece, ou cansa de pensar no assunto. <strong>O Video Audit funciona melhor nas primeiras 24–48 horas após o comentário.</strong>
+      </div>
+    </div>
+
+    <!-- DIAS E HORÁRIOS -->
+    <p class="label">Melhores dias e horários para enviar</p>
+    <div class="week-grid" style="margin-bottom:32px">
+      <div class="week-card" style="border-color:var(--green-dark)">
+        <div class="week-label" style="color:var(--green)">✓ Terça</div>
+        <div class="week-item">Melhor dia da semana</div>
+        <div class="week-item">Energia pós-segunda</div>
+        <div class="week-item">Caixa de entrada limpa</div>
+      </div>
+      <div class="week-card" style="border-color:var(--green-dark)">
+        <div class="week-label" style="color:var(--green)">✓ Quarta</div>
+        <div class="week-item">Segundo melhor dia</div>
+        <div class="week-item">Pessoa no ritmo de trabalho</div>
+        <div class="week-item">Receptiva a conteúdo novo</div>
+      </div>
+      <div class="week-card" style="border-color:var(--green-dark)">
+        <div class="week-label" style="color:var(--green)">✓ Quinta</div>
+        <div class="week-item">Ainda funciona bem</div>
+        <div class="week-item">Antes do desmonte de sexta</div>
+        <div class="week-item">Bom para follow-up</div>
+      </div>
+      <div class="week-card" style="border-color:var(--red-dark)">
+        <div class="week-label" style="color:var(--red)">✕ Segunda</div>
+        <div class="week-item">Caixa de entrada cheia</div>
+        <div class="week-item">Modo resolução de urgência</div>
+        <div class="week-item">Menor atenção disponível</div>
+      </div>
+      <div class="week-card" style="border-color:var(--red-dark)">
+        <div class="week-label" style="color:var(--red)">✕ Sexta / Fim</div>
+        <div class="week-item">Modo desligar</div>
+        <div class="week-item">Menor intenção de compra</div>
+        <div class="week-item">Vídeo some na caixa de entrada</div>
+      </div>
+    </div>
+
+    <!-- HORÁRIOS -->
+    <p class="label">Faixa de horário ideal</p>
+    <div class="grid-3" style="margin-bottom:32px">
+      <div class="card" style="border-color:var(--green-dark);text-align:center">
+        <div style="font-size:26px;font-weight:900;color:var(--green)">08–10h</div>
+        <div style="font-size:12px;color:var(--muted2);margin-top:6px">Manhã cedo — pessoa abre o celular antes de começar o dia. Alta atenção disponível.</div>
+      </div>
+      <div class="card" style="border-color:var(--yellow-bg);text-align:center;border-color:var(--gold-dark)">
+        <div style="font-size:26px;font-weight:900;color:var(--gold)">12–13h</div>
+        <div style="font-size:12px;color:var(--muted2);margin-top:6px">Intervalo de almoço — temperatura social alta, propenso a consumir vídeo curto.</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:26px;font-weight:900;color:var(--muted2)">20–21h</div>
+        <div style="font-size:12px;color:var(--muted2);margin-top:6px">Noite funciona para empreendedores que trabalham até tarde. Menos concorrência.</div>
+      </div>
+    </div>
+
+    <!-- PROTOCOLO DE FOLLOW-UP -->
+    <p class="label">Protocolo de follow-up</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark);font-size:11px">D0</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Dia 0 — Envio do vídeo</div>
+          <div class="step-desc">Mensagem curta com link. Não explica nada além do essencial. Aguarda.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark);font-size:11px">D3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Dia 3 — Follow-up 1 (se silêncio)</div>
+          <div class="step-desc">Mensagem de uma linha. Não repete o pitch. Apenas reabre a conversa com leveza.</div>
+          <div class="step-detail">"Oi [nome], só passando para ver se conseguiu assistir ao vídeo. Qualquer dúvida estou por aqui."</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num" style="background:var(--bg3);color:var(--muted2);border:2px solid var(--border2);font-size:11px">D7</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Dia 7 — Follow-up 2 e encerramento</div>
+          <div class="step-desc">Último contato. Tom de encerramento — isso gera respostas porque a pessoa sente que está perdendo o acesso.</div>
+          <div class="step-detail">"Tudo bem [nome]. Vou deixar o link disponível por mais alguns dias caso queira ver depois. Qualquer coisa é só falar."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight" style="background:var(--bg2);border-color:var(--border2)">
+      <div class="hl-label" style="color:var(--muted2)">📌 Regra dos 2 follow-ups</div>
+      <div class="hl-body">Nunca mais de 2 follow-ups. Quem não respondeu após o dia 7 não estava pronto agora — pode estar em 3 meses. <strong>Archive o lead, não apague.</strong> A reativação em 60–90 dias com uma nova observação tem taxa de resposta surpreendente.</div>
+    </div>
+
+  </div>
+
+
+  <!-- ══ RESULTADOS ══ -->
+  <div class="section" id="aba-resultados">
+
+    <div class="sec-eyebrow">O que esperar</div>
+    <div class="sec-title">Resultados realistas por etapa</div>
+    <div class="sec-sub">Números baseados em agências que usam Video Audit como principal canal de prospecção. Seus números vão melhorar com cada vídeo gravado — a curva de aprendizado é rápida.</div>
+
+    <!-- MÉTRICAS CHAVE -->
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-value" style="color:var(--gold)">70%</div>
+        <div class="metric-label">Taxa de visualização</div>
+        <div class="metric-desc">Pessoas que abrem e assistem ao vídeo enviado</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:var(--blue)">20%</div>
+        <div class="metric-label">Taxa de resposta</div>
+        <div class="metric-desc">De quem assistiu, responde após o vídeo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:var(--purple)">40%</div>
+        <div class="metric-label">Conversão p/ call</div>
+        <div class="metric-desc">De quem respondeu, aceita uma conversa</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:var(--green)">25%</div>
+        <div class="metric-label">Conversão p/ cliente</div>
+        <div class="metric-desc">De quem fez call, fecha o primeiro nível</div>
+      </div>
+    </div>
+
+    <!-- O FUNIL EM NÚMEROS -->
+    <div class="highlight" style="background:var(--bg2);border-color:var(--border2);margin-bottom:32px">
+      <div class="hl-label" style="color:var(--muted2)">📊 O funil completo em números reais</div>
+      <div class="hl-body">
+        <strong>10 leads com video audit enviado</strong><br>
+        → 7 assistem ao vídeo (70%)<br>
+        → 1,4 respondem (20% dos que assistiram)<br>
+        → 0,6 aceitam call (40% dos que responderam)<br>
+        → <strong style="color:var(--green)">≈ 1 cliente a cada 15–20 vídeos enviados</strong><br><br>
+        Em 4 semanas fazendo 3 vídeos por semana = 12 vídeos = <strong>probabilidade alta de fechar o primeiro cliente.</strong>
+      </div>
+    </div>
+
+    <!-- PROJEÇÃO SEMANA A SEMANA -->
+    <p class="label">Projeção realista — primeiras 4 semanas</p>
+    <div class="week-grid" style="margin-bottom:32px">
+      <div class="week-card" style="border-color:var(--blue-dark)">
+        <div class="week-label" style="color:var(--blue)">Semana 1</div>
+        <div class="week-item">3 leads prospectados</div>
+        <div class="week-item">3 vídeos gravados</div>
+        <div class="week-item">Aprendendo o processo</div>
+        <div class="week-item" style="color:var(--muted)">Meta: enviar, não fechar</div>
+      </div>
+      <div class="week-card" style="border-color:var(--purple-dark)">
+        <div class="week-label" style="color:var(--purple)">Semana 2</div>
+        <div class="week-item">+3 vídeos enviados</div>
+        <div class="week-item">1–2 respostas chegam</div>
+        <div class="week-item">Follow-ups da semana 1</div>
+        <div class="week-item" style="color:var(--muted)">Meta: primeira conversa</div>
+      </div>
+      <div class="week-card" style="border-color:var(--gold-dark)">
+        <div class="week-label" style="color:var(--gold)">Semana 3</div>
+        <div class="week-item">+3 vídeos enviados</div>
+        <div class="week-item">1 call de diagnóstico</div>
+        <div class="week-item">Proposta enviada</div>
+        <div class="week-item" style="color:var(--muted)">Meta: proposta no ar</div>
+      </div>
+      <div class="week-card" style="border-color:var(--green-dark)">
+        <div class="week-label" style="color:var(--green)">Semana 4</div>
+        <div class="week-item">Possível primeiro fechamento</div>
+        <div class="week-item">Pipeline de 3–5 leads</div>
+        <div class="week-item">Processo refinado</div>
+        <div class="week-item" style="color:var(--green)">Meta: primeiro R$</div>
+      </div>
+    </div>
+
+    <!-- POR QUE O NÚMERO MELHORA -->
+    <p class="label">Por que seus números vão melhorar com o tempo</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title" style="color:var(--gold)">🎙️ Conforto na gravação</div>
+        <div class="card-body">Do vídeo 1 para o vídeo 10 a qualidade de apresentação muda drasticamente. Você aprende o ritmo, elimina os "ãh" e soa mais confiante. Isso aumenta taxa de resposta.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--blue)">🎯 Seleção de lead</div>
+        <div class="card-body">Você vai aprender a identificar quais tipos de leads têm mais probabilidade de responder — nicho, tamanho do negócio, linguagem usada no comentário.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--green)">📈 Roteiro afinado</div>
+        <div class="card-body">Com feedback das respostas, você vai ajustar o CTA, o tom, a sequência de problemas apresentados. O roteiro gerado pelo sistema vai evoluir com você.</div>
+      </div>
+    </div>
+
+    <div class="action-card">
+      <h3>O primeiro vídeo é o mais difícil</h3>
+      <p>
+        Não espere estar pronto. O vídeo 1 não precisa ser perfeito —<br>
+        precisa ser enviado. Cada vídeo gravado é prática. Cada resposta é aprendizado.<br><br>
+        <strong style="color:var(--gold)">O sistema vai gerar o roteiro. Você só precisa gravar e enviar.</strong>
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- ══ FERRAMENTAS ══ -->
+  <div class="section" id="aba-ferramentas">
+
+    <div class="sec-eyebrow">Stack recomendado</div>
+    <div class="sec-title">O que você precisa para rodar</div>
+    <div class="sec-sub">A stack completa do Video Audit Prospecting. Tudo gratuito ou com tier gratuito suficiente para começar — sem gastar nada antes do primeiro cliente.</div>
+
+    <p class="label">Gravação e distribuição do vídeo</p>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(200,137,44,0.12)">🎬</div>
+      <div class="tool-info">
+        <div class="tool-name">Loom</div>
+        <div class="tool-desc">Screencast com câmera, link público instantâneo, notificação de quando o lead assistiu e até qual minuto. Perfeito para Video Audit.</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--green-bg);color:var(--green);border-color:var(--green-dark)">Gratuito</span>
+    </div>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(96,165,250,0.12)">🖥️</div>
+      <div class="tool-info">
+        <div class="tool-name">OBS Studio</div>
+        <div class="tool-desc">Alternativa gratuita ao Loom. Mais controle sobre layout, qualidade de áudio e vídeo. Requer upload manual para Google Drive ou YouTube não listado.</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--green-bg);color:var(--green);border-color:var(--green-dark)">100% Gratuito</span>
+    </div>
+
+    <hr class="divider" />
+    <p class="label">Análise de presença digital do lead</p>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(251,146,60,0.12)">🔍</div>
+      <div class="tool-info">
+        <div class="tool-name">Sistema de Análise de Lead (em construção)</div>
+        <div class="tool-desc">O próximo módulo deste sistema. Coleta dados públicos do lead, gera score de presença digital e alimenta o roteiro automaticamente via Claude API.</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-dark)">Em breve</span>
+    </div>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(74,222,128,0.12)">🌐</div>
+      <div class="tool-info">
+        <div class="tool-name">PageSpeed Insights (Google)</div>
+        <div class="tool-desc">Analisa velocidade e performance do site do lead gratuitamente. Dados concretos para mostrar no vídeo: "seu site demora X segundos para carregar no mobile."</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--green-bg);color:var(--green);border-color:var(--green-dark)">Gratuito</span>
+    </div>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(167,139,250,0.12)">📍</div>
+      <div class="tool-info">
+        <div class="tool-name">Google Maps + Search Console Insights</div>
+        <div class="tool-desc">Verificar presença no Maps, nota, reviews e visibilidade orgânica. Dados que você mostra ao vivo durante o vídeo.</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--green-bg);color:var(--green);border-color:var(--green-dark)">Gratuito</span>
+    </div>
+
+    <hr class="divider" />
+    <p class="label">Geração do roteiro</p>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(200,137,44,0.12)">🤖</div>
+      <div class="tool-info">
+        <div class="tool-name">Claude API (Anthropic)</div>
+        <div class="tool-desc">O modelo que vai receber os dados do lead (dor detectada, dados do site, Instagram, etc.) e gerar um roteiro personalizado. É o coração do sistema de análise.</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-dark)">API key necessária</span>
+    </div>
+
+    <hr class="divider" />
+    <p class="label">Envio e acompanhamento</p>
+
+    <div class="tool-box">
+      <div class="tool-icon" style="background:rgba(74,222,128,0.12)">💬</div>
+      <div class="tool-info">
+        <div class="tool-name">Instagram DM / LinkedIn / WhatsApp</div>
+        <div class="tool-desc">Canal depende de onde o lead foi encontrado. Instagram para comentários de vídeos de nicho, LinkedIn para vagas de emprego, WhatsApp para negócios locais via Maps.</div>
+      </div>
+      <span class="tool-badge badge" style="background:var(--green-bg);color:var(--green);border-color:var(--green-dark)">Gratuito</span>
+    </div>
+
+    <div class="action-card">
+      <h3>Pronto para construir o sistema?</h3>
+      <p>
+        O próximo passo é construir a página de Análise de Lead — onde você cola o perfil do lead, o sistema coleta os dados públicos, gera o score de presença e cria o roteiro do vídeo automaticamente.<br><br>
+        <strong style="color:var(--gold)">Você só vai precisar da sua API key da Anthropic para ativar a geração de roteiros.</strong>
+      </p>
+    </div>
+
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  const TABS = ['conceito','processo','roteiro','timing','resultados','ferramentas'];
+
+  function ir(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    const sec = document.getElementById('aba-' + id);
+    if (sec) sec.classList.add('active');
+    const idx = TABS.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

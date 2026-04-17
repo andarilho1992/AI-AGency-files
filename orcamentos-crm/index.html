@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orçamentos Pro — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">📋</span>
+      <span class="logo-text">Orçamentos<strong>Pro</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item active">
+        <span class="nav-icon">◼</span> Dashboard
+      </a>
+      <a href="novo-orcamento.html" class="nav-item">
+        <span class="nav-icon">＋</span> Novo Orçamento
+      </a>
+      <a href="orcamentos.html" class="nav-item">
+        <span class="nav-icon">📄</span> Orçamentos
+      </a>
+      <a href="clientes.html" class="nav-item">
+        <span class="nav-icon">👥</span> Clientes
+      </a>
+      <a href="configuracoes.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Configurações
+      </a>
+    </nav>
+    <div class="sidebar-empresa">
+      <span id="empresa-nome">Minha Empresa</span>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p class="subtitle">Visão geral dos seus orçamentos</p>
+      </div>
+      <a href="novo-orcamento.html" class="btn btn-primary">+ Novo Orçamento</a>
+    </header>
+
+    <!-- CARDS DE MÉTRICAS -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Total em Aberto</div>
+        <div class="metric-value" id="total-aberto">R$ 0,00</div>
+        <div class="metric-sub" id="count-aberto">0 orçamentos</div>
+      </div>
+      <div class="metric-card accent-green">
+        <div class="metric-label">Aceitos (este mês)</div>
+        <div class="metric-value" id="total-aceito">R$ 0,00</div>
+        <div class="metric-sub" id="count-aceito">0 orçamentos</div>
+      </div>
+      <div class="metric-card accent-blue">
+        <div class="metric-label">Total de Clientes</div>
+        <div class="metric-value" id="total-clientes">0</div>
+        <div class="metric-sub">cadastrados</div>
+      </div>
+      <div class="metric-card accent-yellow">
+        <div class="metric-label">Taxa de Conversão</div>
+        <div class="metric-value" id="taxa-conversao">0%</div>
+        <div class="metric-sub">aceitos / enviados</div>
+      </div>
+    </section>
+
+    <!-- ORÇAMENTOS RECENTES -->
+    <section class="section-card">
+      <div class="section-header">
+        <h2>Orçamentos Recentes</h2>
+        <a href="orcamentos.html" class="link-ver-todos">Ver todos →</a>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Cliente</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Data</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-orcamentos">
+          <tr class="empty-row">
+            <td colspan="6">Nenhum orçamento ainda. <a href="novo-orcamento.html">Criar o primeiro →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Carrega dados do dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarDashboard();
+    });
+
+    function carregarDashboard() {
+      const orcamentos = Storage.getOrcamentos();
+      const clientes = Storage.getClientes();
+
+      // Métricas
+      const abertos = orcamentos.filter(o => o.status === 'pendente' || o.status === 'enviado');
+      const aceitos = orcamentos.filter(o => o.status === 'aceito');
+      const enviados = orcamentos.filter(o => o.status !== 'rascunho');
+
+      document.getElementById('total-aberto').textContent = formatarMoeda(
+        abertos.reduce((acc, o) => acc + o.total, 0)
+      );
+      document.getElementById('count-aberto').textContent = `${abertos.length} orçamento(s)`;
+
+      document.getElementById('total-aceito').textContent = formatarMoeda(
+        aceitos.reduce((acc, o) => acc + o.total, 0)
+      );
+      document.getElementById('count-aceito').textContent = `${aceitos.length} orçamento(s)`;
+
+      document.getElementById('total-clientes').textContent = clientes.length;
+
+      const taxa = enviados.length > 0
+        ? Math.round((aceitos.length / enviados.length) * 100)
+        : 0;
+      document.getElementById('taxa-conversao').textContent = `${taxa}%`;
+
+      // Empresa
+      const config = Storage.getConfig();
+      if (config.empresa) {
+        document.getElementById('empresa-nome').textContent = config.empresa;
+      }
+
+      // Tabela
+      const recentes = [...orcamentos]
+        .sort((a, b) => new Date(b.criadoEm) - new Date(a.criadoEm))
+        .slice(0, 8);
+
+      const tbody = document.getElementById('tabela-orcamentos');
+
+      if (recentes.length === 0) {
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="6">Nenhum orçamento ainda. <a href="novo-orcamento.html">Criar o primeiro →</a></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = recentes.map(o => `
+        <tr>
+          <td><strong>#${o.numero}</strong></td>
+          <td>${o.clienteNome}</td>
+          <td>${formatarMoeda(o.total)}</td>
+          <td><span class="badge badge-${o.status}">${traduzirStatus(o.status)}</span></td>
+          <td>${formatarData(o.criadoEm)}</td>
+          <td>
+            <a href="visualizar-orcamento.html?id=${o.id}" class="btn-link">Ver</a>
+            <a href="novo-orcamento.html?id=${o.id}" class="btn-link">Editar</a>
+          </td>
+        </tr>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

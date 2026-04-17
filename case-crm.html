@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM Funcional — Andarilho Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:   #0d0d0e;
+      --bg2:  #1a1a1c;
+      --gold: #e7c9a3;
+      --rust: #ae330a;
+      --white:#ffffff;
+      --max:  1100px;
+      --px:   clamp(20px, 5vw, 80px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    .wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--px); }
+
+    .tag {
+      display: inline-block;
+      background: var(--rust);
+      color: var(--gold);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 6px;
+    }
+    .prancheta {
+      padding-block: 100px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .section-header { margin-bottom: 56px; }
+    .section-header h2 {
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 800; line-height: 1.1;
+      margin-top: 16px; color: var(--gold);
+    }
+    .section-header p {
+      font-size: 16px; color: rgba(255,255,255,.6);
+      margin-top: 12px; max-width: 560px; line-height: 1.75;
+    }
+
+    /* ── BACK NAV ── */
+    .back-nav {
+      position: fixed; top: 24px; left: 24px; z-index: 100;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(13,13,14,.85); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 100px;
+      padding: 8px 16px; font-size: 13px; color: rgba(255,255,255,.6);
+      transition: color .2s;
+    }
+    .back-nav:hover { color: var(--gold); }
+
+    /* ── COVER ── */
+    #cover {
+      min-height: 100vh; display: flex; align-items: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.28) 0%, var(--bg) 65%);
+      padding-block: 140px;
+    }
+    .cover-inner { display: flex; flex-direction: column; gap: 28px; }
+    .cover-meta { display: flex; align-items: center; gap: 12px; }
+    .cover-num { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.35); letter-spacing: .1em; text-transform: uppercase; }
+    .cover-title {
+      font-size: clamp(28px, 3.8vw, 52px);
+      font-weight: 900; line-height: 1.1; letter-spacing: -.02em;
+    }
+    .cover-title .gold { color: var(--gold); }
+    .cover-sub {
+      font-size: clamp(13px, 1vw, 15px);
+      color: rgba(255,255,255,.6); max-width: 420px; line-height: 1.7;
+    }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cover-tag {
+      padding: 6px 14px; border: 1px solid rgba(231,201,163,.2);
+      border-radius: 100px; font-size: 12px; font-weight: 500; color: var(--gold);
+    }
+    .cover-stats { display: flex; gap: 48px; padding-top: 8px; }
+    .stat-num { font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ── PROBLEMA ── */
+    #problema { background: var(--bg2); }
+    .prob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .prob-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .prob-icon {
+      width: 44px; height: 44px; background: rgba(174,51,10,.15);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .prob-card h3 { font-size: 17px; font-weight: 700; color: var(--gold); }
+    .prob-card p { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.65; }
+
+    /* ── MÓDULOS ── */
+    #modulos { background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.18) 0%, var(--bg) 65%); }
+    .modulos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+    .modulo-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 24px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: border-color .2s;
+    }
+    .modulo-card:hover { border-color: rgba(174,51,10,.35); }
+    .modulo-icon {
+      width: 44px; height: 44px; background: rgba(174,51,10,.12);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .modulo-num { font-size: 10px; font-weight: 700; color: rgba(174,51,10,.7); letter-spacing: .12em; text-transform: uppercase; }
+    .modulo-card h3 { font-size: 16px; font-weight: 700; color: var(--gold); }
+    .modulo-card p { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.65; }
+    .modulo-features { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .modulo-feat {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: rgba(255,255,255,.5);
+    }
+    .modulo-feat::before {
+      content: ''; width: 4px; height: 4px;
+      background: var(--rust); border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ── STACK ── */
+    #stack { background: var(--bg2); }
+    .stack-flow { display: flex; align-items: center; gap: 0; margin-top: 48px; flex-wrap: wrap; }
+    .stack-item { display: flex; flex-direction: column; align-items: center; gap: 12px; flex: 1; min-width: 120px; }
+    .stack-icon {
+      width: 72px; height: 72px; background: var(--bg);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stack-name { font-size: 13px; font-weight: 600; color: var(--gold); text-align: center; }
+    .stack-role { font-size: 11px; color: rgba(255,255,255,.4); text-align: center; }
+    .stack-arrow { font-size: 22px; color: rgba(174,51,10,.6); padding: 0 4px; flex-shrink: 0; margin-bottom: 36px; }
+
+    /* ── MOCKUPS ── */
+    #mockups { background: var(--bg); }
+    .mock-hero {
+      width: 100%; aspect-ratio: 16/7;
+      background: rgba(255,255,255,.03); border: 1px dashed rgba(231,201,163,.2);
+      border-radius: 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      margin-bottom: 20px; overflow: hidden;
+    }
+    .mock-hero img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; display: none; }
+    .mock-hero.has-img img { display: block; }
+    .mock-hero.has-img .mock-label { display: none; }
+    .mock-label { display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
+    .mock-label svg { opacity: .25; }
+    .mock-label span { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(231,201,163,.4); }
+    .mock-label small { font-size: 11px; color: rgba(255,255,255,.2); }
+    .mock-row { display: grid; gap: 16px; margin-bottom: 16px; }
+    .mock-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .mock-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .mock-wide {
+      width: 100%; aspect-ratio: 16/6;
+      background: rgba(255,255,255,.03); border: 1px dashed rgba(231,201,163,.2);
+      border-radius: 16px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      overflow: hidden; margin-bottom: 16px;
+    }
+    .mock-wide img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; display: none; }
+    .mock-wide.has-img img { display: block; }
+    .mock-wide.has-img .mock-label { display: none; }
+    .mock-sq {
+      aspect-ratio: 4/3; background: rgba(255,255,255,.03);
+      border: 1px dashed rgba(231,201,163,.2); border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px; overflow: hidden;
+    }
+    .mock-sq img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; display: none; }
+    .mock-sq.has-img img { display: block; }
+    .mock-sq.has-img .mock-label { display: none; }
+
+    /* ── ENTREGÁVEIS ── */
+    #entregaveis { background: var(--bg2); }
+    .deliverables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 48px; }
+    .deliver-block h3 { font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 20px; letter-spacing: .16em; text-transform: uppercase; }
+    .deliver-list { display: flex; flex-direction: column; gap: 14px; }
+    .deliver-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.5; }
+    .deliver-item::before { content: ''; width: 6px; height: 6px; background: var(--rust); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+    .result-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px; padding: 20px 24px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .result-num { font-size: 32px; font-weight: 800; color: var(--gold); line-height: 1; min-width: 56px; }
+    .result-label { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5; }
+
+    /* ── DEMO ── */
+    #demo { background: radial-gradient(ellipse at 50% 100%, rgba(174,51,10,.18) 0%, var(--bg) 65%); text-align: center; }
+    #demo h2 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: var(--gold); margin-top: 16px; margin-bottom: 12px; }
+    #demo p { font-size: 16px; color: rgba(255,255,255,.6); margin-bottom: 36px; }
+    .demo-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 100px;
+      font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif;
+      border: 1.5px solid transparent; cursor: pointer; transition: all .2s;
+    }
+    .btn-rust { background: var(--rust); color: var(--gold); border-color: var(--rust); }
+    .btn-outline { background: rgba(231,201,163,.08); color: var(--gold); border-color: rgba(231,201,163,.3); }
+    .btn:hover { opacity: .85; }
+
+    /* ── EXPORT ── */
+    .export-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100;
+      background: var(--bg2); color: rgba(255,255,255,.5);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 100px;
+      padding: 10px 18px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+    }
+    .export-btn:hover { color: var(--gold); border-color: rgba(231,201,163,.3); }
+    body.prancheta-mode .back-nav,
+    body.prancheta-mode .export-btn { display: none; }
+
+    @media (max-width: 768px) {
+      .prob-grid, .modulos-grid { grid-template-columns: 1fr; }
+      .deliverables-grid { grid-template-columns: 1fr; gap: 40px; }
+      .mock-row.cols-2, .mock-row.cols-3 { grid-template-columns: 1fr; }
+      .cover-stats { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="lp-andarilho.html#portfolio" class="back-nav">← Voltar ao portfólio</a>
+
+<!-- PRANCHETA 1 — COVER -->
+<section id="cover" class="prancheta">
+  <div class="wrap">
+    <div class="cover-inner">
+      <div class="cover-meta">
+        <span class="tag">Projeto 02</span>
+        <span class="cover-num">CRM · Dashboard · Gestão</span>
+      </div>
+      <h1 class="cover-title">CRM Funcional<br><span class="gold">para Freelancers</span></h1>
+      <p class="cover-sub">Painel completo de gestão de clientes, projetos, propostas, faturas e reuniões — tudo em um único arquivo HTML.</p>
+      <div class="cover-tags">
+        <span class="cover-tag">HTML</span>
+        <span class="cover-tag">CSS</span>
+        <span class="cover-tag">JavaScript</span>
+        <span class="cover-tag">LocalStorage</span>
+        <span class="cover-tag">Zero dependências</span>
+      </div>
+      <div class="cover-stats">
+        <div>
+          <div class="stat-num">7</div>
+          <div class="stat-label">Módulos</div>
+        </div>
+        <div>
+          <div class="stat-num">1</div>
+          <div class="stat-label">Arquivo só</div>
+        </div>
+        <div>
+          <div class="stat-num">0</div>
+          <div class="stat-label">Dependências</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 2 — PROBLEMA -->
+<section id="problema" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O Problema</span>
+      <h2>Freelancer não precisa<br>de ferramenta cara pra se organizar</h2>
+      <p>A maioria das ferramentas de CRM é complexa demais, cara demais ou exige cadastro. O freelancer precisa de algo que funcione agora.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>Ferramentas genéricas demais</h3>
+        <p>Notion, Trello e afins exigem configuração longa e não foram feitos para o fluxo de trabalho de um freelancer de serviços digitais.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Custo mensal desnecessário</h3>
+        <p>Pagar R$80–R$300/mês por uma ferramenta que usa 20% dos recursos não faz sentido pra quem está construindo renda do zero.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Dados espalhados</h3>
+        <p>Clientes no WhatsApp, propostas no e-mail, faturas na planilha e reuniões no calendar. Nenhum lugar centralizado com visão completa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 3 — MÓDULOS -->
+<section id="modulos" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Os Módulos</span>
+      <h2>Sete telas.<br>Uma operação completa.</h2>
+      <p>Cada módulo resolve uma parte do fluxo de trabalho — do primeiro contato ao pagamento recebido.</p>
+    </div>
+    <div class="modulos-grid">
+
+      <div class="modulo-card">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 01</div>
+        <h3>Dashboard</h3>
+        <p>Visão geral do negócio com métricas em tempo real, atividade recente e acesso rápido às ações mais usadas.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">KPIs principais</div>
+          <div class="modulo-feat">Atividade recente</div>
+          <div class="modulo-feat">Atalhos rápidos</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 02</div>
+        <h3>Clientes</h3>
+        <p>Cadastro completo de clientes com histórico, status e dados de contato. Filtros por status e busca integrada.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Cadastro completo</div>
+          <div class="modulo-feat">Filtro por status</div>
+          <div class="modulo-feat">Busca integrada</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 03</div>
+        <h3>Projetos</h3>
+        <p>Acompanhamento de cada entrega com status, prazo e valor. Visão clara do que está em andamento ou atrasado.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Status em tempo real</div>
+          <div class="modulo-feat">Controle de prazo</div>
+          <div class="modulo-feat">Valor do projeto</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 04</div>
+        <h3>Propostas</h3>
+        <p>Pipeline de vendas com controle de propostas enviadas, aceitas e recusadas. Nunca perca um follow-up.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Pipeline visual</div>
+          <div class="modulo-feat">Status de negociação</div>
+          <div class="modulo-feat">Valor por proposta</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 05</div>
+        <h3>Faturas</h3>
+        <p>Controle de cobranças com status de pagamento. Saiba exatamente o que foi pago, o que está pendente e o que está atrasado.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Status de pagamento</div>
+          <div class="modulo-feat">Alertas de atraso</div>
+          <div class="modulo-feat">Valor total em aberto</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 06</div>
+        <h3>Reuniões</h3>
+        <p>Agenda de calls com clientes. Data, horário, link de acesso e status de cada reunião em um só lugar.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Agenda visual</div>
+          <div class="modulo-feat">Link de acesso direto</div>
+          <div class="modulo-feat">Status da reunião</div>
+        </div>
+      </div>
+
+      <div class="modulo-card" style="grid-column: span 1;">
+        <div class="modulo-icon">
+          <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <div class="modulo-num">Módulo 07</div>
+        <h3>Anotações</h3>
+        <p>Bloco de notas integrado para ideias, lembretes e informações importantes sobre clientes e projetos.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Notas por categoria</div>
+          <div class="modulo-feat">Acesso rápido</div>
+          <div class="modulo-feat">Persistência local</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 4 — STACK -->
+<section id="stack" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">A Stack</span>
+      <h2>Um arquivo.<br>Zero dependências.</h2>
+      <p>Construído em HTML, CSS e JavaScript puro — sem frameworks, sem banco de dados, sem servidor. Abre no browser e já funciona.</p>
+    </div>
+    <div class="stack-flow">
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="26" height="26" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24"><path d="M4 4l16 16M4 20L20 4"/><path d="M4 4h3M4 4v3M20 20h-3M20 20v-3"/></svg>
+        </div>
+        <div class="stack-name">HTML</div>
+        <div class="stack-role">Estrutura</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="26" height="26" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24"><path d="M4 2l16 0M4 22l16 0"/><rect x="7" y="6" width="10" height="12" rx="1"/></svg>
+        </div>
+        <div class="stack-name">CSS</div>
+        <div class="stack-role">Estilo & Layout</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="26" height="26" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="stack-name">JavaScript</div>
+        <div class="stack-role">Lógica & CRUD</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="26" height="26" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M2 12c0 2.21 4.48 4 10 4s10-1.79 10-4"/><path d="M2 12v6c0 2.21 4.48 4 10 4s10-1.79 10-4v-6"/></svg>
+        </div>
+        <div class="stack-name">LocalStorage</div>
+        <div class="stack-role">Persistência de dados</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="26" height="26" fill="none" stroke="#e7c9a3" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div class="stack-name">Deploy</div>
+        <div class="stack-role">Browser / GitHub Pages</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 5 — MOCKUPS -->
+<section id="mockups" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O Projeto</span>
+      <h2>Cada módulo.<br>Em tela cheia.</h2>
+      <p>Prints reais do painel funcionando — dark mode, dados reais, interface completa.</p>
+    </div>
+
+    <!-- IMAGEM 1 — Dashboard completo, visão geral -->
+    <div class="mock-hero" style="margin-bottom:20px">
+      <img src="" alt="Dashboard completo">
+      <div class="mock-label">
+        <svg width="32" height="32" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>Imagem 01</span>
+        <small>Dashboard — visão geral com sidebar e KPIs · 16:7</small>
+      </div>
+    </div>
+
+    <!-- IMAGENS 2 e 3 — Clientes + Projetos -->
+    <div class="mock-row cols-2">
+      <div class="mock-sq">
+        <img src="" alt="Módulo Clientes">
+        <div class="mock-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span>Imagem 02</span>
+          <small>Módulo Clientes · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-sq">
+        <img src="" alt="Módulo Projetos">
+        <div class="mock-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span>Imagem 03</span>
+          <small>Módulo Projetos · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGENS 4 e 5 — Propostas + Faturas -->
+    <div class="mock-row cols-2">
+      <div class="mock-sq">
+        <img src="" alt="Módulo Propostas">
+        <div class="mock-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Imagem 04</span>
+          <small>Módulo Propostas · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-sq">
+        <img src="" alt="Módulo Faturas">
+        <div class="mock-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Imagem 05</span>
+          <small>Módulo Faturas · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGENS 6 e 7 — Reuniões + Modal aberto -->
+    <div class="mock-row cols-2">
+      <div class="mock-sq">
+        <img src="" alt="Módulo Reuniões">
+        <div class="mock-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Imagem 06</span>
+          <small>Módulo Reuniões · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-sq">
+        <img src="" alt="Modal de cadastro aberto">
+        <div class="mock-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>Imagem 07</span>
+          <small>Modal de cadastro aberto · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRANCHETA 6 — ENTREGÁVEIS -->
+<section id="entregaveis" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O que é entregue</span>
+      <h2>Um arquivo.<br>Uma operação inteira.</h2>
+    </div>
+    <div class="deliverables-grid">
+      <div class="deliver-block">
+        <h3>Entregáveis</h3>
+        <div class="deliver-list">
+          <div class="deliver-item">Arquivo HTML único, sem instalação</div>
+          <div class="deliver-item">7 módulos com CRUD completo</div>
+          <div class="deliver-item">Dados persistidos no LocalStorage</div>
+          <div class="deliver-item">Design dark mode com identidade visual</div>
+          <div class="deliver-item">Responsivo para tablet e desktop</div>
+          <div class="deliver-item">Documentação de uso e personalização</div>
+        </div>
+      </div>
+      <div class="deliver-block">
+        <h3>Resultados</h3>
+        <div class="deliver-list" style="gap:14px">
+          <div class="result-card">
+            <div class="result-num">7</div>
+            <div class="result-label">Módulos funcionais em um único arquivo</div>
+          </div>
+          <div class="result-card">
+            <div class="result-num">0</div>
+            <div class="result-label">Custo mensal — sem assinatura, sem servidor</div>
+          </div>
+          <div class="result-card">
+            <div class="result-num">∞</div>
+            <div class="result-label">Personalizável para qualquer tipo de negócio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 7 — DEMO -->
+<section id="demo" class="prancheta">
+  <div class="wrap">
+    <span class="tag">Demo ao vivo</span>
+    <h2>Abra e use agora.<br>Sem cadastro, sem instalação.</h2>
+    <p>Clique no botão e veja o painel funcionando em tempo real no seu browser.</p>
+    <div class="demo-btns">
+      <a href="painel-demo.html" class="btn btn-rust" target="_blank">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Abrir o painel
+      </a>
+      <a href="lp-andarilho.html#proximo" class="btn btn-outline">Quero um pra meu negócio</a>
+    </div>
+  </div>
+</section>
+
+<button class="export-btn" onclick="document.body.classList.toggle('prancheta-mode'); this.textContent = document.body.classList.contains('prancheta-mode') ? '✕ Sair do modo' : '⊞ Modo Prancheta'">
+  ⊞ Modo Prancheta
+</button>
+
+</body>
+</html>

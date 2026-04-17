@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estratégia & Sistema — Andarilho Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0c0e1a;
+      --bg2:        #131828;
+      --bg3:        #1b2240;
+      --border:     #1e2840;
+      --border2:    #253560;
+      --text:       #f0ede6;
+      --muted:      #6b7080;
+      --muted2:     #9098a8;
+      --gold:       #C8892C;
+      --gold-light: #D9A850;
+      --gold-dark:  #7a5010;
+      --gold-bg:    #1a1208;
+      --purple:     #a78bfa;
+      --purple-dark:#5b21b6;
+      --purple-bg:  #1a0d35;
+      --green:      #4ade80;
+      --green-dark: #15803d;
+      --green-bg:   #061a0c;
+      --orange:     #fb923c;
+      --orange-dark:#c2410c;
+      --orange-bg:  #1c0e06;
+      --red:        #f87171;
+      --red-dark:   #b91c1c;
+      --red-bg:     #1c0808;
+      --yellow:     #fbbf24;
+      --yellow-bg:  #1c1608;
+      --cyan:       #38bdf8;
+      --cyan-bg:    #071820;
+      --blue:       #60a5fa;
+      --blue-dark:  #1d4ed8;
+      --blue-bg:    #0a1628;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── HERO ─────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 56px 24px 40px;
+      background: linear-gradient(180deg, #120e06 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(217,161,104,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: rgba(217,161,104,0.15);
+      border: 1px solid rgba(217,161,104,0.3);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(24px, 4vw, 42px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted2);
+      max-width: 580px;
+      margin: 0 auto 32px;
+    }
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    /* ── TABS ─────────────────────────────── */
+    .tabs-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,15,30,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      overflow-x: auto;
+    }
+    .tabs {
+      display: flex;
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .tab {
+      padding: 14px 18px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: inherit;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: white; border-bottom-color: var(--gold); }
+
+    /* ── SECTIONS ─────────────────────────── */
+    .section { display: none; }
+    .section.active { display: block; }
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── TIPOGRAFIA ───────────────────────── */
+    .sec-title { font-family:'Cinzel',serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing:0.02em; }
+    .sec-sub { font-size: 15px; color: var(--muted2); margin-bottom: 36px; max-width: 640px; line-height: 1.7; }
+    h3.label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px;
+    }
+
+    /* ── CARDS ────────────────────────────── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-2px); }
+    .card-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .card-body { font-size: 14px; color: var(--muted2); line-height: 1.7; }
+
+    /* ── GRIDS ────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+    /* ── DIVIDER ──────────────────────────── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+    /* ── BADGE ────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    /* ── PIPELINE NODES ───────────────────── */
+    .fw-node {
+      flex: 1;
+      max-width: 180px;
+      text-align: center;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    /* ── STEPS ────────────────────────────── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step { display: flex; gap: 20px; }
+    .step-left { display: flex; flex-direction: column; align-items: center; width: 44px; flex-shrink: 0; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; flex-shrink: 0;
+    }
+    .step-line { width: 2px; flex: 1; background: var(--border2); margin: 6px 0; min-height: 20px; }
+    .step-content {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      flex: 1;
+    }
+    .step-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .step-content p { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+    .code-block {
+      margin-top: 10px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #7dd3fc;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    /* ── SCRIPT BOX ───────────────────────── */
+    .script-box {
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.8;
+      margin: 12px 0;
+      font-style: italic;
+    }
+    .script-box strong { color: white; font-style: normal; }
+
+    /* ── OFFER CARDS ──────────────────────── */
+    .offer-card {
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid;
+      position: relative;
+      overflow: hidden;
+    }
+    .offer-card.featured::before {
+      content: '⭐ CARRO-CHEFE';
+      position: absolute;
+      top: 16px; right: 16px;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.08em;
+      background: var(--yellow); color: #000;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .offer-price { font-size: 28px; font-weight: 900; margin: 10px 0 4px; }
+    .offer-prazo { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+    .offer-item {
+      display: flex; gap: 10px; padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px; color: var(--muted2); align-items: flex-start;
+    }
+    .offer-item:last-child { border-bottom: none; }
+
+    /* ── REVENUE CARDS ────────────────────── */
+    .revenue { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .rev-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: 16px; padding: 24px; }
+    .rev-period { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+    .rev-value { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+    .rev-mix { font-size: 12px; color: var(--muted2); margin-bottom: 14px; }
+    .rev-focus { font-size: 12px; color: var(--muted2); padding-top: 14px; border-top: 1px solid var(--border); line-height: 1.5; }
+    .rev-focus strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+    /* ── ACTION CARD ──────────────────────── */
+    .action-card {
+      background: linear-gradient(135deg, var(--gold-bg), var(--purple-bg));
+      border: 1px solid var(--gold-dark);
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .action-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .action-card p { font-size: 14px; color: var(--muted2); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+    /* ── DOR BADGE ────────────────────────── */
+    .dor-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 999px;
+      font-size: 12px; font-weight: 700;
+      border: 1px solid;
+    }
+
+    /* ── WEEK ─────────────────────────────── */
+    .week { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .day-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: 12px; padding: 18px; }
+    .day-name { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 12px; }
+    .day-item { display: flex; gap: 8px; font-size: 12px; color: var(--muted2); margin-bottom: 8px; align-items: flex-start; line-height: 1.4; }
+
+    /* ── HIGHLIGHT BOX ────────────────────── */
+    .highlight-box {
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid;
+      margin-bottom: 16px;
+    }
+    .highlight-box .hl-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .highlight-box .hl-body { font-size: 14px; color: var(--muted2); line-height: 1.7; }
+
+    /* ── CHECKLIST ────────────────────────── */
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 8px 0; font-size: 14px; color: var(--muted2);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check { color: var(--green); flex-shrink: 0; font-weight: 700; }
+
+    /* ── COMPARE TABLE ────────────────────── */
+    .compare { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .compare th {
+      text-align: left; padding: 10px 14px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted);
+      border-bottom: 2px solid var(--border2);
+    }
+    .compare td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .compare tr:last-child td { border-bottom: none; }
+    .compare .bad { color: var(--red); }
+    .compare .good { color: var(--green); }
+
+    /* ── METRIC CARDS ─────────────────────── */
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; margin-bottom: 36px; }
+    .metric-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: 14px; padding: 20px; }
+    .metric-value { font-size: 32px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+    .metric-label { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+    .metric-desc { font-size: 12px; color: var(--muted2); margin-top: 6px; line-height: 1.4; }
+
+    /* ── CENTRALIZAÇÃO GLOBAL ────────────── */
+    .content { text-align: center; }
+    .sec-sub { margin-left: auto; margin-right: auto; }
+
+    /* Elementos que devem ficar alinhados à esquerda */
+    .code-block,
+    .checklist,
+    .checklist li,
+    .compare,
+    .compare td,
+    .compare th,
+    .offer-item,
+    .day-item,
+    .step-content p,
+    .card-body,
+    .script-box,
+    .rev-focus,
+    .hl-body,
+    .highlight-box .hl-body { text-align: left; }
+
+    /* ── ACCORDION (IDEIAS) ───────────────── */
+    .forum { display: flex; flex-direction: column; gap: 8px; margin-bottom: 36px; }
+    .forum-item { border: 1px solid var(--border2); border-radius: 12px; background: var(--bg2); overflow: hidden; }
+    .forum-item summary {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 20px; cursor: pointer; list-style: none;
+      transition: background 0.15s;
+    }
+    .forum-item summary:hover { background: var(--bg3); }
+    .forum-item summary::-webkit-details-marker { display: none; }
+    .forum-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .forum-meta { flex: 1; text-align: left; }
+    .forum-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .forum-sub { font-size: 12px; color: var(--muted); }
+    .forum-arrow {
+      font-size: 12px; color: var(--muted); transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .forum-item[open] .forum-arrow { transform: rotate(90deg); }
+    .forum-item[open] { border-color: var(--border2); }
+    .forum-body {
+      padding: 0 20px 24px 72px;
+      border-top: 1px solid var(--border);
+      text-align: left;
+    }
+    .forum-body h4 { font-size: 13px; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.07em; margin: 20px 0 8px; }
+    .forum-body p { font-size: 14px; color: var(--muted2); line-height: 1.7; margin-bottom: 10px; }
+    .forum-body strong { color: var(--text); }
+    .forum-body .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .forum-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1px solid; }
+    .forum-body .code-block { margin-bottom: 10px; }
+    .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .pros-cons-col { background: var(--bg); border-radius: 10px; padding: 14px; }
+    .pros-cons-col .col-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+    .pros-cons-col li { font-size: 13px; color: var(--muted2); list-style: none; padding: 4px 0; padding-left: 14px; position: relative; line-height: 1.5; }
+    .pros-cons-col li::before { content: '·'; position: absolute; left: 0; }
+    @media (max-width: 640px) {
+      .pros-cons { grid-template-columns: 1fr; }
+      .forum-body { padding-left: 20px; }
+    }
+
+    /* ── PRINT ────────────────────────────── */
+    @media print {
+      .tabs-wrapper { display: none; }
+      .section { display: block !important; page-break-before: always; }
+      body { background: white; color: black; }
+    }
+
+    /* ── BARRA DE EDIÇÃO ──────────────────── */
+    .edit-toolbar {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 999px; padding: 8px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+    }
+    .et-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-right: 4px; }
+    .et-btn {
+      border: none; border-radius: 999px; padding: 6px 14px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
+    }
+    .et-toggle { background: var(--bg3); color: var(--muted2); }
+    .et-toggle.active { background: var(--gold); color: #000; }
+    .et-save { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-dark); display: none; }
+    .et-save:hover { background: #0a3d28; }
+    .et-reset { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-dark); display: none; }
+    .et-reset:hover { background: #3a0a0a; }
+    .et-status { font-size: 11px; color: var(--green); font-weight: 700; display: none; }
+    @keyframes fadeOut { 0%,70% { opacity:1; } 100% { opacity:0; } }
+
+    /* ── ELEMENTOS EDITÁVEIS ──────────────── */
+    body.edit-mode [contenteditable="true"] {
+      outline: 1.5px dashed rgba(217,161,104,0.4);
+      border-radius: 4px; cursor: text; min-height: 1em;
+      transition: outline 0.15s, background 0.15s;
+    }
+    body.edit-mode [contenteditable="true"]:hover {
+      outline-color: var(--gold); background: rgba(217,161,104,0.04);
+    }
+    body.edit-mode [contenteditable="true"]:focus {
+      outline-color: var(--gold); background: rgba(217,161,104,0.08);
+      outline-style: solid;
+    }
+
+    /* ── ICON SLOTS ───────────────────────── */
+    .icon-slot { position: relative; display: inline-block; }
+    .icon-slot img.icon-svg {
+      height: 1.2em; width: auto; vertical-align: middle; object-fit: contain;
+    }
+    body.edit-mode .icon-slot {
+      cursor: pointer; outline: 1.5px dashed rgba(217,161,104,0.4); padding: 2px 4px;
+    }
+    body.edit-mode .icon-slot:hover {
+      background: rgba(217,161,104,0.12); outline-color: var(--gold);
+    }
+    body.edit-mode .icon-slot::after {
+      content: '↑SVG'; position: absolute; top: -18px; left: 50%;
+      transform: translateX(-50%); font-size: 9px; font-weight: 700;
+      color: var(--gold); background: var(--bg2); border: 1px solid var(--gold-dark);
+      border-radius: 4px; padding: 1px 5px; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s;
+    }
+    body.edit-mode .icon-slot:hover::after { opacity: 1; }
+    #icon-file-input { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Andarilho Digital · Agência</div>
+  <h1>Estratégia & Sistema</h1>
+  <p>Como a agência funciona, como o sistema de prospecção foi construído e como você vai ganhar dinheiro com ele — sem depender de audiência ou algoritmo.</p>
+  <div class="hero-badges">
+    <span class="hero-badge" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">🔍 Prospecção Ativa</span>
+    <span class="hero-badge" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">✓ YouTube + Reddit</span>
+    <span class="hero-badge" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">🌍 PT-BR + EN</span>
+    <span class="hero-badge" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">💰 Sem API paga</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab active" onclick="ir('visao')"><span class="icon-slot" data-key="tab-visao">🔄</span> Visão Geral</button>
+    <button class="tab" onclick="ir('sistema')"><span class="icon-slot" data-key="tab-sistema">🔍</span> O Sistema</button>
+    <button class="tab" onclick="ir('dores')"><span class="icon-slot" data-key="tab-dores">🧠</span> 5 Dores</button>
+    <button class="tab" onclick="ir('abordagem')"><span class="icon-slot" data-key="tab-abordagem">💬</span> Abordagem</button>
+    <button class="tab" onclick="ir('oferta')"><span class="icon-slot" data-key="tab-oferta">💼</span> Oferta</button>
+    <button class="tab" onclick="ir('operacao')"><span class="icon-slot" data-key="tab-operacao">📅</span> Operação</button>
+    <button class="tab" onclick="ir('receita')"><span class="icon-slot" data-key="tab-receita">💰</span> Receita</button>
+    <button class="tab" onclick="ir('ideias')"><span class="icon-slot" data-key="tab-ideias">💡</span> Ideias</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     VISÃO GERAL
+══════════════════════════════════════════ -->
+<div class="section active" id="aba-visao">
+<div class="content">
+
+  <div class="sec-title">O Motor do Negócio</div>
+  <div class="sec-sub">O motor não é conteúdo. É prospecção ativa. Você não espera o cliente aparecer — você vai até onde ele está descrevendo o problema que você resolve, identifica a dor, e faz o primeiro movimento.</div>
+
+  <!-- CICLO VISUAL -->
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:40px;margin-bottom:36px">
+    <div style="text-align:center;margin-bottom:32px">
+      <h3 class="label">O ciclo completo — sem depender de algoritmo</h3>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:24px;align-items:center">
+      <div class="fw-node" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">
+        🔍<br>Prospecção<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Busca comentários</span>
+      </div>
+      <div style="color:var(--muted);font-size:22px">→</div>
+      <div class="fw-node" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">
+        🧠<br>Análise<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Detecta 5 dores</span>
+      </div>
+      <div style="color:var(--muted);font-size:22px">→</div>
+      <div class="fw-node" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">
+        🎯<br>Lead<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Salvo no CRM</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:22px;color:var(--muted);margin-bottom:8px">↕</div>
+
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;flex-direction:row-reverse;align-items:center">
+      <div class="fw-node" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">
+        🤝<br>Fechamento<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Proposta → contrato</span>
+      </div>
+      <div style="color:var(--muted);font-size:22px">→</div>
+      <div class="fw-node" style="background:var(--cyan-bg);border-color:#0e7490;color:var(--cyan)">
+        💬<br>Contato<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Aborda a dor</span>
+      </div>
+      <div style="color:var(--muted);font-size:22px">→</div>
+      <div class="fw-node" style="background:var(--red-bg);border-color:var(--red-dark);color:var(--red)">
+        🛠️<br>Entrega<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Resolve → vira case</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:24px;font-size:13px;color:var(--muted);font-style:italic">
+      O case facilita o próximo contato → o ciclo recomeça mais forte
+    </div>
+  </div>
+
+  <!-- O FORASTEIRO -->
+  <div class="highlight-box" style="background:var(--bg3);border-color:var(--border2);border-left:3px solid var(--gold);margin-bottom:36px">
+    <div class="hl-label" style="color:var(--gold)">🏕️ O Forasteiro — Presença, não motor</div>
+    <div class="hl-body">O Instagram e o YouTube existem para mostrar que você está construindo algo real — sem vender a ideia de que já deu certo. Quando alguém recebe sua mensagem de prospecção e vai te pesquisar (e vai), encontra um perfil legítimo de alguém em movimento. Isso gera confiança suficiente para a pessoa responder. <strong style="color:var(--text)">Você posta quando tiver algo genuíno. Sem calendário, sem pressão, sem guru.</strong></div>
+  </div>
+
+  <!-- 4 PILARES -->
+  <h3 class="label">Os pilares do negócio</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+
+    <div class="card" style="border-color:var(--gold-dark);background:var(--gold-bg)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--gold)">Motor principal</div>
+      <div class="card-title" style="color:var(--gold)">🔍 Prospecção Ativa</div>
+      <div class="card-body">Sistema que varre comentários no YouTube e Reddit. Detecta 5 categorias de dor em PT-BR e inglês. Você recebe uma lista de pessoas com problemas reais — e já sabe qual é o problema antes de falar com elas.</div>
+    </div>
+
+    <div class="card" style="border-color:var(--purple-dark);background:var(--purple-bg)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Confiança</div>
+      <div class="card-title" style="color:var(--purple)">🎯 Branding — Você parece real</div>
+      <div class="card-body">Posicionamento claro. Quando o lead te pesquisa, encontra um profissional com identidade definida. O perfil existe para validar você após o contato — não para atrair de forma orgânica.</div>
+    </div>
+
+    <div class="card" style="border-color:var(--green-dark);background:var(--green-bg)">
+      <div class="badge" style="background:rgba(104,217,144,0.2);color:var(--green)">Conversão</div>
+      <div class="card-title" style="color:var(--green)">💼 Oferta em 3 Níveis</div>
+      <div class="card-body">O lead chega com contexto de dor identificada. A conversa começa no diagnóstico, não no preço. 3 níveis claros — o cliente entende onde se encaixa sem você precisar explicar do zero.</div>
+    </div>
+
+    <div class="card" style="border-color:#0e7490;background:var(--cyan-bg)">
+      <div class="badge" style="background:rgba(96,184,217,0.2);color:var(--cyan)">Resultado</div>
+      <div class="card-title" style="color:var(--cyan)">🛠️ Entrega que vira case</div>
+      <div class="card-body">Processo de 3 semanas. Cada projeto bem entregue gera um case real — e o case facilita o próximo contato de prospecção. O resultado é a prova social que o negócio precisa para crescer.</div>
+    </div>
+
+  </div>
+
+  <!-- POR QUE FUNCIONA SEM AUDIÊNCIA -->
+  <h3 class="label">Por que funciona sem audiência</h3>
+  <div style="overflow-x:auto">
+    <table class="compare" style="margin-bottom:36px">
+      <thead>
+        <tr>
+          <th>❌ Modelo de conteúdo (dependente)</th>
+          <th>✓ Modelo de prospecção (ativo)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="bad">Você precisa de audiência antes de ter clientes</td>
+          <td class="good">Você prospecta agora — o primeiro cliente não exige audiência</td>
+        </tr>
+        <tr>
+          <td class="bad">Quando para de postar, para de entrar lead</td>
+          <td class="good">O sistema roda quando você quiser — independente de frequência</td>
+        </tr>
+        <tr>
+          <td class="bad">Resultado demora 6-12 meses para aparecer</td>
+          <td class="good">Primeira conversa pode acontecer na primeira semana</td>
+        </tr>
+        <tr>
+          <td class="bad">Depende do algoritmo de cada plataforma</td>
+          <td class="good">Depende de você abrir o sistema e rodar a busca</td>
+        </tr>
+        <tr>
+          <td class="bad">Mensagem genérica para todo o feed</td>
+          <td class="good">Abordagem personalizada — você conhece a dor antes de falar</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="action-card">
+    <h3>A mentalidade que une tudo</h3>
+    <p>Você não espera audiência para ter clientes. Você vai até onde a dor existe, identifica quem precisa do que você faz, e faz o primeiro movimento.<br><br>
+    Você não vende serviço. Você resolve um problema específico que já sabe que existe — porque leu o comentário onde a pessoa explicou.</p>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     O SISTEMA
+══════════════════════════════════════════ -->
+<div class="section" id="aba-sistema">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--gold)">🔍 O Sistema de Prospecção</div>
+  <div class="sec-sub">Um conjunto de ferramentas HTML/JS que rodam direto no navegador, sem servidor, sem assinatura, sem custo mensal. Os dados ficam salvos localmente no seu computador.</div>
+
+  <!-- TELAS DO SISTEMA -->
+  <h3 class="label">O que foi construído</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+
+    <div class="card" style="border-color:var(--gold-dark)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--gold)">buscar.html</div>
+      <div class="card-title">🔎 Busca de Comentários</div>
+      <div class="card-body">Tela principal de prospecção. Seletor YouTube/Reddit. Para Reddit: modo único, múltiplos subreddits ou busca por termo. Barra de progresso em tempo real. Prévia dos comentários com dores detectadas.</div>
+    </div>
+
+    <div class="card" style="border-color:var(--purple-dark)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">index.html</div>
+      <div class="card-title">📊 Dashboard</div>
+      <div class="card-body">Métricas: total analisado, com dores, leads salvos, fontes. Gráfico de barras por categoria de dor. Lista filtrável por fonte (YouTube/Reddit) e por categoria. Links diretos para perfil e post original.</div>
+    </div>
+
+    <div class="card" style="border-color:var(--green-dark)">
+      <div class="badge" style="background:rgba(104,217,144,0.2);color:var(--green)">leads.html</div>
+      <div class="card-title">🎯 CRM de Leads</div>
+      <div class="card-body">Pipeline de status: novo → contatado → negociando → fechado → perdido. Anotações por lead com salvamento automático. Links para perfil e post original. Filtro por status e dor.</div>
+    </div>
+
+    <div class="card" style="border-color:#0e7490">
+      <div class="badge" style="background:rgba(96,184,217,0.2);color:var(--cyan)">analise.js</div>
+      <div class="card-title">🧠 Motor de Análise</div>
+      <div class="card-body">Dicionário de keywords em PT-BR e inglês. Normalização de texto (remove acentos, padroniza caixa). Detecção por categoria com score de relevância. Sem IA — funciona offline.</div>
+    </div>
+
+  </div>
+
+  <!-- COMO FUNCIONA TECNICAMENTE -->
+  <h3 class="label">Como funciona por dentro</h3>
+  <div class="steps" style="margin-bottom:36px">
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark)">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--gold-dark)">
+        <h4 style="color:var(--gold)">Coleta — YouTube ou Reddit</h4>
+        <p>Para YouTube: usa a Data API v3 (gratuita, 10.000 unidades/dia). Busca até 1.000 comentários por vídeo em páginas de 100. Para Reddit: acessa a API pública JSON sem autenticação — basta adicionar .json a qualquer URL do Reddit.</p>
+        <div class="code-block">YouTube → youtube.com/watch?v=ID → commentThreads.list (API v3)
+Reddit  → reddit.com/r/sub/new.json → sem API Key, sem custo
+         → reddit.com/r/sub/comments/ID.json → comentários do post
+Pausa de 600ms entre requisições para respeitar o rate limit</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark)">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--gold-dark)">
+        <h4 style="color:var(--gold)">Normalização — prepara o texto</h4>
+        <p>Antes de comparar com as keywords, o texto passa por normalização: converte para minúsculas, remove acentos via NFD, remove pontuação. Isso garante que "Cobrança!" e "cobrança" e "COBRANCA" são tratados igual.</p>
+        <div class="code-block">normalizar("Tenho MEDO de Cobrar mais!")
+→ "tenho medo de cobrar mais"
+
+normalizar("I'm afraid to raise my rates...")
+→ "i m afraid to raise my rates"</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark)">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--gold-dark)">
+        <h4 style="color:var(--gold)">Detecção — compara com o dicionário</h4>
+        <p>Cada comentário normalizado é comparado contra as keywords das 5 categorias. Comentários com pelo menos 1 match são marcados com a categoria. Quanto mais keywords batem, maior o score — mais relevante o lead.</p>
+        <div class="code-block">texto: "tenho medo de cobrar mais pelo meu servico"
+match em 'cobranca': ['cobrar', 'medo de cobrar']  → score: 2 ✓
+match em 'presenca':  []                            → score: 0 ✗
+resultado: [{ key:'cobranca', score:2, emoji:'💰' }]</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark)">4</div>
+      </div>
+      <div class="step-content" style="border-color:var(--gold-dark)">
+        <h4 style="color:var(--gold)">Armazenamento — tudo local, sem servidor</h4>
+        <p>Comentários analisados, leads salvos, histórico de buscas e API Key ficam no localStorage do navegador. Nada vai para nenhum servidor externo. Os dados persistem entre sessões no mesmo navegador.</p>
+        <div class="code-block">localStorage keys:
+  prosp_config      → API Key do YouTube
+  prosp_comentarios → todos os comentários analisados
+  prosp_leads       → leads salvos com status e notas
+  prosp_historico   → buscas realizadas</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FONTES -->
+  <hr class="divider" />
+  <h3 class="label">Fontes e quando usar cada uma</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+    <div class="card" style="border-color:var(--red-dark)">
+      <div class="badge" style="background:rgba(217,104,72,0.2);color:var(--red)">▶ YouTube</div>
+      <div class="card-title">Melhor para dores emocionais</div>
+      <div class="card-body" style="margin-bottom:12px">Comentários de vídeos sobre empreendedorismo, freelance, cobrar mais, presença digital, MEI. Pessoas tendem a ser mais emotivas — dores expressas com mais intensidade. Precisa de API Key gratuita do Google Cloud (5 minutos para configurar).</div>
+      <div class="code-block">Bons vídeos para prospectar:
+"como cobrar mais pelo seu serviço"
+"como conseguir mais clientes"
+"como crescer nas redes sociais"
+"freelancer iniciante"
+"empreendedorismo MEI"
+"how to get clients" / "raise your rates"</div>
+    </div>
+    <div class="card" style="border-color:#7a3a10">
+      <div class="badge" style="background:rgba(255,99,20,0.15);color:#ff8c50">🟠 Reddit</div>
+      <div class="card-title">Melhor para dores bem articuladas</div>
+      <div class="card-body" style="margin-bottom:12px">Pessoas escrevem mais no Reddit. Posts longos descrevendo o problema em detalhes — mais fácil de personalizar o contato. Sem API Key, sem custo, sem limite rígido.</div>
+      <div class="code-block">Subreddits BR pré-configurados:
+r/empreendedorismo  → donos de negócio
+r/freelancers       → autônomos BR
+r/meunegocio        → pequenos negócios
+r/marketing         → marketing digital
+r/brdev             → devs que precisam de presença
+r/financaspessoais  → futuros clientes
+r/trabalheemcasa    → trabalho remoto</div>
+    </div>
+  </div>
+
+  <div class="action-card">
+    <h3>Como começar agora</h3>
+    <p>Abra <strong style="color:var(--gold)">configuracoes.html</strong> e configure a API Key do YouTube (grátis, 5 minutos no Google Cloud).<br>
+    Depois abra <strong style="color:var(--gold)">buscar.html</strong>, selecione Reddit, escolha r/empreendedorismo e rode a primeira análise.<br><br>
+    <strong style="color:white">Não precisa de API Key para o Reddit. Você pode prospectar agora mesmo.</strong></p>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     5 DORES
+══════════════════════════════════════════ -->
+<div class="section" id="aba-dores">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--purple)">🧠 As 5 Categorias de Dor</div>
+  <div class="sec-sub">O sistema detecta automaticamente qual categoria de problema o comentário expressa. Cada categoria corresponde a um serviço que você oferece — e define como você vai abordar o lead.</div>
+
+  <!-- MÉTRICAS RÁPIDAS -->
+  <div class="metrics">
+    <div class="metric-card">
+      <div style="font-size:22px;margin-bottom:8px">💰</div>
+      <div class="metric-value" style="font-size:20px">Cobrança</div>
+      <div class="metric-label">Valor / Preço</div>
+      <div class="metric-desc">Medo de cobrar, desvalorização, concorrência por preço</div>
+    </div>
+    <div class="metric-card">
+      <div style="font-size:22px;margin-bottom:8px">🌐</div>
+      <div class="metric-value" style="font-size:20px">Presença</div>
+      <div class="metric-label">Digital</div>
+      <div class="metric-desc">Sem site, invisível no Google, sem engajamento</div>
+    </div>
+    <div class="metric-card">
+      <div style="font-size:22px;margin-bottom:8px">🎯</div>
+      <div class="metric-value" style="font-size:20px">Captação</div>
+      <div class="metric-label">Clientes / Leads</div>
+      <div class="metric-desc">Não consegue vender, sem funil, perdeu clientes</div>
+    </div>
+    <div class="metric-card">
+      <div style="font-size:22px;margin-bottom:8px">⚙️</div>
+      <div class="metric-value" style="font-size:20px">Operação</div>
+      <div class="metric-label">Gestão / Processo</div>
+      <div class="metric-desc">Sobrecarregado, sem sistema, tudo na cabeça</div>
+    </div>
+    <div class="metric-card">
+      <div style="font-size:22px;margin-bottom:8px">🏆</div>
+      <div class="metric-value" style="font-size:20px">Credibi...</div>
+      <div class="metric-label">Portfólio</div>
+      <div class="metric-desc">Não é levado a sério, sem cases, sem autoridade</div>
+    </div>
+  </div>
+
+  <!-- CARDS DETALHADOS -->
+  <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:36px">
+
+    <div class="card" style="border-color:var(--orange-dark)">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <div class="badge" style="background:rgba(217,120,64,0.2);color:var(--orange)">💰 Cobrança / Valor</div>
+          <div class="card-title">Medo de cobrar o que vale</div>
+          <div class="card-body">Pessoa sente que não pode cobrar mais, fica comparando com concorrente mais barato, aceita pechinchas, se sente desvalorizada. É a dor mais comum e a mais diretamente ligada à presença digital — quem parece amador online não consegue cobrar como profissional.</div>
+        </div>
+        <div style="flex:1;min-width:240px">
+          <div class="code-block">PT-BR: cobrar, medo de cobrar, precificacao,
+       caro, barato, dumping, hora trabalhada,
+       nao consigo cobrar, desvalorizado
+
+EN: pricing, afraid to charge, raise my rates,
+    lowball, race to the bottom, undervalued,
+    charge more, worth it, underpaid</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--gold-dark)">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--gold)">🌐 Presença Digital</div>
+          <div class="card-title">Invisível online</div>
+          <div class="card-body">Não tem site, não aparece no Google, não sabe usar Instagram, tem perfil mas sem engajamento. Esse é o lead mais óbvio — ele está descrevendo exatamente o que você resolve. A proposta se vende sozinha.</div>
+        </div>
+        <div style="flex:1;min-width:240px">
+          <div class="code-block">PT-BR: sem site, ninguem me acha, nao apareco,
+       presenca digital, algoritmo, alcance,
+       engajamento, divulgacao, trafego
+
+EN: no website, not ranking, cant be found,
+    no online presence, brand awareness,
+    grow my audience, seo, no followers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--purple-dark)">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">🎯 Captação de Clientes</div>
+          <div class="card-title">Sem leads ou sem conversão</div>
+          <div class="card-body">Dificuldade em atrair, fechar ou manter clientes. Na maioria dos casos o problema real é presença digital fraca — a pessoa não converte porque ninguém encontra ela ou não confia quando encontra.</div>
+        </div>
+        <div style="flex:1;min-width:240px">
+          <div class="code-block">PT-BR: sem cliente, nao consigo vender,
+       como conseguir cliente, perdi cliente,
+       funil, pipeline, nao tenho lead
+
+EN: no clients, find clients, cant close,
+    struggling to sell, no leads, how to sell,
+    client retention, cold outreach</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#0e7490">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <div class="badge" style="background:rgba(96,184,217,0.2);color:var(--cyan)">⚙️ Operacional / Gestão</div>
+          <div class="card-title">Sobrecarregado e sem processo</div>
+          <div class="card-body">Caos operacional, tudo na cabeça, retrabalho, atrasos, não consegue delegar, sem sistema de gestão. Esse perfil precisa de ferramentas — sistema de orçamentos, CRM, automações. É o lead para o Nível 3 da oferta.</div>
+        </div>
+        <div style="flex:1;min-width:240px">
+          <div class="code-block">PT-BR: nao tenho tempo, sobrecarregado,
+       bagunca, sem processo, retrabalho,
+       automatizar, escalar, gestao
+
+EN: overwhelmed, burned out, no system,
+    cant delegate, time management,
+    automate, workflow, chaotic</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--gold-dark)">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <div class="badge" style="background:rgba(232,196,144,0.2);color:var(--yellow)">🏆 Credibilidade / Portfólio</div>
+          <div class="card-title">Não é levado a sério</div>
+          <div class="card-body">Sem cases, sem depoimentos, sem prova social. Iniciante que não consegue convencer o primeiro cliente. Parece amador porque a presença digital não reflete a qualidade do trabalho — de novo, o problema é presença.</div>
+        </div>
+        <div style="flex:1;min-width:240px">
+          <div class="code-block">PT-BR: parece amador, sem portfolio,
+       nao me levam a serio, sem experiencia,
+       comecando, ninguem me conhece
+
+EN: imposter syndrome, social proof,
+    no track record, prove myself,
+    nobody knows me, build trust</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="highlight-box" style="background:var(--green-bg);border-color:var(--green-dark)">
+    <div class="hl-label" style="color:var(--green)">💡 Perceba o padrão</div>
+    <div class="hl-body">4 das 5 categorias de dor têm a mesma causa raiz: <strong style="color:var(--text)">presença digital fraca.</strong> Quem não aparece bem online não consegue cobrar mais, não atrai clientes, não passa credibilidade. Isso significa que o seu serviço resolve a causa raiz de quase toda dor que o sistema detecta — não apenas o sintoma.</div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABORDAGEM
+══════════════════════════════════════════ -->
+<div class="section" id="aba-abordagem">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--cyan)">💬 Como Abordar o Lead</div>
+  <div class="sec-sub">A diferença entre prospecção que funciona e mensagem fria genérica é uma coisa: contexto. Você tem a vantagem de saber o problema antes de falar. Use isso.</div>
+
+  <!-- REGRA PRINCIPAL -->
+  <div class="highlight-box" style="background:var(--gold-bg);border-color:var(--gold-dark);margin-bottom:36px">
+    <div class="hl-label" style="color:var(--gold)">⚡ A regra de ouro</div>
+    <div class="hl-body">
+      <strong style="color:var(--text)">Nunca aborde sem mencionar a dor específica que você viu.</strong> Mensagem genérica vai para o lixo. Mensagem que diz "vi você comentar que [dor específica]" gera resposta — porque a pessoa sente que você a leu de verdade, não que está mandando spam.
+    </div>
+  </div>
+
+  <!-- MODELOS POR CATEGORIA -->
+  <h3 class="label">Modelos por categoria de dor</h3>
+
+  <div class="card" style="border-color:var(--orange-dark);margin-bottom:16px">
+    <div class="badge" style="background:rgba(217,120,64,0.2);color:var(--orange)">💰 Cobrança / Valor</div>
+    <div class="card-title">Quando a pessoa expressou medo de cobrar</div>
+    <div class="script-box" style="border-left-color:var(--orange)">"Oi [nome], vi seu comentário no vídeo sobre precificação — onde você falou que tem dificuldade de cobrar o que vale. <strong>Isso é exatamente o que eu ajudo a resolver para prestadores de serviço.</strong> O que trava a cobrança na maioria dos casos não é o preço em si — é que a presença digital não reflete a qualidade do trabalho. Posso te mostrar em 2 minutos como funciona?"</div>
+  </div>
+
+  <div class="card" style="border-color:var(--gold-dark);margin-bottom:16px">
+    <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--gold)">🌐 Presença Digital</div>
+    <div class="card-title">Quando a pessoa disse que não aparece online</div>
+    <div class="script-box" style="border-left-color:var(--gold)">"Oi [nome], você comentou que não tem site profissional e que é difícil ser encontrado online. <strong>Isso é exatamente o que eu faço — presença digital para negócios que são bons mas ainda não aparecem como deveriam.</strong> Em até 10 dias o problema estaria resolvido. Quer ver como funciona para o seu tipo de negócio?"</div>
+  </div>
+
+  <div class="card" style="border-color:var(--purple-dark);margin-bottom:16px">
+    <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">🎯 Captação de Clientes</div>
+    <div class="card-title">Quando a pessoa está sem clientes ou sem conversão</div>
+    <div class="script-box" style="border-left-color:var(--purple)">"Vi que você está com dificuldade de conseguir clientes. <strong>Na maioria dos casos que atendo, o problema não é o serviço — é que a presença digital não converte.</strong> Quando alguém te pesquisa agora, o que encontra? Se a resposta não for convincente, o cliente vai embora antes de falar com você."</div>
+  </div>
+
+  <div class="card" style="border-color:var(--yellow-bg);margin-bottom:36px">
+    <div class="badge" style="background:rgba(232,196,144,0.2);color:var(--yellow)">🏆 Credibilidade</div>
+    <div class="card-title">Quando a pessoa sente que não é levada a sério</div>
+    <div class="script-box" style="border-left-color:var(--yellow)">"Vi você comentar que tem dificuldade de ser levado a sério como profissional. <strong>Eu construo a presença digital que muda isso — site, identidade visual e posicionamento que fazem você parecer tão bom quanto você é.</strong> Posso te mostrar alguns casos de quem estava na mesma situação?"</div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- CONVERSA DE DIAGNÓSTICO -->
+  <h3 class="label">Quando a pessoa responde — a conversa de diagnóstico</h3>
+  <div class="steps" style="margin-bottom:36px">
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">Abertura — não mande preço</h4>
+        <p>Crie espaço para a pessoa falar mais. Nunca comece com valor ou lista de serviços.</p>
+        <div class="code-block">"Antes de qualquer número, me conta: qual é o maior problema que você quer resolver com isso?"</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">3 perguntas obrigatórias</h4>
+        <p>As perguntas certas fazem o cliente perceber o problema enquanto você escuta.</p>
+        <div class="code-block">→ "Como está chegando cliente hoje para você?"
+→ "Quando alguém te pesquisa online, o que encontra?"
+→ "Já perdeu oportunidade pela impressão que a marca passava?"</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">Reflexão — mostre que entendeu</h4>
+        <p>Resume com as palavras dele. Quando ele diz "exatamente" — ele aceitou o diagnóstico.</p>
+        <div class="code-block">"Então o que está acontecendo é: você tem um negócio bom mas a presença
+não reflete isso — e isso te trava de chegar em clientes melhores. É isso?"</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">4</div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">Convite — não empurre</h4>
+        <p>"Sem compromisso" remove a pressão. "Você decide" devolve o controle.</p>
+        <div class="code-block">"Você topa uma conversa de 30 minutos essa semana? Sem compromisso —
+você entende o caminho e decide se faz sentido."</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OBJEÇÕES -->
+  <hr class="divider" />
+  <h3 class="label">Objeções e como responder</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">❌ "Está caro"</div>
+      <div class="script-box">"Entendo. Me ajuda a entender: caro comparado com o quê? Com outro orçamento que você recebeu, ou com o que você esperava investir?"</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--yellow)">⏳ "Vou pensar"</div>
+      <div class="script-box">"Claro. Só me diz: tem alguma dúvida que ficou que eu posso esclarecer agora? Às vezes o 'vou pensar' esconde uma pergunta sem resposta."</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--muted2)">💸 "Não tenho esse dinheiro agora"</div>
+      <div class="script-box">"Posso dividir em duas partes — metade no início, metade na entrega. Isso resolve?"</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--gold)">👀 "Preciso ver mais referências"</div>
+      <div class="script-box">"O que você quer ver — o estilo visual, a qualidade técnica, ou o resultado que gerou para o negócio?"</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     OFERTA
+══════════════════════════════════════════ -->
+<div class="section" id="aba-oferta">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--green)">💼 A Oferta — 3 Níveis</div>
+  <div class="sec-sub">Site + Automação de WhatsApp + CRM. O diferencial não é só o site bonito — é o sistema que trabalha quando você não está. 3 níveis claros para o lead entender onde se encaixa sem você precisar explicar do zero toda vez.</div>
+
+  <div class="grid-3" style="margin-bottom:40px">
+
+    <!-- NÍVEL 1 -->
+    <div class="offer-card" style="background:var(--bg2);border-color:var(--gold-dark)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--gold)">Nível 1</div>
+      <div class="card-title" style="font-size:18px">Presença + Bot</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:8px">Seu negócio no mapa — respondendo 24h</div>
+      <div class="offer-price" style="color:var(--gold)">R$ 4.800 – 6.500</div>
+      <div class="offer-prazo">12 dias úteis · Astro + n8n + Z-API</div>
+      <div class="offer-item"><span>→</span><span>Identidade visual completa (logo, paleta, tipografia)</span></div>
+      <div class="offer-item"><span>→</span><span>Landing page com foco em conversão</span></div>
+      <div class="offer-item"><span>→</span><span>Google Meu Negócio configurado e otimizado</span></div>
+      <div class="offer-item"><span>→</span><span>Manual de marca simples</span></div>
+      <div class="offer-item" style="color:var(--gold)"><span>⚡</span><span><strong>WhatsApp automático:</strong> lead preenche o site → dono recebe mensagem na hora com nome, contato e serviço</span></div>
+      <div class="offer-item"><span>→</span><span>1 revisão de cada entrega</span></div>
+      <div style="margin-top:16px;padding:12px;background:var(--gold-bg);border-radius:8px;font-size:12px;color:var(--muted2);line-height:1.5;font-style:italic">
+        "Você para de perder cliente porque não viu a mensagem a tempo."
+      </div>
+    </div>
+
+    <!-- NÍVEL 2 DESTAQUE -->
+    <div class="offer-card featured" style="background:linear-gradient(135deg,var(--green-bg),var(--gold-bg));border-color:var(--green-dark)">
+      <div class="badge" style="background:rgba(104,217,144,0.2);color:var(--green)">Nível 2</div>
+      <div class="card-title" style="font-size:18px">Posicionamento + Qualificação</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:8px">Sua marca fecha enquanto você dorme</div>
+      <div class="offer-price" style="color:var(--green)">R$ 9.500 – 14.000</div>
+      <div class="offer-prazo">21 dias úteis · Astro + n8n + CRM + Typebot</div>
+      <div class="offer-item"><span>→</span><span>Tudo do Nível 1</span></div>
+      <div class="offer-item"><span>→</span><span>Site completo (até 5 páginas) + copy</span></div>
+      <div class="offer-item"><span>→</span><span>Estratégia de posicionamento escrita</span></div>
+      <div class="offer-item"><span>→</span><span>CRM + sistema de orçamentos configurado</span></div>
+      <div class="offer-item" style="color:var(--green)"><span>⚡</span><span><strong>Bot de qualificação no WhatsApp:</strong> lead entra em contato → bot faz 4 perguntas (serviço, orçamento, prazo, localização) → classifica → joga no CRM automaticamente</span></div>
+      <div class="offer-item" style="color:var(--green)"><span>⚡</span><span><strong>Follow-up automático:</strong> orçamento sem resposta em 24h → WhatsApp automático de acompanhamento</span></div>
+      <div class="offer-item"><span>→</span><span>2 semanas de suporte pós-entrega</span></div>
+      <div style="margin-top:16px;padding:12px;background:rgba(104,217,144,0.08);border-radius:8px;font-size:12px;color:var(--muted2);line-height:1.5;font-style:italic">
+        "Você só fala com quem já está qualificado. O bot filtra, o CRM organiza, você fecha."
+      </div>
+    </div>
+
+    <!-- NÍVEL 3 -->
+    <div class="offer-card" style="background:var(--bg2);border-color:var(--purple-dark)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Nível 3</div>
+      <div class="card-title" style="font-size:18px">Sistema Completo + IA</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:8px">Infraestrutura que vende, nutre e escala</div>
+      <div class="offer-price" style="color:var(--purple)">R$ 22.000 – 35.000</div>
+      <div class="offer-prazo">35 dias úteis · Stack Própria + n8n + IA</div>
+      <div class="offer-item"><span>→</span><span>Tudo do Nível 2</span></div>
+      <div class="offer-item"><span>→</span><span>Site com blog ou área de membros</span></div>
+      <div class="offer-item"><span>→</span><span>Funil de captação de leads estruturado</span></div>
+      <div class="offer-item" style="color:var(--purple)"><span>⚡</span><span><strong>WhatsApp com IA:</strong> respostas inteligentes 24/7 — responde dúvidas comuns, agenda reunião, envia proposta, tudo automático</span></div>
+      <div class="offer-item" style="color:var(--purple)"><span>⚡</span><span><strong>Funil de nutrição:</strong> lead que não fechou recebe sequência automática de mensagens ao longo de 7 dias</span></div>
+      <div class="offer-item" style="color:var(--purple)"><span>⚡</span><span><strong>Dashboard de conversão:</strong> relatório semanal automático com leads recebidos, qualificados e fechados</span></div>
+      <div class="offer-item"><span>→</span><span>Treinamento da equipe + documentação</span></div>
+      <div class="offer-item"><span>→</span><span>3 meses de suporte e ajuste de automações</span></div>
+      <div style="margin-top:16px;padding:12px;background:var(--purple-bg);border-radius:8px;font-size:12px;color:var(--muted2);line-height:1.5;font-style:italic">
+        "Enquanto você está dormindo na Tailândia, o sistema do seu cliente está fechando negócio no Brasil."
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- COMO JUSTIFICAR PREÇO -->
+  <h3 class="label">Como justificar preço mais alto</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+    <div class="card">
+      <div class="card-title">🎯 Perguntas que ancoram o valor</div>
+      <div class="script-box">"Quanto você está deixando de faturar por mês porque seu site não converte?"</div>
+      <div class="script-box">"Se um cliente entrar no seu Instagram agora, ele confia em você só pelo que vê?"</div>
+      <div class="script-box">"Quanto tempo você gasta por semana fazendo orçamento manual?"</div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ As alavancas de valor</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px">1. <strong style="color:white">Nomeie o processo</strong> — "Método Fundação Digital" soa mais robusto</div>
+        <div style="margin-bottom:8px">2. <strong style="color:white">Ancore no custo do problema</strong> — não no concorrente mais barato</div>
+        <div style="margin-bottom:8px">3. <strong style="color:white">Entregue mais do que esperado</strong> — surpreenda após o preço</div>
+        <div style="margin-bottom:8px">4. <strong style="color:white">Prova social específica</strong> — nome, nicho, resultado real</div>
+        <div>5. <strong style="color:white">Silêncio após o preço</strong> — quem fala primeiro perde</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     OPERAÇÃO
+══════════════════════════════════════════ -->
+<div class="section" id="aba-operacao">
+<div class="content">
+
+  <div class="sec-title">📅 Operação Semanal</div>
+  <div class="sec-sub">Como rodar esse negócio na prática, semana a semana. O conteúdo sai quando você quiser — sem calendário editorial. O que tem agenda fixa é prospecção e entrega.</div>
+
+  <h3 class="label">Rotina semanal</h3>
+  <div class="week" style="margin-bottom:36px">
+    <div class="day-card" style="border-color:var(--gold-dark)">
+      <div class="day-name" style="color:var(--gold)">Segunda</div>
+      <div class="day-item">🔍 <span>Rodar prospecção (YouTube ou Reddit)</span></div>
+      <div class="day-item">📊 <span>Revisar dashboard de dores</span></div>
+      <div class="day-item">🎯 <span>Salvar leads com mais potencial</span></div>
+    </div>
+    <div class="day-card" style="border-color:var(--orange-dark)">
+      <div class="day-name" style="color:var(--orange)">Terça</div>
+      <div class="day-item">💬 <span>Abordar leads (mensagem personalizada)</span></div>
+      <div class="day-item">📞 <span>Calls de diagnóstico agendadas</span></div>
+      <div class="day-item">📄 <span>Enviar propostas das calls</span></div>
+    </div>
+    <div class="day-card" style="border-color:var(--purple-dark)">
+      <div class="day-name" style="color:var(--purple)">Quarta</div>
+      <div class="day-item">🛠️ <span>Entrega (foco no cliente ativo)</span></div>
+      <div class="day-item">🔄 <span>Follow-up em propostas (+3 dias)</span></div>
+      <div class="day-item">📊 <span>Atualizar CRM de leads</span></div>
+    </div>
+    <div class="day-card">
+      <div class="day-name">Quinta</div>
+      <div class="day-item">🛠️ <span>Entrega (foco total)</span></div>
+      <div class="day-item">🤝 <span>Alinhamento com cliente ativo</span></div>
+      <div class="day-item">🔍 <span>Segunda rodada de prospecção (opcional)</span></div>
+    </div>
+    <div class="day-card" style="border-color:var(--green-dark)">
+      <div class="day-name" style="color:var(--green)">Sexta</div>
+      <div class="day-item">📊 <span>Fechar semana: contatou / respondeu / fechou</span></div>
+      <div class="day-item">💡 <span>Documentar 1 aprendizado da semana</span></div>
+      <div class="day-item">🏕️ <span>Post no Instagram se tiver algo real</span></div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- DISTRIBUIÇÃO DE TEMPO -->
+  <h3 class="label">Distribuição de tempo por semana</h3>
+  <div class="grid-4" style="margin-bottom:36px">
+    <div class="card" style="text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--gold)">25h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Entrega<br>(cliente ativo)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--purple)">4h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Prospecção<br>(busca + abordagem)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--orange)">3h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Vendas<br>(calls + follow-up)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--green)">1h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Sistema<br>(CRM + pipeline)</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- CHECKLIST SEMANAL -->
+  <h3 class="label">Checklist da semana ideal</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+    <div class="card">
+      <div class="card-title">🔍 Prospecção</div>
+      <ul class="checklist">
+        <li><span class="check">□</span><span>Rodou pelo menos 1 busca (YouTube ou Reddit)</span></li>
+        <li><span class="check">□</span><span>Tem ao menos 5 novos leads salvos no CRM</span></li>
+        <li><span class="check">□</span><span>Abordou todos os leads novos com mensagem personalizada</span></li>
+        <li><span class="check">□</span><span>Fez follow-up nos leads de 3+ dias sem resposta</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">💼 Pipeline</div>
+      <ul class="checklist">
+        <li><span class="check">□</span><span>Tem 2-3 conversas ativas no CRM</span></li>
+        <li><span class="check">□</span><span>Tem ao menos 1 proposta enviada aguardando</span></li>
+        <li><span class="check">□</span><span>Se tem cliente ativo: entrega dentro do prazo</span></li>
+        <li><span class="check">□</span><span>Documentou 1 aprendizado da semana</span></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     RECEITA
+══════════════════════════════════════════ -->
+<div class="section" id="aba-receita">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--yellow)">💰 Como Você Vai Ganhar Dinheiro</div>
+  <div class="sec-sub">O que é possível com esse sistema rodando. Construído em camadas — não tente chegar no Mês 6 sem passar pelo Mês 1. Cada fase tem um foco diferente.</div>
+
+  <div class="revenue" style="margin-bottom:40px">
+
+    <div class="rev-card" style="border-color:var(--gold-dark)">
+      <div class="rev-period" style="color:var(--gold)">Mês 1–2 · Validação</div>
+      <div class="rev-value" style="color:var(--gold)">R$ 9–13k</div>
+      <div class="rev-mix">2× Nível 1 (R$ 4.800–6.500 cada)</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Rodar o sistema, aprender a abordar, aprender a fechar. Coletar feedback real, ajustar a oferta, gerar os primeiros depoimentos.
+      </div>
+    </div>
+
+    <div class="rev-card" style="border-color:var(--orange-dark)">
+      <div class="rev-period" style="color:var(--orange)">Mês 3–4 · Tração</div>
+      <div class="rev-value" style="color:var(--orange)">R$ 14–20k</div>
+      <div class="rev-mix">1× Nível 1 + 1× Nível 2</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Primeiro case documentado. Refinar quais fontes e termos de busca convertem melhor. Prospecção mais precisa, abordagem mais afinada.
+      </div>
+    </div>
+
+    <div class="rev-card" style="border-color:var(--green-dark)">
+      <div class="rev-period" style="color:var(--green)">Mês 5–6 · Escala</div>
+      <div class="rev-value" style="color:var(--green)">R$ 19–28k</div>
+      <div class="rev-mix">2× Nível 2</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Cases gerando indicações. Prospecção continua como base. Posicionamento estabelecido — cobrar mais pelo mesmo serviço com mais confiança.
+      </div>
+    </div>
+
+    <div class="rev-card" style="border-color:var(--purple-dark)">
+      <div class="rev-period" style="color:var(--purple)">Mês 6+ · Consistência</div>
+      <div class="rev-value" style="color:var(--purple)">R$ 31–49k</div>
+      <div class="rev-mix">1× Nível 2 + 1× Nível 3</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Poucos clientes, ticket alto. Prospecção mais seletiva — só entra quem tem o perfil certo. Começa a pensar em produto SaaS e renda recorrente.
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- PLANO DAS 4 SEMANAS -->
+  <h3 class="label">Plano de execução — primeiras 4 semanas</h3>
+  <div class="steps" style="margin-bottom:36px">
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--gold-bg);color:var(--gold);border:2px solid var(--gold-dark)">S1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--gold-dark)">
+        <h4 style="color:var(--gold)">Semana 1 — Configurar e prospectar</h4>
+        <div class="code-block">□ Abrir configuracoes.html e configurar API Key do YouTube (grátis, 5 min)
+□ Rodar primeira busca no Reddit — r/empreendedorismo ou r/freelancers
+□ Identificar 10 leads com dores claras e salvar no CRM
+□ Escrever o posicionamento da marca (1 parágrafo, para ter quando alguém pesquisar)</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">S2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--orange-dark)">
+        <h4 style="color:var(--orange)">Semana 2 — Abordagem e diagnóstico</h4>
+        <div class="code-block">□ Abordar os 10 leads com mensagem personalizada (mencionar a dor específica)
+□ Ter a primeira conversa de diagnóstico com quem responder
+□ Documentar os 3 níveis de oferta com entregáveis e preços
+□ Enviar proposta de 1 página pelo sistema de orçamentos</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--green-bg);color:var(--green);border:2px solid var(--green-dark)">S3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--green-dark)">
+        <h4 style="color:var(--green)">Semana 3 — Fechar e entregar</h4>
+        <div class="code-block">□ Fechar o primeiro cliente
+□ Executar com o processo de entrega documentado (3 semanas)
+□ Continuar prospectando em paralelo — nunca pare com 1 cliente ativo
+□ Pedir depoimento com foto ao final da entrega</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--purple-bg);color:var(--purple);border:2px solid var(--purple-dark)">S4</div>
+      </div>
+      <div class="step-content" style="border-color:var(--purple-dark)">
+        <h4 style="color:var(--purple)">Semana 4 — Refinar e escalar</h4>
+        <div class="code-block">□ Analisar: qual fonte gerou mais leads? qual abordagem converteu melhor?
+□ Segunda rodada de prospecção com o que funcionou
+□ Manter 2-3 conversas ativas no pipeline ao mesmo tempo
+□ Se tiver algo real: postar no Instagram sem forçar</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="action-card">
+    <h3>Você já tem tudo que precisa</h3>
+    <p>
+      O sistema de prospecção está pronto e funcionando.<br>
+      O CRM de leads está pronto.<br>
+      A oferta está estruturada em 3 níveis.<br>
+      O processo de entrega está definido.<br><br>
+      <strong style="color:white">O que falta não é planejamento. É abrir o buscar.html, escolher um subreddit e rodar a primeira análise.</strong><br><br>
+      O primeiro lead está num comentário em algum vídeo ou post agora mesmo descrevendo exatamente o problema que você resolve.
+    </p>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     IDEIAS — OUTROS SISTEMAS DE PROSPECÇÃO
+══════════════════════════════════════════ -->
+<div class="section" id="aba-ideias">
+<div class="content">
+
+  <div class="sec-title">💡 Outros Sistemas de Prospecção</div>
+  <div class="sec-sub">O mesmo motor — encontrar pessoas verbalizando dores em público — pode ser replicado em outras plataformas. Cada ideia abaixo é um sistema possível de construir com a mesma lógica do que já existe. Clique para expandir e ler a ideia completa.</div>
+
+  <div class="forum">
+
+    <!-- 1. GRUPOS DO FACEBOOK -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(24,119,242,0.15);color:#1877F2">👥</div>
+        <div class="forum-meta">
+          <div class="forum-title">Scraper de Grupos do Facebook</div>
+          <div class="forum-sub">Dores expostas publicamente em grupos de nicho — designers, freelancers, empreendedores</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Grupos públicos do Facebook são um dos maiores repositórios de dores verbalizadas do mundo. Empreendedores, freelancers e pequenos negócios postam perguntas, frustrações e pedidos de ajuda com frequência diária — e tudo isso é público e indexável.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>A API oficial do Facebook (Graph API) é muito restrita para dados de grupos, mas <strong>grupos marcados como "públicos" têm os posts visíveis no HTML da página</strong>. Um scraper via Puppeteer ou Playwright consegue navegar, rolar a página e coletar os textos dos posts. O fluxo seria idêntico ao atual: coletar texto → passar pelo <code>analisarComentario()</code> → salvar leads com dor detectada.</p>
+        <div class="code-block">Grupos úteis para o nicho:
+→ "Designers Brasileiros", "Freelancers BR"
+→ "Empreendedores Digitais", "Social Media Brasil"
+→ "Donos de Negócio Local", "MEI e Microempreendedor"</div>
+        <h4>Quem são os leads</h4>
+        <p>Pessoas que postam dúvidas como "como cobrar meu serviço de design?", "alguém tem experiência com site para restaurante?", "perdi meu principal cliente, como recomeçar?" — todas com dor identificável e nome visível para abordagem direta.</p>
+        <h4>Como abordar</h4>
+        <p>Comentar no próprio post com uma resposta genuína, depois enviar DM. O Facebook tem baixa barreira para mensagem entre desconhecidos em grupos — diferente do Instagram. A abordagem começa no comentário público, move para o privado.</p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>Volume enorme de posts diários</li>
+              <li>Nicho fácil de segmentar por grupo</li>
+              <li>Dados de contato (nome completo) visíveis</li>
+              <li>Abordagem via comentário parece menos invasiva</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>Facebook bloqueia scraping com CAPTCHA agressivo</li>
+              <li>Exige conta real e sessão autenticada</li>
+              <li>Grupos podem fechar ou virar privados</li>
+              <li>Risco de banimento de conta se automatizado em excesso</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 2. FÓRUNS / COMUNIDADES -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(255,102,0,0.15);color:#ff6600">🗣️</div>
+        <div class="forum-meta">
+          <div class="forum-title">Monitor de Fóruns e Comunidades</div>
+          <div class="forum-sub">ProductHunt, Indie Hackers, Hacker News, Geekhunter — comunidades tech abertas</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Comunidades de empreendedores e criadores de produto têm cultura de compartilhar dificuldades abertamente. Um post no Indie Hackers dizendo "meu SaaS tem zero tráfego" é um lead com dor de presença digital — e o dono deixou o nome, o produto, e muitas vezes o contato no perfil.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p><strong>Indie Hackers, Hacker News e ProductHunt têm APIs públicas ou feeds RSS</strong> sem necessidade de autenticação. O Reddit já está no sistema — a lógica é a mesma aplicada a essas outras fontes. Cada fórum retorna JSON ou XML que você parseia, extrai o texto e passa pela análise de dores.</p>
+        <div class="code-block">Fontes com dados abertos:
+→ Hacker News: https://hn.algolia.com/api (busca por keyword)
+→ Indie Hackers: RSS público por tópico
+→ ProductHunt: API com key gratuita (rate limit generoso)
+→ DEV.to: API REST pública, sem autenticação</div>
+        <h4>Quem são os leads</h4>
+        <p>Fundadores de produtos digitais, desenvolvedores que querem monetizar projetos, criadores de conteúdo técnico. O perfil é diferente do freelancer brasileiro — mas dores de presença, captação e credibilidade são universais.</p>
+        <h4>Como abordar</h4>
+        <p>Comentar no próprio post com valor real (não com pitch), depois enviar mensagem privada. Em comunidades como Indie Hackers, a cultura é de troca — uma resposta útil abre a porta para a conversa comercial de forma natural.</p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>APIs abertas — sem scraping agressivo</li>
+              <li>Público com capacidade de pagar em USD</li>
+              <li>Alta intenção: pessoa está pedindo ajuda abertamente</li>
+              <li>Perfis ricos com produto, receita e contexto</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>Volume menor que YouTube/Reddit</li>
+              <li>Comunidade percebe pitch facilmente — exige autenticidade</li>
+              <li>Maioria em inglês — exige domínio do idioma</li>
+              <li>Concorrência alta — muitos serviços mirando o mesmo público</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 3. TWITTER/X HASHTAGS -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(29,155,240,0.12);color:#1d9bf0">🐦</div>
+        <div class="forum-meta">
+          <div class="forum-title">Monitor de Hashtags do Twitter / X</div>
+          <div class="forum-sub">Tweets em tempo real com keywords de dor — prospecção quente</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>O Twitter/X é onde pessoas expressam frustração em tempo real. Um tweet como "meu site não aparece no Google e não sei o que fazer" tem menos de 24 horas de vida — a dor está fresca, a pessoa está receptiva agora. Prospecção em cima de tweet recente é a mais quente possível.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>A API v2 do Twitter tem um <strong>nível gratuito com 1 aplicação e busca básica</strong>. Dá pra buscar tweets por keyword e retorna JSON com texto, nome do usuário e timestamp. O sistema atual faria a mesma coisa: buscar keywords de dor → filtrar com <code>analisarComentario()</code> → salvar lead com link para o tweet.</p>
+        <div class="code-block">Keywords de busca úteis:
+→ "não consigo cobrar" OR "medo de cobrar"
+→ "sem clientes" OR "como conseguir clientes"
+→ "meu site" AND ("não aparece" OR "horrível")
+→ "overwhelmed" AND "freelance"
+→ "pricing" AND "scared" AND "raise"</div>
+        <h4>Quem são os leads</h4>
+        <p>Freelancers, empreendedores e donos de pequenos negócios que usam o Twitter para desabafar. O tweet funciona como gatilho — você aborda em DM mencionando exatamente o tweet, o que torna a mensagem impossível de ignorar.</p>
+        <h4>Como abordar</h4>
+        <p><strong>Primeiro comentar no tweet com algo útil</strong>, depois abrir DM. Nunca vá direto para DM sem interação pública antes — parece bot. O tweet recente (menos de 48h) é sinal de que a dor está ativa e a resposta virá mais rápido.</p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>Dor em tempo real — lead mais quente possível</li>
+              <li>API pública com nível gratuito</li>
+              <li>Abordagem via tweet + DM é natural na plataforma</li>
+              <li>Funciona em PT-BR e inglês igualmente</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>API gratuita limita a 500k tweets/mês e 1 app</li>
+              <li>Plano pago necessário para volume real ($100/mês)</li>
+              <li>Efemeridade: tweet some da memória rápido</li>
+              <li>Muita competição por DMs não solicitadas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 4. GOOGLE MAPS REVIEWS -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(52,168,83,0.12);color:#34A853">📍</div>
+        <div class="forum-meta">
+          <div class="forum-title">Scraper de Reviews do Google Maps</div>
+          <div class="forum-sub">Avaliações ruins de negócios locais = dono com problema identificado</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Uma avaliação de 1 ou 2 estrelas em um negócio local é um sinal claro: há um problema de atendimento, presença, processo ou gestão que o próprio dono provavelmente já conhece e teme. Você lê a review, identifica o problema, encontra o contato do negócio e aborda com a solução.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>A <strong>API do Google Places</strong> retorna dados de negócios incluindo avaliações. O nível gratuito cobre alguns milhares de buscas. Alternativamente, um scraper do HTML do Google Maps consegue extrair reviews e notas sem API. O fluxo: buscar negócios de uma categoria + cidade → filtrar por nota baixa (1-3 estrelas) → ler reviews → identificar o problema → buscar contato no site ou Instagram do negócio.</p>
+        <div class="code-block">Segmentação possível:
+→ Categoria: "salão de beleza", "restaurante", "clínica"
+→ Cidade: São Paulo, Floripa, etc.
+→ Filtro: nota ≤ 3 estrelas
+→ Review menciona: "demora", "desorganizado", "sem resposta"
+
+O problema → a dor → a oferta:
+"Vi que vocês têm avaliações mencionando tempo de resposta.
+Eu construo sistemas de atendimento digital que resolvem isso."</div>
+        <h4>Quem são os leads</h4>
+        <p>Donos de negócio local — salões, restaurantes, clínicas, lojas — com problemas operacionais ou de presença digital visíveis nas avaliações. É o lead mais qualificado possível: você sabe o problema, sabe o negócio, sabe a localização, e o contato está no próprio perfil do Maps.</p>
+        <h4>Como abordar</h4>
+        <p>Email ou WhatsApp direto para o negócio — não para uma pessoa específica. A mensagem referencia o que você viu nas avaliações, não de forma depreciativa, mas construtiva: <strong>"Vi algumas avaliações mencionando X. Trabalho com negócios como o seu para resolver exatamente isso."</strong></p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>Dor validada por terceiros (clientes reais reclamando)</li>
+              <li>Contato do negócio sempre disponível no perfil</li>
+              <li>Segmentação geográfica e por categoria</li>
+              <li>Dono já sabe que tem problema — não precisa convencer</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>API do Google Places cobra por uso além do gratuito</li>
+              <li>Scraping do Maps vai contra os ToS do Google</li>
+              <li>Mensagem precisa ser muito delicada — não pode soar como "vi que você é ruim"</li>
+              <li>Lead pode não ter orçamento (negócio com avaliação ruim pode estar em crise)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 5. COMENTÁRIOS DO INSTAGRAM -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(225,48,108,0.12);color:#E1306C">📸</div>
+        <div class="forum-meta">
+          <div class="forum-title">Monitor de Comentários do Instagram</div>
+          <div class="forum-sub">Comentários em posts de influenciadores do nicho com dores explícitas</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Influenciadores de nicho (coaches de negócio, freelancers famosos, criadores de conteúdo sobre empreendedorismo) têm comentários cheios de pessoas compartilhando dores. Quando alguém comenta "eu sofro exatamente com isso de precificação", está se identificando publicamente como lead com essa dor.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>A API oficial do Instagram é muito restrita — exige permissão do perfil monitorado. Para perfis públicos, <strong>o HTML da página de um post é acessível via scraping</strong> com Puppeteer. Você escolhe 5 a 10 criadores do nicho, monitora os posts novos deles e coleta comentários. O mesmo <code>analisarComentario()</code> já existente faz a análise.</p>
+        <div class="code-block">Perfis para monitorar (exemplo de nicho):
+→ Coaches de freelancing e precificação
+→ Designers que ensinam design
+→ Influenciadores de "empreendedorismo digital"
+→ Qualquer perfil onde sua persona alvo comenta
+
+Comentários que sinalizam dor:
+"Eu tenho esse problema todo dia 😭"
+"Como você cobrou isso? Eu não sei quanto cobrar"
+"Meu cliente sempre pede desconto..."</div>
+        <h4>Quem são os leads</h4>
+        <p>Seguidores de criadores de conteúdo do nicho — geralmente freelancers, prestadores de serviço e pequenos empreendedores que estão ativamente buscando aprender. Já têm consciência do problema, estão em modo de busca por solução.</p>
+        <h4>Como abordar</h4>
+        <p>DM direta mencionando o comentário específico. O Instagram tem taxa de abertura de DM alta entre desconhecidos quando a mensagem é relevante. A abordagem: <strong>"Vi você comentar no post do [criador] sobre precificação — isso é exatamente o que eu resolvo."</strong></p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>Alta concentração de leads por post de influenciador</li>
+              <li>Pessoa já está em modo "quero aprender" = receptiva</li>
+              <li>DM no Instagram tem boa taxa de resposta</li>
+              <li>Você monitora poucos perfis e garante volume</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>API oficial inútil para esse caso — exige scraping</li>
+              <li>Instagram detecta e bloqueia scrapers rapidamente</li>
+              <li>Conta pode ser restrita por DMs em excesso</li>
+              <li>Comentários têm menos texto que comentários de YouTube</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 6. DISCORD -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(88,101,242,0.15);color:#5865F2">🎮</div>
+        <div class="forum-meta">
+          <div class="forum-title">Listener de Comunidades do Discord</div>
+          <div class="forum-sub">Servidores públicos de nicho — design, marketing, SaaS, freelancing</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Existem servidores públicos no Discord dedicados a freelancers, designers, desenvolvedores e empreendedores. Nesses servidores, as pessoas fazem perguntas abertas, pedem feedback e compartilham problemas com frequência. É uma comunidade em tempo real — as dores aparecem no chat antes de aparecerem em qualquer outro lugar.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>A <strong>API oficial do Discord permite criar bots que leem mensagens de servidores públicos</strong> onde o bot é membro — sem violar os termos de uso. O bot entra nos servidores relevantes, monitora os canais de "ajuda", "dúvidas" ou "networking" e envia o texto das mensagens para o mesmo sistema de análise de dores. Quando detecta uma dor, você recebe uma notificação com o nome do usuário e o contexto.</p>
+        <div class="code-block">Fluxo técnico:
+1. Criar app no Discord Developer Portal (gratuito)
+2. Bot com permissão "Read Messages" entra no servidor
+3. Evento on_message → texto → analisarComentario()
+4. Se detectar dor → salvar lead no dashboard
+5. Abordar via DM no próprio Discord
+
+Canais úteis para monitorar:
+→ #freelance-ajuda, #precificacao, #captacao-clientes
+→ #showcase (onde pedem feedback = lead quente)</div>
+        <h4>Quem são os leads</h4>
+        <p>Membros ativos de comunidades de nicho — pessoas que já estão buscando aprender, trocar experiências e resolver problemas. A dor é verbalizada em conversa natural, não como post formal — o que torna a detecção mais desafiadora mas a abordagem mais humana.</p>
+        <h4>Como abordar</h4>
+        <p>DM direta no Discord é menos invasiva que DM no Instagram. A abordagem: responder no canal com algo útil primeiro, depois ir ao privado. Em servidores menores, até oferecer ajuda no canal público e resolver a dor lá funciona como demonstração do serviço.</p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>API oficial e estável — sem scraping</li>
+              <li>Dores em tempo real, conversas naturais</li>
+              <li>Comunidades segmentadas por nicho</li>
+              <li>DM no Discord tem boa receptividade</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>Bot precisa ser aprovado como membro do servidor</li>
+              <li>Volume por servidor pode ser baixo</li>
+              <li>Servidores grandes têm regras contra bots de DM</li>
+              <li>Mensagens são curtas — análise de keywords funciona menos</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 7. VAGAS DE EMPREGO -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(0,119,181,0.12);color:#0077B5">💼</div>
+        <div class="forum-meta">
+          <div class="forum-title">Scraper de Vagas de Emprego</div>
+          <div class="forum-sub">Vaga postada = empresa com problema operacional identificado</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Uma empresa que posta vaga de "gestor de redes sociais", "atendente de SAC" ou "assistente de marketing" está sinalizando que tem um problema que não consegue resolver internamente. Você lê a vaga, identifica o problema, encontra o responsável pelo RH ou pelo negócio e oferece uma solução mais rápida e barata: um sistema ou serviço pronto.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>LinkedIn, Indeed, Catho e Vagas.com têm páginas de vagas indexadas e acessíveis. <strong>O Indeed tem uma API pública parcial; o LinkedIn tem uma API de Jobs com nível gratuito para leitura</strong>. Um scraper do HTML funciona para todos. O fluxo: buscar vagas por cargo-chave → extrair descrição → analisar com keywords de dor → salvar empresa como lead.</p>
+        <div class="code-block">Vagas que sinalizam dores específicas:
+→ "gestor de redes sociais" → dor: presença digital
+→ "atendente de SAC / WhatsApp" → dor: operacional
+→ "captador de clientes / SDR" → dor: captação
+→ "designer freelancer" → dor: credibilidade/presença
+→ "assistente administrativo" → dor: gestão/processo
+
+Abordagem:
+"Vi que vocês estão buscando alguém para [cargo].
+Em vez de contratar, posso entregar o mesmo resultado
+em 2 semanas por [valor]. Posso mostrar como funciona?"</div>
+        <h4>Quem são os leads</h4>
+        <p>Empresas pequenas e médias com intenção de resolver um problema agora. A vaga é prova de orçamento disponível e decisão tomada de resolver o problema. O responsável pela contratação — geralmente o próprio dono em pequenas empresas — está com a dor ativa e buscando solução.</p>
+        <h4>Como abordar</h4>
+        <p>Email para o contato da vaga ou mensagem no LinkedIn para o responsável. A proposta é posicionada como alternativa mais rápida e mais barata que contratar: <strong>você entrega o resultado que eles precisam sem o custo de um funcionário fixo.</strong></p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>Empresa já decidiu gastar dinheiro no problema</li>
+              <li>Dor 100% identificada pela própria descrição da vaga</li>
+              <li>Contato sempre disponível (email de RH ou LinkedIn)</li>
+              <li>Volume alto — milhares de vagas por dia</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>Competição direta com freelancers aplicando à mesma vaga</li>
+              <li>Empresa pode preferir CLT por controle e presença física</li>
+              <li>LinkedIn limita scraping e requisições em volume</li>
+              <li>Decisor real nem sempre é quem postou a vaga</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 8. REVIEWS AMAZON / MERCADO LIVRE -->
+    <details class="forum-item">
+      <summary>
+        <div class="forum-icon" style="background:rgba(255,153,0,0.12);color:#FF9900">⭐</div>
+        <div class="forum-meta">
+          <div class="forum-title">Monitor de Reviews Amazon / Mercado Livre</div>
+          <div class="forum-sub">Avaliações 1-2 estrelas de ferramentas e softwares = usuário insatisfeito e com dor ativa</div>
+        </div>
+        <div class="forum-arrow">▶</div>
+      </summary>
+      <div class="forum-body">
+        <h4>O que é</h4>
+        <p>Quem compra uma ferramenta de gestão, um curso de design ou um software e deixa 1 estrela está verbalizado uma dor de forma detalhada — e ainda por cima provavelmente está buscando uma alternativa. É o lead que já tentou resolver o problema, não funcionou, e ainda não encontrou a solução certa.</p>
+        <h4>Como funciona tecnicamente</h4>
+        <p>O Mercado Livre tem uma <strong>API pública robusta e gratuita</strong> que retorna produtos, vendedores e avaliações sem autenticação. A Amazon tem scraping acessível via HTML — sem API oficial para reviews. O fluxo: buscar produtos por categoria (software de gestão, cursos, ferramentas) → filtrar reviews de 1-2 estrelas → analisar texto da review → identificar dor → buscar o revisor para abordagem.</p>
+        <div class="code-block">Categorias no Mercado Livre:
+→ Software de gestão / ERP
+→ Cursos de marketing digital
+→ Ferramentas de design / impressão
+
+Exemplo de review → lead:
+⭐ "O sistema trava sempre que vou emitir nota fiscal.
+    Suporte demora 3 dias para responder. Péssimo."
+    → Dor: operacional + gestão
+    → Você vende: sistema de orçamento rápido, sem travamento
+
+API ML: https://api.mercadolibre.com/reviews/item/{item_id}</div>
+        <h4>Quem são os leads</h4>
+        <p>Compradores de ferramentas para negócio — geralmente pequenos empresários, freelancers e profissionais liberais. A review negativa detalha o problema melhor que qualquer briefing. O desafio é encontrar o contato do revisor, pois o Mercado Livre não expõe email diretamente.</p>
+        <h4>Como abordar</h4>
+        <p>No Mercado Livre, dá para responder a uma review publicamente como vendedor — mas o ideal é encontrar o usuário em outra plataforma (muitos usam o mesmo apelido). A abordagem: <strong>"Vi sua avaliação do [produto] onde você mencionou [problema]. Eu faço exatamente isso de uma forma que não tem esse problema."</strong></p>
+        <div class="pros-cons">
+          <div class="pros-cons-col" style="border:1px solid var(--green-dark)">
+            <div class="col-title" style="color:var(--green)">✓ Vantagens</div>
+            <ul>
+              <li>Dor ultra detalhada — a pessoa escreveu um parágrafo reclamando</li>
+              <li>API do Mercado Livre é gratuita e estável</li>
+              <li>Lead já tentou pagar pelo problema — tem orçamento</li>
+              <li>Concorrência com o produto que falhou é fácil</li>
+            </ul>
+          </div>
+          <div class="pros-cons-col" style="border:1px solid var(--red-dark)">
+            <div class="col-title" style="color:var(--red)">✗ Desafios</div>
+            <ul>
+              <li>Contato do revisor raramente está disponível</li>
+              <li>Review pode ser antiga — dor pode já ter sido resolvida</li>
+              <li>Escalar exige filtrar muito ruído (reviews que não são leads)</li>
+              <li>Amazon Brasil tem volume menor que ML para este nicho</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="highlight-box" style="background:var(--bg2);border-color:var(--border2)">
+    <div class="hl-label" style="color:var(--muted2)">🧭 Por onde começar</div>
+    <div class="hl-body">O sistema atual (YouTube + Reddit) já é o ponto de partida certo — tem as melhores APIs, o maior volume de texto por comentário e o menor risco de bloqueio. Adicionar uma segunda fonte quando o primeiro sistema estiver gerando leads consistentes. <strong style="color:var(--text)">Não construa 8 sistemas ao mesmo tempo. Domine um antes de expandir.</strong></div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- INPUT OCULTO PARA SVG -->
+<input type="file" id="icon-file-input" accept=".svg,image/svg+xml" />
+
+<!-- BARRA DE EDIÇÃO -->
+<div class="edit-toolbar">
+  <span class="et-label">✏️ Estratégia</span>
+  <button class="et-btn et-toggle" onclick="toggleEdicao()">Editar</button>
+  <button class="et-btn" id="btn-cores" onclick="toggleCores()" style="background:var(--bg3);color:var(--muted2);display:none">🎨 Cores</button>
+  <button class="et-btn et-save" onclick="salvar()">💾 Salvar</button>
+  <button class="et-btn et-reset" onclick="resetar()">↺ Resetar</button>
+  <span class="et-status" id="et-status">✓ Salvo!</span>
+</div>
+
+<!-- PAINEL DE CORES -->
+<div id="painel-cores" style="
+  display:none; position:fixed; bottom:72px; right:24px;
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:16px; padding:20px; z-index:998;
+  box-shadow:0 8px 32px rgba(0,0,0,0.6);
+  min-width:280px; max-height:70vh; overflow-y:auto;
+">
+  <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px">🎨 Editor de Cores</div>
+  <div id="lista-cores"></div>
+  <div style="margin-top:14px;font-size:11px;color:var(--muted)">Alterações em tempo real. Clique em 💾 Salvar para manter.</div>
+</div>
+
+<script>
+  // ── NAVEGAÇÃO ─────────────────────────────────────────
+  const SECTION_IDS = ['visao','sistema','dores','abordagem','oferta','operacao','receita','ideias'];
+
+  function ir(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('aba-' + id).classList.add('active');
+    const idx = SECTION_IDS.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── CONFIGURAÇÃO ──────────────────────────────────────
+  const STORE_TEXT  = 'estrategia_texto_v1';
+  const STORE_ICONS = 'estrategia_icones_v1';
+  const STORE_CORES = 'estrategia_cores_v1';
+
+  const EDITABLE_SEL = [
+    '.hero-tag', '.hero h1', '.hero p',
+    '.sec-title', '.sec-sub',
+    'h3.label',
+    '.card-title', '.card-body',
+    '.badge',
+    '.script-box',
+    '.day-name', '.day-item span',
+    '.offer-price', '.offer-prazo',
+    '.code-block',
+    '.step-content h4', '.step-content p',
+    '.rev-value', '.rev-mix', '.rev-focus',
+    '.action-card h3', '.action-card p',
+    '.hl-label', '.hl-body',
+    '.metric-value', '.metric-label', '.metric-desc',
+  ].join(', ');
+
+  const CSS_VARS = [
+    { key: '--gold',         label: '🟡 Âmbar — destaque principal' },
+    { key: '--gold-dark',    label: '🟡 Âmbar — borda' },
+    { key: '--gold-bg',      label: '🟡 Âmbar — fundo' },
+    { key: '--purple',       label: '💜 Lavanda — texto/ícone' },
+    { key: '--purple-dark',  label: '💜 Lavanda — borda' },
+    { key: '--purple-bg',    label: '💜 Lavanda — fundo' },
+    { key: '--green',        label: '🟢 Verde — texto/ícone' },
+    { key: '--green-dark',   label: '🟢 Verde — borda' },
+    { key: '--green-bg',     label: '🟢 Verde — fundo' },
+    { key: '--orange',       label: '🟠 Âmbar profundo — texto/ícone' },
+    { key: '--orange-dark',  label: '🟠 Âmbar profundo — borda' },
+    { key: '--orange-bg',    label: '🟠 Âmbar profundo — fundo' },
+    { key: '--cyan',         label: '🔵 Teal — texto/ícone' },
+    { key: '--cyan-bg',      label: '🔵 Teal — fundo' },
+    { key: '--red',          label: '🔴 Coral — texto/ícone' },
+    { key: '--red-dark',     label: '🔴 Coral — borda' },
+    { key: '--red-bg',       label: '🔴 Coral — fundo' },
+    { key: '--yellow',       label: '✨ Dourado claro — destaques' },
+    { key: '--yellow-bg',    label: '✨ Dourado claro — fundo' },
+    { key: '--bg',           label: '⬛ Fundo principal da página' },
+    { key: '--bg2',          label: '⬛ Fundo dos cards' },
+    { key: '--bg3',          label: '⬛ Fundo terciário' },
+    { key: '--text',         label: '📝 Texto principal' },
+    { key: '--muted',        label: '📝 Texto secundário' },
+    { key: '--muted2',       label: '📝 Texto terciário' },
+    { key: '--border',       label: '▪ Borda sutil' },
+    { key: '--border2',      label: '▪ Borda visível' },
+  ];
+
+  // ── MODO EDIÇÃO ───────────────────────────────────────
+  let editando = false;
+
+  function toggleEdicao() {
+    editando = !editando;
+    document.body.classList.toggle('edit-mode', editando);
+    document.querySelectorAll(EDITABLE_SEL).forEach(el => {
+      if (editando) el.setAttribute('contenteditable', 'true');
+      else          el.removeAttribute('contenteditable');
+    });
+    const btn = document.querySelector('.et-toggle');
+    btn.textContent = editando ? '👁 Visualizar' : 'Editar';
+    btn.classList.toggle('active', editando);
+    const show = editando ? 'inline-block' : 'none';
+    document.querySelector('.et-save').style.display  = show;
+    document.querySelector('.et-reset').style.display = show;
+    document.getElementById('btn-cores').style.display = show;
+    if (!editando) document.getElementById('painel-cores').style.display = 'none';
+  }
+
+  // ── SALVAR ────────────────────────────────────────────
+  function salvar() {
+    document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    const textos = {};
+    SECTION_IDS.forEach(id => {
+      const sec = document.getElementById('aba-' + id);
+      if (sec) { const inner = sec.querySelector('.content'); textos[id] = inner ? inner.innerHTML : sec.innerHTML; }
+    });
+    textos['hero'] = document.querySelector('.hero').innerHTML;
+    localStorage.setItem(STORE_TEXT, JSON.stringify(textos));
+
+    const root = document.documentElement;
+    const cores = {};
+    CSS_VARS.forEach(v => { cores[v.key] = getComputedStyle(root).getPropertyValue(v.key).trim(); });
+    localStorage.setItem(STORE_CORES, JSON.stringify(cores));
+
+    document.querySelectorAll(EDITABLE_SEL).forEach(el => el.setAttribute('contenteditable', 'true'));
+    const status = document.getElementById('et-status');
+    status.style.display = 'inline';
+    status.style.animation = 'none';
+    void status.offsetHeight;
+    status.style.animation = 'fadeOut 2.5s forwards';
+    setTimeout(() => { status.style.display = 'none'; }, 2600);
+  }
+
+  // ── RESETAR ───────────────────────────────────────────
+  function resetar() {
+    if (!confirm('Resetar tudo? Textos, ícones e cores serão restaurados ao original.')) return;
+    [STORE_TEXT, STORE_ICONS, STORE_CORES].forEach(k => localStorage.removeItem(k));
+    location.reload();
+  }
+
+  // ── CARREGAR SALVOS ───────────────────────────────────
+  function carregarSalvo() {
+    const rawTexto = localStorage.getItem(STORE_TEXT);
+    if (rawTexto) {
+      try {
+        const textos = JSON.parse(rawTexto);
+        SECTION_IDS.forEach(id => {
+          const sec = document.getElementById('aba-' + id);
+          if (!sec || !textos[id]) return;
+          const inner = sec.querySelector('.content');
+          if (inner) inner.innerHTML = textos[id];
+        });
+        if (textos['hero']) document.querySelector('.hero').innerHTML = textos['hero'];
+      } catch(e) { console.warn('Erro ao restaurar textos:', e); }
+    }
+    const rawCores = localStorage.getItem(STORE_CORES);
+    if (rawCores) {
+      try {
+        const cores = JSON.parse(rawCores);
+        Object.entries(cores).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+      } catch(e) { console.warn('Erro ao restaurar cores:', e); }
+    }
+  }
+
+  // ── ÍCONES SVG ────────────────────────────────────────
+  let slotAtivo = null;
+
+  function aplicarIconeSVG(slot, dataUrl) {
+    slot.innerHTML = `<img class="icon-svg" src="${dataUrl}" alt="ícone" />`;
+  }
+
+  document.addEventListener('click', function(e) {
+    const slot = e.target.closest('.icon-slot');
+    if (!slot || !editando) return;
+    e.stopPropagation();
+    slotAtivo = slot;
+    document.getElementById('icon-file-input').click();
+  });
+
+  document.getElementById('icon-file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file || !slotAtivo) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const dataUrl = ev.target.result;
+      const key = slotAtivo.dataset.key;
+      aplicarIconeSVG(slotAtivo, dataUrl);
+      const icons = JSON.parse(localStorage.getItem(STORE_ICONS) || '{}');
+      icons[key] = dataUrl;
+      localStorage.setItem(STORE_ICONS, JSON.stringify(icons));
+      slotAtivo = null;
+      e.target.value = '';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ── EDITOR DE CORES ───────────────────────────────────
+  function toggleCores() {
+    const painel = document.getElementById('painel-cores');
+    const visivel = painel.style.display !== 'none';
+    painel.style.display = visivel ? 'none' : 'block';
+    if (!visivel) renderizarCores();
+  }
+
+  function renderizarCores() {
+    const root = document.documentElement;
+    const lista = document.getElementById('lista-cores');
+    lista.innerHTML = CSS_VARS.map(v => {
+      const valor = getComputedStyle(root).getPropertyValue(v.key).trim();
+      const ehHex = /^#[0-9a-fA-F]{3,6}$/.test(valor);
+      return `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <label style="font-size:12px;color:var(--muted2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${v.key}">${v.label}</label>
+          ${ehHex ? `<input type="color" value="${valor}" oninput="aplicarCor('${v.key}', this.value)" style="width:32px;height:28px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0" />` : ''}
+          <input type="text" value="${valor}" oninput="aplicarCorHex('${v.key}', this)"
+            style="width:90px;font-size:11px;font-family:monospace;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:6px;padding:4px 8px;outline:none"
+          />
+        </div>`;
+    }).join('');
+  }
+
+  function aplicarCor(varName, valor) {
+    document.documentElement.style.setProperty(varName, valor);
+    renderizarCores();
+  }
+
+  function aplicarCorHex(varName, input) {
+    const val = input.value.trim();
+    document.documentElement.style.setProperty(varName, val);
+    input.style.borderColor = val.startsWith('#') && (val.length === 4 || val.length === 7)
+      ? 'var(--green)' : 'var(--red)';
+  }
+
+  // ── AUTO-WRAP DE EMOJIS ───────────────────────────────
+  const EMOJI_RE = /\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu;
+  let _emojiCounter = 0;
+
+  function autoWrapEmojis() {
+    const areas = [
+      ...document.querySelectorAll('[id^="aba-"] .content'),
+      document.querySelector('.hero'),
+      document.querySelector('.tabs'),
+    ].filter(Boolean);
+
+    areas.forEach(area => {
+      const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (node.parentElement.closest('.icon-slot')) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('.edit-toolbar, #painel-cores')) return NodeFilter.FILTER_REJECT;
+          EMOJI_RE.lastIndex = 0;
+          return EMOJI_RE.test(node.textContent) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+        }
+      });
+
+      const nodes = [];
+      let n;
+      while ((n = walker.nextNode())) nodes.push(n);
+
+      nodes.forEach(textNode => {
+        EMOJI_RE.lastIndex = 0;
+        const text = textNode.textContent;
+        if (!EMOJI_RE.test(text)) return;
+        EMOJI_RE.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let last = 0, m;
+        while ((m = EMOJI_RE.exec(text)) !== null) {
+          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          const span = document.createElement('span');
+          span.className = 'icon-slot';
+          span.dataset.key = `auto-${m[0].codePointAt(0).toString(16)}-${_emojiCounter++}`;
+          span.textContent = m[0];
+          frag.appendChild(span);
+          last = m.index + m[0].length;
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+    });
+  }
+
+  function restaurarIcones() {
+    const raw = localStorage.getItem(STORE_ICONS);
+    if (!raw) return;
+    try {
+      const icons = JSON.parse(raw);
+      document.querySelectorAll('.icon-slot').forEach(slot => {
+        const img = icons[slot.dataset.key];
+        if (img) aplicarIconeSVG(slot, img);
+      });
+    } catch(e) { console.warn('Erro ao restaurar ícones:', e); }
+  }
+
+  // ── INIT ──────────────────────────────────────────────
+  carregarSalvo();
+  autoWrapEmojis();
+  restaurarIcones();
+</script>
+
+</body>
+</html>

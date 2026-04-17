@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arsenal — Andarilho Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:     #0d0d0e;
+      --bg2:    #1a1a1c;
+      --bg3:    #242426;
+      --gold:   #e7c9a3;
+      --rust:   #ae330a;
+      --white:  #ffffff;
+      --green:  #4ade80;
+      --blue:   #60a5fa;
+      --purple: #a78bfa;
+      --yellow: #fbbf24;
+      --teal:   #2dd4bf;
+      --max:    1100px;
+      --px:     clamp(20px, 5vw, 60px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--px); }
+
+    /* ── NAV ── */
+    .back-nav {
+      position: fixed; top: 24px; left: 24px; z-index: 100;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(13,13,14,.9); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 100px;
+      padding: 8px 16px; font-size: 13px; color: rgba(255,255,255,.6);
+      transition: color .2s;
+    }
+    .back-nav:hover { color: var(--gold); }
+
+    /* ── SIDEBAR NAV ── */
+    .side-nav {
+      position: fixed; top: 50%; right: 24px; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 8px; z-index: 100;
+    }
+    .side-link {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.15); cursor: pointer;
+      transition: all .2s; border: none;
+    }
+    .side-link.active { background: var(--gold); transform: scale(1.4); }
+    .side-link:hover { background: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 60vh; display: flex; align-items: center;
+      padding-block: 140px 80px;
+      background: radial-gradient(ellipse at 60% 0%, rgba(174,51,10,.22) 0%, var(--bg) 60%);
+    }
+    .hero-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); margin-bottom: 16px; }
+    .hero-title { font-size: clamp(36px, 5vw, 72px); font-weight: 900; line-height: 1.05; letter-spacing: -.03em; margin-bottom: 20px; }
+    .hero-title .gold { color: var(--gold); }
+    .hero-sub { font-size: 16px; color: rgba(255,255,255,.55); max-width: 520px; line-height: 1.75; margin-bottom: 40px; }
+    .zone-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .zone-pill {
+      padding: 8px 18px; border-radius: 100px; font-size: 12px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+      border: 1px solid transparent; transition: all .2s;
+    }
+    .zp-agency  { background: rgba(174,51,10,.15);  color: #f87171; border-color: rgba(248,113,113,.25); }
+    .zp-sites   { background: rgba(96,165,250,.1);  color: var(--blue); border-color: rgba(96,165,250,.25); }
+    .zp-canal   { background: rgba(167,139,250,.1); color: var(--purple); border-color: rgba(167,139,250,.25); }
+    .zp-cross   { background: rgba(231,201,163,.08); color: var(--gold); border-color: rgba(231,201,163,.25); }
+    .zone-pill:hover { opacity: .8; transform: translateY(-1px); }
+
+    /* ── ZONE HEADER ── */
+    .zone-section { padding-block: 80px; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .zone-header { margin-bottom: 48px; }
+    .zone-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .zt-agency  { background: rgba(248,113,113,.1);  color: #f87171; border: 1px solid rgba(248,113,113,.2); }
+    .zt-sites   { background: rgba(96,165,250,.1);  color: var(--blue); border: 1px solid rgba(96,165,250,.2); }
+    .zt-canal   { background: rgba(167,139,250,.1); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+    .zt-cross   { background: rgba(231,201,163,.08); color: var(--gold); border: 1px solid rgba(231,201,163,.2); }
+    .zone-header h2 { font-size: clamp(26px, 3vw, 40px); font-weight: 800; line-height: 1.1; color: var(--gold); margin-bottom: 10px; }
+    .zone-header p { font-size: 15px; color: rgba(255,255,255,.5); max-width: 540px; line-height: 1.7; }
+
+    /* ── TOOL CARD ── */
+    .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .tool-card {
+      background: var(--bg2); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 16px;
+      transition: border-color .2s;
+    }
+    .tool-card:hover { border-color: rgba(255,255,255,.14); }
+
+    .tool-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .tool-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .tool-cost {
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px;
+      letter-spacing: .06em; white-space: nowrap;
+    }
+    .cost-free    { background: rgba(74,222,128,.1); color: var(--green); }
+    .cost-low     { background: rgba(96,165,250,.1); color: var(--blue); }
+    .cost-medium  { background: rgba(251,191,36,.1); color: var(--yellow); }
+    .cost-api     { background: rgba(167,139,250,.1); color: var(--purple); }
+
+    .tool-name { font-size: 18px; font-weight: 800; color: var(--gold); }
+    .tool-tagline { font-size: 12px; font-weight: 600; color: var(--rust); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+
+    .tool-what { font-size: 14px; color: rgba(255,255,255,.65); line-height: 1.65; }
+
+    .tool-example {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-left: 3px solid var(--rust);
+      border-radius: 0 10px 10px 0; padding: 14px 16px;
+    }
+    .tool-example-label { font-size: 9px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--rust); margin-bottom: 6px; }
+    .tool-example p { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+    .tool-how { display: flex; flex-direction: column; gap: 6px; }
+    .tool-how-label { font-size: 9px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 2px; }
+    .how-step {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.5;
+    }
+    .how-num {
+      min-width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(174,51,10,.2); color: var(--rust);
+      font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+      margin-top: 1px; flex-shrink: 0;
+    }
+
+    .tool-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .ttag {
+      font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 100px;
+      background: rgba(255,255,255,.05); color: rgba(255,255,255,.35);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    /* ── FLOW SECTION ── */
+    #fluxo { padding-block: 80px; background: var(--bg2); border-bottom: none; }
+    .flow-title { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: var(--gold); margin-bottom: 8px; }
+    .flow-sub { font-size: 15px; color: rgba(255,255,255,.5); margin-bottom: 48px; max-width: 480px; line-height: 1.7; }
+
+    .flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    .flow-col { display: flex; flex-direction: column; gap: 10px; }
+    .flow-col-title {
+      font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+      padding: 8px 14px; border-radius: 8px; text-align: center; margin-bottom: 4px;
+    }
+    .fct-agency  { background: rgba(248,113,113,.1); color: #f87171; }
+    .fct-sites   { background: rgba(96,165,250,.1); color: var(--blue); }
+    .fct-canal   { background: rgba(167,139,250,.1); color: var(--purple); }
+
+    .flow-node {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 10px; padding: 12px 14px;
+      font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5;
+    }
+    .flow-node strong { color: var(--white); display: block; font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+
+    .flow-center {
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at center, rgba(174,51,10,.15) 0%, transparent 70%);
+      border: 1px solid rgba(174,51,10,.2); border-radius: 16px;
+      padding: 32px; text-align: center; margin-top: 16px;
+    }
+    .flow-center-inner { max-width: 400px; }
+    .flow-center h3 { font-size: 20px; font-weight: 800; color: var(--gold); margin-bottom: 8px; }
+    .flow-center p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+    /* ── PRIORITY ── */
+    #prioridade { padding-block: 80px; }
+    .priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .priority-card {
+      background: var(--bg2); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 28px;
+    }
+    .priority-phase { font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 12px; }
+    .pp-now    { color: var(--green); }
+    .pp-week   { color: var(--blue); }
+    .pp-month  { color: var(--purple); }
+    .priority-card h3 { font-size: 16px; font-weight: 800; color: var(--gold); margin-bottom: 16px; }
+    .priority-list { display: flex; flex-direction: column; gap: 10px; }
+    .priority-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5;
+    }
+    .pi-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+    .pid-now   { background: var(--green); }
+    .pid-week  { background: var(--blue); }
+    .pid-month { background: var(--purple); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .flow-grid { grid-template-columns: 1fr; }
+      .priority-grid { grid-template-columns: 1fr; }
+      .side-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="lp-andarilho.html" class="back-nav">← Voltar ao início</a>
+
+<!-- SIDE NAV -->
+<div class="side-nav">
+  <button class="side-link active" onclick="scrollTo('#hero')" title="Início"></button>
+  <button class="side-link" onclick="scrollTo('#agencia')" title="Agência"></button>
+  <button class="side-link" onclick="scrollTo('#sites')" title="Sites"></button>
+  <button class="side-link" onclick="scrollTo('#canal')" title="Canal"></button>
+  <button class="side-link" onclick="scrollTo('#cross')" title="Transversais"></button>
+  <button class="side-link" onclick="scrollTo('#fluxo')" title="Fluxo"></button>
+  <button class="side-link" onclick="scrollTo('#prioridade')" title="Prioridade"></button>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-label">Andarilho Digital · Arsenal Completo</div>
+    <h1 class="hero-title">Cada ferramenta.<br><span class="gold">Cada função.<br>Cada projeto.</span></h1>
+    <p class="hero-sub">Um guia de referência para entender o que cada IA faz, como se aplica nos seus projetos reais e em que ordem configurar.</p>
+    <div class="zone-pills">
+      <span class="zone-pill zp-agency" onclick="document.getElementById('agencia').scrollIntoView({behavior:'smooth'})">Zona Agência</span>
+      <span class="zone-pill zp-sites"  onclick="document.getElementById('sites').scrollIntoView({behavior:'smooth'})">Zona Sites</span>
+      <span class="zone-pill zp-canal"  onclick="document.getElementById('canal').scrollIntoView({behavior:'smooth'})">Zona Canal</span>
+      <span class="zone-pill zp-cross"  onclick="document.getElementById('cross').scrollIntoView({behavior:'smooth'})">Transversais</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ZONA AGÊNCIA
+══════════════════════════════════════ -->
+<section id="agencia" class="zone-section">
+  <div class="wrap">
+    <div class="zone-header">
+      <div class="zone-tag zt-agency">Zona Agência</div>
+      <h2>Automação & Sistemas</h2>
+      <p>Ferramentas que constroem o produto que você vende — bots, CRM, fluxos e agentes autônomos. Aqui entra o dinheiro recorrente.</p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- N8N -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(234,88,12,.15)">
+              <svg width="24" height="24" fill="none" stroke="#ea580c" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">n8n</div>
+            <div class="tool-tagline">O orquestrador — conecta tudo</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis (self) / $20/mês</span>
+        </div>
+        <p class="tool-what">É o sistema nervoso central da agência. Pega uma informação de qualquer lugar (WhatsApp, formulário, e-mail, Google Sheets) e decide o que fazer com ela — sem você precisar estar online. Você cria fluxos visuais conectando blocos: "quando X acontecer → faça Y → depois Z".</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Bot de atendimento</div>
+          <p>Cliente manda "quero orçamento" no WhatsApp → n8n recebe via Z-API → manda pra Claude classificar a intenção → se for lead quente, registra no CRM e avisa você → se for dúvida simples, Claude responde automaticamente.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>Cria conta em app.n8n.cloud (14 dias grátis)</div>
+          <div class="how-step"><span class="how-num">2</span>Cria workflow: "Webhook recebe dados → salva no Google Sheets"</div>
+          <div class="how-step"><span class="how-num">3</span>Testa mandando uma requisição pelo browser</div>
+          <div class="how-step"><span class="how-num">4</span>Adiciona Claude e Z-API quando o básico funcionar</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">workflows visuais</span><span class="ttag">sem código</span><span class="ttag">280+ integrações</span><span class="ttag">self-hosted gratuito</span></div>
+      </div>
+
+      <!-- CLAUDE API -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(174,51,10,.15)">
+              <svg width="24" height="24" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Claude API</div>
+            <div class="tool-tagline">O cérebro — entende e decide</div>
+          </div>
+          <span class="tool-cost cost-api">~R$2/1000 msgs</span>
+        </div>
+        <p class="tool-what">É o Claude que você usa agora, mas via API — chamado diretamente pelos seus sistemas, não pelo chat. O modelo Haiku é o ideal para bots: barato, rápido, suficientemente inteligente pra qualificar lead, responder dúvida, gerar proposta. Você define a personalidade no system prompt e ele age como um atendente treinado.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Bot do cliente pet shop</div>
+          <p>System prompt define: "Você é a assistente da Creche Pet. Responda sobre check-in, preços e horários. Se o tutor perguntar sobre vagas, peça nome e contato e registre no sistema." — Claude faz exatamente isso, no tom certo, 24h por dia.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>Acessa platform.anthropic.com e cria API key</div>
+          <div class="how-step"><span class="how-num">2</span>No n8n, adiciona node "HTTP Request" apontando pra API</div>
+          <div class="how-step"><span class="how-num">3</span>Escreve o system prompt do personagem do bot</div>
+          <div class="how-step"><span class="how-num">4</span>Testa mandando mensagens e ajusta o prompt</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">Haiku (barato)</span><span class="ttag">Sonnet (complexo)</span><span class="ttag">system prompt</span><span class="ttag">pay-per-use</span></div>
+      </div>
+
+      <!-- CLAUDE MANAGED AGENTS -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(167,139,250,.15)">
+              <svg width="24" height="24" fill="none" stroke="#a78bfa" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h.01M11 8h6M7 12h10"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Claude Managed Agents</div>
+            <div class="tool-tagline">Agentes autônomos — trabalham sozinhos por horas</div>
+          </div>
+          <span class="tool-cost cost-api">$0.08/hora runtime</span>
+        </div>
+        <p class="tool-what">Lançado em abril 2026. É Claude com autonomia total para executar tarefas longas sem você supervisionar: abre browser, lê arquivos, faz buscas, escreve código, chama APIs — e não para até terminar a tarefa. Diferente da API normal que responde uma mensagem por vez, aqui o agente trabalha por horas seguidas com memória de sessão.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Prospecção autônoma</div>
+          <p>Todo domingo às 20h, um agente acorda, busca 30 restaurantes novos no Google Maps da cidade alvo, verifica quais não têm site ou têm site lento, cria fichas no seu CRM com nome/contato/problema encontrado, e te manda um resumo no WhatsApp. Você acorda segunda com leads prontos pra abordar.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar (depois do Claude API básico)</div>
+          <div class="how-step"><span class="how-num">1</span>Mesma API key do Claude — só muda o header da requisição</div>
+          <div class="how-step"><span class="how-num">2</span>Adiciona: <code style="background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px;font-size:11px">anthropic-beta: managed-agents-2026-04-01</code></div>
+          <div class="how-step"><span class="how-num">3</span>Define o agente: modelo + system prompt + ferramentas permitidas</div>
+          <div class="how-step"><span class="how-num">4</span>Inicia sessão e monitora via eventos em tempo real</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">lançado abril 2026</span><span class="ttag">execução longa</span><span class="ttag">browser + arquivos</span><span class="ttag">agendável</span></div>
+      </div>
+
+      <!-- Z-API -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(74,222,128,.1)">
+              <svg width="24" height="24" fill="none" stroke="#4ade80" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Z-API</div>
+            <div class="tool-tagline">A ponte — WhatsApp ↔ seus sistemas</div>
+          </div>
+          <span class="tool-cost cost-medium">~R$150/mês</span>
+        </div>
+        <p class="tool-what">WhatsApp não tem API oficial acessível pra pequenos negócios. Z-API é o meio-campo: você conecta um número de WhatsApp a ele (via QR Code), e a partir daí consegue receber e enviar mensagens via código. Sem ele, seu bot não existe. Com ele, qualquer mensagem que chega no WhatsApp do cliente pode ser processada pelo n8n e respondida pelo Claude.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Qualificação de lead</div>
+          <p>Lead manda "oi" no WhatsApp do pet shop → Z-API captura → manda pro n8n → n8n manda pro Claude → Claude responde com boas-vindas + pergunta sobre o pet → lead responde → Claude coleta dados → n8n salva no CRM → dono recebe notificação só quando o lead está qualificado.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>Cria conta em z-api.io</div>
+          <div class="how-step"><span class="how-num">2</span>Cria uma instância e escaneia QR Code com o número do cliente</div>
+          <div class="how-step"><span class="how-num">3</span>Copia o token e a URL do webhook</div>
+          <div class="how-step"><span class="how-num">4</span>Cola no n8n como trigger do workflow</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">WhatsApp não-oficial</span><span class="ttag">webhook</span><span class="ttag">envio e recebimento</span><span class="ttag">por instância</span></div>
+      </div>
+
+      <!-- MAKE -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(96,165,250,.1)">
+              <svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Make (Integromat)</div>
+            <div class="tool-tagline">Alternativa visual ao n8n — mais simples</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis até 1k ops/mês</span>
+        </div>
+        <p class="tool-what">Mesmo conceito do n8n, interface mais amigável, hospedagem no cloud (não precisa servidor). Ideal quando o cliente quer algo simples e você não quer configurar infraestrutura. O free tier é suficiente para clientes pequenos — formulário de contato → CRM → e-mail automático.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Onboarding de novo cliente</div>
+          <p>Cliente assina o serviço → Make pega os dados do formulário → cria pasta no Google Drive → manda e-mail de boas-vindas personalizado → cria linha no CRM → agenda reunião de kickoff no Google Calendar → manda lembrete 24h antes. Tudo automático, sem você tocar em nada.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>Cria conta em make.com</div>
+          <div class="how-step"><span class="how-num">2</span>Escolhe um template pronto (tem centenas)</div>
+          <div class="how-step"><span class="how-num">3</span>Adapta pras suas ferramentas (Google, e-mail, CRM)</div>
+          <div class="how-step"><span class="how-num">4</span>Testa com dados reais e ativa</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">no-code</span><span class="ttag">cloud nativo</span><span class="ttag">1000+ apps</span><span class="ttag">templates prontos</span></div>
+      </div>
+
+      <!-- GOOGLE SHEETS + APPS SCRIPT -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(74,222,128,.1)">
+              <svg width="24" height="24" fill="none" stroke="#4ade80" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Google Sheets + Apps Script</div>
+            <div class="tool-tagline">CRM gratuito com automação nativa</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis</span>
+        </div>
+        <p class="tool-what">Planilha que vira CRM completo com o Apps Script (JavaScript que roda dentro do Google). Você cria colunas para cliente, status, data, valor — e o Script envia e-mail automático quando status muda, cria relatório semanal, alerta quando proposta está vencendo. É o CRM mínimo viável antes de vender o CRM customizado pra cliente.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Seu próprio pipeline de vendas</div>
+          <p>Coluna "Status" com: Prospectado / Contato feito / Demo enviada / Proposta enviada / Fechado / Perdido. Quando muda pra "Proposta enviada", Apps Script agenda follow-up automático em D+1, D+3 e D+7. Você nunca esquece de um lead.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>Cria planilha no Google Sheets com colunas de CRM</div>
+          <div class="how-step"><span class="how-num">2</span>Extensões → Apps Script → cola o script de automação</div>
+          <div class="how-step"><span class="how-num">3</span>Define gatilho: "quando linha muda → executa função"</div>
+          <div class="how-step"><span class="how-num">4</span>Testa com um lead real</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">100% grátis</span><span class="ttag">JavaScript nativo</span><span class="ttag">gatilhos por tempo ou evento</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ZONA SITES
+══════════════════════════════════════ -->
+<section id="sites" class="zone-section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="zone-header">
+      <div class="zone-tag zt-sites">Zona Sites</div>
+      <h2>Presença Digital & SEO</h2>
+      <p>Ferramentas para construir, otimizar e automatizar a presença online dos clientes. Cada site entregue gera mensalidade de manutenção.</p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- CLAUDE COMO COPYWRITER -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(174,51,10,.15)">
+              <svg width="24" height="24" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Claude — Copywriter de Sites</div>
+            <div class="tool-tagline">Escreve o site inteiro em minutos</div>
+          </div>
+          <span class="tool-cost cost-free">Incluso no plano</span>
+        </div>
+        <p class="tool-what">Você fornece as informações do negócio (nicho, público, diferencial, localização) e o Claude escreve headline, subtítulo, seção "sobre", lista de serviços, depoimentos fictícios para placeholder, meta description e título SEO. O que levaria 4 horas de escrita vira 20 minutos de revisão.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Site de eletricista</div>
+          <p>Prompt: "Escreva o copy de uma landing page para João Silva, eletricista em Florianópolis, atende residencial e comercial, 15 anos de experiência, destaque para rapidez e preço justo. Tom direto, sem enrolação." — Em 30 segundos você tem o texto completo do site.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como usar no fluxo</div>
+          <div class="how-step"><span class="how-num">1</span>Faz uma call de 15min com o cliente e anota os dados</div>
+          <div class="how-step"><span class="how-num">2</span>Cola no Claude com o prompt de copywriter</div>
+          <div class="how-step"><span class="how-num">3</span>Claude gera headline, corpo e meta tags</div>
+          <div class="how-step"><span class="how-num">4</span>Você revisa e encaixa no HTML</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">copy persuasivo</span><span class="ttag">SEO on-page</span><span class="ttag">meta tags</span><span class="ttag">tom de voz</span></div>
+      </div>
+
+      <!-- GOOGLE SEARCH CONSOLE -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(96,165,250,.1)">
+              <svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Google Search Console</div>
+            <div class="tool-tagline">Raio-X de como o Google enxerga o site</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis</span>
+        </div>
+        <p class="tool-what">Mostra em quais buscas o site aparece, em qual posição, quantos cliques recebe, se tem erros de indexação e se o Google consegue ler as páginas. É a ferramenta obrigatória de qualquer serviço de SEO — sem ela você está gerenciando às cegas. Você entrega o acesso ao cliente como parte do pacote.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Auditoria grátis de prospecção</div>
+          <p>Você pede acesso ao Search Console do lead (ou verifica por fora com outras ferramentas) e mostra: "Seu site aparece na posição 34 pra 'eletricista florianópolis'. Ninguém chega na página 4. Posso colocar você no top 5 em 60 dias." — Esse dado fecha o diagnóstico.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>search.google.com/search-console → adiciona o site</div>
+          <div class="how-step"><span class="how-num">2</span>Verifica propriedade (tag no HTML ou DNS)</div>
+          <div class="how-step"><span class="how-num">3</span>Submete o sitemap.xml</div>
+          <div class="how-step"><span class="how-num">4</span>Aguarda 48h e começa a ver dados</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">obrigatório</span><span class="ttag">palavras-chave reais</span><span class="ttag">erros de indexação</span><span class="ttag">Core Web Vitals</span></div>
+      </div>
+
+      <!-- PAGE SPEED INSIGHTS -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(251,191,36,.1)">
+              <svg width="24" height="24" fill="none" stroke="#fbbf24" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">PageSpeed Insights</div>
+            <div class="tool-tagline">Velocidade e performance do site</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis</span>
+        </div>
+        <p class="tool-what">Ferramenta do Google que pontua o site de 0 a 100 em performance, acessibilidade, SEO e boas práticas. É a base do seu diagnóstico gratuito de prospecção — você cola o URL do lead, tira print da nota baixa e mostra como problema concreto. Sites lentos perdem ranking e clientes. Sites rápidos convertem mais.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Argumento de venda</div>
+          <p>"Rodei uma análise rápida no seu site. Nota 31 no mobile — isso significa que 7 em cada 10 pessoas que acessam pelo celular saem antes de ver o que você oferece. Cada segundo de carregamento extra custa 7% de conversão." — Dado real, impacto imediato.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como usar na prospecção</div>
+          <div class="how-step"><span class="how-num">1</span>pagespeed.web.dev → cola o URL do lead</div>
+          <div class="how-step"><span class="how-num">2</span>Tira print da nota (especialmente mobile)</div>
+          <div class="how-step"><span class="how-num">3</span>Manda no primeiro contato como "análise que fiz"</div>
+          <div class="how-step"><span class="how-num">4</span>Oferece diagnóstico completo como próximo passo</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">diagnóstico grátis</span><span class="ttag">argumento de venda</span><span class="ttag">Core Web Vitals</span></div>
+      </div>
+
+      <!-- KITE AI -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(45,212,191,.1)">
+              <svg width="24" height="24" fill="none" stroke="#2dd4bf" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Kite.ai</div>
+            <div class="tool-tagline">IA que gera e mantém o site automaticamente</div>
+          </div>
+          <span class="tool-cost cost-low">~$15/mês</span>
+        </div>
+        <p class="tool-what">Lançado em abril 2026. Você descreve o negócio numa conversa e a IA gera o site completo — design, copy, SEO. Mas o diferencial real é a manutenção automática: a IA monitora, corrige bugs e otimiza o SEO sozinha ao longo do tempo. Ideal pra clientes simples onde você não quer gastar horas codando.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Escala de sites simples</div>
+          <p>Para um cliente de R$1.800 de setup + R$280/mês, você usa o Kite pra gerar o site em 30 minutos, configura o GMB, e a manutenção fica por conta da IA. Sua hora vai pro cliente mais complexo que paga R$4.500. Você atende mais clientes sem trabalhar mais.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como usar</div>
+          <div class="how-step"><span class="how-num">1</span>Kite.ai → inicia conversa descrevendo o negócio</div>
+          <div class="how-step"><span class="how-num">2</span>IA gera o site completo e publica</div>
+          <div class="how-step"><span class="how-num">3</span>Você revisa, ajusta logo e cores</div>
+          <div class="how-step"><span class="how-num">4</span>Conecta ao domínio do cliente e entrega</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">geração por conversa</span><span class="ttag">manutenção automática</span><span class="ttag">SEO nativo</span><span class="ttag">lançado abril 2026</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ZONA CANAL
+══════════════════════════════════════ -->
+<section id="canal" class="zone-section">
+  <div class="wrap">
+    <div class="zone-header">
+      <div class="zone-tag zt-canal">Zona Canal</div>
+      <h2>YouTube & Instagram</h2>
+      <p>Ferramentas que multiplicam um único vídeo em múltiplos conteúdos — sem gravar mais, sem perder a naturalidade.</p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- OPUS CLIP -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(167,139,250,.15)">
+              <svg width="24" height="24" fill="none" stroke="#a78bfa" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">OpusClip</div>
+            <div class="tool-tagline">Um YouTube vira 5 Reels automaticamente</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis 90min/mês</span>
+        </div>
+        <p class="tool-what">Você faz upload do vídeo longo ou cola o link do YouTube. A IA assiste o vídeo inteiro, identifica os momentos mais relevantes e poderosos, corta em clipes verticais de 30–90 segundos, adiciona legenda animada e reformata o enquadramento pra vertical. O que levaria 3 horas de edição acontece em 10 minutos.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Semana de conteúdo em 1 upload</div>
+          <p>Você grava o YouTube de 12 minutos no domingo (a jornada da semana). Sobe no OpusClip. Ele corta: o momento em que você fala do cliente recusando a proposta (Reel segunda), quando você mostra o bot funcionando (quarta), quando revela quanto entrou de dinheiro (quinta). Você tem 5 Reels sem gravar mais nada.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>opus.pro → cria conta grátis</div>
+          <div class="how-step"><span class="how-num">2</span>Cola o link do YouTube ou faz upload do arquivo</div>
+          <div class="how-step"><span class="how-num">3</span>Escolhe o estilo de legenda e aspecto (9:16)</div>
+          <div class="how-step"><span class="how-num">4</span>Baixa os clipes e revisa rapidamente antes de postar</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">corte automático</span><span class="ttag">legenda animada</span><span class="ttag">reformato vertical</span><span class="ttag">highlight detection</span></div>
+      </div>
+
+      <!-- DESCRIPT -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(96,165,250,.1)">
+              <svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Descript</div>
+            <div class="tool-tagline">Edita vídeo como se fosse um texto</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis limitado / $12/mês</span>
+        </div>
+        <p class="tool-what">Transcreve o vídeo automaticamente e exibe o texto lado a lado com o vídeo. Para cortar um trecho, você apaga o texto — o vídeo corta junto. Quer remover "ãhn" e silêncios? Um clique. Isso é revolucionário pra quem filma natural sem roteiro — você edita conversando com o texto, não arrastando linha do tempo.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Estilo Casey Neistat</div>
+          <p>Você grava 40 minutos de vídeo bruto durante a semana — café, rua, computador, conversa com lead. Sobe no Descript. Ele transcreve. Você lê o texto e deleta as partes chatas. Em 45 minutos de edição você tem um YouTube de 12 minutos que parece documentário.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>descript.com → cria conta e instala o app</div>
+          <div class="how-step"><span class="how-num">2</span>Importa o vídeo — transcrição automática em PT</div>
+          <div class="how-step"><span class="how-num">3</span>Lê o texto, seleciona e deleta o que não quer</div>
+          <div class="how-step"><span class="how-step"><span class="how-num">4</span>Exporta o vídeo editado</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">edição por texto</span><span class="ttag">remove silêncios</span><span class="ttag">transcrição PT</span><span class="ttag">overdub (voz IA)</span></div>
+      </div>
+
+      <!-- BUFFER -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(74,222,128,.1)">
+              <svg width="24" height="24" fill="none" stroke="#4ade80" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Buffer</div>
+            <div class="tool-tagline">Agenda posts — você vive, ele publica</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis 3 canais</span>
+        </div>
+        <p class="tool-what">Você prepara os Reels e posts da semana toda de uma vez (domingo à noite, por exemplo) e define quando cada um vai ao ar. Buffer publica automaticamente no horário certo enquanto você prospecta cliente, edita site ou está num café em Chiang Mai. Você não precisa estar online pra manter presença online.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Domingo produtivo</div>
+          <p>Domingo: você edita o YouTube (2h) → OpusClip corta 5 Reels (10min) → você escreve as legendas no Claude (20min) → sobe tudo no Buffer agendado pra seg/ter/qua/qui/sex → semana postada. De segunda a sexta você só prospecta e executa.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>buffer.com → conecta Instagram e YouTube</div>
+          <div class="how-step"><span class="how-num">2</span>Sobe o Reel com legenda e hashtags</div>
+          <div class="how-step"><span class="how-num">3</span>Define data e hora de publicação</div>
+          <div class="how-step"><span class="how-num">4</span>Repete pra todos os posts da semana</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">agendamento</span><span class="ttag">multi-plataforma</span><span class="ttag">analytics básico</span><span class="ttag">grátis pra começar</span></div>
+      </div>
+
+      <!-- TUBEBODY / VIDIQ -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(251,191,36,.1)">
+              <svg width="24" height="24" fill="none" stroke="#fbbf24" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">VidIQ</div>
+            <div class="tool-tagline">SEO do YouTube — aparece na busca certa</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis básico</span>
+        </div>
+        <p class="tool-what">Extensão do Chrome que aparece ao lado de qualquer vídeo do YouTube mostrando: quantas views por hora, quais palavras-chave estão trazendo tráfego, qual a dificuldade de ranquear e o que os concorrentes estão usando. Você escreve títulos e tags com base em dados reais, não achismo.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Título que ranqueia</div>
+          <p>Você quer postar sobre "como fazer bot de WhatsApp". VidIQ mostra: esse termo tem 12k buscas/mês e dificuldade média. Sugere variação: "bot WhatsApp grátis para pequenos negócios" — 8k buscas, dificuldade baixa. Você usa o segundo e aparece no top 10 mais rápido.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>vidiq.com → instala extensão no Chrome</div>
+          <div class="how-step"><span class="how-num">2</span>Conecta com sua conta do YouTube</div>
+          <div class="how-step"><span class="how-num">3</span>Antes de postar, pesquisa o título no buscador do YouTube</div>
+          <div class="how-step"><span class="how-num">4</span>Usa as sugestões de palavras-chave no título e descrição</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">SEO YouTube</span><span class="ttag">palavras-chave</span><span class="ttag">análise de concorrente</span><span class="ttag">extensão Chrome</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TRANSVERSAIS
+══════════════════════════════════════ -->
+<section id="cross" class="zone-section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="zone-header">
+      <div class="zone-tag zt-cross">Transversais</div>
+      <h2>Presentes nas três zonas</h2>
+      <p>Ferramentas que aparecem em qualquer projeto. Quanto mais cedo dominar, mais velocidade você tem.</p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- CLAUDE CHAT -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(174,51,10,.15)">
+              <svg width="24" height="24" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Claude (chat)</div>
+            <div class="tool-tagline">O assistente que não dorme</div>
+          </div>
+          <span class="tool-cost cost-free">Plano atual</span>
+        </div>
+        <p class="tool-what">Já é seu principal parceiro de trabalho. O que ainda pode expandir: criar um arquivo de contexto fixo (quem você é, seus projetos, preços, tom de voz) e colar no início de cada conversa importante. Isso evita reexplicar tudo e mantém consistência. Use pra: proposta, copy, roteiro, diagnóstico de cliente, código, estratégia.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Proposta em 15 minutos</div>
+          <p>Cola o contexto fixo + dados do cliente + serviço desejado. Claude gera proposta completa com problema, solução, etapas, preços e prazo. Você revisa, personaliza 20% e manda. O que levava 2 horas vira 15 minutos.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Próximo nível</div>
+          <div class="how-step"><span class="how-num">1</span>Cria um arquivo .txt com seu contexto fixo</div>
+          <div class="how-step"><span class="how-num">2</span>Sempre cola no início de conversas estratégicas</div>
+          <div class="how-step"><span class="how-num">3</span>Cria prompts salvos pra tarefas repetidas (proposta, follow-up, roteiro)</div>
+          <div class="how-step"><span class="how-num">4</span>Quando precisar de mais poder → migra pra API</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">copy</span><span class="ttag">código</span><span class="ttag">estratégia</span><span class="ttag">roteiro</span><span class="ttag">proposta</span></div>
+      </div>
+
+      <!-- NOTION -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(255,255,255,.06)">
+              <svg width="24" height="24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Notion</div>
+            <div class="tool-tagline">Base de conhecimento e SOPs</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis</span>
+        </div>
+        <p class="tool-what">Onde você documenta tudo que não pode ficar só na sua cabeça: processo de onboarding de cliente, checklist de entrega de site, SOP do bot, roteiro padrão de reunião, briefing de conteúdo. À medida que a agência cresce, o Notion vira o manual de operação — e quando você contratar alguém, o manual já existe.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Escalabilidade futura</div>
+          <p>Você documenta no Notion: "Como entrego um bot em 7 dias". Com esse SOP escrito, no futuro você pode contratar alguém pra executar enquanto você só fecha o cliente e supervisiona. A documentação hoje é a alavanca do amanhã.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como começar</div>
+          <div class="how-step"><span class="how-num">1</span>Cria workspace "Andarilho Digital"</div>
+          <div class="how-step"><span class="how-num">2</span>Página: Clientes ativos (tabela com status)</div>
+          <div class="how-step"><span class="how-num">3</span>Página: Processos (um por serviço)</div>
+          <div class="how-step"><span class="how-num">4</span>Página: Arsenal (link pra este arquivo)</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">SOPs</span><span class="ttag">documentação</span><span class="ttag">banco de ideias</span><span class="ttag">gestão de clientes</span></div>
+      </div>
+
+      <!-- LOOM -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(174,51,10,.15)">
+              <svg width="24" height="24" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Loom</div>
+            <div class="tool-tagline">Vídeo de tela — vende sem reunião</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis 5min/vídeo</span>
+        </div>
+        <p class="tool-what">Grava sua tela com câmera no canto e manda um link. Você usa pra: explicar a proposta pro lead sem reunião, mostrar o demo do painel ao vivo, entregar o site com tour explicativo, mandar diagnóstico visual de presença digital. O cliente assiste quando quiser, você não precisa estar disponível.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Demo que fecha cliente</div>
+          <p>"Grava um Loom de 3 minutos mostrando o painel-demo.html funcionando. Legenda: 'Preparei um tour pelo sistema que montei. Assiste quando puder — no final tem um botão pra a gente conversar.' Taxa de resposta muito maior que mandar PDF ou texto longo."</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como usar</div>
+          <div class="how-step"><span class="how-num">1</span>loom.com → instala extensão Chrome</div>
+          <div class="how-step"><span class="how-num">2</span>Clica no ícone → grava tela + câmera</div>
+          <div class="how-step"><span class="how-num">3</span>Copia o link e manda no WhatsApp</div>
+          <div class="how-step"><span class="how-num">4</span>Loom mostra quando o lead assistiu e por quanto tempo</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">demo ao vivo</span><span class="ttag">proposta visual</span><span class="ttag">diagnóstico</span><span class="ttag">sem reunião</span></div>
+      </div>
+
+      <!-- CANVA AI -->
+      <div class="tool-card">
+        <div class="tool-top">
+          <div>
+            <div class="tool-icon" style="background:rgba(96,165,250,.1)">
+              <svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div class="tool-name" style="margin-top:12px">Canva AI</div>
+            <div class="tool-tagline">Thumbnails e artes em segundos</div>
+          </div>
+          <span class="tool-cost cost-free">Grátis / Pro $15/mês</span>
+        </div>
+        <p class="tool-what">Magic Design gera thumbnail de YouTube a partir de uma descrição. Background Remover remove fundo de foto em um clique. Magic Write gera texto pra qualquer arte. Você não é designer de comunicação visual — use o Canva pra entregar qualidade suficiente sem gastar horas em Figma ou Photoshop pras peças do canal e do cliente.</p>
+        <div class="tool-example">
+          <div class="tool-example-label">Exemplo real — Thumbnail em 5 minutos</div>
+          <p>Você vai postar "Tentei fechar meu primeiro cliente — não deu. Aqui o que aprendi." Abre o Canva, descreve a thumbnail, ele gera 4 opções. Você escolhe, ajusta o texto e a sua foto. 5 minutos, pronto. Thumbnail ruim = 40% menos cliques.</p>
+        </div>
+        <div class="tool-how">
+          <div class="tool-how-label">Como usar</div>
+          <div class="how-step"><span class="how-num">1</span>canva.com → cria template YouTube Thumbnail (1280x720)</div>
+          <div class="how-step"><span class="how-num">2</span>Magic Design → descreve o conceito</div>
+          <div class="how-step"><span class="how-num">3</span>Escolhe, ajusta texto e foto</div>
+          <div class="how-step"><span class="how-num">4</span>Exporta PNG e sobe no YouTube</div>
+        </div>
+        <div class="tool-tags"><span class="ttag">thumbnail</span><span class="ttag">Magic Design</span><span class="ttag">remove fundo</span><span class="ttag">templates</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FLUXO CONECTADO
+══════════════════════════════════════ -->
+<section id="fluxo" class="zone-section">
+  <div class="wrap">
+    <div class="flow-title">Como tudo se conecta</div>
+    <p class="flow-sub">Cada ferramenta tem um papel. Juntas formam uma operação que roda com menos de 4 horas de trabalho direto por dia.</p>
+
+    <div class="flow-grid">
+      <div class="flow-col">
+        <div class="flow-col-title fct-agency">Agência</div>
+        <div class="flow-node"><strong>Lead chega no WhatsApp</strong>Z-API captura a mensagem e dispara o workflow</div>
+        <div class="flow-node"><strong>n8n processa</strong>Decide o que fazer com base no conteúdo da mensagem</div>
+        <div class="flow-node"><strong>Claude Haiku responde</strong>Qualifica, tira dúvida ou agenda conversa</div>
+        <div class="flow-node"><strong>CRM registra</strong>Google Sheets atualiza com nome, status e próximo passo</div>
+        <div class="flow-node"><strong>Loom fecha</strong>Você manda tour do painel-demo como argumento final</div>
+      </div>
+      <div class="flow-col">
+        <div class="flow-col-title fct-sites">Sites</div>
+        <div class="flow-node"><strong>PageSpeed faz diagnóstico</strong>Você encontra o problema específico do lead</div>
+        <div class="flow-node"><strong>Claude escreve o copy</strong>Texto do site em 20 minutos com os dados do cliente</div>
+        <div class="flow-node"><strong>Você constrói o HTML</strong>Seu diferencial: código limpo, rápido, sem dependência</div>
+        <div class="flow-node"><strong>Search Console monitora</strong>Você entrega acesso como parte do pacote mensal</div>
+        <div class="flow-node"><strong>n8n automatiza GMB</strong>Posts semanais no Google Meu Negócio sem intervenção</div>
+      </div>
+      <div class="flow-col">
+        <div class="flow-col-title fct-canal">Canal</div>
+        <div class="flow-node"><strong>Você grava bruto</strong>Celular, natural, sem roteiro — a vida acontece</div>
+        <div class="flow-node"><strong>Descript edita por texto</strong>45 minutos de edição pro YouTube de 12 minutos</div>
+        <div class="flow-node"><strong>OpusClip multiplica</strong>5 Reels cortados automaticamente do mesmo vídeo</div>
+        <div class="flow-node"><strong>Claude escreve as legendas</strong>Descrições, hashtags e títulos otimizados por VidIQ</div>
+        <div class="flow-node"><strong>Buffer publica na hora certa</strong>Você dorme, o conteúdo vai ao ar</div>
+      </div>
+    </div>
+
+    <div class="flow-center">
+      <div class="flow-center-inner">
+        <h3>A conexão entre os três</h3>
+        <p>O canal mostra o processo da agência → audiência vira prova social → prova social fecha cliente mais rápido → cliente fechado vira episódio do canal → episódio atrai próximo cliente. Um ciclo que se alimenta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PRIORIDADE DE SETUP
+══════════════════════════════════════ -->
+<section id="prioridade" style="padding-block:80px; background:radial-gradient(ellipse at 50% 100%, rgba(174,51,10,.15) 0%, var(--bg) 65%)">
+  <div class="wrap">
+    <div class="flow-title">Em que ordem configurar</div>
+    <p class="flow-sub">Não configure tudo ao mesmo tempo. Cada fase tem um objetivo específico.</p>
+
+    <div class="priority-grid">
+      <div class="priority-card">
+        <div class="priority-phase pp-now">Agora — Grátis, zero infraestrutura</div>
+        <h3>Primeiros 3 dias</h3>
+        <div class="priority-list">
+          <div class="priority-item"><span class="pi-dot pid-now"></span>OpusClip — conecta o YouTube e testa o corte automático</div>
+          <div class="priority-item"><span class="pi-dot pid-now"></span>Buffer — agenda os próximos 5 Reels</div>
+          <div class="priority-item"><span class="pi-dot pid-now"></span>VidIQ — instala extensão e pesquisa palavras-chave do canal</div>
+          <div class="priority-item"><span class="pi-dot pid-now"></span>PageSpeed — roda diagnóstico de 3 leads potenciais</div>
+          <div class="priority-item"><span class="pi-dot pid-now"></span>Loom — grava primeiro tour do painel-demo.html</div>
+          <div class="priority-item"><span class="pi-dot pid-now"></span>Contexto fixo do Claude — cria o arquivo e usa em toda conversa</div>
+        </div>
+      </div>
+      <div class="priority-card">
+        <div class="priority-phase pp-week">Esta semana — Baixo custo, alto impacto</div>
+        <h3>Dias 4 a 14</h3>
+        <div class="priority-list">
+          <div class="priority-item"><span class="pi-dot pid-week"></span>n8n Cloud — ativa trial, cria primeiro workflow formulário → Sheets</div>
+          <div class="priority-item"><span class="pi-dot pid-week"></span>Claude API — gera API key, testa primeiro prompt de bot no Postman</div>
+          <div class="priority-item"><span class="pi-dot pid-week"></span>Google Search Console — configura pro seu site de portfólio</div>
+          <div class="priority-item"><span class="pi-dot pid-week"></span>Notion — estrutura o workspace com clientes e processos</div>
+          <div class="priority-item"><span class="pi-dot pid-week"></span>Descript — edita o próximo YouTube por texto</div>
+        </div>
+      </div>
+      <div class="priority-card">
+        <div class="priority-phase pp-month">Mês 1–2 — Quando tiver o primeiro cliente</div>
+        <h3>Com receita entrando</h3>
+        <div class="priority-list">
+          <div class="priority-item"><span class="pi-dot pid-month"></span>Z-API — contrata e conecta ao n8n. Bot ao vivo no WhatsApp do cliente</div>
+          <div class="priority-item"><span class="pi-dot pid-month"></span>Make — automação de onboarding do cliente funcionando</div>
+          <div class="priority-item"><span class="pi-dot pid-month"></span>Claude Managed Agents — primeiro agente de prospecção autônoma</div>
+          <div class="priority-item"><span class="pi-dot pid-month"></span>Canva Pro — thumbnails sem marca d'água e mais templates</div>
+          <div class="priority-item"><span class="pi-dot pid-month"></span>Kite.ai — primeiro site entregue usando a IA de geração</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Smooth scroll
+  function scrollTo(id) {
+    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Active side nav dot
+  const sections = ['hero','agencia','sites','canal','cross','fluxo','prioridade'];
+  const dots = document.querySelectorAll('.side-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = sections.indexOf(entry.target.id);
+        dots.forEach(d => d.classList.remove('active'));
+        if (idx >= 0) dots[idx]?.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // Scroll dots click
+  dots.forEach((dot, i) => {
+    dot.onclick = () => document.getElementById(sections[i])?.scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

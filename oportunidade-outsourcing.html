@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposta — Automação para Outsourcing de Impressão</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:#0c0e1a; --bg2:#131828; --bg3:#1b2240; --border:#1e2840;
+      --border2:#253560; --text:#f0ede6; --muted:#6b7080; --muted2:#9098a8;
+      --gold:#C8892C; --gold-light:#D9A850; --gold-dark:#7a5010; --gold-bg:#1a1208;
+      --purple:#a78bfa; --purple-dark:#5b21b6; --purple-bg:#1a0d35;
+      --green:#4ade80; --green-dark:#15803d; --green-bg:#061a0c;
+      --orange:#fb923c; --orange-dark:#c2410c; --orange-bg:#1c0e06;
+      --red:#f87171; --red-dark:#b91c1c; --red-bg:#1c0808;
+      --blue:#60a5fa; --blue-dark:#1d4ed8; --blue-bg:#0a1628;
+      --cyan:#38bdf8; --cyan-bg:#071820;
+      --yellow:#fbbf24; --yellow-bg:#1c1608;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+
+    /* ── HERO ─────────────────────────────── */
+    .hero {
+      background: linear-gradient(160deg, #080a16 0%, #0c0e1a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 48px 36px; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content:''; position:absolute; top:-120px; right:-80px;
+      width:600px; height:600px;
+      background: radial-gradient(circle, rgba(200,137,44,0.06) 0%, transparent 65%);
+      pointer-events:none;
+    }
+    .hero-top { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:20px; }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:11px; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.12em; color:var(--gold);
+    }
+    .hero-badge::before { content:''; display:block; width:24px; height:1px; background:var(--gold); }
+    .hero-meeting { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .hero-meeting-label { font-size:11px; color:var(--muted); }
+    .client-input {
+      background:rgba(200,137,44,0.06); border:1px dashed var(--gold-dark);
+      border-radius:8px; padding:6px 14px; color:var(--gold-light);
+      font-size:14px; font-weight:700; font-family:inherit; outline:none; min-width:220px;
+      transition: all .2s;
+    }
+    .client-input:focus { border-color:var(--gold); background:rgba(200,137,44,0.10); }
+    .client-input::placeholder { color:var(--muted); font-weight:400; }
+    .hero h1 {
+      font-family:'Cinzel',serif; font-size:clamp(24px,3.5vw,44px);
+      font-weight:900; letter-spacing:0.02em; line-height:1.1; margin-bottom:12px;
+    }
+    .hero h1 em { color:var(--gold); font-style:normal; }
+    .nome-cliente { color:var(--gold); font-weight:800; }
+    .hero-sub { font-size:14px; color:var(--muted2); max-width:680px; line-height:1.8; margin-bottom:28px; }
+    .hero-sub strong { color:var(--text); }
+    .hero-chips { display:flex; gap:10px; flex-wrap:wrap; }
+    .chip {
+      padding:5px 14px; border-radius:99px; font-size:12px; font-weight:700;
+      border:1px solid; white-space:nowrap;
+    }
+
+    /* ── TABS ─────────────────────────────── */
+    .tabs-bar {
+      display:flex; border-bottom:1px solid var(--border);
+      background:var(--bg2); padding:0 48px; overflow-x:auto; gap:0;
+      position:sticky; top:0; z-index:100; align-items:center;
+    }
+    .tab {
+      padding:15px 20px; font-size:13px; font-weight:600;
+      color:var(--muted2); background:none; border:none; cursor:pointer;
+      border-bottom:2px solid transparent; transition:all .15s;
+      white-space:nowrap; font-family:inherit; margin-bottom:-1px;
+    }
+    .tab:hover { color:var(--text); }
+    .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+    .presenter-btn {
+      margin-left:auto; flex-shrink:0;
+      padding:7px 14px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+      background:var(--yellow-bg); border:1px solid #5a4500; color:#fbbf24;
+      border-radius:8px; cursor:pointer; font-family:inherit; transition:all .2s;
+      white-space:nowrap;
+    }
+    .presenter-btn.ativo { background:#2a1f00; border-color:#fbbf24; }
+
+    /* ── CONTENT ──────────────────────────── */
+    .section { display:none; padding:48px 48px 90px; max-width:1100px; }
+    .section.active { display:block; }
+
+    /* ── TIPOGRAFIA ───────────────────────── */
+    .eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:8px; }
+    .sec-title { font-family:'Cinzel',serif; font-size:clamp(20px,2.8vw,32px); font-weight:700; margin-bottom:12px; letter-spacing:.02em; line-height:1.2; }
+    .sec-title em { color:var(--gold); font-style:normal; }
+    .sec-lead { font-size:15px; color:var(--muted2); line-height:1.9; margin-bottom:36px; max-width:720px; }
+    .sec-lead strong { color:var(--text); }
+    .body-text { font-size:14px; color:var(--muted2); line-height:1.9; margin-bottom:16px; }
+    .body-text strong { color:var(--text); }
+    .divider { border:none; border-top:1px solid var(--border); margin:40px 0; }
+    .label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:16px; }
+
+    /* ── NOTA APRESENTADOR ────────────────── */
+    .pnote {
+      display:none; background:#1a1400; border:1px solid #5a4500;
+      border-left:4px solid #fbbf24; border-radius:0 10px 10px 0;
+      padding:14px 18px; margin-bottom:20px;
+    }
+    .pnote.visivel { display:block; }
+    .pnote-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:#fbbf24; margin-bottom:8px; }
+    .pnote-text { font-size:13px; color:#d4b896; line-height:1.7; }
+    .pnote-text strong { color:#fbbf24; }
+    .pnote-text ol, .pnote-text ul { padding-left:18px; margin-top:6px; }
+    .pnote-text li { margin-bottom:4px; }
+
+    /* ── GRIDS ────────────────────────────── */
+    .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:24px; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+    @media(max-width:800px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+
+    /* ── CARD BASE ────────────────────────── */
+    .card { background:var(--bg2); border:1px solid var(--border2); border-radius:14px; padding:22px; }
+    .card-title { font-size:15px; font-weight:800; margin-bottom:8px; }
+    .card-body { font-size:13px; color:var(--muted2); line-height:1.8; }
+    .card-body strong { color:var(--text); }
+
+    /* ── HIGHLIGHT ────────────────────────── */
+    .hl { border-radius:14px; padding:22px 26px; border:1px solid; margin-bottom:20px; }
+    .hl-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-bottom:10px; }
+    .hl-body { font-size:14px; color:var(--muted2); line-height:1.85; }
+    .hl-body strong { color:var(--text); }
+
+    /* ── PERGUNTA ÂNCORA ──────────────────── */
+    .pergunta {
+      background:linear-gradient(135deg, var(--gold-bg), #0c0e1a);
+      border:1px solid var(--gold-dark); border-left:4px solid var(--gold);
+      border-radius:0 14px 14px 0;
+      padding:20px 24px; margin-bottom:16px;
+    }
+    .pergunta-text { font-size:17px; font-weight:700; color:var(--gold-light); line-height:1.5; margin-bottom:8px; }
+    .pergunta-sub { font-size:13px; color:var(--muted2); line-height:1.7; }
+    .pergunta-sub strong { color:var(--text); }
+
+    /* ── CENÁRIO (antes/depois) ───────────── */
+    .cenario-grid { display:grid; grid-template-columns:1fr 60px 1fr; gap:0; align-items:center; margin-bottom:28px; }
+    .cenario-col { border-radius:14px; padding:20px; border:1px solid; }
+    .cenario-antes { background:var(--red-bg); border-color:var(--red-dark); }
+    .cenario-depois { background:var(--green-bg); border-color:var(--green-dark); }
+    .cenario-arrow { display:flex; align-items:center; justify-content:center; font-size:28px; color:var(--muted); }
+    .cenario-title { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-bottom:14px; }
+    .cenario-item { display:flex; gap:8px; font-size:13px; color:var(--muted2); line-height:1.5; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+    .cenario-item:last-child { border-bottom:none; }
+    @media(max-width:700px) { .cenario-grid { grid-template-columns:1fr; } .cenario-arrow { transform:rotate(90deg); } }
+
+    /* ── FLUXO DE AUTOMAÇÃO ───────────────── */
+    .fluxo { display:flex; align-items:stretch; gap:0; flex-wrap:wrap; margin:24px 0; }
+    .fluxo-step {
+      flex:1; min-width:130px; background:var(--bg2); border:1px solid var(--border2);
+      border-radius:12px; padding:16px 14px; text-align:center; position:relative;
+    }
+    .fluxo-step + .fluxo-step { margin-left:-1px; border-radius:0; }
+    .fluxo-step:first-child { border-radius:12px 0 0 12px; }
+    .fluxo-step:last-child { border-radius:0 12px 12px 0; }
+    .fluxo-icon { font-size:22px; margin-bottom:8px; }
+    .fluxo-label { font-size:11px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; }
+    .fluxo-sub { font-size:10px; color:var(--muted); line-height:1.4; }
+    .fluxo-arrow {
+      display:flex; align-items:center; padding:0 6px;
+      color:var(--muted); font-size:18px; flex-shrink:0;
+    }
+    @media(max-width:700px) { .fluxo { flex-direction:column; } .fluxo-arrow { transform:rotate(90deg); justify-content:center; padding:4px 0; } .fluxo-step { border-radius:12px !important; margin-left:0 !important; } }
+
+    /* ── NÚMERO DE IMPACTO ────────────────── */
+    .impacto-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin:24px 0; }
+    .impacto-card { background:var(--bg2); border:1px solid var(--border2); border-radius:12px; padding:18px; text-align:center; }
+    .impacto-num { font-size:36px; font-weight:900; font-family:'Cinzel',serif; line-height:1; margin-bottom:6px; }
+    .impacto-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:4px; }
+    .impacto-desc { font-size:11px; color:var(--muted2); line-height:1.4; }
+
+    /* ── SISTEMA CARD ─────────────────────── */
+    .sistema { background:var(--bg2); border:1px solid var(--border2); border-radius:18px; overflow:hidden; margin-bottom:36px; }
+    .sistema-header { padding:24px 28px; border-bottom:1px solid var(--border); }
+    .sistema-header-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+    .sistema-badge-num {
+      width:40px; height:40px; border-radius:10px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px; font-weight:900; font-family:'Cinzel',serif; border:2px solid;
+    }
+    .sistema-title-block { flex:1; }
+    .sistema-nome { font-size:18px; font-weight:800; margin-bottom:4px; }
+    .sistema-tagline { font-size:13px; color:var(--muted2); }
+    .sistema-preco { text-align:right; flex-shrink:0; }
+    .sistema-preco-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+    .sistema-preco-valor { font-size:20px; font-weight:900; font-family:'Cinzel',serif; }
+    .sistema-preco-rec { font-size:11px; color:var(--muted2); margin-top:3px; }
+    .sistema-pitch { font-size:14px; color:var(--muted2); line-height:1.85; }
+    .sistema-pitch strong { color:var(--text); }
+
+    .sistema-body { display:grid; grid-template-columns:1fr 1fr; }
+    @media(max-width:800px) { .sistema-body { grid-template-columns:1fr; } }
+    .sistema-col { padding:22px 28px; border-right:1px solid var(--border); }
+    .sistema-col:last-child { border-right:none; }
+    .sistema-col-title { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:14px; }
+
+    .lista-item { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--muted2); line-height:1.6; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+    .lista-item:last-child { border-bottom:none; }
+    .lista-icon { flex-shrink:0; margin-top:1px; font-size:14px; }
+    .lista-item strong { color:var(--text); }
+
+    .roi-box { background:var(--bg3); border:1px solid var(--border2); border-radius:10px; padding:16px 18px; margin-top:8px; }
+    .roi-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted2); padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+    .roi-row:last-child { border-bottom:none; color:var(--text); font-weight:800; }
+    .roi-row span:last-child { font-weight:700; }
+
+    /* ── STACK TAGS ───────────────────────── */
+    .tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+    .tag {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:4px 11px; border-radius:99px; font-size:11px; font-weight:700; border:1px solid;
+    }
+
+    /* ── TIMELINE IMPLEMENTAÇÃO ───────────── */
+    .timeline { position:relative; padding-left:40px; }
+    .timeline::before { content:''; position:absolute; left:12px; top:0; bottom:0; width:2px; background:var(--border2); }
+    .timeline-item { position:relative; margin-bottom:32px; }
+    .timeline-dot {
+      position:absolute; left:-40px; top:4px;
+      width:26px; height:26px; border-radius:50%; border:2px solid;
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; font-weight:900; font-family:'Cinzel',serif;
+      background:var(--bg);
+    }
+    .timeline-period { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; }
+    .timeline-title { font-size:17px; font-weight:800; margin-bottom:8px; }
+    .timeline-desc { font-size:14px; color:var(--muted2); line-height:1.85; margin-bottom:12px; }
+    .timeline-desc strong { color:var(--text); }
+    .timeline-meta { display:flex; gap:24px; flex-wrap:wrap; padding:12px 16px; background:var(--bg2); border:1px solid var(--border2); border-radius:10px; }
+    .timeline-meta-item .tm-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:3px; }
+    .timeline-meta-item .tm-value { font-size:14px; font-weight:800; }
+
+    /* ── CALCULADORA ROI ──────────────────── */
+    .calc { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; overflow:hidden; margin-bottom:24px; }
+    .calc-header { padding:18px 24px; border-bottom:1px solid var(--border); background:var(--bg3); }
+    .calc-title { font-size:15px; font-weight:800; }
+    .calc-sub { font-size:12px; color:var(--muted2); margin-top:3px; }
+    .calc-body { padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:600px) { .calc-body { grid-template-columns:1fr; } }
+    .calc-field { margin-bottom:16px; }
+    .calc-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:6px; }
+    .calc-input {
+      width:100%; background:var(--bg3); border:1px solid var(--border2);
+      color:var(--text); border-radius:8px; padding:10px 14px;
+      font-size:15px; font-family:inherit; font-weight:700; outline:none;
+    }
+    .calc-input:focus { border-color:var(--gold); }
+    .calc-result { background:var(--bg3); border:1px solid var(--border2); border-radius:12px; padding:20px; margin-bottom:12px; }
+    .calc-result-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:6px; }
+    .calc-result-value { font-size:32px; font-weight:900; font-family:'Cinzel',serif; line-height:1; margin-bottom:8px; }
+    .calc-result-desc { font-size:12px; color:var(--muted2); line-height:1.6; }
+
+    /* ── TABELA DE PREÇOS ─────────────────── */
+    .preco-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-bottom:24px; }
+    .preco-card { background:var(--bg2); border:1px solid var(--border2); border-radius:14px; padding:20px; }
+    .preco-card.destaque { border-color:var(--green-dark); background:linear-gradient(135deg,var(--green-bg),var(--bg2)); }
+    .preco-num { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-bottom:10px; }
+    .preco-nome { font-size:14px; font-weight:800; margin-bottom:4px; }
+    .preco-desc { font-size:11px; color:var(--muted2); margin-bottom:14px; line-height:1.5; }
+    .preco-setup-label { font-size:10px; color:var(--muted); margin-bottom:2px; }
+    .preco-setup-val { font-size:20px; font-weight:900; font-family:'Cinzel',serif; line-height:1; margin-bottom:8px; }
+    .preco-rec { font-size:12px; color:var(--muted2); padding-top:8px; border-top:1px solid var(--border); }
+
+    /* ── PACOTES FECHAMENTO ───────────────── */
+    .pacote {
+      background:var(--bg2); border:2px solid var(--border2); border-radius:18px;
+      padding:24px; margin-bottom:16px; cursor:pointer; transition:all .2s;
+    }
+    .pacote:hover { border-color:var(--gold-dark); }
+    .pacote.selecionado { border-color:var(--gold); background:linear-gradient(135deg,var(--gold-bg),var(--bg2)); }
+    .pacote-header { display:flex; align-items:flex-start; gap:16px; margin-bottom:16px; }
+    .pacote-check {
+      width:26px; height:26px; min-width:26px; border-radius:6px; border:2px solid var(--border2);
+      display:flex; align-items:center; justify-content:center; font-size:15px; margin-top:2px;
+      transition: all .2s;
+    }
+    .pacote.selecionado .pacote-check { background:var(--gold); border-color:var(--gold); color:#000; }
+    .pacote-info { flex:1; }
+    .pacote-nome { font-size:18px; font-weight:800; margin-bottom:4px; }
+    .pacote-subtag { font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; border:1px solid; display:inline-block; margin-bottom:8px; }
+    .pacote-desc { font-size:13px; color:var(--muted2); line-height:1.7; }
+    .pacote-preco-area { text-align:right; flex-shrink:0; }
+    .pacote-setup-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+    .pacote-setup-val { font-size:22px; font-weight:900; font-family:'Cinzel',serif; }
+    .pacote-mes { font-size:12px; color:var(--muted2); margin-top:4px; }
+    .pacote-items { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); }
+    @media(max-width:600px) { .pacote-items { grid-template-columns:1fr; } .pacote-header { flex-wrap:wrap; } .pacote-preco-area { text-align:left; } }
+    .pacote-item { display:flex; gap:8px; font-size:12px; color:var(--muted2); line-height:1.5; }
+    .pacote-item strong { color:var(--text); }
+
+    /* ── PRÓXIMOS PASSOS ──────────────────── */
+    .steps-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:28px; }
+    .step-card { background:var(--bg2); border:1px solid var(--border2); border-radius:14px; padding:18px; }
+    .step-dia { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:8px; }
+    .step-titulo { font-size:14px; font-weight:800; margin-bottom:6px; }
+    .step-desc { font-size:12px; color:var(--muted2); line-height:1.6; }
+
+    /* ── GERADOR DE MENSAGEM ──────────────── */
+    .msg-box { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; overflow:hidden; margin-bottom:16px; }
+    .msg-box-header { padding:16px 20px; border-bottom:1px solid var(--border); background:var(--bg3); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .msg-box-title { font-size:14px; font-weight:800; }
+    .msg-textarea {
+      width:100%; min-height:200px; background:var(--bg2); border:none;
+      color:var(--text); padding:20px; font-size:13px; font-family:inherit;
+      line-height:1.8; resize:vertical; outline:none;
+    }
+    .btn-copy {
+      padding:8px 18px; background:var(--gold-bg); border:1px solid var(--gold-dark);
+      color:var(--gold); border-radius:8px; font-size:12px; font-weight:700;
+      cursor:pointer; font-family:inherit; transition:all .2s;
+    }
+    .btn-copy:hover { background:var(--gold); color:#000; }
+    .btn-gerar {
+      width:100%; padding:14px; background:linear-gradient(135deg,var(--gold-dark),#c06010);
+      border:none; color:#fff; border-radius:10px; font-size:14px; font-weight:800;
+      cursor:pointer; font-family:inherit; margin-bottom:16px; transition:all .2s;
+    }
+    .btn-gerar:hover { opacity:.9; transform:translateY(-1px); }
+
+    /* ── TOAST ────────────────────────────── */
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--gold-dark); color:var(--text); padding:12px 20px; border-radius:10px; font-size:14px; z-index:9999; display:none; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+
+    /* ── CUSTOMIZADOR REAL-TIME ─────────── */
+    #customizer-fab {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--bg2); border: 2px solid var(--border2);
+      color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    #customizer-fab:hover { transform: scale(1.05); border-color: var(--gold); }
+    
+    .customizer-panel {
+      position: fixed; top: 0; right: -360px; width: 340px; height: 100vh;
+      background: #0f1322; border-left: 1px solid var(--border); color: #fff;
+      z-index: 10001; transition: right 0.3s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.7);
+      display: flex; flex-direction: column; font-family: 'Inter', sans-serif;
+    }
+    .customizer-panel.open { right: 0; }
+    
+    .customizer-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: #1a2035; }
+    .customizer-title { font-weight: 800; font-size: 14px; }
+    .customizer-close { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; display:flex; align-items:center; justify-content:center; }
+    .customizer-close:hover { color: var(--gold); }
+    
+    .customizer-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .cust-group { background: #161b2e; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 16px; }
+    .cust-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 12px; }
+    .cust-color-row { display: flex; align-items: center; justify-content:space-between; margin-bottom: 8px; font-size: 13px; color: #d1d5db; }
+    .cust-color-row > div { display:flex; align-items:center; gap:8px; }
+    .cust-color-row input[type="color"] { width: 36px; height: 28px; border: none; cursor: pointer; background: transparent; padding: 0; border-radius:4px; }
+    
+    .cust-input { width: 100%; background: #0c0e1a; border: 1px solid var(--border); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 13px; margin-bottom: 8px; outline: none; transition: 0.2s; font-family: inherit;}
+    .cust-input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(200,137,44,0.1); }
+    
+    .cust-btn { width: 100%; padding: 12px; background: #1a2035; border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 8px; transition: 0.2s; font-family: inherit;}
+    .cust-btn:hover { background: #252d47; border-color: var(--gold); }
+    .cust-btn-primary { background: linear-gradient(135deg, var(--gold-dark), #C8892C); border: none; }
+    .cust-btn-primary:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="hero-badge">Proposta Comercial · Automação & IA</div>
+    <div class="hero-meeting">
+      <span class="hero-meeting-label">Empresa do cliente:</span>
+      <input class="client-input" id="nome-empresa" placeholder="Digite o nome da empresa..." oninput="atualizarNome()" />
+    </div>
+  </div>
+  <h1>Automatizando o <em>operacional</em> da<br><span id="hero-nome">sua empresa</span></h1>
+  <p class="hero-sub">A maioria dos prestadores de outsourcing de impressão tem <strong>equipamento bom, técnico bom, e processo péssimo</strong>. Proposta feita no Word, chamado por WhatsApp pessoal, relatório montado às 23h. Existe uma forma melhor — e o retorno aparece no primeiro mês.</p>
+  <div class="hero-chips">
+    <span class="chip" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">⚡ 5 sistemas de automação</span>
+    <span class="chip" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">✅ WhatsApp que vocês já usam</span>
+    <span class="chip" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">🤖 IA qualifica leads automaticamente</span>
+    <span class="chip" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">📊 Relatório gerado sem ninguém tocar</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab active" onclick="ir('problema',this)">🔍 O Diagnóstico</button>
+  <button class="tab" onclick="ir('sistemas',this)">⚡ Os 5 Sistemas</button>
+  <button class="tab" onclick="ir('implementacao',this)">📅 Implementação</button>
+  <button class="tab" onclick="ir('investimento',this)">💰 O Investimento</button>
+  <button class="tab" onclick="ir('fechar',this)">✅ Fechar Hoje</button>
+  <button class="presenter-btn" id="presenter-toggle" onclick="togglePresenter()">👁 Modo Apresentador</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 1 — O DIAGNÓSTICO
+══════════════════════════════════════════ -->
+<div class="section active" id="aba-problema">
+
+  <div class="pnote" data-pnote>
+    <div class="pnote-label">👁 Nota do apresentador</div>
+    <div class="pnote-text">
+      <strong>Objetivo desta aba:</strong> fazer os sócios falarem antes de você apresentar qualquer solução. Cada pergunta âncora deve gerar uma resposta deles — ouça ativamente e anote os números reais que eles derem. Esses números vão para a calculadora na aba 4.<br><br>
+      <strong>Ordem ideal:</strong>
+      <ol>
+        <li>Pergunta 1 (propostas) → eles falam o número real → você anota</li>
+        <li>Pergunta 2 (chamados) → eles descrevem como funciona hoje → você valida a dor</li>
+        <li>Pergunta 3 (follow-up) → eles admitem que propostas ficam paradas</li>
+        <li>Pergunta 4 (relatório) → se o relatório atrasa, a fatura atrasa — isso fecha o argumento</li>
+      </ol>
+      <strong>Só então vá para a aba 2.</strong>
+    </div>
+  </div>
+
+  <div class="eyebrow">Passo 1 · Diagnóstico</div>
+  <div class="sec-title">Antes de falar em solução,<br>vamos falar em <em>custo do problema</em></div>
+  <p class="sec-lead">Toda empresa tem processos manuais que parecem normais — até alguém calcular quanto dinheiro e tempo consomem por mês. No outsourcing de impressão, o problema não é o equipamento. <strong>O problema é o que acontece antes e depois da impressora funcionar.</strong></p>
+
+  <div class="label">Perguntas para abrir a conversa</div>
+
+  <div class="pergunta">
+    <div class="pergunta-text">"Quanto tempo vocês gastam montando proposta comercial todo mês?"</div>
+    <div class="pergunta-sub">A média do setor é <strong>2 a 4 horas por proposta</strong>. Para quem faz 8 por mês, são até 32 horas — quase uma semana de trabalho, todo mês, só digitando números em Word.</div>
+  </div>
+
+  <div class="pergunta">
+    <div class="pergunta-text">"Quando um cliente liga com impressora travada às 17h55, o que acontece?"</div>
+    <div class="pergunta-sub">O chamado vai pro WhatsApp pessoal do técnico. Se ele estiver ocupado, o cliente fica sem resposta. <strong>Sem rastreabilidade, sem SLA, sem histórico.</strong> O cliente não sabe o status — e isso custa renovações de contrato.</div>
+  </div>
+
+  <div class="pergunta">
+    <div class="pergunta-text">"Quantas propostas que vocês enviaram no mês passado não tiveram retorno?"</div>
+    <div class="pergunta-sub">Estudos de vendas B2B mostram que <strong>60–70% das propostas morrem por falta de follow-up</strong>. O cliente recebeu, leu, ficou interessado — e vocês não ligaram de volta na hora certa. O concorrente ligou.</div>
+  </div>
+
+  <div class="pergunta">
+    <div class="pergunta-text">"O relatório mensal de consumo de cada cliente sai até o dia 5?"</div>
+    <div class="pergunta-sub">A maioria não sai. É montado manualmente por quem faz dez outras coisas ao mesmo tempo. <strong>Relatório atrasado = fatura atrasada = fluxo de caixa comprometido.</strong> E sem relatório detalhado, o cliente questiona o valor que está pagando.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="label">O custo real do processo manual — em números</div>
+  <div class="impacto-grid">
+    <div class="impacto-card">
+      <div class="impacto-num" style="color:var(--red)">32h</div>
+      <div class="impacto-label">Perdidas por mês</div>
+      <div class="impacto-desc">Em propostas manuais (8 prop × 4h)</div>
+    </div>
+    <div class="impacto-card">
+      <div class="impacto-num" style="color:var(--orange)">68%</div>
+      <div class="impacto-label">Das propostas não fecham</div>
+      <div class="impacto-desc">Por falta de follow-up no momento certo</div>
+    </div>
+    <div class="impacto-card">
+      <div class="impacto-num" style="color:var(--red)">6h</div>
+      <div class="impacto-label">Por relatório mensal</div>
+      <div class="impacto-desc">Montado à mão por cliente — atrasa fatura</div>
+    </div>
+    <div class="impacto-card">
+      <div class="impacto-num" style="color:var(--orange)">35%</div>
+      <div class="impacto-label">Dos chamados se perdem</div>
+      <div class="impacto-desc">No WhatsApp pessoal do técnico, sem registro</div>
+    </div>
+    <div class="impacto-card">
+      <div class="impacto-num" style="color:var(--red)">R$0</div>
+      <div class="impacto-label">De leads ativos</div>
+      <div class="impacto-desc">Sem prospecção sistemática — só indicação</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="label">A realidade atual vs. como poderia ser</div>
+
+  <div class="cenario-grid">
+    <div class="cenario-col cenario-antes">
+      <div class="cenario-title" style="color:var(--red)">✕ Como é hoje</div>
+      <div class="cenario-item"><span style="color:var(--red)">—</span><span>Cliente manda mensagem → vai pro WhatsApp do técnico → se perde</span></div>
+      <div class="cenario-item"><span style="color:var(--red)">—</span><span>Vendedor faz proposta no Word → 3h depois → envia PDF → esquece de ligar</span></div>
+      <div class="cenario-item"><span style="color:var(--red)">—</span><span>Admin monta relatório no Excel → atrasa → cliente questiona a fatura</span></div>
+      <div class="cenario-item"><span style="color:var(--red)">—</span><span>Prospecção = aguardar indicação</span></div>
+      <div class="cenario-item"><span style="color:var(--red)">—</span><span>Sócio resolve tudo, o tempo todo, manualmente</span></div>
+    </div>
+    <div class="cenario-arrow">→</div>
+    <div class="cenario-col cenario-depois">
+      <div class="cenario-title" style="color:var(--green)">✓ Como pode ser</div>
+      <div class="cenario-item"><span style="color:var(--green)">+</span><span>Cliente manda mensagem → IA atende, registra e agenda técnico em segundos</span></div>
+      <div class="cenario-item"><span style="color:var(--green)">+</span><span>Vendedor preenche formulário de 5 min → proposta em PDF gerada automaticamente</span></div>
+      <div class="cenario-item"><span style="color:var(--green)">+</span><span>Relatório gerado e enviado automaticamente no dia 1 de cada mês</span></div>
+      <div class="cenario-item"><span style="color:var(--green)">+</span><span>Sistema identifica empresas do nicho e aborda decisores automaticamente</span></div>
+      <div class="cenario-item"><span style="color:var(--green)">+</span><span>Sócios gerenciam pelo dashboard — o sistema executa por eles</span></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 2 — OS 5 SISTEMAS
+══════════════════════════════════════════ -->
+<div class="section" id="aba-sistemas">
+
+  <div class="pnote" data-pnote>
+    <div class="pnote-label">👁 Nota do apresentador</div>
+    <div class="pnote-text">
+      <strong>Objetivo desta aba:</strong> mostrar cada sistema como a solução direta para cada dor que eles acabaram de confirmar.<br><br>
+      <strong>Dica de apresentação:</strong> vá sistema por sistema. Depois de cada um, pergunte: <em>"Isso faz sentido para vocês? É uma dor que vocês têm?"</em>. Não avance sem confirmação — o sim de cada sistema é o que constrói o fechamento na aba 5.<br><br>
+      <strong>Sistema 3 (Proposta)</strong> costuma ser o que mais chama atenção. Deixe o impacto cair: <em>"Vocês gastam hoje até X horas por proposta. Com isso, são 5 minutos."</em>
+    </div>
+  </div>
+
+  <div class="eyebrow">Passo 2 · As Soluções</div>
+  <div class="sec-title">5 sistemas. Cada um resolve<br>uma <em>dor específica e mensurável</em></div>
+  <p class="sec-lead">Não são recursos tecnológicos por tecnologia. São processos que a empresa já faz hoje, de forma manual e cara — e que passam a acontecer automaticamente. <strong>Cada sistema tem ROI calculável antes de ser instalado.</strong></p>
+
+  <!-- SISTEMA 1 -->
+  <div class="sistema">
+    <div class="sistema-header">
+      <div class="sistema-header-top">
+        <div style="display:flex;align-items:flex-start;gap:14px;flex:1">
+          <div class="sistema-badge-num" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">01</div>
+          <div class="sistema-title-block">
+            <div class="sistema-nome">Atendimento de Chamados via WhatsApp + IA</div>
+            <div class="sistema-tagline">Suporte técnico disponível 24 horas — sem contratar ninguém</div>
+          </div>
+        </div>
+        <div class="sistema-preco">
+          <div class="sistema-preco-label">Implementação</div>
+          <div class="sistema-preco-valor" style="color:var(--blue)">R$ 3–5k</div>
+          <div class="sistema-preco-rec">+ R$ 400–700/mês</div>
+        </div>
+      </div>
+      <p class="sistema-pitch">É sexta-feira às 18h e um cliente tem a impressora travada. Hoje, a mensagem vai pro WhatsApp pessoal do técnico — que talvez esteja dirigindo, jantando. O cliente fica sem resposta. Na segunda de manhã, está irritado. <strong>Com o sistema de atendimento automático, a resposta acontece em segundos, a qualquer hora, sem ninguém precisar estar disponível.</strong></p>
+    </div>
+
+    <div style="padding:20px 28px;border-bottom:1px solid var(--border)">
+      <div class="label" style="margin-bottom:12px">Como funciona — passo a passo</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--blue-dark);background:var(--blue-bg)">
+          <div class="fluxo-icon">📱</div>
+          <div class="fluxo-label" style="color:var(--blue)">Cliente manda mensagem</div>
+          <div class="fluxo-sub">No WhatsApp da empresa</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark);background:var(--purple-bg)">
+          <div class="fluxo-icon">🤖</div>
+          <div class="fluxo-label" style="color:var(--purple)">IA faz triagem</div>
+          <div class="fluxo-sub">Toner / papel / hardware / conectividade</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--gold-dark);background:var(--gold-bg)">
+          <div class="fluxo-icon">📅</div>
+          <div class="fluxo-label" style="color:var(--gold)">Agenda técnico</div>
+          <div class="fluxo-sub">Ou tenta resolver remoto</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark);background:var(--green-bg)">
+          <div class="fluxo-icon">🔔</div>
+          <div class="fluxo-label" style="color:var(--green)">Atualiza o cliente</div>
+          <div class="fluxo-sub">Status em tempo real</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--cyan-bg);background:var(--cyan-bg)">
+          <div class="fluxo-icon">📋</div>
+          <div class="fluxo-label" style="color:var(--cyan)">Registra no CRM</div>
+          <div class="fluxo-sub">Histórico completo automático</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sistema-body">
+      <div class="sistema-col">
+        <div class="sistema-col-title">O que vocês ganham</div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">✓</span><span>Resposta em menos de 30 segundos, 24h por dia, 7 dias por semana</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">✓</span><span>Histórico completo de todos os chamados — rastreabilidade total</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">✓</span><span>Relatório de SLA mensal automático — prova de qualidade entregue</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">✓</span><span>Técnico já sabe o problema antes de chegar — atendimento mais rápido</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">✓</span><span>Clientes mais satisfeitos = menos cancelamento de contrato</span></div>
+      </div>
+      <div class="sistema-col">
+        <div class="sistema-col-title">Retorno sobre investimento</div>
+        <div class="roi-box">
+          <div class="roi-row"><span>Chamados/mês fora do horário</span><span style="color:var(--blue)">~40</span></div>
+          <div class="roi-row"><span>Tempo médio sem automação (por chamado)</span><span style="color:var(--orange)">25 min</span></div>
+          <div class="roi-row"><span>Horas economizadas por mês</span><span style="color:var(--gold)">~17h</span></div>
+          <div class="roi-row"><span>Contratos não cancelados por insatisfação</span><span style="color:var(--green)">2–4/ano</span></div>
+          <div class="roi-row"><span style="color:var(--text)">Custo mensal do sistema</span><span style="color:var(--green)">R$ 400–700</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Typebot</span>
+          <span class="tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Z-API</span>
+          <span class="tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">n8n</span>
+          <span class="tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude IA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 2 -->
+  <div class="sistema">
+    <div class="sistema-header">
+      <div class="sistema-header-top">
+        <div style="display:flex;align-items:flex-start;gap:14px;flex:1">
+          <div class="sistema-badge-num" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">02</div>
+          <div class="sistema-title-block">
+            <div class="sistema-nome">Relatório Mensal Automático com IA</div>
+            <div class="sistema-tagline">O relatório que justifica sua fatura — gerado e enviado sem ninguém tocar</div>
+          </div>
+        </div>
+        <div class="sistema-preco">
+          <div class="sistema-preco-label">Implementação</div>
+          <div class="sistema-preco-valor" style="color:var(--gold)">R$ 2–4k</div>
+          <div class="sistema-preco-rec">+ R$ 300–600/mês</div>
+        </div>
+      </div>
+      <p class="sistema-pitch">Todo mês, alguém abre uma planilha, olha os dados de impressão de cada cliente, e monta um relatório manualmente. Se vocês têm 10 clientes, são até 60 horas por mês nessa tarefa. <strong>Com esse sistema, no dia 1 de cada mês o relatório já está na caixa de entrada do cliente — formatado, comparado com o mês anterior, com análise da IA explicando o que mudou. Sem ninguém tocar.</strong></p>
+    </div>
+
+    <div style="padding:20px 28px;border-bottom:1px solid var(--border)">
+      <div class="label" style="margin-bottom:12px">Como funciona — passo a passo</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--gold-dark);background:var(--gold-bg)">
+          <div class="fluxo-icon">📊</div>
+          <div class="fluxo-label" style="color:var(--gold)">Coleta dados</div>
+          <div class="fluxo-sub">API do software de bilhetagem</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark);background:var(--purple-bg)">
+          <div class="fluxo-icon">🧠</div>
+          <div class="fluxo-label" style="color:var(--purple)">IA analisa</div>
+          <div class="fluxo-sub">Compara meses, identifica anomalias</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark);background:var(--blue-bg)">
+          <div class="fluxo-icon">📄</div>
+          <div class="fluxo-label" style="color:var(--blue)">Gera PDF</div>
+          <div class="fluxo-sub">Com identidade visual da empresa</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark);background:var(--green-bg)">
+          <div class="fluxo-icon">📨</div>
+          <div class="fluxo-label" style="color:var(--green)">Envia automático</div>
+          <div class="fluxo-sub">WhatsApp + e-mail no dia configurado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sistema-body">
+      <div class="sistema-col">
+        <div class="sistema-col-title">O que o relatório inclui</div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--gold)">→</span><span><strong>Resumo executivo:</strong> total de páginas, por equipamento e por setor</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--gold)">→</span><span><strong>Comparativo mensal:</strong> cresceu? caiu? por quê?</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--gold)">→</span><span><strong>Custo-por-página:</strong> visibilidade total para o cliente</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--gold)">→</span><span><strong>Alertas e recomendações:</strong> equipamento sobrecarregado? IA aponta</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--gold)">→</span><span><strong>Histórico de chamados:</strong> prova do SLA entregue no mês</span></div>
+      </div>
+      <div class="sistema-col">
+        <div class="sistema-col-title">Retorno sobre investimento</div>
+        <div class="roi-box">
+          <div class="roi-row"><span>Horas gastas por relatório hoje</span><span style="color:var(--orange)">4–6h</span></div>
+          <div class="roi-row"><span>Clientes na carteira</span><span style="color:var(--blue)">10</span></div>
+          <div class="roi-row"><span>Horas liberadas por mês</span><span style="color:var(--gold)">40–60h</span></div>
+          <div class="roi-row"><span>Clientes que questionam a fatura</span><span style="color:var(--green)">Cai 80%</span></div>
+          <div class="roi-row"><span style="color:var(--text)">Custo mensal</span><span style="color:var(--green)">R$ 300–600</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">n8n</span>
+          <span class="tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude IA</span>
+          <span class="tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">PDF automático</span>
+          <span class="tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Google Sheets</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 3 -->
+  <div class="sistema" style="border-color:var(--green-dark)">
+    <div class="sistema-header" style="background:linear-gradient(135deg,var(--green-bg),var(--bg2))">
+      <div class="sistema-header-top">
+        <div style="display:flex;align-items:flex-start;gap:14px;flex:1">
+          <div class="sistema-badge-num" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">03</div>
+          <div class="sistema-title-block">
+            <div class="sistema-nome">Gerador de Proposta Comercial Inteligente <span style="color:var(--green);font-size:11px">⭐ MAIOR IMPACTO</span></div>
+            <div class="sistema-tagline">Vendedor preenche 5 campos — proposta profissional em PDF gerada em 30 segundos</div>
+          </div>
+        </div>
+        <div class="sistema-preco">
+          <div class="sistema-preco-label">Implementação</div>
+          <div class="sistema-preco-valor" style="color:var(--green)">R$ 4–8k</div>
+          <div class="sistema-preco-rec">+ R$ 500–900/mês</div>
+        </div>
+      </div>
+      <p class="sistema-pitch">O processo de proposta hoje: o vendedor abre o Word, copia o modelo anterior, muda o nome do cliente, recalcula (às vezes erra), formata, exporta PDF, envia. <strong>2 a 4 horas. Por lead.</strong> Com o gerador, o vendedor preenche um formulário simples — equipamentos, volume estimado, segmento — e em 30 segundos tem uma proposta profissional, com análise de ROI para o cliente, precificação automática e identidade visual da empresa. Com follow-up automático para 24h e 72h depois.</p>
+    </div>
+
+    <div style="padding:20px 28px;border-bottom:1px solid var(--border)">
+      <div class="label" style="margin-bottom:12px">Como funciona — passo a passo</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--green-dark);background:var(--green-bg)">
+          <div class="fluxo-icon">📝</div>
+          <div class="fluxo-label" style="color:var(--green)">Vendedor preenche</div>
+          <div class="fluxo-sub">5 campos, 5 minutos</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--gold-dark);background:var(--gold-bg)">
+          <div class="fluxo-icon">⚙️</div>
+          <div class="fluxo-label" style="color:var(--gold)">Sistema calcula</div>
+          <div class="fluxo-sub">Preço, modelo de contrato, ROI</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark);background:var(--purple-bg)">
+          <div class="fluxo-icon">🧠</div>
+          <div class="fluxo-label" style="color:var(--purple)">IA escreve</div>
+          <div class="fluxo-sub">Texto personalizado por segmento</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark);background:var(--blue-bg)">
+          <div class="fluxo-icon">📄</div>
+          <div class="fluxo-label" style="color:var(--blue)">Gera PDF</div>
+          <div class="fluxo-sub">Com marca da empresa</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark);background:var(--green-bg)">
+          <div class="fluxo-icon">🔁</div>
+          <div class="fluxo-label" style="color:var(--green)">Follow-up automático</div>
+          <div class="fluxo-sub">24h e 72h sem resposta</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sistema-body">
+      <div class="sistema-col">
+        <div class="sistema-col-title">A proposta que o cliente recebe</div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">→</span><span><strong>Capa profissional</strong> com logo e cores da empresa</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">→</span><span><strong>Análise da situação atual:</strong> o que o cliente gasta hoje em impressão</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">→</span><span><strong>Proposta de valor:</strong> economia estimada com outsourcing vs. manter próprio</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">→</span><span><strong>Tabela de preços clara:</strong> modelo de contrato, franquia, excedente</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--green)">→</span><span><strong>Próximos passos:</strong> prazo de resposta e o que acontece depois do sim</span></div>
+      </div>
+      <div class="sistema-col">
+        <div class="sistema-col-title">Retorno sobre investimento</div>
+        <div class="roi-box">
+          <div class="roi-row"><span>Propostas feitas por mês</span><span style="color:var(--blue)">8</span></div>
+          <div class="roi-row"><span>Tempo atual por proposta</span><span style="color:var(--orange)">3h</span></div>
+          <div class="roi-row"><span>Tempo com automação</span><span style="color:var(--green)">5 min</span></div>
+          <div class="roi-row"><span>Horas liberadas/mês</span><span style="color:var(--gold)">~23h</span></div>
+          <div class="roi-row"><span>Taxa de fechamento (+follow-up)</span><span style="color:var(--green)">+40%</span></div>
+          <div class="roi-row"><span style="color:var(--text)">Custo mensal</span><span style="color:var(--green)">R$ 500–900</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Formulário</span>
+          <span class="tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude IA</span>
+          <span class="tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">n8n</span>
+          <span class="tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">PDF + CRM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 4 -->
+  <div class="sistema">
+    <div class="sistema-header">
+      <div class="sistema-header-top">
+        <div style="display:flex;align-items:flex-start;gap:14px;flex:1">
+          <div class="sistema-badge-num" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">04</div>
+          <div class="sistema-title-block">
+            <div class="sistema-nome">Motor de Prospecção Outbound Automatizado</div>
+            <div class="sistema-tagline">Parar de depender de indicação e começar a gerar leads ativamente</div>
+          </div>
+        </div>
+        <div class="sistema-preco">
+          <div class="sistema-preco-label">Implementação</div>
+          <div class="sistema-preco-valor" style="color:var(--orange)">R$ 5–10k</div>
+          <div class="sistema-preco-rec">+ R$ 800–1.500/mês</div>
+        </div>
+      </div>
+      <p class="sistema-pitch">Qual é a estratégia de captação de novos clientes hoje? Para a maioria dos prestadores a resposta honesta é: <strong>indicação e sorte</strong>. O motor de prospecção muda essa lógica: o sistema identifica empresas do perfil ideal (escritórios, clínicas, escolas, contabilidades), encontra o contato do decisor, e aborda com mensagem personalizada — tudo automaticamente, todo dia, sem ninguém operando.</p>
+    </div>
+
+    <div style="padding:20px 28px;border-bottom:1px solid var(--border)">
+      <div class="label" style="margin-bottom:12px">Como funciona — passo a passo</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--orange-dark);background:var(--orange-bg)">
+          <div class="fluxo-icon">🔍</div>
+          <div class="fluxo-label" style="color:var(--orange)">Identifica empresas</div>
+          <div class="fluxo-sub">Por segmento e localidade</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--gold-dark);background:var(--gold-bg)">
+          <div class="fluxo-icon">👤</div>
+          <div class="fluxo-label" style="color:var(--gold)">Encontra o decisor</div>
+          <div class="fluxo-sub">Nome, e-mail, WhatsApp</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark);background:var(--purple-bg)">
+          <div class="fluxo-icon">✍️</div>
+          <div class="fluxo-label" style="color:var(--purple)">IA personaliza</div>
+          <div class="fluxo-sub">Mensagem com dor do segmento</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark);background:var(--blue-bg)">
+          <div class="fluxo-icon">📧</div>
+          <div class="fluxo-label" style="color:var(--blue)">Aborda em sequência</div>
+          <div class="fluxo-sub">E-mail + WhatsApp</div>
+        </div>
+        <div class="fluxo-arrow">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark);background:var(--green-bg)">
+          <div class="fluxo-icon">🎯</div>
+          <div class="fluxo-label" style="color:var(--green)">Interessado → CRM</div>
+          <div class="fluxo-sub">Com contexto completo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sistema-body">
+      <div class="sistema-col">
+        <div class="sistema-col-title">Segmentos com maior potencial</div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--orange)">→</span><span><strong>Escritórios de advocacia:</strong> altíssimo volume, pagam bem</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--orange)">→</span><span><strong>Clínicas e hospitais:</strong> precisam de impressão confiável</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--orange)">→</span><span><strong>Escolas e universidades:</strong> volumes gigantes, contratos longos</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--orange)">→</span><span><strong>Contabilidades:</strong> muita impressão de documento fiscal</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--orange)">→</span><span><strong>Indústrias e galpões:</strong> etiquetas, NFs, documentação</span></div>
+      </div>
+      <div class="sistema-col">
+        <div class="sistema-col-title">Retorno sobre investimento</div>
+        <div class="roi-box">
+          <div class="roi-row"><span>Empresas abordadas por mês</span><span style="color:var(--blue)">200–500</span></div>
+          <div class="roi-row"><span>Taxa de resposta esperada</span><span style="color:var(--gold)">3–8%</span></div>
+          <div class="roi-row"><span>Reuniões agendadas por mês</span><span style="color:var(--green)">6–15</span></div>
+          <div class="roi-row"><span>Fechamentos esperados</span><span style="color:var(--green)">2–4 novos contratos</span></div>
+          <div class="roi-row"><span style="color:var(--text)">Custo mensal</span><span style="color:var(--green)">R$ 800–1.500</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">Clay / Apollo</span>
+          <span class="tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">n8n</span>
+          <span class="tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude IA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 5 -->
+  <div class="sistema" style="border-color:var(--purple-dark)">
+    <div class="sistema-header" style="background:linear-gradient(135deg,var(--purple-bg),var(--bg2))">
+      <div class="sistema-header-top">
+        <div style="display:flex;align-items:flex-start;gap:14px;flex:1">
+          <div class="sistema-badge-num" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">05</div>
+          <div class="sistema-title-block">
+            <div class="sistema-nome">Dashboard de Gestão de Parque</div>
+            <div class="sistema-tagline">Visão total do parque de equipamentos, clientes e SLA — em tempo real</div>
+          </div>
+        </div>
+        <div class="sistema-preco">
+          <div class="sistema-preco-label">Implementação</div>
+          <div class="sistema-preco-valor" style="color:var(--purple)">R$ 15–30k</div>
+          <div class="sistema-preco-rec">+ R$ 300–800/mês</div>
+        </div>
+      </div>
+      <p class="sistema-pitch">Os grandes players enterprise têm painéis que mostram em tempo real cada equipamento, chamado, nível de toner e SLA. Custa caro e exige TI. <strong>Os prestadores PME ficam de fora.</strong> Esse sistema entrega 80% das funcionalidades enterprise, sem precisar de TI para instalar. Vocês gerenciam tudo numa tela. O cliente acessa o portal dele. Já inclui Sistemas 1 e 2 integrados.</p>
+    </div>
+
+    <div class="sistema-body">
+      <div class="sistema-col">
+        <div class="sistema-col-title">O que o dashboard inclui</div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span><strong>Painel da empresa:</strong> todos os clientes, equipamentos, chamados numa tela</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span><strong>Portal do cliente:</strong> ele abre chamado e acompanha status por conta própria</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span><strong>Alertas automáticos:</strong> toner abaixo de 20%, SLA em risco, contrato próximo do vencimento</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span><strong>Relatório mensal integrado:</strong> Sistema 2 embutido, gerado automaticamente</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span><strong>Histórico completo:</strong> chamados, manutenções, trocas de peça por equipamento</span></div>
+      </div>
+      <div class="sistema-col">
+        <div class="sistema-col-title">Por que é o mais estratégico</div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span>Clientes ficam no ecossistema de vocês — migrar para o concorrente vira um problema</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span>Diferenciação total frente aos concorrentes que fazem tudo no WhatsApp</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span>Com 15 clientes: <strong>R$ 4.500–12.000/mês</strong> de valor percebido adicional</span></div>
+        <div class="lista-item"><span class="lista-icon" style="color:var(--purple)">→</span><span>Custo de hospedagem: <strong>R$ 50–200/mês</strong></span></div>
+        <div class="tags" style="margin-top:12px">
+          <span class="tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare</span>
+          <span class="tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">n8n</span>
+          <span class="tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude IA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 3 — IMPLEMENTAÇÃO
+══════════════════════════════════════════ -->
+<div class="section" id="aba-implementacao">
+
+  <div class="pnote" data-pnote>
+    <div class="pnote-label">👁 Nota do apresentador</div>
+    <div class="pnote-text">
+      <strong>Objetivo desta aba:</strong> mostrar que a implementação é concreta, rápida e de baixo risco. Eles não precisam "decidir tudo hoje" — a entrada é o Sistema 1 em 2 semanas.<br><br>
+      <strong>Frase de ancoragem:</strong> <em>"A ideia é entrar pelo menor passo possível, provar o valor em dias — e vocês expandem só quando viram o resultado funcionar de verdade."</em><br><br>
+      <strong>Se um dos sócios resistir com "não é hora":</strong> pergunte qual é a dor mais urgente. Qualquer sistema individual resolve uma dor específica — não precisa de todos de uma vez.
+    </div>
+  </div>
+
+  <div class="eyebrow">Passo 3 · Execução</div>
+  <div class="sec-title">Do contrato ao primeiro sistema<br>funcionando em <em>2 semanas</em></div>
+  <p class="sec-lead">A ordem importa. Não constrói tudo de uma vez. Entra pelo produto mais simples, prova o valor em dias, e expande de dentro para fora. <strong>Quem vê o Sistema 1 funcionando raramente recusa o Sistema 2.</strong></p>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--blue-dark);color:var(--blue)">1</div>
+      <div class="timeline-period" style="color:var(--blue)">Semanas 1–2 · Ponto de entrada</div>
+      <div class="timeline-title">Sistema 1: Chamados no WhatsApp funcionando</div>
+      <div class="timeline-desc">O sistema mais rápido de entregar e de validar. Construo o fluxo (Typebot + n8n + Z-API), configuro no número de WhatsApp da empresa, testo com alguns clientes reais. <strong>Vocês veem o sistema responder em segundos um chamado às 22h. Isso fecha a conversa.</strong></div>
+      <div class="timeline-meta">
+        <div class="timeline-meta-item"><div class="tm-label">Investimento</div><div class="tm-value" style="color:var(--blue)">R$ 3–5k setup</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Mensalidade</div><div class="tm-value" style="color:var(--blue)">R$ 400–700</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Prazo de entrega</div><div class="tm-value">~2 semanas</div></div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--gold-dark);color:var(--gold)">2</div>
+      <div class="timeline-period" style="color:var(--gold)">Mês 2 · Expansão natural</div>
+      <div class="timeline-title">Sistemas 2 e 3: Relatório e Proposta como upsell</div>
+      <div class="timeline-desc">Com o chamado funcionando, vocês já confiam no sistema. Pergunta natural: <em>"quanto tempo vocês gastam por mês montando relatório?"</em> — abre o Sistema 2. <em>"Quantas propostas fecharam esse mês?"</em> — abre o Sistema 3. <strong>São conversas naturais, não vendas. O sistema já está funcionando — vocês querem mais.</strong></div>
+      <div class="timeline-meta">
+        <div class="timeline-meta-item"><div class="tm-label">Investimento adicional</div><div class="tm-value" style="color:var(--gold)">R$ 6–12k</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Mensalidade total</div><div class="tm-value" style="color:var(--gold)">R$ 1.200–2.200</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Horas liberadas/mês</div><div class="tm-value">60–100h</div></div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--green-dark);color:var(--green)">3</div>
+      <div class="timeline-period" style="color:var(--green)">Mês 3–4 · Crescimento ativo</div>
+      <div class="timeline-title">Sistema 4: Motor de prospecção para crescer a carteira</div>
+      <div class="timeline-desc">Com a operação interna automatizada, a equipe tem fôlego para crescer. O motor de prospecção começa a trabalhar enquanto a equipe trabalha. <strong>200 a 500 empresas abordadas por mês, de forma personalizada, sem ninguém operando.</strong> Os interessados já chegam no CRM com contexto completo.</div>
+      <div class="timeline-meta">
+        <div class="timeline-meta-item"><div class="tm-label">Reuniões/mês geradas</div><div class="tm-value" style="color:var(--green)">6–15</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Novos contratos estimados</div><div class="tm-value" style="color:var(--green)">2–4/mês</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Custo</div><div class="tm-value">R$ 5–10k setup</div></div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--purple-dark);color:var(--purple)">4</div>
+      <div class="timeline-period" style="color:var(--purple)">Mês 5+ · Produto próprio</div>
+      <div class="timeline-title">Sistema 5: Dashboard de gestão de parque</div>
+      <div class="timeline-desc">Com mais clientes e operação crescendo, o dashboard centraliza tudo. Cada cliente acessa o portal próprio. Vocês gerenciam tudo numa tela. <strong>Diferenciação total frente aos concorrentes que ainda operam no WhatsApp pessoal do técnico.</strong></div>
+      <div class="timeline-meta">
+        <div class="timeline-meta-item"><div class="tm-label">Investimento</div><div class="tm-value" style="color:var(--purple)">R$ 15–30k</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Ganho competitivo</div><div class="tm-value">Alto</div></div>
+        <div class="timeline-meta-item"><div class="tm-label">Prazo de entrega</div><div class="tm-value">4–6 semanas</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hl" style="background:var(--gold-bg);border-color:var(--gold-dark)">
+    <div class="hl-label" style="color:var(--gold)">🎯 A lógica do ponto de entrada</div>
+    <div class="hl-body">O risco de investir em automação é real — por isso a estratégia é entrar pelo menor passo possível. O Sistema 1 entrega resultado visível em 2 semanas com o menor investimento. <strong>Se vocês não virem valor em 30 dias, paramos. Se virem, expandimos.</strong> Essa é a proposta.</div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 4 — O INVESTIMENTO
+══════════════════════════════════════════ -->
+<div class="section" id="aba-investimento">
+
+  <div class="pnote" data-pnote>
+    <div class="pnote-label">👁 Nota do apresentador</div>
+    <div class="pnote-text">
+      <strong>Objetivo desta aba:</strong> deixar os sócios calcularem com os dados deles — não com médias genéricas. Peça que preencham os campos com os números reais da empresa.<br><br>
+      <strong>Frase de ancoragem:</strong> <em>"Antes de eu falar em preço, quero que vocês vejam quanto o processo atual está custando. Podem preencher com os números reais de vocês?"</em><br><br>
+      <strong>Depois que calcularem:</strong> mostre que o custo do Sistema 1+3 é menor que o custo mensal em horas manuais que acabaram de calcular. O sistema se paga no primeiro mês.
+    </div>
+  </div>
+
+  <div class="eyebrow">Passo 4 · Números</div>
+  <div class="sec-title">Calculando o retorno <em>com os dados reais de vocês</em></div>
+  <p class="sec-lead">Preencha os campos abaixo com os números da empresa. O resultado mostra quanto o processo manual está custando todo mês — antes de falar em preço de qualquer sistema.</p>
+
+  <div class="calc">
+    <div class="calc-header">
+      <div class="calc-title">🧮 Calculadora: custo do processo manual</div>
+      <div class="calc-sub">Preencha com os dados reais da empresa</div>
+    </div>
+    <div class="calc-body">
+      <div class="calc-inputs">
+        <div class="calc-field">
+          <div class="calc-label">Propostas feitas por mês</div>
+          <input class="calc-input" type="number" id="c-propostas" value="8" oninput="calcular()" min="0">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Horas por proposta (hoje)</div>
+          <input class="calc-input" type="number" id="c-horas-prop" value="3" oninput="calcular()" min="0">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Clientes ativos na carteira</div>
+          <input class="calc-input" type="number" id="c-clientes" value="10" oninput="calcular()" min="0">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Horas por relatório (por cliente/mês)</div>
+          <input class="calc-input" type="number" id="c-horas-rel" value="4" oninput="calcular()" min="0">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Chamados atendidos por mês</div>
+          <input class="calc-input" type="number" id="c-chamados" value="40" oninput="calcular()" min="0">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Valor hora da equipe (R$)</div>
+          <input class="calc-input" type="number" id="c-valor-hora" value="50" oninput="calcular()" min="0">
+        </div>
+      </div>
+      <div>
+        <div class="calc-result" style="margin-bottom:12px">
+          <div class="calc-result-label">Custo mensal em horas manuais</div>
+          <div class="calc-result-value" style="color:var(--red)" id="r-custo">R$ 0</div>
+          <div class="calc-result-desc" id="r-horas">Calculando...</div>
+        </div>
+        <div class="calc-result" style="margin-bottom:12px">
+          <div class="calc-result-label">Propostas perdidas por falta de follow-up</div>
+          <div class="calc-result-value" style="color:var(--orange)" id="r-perdidas">0</div>
+          <div class="calc-result-desc" id="r-perdidas-desc">Calculando...</div>
+        </div>
+        <div class="calc-result" style="background:var(--green-bg);border-color:var(--green-dark)">
+          <div class="calc-result-label" style="color:var(--green)">Custo de entrada: Sistemas 1 + 3</div>
+          <div class="calc-result-value" style="color:var(--green)">R$ 900–1.600/mês</div>
+          <div class="calc-result-desc">Sistema 1 (chamados) + Sistema 3 (proposta). Setup único: R$ 7–13k.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="label">Todos os 5 sistemas — tabela de preços</div>
+
+  <div class="preco-grid">
+    <div class="preco-card">
+      <div class="preco-num" style="color:var(--blue)">Sistema 01 · Chamados WPP</div>
+      <div class="preco-nome">Atendimento Automático</div>
+      <div class="preco-desc">IA atende, triaga e registra chamados técnicos 24h/dia</div>
+      <div class="preco-setup-label">Implementação</div>
+      <div class="preco-setup-val" style="color:var(--blue)">R$ 3–5k</div>
+      <div class="preco-rec">+ R$ 400–700/mês manutenção</div>
+    </div>
+    <div class="preco-card">
+      <div class="preco-num" style="color:var(--gold)">Sistema 02 · Relatório</div>
+      <div class="preco-nome">Relatório Mensal Auto</div>
+      <div class="preco-desc">PDF com análise de uso gerado e enviado automaticamente</div>
+      <div class="preco-setup-label">Implementação</div>
+      <div class="preco-setup-val" style="color:var(--gold)">R$ 2–4k</div>
+      <div class="preco-rec">+ R$ 300–600/mês</div>
+    </div>
+    <div class="preco-card destaque">
+      <div class="preco-num" style="color:var(--green)">Sistema 03 · Proposta ⭐</div>
+      <div class="preco-nome">Gerador de Proposta</div>
+      <div class="preco-desc">Proposta profissional em PDF gerada em 30 segundos</div>
+      <div class="preco-setup-label">Implementação</div>
+      <div class="preco-setup-val" style="color:var(--green)">R$ 4–8k</div>
+      <div class="preco-rec">+ R$ 500–900/mês com follow-up automático</div>
+    </div>
+    <div class="preco-card">
+      <div class="preco-num" style="color:var(--orange)">Sistema 04 · Prospecção</div>
+      <div class="preco-nome">Motor Outbound</div>
+      <div class="preco-desc">Identifica empresas, aborda decisores, entrega reuniões</div>
+      <div class="preco-setup-label">Implementação</div>
+      <div class="preco-setup-val" style="color:var(--orange)">R$ 5–10k</div>
+      <div class="preco-rec">+ R$ 800–1.500/mês operação</div>
+    </div>
+    <div class="preco-card" style="border-color:var(--purple-dark)">
+      <div class="preco-num" style="color:var(--purple)">Sistema 05 · Dashboard</div>
+      <div class="preco-nome">Gestão de Parque</div>
+      <div class="preco-desc">Visão total do parque com portal do cliente integrado</div>
+      <div class="preco-setup-label">Implementação</div>
+      <div class="preco-setup-val" style="color:var(--purple)">R$ 15–30k</div>
+      <div class="preco-rec">+ R$ 300–800/mês</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 5 — FECHAR HOJE
+══════════════════════════════════════════ -->
+<div class="section" id="aba-fechar">
+
+  <div class="pnote" data-pnote>
+    <div class="pnote-label">👁 Nota do apresentador</div>
+    <div class="pnote-text">
+      <strong>Objetivo desta aba:</strong> fechar. Não sair com "vamos pensar". Você chegou até aqui porque eles confirmaram as dores e viram o ROI.<br><br>
+      <strong>Ancoragem de fechamento:</strong> <em>"Qual desses pontos de entrada faz mais sentido para vocês começarem?"</em> — não pergunte SE querem, pergunte QUAL.<br><br>
+      <strong>Se pedirem desconto:</strong> ofereça retirar a mensalidade do primeiro mês, não mexer no setup. Protege o valor percebido.<br><br>
+      <strong>Se pedirem para pensar:</strong> <em>"Sem problema. O que vocês precisam ver para tomar a decisão?"</em> — identifica a objeção real e trate ela na hora.<br><br>
+      <strong>Gere a mensagem de follow-up</strong> antes de sair da reunião — já fica pronto para enviar.
+    </div>
+  </div>
+
+  <div class="eyebrow">Fechar · Proposta</div>
+  <div class="sec-title">Escolha o ponto de<br><em>entrada que faz sentido</em></div>
+  <p class="sec-lead">Três opções de entrada — da mais simples à mais completa. Cada uma tem retorno mensurável no primeiro mês. Escolha uma e começamos em até 7 dias.</p>
+
+  <!-- PACOTE 1 -->
+  <div class="pacote" id="pacote-1" onclick="selecionarPacote(1)">
+    <div class="pacote-header">
+      <div class="pacote-check" id="check-1"></div>
+      <div class="pacote-info">
+        <div class="pacote-nome">Entrada: Sistema 1 — Chamados WPP</div>
+        <span class="pacote-subtag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Mais rápido · Menor risco · 2 semanas</span>
+        <div class="pacote-desc">Ideal para validar a automação com risco zero. O WhatsApp da empresa começa a atender chamados 24h em 2 semanas. Vocês veem funcionando antes de decidir mais alguma coisa.</div>
+      </div>
+      <div class="pacote-preco-area">
+        <div class="pacote-setup-label">Setup único</div>
+        <div class="pacote-setup-val" style="color:var(--blue)">R$ 3–5k</div>
+        <div class="pacote-mes">+ R$ 400–700/mês</div>
+      </div>
+    </div>
+    <div class="pacote-items">
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>IA atende chamados 24h/7</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Triagem automática por tipo de problema</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Registro de todos os chamados no CRM</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Relatório de SLA mensal automático</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Treinamento da equipe incluído</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>30 dias de suporte pós-entrega</span></div>
+    </div>
+  </div>
+
+  <!-- PACOTE 2 -->
+  <div class="pacote" id="pacote-2" onclick="selecionarPacote(2)">
+    <div class="pacote-header">
+      <div class="pacote-check" id="check-2"></div>
+      <div class="pacote-info">
+        <div class="pacote-nome">Essencial: Sistemas 1 + 3 — Chamados + Proposta</div>
+        <span class="pacote-subtag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Recomendado · Maior ROI imediato · 3–4 semanas</span>
+        <div class="pacote-desc">A combinação com maior retorno no curto prazo. Resolve os dois maiores ladrões de tempo: atendimento sem horário e proposta manual. O sistema se paga no primeiro mês com as horas economizadas.</div>
+      </div>
+      <div class="pacote-preco-area">
+        <div class="pacote-setup-label">Setup único</div>
+        <div class="pacote-setup-val" style="color:var(--green)">R$ 7–13k</div>
+        <div class="pacote-mes">+ R$ 900–1.600/mês</div>
+      </div>
+    </div>
+    <div class="pacote-items">
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Tudo do Sistema 1 (chamados)</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Proposta em PDF gerada em 30 segundos</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Follow-up automático em 24h e 72h</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>CRM integrado com histórico de leads</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Precificação automática por segmento</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>30 dias de suporte pós-entrega</span></div>
+    </div>
+  </div>
+
+  <!-- PACOTE 3 -->
+  <div class="pacote" id="pacote-3" onclick="selecionarPacote(3)">
+    <div class="pacote-header">
+      <div class="pacote-check" id="check-3"></div>
+      <div class="pacote-info">
+        <div class="pacote-nome">Completo: Sistemas 1 + 2 + 3 — Operação Automatizada</div>
+        <span class="pacote-subtag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">Máximo impacto · 4–6 semanas</span>
+        <div class="pacote-desc">Os três sistemas da operação interna rodando juntos. Chamados, relatórios e propostas — automáticos. A equipe para de fazer trabalho manual repetitivo e foca no que fecha contrato e atende cliente com qualidade.</div>
+      </div>
+      <div class="pacote-preco-area">
+        <div class="pacote-setup-label">Setup único</div>
+        <div class="pacote-setup-val" style="color:var(--gold)">R$ 9–17k</div>
+        <div class="pacote-mes">+ R$ 1.200–2.200/mês</div>
+      </div>
+    </div>
+    <div class="pacote-items">
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Tudo dos Sistemas 1 + 3</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Relatório mensal automático por cliente</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>PDF com análise de IA e comparativo mensal</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>Envio automático WhatsApp + e-mail no dia 1</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>60+ horas/mês liberadas na operação</span></div>
+      <div class="pacote-item"><span style="color:var(--green)">✓</span><span>60 dias de suporte pós-entrega</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="label">O que acontece nos próximos 7 dias</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-dia" style="color:var(--blue)">Hoje</div>
+      <div class="step-titulo">Acordo verbal</div>
+      <div class="step-desc">Definimos qual pacote entra. Alinhamos expectativas de prazo e entregáveis.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-dia" style="color:var(--gold)">Dia 1–2</div>
+      <div class="step-titulo">Contrato + entrada</div>
+      <div class="step-desc">Envio contrato simples de prestação de serviço. Entrada de 50% para iniciar.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-dia" style="color:var(--orange)">Dia 3–4</div>
+      <div class="step-titulo">Kickoff técnico</div>
+      <div class="step-desc">Reunião de 1h para mapear o fluxo atual, acessos necessários e configurações.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-dia" style="color:var(--green)">Dia 14</div>
+      <div class="step-titulo">Sistema ao vivo</div>
+      <div class="step-desc">Primeiro sistema funcionando. Testamos juntos com chamados reais antes de ligar para todos os clientes.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="label">Gerar mensagem de follow-up</div>
+  <p class="body-text" style="margin-bottom:20px">Preencha abaixo e gere a mensagem de WhatsApp para enviar para os sócios após a reunião.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="calc-field">
+      <div class="calc-label">Empresa do cliente</div>
+      <input class="calc-input" type="text" id="msg-empresa" placeholder="Nome da empresa..." oninput="sincronizarEmpresa()">
+    </div>
+    <div class="calc-field">
+      <div class="calc-label">Nome dos sócios</div>
+      <input class="calc-input" type="text" id="msg-socios" placeholder="Ex: João e Carlos">
+    </div>
+  </div>
+
+  <button class="btn-gerar" onclick="gerarMensagem()">⚡ Gerar mensagem de follow-up</button>
+
+  <div class="msg-box" id="msg-box" style="display:none">
+    <div class="msg-box-header">
+      <div class="msg-box-title">📱 Mensagem para enviar no WhatsApp</div>
+      <button class="btn-copy" onclick="copiarMensagem()">Copiar</button>
+    </div>
+    <textarea class="msg-textarea" id="msg-output" readonly></textarea>
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── NAVEGAÇÃO ──────────────────────────── */
+function ir(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('aba-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+/* ── NOME DO CLIENTE ────────────────────── */
+function atualizarNome() {
+  const nome = document.getElementById('nome-empresa').value.trim();
+  const display = nome || 'sua empresa';
+  document.getElementById('hero-nome').textContent = display;
+  // Sincroniza com campo da mensagem
+  const msgEmpresa = document.getElementById('msg-empresa');
+  if (msgEmpresa && !msgEmpresa.dataset.editado) msgEmpresa.value = nome;
+}
+
+function sincronizarEmpresa() {
+  const campo = document.getElementById('msg-empresa');
+  campo.dataset.editado = '1';
+}
+
+/* ── MODO APRESENTADOR ──────────────────── */
+let modoApresentador = false;
+
+function togglePresenter() {
+  modoApresentador = !modoApresentador;
+  const btn = document.getElementById('presenter-toggle');
+  const notas = document.querySelectorAll('.pnote');
+  if (modoApresentador) {
+    btn.classList.add('ativo');
+    btn.textContent = '👁 Apresentador ATIVO';
+    notas.forEach(n => n.classList.add('visivel'));
+  } else {
+    btn.classList.remove('ativo');
+    btn.textContent = '👁 Modo Apresentador';
+    notas.forEach(n => n.classList.remove('visivel'));
+  }
+}
+
+/* ── CALCULADORA ────────────────────────── */
+function calcular() {
+  const p  = +document.getElementById('c-propostas').value  || 0;
+  const hp = +document.getElementById('c-horas-prop').value || 0;
+  const cl = +document.getElementById('c-clientes').value   || 0;
+  const hr = +document.getElementById('c-horas-rel').value  || 0;
+  const ch = +document.getElementById('c-chamados').value   || 0;
+  const vh = +document.getElementById('c-valor-hora').value || 0;
+
+  const horasProp  = p * hp;
+  const horasRel   = cl * hr;
+  const horasCham  = ch * 0.35;
+  const totalHoras = horasProp + horasRel + horasCham;
+  const custo      = totalHoras * vh;
+
+  const perdidas   = Math.round(p * 0.65);
+  const valPerdido = perdidas * 2000 * 0.1;
+
+  document.getElementById('r-custo').textContent     = 'R$ ' + custo.toLocaleString('pt-BR');
+  document.getElementById('r-horas').textContent     = Math.round(totalHoras) + 'h/mês em tarefas automatizáveis';
+  document.getElementById('r-perdidas').textContent  = perdidas + ' propostas';
+  document.getElementById('r-perdidas-desc').textContent = perdidas + ' de ' + p + ' propostas/mês sem follow-up. Potencial perdido: ~R$ ' + valPerdido.toLocaleString('pt-BR') + '/mês';
+}
+
+calcular();
+
+/* ── SELEÇÃO DE PACOTE ──────────────────── */
+let pacoteSelecionado = 2; // Recomendado por padrão
+
+function selecionarPacote(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('pacote-' + i).classList.remove('selecionado');
+    document.getElementById('check-' + i).textContent = '';
+  });
+  document.getElementById('pacote-' + n).classList.add('selecionado');
+  document.getElementById('check-' + n).textContent = '✓';
+  pacoteSelecionado = n;
+}
+
+// Seleciona pacote 2 por padrão
+selecionarPacote(2);
+
+/* ── GERADOR DE MENSAGEM ────────────────── */
+const textosPacote = {
+  1: {
+    nome: 'Sistema 1 — Atendimento de Chamados via WhatsApp',
+    setup: 'R$ 3–5k (setup único)',
+    mes: 'R$ 400–700/mês',
+    prazo: '2 semanas',
+    resumo: 'O WhatsApp da empresa começa a atender chamados 24h automaticamente, registrar tudo no CRM e gerar relatório de SLA mensal — sem ninguém precisar estar disponível.'
+  },
+  2: {
+    nome: 'Sistemas 1 + 3 — Chamados + Proposta Inteligente',
+    setup: 'R$ 7–13k (setup único)',
+    mes: 'R$ 900–1.600/mês',
+    prazo: '3–4 semanas',
+    resumo: 'Chamados atendidos 24h automaticamente + proposta comercial profissional gerada em 30 segundos com follow-up automático em 24h e 72h. Maior ROI no curto prazo.'
+  },
+  3: {
+    nome: 'Sistemas 1 + 2 + 3 — Operação Completa',
+    setup: 'R$ 9–17k (setup único)',
+    mes: 'R$ 1.200–2.200/mês',
+    prazo: '4–6 semanas',
+    resumo: 'Toda a operação interna automatizada: chamados 24h, relatório mensal gerado e enviado automaticamente, e proposta em PDF com follow-up. 60+ horas/mês liberadas.'
+  }
+};
+
+function gerarMensagem() {
+  const empresa = document.getElementById('msg-empresa').value.trim() || document.getElementById('nome-empresa').value.trim() || 'vocês';
+  const socios  = document.getElementById('msg-socios').value.trim()  || 'pessoal';
+  const p = textosPacote[pacoteSelecionado];
+
+  const msg = `Olá, ${socios}! 👋
+
+Obrigado pelo tempo de hoje — foi uma conversa muito produtiva.
+
+Conforme alinhamos, segue o resumo do que discutimos:
+
+*Ponto de entrada escolhido:*
+${p.nome}
+
+*O que isso resolve:*
+${p.resumo}
+
+*Investimento:*
+• Setup: ${p.setup}
+• Mensalidade: ${p.mes}
+• Prazo de entrega: ${p.prazo}
+
+*Próximos passos:*
+1. Confirmar o interesse até amanhã
+2. Envio o contrato e a NF de entrada (50%)
+3. Reunião de kickoff técnico (1h) para mapear os fluxos
+4. Sistema ao vivo em ${p.prazo}
+
+*Apresentação completa:* (link do arquivo)
+
+Qualquer dúvida, estou disponível. Quando confirmar, já agendo o kickoff.
+
+Abraço,
+Guilherme`;
+
+  const box = document.getElementById('msg-box');
+  const out = document.getElementById('msg-output');
+  box.style.display = 'block';
+  out.value = msg;
+  out.style.height = 'auto';
+  out.style.height = out.scrollHeight + 'px';
+  box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ── CLIPBOARD ──────────────────────────── */
+function copiarMensagem() {
+  const texto = document.getElementById('msg-output').value;
+  copiarTexto(texto, 'Mensagem copiada!');
+}
+
+function copiarTexto(texto, msg) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(texto).then(() => toast(msg)).catch(() => copiarFallback(texto, msg));
+  } else {
+    copiarFallback(texto, msg);
+  }
+}
+
+function copiarFallback(texto, msg) {
+  const ta = document.createElement('textarea');
+  ta.value = texto;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); toast(msg); }
+  catch { toast('Selecione o texto manualmente (Ctrl+A, Ctrl+C).'); }
+  document.body.removeChild(ta);
+}
+
+/* ── TOAST ──────────────────────────────── */
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 2500);
+}
+
+/* ── CUSTOMIZADOR LOGIC ─────────────────── */
+function abrirCustomizador() { document.getElementById('theme-customizer').classList.add('open'); }
+function fecharCustomizador() { document.getElementById('theme-customizer').classList.remove('open'); }
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+}
+
+function adjustColorIntensity(hex, factor) {
+  let rgb = hexToRgb(hex);
+  if(!rgb) return hex;
+  let r = Math.min(255, Math.max(0, Math.round(rgb.r * factor)));
+  let g = Math.min(255, Math.max(0, Math.round(rgb.g * factor)));
+  let b = Math.min(255, Math.max(0, Math.round(rgb.b * factor)));
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function applyOpacity(hex, alpha) {
+    let rgb = hexToRgb(hex);
+    if(!rgb) return hex;
+    return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+}
+
+function mudarCor(varName, val) {
+  document.documentElement.style.setProperty(varName, val);
+  
+  if(varName !== '--bg') {
+     document.documentElement.style.setProperty(varName+'-dark', adjustColorIntensity(val, 0.6));
+     document.documentElement.style.setProperty(varName+'-bg', applyOpacity(val, 0.12));
+  } else {
+     document.documentElement.style.setProperty('--bg2', adjustColorIntensity(val, 1.3));
+     document.documentElement.style.setProperty('--bg3', adjustColorIntensity(val, 1.6));
+  }
+}
+
+function mudarFonte(fontName, type) {
+  if(!fontName) return;
+  const linkId = 'font-' + type;
+  let link = document.getElementById(linkId);
+  if(!link) { 
+    link = document.createElement('link'); 
+    link.id = linkId; 
+    link.rel = 'stylesheet'; 
+    document.head.appendChild(link); 
+  }
+  
+  link.href = 'https://fonts.googleapis.com/css2?family=' + fontName.replace(/\s+/g, '+') + ':wght@400;600;700;800;900&display=swap';
+  
+  let targetElements = type === 'title' 
+    ? 'h1, .sec-title, .impacto-num, .sistema-badge-num, .sistema-preco-valor, .pacote-setup-val, .calc-result-value, .timeline-dot' 
+    : 'body, .client-input, .tab, .presenter-btn, .msg-textarea, .btn-copy, .btn-gerar, .calc-input, .pnote-text, .card-body, .pergunta-sub, .cenario-item';
+  
+  let styleId = 'font-style-' + type;
+  let styleEl = document.getElementById(styleId);
+  if(!styleEl) { 
+    styleEl = document.createElement('style'); 
+    styleEl.id = styleId; 
+    document.head.appendChild(styleEl); 
+  }
+  
+  styleEl.innerHTML = `${targetElements} { font-family: '${fontName}', sans-serif !important; }`;
+}
+
+function trocarIcone() {
+  const oldI = document.getElementById('cust-icon-old').value.trim();
+  const newI = document.getElementById('cust-icon-new').value.trim();
+  if(!oldI || !newI) return;
+  
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  let n;
+  let replacedAny = false;
+  while(n = walker.nextNode()) {
+    if(n.nodeValue.includes(oldI) && n.parentElement.id !== 'cust-icon-old') {
+      n.nodeValue = n.nodeValue.replaceAll(oldI, newI);
+      replacedAny = true;
+    }
+  }
+  
+  if (replacedAny) {
+    toast(`Ícone alterado com sucesso!`);
+    document.getElementById('cust-icon-old').value = '';
+    document.getElementById('cust-icon-new').value = '';
+  } else {
+    toast(`Ícone original não encontrado.`);
+  }
+}
+
+function resetarTema() {
+  document.documentElement.removeAttribute('style');
+  ['font-style-title', 'font-style-body', 'font-title', 'font-body'].forEach(id => { 
+    let el = document.getElementById(id); if(el) el.remove(); 
+  });
+  
+  setTimeout(() => {
+    let rs = getComputedStyle(document.documentElement);
+    setPickerColor('c-bg', rs.getPropertyValue('--bg'));
+    setPickerColor('c-gold', rs.getPropertyValue('--gold'));
+    setPickerColor('c-green', rs.getPropertyValue('--green'));
+    setPickerColor('c-blue', rs.getPropertyValue('--blue'));
+    setPickerColor('c-purple', rs.getPropertyValue('--purple'));
+    setPickerColor('c-orange', rs.getPropertyValue('--orange'));
+  }, 100);
+
+  document.getElementById('cust-font-title').value = '';
+  document.getElementById('cust-font-body').value = '';
+  toast('Tema resetado para o padrão.');
+}
+
+function RgbToHex(rgbStr) {
+  let m = rgbStr.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+  if (m) {
+    return "#" +
+      ("0" + parseInt(m[1],10).toString(16)).slice(-2) +
+      ("0" + parseInt(m[2],10).toString(16)).slice(-2) +
+      ("0" + parseInt(m[3],10).toString(16)).slice(-2);
+  }
+  return rgbStr;
+}
+
+function setPickerColor(id, cssVal) {
+    if(!cssVal) return;
+    cssVal = cssVal.trim();
+    if(cssVal.startsWith('rgb')) cssVal = RgbToHex(cssVal);
+    let el = document.getElementById(id);
+    if(el && cssVal.startsWith('#')) el.value = cssVal;
+}
+
+function exportarHTML() {
+  fecharCustomizador();
+  setTimeout(() => {
+    // Preservar valores dos inputs do theme customizer no HTML
+    document.querySelectorAll('.customizer-panel input').forEach(input => {
+      if (input.type === 'color' || input.type === 'text') {
+        input.setAttribute('value', input.value);
+      }
+    });
+
+    const docCloned = document.documentElement.cloneNode(true);
+    const finalHTML = '<!DOCTYPE html>\n' + docCloned.outerHTML;
+    
+    var blob = new Blob([finalHTML], { type: 'text/html' });
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'oportunidade-outsourcing-custom.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    toast('HTML modificado baixado com sucesso!');
+  }, 400);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    let rs = getComputedStyle(document.documentElement);
+    setPickerColor('c-bg', rs.getPropertyValue('--bg'));
+    setPickerColor('c-gold', rs.getPropertyValue('--gold'));
+    setPickerColor('c-green', rs.getPropertyValue('--green'));
+    setPickerColor('c-blue', rs.getPropertyValue('--blue'));
+    setPickerColor('c-purple', rs.getPropertyValue('--purple'));
+    setPickerColor('c-orange', rs.getPropertyValue('--orange'));
+});
+</script>
+
+<!-- REAL-TIME CUSTOMIZER -->
+<div id="theme-customizer" class="customizer-panel">
+  <div class="customizer-header">
+    <div class="customizer-title">🎨 Personalizar Tema</div>
+    <button class="customizer-close" onclick="fecharCustomizador()">×</button>
+  </div>
+  <div class="customizer-body">
+    <div class="cust-group">
+      <div class="cust-label">Cores de Interface</div>
+      <div class="cust-color-row">
+        <div><input type="color" id="c-bg" oninput="mudarCor('--bg', this.value)"> <span>Fundo Escuro</span></div>
+      </div>
+      <div class="cust-color-row">
+        <div><input type="color" id="c-gold" oninput="mudarCor('--gold', this.value)"> <span>Primária (Destaque)</span></div>
+      </div>
+      <div class="cust-color-row">
+        <div><input type="color" id="c-green" oninput="mudarCor('--green', this.value)"> <span>Sistema 3 (Proposta)</span></div>
+      </div>
+      <div class="cust-color-row">
+        <div><input type="color" id="c-blue" oninput="mudarCor('--blue', this.value)"> <span>Sistema 1 (Atendimento)</span></div>
+      </div>
+      <div class="cust-color-row">
+        <div><input type="color" id="c-orange" oninput="mudarCor('--orange', this.value)"> <span>Sistema 4 (Prospecção)</span></div>
+      </div>
+      <div class="cust-color-row">
+        <div><input type="color" id="c-purple" oninput="mudarCor('--purple', this.value)"> <span>Sistema 5 (Dashboard)</span></div>
+      </div>
+    </div>
+    
+    <div class="cust-group">
+      <div class="cust-label">Google Fonts</div>
+      <input type="text" id="cust-font-title" placeholder="Títulos (ex: Montserrat)" class="cust-input" onchange="mudarFonte(this.value, 'title')">
+      <input type="text" id="cust-font-body" placeholder="Textos (ex: Lato)" class="cust-input" onchange="mudarFonte(this.value, 'body')">
+    </div>
+    
+    <div class="cust-group">
+      <div class="cust-label">Substituir Ícones (Emojis)</div>
+      <div style="font-size:11.5px; color:#9098a8; margin-bottom:12px; line-height: 1.5;">Substitui um emoji específico em todo o documento.</div>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="cust-icon-old" placeholder="Antigo (ex: 📝)" class="cust-input" style="flex:1">
+        <input type="text" id="cust-icon-new" placeholder="Novo (ex: ⚡)" class="cust-input" style="flex:1">
+      </div>
+      <button class="cust-btn" onclick="trocarIcone()">Substituir no HTML</button>
+    </div>
+
+    <div style="margin-top:24px;">
+      <button class="cust-btn cust-btn-primary" onclick="exportarHTML()" style="padding:16px;">⬇️ Baixar HTML Final</button>
+      <button class="cust-btn" onclick="resetarTema()">🔄 Resetar para o Padrão</button>
+    </div>
+  </div>
+</div>
+<button id="customizer-fab" onclick="abrirCustomizador()" title="Personalizar Cores e Fontes">🎨</button>
+
+</body>
+</html>

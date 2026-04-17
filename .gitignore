@@ -1,0 +1,46 @@
+# Secrets
+.env
+*.env.*
+
+# Dependências
+node_modules/
+
+# Dados sensíveis / memória pessoal
+.claude/
+.agent/
+
+# Imagens pesadas (não vai pra repo)
+*.jpg
+*.jpeg
+*.png
+*.webp
+hero-bg.jpg
+sobre.png
+patricia-hero.png
+logo-patricia.png
+automacao-ia.png
+gestao-sistemas.png
+saas-produto.png
+
+# Arquivos de cliente específico (privado)
+brand_presentation_patricia.html
+case-patricia.html
+estudo_de_caso_patricia.html
+lp-patricia.html
+patricia-specs.html
+prototipo_patricia_fernas.html
+hero-paty.png
+logo.png
+
+# Build / export temporário
+slides-carrossel-01/
+destaques-exportados/
+export-destaques.js
+export-slides.js
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Elementor / raw templates
+elementor-template.json

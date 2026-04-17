@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sênior Figma Workflow | Guia Operacional</title>
+    <!-- Modern Typography: Outfit for headers, Inter for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0A0A0B;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #F4F4F5;
+            --text-secondary: #A1A1AA;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --accent-color: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --figma-blue: #1abcfe;
+            --figma-purple: #9d56facf;
+            --figma-pink: #f24e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, var(--accent-glow) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 100px 20px 60px;
+            position: relative;
+        }
+
+        .pill-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--surface-border);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #A855F7;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-wrap: balance;
+        }
+
+        .header-sub {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 60px auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 32px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--figma-blue), var(--figma-purple), var(--figma-pink));
+            opacity: 0.3;
+        }
+
+        .step-card {
+            position: relative;
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            padding: 40px;
+            margin-top: 40px;
+            margin-left: 80px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(168, 85, 247, 0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            left: -80px;
+            top: 40px;
+            width: 64px;
+            height: 64px;
+            background: var(--bg-color);
+            border: 2px solid var(--surface-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 2;
+            transition: 0.3s;
+        }
+
+        .step-card:hover .step-number {
+            border-color: var(--accent-color);
+            background: var(--accent-gradient);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .step-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .grid-tech {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .tech-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 3px solid;
+            transition: 0.3s;
+        }
+
+        .tech-box:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .tech-box h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .tech-box p {
+            font-size: 0.9rem;
+            color: #94A3B8;
+        }
+
+        /* Border Left colors for semantic states */
+        .tb-figjam { border-left-color: var(--figma-pink); }
+        .tb-plugin { border-left-color: var(--figma-purple); }
+        .tb-native { border-left-color: var(--figma-blue); }
+        .tb-ai     { border-left-color: var(--accent-color); }
+
+        .tag-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            color: #CBD5E1;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before { left: 16px; }
+            .step-card { margin-left: 48px; padding: 24px; }
+            .step-number { left: -48px; width: 48px; height: 48px; font-size: 1.2rem; top: 24px; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="pill-badge">UX/UI • Product Design • Alto Desempenho</div>
+        <h1>A Orquestração do Figma Sênior</h1>
+        <p class="header-sub">O fluxo exato e validado para configurar, organizar e escalar projetos no Figma sem retrabalho. Do caos da pesquisa à exportação matemática codificada.</p>
+    </header>
+
+    <main>
+        <div class="timeline">
+
+            <!-- STAGE 1 -->
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Fundação e O Cérebro (FigJam)</h2>
+                <p class="step-desc">A regra de ouro: Nunca desenhe a primeira tela (pixels) antes de validar o escopo em rabiscos. Onde nasce o consenso entre negócio, design e código.</p>
+                
+                <div class="grid-tech">
+                    <div class="tech-box tb-figjam">
+                        <h4>Mapeamento & AI (Sitemap)</h4>
+                        <p>Use o "FigJam AI" para gerar mapas do sistema rapidamente e os Lápis/Formas para amarrar o fluxo (Tela de Login → Painel → Detalhes).</p>
+                    </div>
+                    <div class="tech-box tb-figjam">
+                        <h4>Moodboard & Concorrentes</h4>
+                        <p>Abrace o caos. Cole "screenshots" gigantes de sites concorrentes. Use "Sticky Notes" de pontuação positiva ou negativa na visão do seu cliente.</p>
+                    </div>
+                </div>
+                <div class="tag-list">
+                    <span class="tag">#FigJam</span>
+                    <span class="tag">#Sticky-Notes</span>
+                    <span class="tag">#Flow-Connectors</span>
+                </div>
+            </div>
+
+            <!-- STAGE 2 -->
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Estrutura e Governança do Arquivo</h2>
+                <p class="step-desc">Seu arquivo Figma deve ser um painel cirúrgico, não uma gaveta de rascunhos rasgados. É sobre dividir as áreas responsabilidades para não ter o cliente e os Devs confusos no mesmo lugar.</p>
+                
+                <div class="grid-tech">
+                    <div class="tech-box tb-native">
+                        <h4>A Árvore de Páginas (Pages)</h4>
+                        <p>No painel lateral esquedo, crie religiosamente: <br>1. 🕹️ Rascunhos<br> 2. 🏛️ Design System<br> 3. 📦 Componentes <br> 4. ✅ Entrega FInal.</p>
+                    </div>
+                    <div class="tech-box tb-plugin">
+                        <h4>Setup e Importação (Redesign)</h4>
+                        <p>Se você for refatorar (como os painéis HTML), utilize agora o plugin <b>html.to.design</b>! Ele converterá sites vivos inteiros do Chrome em Auto Layout em 5 segundos, poupando dias.</p>
+                    </div>
+                </div>
+                <div class="tag-list">
+                    <span class="tag">#html.to.design</span>
+                    <span class="tag">#Figma Pages</span>
+                    <span class="tag">#Governança</span>
+                </div>
+            </div>
+
+            <!-- STAGE 3 -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Sistemas Escalonáveis (Tokens)</h2>
+                <p class="step-desc">Chega de "conta-gotas". Você programa a lógica antes do Design. Definimos os Tokens no Design System (Passo Anterior) para as UIs herdarem as cores sem que você toque nelas manualmente.</p>
+                
+                <div class="grid-tech">
+                    <div class="tech-box tb-plugin">
+                        <h4>Escala Tipográfica Correta</h4>
+                        <p>Use o plugin <b>Typescales</b>. Defina sua Base Font como Inter e título como Outfit. Gere a escala H1 até SMALL de forma matemática geométrica (ratio 1.250). Salve no painel Texto: "Heading 1", "Body 16px".</p>
+                    </div>
+                    <div class="tech-box tb-plugin">
+                        <h4>Cromática e Variables</h4>
+                        <p>Rode <b>Color Chroma</b> e o <b>Styler</b>. Gere uma rampa de luminosidade da cor principal da marca. Mapeie cores para <i>Variables Nativas</i> como: "Surface/Brand", "Text/Inverse", "Border/Subtle".</p>
+                    </div>
+                </div>
+                <div class="tag-list">
+                    <span class="tag">#Color Chroma</span>
+                    <span class="tag">#Typescales</span>
+                    <span class="tag">#Variables (Beta)</span>
+                </div>
+            </div>
+
+            <!-- STAGE 4 -->
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h2 class="step-title">Prototipação em Alta (Workflow Veloz)</h2>
+                <p class="step-desc">Se a escala e as cores foram ajustadas visualmente. Chegou a hora de acelerar o desenvolvimento com automações e preenchimento orgânico na hora que você monta o chassi do layout real.</p>
+                
+                <div class="grid-tech">
+                    <div class="tech-box tb-native">
+                        <h4>Base 8 e Auto Layout (Supremo)</h4>
+                        <p>Você nunca mais desenhará nada sem Auto Layout (Shift+A). Margens e Paddings DEVEM ser na base multipla de 8 (8, 16, 24, 32px, 64px). Isto traduz para CSS nativo e deixa as interfaces com "Ar de Luxo" gringo.</p>
+                    </div>
+                    <div class="tech-box tb-plugin">
+                        <h4>Inteligência Artificial (Preenchimento)</h4>
+                        <p>Apague o Lorem Ipsum. Selecione todas as labels de usuários e use <b>Content Reel</b> para simular Nomes e Dinheiro Real no app. Para wireframing inteiro automático baseado num prompt focado na copy, use <b>Relume</b>.</p>
+                    </div>
+                    <div class="tech-box tb-plugin">
+                        <h4>Edição em Massa</h4>
+                        <p>Se o cliente pedir pra mudar 40 ícones errados ou 20 nomes de botão - não desespere. O plugin <b>Similayer</b> marca todo o arquivo que possua tal estilo idêntico. Já o plugin <b>Find and Replace</b> resolve copys erradas em todos os frames em 1 segundo.</p>
+                    </div>
+                    <div class="tech-box tb-plugin">
+                        <h4>A Máquina de Ícones Modernos</h4>
+                        <p>Livre-se de SVGs sujos da internet. Use <b>Phosphor Icons</b> ou <b>Iconify</b> para garantir todos pesem igual visualmente, com os traços controlados (thickness de 1.5 a 2.0).</p>
+                    </div>
+                </div>
+                <div class="tag-list">
+                    <span class="tag">#AutoLayout_Rules</span>
+                    <span class="tag">#Base_8_Grid</span>
+                    <span class="tag">#Content_Reel</span>
+                    <span class="tag">#Similayer</span>
+                </div>
+            </div>
+
+            <!-- STAGE 5 -->
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <h2 class="step-title">Limpeza, QA e Entrega (Behance / Dev)</h2>
+                <p class="step-desc">Finalizar design é muito mais que deixar bonito. É tornar ele limpo sob o capô (pra quem faz o código) e atrativo para venda (Mockups no Portfólio).</p>
+                
+                <div class="grid-tech">
+                    <div class="tech-box tb-plugin">
+                        <h4>Acessibilidade Visual (QA)</h4>
+                        <p>Cores escuras no escuro? Falha técnica. Verifique se o ratio da sua fonte principal pro fundo do dashboard está aprovado pelas normas WCAG usando <b>Stark</b> ou <b>Contrast</b>.</p>
+                    </div>
+                    <div class="tech-box tb-plugin">
+                        <h4>Sanitização da Interface</h4>
+                        <p>Use o <b>Clean Document</b> para excluir pixels quebrados (X: 13.33px) forçando um grid seguro. Além disso, nomeie em lote suas dezenas de frames para export usando <b>Rename It</b> (Anotando e.g.: AppLogin_%n).</p>
+                    </div>
+                    <div class="tech-box tb-ai">
+                        <h4>O Pacote Visual Premium</h4>
+                        <p>Tire a imagem chapada. Rode <b>Artboard Studio Mockups</b> ou <b>Clay Mockup 3D</b>; enfie nativamente seus frames dentro da tela de Macbook moderno isométrico. Aumente o valor percebido pelo recrutador ou seu líder tech.</p>
+                    </div>
+                </div>
+                <div class="tag-list">
+                    <span class="tag">#QA_Accessibility</span>
+                    <span class="tag">#Rename_It</span>
+                    <span class="tag">#Mockup3D</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Micro interactions & basic animation scripts -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cards = document.querySelectorAll('.step-card');
+            
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach((card, index) => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px) scale(0.98)';
+                card.style.transitionDelay = `${index * 0.15}s`;
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

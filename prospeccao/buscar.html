@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar Comentários — Prospecção Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0c0e1a; --bg2:#131828; --bg3:#1b2240; --border:#1e2840;
+      --border2:#253560; --text:#f0ede6; --muted:#6b7080; --muted2:#9098a8;
+      --gold:#C8892C; --gold-light:#D9A850; --gold-dark:#7a5010; --gold-bg:#1a1208;
+      --purple:#a78bfa; --purple-dark:#5b21b6; --purple-bg:#1a0d35;
+      --green:#4ade80; --green-dark:#15803d; --green-bg:#061a0c;
+      --orange:#fb923c; --orange-dark:#c2410c; --orange-bg:#1c0e06;
+      --red:#f87171; --red-dark:#b91c1c; --red-bg:#1c0808;
+      --yellow:#fbbf24; --yellow-bg:#1c1608;
+      --cyan:#38bdf8; --cyan-bg:#071820;
+      --blue:#60a5fa; --blue-dark:#1d4ed8; --blue-bg:#0a1628;
+    }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; }
+
+    /* SIDEBAR */
+    .sidebar { width:240px; min-height:100vh; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; bottom:0; }
+    .sidebar-logo { padding:24px 20px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+    .logo-text { font-family:'Cinzel',serif; font-size:13px; font-weight:700; color:var(--muted2); line-height:1.2; letter-spacing:0.04em; }
+    .logo-text strong { color:var(--gold); display:block; font-size:15px; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:11px 20px; color:var(--muted2); text-decoration:none; font-size:13px; font-weight:500; transition:all .15s; border-left:2px solid transparent; margin:1px 0; }
+    .nav-item:hover { color:var(--text); background:rgba(200,137,44,0.08); border-left-color:var(--gold-dark); }
+    .nav-item.active { color:#0c0e1a; background:var(--gold); border-left-color:var(--gold); font-weight:700; }
+    .nav-icon { font-size:16px; width:20px; text-align:center; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); }
+    .sidebar-footer a { color:var(--gold); text-decoration:none; }
+
+    /* MAIN */
+    .main { margin-left:240px; flex:1; }
+    .page-header { padding:28px 32px 24px; border-bottom:1px solid var(--border); }
+    .page-header h1 { font-family:'Cinzel',serif; font-size:20px; font-weight:700; letter-spacing:0.03em; }
+    .page-header .subtitle { font-size:13px; color:var(--muted2); margin-top:4px; }
+    .content { padding:28px 32px 60px; max-width:860px; }
+
+    /* SELETOR DE FONTE */
+    .fonte-tabs {
+      display: flex;
+      gap: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+    .fonte-tab {
+      padding: 9px 20px;
+      border-radius: 9px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .fonte-tab.active {
+      background: var(--bg2);
+      color: var(--text);
+      border: 1px solid var(--border2);
+    }
+    .fonte-tab.active.yt { color: var(--red); }
+    .fonte-tab.active.reddit { color: #ff6314; }
+
+    /* CARDS */
+    .card { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; padding:24px; margin-bottom:20px; }
+    .card-title { font-size:16px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+
+    /* FORMULÁRIOS */
+    .form-group { margin-bottom:16px; }
+    label { display:block; font-size:12px; font-weight:700; color:var(--muted2); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+    input[type=text], input[type=number], select, textarea {
+      width:100%; background:var(--bg3); border:1px solid var(--border2); color:var(--text);
+      border-radius:8px; padding:10px 14px; font-size:14px; font-family:inherit; outline:none; transition:border .15s;
+    }
+    input:focus, select:focus, textarea:focus { border-color:var(--gold); }
+    input::placeholder, textarea::placeholder { color:var(--muted); }
+    select option { background:var(--bg2); }
+    .hint { font-size:12px; color:var(--muted); margin-top:5px; line-height:1.6; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+    /* SUBREDDITS RÁPIDOS */
+    .sub-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .sub-chip {
+      padding:5px 12px; border-radius:99px; font-size:12px; font-weight:700;
+      cursor:pointer; border:1px solid var(--border2); background:var(--bg3); color:var(--muted2);
+      transition:all .15s;
+    }
+    .sub-chip:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-bg); }
+    .sub-chip.selected { border-color:var(--gold); color:var(--gold); background:var(--gold-bg); }
+
+    /* BOTÕES */
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:8px; border:none; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; text-decoration:none; font-family:inherit; }
+    .btn-primary { background:var(--gold); color:#000; }
+    .btn-primary:hover { background:var(--yellow); }
+    .btn-primary:disabled { opacity:.4; cursor:not-allowed; }
+    .btn-secondary { background:var(--bg3); color:var(--muted2); border:1px solid var(--border2); }
+    .btn-sm { padding:7px 14px; font-size:13px; }
+
+    /* PROGRESSO */
+    .progress-wrap { display:none; }
+    .progress-bar-outer { background:var(--bg3); border-radius:99px; height:8px; overflow:hidden; margin:12px 0; }
+    .progress-bar-inner { height:100%; background:var(--gold); border-radius:99px; transition:width .4s; }
+    .progress-text { font-size:13px; color:var(--muted2); }
+    .progress-sub { font-size:12px; color:var(--muted); margin-top:4px; }
+
+    /* SUMÁRIO */
+    .sumario { background:var(--green-bg); border:1px solid var(--green-dark); border-radius:12px; padding:18px 20px; display:none; }
+    .sumario-title { font-size:14px; font-weight:700; color:var(--green); margin-bottom:8px; }
+    .sumario-stat { font-size:13px; color:var(--muted2); margin-bottom:4px; }
+
+    /* PRÉVIA */
+    .resultado-wrap { display:none; }
+    .resultado-item {
+      background:var(--bg3); border-radius:10px; padding:14px; margin-bottom:10px;
+      border-left:3px solid var(--gold);
+    }
+    .resultado-item.reddit { border-left-color:#ff6314; }
+    .resultado-fonte { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:4px; }
+    .resultado-autor { font-size:13px; font-weight:700; margin-bottom:4px; color:var(--text); }
+    .resultado-video { font-size:11px; color:var(--gold); margin-bottom:6px; }
+    .resultado-texto { font-size:13px; color:var(--muted2); line-height:1.5; margin-bottom:8px; }
+    .resultado-badges { display:flex; gap:6px; flex-wrap:wrap; }
+    .badge-sm { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+    .badge-orange { background:var(--orange-bg); color:var(--orange); border:1px solid var(--orange-dark); }
+    .badge-blue   { background:var(--gold-bg);   color:var(--gold);   border:1px solid var(--gold-dark); }
+    .badge-purple { background:var(--purple-bg); color:var(--purple); border:1px solid var(--purple-dark); }
+    .badge-cyan   { background:var(--cyan-bg);   color:var(--cyan);   border:1px solid #1870A0; }
+    .badge-yellow { background:var(--yellow-bg); color:var(--yellow); border:1px solid var(--gold-dark); }
+
+    /* ALERTA */
+    .alerta { border-radius:10px; padding:14px 18px; font-size:13px; line-height:1.6; margin-bottom:16px; }
+    .alerta-warn { background:var(--orange-bg); border:1px solid var(--orange-dark); color:var(--orange); }
+    .alerta-info { background:var(--gold-bg); border:1px solid var(--gold-dark); color:var(--yellow); }
+    .alerta-reddit { background:#1a0e08; border:1px solid #7a3a10; color:#ff8c50; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--gold-dark); color:var(--text); padding:12px 20px; border-radius:10px; font-size:14px; font-weight:500; z-index:9999; display:none; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+
+    /* SEÇÕES POR FONTE */
+    .secao-yt     { display:block; }
+    .secao-reddit { display:none; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span style="font-size:22px">🔍</span>
+      <span class="logo-text">Prospecção<strong>Pro</strong></span>
+    </div>
+    <nav style="flex:1;padding:12px 0">
+      <a href="index.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="buscar.html" class="nav-item active"><span class="nav-icon">🔎</span> Buscar Comentários</a>
+      <a href="leads.html" class="nav-item"><span class="nav-icon">🎯</span> Leads Salvos</a>
+      <a href="configuracoes.html" class="nav-item"><span class="nav-icon">⚙️</span> Configurações</a>
+      <a href="estrategia.html" class="nav-item"><span class="nav-icon">🗺️</span> Estratégia</a>
+      <a href="video-audit.html" class="nav-item"><span class="nav-icon">🎬</span> Video Audit</a>
+    </nav>
+    <div class="sidebar-footer">
+      Andarilho Digital · Agência<br>
+      <a href="../orcamentos-crm/index.html">→ Sistema de Orçamentos</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <h1>🔎 Buscar Comentários</h1>
+      <p class="subtitle">YouTube e Reddit · detecte dores em PT-BR e EN em tempo real</p>
+    </header>
+
+    <div class="content">
+
+      <!-- SELETOR DE FONTE -->
+      <div class="fonte-tabs">
+        <button class="fonte-tab active yt" onclick="trocarFonte('yt')">
+          ▶ YouTube
+        </button>
+        <button class="fonte-tab reddit" onclick="trocarFonte('reddit')">
+          🟠 Reddit
+        </button>
+      </div>
+
+      <!-- ══════════════════════════════════
+           YOUTUBE
+      ══════════════════════════════════ -->
+      <div class="secao-yt">
+
+        <div class="alerta alerta-warn" id="aviso-apikey" style="display:none">
+          ⚠️ <strong>API Key não configurada.</strong>
+          <a href="configuracoes.html" style="color:var(--yellow)">Configurar agora →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-title">▶ Vídeo do YouTube</div>
+
+          <div class="form-group">
+            <label>URL do vídeo</label>
+            <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..." />
+            <p class="hint">Cole qualquer formato: youtube.com/watch?v=..., youtu.be/..., /shorts/...</p>
+          </div>
+
+          <div class="form-group" style="width:160px">
+            <label>Páginas a buscar</label>
+            <input type="number" id="yt-paginas" value="3" min="1" max="10" />
+            <p class="hint">1 página = 100 comentários</p>
+          </div>
+
+          <button class="btn btn-primary" id="btn-yt" onclick="buscarYT()">
+            🔍 Analisar Vídeo
+          </button>
+        </div>
+
+        <div class="card" style="padding:16px 24px">
+          <p style="font-size:13px;color:var(--muted2);line-height:1.8">
+            <strong style="color:var(--text)">Vídeos que convertem melhor em leads (PT-BR):</strong>
+            "como conseguir mais clientes", "cobrar mais pelo serviço",
+            "como crescer nas redes sociais", "freelancer iniciante", "empreendedorismo MEI"
+          </p>
+          <p style="font-size:13px;color:var(--muted2);line-height:1.8;margin-top:8px">
+            <strong style="color:var(--text)">Em inglês (EN):</strong>
+            "how to get clients", "raise your rates", "freelance pricing",
+            "grow your business", "digital marketing for beginners"
+          </p>
+          <p style="font-size:11px;color:var(--muted);margin-top:8px">
+            🌍 O sistema detecta dores em PT-BR e EN automaticamente.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           REDDIT
+      ══════════════════════════════════ -->
+      <div class="secao-reddit">
+
+        <div class="alerta alerta-reddit">
+          🟠 <strong>Reddit não precisa de API Key.</strong>
+          Grátis e sem limites rígidos. Os dados são públicos.
+        </div>
+
+        <!-- MODO: subreddit único OU múltiplos -->
+        <div class="card">
+          <div class="card-title">🟠 Configurar busca no Reddit</div>
+
+          <div class="form-group">
+            <label>Modo</label>
+            <select id="reddit-modo" onchange="trocarModoReddit()">
+              <option value="unico">Um subreddit específico</option>
+              <option value="multiplos">Múltiplos subreddits de uma vez</option>
+              <option value="busca">Buscar por termo em um subreddit</option>
+            </select>
+          </div>
+
+          <!-- MODO: único -->
+          <div id="reddit-unico">
+            <div class="form-group">
+              <label>Nome do subreddit (sem r/)</label>
+              <input type="text" id="reddit-sub" placeholder="empreendedorismo" />
+            </div>
+            <div class="form-group" style="width:200px">
+              <label>Posts a analisar</label>
+              <input type="number" id="reddit-posts" value="10" min="1" max="50" />
+              <p class="hint">Cada post gera ~50 comentários a analisar.</p>
+            </div>
+            <div class="sub-chips" style="margin-bottom:16px">
+              <span style="font-size:12px;color:var(--muted);align-self:center;margin-right:4px">Atalhos:</span>
+            </div>
+          </div>
+
+          <!-- MODO: múltiplos -->
+          <div id="reddit-multiplos" style="display:none">
+            <div class="form-group">
+              <label>Subreddits (um por linha ou separados por vírgula)</label>
+              <textarea id="reddit-subs-multi" rows="4" placeholder="empreendedorismo&#10;freelancers&#10;marketing&#10;meunegocio"></textarea>
+            </div>
+            <div class="form-group" style="width:200px">
+              <label>Posts por subreddit</label>
+              <input type="number" id="reddit-posts-multi" value="5" min="1" max="20" />
+            </div>
+          </div>
+
+          <!-- MODO: busca por termo -->
+          <div id="reddit-busca-termo" style="display:none">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Subreddit</label>
+                <input type="text" id="reddit-sub-busca" placeholder="empreendedorismo" />
+              </div>
+              <div class="form-group">
+                <label>Termo de busca</label>
+                <input type="text" id="reddit-termo" placeholder="cobrar mais, cliente, site..." />
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="btn-reddit" onclick="buscarReddit()" style="background:#c85a20;color:#fff">
+            🟠 Analisar Reddit
+          </button>
+        </div>
+
+      </div><!-- fim secao-reddit -->
+
+      <!-- ══════════════════════════════════
+           ESTADO DE PROGRESSO (compartilhado)
+      ══════════════════════════════════ -->
+      <div class="card progress-wrap" id="progresso">
+        <div class="card-title">⏳ Analisando...</div>
+        <div class="progress-text" id="prog-texto">Iniciando...</div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="prog-bar" style="width:0%"></div>
+        </div>
+        <div class="progress-sub" id="prog-sub"></div>
+      </div>
+
+      <!-- SUMÁRIO (compartilhado) -->
+      <div class="sumario" id="sumario">
+        <div class="sumario-title">✅ Análise concluída!</div>
+        <div id="sum-stats"></div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <a href="index.html" class="btn btn-primary btn-sm">Ver no Dashboard →</a>
+          <button class="btn btn-secondary btn-sm" onclick="limparForm()">Analisar outra fonte</button>
+        </div>
+      </div>
+
+      <!-- PRÉVIA (compartilhada) -->
+      <div class="card resultado-wrap" id="resultados">
+        <div class="card-title">🚨 Prévia — comentários com dores detectadas</div>
+        <div id="lista-preview"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/analise.js"></script>
+  <script src="js/youtube.js"></script>
+  <script src="js/reddit.js"></script>
+  <script>
+
+    // ── UTILS ──────────────────────────────────────────────────
+    function toast(msg, ms = 3000) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', ms);
+    }
+
+    function setProgresso(pct, texto, sub = '') {
+      document.getElementById('prog-bar').style.width = pct + '%';
+      document.getElementById('prog-texto').textContent = texto;
+      document.getElementById('prog-sub').textContent = sub;
+    }
+
+    function iniciarUI(btnId) {
+      document.getElementById(btnId).disabled = true;
+      document.getElementById('progresso').style.display = 'block';
+      document.getElementById('sumario').style.display = 'none';
+      document.getElementById('resultados').style.display = 'none';
+    }
+
+    function finalizarUI(btnId, analisados, novos) {
+      document.getElementById(btnId).disabled = false;
+      const comDores = analisados.filter(c => c.dores?.length > 0);
+      const taxa = analisados.length > 0 ? Math.round((comDores.length / analisados.length) * 100) : 0;
+
+      document.getElementById('sum-stats').innerHTML = `
+        <div class="sumario-stat">💬 <strong>${analisados.length}</strong> entradas analisadas</div>
+        <div class="sumario-stat">🚨 <strong>${comDores.length}</strong> com dores detectadas (${taxa}%)</div>
+        <div class="sumario-stat">🆕 <strong>${novos}</strong> novas adicionadas ao dashboard</div>
+      `;
+      document.getElementById('sumario').style.display = 'block';
+
+      if (comDores.length > 0) renderizarPrevia(comDores.slice(0, 5));
+    }
+
+    function salvarEAnalisar(itens) {
+      const analisados = itens.map(c => ({
+        ...c,
+        dores: analisarComentario(c.texto),
+      }));
+
+      const existentes = Storage.getComentarios();
+      const idsExistentes = new Set(existentes.map(c => c.id));
+      const novos = analisados.filter(c => !idsExistentes.has(c.id));
+      Storage.salvarComentarios([...existentes, ...novos]);
+
+      return { analisados, novosCount: novos.length };
+    }
+
+    function renderizarPrevia(lista) {
+      const cores = { cobranca:'orange', presenca:'blue', captacao:'purple', operacional:'cyan', credibilidade:'yellow' };
+      const container = document.getElementById('lista-preview');
+      const wrap = document.getElementById('resultados');
+
+      container.innerHTML = lista.map(c => `
+        <div class="resultado-item ${c.fonte === 'reddit' ? 'reddit' : ''}">
+          <div class="resultado-fonte">${c.fonte === 'reddit' ? '🟠 Reddit' : '▶ YouTube'} · ${c.subreddit ? 'r/' + c.subreddit : ''}</div>
+          <div class="resultado-autor">${c.autor}</div>
+          ${c.videoTitle ? `<div class="resultado-video">${c.videoTitle.slice(0,70)}</div>` : ''}
+          <div class="resultado-texto">${c.texto.slice(0, 200)}${c.texto.length > 200 ? '…' : ''}</div>
+          <div class="resultado-badges">
+            ${(c.dores || []).map(d => `<span class="badge-sm badge-${cores[d.key] || 'blue'}">${d.emoji} ${d.label}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      wrap.style.display = 'block';
+    }
+
+    function limparForm() {
+      document.getElementById('progresso').style.display = 'none';
+      document.getElementById('sumario').style.display = 'none';
+      document.getElementById('resultados').style.display = 'none';
+      document.getElementById('prog-bar').style.width = '0%';
+      document.getElementById('btn-yt').disabled = false;
+      document.getElementById('btn-reddit').disabled = false;
+    }
+
+    // ── FONTE TOGGLE ───────────────────────────────────────────
+    function trocarFonte(fonte) {
+      document.querySelectorAll('.fonte-tab').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.fonte-tab.${fonte}`).classList.add('active');
+      document.querySelector('.secao-yt').style.display     = fonte === 'yt'     ? 'block' : 'none';
+      document.querySelector('.secao-reddit').style.display = fonte === 'reddit' ? 'block' : 'none';
+      limparForm();
+    }
+
+    // ── REDDIT MODO TOGGLE ─────────────────────────────────────
+    function trocarModoReddit() {
+      const modo = document.getElementById('reddit-modo').value;
+      document.getElementById('reddit-unico').style.display       = modo === 'unico'  ? 'block' : 'none';
+      document.getElementById('reddit-multiplos').style.display   = modo === 'multiplos' ? 'block' : 'none';
+      document.getElementById('reddit-busca-termo').style.display = modo === 'busca'  ? 'block' : 'none';
+    }
+
+    // ── YOUTUBE BUSCA ──────────────────────────────────────────
+    async function buscarYT() {
+      const cfg = Storage.getConfig();
+      if (!cfg.apiKey) { toast('⚠️ Configure a API Key em Configurações.'); return; }
+
+      const urlInput = document.getElementById('yt-url').value.trim();
+      const videoId = extrairVideoId(urlInput);
+      if (!videoId) { toast('URL do YouTube inválida.'); return; }
+
+      const maxPaginas = parseInt(document.getElementById('yt-paginas').value) || 3;
+      iniciarUI('btn-yt');
+
+      try {
+        setProgresso(5, 'Buscando informações do vídeo...');
+        let infoVideo = null;
+        try { infoVideo = await buscarInfoVideo(videoId, cfg.apiKey); } catch(e) {}
+
+        if (infoVideo) {
+          document.getElementById('prog-sub').textContent = `📹 ${infoVideo.title}`;
+        }
+
+        setProgresso(10, 'Buscando comentários...');
+        const comentarios = await buscarTodosComentarios(videoId, cfg.apiKey, maxPaginas, (atual, total) => {
+          setProgresso(10 + (atual / Math.max(total, 1)) * 70, `${atual} de ${total} comentários...`);
+        });
+
+        const itensRaw = comentarios.map(c => ({
+          ...c,
+          videoTitle: infoVideo?.title || '',
+          videoChannel: infoVideo?.channelTitle || '',
+          fonte: 'youtube',
+        }));
+
+        setProgresso(90, 'Analisando dores...');
+        const { analisados, novosCount } = salvarEAnalisar(itensRaw);
+        Storage.adicionarHistorico({ videoId, videoTitle: infoVideo?.title || videoId, total: comentarios.length, comDores: analisados.filter(c => c.dores.length > 0).length, fonte: 'youtube' });
+
+        setProgresso(100, 'Concluído!');
+        finalizarUI('btn-yt', analisados, novosCount);
+
+      } catch(err) {
+        toast(`❌ ${err.message}`, 5000);
+        document.getElementById('prog-texto').textContent = `Erro: ${err.message}`;
+        document.getElementById('btn-yt').disabled = false;
+      }
+    }
+
+    // ── REDDIT BUSCA ───────────────────────────────────────────
+    async function buscarReddit() {
+      const modo = document.getElementById('reddit-modo').value;
+      iniciarUI('btn-reddit');
+
+      try {
+        let itensRaw = [];
+
+        if (modo === 'unico') {
+          const sub = document.getElementById('reddit-sub').value.trim().replace(/^r\//,'');
+          const maxPosts = parseInt(document.getElementById('reddit-posts').value) || 10;
+          if (!sub) { toast('Digite o nome do subreddit.'); document.getElementById('btn-reddit').disabled = false; return; }
+
+          setProgresso(5, `Acessando r/${sub}...`);
+          itensRaw = await buscarRedditCompleto(sub, maxPosts, (atual, total, texto) => {
+            setProgresso(5 + (atual / Math.max(total, 1)) * 85, texto, `Post ${atual} de ${total}`);
+          });
+
+        } else if (modo === 'multiplos') {
+          const raw = document.getElementById('reddit-subs-multi').value;
+          const subs = raw.split(/[\n,]+/).map(s => s.trim().replace(/^r\//,'')).filter(Boolean);
+          const maxPosts = parseInt(document.getElementById('reddit-posts-multi').value) || 5;
+          if (!subs.length) { toast('Digite ao menos um subreddit.'); document.getElementById('btn-reddit').disabled = false; return; }
+
+          itensRaw = await buscarMultiplosSubreddits(subs, maxPosts, (atual, total, texto) => {
+            setProgresso(5 + (atual / Math.max(total, 1)) * 85, texto, `${atual} de ${total} subreddits`);
+          });
+
+        } else if (modo === 'busca') {
+          const sub   = document.getElementById('reddit-sub-busca').value.trim().replace(/^r\//,'');
+          const termo = document.getElementById('reddit-termo').value.trim();
+          if (!sub || !termo) { toast('Preencha subreddit e termo.'); document.getElementById('btn-reddit').disabled = false; return; }
+
+          setProgresso(10, `Buscando "${termo}" em r/${sub}...`);
+          const posts = await buscarRedditPorTermo(sub, termo, 25);
+          setProgresso(30, `${posts.length} posts encontrados. Carregando comentários...`);
+
+          for (let i = 0; i < posts.length; i++) {
+            const p = posts[i];
+            const textoPost = [p.title, p.selftext].filter(Boolean).join('\n\n').trim();
+            if (textoPost.length >= 15) {
+              itensRaw.push({
+                id: `reddit-post-${p.id}`,
+                tipo: 'post',
+                texto: textoPost,
+                autor: p.author,
+                autorUrl: `https://reddit.com/u/${p.author}`,
+                autorFoto: null,
+                likes: p.score || 0,
+                data: new Date((p.created_utc || 0) * 1000).toISOString(),
+                fonte: 'reddit',
+                subreddit: p.subreddit,
+                videoId: p.id,
+                videoTitle: `r/${p.subreddit} · ${p.title.slice(0, 60)}`,
+                permalink: `https://reddit.com${p.permalink}`,
+              });
+            }
+            if (p.num_comments > 0) {
+              try {
+                const comms = await buscarComentariosPost(p.subreddit || sub, p.id, 30);
+                itensRaw.push(...comms);
+              } catch(e) {}
+            }
+            setProgresso(30 + ((i+1)/posts.length)*60, `Post ${i+1} de ${posts.length}...`);
+            await new Promise(r => setTimeout(r, 500));
+          }
+        }
+
+        setProgresso(95, 'Analisando dores...');
+        const { analisados, novosCount } = salvarEAnalisar(itensRaw);
+        setProgresso(100, 'Concluído!');
+        finalizarUI('btn-reddit', analisados, novosCount);
+
+      } catch(err) {
+        toast(`❌ ${err.message}`, 5000);
+        document.getElementById('prog-texto').textContent = `Erro: ${err.message}`;
+        document.getElementById('btn-reddit').disabled = false;
+      }
+    }
+
+    // ── INIT ───────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      const cfg = Storage.getConfig();
+      if (!cfg.apiKey) document.getElementById('aviso-apikey').style.display = 'block';
+
+      // Chips de subreddits rápidos
+      const chipsWrap = document.querySelector('.sub-chips');
+      SUBREDDITS_BR.forEach(({ sub, desc }) => {
+        const chip = document.createElement('span');
+        chip.className = 'sub-chip';
+        chip.title = desc;
+        chip.textContent = 'r/' + sub;
+        chip.onclick = () => {
+          document.getElementById('reddit-sub').value = sub;
+          document.querySelectorAll('.sub-chip').forEach(c => c.classList.remove('selected'));
+          chip.classList.add('selected');
+        };
+        chipsWrap.appendChild(chip);
+      });
+    });
+  </script>
+</body>
+</html>

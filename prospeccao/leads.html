@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leads — Prospecção Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0c0e1a; --bg2:#131828; --bg3:#1b2240; --border:#1e2840;
+      --border2:#253560; --text:#f0ede6; --muted:#6b7080; --muted2:#9098a8;
+      --gold:#C8892C; --gold-light:#D9A850; --gold-dark:#7a5010; --gold-bg:#1a1208;
+      --purple:#a78bfa; --purple-dark:#5b21b6; --purple-bg:#1a0d35;
+      --green:#4ade80; --green-dark:#15803d; --green-bg:#061a0c;
+      --orange:#fb923c; --orange-dark:#c2410c; --orange-bg:#1c0e06;
+      --red:#f87171; --red-dark:#b91c1c; --red-bg:#1c0808;
+      --yellow:#fbbf24; --yellow-bg:#1c1608;
+      --cyan:#38bdf8; --cyan-bg:#071820;
+      --blue:#60a5fa; --blue-dark:#1d4ed8; --blue-bg:#0a1628;
+    }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; }
+
+    .sidebar { width:240px; min-height:100vh; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; bottom:0; }
+    .sidebar-logo { padding:24px 20px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+    .logo-text { font-family:'Cinzel',serif; font-size:13px; font-weight:700; color:var(--muted2); line-height:1.2; letter-spacing:0.04em; }
+    .logo-text strong { color:var(--gold); display:block; font-size:15px; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:11px 20px; color:var(--muted2); text-decoration:none; font-size:13px; font-weight:500; transition:all .15s; border-left:2px solid transparent; margin:1px 0; }
+    .nav-item:hover { color:var(--text); background:rgba(200,137,44,0.08); border-left-color:var(--gold-dark); }
+    .nav-item.active { color:#0c0e1a; background:var(--gold); border-left-color:var(--gold); font-weight:700; }
+    .nav-icon { font-size:16px; width:20px; text-align:center; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); }
+    .sidebar-footer a { color:var(--gold); text-decoration:none; }
+
+    .main { margin-left:240px; flex:1; }
+    .page-header { padding:28px 32px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .page-header h1 { font-family:'Cinzel',serif; font-size:20px; font-weight:700; letter-spacing:0.03em; }
+    .page-header .subtitle { font-size:13px; color:var(--muted2); margin-top:4px; }
+    .content { padding:28px 32px 60px; }
+
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:9px 18px; border-radius:8px; border:none; font-size:13px; font-weight:700; cursor:pointer; transition:all .15s; text-decoration:none; font-family:inherit; }
+    .btn-primary { background:var(--gold); color:#000; }
+    .btn-primary:hover { background:var(--yellow); }
+    .btn-secondary { background:var(--bg3); color:var(--muted2); border:1px solid var(--border2); }
+
+    .section-card { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; margin-bottom:24px; overflow:hidden; }
+    .section-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .section-title { font-size:14px; font-weight:700; }
+
+    .filtros { display:flex; gap:10px; flex-wrap:wrap; padding:16px 20px; border-bottom:1px solid var(--border); }
+    .filtros input, .filtros select { background:var(--bg3); border:1px solid var(--border2); color:var(--text); border-radius:8px; padding:7px 12px; font-size:13px; outline:none; }
+    .filtros input:focus, .filtros select:focus { border-color:var(--gold); }
+    .filtros select option { background:var(--bg2); }
+    .filtros input::placeholder { color:var(--muted); }
+
+    .lead-card { padding:20px; border-bottom:1px solid var(--border); display:flex; gap:14px; align-items:flex-start; }
+    .lead-card:last-child { border-bottom:none; }
+    .lead-avatar { width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0; background:var(--bg3); }
+    .lead-avatar-fb { width:44px; height:44px; border-radius:50%; background:var(--gold-bg); border:1px solid var(--gold-dark); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--gold); flex-shrink:0; }
+    .lead-body { flex:1; min-width:0; }
+    .lead-nome { font-size:15px; font-weight:700; margin-bottom:2px; }
+    .lead-video { font-size:12px; color:var(--gold); margin-bottom:8px; }
+    .lead-comentario { font-size:13px; color:var(--muted2); line-height:1.5; margin-bottom:10px; background:var(--bg3); border-radius:8px; padding:10px 12px; border-left:3px solid var(--gold-dark); }
+    .lead-dores { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+    .dor-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+    .dor-badge.orange { background:var(--orange-bg); color:var(--orange); border:1px solid var(--orange-dark); }
+    .dor-badge.blue   { background:var(--gold-bg);   color:var(--gold);   border:1px solid var(--gold-dark); }
+    .dor-badge.purple { background:var(--purple-bg); color:var(--purple); border:1px solid var(--purple-dark); }
+    .dor-badge.cyan   { background:var(--cyan-bg);   color:var(--cyan);   border:1px solid #1870A0; }
+    .dor-badge.yellow { background:var(--yellow-bg); color:var(--yellow); border:1px solid var(--gold-dark); }
+
+    .lead-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .lead-status select { background:var(--bg3); border:1px solid var(--border2); color:var(--text); border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer; }
+    .lead-status select:focus { outline:none; border-color:var(--gold); }
+    .btn-link { background:none; border:none; color:var(--gold); font-size:12px; font-weight:700; cursor:pointer; padding:0; text-decoration:underline; text-underline-offset:3px; }
+    .btn-link:hover { color:var(--yellow); }
+    .btn-link.danger { color:var(--red); }
+
+    .status-badge { padding:3px 10px; border-radius:99px; font-size:11px; font-weight:700; }
+    .status-novo      { background:var(--gold-bg);   color:var(--gold);   border:1px solid var(--gold-dark); }
+    .status-contatado { background:var(--purple-bg); color:var(--purple); border:1px solid var(--purple-dark); }
+    .status-negociando{ background:var(--cyan-bg);   color:var(--cyan);   border:1px solid #1870A0; }
+    .status-fechado   { background:var(--green-bg);  color:var(--green);  border:1px solid var(--green-dark); }
+    .status-perdido   { background:var(--red-bg);    color:var(--red);    border:1px solid var(--red-dark); }
+
+    .lead-nota { margin-top:8px; }
+    .lead-nota textarea { width:100%; background:var(--bg); border:1px solid var(--border2); color:var(--text); border-radius:8px; padding:8px 10px; font-size:12px; font-family:inherit; outline:none; resize:vertical; min-height:60px; }
+    .lead-nota textarea:focus { border-color:var(--gold); }
+
+    .empty-state { text-align:center; padding:60px 20px; }
+    .empty-icon { font-size:48px; margin-bottom:16px; }
+    .empty-title { font-size:18px; font-weight:700; margin-bottom:8px; }
+    .empty-desc { font-size:14px; color:var(--muted2); max-width:400px; margin:0 auto 24px; line-height:1.6; }
+
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--gold-dark); color:var(--text); padding:12px 20px; border-radius:10px; font-size:14px; font-weight:500; z-index:9999; display:none; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span style="font-size:22px">🔍</span>
+      <span class="logo-text">Prospecção<strong>Pro</strong></span>
+    </div>
+    <nav style="flex:1;padding:12px 0">
+      <a href="index.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="buscar.html" class="nav-item"><span class="nav-icon">🔎</span> Buscar Comentários</a>
+      <a href="leads.html" class="nav-item active"><span class="nav-icon">🎯</span> Leads Salvos</a>
+      <a href="diagnostico.html" class="nav-item"><span class="nav-icon">🩺</span> Diagnóstico</a>
+      <a href="video-audit.html" class="nav-item"><span class="nav-icon">🎬</span> Video Audit</a>
+      <a href="estrategia.html" class="nav-item"><span class="nav-icon">🗺️</span> Estratégia</a>
+      <a href="configuracoes.html" class="nav-item"><span class="nav-icon">⚙️</span> Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      Andarilho Digital · Agência<br>
+      <a href="../orcamentos-crm/index.html">→ Sistema de Orçamentos</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <div>
+        <h1>🎯 Leads Salvos</h1>
+        <p class="subtitle">Pessoas com dores reais identificadas nos comentários</p>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-title">Pipeline de Prospecção</span>
+          <span id="total-label" style="font-size:12px;color:var(--muted)"></span>
+        </div>
+
+        <div class="filtros">
+          <input type="text" id="busca" placeholder="Buscar por nome ou dor..." oninput="renderizar()" style="flex:1;min-width:200px" />
+          <select id="filtro-status" onchange="renderizar()">
+            <option value="">Todos os status</option>
+            <option value="novo">🟡 Novo</option>
+            <option value="contatado">💜 Contatado</option>
+            <option value="negociando">🔵 Negociando</option>
+            <option value="fechado">🟢 Fechado</option>
+            <option value="perdido">🔴 Perdido</option>
+          </select>
+        </div>
+
+        <div id="lista-leads">
+          <div class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <div class="empty-title">Nenhum lead salvo ainda</div>
+            <div class="empty-desc">Vá ao Dashboard, encontre comentários com dores e salve como lead.</div>
+            <a href="index.html" class="btn btn-primary">Ver Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/storage.js"></script>
+  <script>
+    function toast(msg, ms = 2500) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', ms);
+    }
+
+    function formatarData(iso) {
+      if (!iso) return '';
+      return new Date(iso).toLocaleDateString('pt-BR');
+    }
+
+    function renderizar() {
+      const busca = document.getElementById('busca').value.toLowerCase();
+      const filtroStatus = document.getElementById('filtro-status').value;
+
+      let leads = Storage.getLeads();
+
+      if (busca) {
+        leads = leads.filter(l =>
+          (l.nome || '').toLowerCase().includes(busca) ||
+          (l.comentario || '').toLowerCase().includes(busca) ||
+          (l.dores || []).some(d => d.label.toLowerCase().includes(busca))
+        );
+      }
+
+      if (filtroStatus) {
+        leads = leads.filter(l => l.status === filtroStatus);
+      }
+
+      document.getElementById('total-label').textContent =
+        leads.length > 0 ? `${leads.length} lead(s)` : '';
+
+      const container = document.getElementById('lista-leads');
+
+      if (leads.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <div class="empty-title">${busca || filtroStatus ? 'Nenhum resultado' : 'Nenhum lead salvo ainda'}</div>
+            <div class="empty-desc">${busca || filtroStatus ? 'Tente outros filtros.' : 'Vá ao Dashboard e salve leads dos comentários analisados.'}</div>
+            ${!busca && !filtroStatus ? '<a href="index.html" class="btn btn-primary">Ver Dashboard</a>' : ''}
+          </div>`;
+        return;
+      }
+
+      const statusOpts = [
+        ['novo','🟡 Novo'],
+        ['contatado','💜 Contatado'],
+        ['negociando','🔵 Negociando'],
+        ['fechado','🟢 Fechado'],
+        ['perdido','🔴 Perdido'],
+      ];
+
+      container.innerHTML = leads.map(l => {
+        const foto = l.foto
+          ? `<img class="lead-avatar" src="${l.foto}" alt="${l.nome}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex">`
+          : '';
+        const inicial = (l.nome || '?')[0].toUpperCase();
+
+        return `
+          <div class="lead-card" id="lead-${l.id}">
+            ${foto}
+            <div class="lead-avatar-fb" ${l.foto ? 'style="display:none"' : ''}>${inicial}</div>
+            <div class="lead-body">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap">
+                <div class="lead-nome">${l.nome || 'Sem nome'}</div>
+                <span class="status-badge status-${l.status || 'novo'}">${statusLabel(l.status)}</span>
+                <span style="font-size:11px;color:var(--muted)">Salvo em ${formatarData(l.savedAt)}</span>
+              </div>
+              ${l.videoTitle ? `<div class="lead-video">📹 ${l.videoTitle}</div>` : ''}
+              <div class="lead-comentario">"${l.comentario?.slice(0,300)}${(l.comentario?.length||0) > 300 ? '…' : ''}"</div>
+              <div class="lead-dores">
+                ${(l.dores || []).map(d => `<span class="dor-badge ${d.cor}">${d.emoji} ${d.label}</span>`).join('')}
+              </div>
+
+              <div class="lead-nota">
+                <textarea
+                  placeholder="Anotações sobre este lead (abordagem, resposta, próximo passo)..."
+                  onblur="salvarNota('${l.id}', this.value)"
+                >${l.nota || ''}</textarea>
+              </div>
+
+              <div class="lead-actions" style="margin-top:10px">
+                <div class="lead-status">
+                  <select onchange="mudarStatus('${l.id}', this.value)">
+                    ${statusOpts.map(([v,t]) => `<option value="${v}" ${l.status===v?'selected':''}>${t}</option>`).join('')}
+                  </select>
+                </div>
+                ${l.canal ? `<a href="${l.canal}" target="_blank" class="btn-link">Ver canal →</a>` : ''}
+                ${l.videoId ? `<a href="https://youtube.com/watch?v=${l.videoId}" target="_blank" class="btn-link">Ver vídeo →</a>` : ''}
+                <button class="btn-link danger" onclick="excluir('${l.id}')">Excluir</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function statusLabel(s) {
+      const map = { novo:'🟡 Novo', contatado:'💜 Contatado', negociando:'🔵 Negociando', fechado:'🟢 Fechado', perdido:'🔴 Perdido' };
+      return map[s] || '🟡 Novo';
+    }
+
+    function mudarStatus(id, status) {
+      Storage.atualizarLead(id, { status });
+      renderizar();
+      toast('Status atualizado.');
+    }
+
+    function salvarNota(id, nota) {
+      Storage.atualizarLead(id, { nota });
+    }
+
+    function excluir(id) {
+      if (!confirm('Excluir este lead?')) return;
+      Storage.excluirLead(id);
+      renderizar();
+      toast('Lead excluído.');
+    }
+
+    renderizar();
+  </script>
+</body>
+</html>

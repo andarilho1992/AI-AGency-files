@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico de Lead — Prospecção Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:#0c0e1a; --bg2:#131828; --bg3:#1b2240; --border:#1e2840;
+      --border2:#253560; --text:#f0ede6; --muted:#6b7080; --muted2:#9098a8;
+      --gold:#C8892C; --gold-light:#D9A850; --gold-dark:#7a5010; --gold-bg:#1a1208;
+      --purple:#a78bfa; --purple-dark:#5b21b6; --purple-bg:#1a0d35;
+      --green:#4ade80; --green-dark:#15803d; --green-bg:#061a0c;
+      --orange:#fb923c; --orange-dark:#c2410c; --orange-bg:#1c0e06;
+      --red:#f87171; --red-dark:#b91c1c; --red-bg:#1c0808;
+      --blue:#60a5fa; --blue-dark:#1d4ed8; --blue-bg:#0a1628;
+      --cyan:#38bdf8; --cyan-bg:#071820;
+      --yellow:#fbbf24; --yellow-bg:#1c1608;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ─────────────────────────── */
+    .sidebar {
+      width: 240px; min-height: 100vh; background: var(--bg2);
+      border-right: 1px solid var(--border); display: flex;
+      flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0;
+    }
+    .sidebar-logo {
+      padding: 24px 20px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-text { font-family:'Cinzel',serif; font-size:13px; font-weight:700; color:var(--muted2); line-height:1.2; letter-spacing:0.04em; }
+    .logo-text strong { color:var(--gold); display:block; font-size:15px; }
+    .nav-item {
+      display:flex; align-items:center; gap:10px; padding:11px 20px;
+      color:var(--muted2); text-decoration:none; font-size:13px; font-weight:500;
+      transition:all .15s; border-left:2px solid transparent; margin:1px 0;
+    }
+    .nav-item:hover { color:var(--text); background:rgba(200,137,44,0.08); border-left-color:var(--gold-dark); }
+    .nav-item.active { color:#0c0e1a; background:var(--gold); border-left-color:var(--gold); font-weight:700; }
+    .nav-icon { font-size:16px; width:20px; text-align:center; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); }
+    .sidebar-footer a { color:var(--gold); text-decoration:none; }
+
+    /* ── MAIN ────────────────────────────── */
+    .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; }
+
+    /* ── PAGE HEADER ─────────────────────── */
+    .page-header {
+      padding: 24px 32px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg2);
+    }
+    .page-header h1 { font-family:'Cinzel',serif; font-size:18px; font-weight:700; letter-spacing:0.03em; }
+    .page-header .subtitle { font-size:12px; color:var(--muted2); margin-top:3px; }
+
+    /* ── LEAD HEADER CARD ────────────────── */
+    .lead-header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px;
+    }
+    .lead-header-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted);
+    }
+    .form-input, .form-select {
+      background: var(--bg3); border: 1px solid var(--border2);
+      color: var(--text); border-radius: 8px; padding: 8px 12px;
+      font-size: 13px; font-family: inherit; outline: none;
+      transition: border-color .15s;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--gold); }
+    .form-input::placeholder { color: var(--muted); }
+    .form-select option { background: var(--bg2); }
+
+    /* ── STEPS NAV ───────────────────────── */
+    .steps-nav {
+      display: flex; gap: 0;
+      background: var(--bg2);
+      border-bottom: 2px solid var(--border);
+      padding: 0 32px;
+      overflow-x: auto;
+    }
+    .step-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 16px 20px;
+      font-size: 13px; font-weight: 600;
+      color: var(--muted2); background: none; border: none;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -2px; transition: all .15s;
+      white-space: nowrap; font-family: inherit;
+    }
+    .step-btn:hover { color: var(--text); }
+    .step-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .step-btn.done { color: var(--green); }
+    .step-btn .step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800;
+      background: var(--bg3); border: 1px solid var(--border2);
+      flex-shrink: 0;
+    }
+    .step-btn.active .step-num { background: var(--gold-bg); border-color: var(--gold-dark); color: var(--gold); }
+    .step-btn.done .step-num { background: var(--green-bg); border-color: var(--green-dark); color: var(--green); }
+
+    /* ── CONTENT AREA ────────────────────── */
+    .content { padding: 28px 32px 60px; }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ── SECTION HEADER ──────────────────── */
+    .sec-eyebrow {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gold); margin-bottom: 6px;
+    }
+    .sec-title {
+      font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700;
+      margin-bottom: 6px; letter-spacing: 0.02em;
+    }
+    .sec-sub { font-size: 13px; color: var(--muted2); margin-bottom: 28px; line-height: 1.7; }
+
+    /* ── DIAGNOSTIC GRID ─────────────────── */
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .diag-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .diag-card-header {
+      padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .diag-card-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700;
+    }
+    .diag-score {
+      font-size: 12px; font-weight: 800;
+      padding: 3px 10px; border-radius: 99px;
+    }
+    .diag-card-url {
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .diag-card-url input {
+      width: 100%;
+      background: var(--bg3); border: 1px solid var(--border2);
+      color: var(--text); border-radius: 6px; padding: 6px 10px;
+      font-size: 12px; font-family: inherit; outline: none;
+    }
+    .diag-card-url input:focus { border-color: var(--gold); }
+    .diag-card-url input::placeholder { color: var(--muted); }
+    .diag-items { padding: 8px 0; }
+    .diag-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 18px; cursor: pointer;
+      transition: background .1s;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .diag-item:last-child { border-bottom: none; }
+    .diag-item:hover { background: rgba(255,255,255,0.02); }
+    .diag-item input[type="checkbox"] {
+      width: 16px; height: 16px; cursor: pointer;
+      accent-color: var(--gold); flex-shrink: 0;
+    }
+    .diag-item-label {
+      font-size: 13px; color: var(--muted2); line-height: 1.4;
+      flex: 1;
+    }
+    .diag-item-label.checked { color: var(--text); }
+    .diag-item-severity {
+      font-size: 10px; font-weight: 700; padding: 2px 7px;
+      border-radius: 99px; flex-shrink: 0;
+    }
+    .sev-alta  { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-dark); }
+    .sev-media { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-dark); }
+    .sev-baixa { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-dark); }
+    .diag-notes {
+      padding: 10px 18px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .diag-notes textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+      color: var(--text); border-radius: 8px; padding: 8px 10px;
+      font-size: 12px; font-family: inherit; outline: none;
+      resize: vertical; min-height: 56px; line-height: 1.5;
+    }
+    .diag-notes textarea:focus { border-color: var(--gold); }
+    .diag-notes textarea::placeholder { color: var(--muted); }
+
+    /* ── SCORE SUMMARY ───────────────────── */
+    .score-bar-wrap {
+      background: var(--bg3); border-radius: 99px;
+      height: 6px; overflow: hidden; flex: 1;
+    }
+    .score-bar-fill {
+      height: 100%; border-radius: 99px;
+      transition: width .5s ease;
+    }
+
+    /* ── PROJETO TAB ─────────────────────── */
+    .projeto-section {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 14px; margin-bottom: 20px; overflow: hidden;
+    }
+    .projeto-section-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .projeto-section-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700;
+    }
+    .projeto-items { padding: 8px 0; }
+    .projeto-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .projeto-item:last-child { border-bottom: none; }
+    .projeto-item-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0;
+      background: var(--gold-bg); border: 1px solid var(--gold-dark);
+      color: var(--gold);
+    }
+    .projeto-item-body { flex: 1; }
+    .projeto-item-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .projeto-item-desc { font-size: 12px; color: var(--muted2); line-height: 1.6; }
+    .projeto-item-tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 99px; border: 1px solid;
+    }
+    .tag-urgente  { background: var(--red-bg);    color: var(--red);    border-color: var(--red-dark); }
+    .tag-alto     { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-dark); }
+    .tag-medio    { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-dark); }
+    .tag-site     { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-dark); }
+    .tag-gmb      { background: var(--gold-bg);   color: var(--gold);   border-color: var(--gold-dark); }
+    .tag-social   { background: var(--cyan-bg);   color: var(--cyan);   border-color: #1870A0; }
+
+    .empty-projeto {
+      text-align: center; padding: 48px 20px;
+      color: var(--muted); font-size: 14px;
+    }
+
+    /* ── SCRIPT TAB ──────────────────────── */
+    .lang-selector {
+      display: flex; gap: 8px; margin-bottom: 20px;
+    }
+    .lang-btn {
+      padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border2);
+      background: var(--bg3); color: var(--muted2);
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: all .15s; font-family: inherit;
+    }
+    .lang-btn.active {
+      background: var(--gold-bg); border-color: var(--gold-dark);
+      color: var(--gold);
+    }
+    .lang-btn:hover:not(.active) { border-color: var(--gold); color: var(--text); }
+
+    .script-container {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 14px; overflow: hidden;
+    }
+    .script-toolbar {
+      padding: 12px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .script-toolbar-left { display: flex; align-items: center; gap: 10px; }
+    .script-toolbar-title { font-size: 13px; font-weight: 700; }
+    .script-duration {
+      font-size: 11px; font-weight: 700; padding: 2px 10px;
+      border-radius: 99px;
+      background: var(--gold-bg); border: 1px solid var(--gold-dark);
+      color: var(--gold);
+    }
+
+    .script-body { padding: 20px; }
+    .script-block { margin-bottom: 20px; }
+    .script-block:last-child { margin-bottom: 0; }
+    .script-time {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gold);
+      margin-bottom: 5px;
+    }
+    .script-section-name {
+      font-size: 12px; font-weight: 700; color: var(--muted2);
+      margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .script-text {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px; color: var(--muted2); line-height: 1.85;
+      white-space: pre-wrap;
+    }
+    .script-text em { color: var(--gold-light); font-style: normal; }
+    .script-tip {
+      margin-top: 6px; font-size: 11px; color: var(--muted);
+      padding-left: 4px; font-style: italic;
+    }
+    .script-empty {
+      text-align: center; padding: 60px 20px;
+      color: var(--muted); font-size: 14px;
+    }
+    .script-full-text {
+      background: var(--bg3); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 20px;
+      font-size: 13px; color: var(--muted2); line-height: 1.9;
+      white-space: pre-wrap; margin-bottom: 16px;
+    }
+
+    /* ── PRICING TAB ─────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .pricing-item {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 12px; padding: 16px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .pricing-item input[type="checkbox"] {
+      width: 16px; height: 16px; cursor: pointer;
+      accent-color: var(--gold); flex-shrink: 0;
+    }
+    .pricing-item-body { flex: 1; }
+    .pricing-item-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .pricing-item-range { font-size: 11px; color: var(--muted2); }
+    .pricing-item-input {
+      width: 100px; background: var(--bg3); border: 1px solid var(--border2);
+      color: var(--gold); border-radius: 6px; padding: 5px 8px;
+      font-size: 13px; font-weight: 800; font-family: inherit; outline: none;
+      text-align: right;
+    }
+    .pricing-item-input:focus { border-color: var(--gold); }
+
+    .currency-toggle {
+      display: flex; gap: 0; margin-bottom: 20px;
+    }
+    .currency-btn {
+      padding: 7px 16px; border: 1px solid var(--border2);
+      background: var(--bg3); color: var(--muted2);
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: all .15s; font-family: inherit;
+    }
+    .currency-btn:first-child { border-radius: 8px 0 0 8px; }
+    .currency-btn:last-child { border-radius: 0 8px 8px 0; border-left: none; }
+    .currency-btn.active { background: var(--gold-bg); border-color: var(--gold-dark); color: var(--gold); }
+
+    .total-card {
+      background: linear-gradient(135deg, var(--gold-bg), #1a0d35);
+      border: 1px solid var(--gold-dark);
+      border-radius: 14px; padding: 24px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .total-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 4px; }
+    .total-value { font-size: 36px; font-weight: 900; line-height: 1; font-family: 'Cinzel', serif; }
+    .total-sub { font-size: 12px; color: var(--muted2); margin-top: 4px; }
+
+    /* ── SEND CHECKLIST ──────────────────── */
+    .send-checklist {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 14px; overflow: hidden; margin-bottom: 20px;
+    }
+    .send-checklist-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-size: 14px; font-weight: 700;
+    }
+    .send-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .send-item:last-child { border-bottom: none; }
+    .send-item input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: var(--green);
+      flex-shrink: 0; margin-top: 2px; cursor: pointer;
+    }
+    .send-item-label { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+    .send-item-label strong { color: var(--text); display: block; }
+
+    /* ── BOTÕES ──────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 8px; border: none;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: all .15s; text-decoration: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--gold); color: #000; }
+    .btn-primary:hover { background: var(--yellow); }
+    .btn-secondary { background: var(--bg3); color: var(--muted2); border: 1px solid var(--border2); }
+    .btn-secondary:hover { color: var(--text); border-color: var(--gold); }
+    .btn-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-dark); }
+    .btn-green:hover { background: var(--green); color: #000; }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+    .actions-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 24px; }
+
+    /* ── TOAST ───────────────────────────── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3); border: 1px solid var(--gold-dark);
+      color: var(--text); padding: 12px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; z-index: 9999;
+      display: none; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    }
+
+    /* ── MISC ────────────────────────────── */
+    .info-banner {
+      background: var(--blue-bg); border: 1px solid var(--blue-dark);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 12px; color: var(--blue); margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .diag-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span style="font-size:22px">🔍</span>
+    <span class="logo-text">Prospecção<strong>Pro</strong></span>
+  </div>
+  <nav style="flex:1;padding:12px 0">
+    <a href="index.html"       class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="buscar.html"      class="nav-item"><span class="nav-icon">🔎</span> Buscar Comentários</a>
+    <a href="leads.html"       class="nav-item"><span class="nav-icon">🎯</span> Leads Salvos</a>
+    <a href="diagnostico.html" class="nav-item active"><span class="nav-icon">🩺</span> Diagnóstico</a>
+    <a href="video-audit.html" class="nav-item"><span class="nav-icon">🎬</span> Video Audit</a>
+    <a href="estrategia.html"  class="nav-item"><span class="nav-icon">🗺️</span> Estratégia</a>
+    <a href="configuracoes.html" class="nav-item"><span class="nav-icon">⚙️</span> Configurações</a>
+  </nav>
+  <div class="sidebar-footer">
+    Andarilho Digital · Agência<br>
+    <a href="../orcamentos-crm/index.html">→ Sistema de Orçamentos</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div>
+      <h1>🩺 Diagnóstico de Lead</h1>
+      <p class="subtitle">Analise, monte o projeto, gere o roteiro e feche o preço</p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-secondary btn-sm" onclick="novoLead()">+ Novo Lead</button>
+      <button class="btn btn-primary btn-sm" onclick="salvarDiagnostico()">💾 Salvar</button>
+    </div>
+  </header>
+
+  <!-- LEAD HEADER FORM -->
+  <div class="lead-header">
+    <div class="lead-header-form">
+      <div class="form-group">
+        <label class="form-label">Nome / @usuário</label>
+        <input type="text" class="form-input" id="lead-nome" placeholder="Ex: João Silva" oninput="salvarCampo()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Negócio</label>
+        <input type="text" class="form-input" id="lead-negocio" placeholder="Ex: Padaria do João" oninput="salvarCampo()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nicho / Setor</label>
+        <input type="text" class="form-input" id="lead-nicho" placeholder="Ex: Alimentação, Saúde..." oninput="salvarCampo()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">País</label>
+        <select class="form-select" id="lead-pais" onchange="salvarCampo()">
+          <option value="br">🇧🇷 Brasil</option>
+          <option value="th">🇹🇭 Tailândia</option>
+          <option value="us">🇺🇸 EUA</option>
+          <option value="au">🇦🇺 Austrália</option>
+          <option value="uk">🇬🇧 Reino Unido</option>
+          <option value="ae">🇦🇪 Dubai / EAU</option>
+          <option value="pt">🇵🇹 Portugal</option>
+          <option value="mx">🇲🇽 México</option>
+          <option value="ar">🇦🇷 Argentina</option>
+          <option value="co">🇨🇴 Colômbia</option>
+          <option value="other">🌍 Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Idioma do vídeo</label>
+        <select class="form-select" id="lead-idioma" onchange="salvarCampo(); trocarIdioma(this.value)">
+          <option value="pt">🇧🇷 Português</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="es">🇪🇸 Español</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contexto / Dor identificada</label>
+        <input type="text" class="form-input" id="lead-contexto" placeholder="Ex: Não consegue fechar clientes" oninput="salvarCampo()">
+      </div>
+    </div>
+  </div>
+
+  <!-- STEPS NAV -->
+  <div class="steps-nav">
+    <button class="step-btn active" id="step-btn-1" onclick="irAba(1)">
+      <span class="step-num">1</span> Diagnóstico
+    </button>
+    <button class="step-btn" id="step-btn-2" onclick="irAba(2)">
+      <span class="step-num">2</span> Projeto
+    </button>
+    <button class="step-btn" id="step-btn-3" onclick="irAba(3)">
+      <span class="step-num">3</span> Script do Vídeo
+    </button>
+    <button class="step-btn" id="step-btn-4" onclick="irAba(4)">
+      <span class="step-num">4</span> Fechar & Enviar
+    </button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ══ ABA 1: DIAGNÓSTICO ══ -->
+    <div class="tab-section active" id="aba-1">
+
+      <div class="sec-eyebrow">Passo 1 · Análise</div>
+      <div class="sec-title">Diagnóstico de Presença Digital</div>
+      <div class="sec-sub">Marque os problemas encontrados. Os itens não marcados = problema identificado. Isso alimenta o projeto e o script automaticamente.</div>
+
+      <div class="diag-grid">
+
+        <!-- SITE -->
+        <div class="diag-card" id="card-site">
+          <div class="diag-card-header">
+            <div class="diag-card-title">🌐 Website</div>
+            <span class="diag-score" id="score-site" style="background:var(--bg3);border:1px solid var(--border2);color:var(--muted)">—</span>
+          </div>
+          <div class="diag-card-url">
+            <input type="url" id="url-site" placeholder="https://... (ou vazio se não tem site)" oninput="salvarCampo()">
+          </div>
+          <div class="diag-items">
+            <label class="diag-item">
+              <input type="checkbox" id="site-existe" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-existe">Tem site próprio</span>
+              <span class="diag-item-severity sev-alta">CRÍTICO</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-mobile" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-mobile">Funciona bem no celular</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-rapido" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-rapido">Carrega rápido (menos de 3s)</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-cta" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-cta">Tem chamada clara para ação (CTA)</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-contato" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-contato">Formulário ou botão de contato</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-seo" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-seo">Aparece no Google (SEO básico)</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-ssl" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-ssl">Tem HTTPS / cadeado de segurança</span>
+              <span class="diag-item-severity sev-baixa">BAIXA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="site-atualizado" onchange="atualizarScore('site'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-site-atualizado">Conteúdo atualizado / atual</span>
+              <span class="diag-item-severity sev-baixa">BAIXA</span>
+            </label>
+          </div>
+          <div class="diag-notes">
+            <textarea id="notes-site" placeholder="Anotações sobre o site (o que você viu, screenshots, etc)..." oninput="salvarCampo()"></textarea>
+          </div>
+        </div>
+
+        <!-- GMB -->
+        <div class="diag-card" id="card-gmb">
+          <div class="diag-card-header">
+            <div class="diag-card-title">📍 Google Meu Negócio</div>
+            <span class="diag-score" id="score-gmb" style="background:var(--bg3);border:1px solid var(--border2);color:var(--muted)">—</span>
+          </div>
+          <div class="diag-card-url">
+            <input type="text" id="url-gmb" placeholder="Buscar no Google por: [nome do negócio]" oninput="salvarCampo()">
+          </div>
+          <div class="diag-items">
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-existe" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-existe">Aparece no Google Maps</span>
+              <span class="diag-item-severity sev-alta">CRÍTICO</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-completo" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-completo">Perfil 100% preenchido (telefone, endereço, site)</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-reviews" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-reviews">Tem avaliações (reviews)</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-respondeu" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-respondeu">Responde às avaliações</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-fotos" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-fotos">Tem fotos de qualidade</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-horario" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-horario">Horário de funcionamento atualizado</span>
+              <span class="diag-item-severity sev-baixa">BAIXA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="gmb-posts" onchange="atualizarScore('gmb'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-gmb-posts">Faz posts / atualizações no GMB</span>
+              <span class="diag-item-severity sev-baixa">BAIXA</span>
+            </label>
+          </div>
+          <div class="diag-notes">
+            <textarea id="notes-gmb" placeholder="Nota: se é um negócio online (sem endereço físico), GMB pode não se aplicar..." oninput="salvarCampo()"></textarea>
+          </div>
+        </div>
+
+        <!-- REDES SOCIAIS -->
+        <div class="diag-card" id="card-social">
+          <div class="diag-card-header">
+            <div class="diag-card-title">📲 Redes Sociais</div>
+            <span class="diag-score" id="score-social" style="background:var(--bg3);border:1px solid var(--border2);color:var(--muted)">—</span>
+          </div>
+          <div class="diag-card-url">
+            <input type="text" id="url-social" placeholder="@instagram ou link do perfil principal" oninput="salvarCampo()">
+          </div>
+          <div class="diag-items">
+            <label class="diag-item">
+              <input type="checkbox" id="social-presente" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-presente">Tem perfil ativo nas redes</span>
+              <span class="diag-item-severity sev-alta">CRÍTICO</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-bio" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-bio">Bio clara: quem é, o que faz, CTA</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-frequencia" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-frequencia">Posta com frequência (+3x/semana)</span>
+              <span class="diag-item-severity sev-alta">ALTA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-qualidade" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-qualidade">Qualidade visual consistente</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-cta" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-cta">Posts com CTA (link, WhatsApp, etc)</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-stories" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-stories">Usa Stories / Reels / Vídeos curtos</span>
+              <span class="diag-item-severity sev-media">MÉDIA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-engajamento" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-engajamento">Responde comentários e mensagens</span>
+              <span class="diag-item-severity sev-baixa">BAIXA</span>
+            </label>
+            <label class="diag-item">
+              <input type="checkbox" id="social-link" onchange="atualizarScore('social'); gerarProjeto()" />
+              <span class="diag-item-label" id="lbl-social-link">Link na bio aponta para algo útil</span>
+              <span class="diag-item-severity sev-baixa">BAIXA</span>
+            </label>
+          </div>
+          <div class="diag-notes">
+            <textarea id="notes-social" placeholder="Qual rede principal? Quantos seguidores? Última postagem foi quando?" oninput="salvarCampo()"></textarea>
+          </div>
+        </div>
+
+      </div><!-- /diag-grid -->
+
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="irAba(2); gerarProjeto()">
+          Gerar Projeto de Melhoria →
+        </button>
+        <span style="font-size:12px;color:var(--muted)">O projeto é gerado automaticamente com base nos problemas marcados acima</span>
+      </div>
+
+    </div><!-- /aba-1 -->
+
+
+    <!-- ══ ABA 2: PROJETO ══ -->
+    <div class="tab-section" id="aba-2">
+
+      <div class="sec-eyebrow">Passo 2 · Estratégia</div>
+      <div class="sec-title">Projeto de Melhoria</div>
+      <div class="sec-sub">Gerado automaticamente com base no diagnóstico. Priorizado por impacto. Isso é o que você vai mostrar no vídeo.</div>
+
+      <div id="projeto-container">
+        <div class="empty-projeto">
+          <div style="font-size:40px;margin-bottom:12px">🔍</div>
+          <div>Faça o diagnóstico primeiro (Passo 1) para gerar o projeto automaticamente.</div>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="irAba(3); gerarScript()">
+          Gerar Script do Vídeo →
+        </button>
+        <button class="btn btn-secondary" onclick="irAba(1)">← Voltar ao Diagnóstico</button>
+      </div>
+
+    </div><!-- /aba-2 -->
+
+
+    <!-- ══ ABA 3: SCRIPT ══ -->
+    <div class="tab-section" id="aba-3">
+
+      <div class="sec-eyebrow">Passo 3 · Comunicação</div>
+      <div class="sec-title">Script do Vídeo</div>
+      <div class="sec-sub">Roteiro personalizado de 3-5 minutos. Adaptado ao idioma, ao cliente e aos problemas encontrados. Copie, ajuste o tom, e grave.</div>
+
+      <div class="lang-selector">
+        <button class="lang-btn active" id="lang-pt" onclick="trocarIdioma('pt')">🇧🇷 Português</button>
+        <button class="lang-btn" id="lang-en" onclick="trocarIdioma('en')">🇺🇸 English</button>
+        <button class="lang-btn" id="lang-es" onclick="trocarIdioma('es')">🇪🇸 Español</button>
+      </div>
+
+      <div class="script-container" id="script-container">
+        <div class="script-empty">
+          <div style="font-size:40px;margin-bottom:12px">🎬</div>
+          <div>Complete o diagnóstico (Passo 1) e clique em "Gerar Script do Vídeo".</div>
+        </div>
+      </div>
+
+      <div class="actions-row" style="margin-top:16px">
+        <button class="btn btn-primary" id="btn-copiar-script" onclick="copiarScript()" style="display:none">
+          📋 Copiar Script Completo
+        </button>
+        <button class="btn btn-secondary" onclick="irAba(4)">Ir para Precificação →</button>
+        <button class="btn btn-secondary" onclick="irAba(2)">← Voltar ao Projeto</button>
+      </div>
+
+    </div><!-- /aba-3 -->
+
+
+    <!-- ══ ABA 4: FECHAR & ENVIAR ══ -->
+    <div class="tab-section" id="aba-4">
+
+      <div class="sec-eyebrow">Passo 4 · Fechamento</div>
+      <div class="sec-title">Precificação & Envio</div>
+      <div class="sec-sub">Selecione os serviços que vai oferecer, defina o valor e marque o checklist antes de enviar o vídeo.</div>
+
+      <!-- MOEDA -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Moeda:</span>
+        <div class="currency-toggle">
+          <button class="currency-btn active" id="cur-brl" onclick="trocarMoeda('BRL')">R$ BRL</button>
+          <button class="currency-btn" id="cur-usd" onclick="trocarMoeda('USD')">$ USD</button>
+          <button class="currency-btn" id="cur-aud" onclick="trocarMoeda('AUD')">$ AUD</button>
+          <button class="currency-btn" id="cur-gbp" onclick="trocarMoeda('GBP')">£ GBP</button>
+        </div>
+      </div>
+
+      <!-- SERVIÇOS -->
+      <div class="pricing-grid" id="pricing-grid">
+        <!-- gerado dinamicamente -->
+      </div>
+
+      <!-- TOTAL -->
+      <div class="total-card">
+        <div>
+          <div class="total-label">Investimento Total</div>
+          <div class="total-value" id="total-valor">R$ 0</div>
+          <div class="total-sub" id="total-sub">Selecione os serviços acima</div>
+        </div>
+        <div style="text-align:right">
+          <button class="btn btn-primary" onclick="copiarProposta()">📋 Copiar Proposta</button>
+        </div>
+      </div>
+
+      <!-- CHECKLIST DE ENVIO -->
+      <div class="send-checklist">
+        <div class="send-checklist-header">✅ Checklist antes de enviar o vídeo</div>
+        <label class="send-item">
+          <input type="checkbox" id="check-diagnostico" />
+          <span class="send-item-label">
+            <strong>Diagnóstico feito</strong>
+            Você analisou o site, GMB e redes sociais do lead
+          </span>
+        </label>
+        <label class="send-item">
+          <input type="checkbox" id="check-script" />
+          <span class="send-item-label">
+            <strong>Script revisado</strong>
+            Leu o roteiro, ajustou o tom e está pronto para gravar
+          </span>
+        </label>
+        <label class="send-item">
+          <input type="checkbox" id="check-tela" />
+          <span class="send-item-label">
+            <strong>Tela preparada</strong>
+            Você tem o site/perfil do lead aberto e pronto para mostrar
+          </span>
+        </label>
+        <label class="send-item">
+          <input type="checkbox" id="check-gravado" />
+          <span class="send-item-label">
+            <strong>Vídeo gravado</strong>
+            Gravação feita (Loom, OBS, Screen Studio ou similar)
+          </span>
+        </label>
+        <label class="send-item">
+          <input type="checkbox" id="check-link" />
+          <span class="send-item-label">
+            <strong>Link do vídeo pronto</strong>
+            Loom link, YouTube unlisted ou Google Drive com permissão
+          </span>
+        </label>
+        <label class="send-item">
+          <input type="checkbox" id="check-mensagem" />
+          <span class="send-item-label">
+            <strong>Mensagem de envio pronta</strong>
+            Copiou a mensagem abaixo para enviar junto com o vídeo
+          </span>
+        </label>
+      </div>
+
+      <!-- MENSAGEM DE ENVIO -->
+      <div class="projeto-section">
+        <div class="projeto-section-header">
+          <div class="projeto-section-title">💬 Mensagem de Envio</div>
+          <button class="btn btn-secondary btn-sm" onclick="copiarMensagem()">📋 Copiar</button>
+        </div>
+        <div style="padding:16px 18px">
+          <div id="mensagem-envio" style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:16px;font-size:13px;color:var(--muted2);line-height:1.9;white-space:pre-wrap"></div>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted);font-style:italic">Personalize conforme necessário. O vídeo é o diferencial — a mensagem é só o envelope.</div>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-green" onclick="marcarEnviado()">✅ Marcar como Enviado</button>
+        <button class="btn btn-secondary" onclick="irAba(3)">← Voltar ao Script</button>
+        <a href="leads.html" class="btn btn-secondary">Ver Todos os Leads →</a>
+      </div>
+
+    </div><!-- /aba-4 -->
+
+  </div><!-- /content -->
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/storage.js"></script>
+<script>
+
+/* ══════════════════════════════════════════════════
+   ESTADO GLOBAL
+══════════════════════════════════════════════════ */
+let idiomaAtivo = 'pt';
+let moedaAtiva = 'BRL';
+let projetoItens = [];
+let scriptTexto = '';
+
+const MOEDAS = {
+  BRL: { symbol: 'R$', fator: 1 },
+  USD: { symbol: '$',  fator: 0.18 },
+  AUD: { symbol: 'A$', fator: 0.27 },
+  GBP: { symbol: '£',  fator: 0.14 },
+};
+
+const SERVICOS = [
+  { id: 'landing',    nome: 'Landing Page (1 página)',          brl: [1500, 3500],   desc: 'Página de conversão + CTA' },
+  { id: 'site5',      nome: 'Site Institucional (5 páginas)',    brl: [4000, 8000],   desc: 'Home, sobre, serviços, contato + blog' },
+  { id: 'site10',     nome: 'Site Completo (10+ páginas)',       brl: [8000, 18000],  desc: 'Multi-seção com CMS embutido' },
+  { id: 'gmb',        nome: 'Otimização Google Meu Negócio',     brl: [500, 1200],    desc: 'Perfil completo + fotos + estratégia de reviews' },
+  { id: 'social',     nome: 'Gestão de Redes Sociais',           brl: [800, 2000],    desc: '/mês — feed, stories, copy e agendamento' },
+  { id: 'identidade', nome: 'Identidade Visual',                 brl: [2000, 5000],   desc: 'Logo + paleta + tipografia + guia de marca' },
+  { id: 'seo',        nome: 'SEO Básico',                        brl: [600, 1500],    desc: 'On-page, meta tags, velocidade, indexação' },
+  { id: 'manut',      nome: 'Manutenção Mensal',                 brl: [300, 700],     desc: '/mês — atualizações, hosting, suporte' },
+];
+
+/* ══════════════════════════════════════════════════
+   NAVEGAÇÃO
+══════════════════════════════════════════════════ */
+function irAba(n) {
+  document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('aba-' + n).classList.add('active');
+  document.getElementById('step-btn-' + n).classList.add('active');
+
+  if (n === 2) gerarProjeto();
+  if (n === 3) gerarScript();
+  if (n === 4) { renderPricing(); gerarMensagem(); }
+}
+
+/* ══════════════════════════════════════════════════
+   SCORE POR CANAL
+══════════════════════════════════════════════════ */
+const CAMPOS_SITE   = ['existe','mobile','rapido','cta','contato','seo','ssl','atualizado'];
+const CAMPOS_GMB    = ['existe','completo','reviews','respondeu','fotos','horario','posts'];
+const CAMPOS_SOCIAL = ['presente','bio','frequencia','qualidade','cta','stories','engajamento','link'];
+
+function atualizarScore(canal) {
+  const campos = canal === 'site' ? CAMPOS_SITE : canal === 'gmb' ? CAMPOS_GMB : CAMPOS_SOCIAL;
+  const marcados = campos.filter(c => document.getElementById(canal + '-' + c)?.checked).length;
+  const pct = Math.round((marcados / campos.length) * 100);
+  const el = document.getElementById('score-' + canal);
+  if (!el) return;
+
+  let cor, bg;
+  if (pct >= 75) { cor = 'var(--green)'; bg = 'var(--green-bg)'; }
+  else if (pct >= 50) { cor = 'var(--yellow)'; bg = 'var(--yellow-bg)'; }
+  else if (pct >= 25) { cor = 'var(--orange)'; bg = 'var(--orange-bg)'; }
+  else { cor = 'var(--red)'; bg = 'var(--red-bg)'; }
+
+  el.textContent = pct + '%';
+  el.style.background = bg;
+  el.style.color = cor;
+  el.style.border = '1px solid ' + cor.replace(')', '-dark)').replace('var(--', 'var(--');
+
+  salvarCampo();
+}
+
+/* ══════════════════════════════════════════════════
+   GERADOR DE PROJETO
+══════════════════════════════════════════════════ */
+function gerarProjeto() {
+  const negocio = val('lead-negocio') || 'o negócio';
+  const itens = [];
+
+  // SITE
+  if (!chk('site-existe')) {
+    itens.push({ tipo:'site', prioridade:'urgente', titulo:'Criar site profissional', desc:`${negocio} não tem presença digital própria. Um site é o ativo mais importante — é de lá que vêm os clientes que pesquisam no Google. Sem ele, o negócio é invisível para quem busca.` });
+  } else {
+    if (!chk('site-mobile')) itens.push({ tipo:'site', prioridade:'alto', titulo:'Otimizar para celular', desc:'O site não é responsivo ou tem problemas graves no mobile. Mais de 70% das buscas locais acontecem pelo celular — um site que não funciona nele perde a maioria dos visitantes.' });
+    if (!chk('site-rapido')) itens.push({ tipo:'site', prioridade:'alto', titulo:'Melhorar velocidade de carregamento', desc:'O site demora mais de 3 segundos para carregar. Estudos mostram que 53% dos usuários abandonam um site lento. Isso é conversão perdida diretamente.' });
+    if (!chk('site-cta'))    itens.push({ tipo:'site', prioridade:'alto', titulo:'Adicionar chamadas para ação (CTA)', desc:'O site não tem botões ou direcionamentos claros para o visitante agir. Sem CTA, o usuário não sabe o que fazer e sai sem entrar em contato.' });
+    if (!chk('site-contato'))itens.push({ tipo:'site', prioridade:'medio', titulo:'Implementar formulário de contato / WhatsApp', desc:'Sem um canal direto de contato, clientes em potencial desistem. Um botão de WhatsApp fixo ou formulário simples pode triplicar os contatos recebidos.' });
+    if (!chk('site-seo'))    itens.push({ tipo:'site', prioridade:'medio', titulo:'Implementar SEO básico', desc:'O site não aparece nas buscas do Google pelo nome do negócio ou pelos serviços oferecidos. Ajustes de SEO on-page são simples e têm impacto direto na visibilidade.' });
+  }
+
+  // GMB
+  if (!chk('gmb-existe')) {
+    itens.push({ tipo:'gmb', prioridade:'urgente', titulo:'Criar e verificar Google Meu Negócio', desc:`${negocio} não aparece no Google Maps. Para negócios locais, o GMB é a fonte número 1 de novos clientes — é gratuito e tem impacto imediato.` });
+  } else {
+    if (!chk('gmb-completo'))  itens.push({ tipo:'gmb', prioridade:'alto', titulo:'Completar perfil do Google Meu Negócio', desc:'O perfil está incompleto: falta telefone, site, descrição ou categorias. Perfis completos recebem 7x mais cliques que perfis incompletos.' });
+    if (!chk('gmb-reviews'))   itens.push({ tipo:'gmb', prioridade:'alto', titulo:'Estratégia de captação de avaliações', desc:'Poucos ou nenhum review no Google. 88% das pessoas confiam em avaliações online tanto quanto em recomendações pessoais. Um processo sistemático de pedir reviews muda isso em semanas.' });
+    if (!chk('gmb-respondeu')) itens.push({ tipo:'gmb', prioridade:'medio', titulo:'Responder a todas as avaliações', desc:'O negócio não responde reviews. Responder mostra profissionalismo e melhora o posicionamento no Google. Avaliações negativas sem resposta são especialmente prejudiciais.' });
+    if (!chk('gmb-fotos'))     itens.push({ tipo:'gmb', prioridade:'medio', titulo:'Adicionar fotos profissionais', desc:'O perfil tem poucas ou nenhuma foto de qualidade. Perfis com 10+ fotos recebem 35% mais cliques para o site.' });
+  }
+
+  // SOCIAL
+  if (!chk('social-presente')) {
+    itens.push({ tipo:'social', prioridade:'urgente', titulo:'Criar e estruturar perfil nas redes sociais', desc:`${negocio} não tem presença ativa nas redes sociais, ou o perfil está abandonado. As redes são o canal de descoberta mais importante para o público jovem e digital.` });
+  } else {
+    if (!chk('social-bio'))       itens.push({ tipo:'social', prioridade:'alto', titulo:'Reescrever bio estratégica', desc:'A bio não comunica claramente o que o negócio faz, para quem e como entrar em contato. Uma bio estratégica converte quem visita o perfil pela primeira vez.' });
+    if (!chk('social-frequencia'))itens.push({ tipo:'social', prioridade:'alto', titulo:'Criar calendário de conteúdo', desc:'O perfil posta irregularmente ou com pouca frequência. O algoritmo do Instagram penaliza contas inativas. Um calendário mínimo (3x/semana) mantém a conta visível.' });
+    if (!chk('social-qualidade')) itens.push({ tipo:'social', prioridade:'medio', titulo:'Padronizar identidade visual dos posts', desc:'Os posts não têm consistência visual. Uma identidade padronizada (templates, paleta, tipografia) cria reconhecimento de marca e parece mais profissional.' });
+    if (!chk('social-cta'))       itens.push({ tipo:'social', prioridade:'medio', titulo:'Adicionar CTA nos posts e stories', desc:'Os posts não direcionam para nenhuma ação. Cada post deve ter um objetivo claro: visitar o site, mandar mensagem, ligar ou salvar o conteúdo.' });
+    if (!chk('social-stories'))   itens.push({ tipo:'social', prioridade:'medio', titulo:'Usar Reels e Stories regularmente', desc:'O perfil não usa os formatos de maior alcance orgânico. Reels têm alcance 3-4x maior que posts estáticos no Instagram atual.' });
+  }
+
+  projetoItens = itens;
+
+  // Renderizar
+  const container = document.getElementById('projeto-container');
+
+  if (itens.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:48px 20px;color:var(--green)">
+        <div style="font-size:40px;margin-bottom:12px">✅</div>
+        <div style="font-size:16px;font-weight:700">Presença digital está boa!</div>
+        <div style="font-size:13px;color:var(--muted2);margin-top:8px">Poucos problemas críticos encontrados. Mesmo assim, há espaço para otimização avançada.</div>
+      </div>`;
+    return;
+  }
+
+  const urgentes = itens.filter(i => i.prioridade === 'urgente');
+  const altos    = itens.filter(i => i.prioridade === 'alto');
+  const medios   = itens.filter(i => i.prioridade === 'medio');
+
+  let html = '';
+
+  if (urgentes.length) html += renderGrupoProjeto('🚨 Urgente — Impacto Imediato', urgentes, 'var(--red)', 'var(--red-dark)', 'var(--red-bg)');
+  if (altos.length)    html += renderGrupoProjeto('⚡ Alta Prioridade', altos, 'var(--orange)', 'var(--orange-dark)', 'var(--orange-bg)');
+  if (medios.length)   html += renderGrupoProjeto('📌 Média Prioridade', medios, 'var(--blue)', 'var(--blue-dark)', 'var(--blue-bg)');
+
+  container.innerHTML = html;
+}
+
+function renderGrupoProjeto(titulo, itens, cor, corDark, corBg) {
+  const tipoTag = { site: 'tag-site', gmb: 'tag-gmb', social: 'tag-social' };
+  const tipoLabel = { site: '🌐 Site', gmb: '📍 GMB', social: '📲 Social' };
+  const prioTag = { urgente: 'tag-urgente', alto: 'tag-alto', medio: 'tag-medio' };
+  const prioLabel = { urgente: '🚨 Urgente', alto: '⚡ Alta', medio: '📌 Média' };
+
+  return `
+    <div class="projeto-section">
+      <div class="projeto-section-header" style="border-bottom-color:${corDark}">
+        <div class="projeto-section-title" style="color:${cor}">${titulo}</div>
+        <span style="font-size:12px;color:var(--muted)">${itens.length} item(s)</span>
+      </div>
+      <div class="projeto-items">
+        ${itens.map((item, i) => `
+          <div class="projeto-item">
+            <div class="projeto-item-num" style="background:${corBg};border-color:${corDark};color:${cor}">${i+1}</div>
+            <div class="projeto-item-body">
+              <div class="projeto-item-title">${item.titulo}</div>
+              <div class="projeto-item-desc">${item.desc}</div>
+              <div class="projeto-item-tags">
+                <span class="tag ${tipoTag[item.tipo]}">${tipoLabel[item.tipo]}</span>
+                <span class="tag ${prioTag[item.prioridade]}">${prioLabel[item.prioridade]}</span>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   GERADOR DE SCRIPT
+══════════════════════════════════════════════════ */
+function gerarScript() {
+  const nome    = val('lead-nome')    || '[NOME]';
+  const negocio = val('lead-negocio') || '[NEGÓCIO]';
+  const nicho   = val('lead-nicho')   || 'seu setor';
+  const contexto= val('lead-contexto')|| '';
+  const urlSite = val('url-site')     || '';
+  const urlGmb  = val('url-gmb')      || '';
+  const urlSocial= val('url-social')  || '';
+
+  const problemasSite   = CAMPOS_SITE.filter(c => !document.getElementById('site-' + c)?.checked);
+  const problemasGmb    = CAMPOS_GMB.filter(c => !document.getElementById('gmb-' + c)?.checked);
+  const problemasSocial = CAMPOS_SOCIAL.filter(c => !document.getElementById('social-' + c)?.checked);
+
+  const temSite   = chk('site-existe');
+  const temGmb    = chk('gmb-existe');
+  const temSocial = chk('social-presente');
+
+  const totalProblemas = projetoItens.length;
+  const idioma = idiomaAtivo;
+
+  let blocos = [];
+
+  if (idioma === 'pt') {
+    blocos = gerarScriptPT(nome, negocio, nicho, contexto, urlSite, urlGmb, urlSocial, temSite, temGmb, temSocial, problemasSite, problemasGmb, problemasSocial, totalProblemas);
+  } else if (idioma === 'en') {
+    blocos = gerarScriptEN(nome, negocio, nicho, contexto, urlSite, urlGmb, urlSocial, temSite, temGmb, temSocial, problemasSite, problemasGmb, problemasSocial, totalProblemas);
+  } else {
+    blocos = gerarScriptES(nome, negocio, nicho, contexto, urlSite, urlGmb, urlSocial, temSite, temGmb, temSocial, problemasSite, problemasGmb, problemasSocial, totalProblemas);
+  }
+
+  // Calcular duração estimada (150 palavras/min falando devagar)
+  const textoTotal = blocos.map(b => b.texto).join(' ');
+  const palavras = textoTotal.split(/\s+/).length;
+  const minutos = Math.round(palavras / 130);
+
+  // Salvar script completo para copiar
+  scriptTexto = blocos.map(b => `[${b.tempo}] ${b.secao.toUpperCase()}\n${b.texto}`).join('\n\n─────────────────────\n\n');
+
+  const container = document.getElementById('script-container');
+  container.innerHTML = `
+    <div class="script-toolbar">
+      <div class="script-toolbar-left">
+        <span class="script-toolbar-title">🎬 Roteiro Personalizado — ${nome}</span>
+        <span class="script-duration">⏱ ~${minutos} min</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted)">${palavras} palavras estimadas</span>
+    </div>
+    <div class="script-body">
+      ${blocos.map(b => `
+        <div class="script-block">
+          <div class="script-time">${b.tempo}</div>
+          <div class="script-section-name">${b.secao}</div>
+          <div class="script-text">${b.texto.replace(/\*([^*]+)\*/g, '<em>$1</em>')}</div>
+          ${b.dica ? `<div class="script-tip">💡 ${b.dica}</div>` : ''}
+        </div>
+      `).join('')}
+    </div>`;
+
+  document.getElementById('btn-copiar-script').style.display = 'inline-flex';
+  gerarMensagem();
+}
+
+/* ── Script PT ─────────────────────────────────── */
+function gerarScriptPT(nome, negocio, nicho, contexto, urlSite, urlGmb, urlSocial, temSite, temGmb, temSocial, probSite, probGmb, probSocial, total) {
+  const ref = contexto ? `vi que você mencionou: "${contexto}"` : `encontrei o perfil de *${negocio}*`;
+  const blocos = [];
+
+  blocos.push({
+    tempo: '0:00 – 0:30',
+    secao: 'Abertura',
+    texto: `Oi *${nome}*, tudo bem? Meu nome é Guilherme, sou designer e desenvolvedor web — trabalho com presença digital para pequenos e médios negócios. Eu ${ref} e resolvi gravar esse vídeo rápido pra te mostrar algumas coisas que eu encontrei na presença digital de *${negocio}*. Não é uma proposta — é um diagnóstico honesto, de graça. Vai levar uns 4 minutos.`,
+    dica: 'Olhe direto para a câmera. Tom de conversa, não de venda.',
+  });
+
+  // SITE
+  if (!temSite) {
+    blocos.push({
+      tempo: '0:30 – 1:15',
+      secao: 'Diagnóstico: Website',
+      texto: `A primeira coisa que eu fui verificar foi o site de *${negocio}*. *E não encontrei nenhum.* Hoje, quando alguém quer saber se um negócio é sério, a primeira coisa que faz é uma busca no Google. Sem site, você simplesmente não existe pra esse público. E não estou falando de algo caro ou complexo — um site bem feito, focado em conversão, resolve isso completamente.`,
+      dica: 'Mostre na tela uma busca pelo negócio sem resultado. Impacto visual.',
+    });
+  } else if (probSite.length > 0) {
+    const prob1 = mapProblemasSitePT(probSite[0]);
+    const prob2 = probSite[1] ? mapProblemasSitePT(probSite[1]) : null;
+    blocos.push({
+      tempo: '0:30 – 1:15',
+      secao: 'Diagnóstico: Website',
+      texto: `Olhando o site ${urlSite ? `*${urlSite}*` : `de *${negocio}*`}... ele existe, o que já é bom. Mas encontrei alguns problemas que estão custando clientes. ${prob1}${prob2 ? ' Além disso, ' + prob2.toLowerCase() : ''} Esses são pontos que impactam diretamente quantas pessoas entram em contato.`,
+      dica: `Abra o site na tela. Mostre os problemas ao vivo — é muito mais convincente que descrever.`,
+    });
+  }
+
+  // GMB
+  if (!temGmb) {
+    blocos.push({
+      tempo: '1:15 – 2:00',
+      secao: 'Diagnóstico: Google',
+      texto: `Segundo ponto — fui buscar *${negocio}* no Google Maps. *Não aparece.* Isso é grave, especialmente para negócios locais. O Google Meu Negócio é gratuito, e negócios que aparecem ali recebem em média 7 vezes mais visitas do que os que não aparecem. É o canal de captação mais subestimado que existe.`,
+      dica: 'Mostre a busca no Google Maps ao vivo, sem resultado.',
+    });
+  } else if (probGmb.length > 0) {
+    blocos.push({
+      tempo: '1:15 – 2:00',
+      secao: 'Diagnóstico: Google Meu Negócio',
+      texto: `No Google... o negócio aparece, ótimo. Mas o perfil tem pontos que estão prejudicando o posicionamento. ${mapProblemasGmbPT(probGmb[0])}${probGmb[1] ? ' E também: ' + mapProblemasGmbPT(probGmb[1]).toLowerCase() : ''} O Google prioriza perfis completos e ativos — e hoje *${negocio}* está deixando pontos na mesa.`,
+      dica: 'Abra o GMB e aponte os problemas visualmente.',
+    });
+  }
+
+  // SOCIAL
+  if (!temSocial) {
+    blocos.push({
+      tempo: '2:00 – 2:45',
+      secao: 'Diagnóstico: Redes Sociais',
+      texto: `Nas redes sociais... o perfil ou não existe ou está inativo. No nicho de *${nicho}*, as redes são um dos principais canais de descoberta de novos clientes. Um perfil bem estruturado, mesmo com poucos seguidores, gera credibilidade e funciona como vitrine. Sem isso, a concorrência que posta regularmente ganha todos os dias.`,
+      dica: 'Se achar o perfil inativo, mostre o último post — a data fala por si.',
+    });
+  } else if (probSocial.length > 0) {
+    blocos.push({
+      tempo: '2:00 – 2:45',
+      secao: 'Diagnóstico: Redes Sociais',
+      texto: `No Instagram ${urlSocial ? `(*${urlSocial}*)` : ''}... tem presença, o que é positivo. Mas identifiquei algumas coisas que limitam o alcance. ${mapProblemasSocialPT(probSocial[0])}${probSocial[1] ? ' Também: ' + mapProblemasSocialPT(probSocial[1]).toLowerCase() : ''} São ajustes relativamente simples que mudam bastante o resultado.`,
+      dica: 'Abra o perfil. Mostre a bio, os posts, a última data.',
+    });
+  }
+
+  // SOLUÇÃO
+  const urgentes = projetoItens.filter(i => i.prioridade === 'urgente').map(i => i.titulo);
+  const topItens = projetoItens.slice(0, 3).map(i => i.titulo);
+  blocos.push({
+    tempo: '2:45 – 3:45',
+    secao: 'O que eu faria',
+    texto: `Em termos práticos, o que eu faria pra *${negocio}*: ${topItens.map((t, i) => `${i+1}. ${t}`).join('. ')}. ${total > 3 ? `Isso endereça os problemas mais críticos primeiro. Tem mais coisa, mas por aqui começaria.` : ''} O objetivo é transformar a presença digital em um canal que traz cliente, não que afasta.`,
+    dica: 'Fale com confiança. Você já mostrou que sabe do que está falando.',
+  });
+
+  // CTA
+  blocos.push({
+    tempo: '3:45 – 4:15',
+    secao: 'Chamada para Ação',
+    texto: `Isso aqui foi um diagnóstico rápido — gratuito, sem compromisso nenhum. Se você quiser conversar sobre como resolver esses pontos, me manda uma mensagem. Posso te mostrar o que eu faria, quanto custaria e quanto tempo levaria. Se não fizer sentido, tudo bem também. Qualquer coisa, estou aqui. Valeu, *${nome}*!`,
+    dica: 'Tom leve. Sem pressão. Quem assistiu até aqui já está interessado.',
+  });
+
+  return blocos;
+}
+
+/* ── Script EN ─────────────────────────────────── */
+function gerarScriptEN(nome, negocio, nicho, contexto, urlSite, urlGmb, urlSocial, temSite, temGmb, temSocial, probSite, probGmb, probSocial, total) {
+  const ref = contexto ? `I came across your comment: "${contexto}"` : `I came across *${negocio}*`;
+  const blocos = [];
+
+  blocos.push({
+    tempo: '0:00 – 0:30',
+    secao: 'Opening',
+    texto: `Hey *${nome}*, my name is Guilherme — I'm a web designer and developer working with small and medium businesses on their digital presence. ${ref}, and I wanted to put together this quick video showing you a few things I noticed about *${negocio}*'s online presence. This is not a pitch — it's an honest, free audit. Should take about 4 minutes.`,
+    dica: 'Look straight at the camera. Conversational tone, not salesy.',
+  });
+
+  if (!temSite) {
+    blocos.push({
+      tempo: '0:30 – 1:15',
+      secao: 'Website Analysis',
+      texto: `First thing I checked was *${negocio}*'s website. *I couldn't find one.* When someone wants to know if a business is legit, the first thing they do is Google it. Without a website, you're simply invisible to that audience. And I'm not talking about something expensive — a well-built, conversion-focused site fixes this completely.`,
+      dica: 'Show the Google search with no result on screen. Visual impact.',
+    });
+  } else if (probSite.length > 0) {
+    blocos.push({
+      tempo: '0:30 – 1:15',
+      secao: 'Website Analysis',
+      texto: `Looking at ${urlSite ? `*${urlSite}*` : `*${negocio}*'s website`}... it exists, which is great. But I found a few issues that are costing you clients. ${mapProblemasSiteEN(probSite[0])}${probSite[1] ? ' On top of that, ' + mapProblemasSiteEN(probSite[1]).toLowerCase() : ''} These are things that directly affect how many people actually reach out.`,
+      dica: 'Open the site on screen. Show the problems live — way more convincing than describing them.',
+    });
+  }
+
+  if (!temGmb) {
+    blocos.push({
+      tempo: '1:15 – 2:00',
+      secao: 'Google Presence',
+      texto: `Second — I searched for *${negocio}* on Google Maps. *Nothing came up.* This is a real problem, especially for local businesses. Google Business Profile is free, and businesses that show up there get on average 7x more visits than those that don't. It's the most underestimated client acquisition channel out there.`,
+      dica: 'Show the Google Maps search with no result on screen.',
+    });
+  } else if (probGmb.length > 0) {
+    blocos.push({
+      tempo: '1:15 – 2:00',
+      secao: 'Google Business Profile',
+      texto: `On Google... the business does show up, great. But the profile has issues that are hurting your ranking. ${mapProblemasGmbEN(probGmb[0])}${probGmb[1] ? ' Also: ' + mapProblemasGmbEN(probGmb[1]).toLowerCase() : ''} Google prioritizes complete, active profiles — and right now *${negocio}* is leaving a lot of potential on the table.`,
+      dica: 'Open the GBP profile and point out the issues visually.',
+    });
+  }
+
+  if (!temSocial) {
+    blocos.push({
+      tempo: '2:00 – 2:45',
+      secao: 'Social Media',
+      texto: `On social media... the profile either doesn't exist or is inactive. In the *${nicho}* space, social is one of the main discovery channels for new clients. A well-structured profile — even with few followers — builds credibility and works as a digital storefront. Without it, competitors who post consistently win every single day.`,
+      dica: 'If you find an inactive profile, show when the last post was.',
+    });
+  } else if (probSocial.length > 0) {
+    blocos.push({
+      tempo: '2:00 – 2:45',
+      secao: 'Social Media',
+      texto: `On Instagram ${urlSocial ? `(*${urlSocial}*)` : ''}... there's a presence, which is positive. But I spotted a few things limiting the reach. ${mapProblemasSocialEN(probSocial[0])}${probSocial[1] ? ' Also: ' + mapProblemasSocialEN(probSocial[1]).toLowerCase() : ''} These are relatively simple adjustments that make a big difference in results.`,
+      dica: 'Open the profile. Show the bio, the posts, the last date.',
+    });
+  }
+
+  const topItens = projetoItens.slice(0, 3).map(i => i.titulo);
+  blocos.push({
+    tempo: '2:45 – 3:45',
+    secao: 'What I Would Do',
+    texto: `In practical terms, what I would do for *${negocio}*: ${topItens.map((t, i) => `${i+1}. ${t}`).join('. ')}. ${total > 3 ? `This addresses the most critical issues first. There's more to do, but this is where I'd start.` : ''} The goal is to turn *${negocio}*'s digital presence into a channel that actually brings in clients.`,
+    dica: 'Speak with confidence. You already proved you know what you\'re talking about.',
+  });
+
+  blocos.push({
+    tempo: '3:45 – 4:15',
+    secao: 'Call to Action',
+    texto: `This was a quick audit — completely free, no strings attached. If you'd like to talk about how to fix these things, just shoot me a message. I can walk you through what I'd do, what it would cost, and how long it would take. If it doesn't make sense for you, no worries at all. Either way, I'm here. Thanks, *${nome}*!`,
+    dica: 'Keep it light. No pressure. Anyone who watched this far is already interested.',
+  });
+
+  return blocos;
+}
+
+/* ── Script ES ─────────────────────────────────── */
+function gerarScriptES(nome, negocio, nicho, contexto, urlSite, urlGmb, urlSocial, temSite, temGmb, temSocial, probSite, probGmb, probSocial, total) {
+  const ref = contexto ? `vi tu comentario: "${contexto}"` : `encontré el perfil de *${negocio}*`;
+  const blocos = [];
+
+  blocos.push({
+    tempo: '0:00 – 0:30',
+    secao: 'Apertura',
+    texto: `Hola *${nome}*, ¿cómo estás? Mi nombre es Guilherme, soy diseñador y desarrollador web — trabajo con presencia digital para pequeños y medianos negocios. Yo ${ref} y quise grabar este video rápido para mostrarte algunas cosas que encontré en la presencia digital de *${negocio}*. No es una propuesta — es un diagnóstico honesto y gratuito. Son unos 4 minutos.`,
+    dica: 'Mira directo a la cámara. Tono de conversación, no de venta.',
+  });
+
+  if (!temSite) {
+    blocos.push({
+      tempo: '0:30 – 1:15',
+      secao: 'Análisis: Sitio Web',
+      texto: `Lo primero que fui a verificar fue el sitio web de *${negocio}*. *Y no encontré ninguno.* Hoy, cuando alguien quiere saber si un negocio es serio, lo primero que hace es buscarlo en Google. Sin sitio web, simplemente no existes para esa audiencia. Y no hablo de algo caro — un sitio bien construido, enfocado en conversión, resuelve esto completamente.`,
+      dica: 'Muestra en pantalla una búsqueda en Google sin resultado. Impacto visual.',
+    });
+  } else if (probSite.length > 0) {
+    blocos.push({
+      tempo: '0:30 – 1:15',
+      secao: 'Análisis: Sitio Web',
+      texto: `Mirando el sitio ${urlSite ? `*${urlSite}*` : `de *${negocio}*`}... existe, lo cual es bueno. Pero encontré algunos problemas que están costando clientes. ${mapProblemasSiteES(probSite[0])}${probSite[1] ? ' Además: ' + mapProblemasSiteES(probSite[1]).toLowerCase() : ''} Estos son puntos que impactan directamente cuántas personas se ponen en contacto.`,
+      dica: 'Abre el sitio en pantalla. Muestra los problemas en vivo — mucho más convincente que describirlos.',
+    });
+  }
+
+  if (!temGmb) {
+    blocos.push({
+      tempo: '1:15 – 2:00',
+      secao: 'Presencia en Google',
+      texto: `Segundo punto — busqué *${negocio}* en Google Maps. *No aparece.* Esto es grave, especialmente para negocios locales. Google Mi Negocio es gratuito, y los negocios que aparecen ahí reciben en promedio 7 veces más visitas que los que no aparecen. Es el canal de captación más subestimado que existe.`,
+      dica: 'Muestra la búsqueda en Google Maps sin resultado en pantalla.',
+    });
+  } else if (probGmb.length > 0) {
+    blocos.push({
+      tempo: '1:15 – 2:00',
+      secao: 'Google Mi Negocio',
+      texto: `En Google... el negocio sí aparece, qué bueno. Pero el perfil tiene puntos que están afectando el posicionamiento. ${mapProblemasGmbES(probGmb[0])}${probGmb[1] ? ' También: ' + mapProblemasGmbES(probGmb[1]).toLowerCase() : ''} Google prioriza perfiles completos y activos — y hoy *${negocio}* está dejando oportunidades sobre la mesa.`,
+      dica: 'Abre el perfil de GMB y señala los problemas visualmente.',
+    });
+  }
+
+  if (!temSocial) {
+    blocos.push({
+      tempo: '2:00 – 2:45',
+      secao: 'Redes Sociales',
+      texto: `En redes sociales... el perfil no existe o está inactivo. En el nicho de *${nicho}*, las redes son uno de los principales canales de descubrimiento de nuevos clientes. Un perfil bien estructurado — incluso con pocos seguidores — genera credibilidad y funciona como vitrina. Sin esto, la competencia que publica regularmente gana todos los días.`,
+      dica: 'Si encuentras el perfil inactivo, muestra cuándo fue la última publicación.',
+    });
+  } else if (probSocial.length > 0) {
+    blocos.push({
+      tempo: '2:00 – 2:45',
+      secao: 'Redes Sociales',
+      texto: `En Instagram ${urlSocial ? `(*${urlSocial}*)` : ''}... hay presencia, lo cual es positivo. Pero identifiqué algunas cosas que limitan el alcance. ${mapProblemasSocialES(probSocial[0])}${probSocial[1] ? ' También: ' + mapProblemasSocialES(probSocial[1]).toLowerCase() : ''} Son ajustes relativamente simples que cambian bastante el resultado.`,
+      dica: 'Abre el perfil. Muestra la bio, las publicaciones, la última fecha.',
+    });
+  }
+
+  const topItens = projetoItens.slice(0, 3).map(i => i.titulo);
+  blocos.push({
+    tempo: '2:45 – 3:45',
+    secao: 'Lo que yo haría',
+    texto: `En términos prácticos, lo que yo haría para *${negocio}*: ${topItens.map((t, i) => `${i+1}. ${t}`).join('. ')}. ${total > 3 ? `Esto aborda los problemas más críticos primero. Hay más cosas, pero por aquí empezaría.` : ''} El objetivo es convertir la presencia digital en un canal que trae clientes, no que los aleja.`,
+    dica: 'Habla con confianza. Ya demostraste que sabes de lo que hablas.',
+  });
+
+  blocos.push({
+    tempo: '3:45 – 4:15',
+    secao: 'Llamado a la Acción',
+    texto: `Esto fue un diagnóstico rápido — gratuito, sin ningún compromiso. Si quieres conversar sobre cómo resolver estos puntos, mándame un mensaje. Puedo mostrarte qué haría, cuánto costaría y cuánto tiempo tomaría. Si no tiene sentido para ti, no hay problema. En cualquier caso, aquí estoy. ¡Gracias, *${nome}*!`,
+    dica: 'Tono ligero. Sin presión. Quien llegó hasta aquí ya está interesado.',
+  });
+
+  return blocos;
+}
+
+/* ── Mappers de problemas ── */
+function mapProblemasSitePT(p) {
+  const m = {
+    mobile:    'O site *não é otimizado para celular*, o que afasta mais de 70% dos visitantes.',
+    rapido:    'O site *carrega lentamente* — visitantes abandonam depois de 3 segundos.',
+    cta:       '*Não há chamada para ação clara* — o visitante não sabe o que fazer.',
+    contato:   '*Não tem formulário ou botão de contato direto*.',
+    seo:       'O site *não aparece no Google* para as buscas mais óbvias do negócio.',
+    ssl:       'O site *não tem HTTPS* — aparece como "não seguro" no navegador.',
+    atualizado:'O site parece *desatualizado* — conteúdo antigo afasta clientes.',
+  };
+  return m[p] || 'Há problemas de usabilidade que afastam clientes.';
+}
+function mapProblemasSiteEN(p) {
+  const m = {
+    mobile:    'The site *is not mobile-friendly*, which turns away over 70% of visitors.',
+    rapido:    'The site *loads slowly* — visitors leave after 3 seconds.',
+    cta:       '*There\'s no clear call to action* — visitors don\'t know what to do.',
+    contato:   '*No contact form or direct contact button*.',
+    seo:       'The site *doesn\'t show up on Google* for the most obvious searches.',
+    ssl:       'The site *has no HTTPS* — it shows as "not secure" in browsers.',
+    atualizado:'The site looks *outdated* — old content drives potential clients away.',
+  };
+  return m[p] || 'There are usability issues that are costing you clients.';
+}
+function mapProblemasSiteES(p) {
+  const m = {
+    mobile:    'El sitio *no está optimizado para móvil*, lo que aleja a más del 70% de los visitantes.',
+    rapido:    'El sitio *carga lentamente* — los visitantes se van después de 3 segundos.',
+    cta:       '*No hay llamado a la acción claro* — el visitante no sabe qué hacer.',
+    contato:   '*No tiene formulario ni botón de contacto directo*.',
+    seo:       'El sitio *no aparece en Google* para las búsquedas más obvias del negocio.',
+    ssl:       'El sitio *no tiene HTTPS* — aparece como "no seguro" en el navegador.',
+    atualizado:'El sitio parece *desactualizado* — el contenido antiguo aleja a los clientes.',
+  };
+  return m[p] || 'Hay problemas de usabilidad que están costando clientes.';
+}
+
+function mapProblemasGmbPT(p) {
+  const m = {
+    completo:  'O perfil está *incompleto* — falta telefone, site, descrição ou categoria.',
+    reviews:   'O negócio tem *poucas ou nenhuma avaliação* no Google.',
+    respondeu: '*Nenhuma resposta às avaliações* — passa impressão de descaso.',
+    fotos:     'O perfil tem *poucas fotos ou sem qualidade*.',
+    horario:   'O *horário de funcionamento está desatualizado ou ausente*.',
+    posts:     'O perfil não tem *atualizações ou posts* recentes.',
+  };
+  return m[p] || 'O perfil do Google está com problemas que reduzem a visibilidade.';
+}
+function mapProblemasGmbEN(p) {
+  const m = {
+    completo:  'The profile is *incomplete* — missing phone, website, description or category.',
+    reviews:   'The business has *few or no Google reviews*.',
+    respondeu: '*No responses to reviews* — gives the impression of indifference.',
+    fotos:     'The profile has *few or low-quality photos*.',
+    horario:   'The *business hours are outdated or missing*.',
+    posts:     'The profile has *no recent updates or posts*.',
+  };
+  return m[p] || 'The Google Business Profile has issues reducing visibility.';
+}
+function mapProblemasGmbES(p) {
+  const m = {
+    completo:  'El perfil está *incompleto* — falta teléfono, sitio web, descripción o categoría.',
+    reviews:   'El negocio tiene *pocas o ninguna reseña* en Google.',
+    respondeu: '*Sin respuestas a las reseñas* — da impresión de descuido.',
+    fotos:     'El perfil tiene *pocas fotos o sin calidad*.',
+    horario:   'El *horario de funcionamiento está desactualizado o ausente*.',
+    posts:     'El perfil no tiene *actualizaciones o publicaciones* recientes.',
+  };
+  return m[p] || 'El perfil de Google tiene problemas que reducen la visibilidad.';
+}
+
+function mapProblemasSocialPT(p) {
+  const m = {
+    bio:        'A *bio não é clara* — não diz o que o negócio faz nem como entrar em contato.',
+    frequencia: 'O perfil *posta raramente* — o algoritmo penaliza contas inativas.',
+    qualidade:  'Os posts *não têm consistência visual* — parece amador.',
+    cta:        'Os posts *não têm chamada para ação* — o seguidor não sabe o que fazer.',
+    stories:    'O perfil *não usa Reels ou Stories* — os formatos de maior alcance orgânico.',
+    engajamento:'*Não responde comentários* — mata o engajamento e afasta a comunidade.',
+    link:       'O *link na bio não aponta para nada útil* ou está quebrado.',
+  };
+  return m[p] || 'As redes sociais têm problemas que limitam o alcance.';
+}
+function mapProblemasSocialEN(p) {
+  const m = {
+    bio:        'The *bio is unclear* — it doesn\'t say what the business does or how to contact.',
+    frequencia: 'The profile *posts rarely* — the algorithm penalizes inactive accounts.',
+    qualidade:  'Posts *lack visual consistency* — it looks unprofessional.',
+    cta:        'Posts *have no call to action* — followers don\'t know what to do.',
+    stories:    'The profile *doesn\'t use Reels or Stories* — the highest-reach formats.',
+    engajamento:'*No replies to comments* — kills engagement and drives the community away.',
+    link:       'The *link in bio doesn\'t point to anything useful* or is broken.',
+  };
+  return m[p] || 'Social media has issues limiting reach and engagement.';
+}
+function mapProblemasSocialES(p) {
+  const m = {
+    bio:        'La *bio no es clara* — no dice qué hace el negocio ni cómo contactar.',
+    frequencia: 'El perfil *publica raramente* — el algoritmo penaliza las cuentas inactivas.',
+    qualidade:  'Las publicaciones *no tienen consistencia visual* — parece poco profesional.',
+    cta:        'Las publicaciones *no tienen llamado a la acción* — el seguidor no sabe qué hacer.',
+    stories:    'El perfil *no usa Reels ni Stories* — los formatos de mayor alcance orgánico.',
+    engajamento:'*No responde comentarios* — mata el engagement y aleja la comunidad.',
+    link:       'El *link en la bio no apunta a nada útil* o está roto.',
+  };
+  return m[p] || 'Las redes sociales tienen problemas que limitan el alcance.';
+}
+
+/* ══════════════════════════════════════════════════
+   TROCAR IDIOMA
+══════════════════════════════════════════════════ */
+function trocarIdioma(lang) {
+  idiomaAtivo = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('lang-' + lang);
+  if (btn) btn.classList.add('active');
+
+  // Sincronizar select do header
+  const sel = document.getElementById('lead-idioma');
+  if (sel) sel.value = lang;
+
+  if (projetoItens.length > 0 || document.getElementById('aba-3').classList.contains('active')) {
+    gerarScript();
+  }
+  gerarMensagem();
+}
+
+/* ══════════════════════════════════════════════════
+   PRECIFICAÇÃO
+══════════════════════════════════════════════════ */
+function renderPricing() {
+  const grid = document.getElementById('pricing-grid');
+  const f = MOEDAS[moedaAtiva].fator;
+  const s = MOEDAS[moedaAtiva].symbol;
+
+  grid.innerHTML = SERVICOS.map(sv => {
+    const min = Math.round(sv.brl[0] * f);
+    const max = Math.round(sv.brl[1] * f);
+    const mid = Math.round((sv.brl[0] + sv.brl[1]) / 2 * f);
+
+    // Verificar se esse serviço deve ser marcado automaticamente baseado no diagnóstico
+    const autoMark = deveMarcarServico(sv.id);
+
+    return `
+      <div class="pricing-item">
+        <input type="checkbox" id="svc-${sv.id}" ${autoMark ? 'checked' : ''} onchange="calcTotal()" />
+        <div class="pricing-item-body">
+          <div class="pricing-item-name">${sv.nome}</div>
+          <div class="pricing-item-range">${s}${min.toLocaleString('pt-BR')} – ${s}${max.toLocaleString('pt-BR')}</div>
+          <div class="pricing-item-range" style="color:var(--muted);font-size:10px">${sv.desc}</div>
+        </div>
+        <input type="number" class="pricing-item-input" id="val-${sv.id}"
+          value="${mid}" min="0" onchange="calcTotal()" placeholder="0" />
+      </div>`;
+  }).join('');
+
+  calcTotal();
+}
+
+function deveMarcarServico(id) {
+  if (id === 'landing' && !chk('site-existe')) return true;
+  if (id === 'site5' && chk('site-existe') && (!chk('site-mobile') || !chk('site-rapido') || !chk('site-cta'))) return true;
+  if (id === 'gmb' && !chk('gmb-existe')) return true;
+  if (id === 'social' && (!chk('social-frequencia') || !chk('social-qualidade'))) return true;
+  if (id === 'seo' && !chk('site-seo')) return true;
+  return false;
+}
+
+function calcTotal() {
+  const f = MOEDAS[moedaAtiva].fator;
+  const s = MOEDAS[moedaAtiva].symbol;
+
+  let total = 0;
+  let servicos = [];
+
+  SERVICOS.forEach(sv => {
+    const chkEl = document.getElementById('svc-' + sv.id);
+    const valEl = document.getElementById('val-' + sv.id);
+    if (chkEl?.checked && valEl) {
+      const v = parseFloat(valEl.value) || 0;
+      total += v;
+      servicos.push({ nome: sv.nome, valor: v });
+    }
+  });
+
+  document.getElementById('total-valor').textContent = s + total.toLocaleString('pt-BR');
+  document.getElementById('total-sub').textContent = servicos.length > 0
+    ? servicos.length + ' serviço(s) selecionado(s)'
+    : 'Selecione os serviços acima';
+
+  window._totalAtual = total;
+  window._servicosAtual = servicos;
+  window._moedaAtual = moedaAtiva;
+}
+
+function trocarMoeda(m) {
+  moedaAtiva = m;
+  document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('cur-' + m.toLowerCase())?.classList.add('active');
+  renderPricing();
+  gerarMensagem();
+}
+
+/* ══════════════════════════════════════════════════
+   MENSAGEM DE ENVIO
+══════════════════════════════════════════════════ */
+function gerarMensagem() {
+  const nome    = val('lead-nome')    || '[NOME]';
+  const negocio = val('lead-negocio') || '[NEGÓCIO]';
+  const idioma  = idiomaAtivo;
+
+  let msg = '';
+
+  if (idioma === 'pt') {
+    msg = `Oi *${nome}*! 👋
+
+Gravei um vídeo rápido analisando a presença digital de *${negocio}*.
+
+São uns 4 minutos mostrando o que encontrei — sem rodeios.
+
+[LINK DO VÍDEO]
+
+Se fizer sentido conversar depois, me fala. Sem compromisso nenhum. 🤝`;
+  } else if (idioma === 'en') {
+    msg = `Hey *${nome}*! 👋
+
+I put together a quick video auditing *${negocio}*'s digital presence.
+
+It's about 4 minutes — straight to the point, no fluff.
+
+[VIDEO LINK]
+
+If it makes sense to chat after, just let me know. Zero pressure. 🤝`;
+  } else {
+    msg = `¡Hola *${nome}*! 👋
+
+Grabé un video rápido analizando la presencia digital de *${negocio}*.
+
+Son unos 4 minutos mostrando lo que encontré — sin rodeos.
+
+[ENLACE DEL VIDEO]
+
+Si tiene sentido conversar después, avísame. Sin compromiso. 🤝`;
+  }
+
+  const el = document.getElementById('mensagem-envio');
+  if (el) el.textContent = msg;
+}
+
+/* ══════════════════════════════════════════════════
+   COPIAR — compatível com file:// e HTTPS
+══════════════════════════════════════════════════ */
+function copiarTexto(texto, msg) {
+  if (!texto) { toast('Nada para copiar.'); return; }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(texto).then(() => toast(msg)).catch(() => copiarFallback(texto, msg));
+  } else {
+    copiarFallback(texto, msg);
+  }
+}
+
+function copiarFallback(texto, msg) {
+  const ta = document.createElement('textarea');
+  ta.value = texto;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); toast(msg); }
+  catch { toast('Selecione o texto manualmente (Ctrl+A, Ctrl+C).'); }
+  document.body.removeChild(ta);
+}
+
+function copiarScript() {
+  if (!scriptTexto) { toast('Gere o script primeiro.'); return; }
+  copiarTexto(scriptTexto, 'Script copiado! ✅');
+}
+
+function copiarMensagem() {
+  const el = document.getElementById('mensagem-envio');
+  if (!el) return;
+  copiarTexto(el.textContent, 'Mensagem copiada! ✅');
+}
+
+function copiarProposta() {
+  const svcs = window._servicosAtual || [];
+  const moeda = window._moedaAtual || 'BRL';
+  const s = MOEDAS[moeda].symbol;
+  const total = window._totalAtual || 0;
+  const nome = val('lead-negocio') || '[NEGÓCIO]';
+
+  if (svcs.length === 0) { toast('Selecione pelo menos um serviço.'); return; }
+
+  const texto = `PROPOSTA — ${nome}\n\n` +
+    svcs.map(sv => `• ${sv.nome}: ${s}${sv.valor.toLocaleString('pt-BR')}`).join('\n') +
+    `\n\nINVESTIMENTO TOTAL: ${s}${total.toLocaleString('pt-BR')}`;
+
+  copiarTexto(texto, 'Proposta copiada! ✅');
+}
+
+/* ══════════════════════════════════════════════════
+   SALVAR / CARREGAR
+══════════════════════════════════════════════════ */
+let _saveTimeout = null;
+function salvarCampo() {
+  clearTimeout(_saveTimeout);
+  _saveTimeout = setTimeout(salvarDiagnostico, 800);
+}
+
+function salvarDiagnostico() {
+  const dados = {
+    nome:     val('lead-nome'),
+    negocio:  val('lead-negocio'),
+    nicho:    val('lead-nicho'),
+    pais:     val('lead-pais'),
+    idioma:   val('lead-idioma'),
+    contexto: val('lead-contexto'),
+    urlSite:  val('url-site'),
+    urlGmb:   val('url-gmb'),
+    urlSocial:val('url-social'),
+    site:     CAMPOS_SITE.reduce((acc, c) => ({ ...acc, [c]: chk('site-' + c) }), {}),
+    gmb:      CAMPOS_GMB.reduce((acc, c) => ({ ...acc, [c]: chk('gmb-' + c) }), {}),
+    social:   CAMPOS_SOCIAL.reduce((acc, c) => ({ ...acc, [c]: chk('social-' + c) }), {}),
+    notesSite:  val('notes-site'),
+    notesGmb:   val('notes-gmb'),
+    notesSocial:val('notes-social'),
+    savedAt: new Date().toISOString(),
+  };
+  localStorage.setItem('diag_atual', JSON.stringify(dados));
+}
+
+function carregarDiagnostico() {
+  const raw = localStorage.getItem('diag_atual');
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    setVal('lead-nome',     d.nome);
+    setVal('lead-negocio',  d.negocio);
+    setVal('lead-nicho',    d.nicho);
+    setVal('lead-pais',     d.pais);
+    setVal('lead-idioma',   d.idioma);
+    setVal('lead-contexto', d.contexto);
+    setVal('url-site',      d.urlSite);
+    setVal('url-gmb',       d.urlGmb);
+    setVal('url-social',    d.urlSocial);
+    setVal('notes-site',    d.notesSite);
+    setVal('notes-gmb',     d.notesGmb);
+    setVal('notes-social',  d.notesSocial);
+
+    CAMPOS_SITE.forEach(c => { const el = document.getElementById('site-' + c); if (el && d.site) el.checked = !!d.site[c]; });
+    CAMPOS_GMB.forEach(c => { const el = document.getElementById('gmb-' + c); if (el && d.gmb) el.checked = !!d.gmb[c]; });
+    CAMPOS_SOCIAL.forEach(c => { const el = document.getElementById('social-' + c); if (el && d.social) el.checked = !!d.social[c]; });
+
+    ['site', 'gmb', 'social'].forEach(canal => atualizarScore(canal));
+
+    if (d.idioma) { idiomaAtivo = d.idioma; trocarIdioma(d.idioma); }
+  } catch(e) {}
+}
+
+function novoLead() {
+  if (!confirm('Começar diagnóstico de um novo lead? Os dados atuais serão perdidos.')) return;
+  localStorage.removeItem('diag_atual');
+  location.reload();
+}
+
+function marcarEnviado() {
+  const nome = val('lead-nome') || 'Lead';
+  toast(`✅ ${nome} marcado como enviado!`);
+  // Poderia salvar no storage de leads aqui no futuro
+}
+
+/* ══════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════ */
+function val(id)       { return document.getElementById(id)?.value?.trim() || ''; }
+function setVal(id, v) { const el = document.getElementById(id); if (el && v !== undefined && v !== null) el.value = v; }
+function chk(id)       { return document.getElementById(id)?.checked || false; }
+
+function toast(msg, ms = 2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', ms);
+}
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  carregarDiagnostico();
+  renderPricing();
+  gerarMensagem();
+});
+
+</script>
+</body>
+</html>

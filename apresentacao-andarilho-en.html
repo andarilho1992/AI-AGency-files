@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Andarilho Digital — The Full Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow: #E99E22;
+  --navy:   #4130B4;
+  --bg:     #080c14;
+  --card:   #111827;
+  --border: rgba(255,255,255,.07);
+  --text:   #f0f2f8;
+  --muted:  #6b7280;
+  --green:  #22c55e;
+  --red:    #ef4444;
+  --teal:   #14b8a6;
+  --blue:   #3b82f6;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+.deck { width: 100%; height: 100vh; position: relative; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 56px 80px 100px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .38s ease, transform .38s ease;
+  transform: translateX(52px);
+}
+.slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.out    { opacity: 0; transform: translateX(-52px); }
+
+/* NAV */
+.nav { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; z-index: 100; }
+.nav-dots { display: flex; gap: 7px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); cursor: pointer; transition: all .2s; }
+.dot.active { background: var(--yellow); transform: scale(1.4); }
+.nav-btn { width: 38px; height: 38px; border-radius: 9px; background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .15s; }
+.nav-btn:hover { border-color: var(--yellow); }
+.slide-counter { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 38px; text-align: center; }
+
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--yellow); transition: width .38s ease; z-index: 200; }
+.logomark { position: fixed; top: 22px; left: 28px; font-size: 12px; font-weight: 800; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+.logomark span { color: var(--yellow); }
+
+/* UTILS */
+.tag { display: inline-flex; align-items: center; gap: 5px; border-radius: 20px; padding: 4px 13px; font-size: 11px; font-weight: 800; letter-spacing: .04em; }
+.tag-y  { background: rgba(233,158,34,.15); color: var(--yellow); }
+.tag-g  { background: rgba(34,197,94,.12);  color: var(--green);  }
+.tag-r  { background: rgba(239,68,68,.12);  color: var(--red);    }
+.tag-b  { background: rgba(59,130,246,.12); color: var(--blue);   }
+.tag-t  { background: rgba(20,184,166,.12); color: var(--teal);   }
+
+.card  { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.hl    { color: var(--yellow); }
+.hl2   { color: var(--red); }
+.hl3   { color: var(--teal); }
+.hl4   { color: var(--blue); }
+
+/* ─── SLIDE TYPES ─── */
+
+/* BIG QUOTE */
+.big-q { font-family: 'Outfit', sans-serif; font-size: clamp(28px, 4.5vw, 56px); font-weight: 900; line-height: 1.2; text-align: center; max-width: 840px; }
+.big-q-sub { font-size: 16px; color: var(--muted); font-weight: 600; margin-top: 20px; text-align: center; }
+
+/* COVER */
+.cover-eye { font-size: 11px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--yellow); margin-bottom: 18px; }
+.cover-title { font-family: 'Outfit', sans-serif; font-size: clamp(44px, 7.5vw, 90px); font-weight: 900; line-height: 1; text-align: center; margin-bottom: 20px; }
+.cover-sub { font-size: clamp(14px, 2vw, 18px); color: var(--muted); font-weight: 600; text-align: center; max-width: 560px; line-height: 1.6; margin-bottom: 40px; }
+.pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.22); border-radius: 40px; padding: 10px 24px; font-size: 13px; font-weight: 800; color: var(--yellow); }
+
+/* SECTION TITLE */
+.s-label { font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--yellow); margin-bottom: 12px; }
+.s-title { font-family: 'Outfit', sans-serif; font-size: clamp(30px, 4.5vw, 52px); font-weight: 900; line-height: 1.1; margin-bottom: 10px; }
+.s-sub   { font-size: 15px; color: var(--muted); font-weight: 600; margin-bottom: 36px; }
+
+/* TWO-COL */
+.two-col { display: flex; gap: 40px; align-items: flex-start; width: 100%; max-width: 960px; }
+.two-col .left  { flex: 1.1; }
+.two-col .right { flex: 1; }
+
+/* TIMELINE */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item  { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 22px; position: relative; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before { content: ''; position: absolute; left: 14px; top: 30px; bottom: -8px; width: 1px; background: var(--border); }
+.tl-item:last-child::before { display: none; }
+.tl-dot { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; margin-top: 1px; }
+.tl-body {}
+.tl-place { font-size: 13px; font-weight: 900; margin-bottom: 2px; }
+.tl-role  { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+/* STAT CARD */
+.stat-row { display: flex; gap: 14px; width: 100%; }
+.stat-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+.stat-num   { font-size: clamp(28px, 4vw, 44px); font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.stat-label { font-size: 12px; color: var(--muted); font-weight: 700; line-height: 1.4; }
+
+/* FEATURE LIST */
+.feat-list { display: flex; flex-direction: column; gap: 12px; }
+.feat-item { display: flex; align-items: flex-start; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 14px 18px; }
+.feat-ico  { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.feat-body {}
+.feat-title { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.feat-desc  { font-size: 12px; color: var(--muted); font-weight: 600; line-height: 1.4; }
+.feat-tag   { font-size: 10px; font-weight: 800; color: var(--yellow); background: rgba(233,158,34,.1); border-radius: 20px; padding: 2px 8px; display: inline-block; margin-top: 4px; }
+
+/* GRID 3 */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 960px; }
+.g3-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+.g3-ico  { font-size: 28px; margin-bottom: 10px; }
+.g3-title { font-size: 14px; font-weight: 900; margin-bottom: 6px; }
+.g3-desc  { font-size: 12px; color: var(--muted); font-weight: 600; line-height: 1.5; }
+
+/* FLOW */
+.flow { display: flex; align-items: flex-start; gap: 0; width: 100%; max-width: 960px; }
+.flow-step { flex: 1; text-align: center; padding: 0 6px; }
+.flow-ico  { width: 58px; height: 58px; border-radius: 50%; background: var(--card); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; }
+.flow-ico.hl { border-color: var(--yellow); background: rgba(233,158,34,.1); }
+.flow-title { font-size: 12px; font-weight: 800; margin-bottom: 3px; }
+.flow-desc  { font-size: 10px; color: var(--muted); font-weight: 600; line-height: 1.4; }
+.flow-arr   { font-size: 18px; color: var(--muted); flex-shrink: 0; margin-top: 18px; padding: 0 2px; }
+
+/* MONEY TABLE */
+.money-table { width: 100%; border-collapse: collapse; }
+.money-table th { font-size: 11px; font-weight: 800; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; padding: 10px 16px; border-bottom: 1px solid var(--border); text-align: left; }
+.money-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 700; }
+.money-table tr:last-child td { border-bottom: none; }
+
+/* ROADMAP */
+.roadmap { display: flex; gap: 16px; width: 100%; max-width: 960px; }
+.rm-col  { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.rm-hd   { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.rm-period { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.rm-title  { font-size: 15px; font-weight: 900; }
+.rm-body   { padding: 14px 18px; }
+.rm-item   { display: flex; gap: 9px; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; line-height: 1.4; }
+.rm-item:last-child { margin-bottom: 0; }
+.rm-item .ico { flex-shrink: 0; }
+.rm-col.active { border-color: rgba(233,158,34,.4); }
+.rm-col.active .rm-hd { background: rgba(233,158,34,.05); }
+
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="logomark">🌏 <span>O Forasteiro</span> — The Full Story</div>
+
+<div class="deck" id="deck">
+
+  <!-- ─── 1. COVER ─── -->
+  <div class="slide active" id="s0">
+    <div class="cover-eye">The Andarilho Digital Project — 2026</div>
+    <div class="cover-title">Building a business<br/>from a <span class="hl">backpack.</span></div>
+    <div class="cover-sub">This is the story of a Brazilian designer who worked as a painter in London and a gardener in Switzerland — and is now building an AI automation agency from Chiang Mai, Thailand.</div>
+    <div class="pill">🌏 Guilherme Andrade · Um Forasteiro</div>
+  </div>
+
+  <!-- ─── 2. WHO ─── -->
+  <div class="slide" id="s1">
+    <div class="two-col" style="align-items:center">
+      <div class="left">
+        <div class="s-label">The person</div>
+        <div class="s-title">Gui.<br/>33 years old.<br/>From Brazil.</div>
+        <div style="font-size:15px;color:var(--muted);font-weight:600;line-height:1.7;margin-top:12px">
+          Industrial designer with 9 years of experience.<br/>
+          Left Brazil after a personal crisis — not for adventure.<br/>
+          Travelled with his fiancée. Worked to keep moving.<br/>
+          Never went home. Never planned to.
+        </div>
+        <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag tag-b">🇧🇷 Brazil</span>
+          <span class="tag tag-b">🇬🇧 London</span>
+          <span class="tag tag-b">🇨🇭 Switzerland</span>
+          <span class="tag tag-y">🇹🇭 Chiang Mai now</span>
+        </div>
+      </div>
+      <div class="right">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot" style="background:rgba(59,130,246,.2);color:var(--blue)">🎨</div>
+            <div class="tl-body"><div class="tl-place">Brazil</div><div class="tl-role">Industrial Designer, 9 years. Worked on national and international projects.</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:rgba(239,68,68,.15);color:#f87171">🖌️</div>
+            <div class="tl-body"><div class="tl-place">London, England</div><div class="tl-role">Residential painter with a spray machine. Saved enough to move.</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:rgba(255,255,255,.08);color:var(--muted)">⛏️</div>
+            <div class="tl-body"><div class="tl-place">Switzerland</div><div class="tl-role">Driver, gardener, hostel volunteer → assistant manager in the Alps.</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:rgba(233,158,34,.15);color:var(--yellow)">🌴</div>
+            <div class="tl-body"><div class="tl-place">Chiang Mai, Thailand (now)</div><div class="tl-role">Building digital systems. Making the nomad life permanent.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 3. THE BRUTAL TRUTH ─── -->
+  <div class="slide" id="s2">
+    <div class="big-q" style="margin-bottom:40px">
+      "I worked as a painter in London and a gardener in Switzerland to live in Thailand. <span class="hl">I did that twice.</span> <span class="hl2">I'm not doing it a third time.</span>"
+    </div>
+    <div class="stat-row" style="max-width:780px">
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--red)">R$ 1.4k</div>
+        <div class="stat-label">savings left<br/>(April 2026)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--yellow)">R$ 5.6k</div>
+        <div class="stat-label">monthly cost<br/>in Thailand</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--muted)">R$ 0</div>
+        <div class="stat-label">revenue<br/>Jan & Feb 2026</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--green)">Now</div>
+        <div class="stat-label">first client<br/>in the pipeline</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:24px;text-align:center">The numbers are real. This is not a side project. This is the plan.</div>
+  </div>
+
+  <!-- ─── 4. THE TWO BETS ─── -->
+  <div class="slide" id="s3">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="s-label">The strategy</div>
+      <div class="s-title">Two parallel bets.<br/>One mission.</div>
+      <div class="s-sub">Both feed each other. Content builds trust. Agency closes money.</div>
+    </div>
+    <div class="two-col" style="gap:24px">
+      <div class="card" style="flex:1;border-color:rgba(233,158,34,.3)">
+        <div style="font-size:24px;margin-bottom:12px">📹</div>
+        <div style="font-size:18px;font-weight:900;margin-bottom:6px;color:var(--yellow)">Um Forasteiro</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:600;line-height:1.6;margin-bottom:14px">YouTube + Instagram. Not a travel channel. A channel about a systems designer building survival infrastructure in each country — now with AI.</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:12px;font-weight:700">📱 Reels Monday–Friday (daily)</div>
+          <div style="font-size:12px;font-weight:700">🎥 Long video every weekend</div>
+          <div style="font-size:12px;font-weight:700">🎯 Audience → community → product</div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;border-color:rgba(59,130,246,.3)">
+        <div style="font-size:24px;margin-bottom:12px">🤖</div>
+        <div style="font-size:18px;font-weight:900;margin-bottom:6px;color:var(--blue)">Andarilho Digital Agency</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:600;line-height:1.6;margin-bottom:14px">B2B automation and AI systems for Brazilian small businesses. Clinics, pet shops, salons. Businesses drowning in manual work they haven't noticed yet.</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:12px;font-weight:700">🎯 Active prospecting (not waiting)</div>
+          <div style="font-size:12px;font-weight:700">💰 Commission + monthly retainer</div>
+          <div style="font-size:12px;font-weight:700">🚀 Each client becomes a case study</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 5. THE AGENCY TARGETS ─── -->
+  <div class="slide" id="s4">
+    <div class="two-col">
+      <div class="left">
+        <div class="s-label">Who we sell to</div>
+        <div class="s-title">Small businesses<br/>drowning in<br/>manual work.</div>
+        <div style="font-size:15px;color:var(--muted);font-weight:600;line-height:1.7;margin-top:14px;margin-bottom:24px">They have customers, they have revenue — but everything runs on WhatsApp, memory and luck. They don't know they have a problem until we show them the money they're losing.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag tag-y">💉 Aesthetics Clinics</span>
+          <span class="tag tag-t">🐾 Pet Shops</span>
+          <span class="tag tag-b">💇 Hair Salons</span>
+          <span class="tag tag-g">🦷 Dental Clinics</span>
+        </div>
+      </div>
+      <div class="right">
+        <div class="feat-list">
+          <div class="feat-item">
+            <div class="feat-ico">📱</div>
+            <div class="feat-body"><div class="feat-title">No booking system</div><div class="feat-desc">Appointments come in via WhatsApp at 11pm. Nobody answers. Client books somewhere else.</div></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-ico">👻</div>
+            <div class="feat-body"><div class="feat-title">Clients disappear</div><div class="feat-desc">Regular clients stop coming. Owner never knows why. Nobody follows up.</div></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-ico">🎂</div>
+            <div class="feat-body"><div class="feat-title">Zero retention strategy</div><div class="feat-desc">No reminders, no birthday messages, no loyalty. All relationships are accidental.</div></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-ico">📊</div>
+            <div class="feat-body"><div class="feat-title">No data, no awareness</div><div class="feat-desc">They can't see which clients are "at risk" or how much revenue they lose monthly.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 6. WHAT WAS BUILT — overview ─── -->
+  <div class="slide" id="s5">
+    <div style="text-align:center;margin-bottom:32px">
+      <div class="s-label">What's been built</div>
+      <div class="s-title">A complete automated<br/>sales & service machine.</div>
+      <div class="s-sub">Built from scratch in Thailand. Vanilla JS + Node.js + Claude AI. No VC money. No team.</div>
+    </div>
+    <div class="grid3">
+      <div class="g3-card" style="border-color:rgba(233,158,34,.3)">
+        <div class="g3-ico">🔍</div>
+        <div class="g3-title" style="color:var(--yellow)">Prospecting Agent</div>
+        <div class="g3-desc">Finds leads on Google Maps, scrapes their websites, analyzes Instagram, and generates a personalized first-contact message — fully automated.</div>
+      </div>
+      <div class="g3-card" style="border-color:rgba(59,130,246,.3)">
+        <div class="g3-ico">📋</div>
+        <div class="g3-title" style="color:var(--blue)">Pipeline CRM</div>
+        <div class="g3-desc">Kanban board to manage all leads from "found" to "closed". Each card shows contact info, digital presence analysis, and AI-generated message.</div>
+      </div>
+      <div class="g3-card" style="border-color:rgba(20,184,166,.3)">
+        <div class="g3-ico">🤖</div>
+        <div class="g3-title" style="color:var(--teal)">Prospecting Server</div>
+        <div class="g3-desc">Full Express server with cron jobs. Runs prospecting, sends WhatsApp, handles follow-ups. Simulates everything without paid APIs.</div>
+      </div>
+      <div class="g3-card" style="border-color:rgba(233,158,34,.3)">
+        <div class="g3-ico">🐾</div>
+        <div class="g3-title" style="color:var(--yellow)">Pets Go CRM</div>
+        <div class="g3-desc">Full pet shop management system: check-in/out, tele-pickup, appointments, stock, billing, multi-branch dashboard, pet health records.</div>
+      </div>
+      <div class="g3-card" style="border-color:rgba(34,197,94,.3)">
+        <div class="g3-ico">⚙️</div>
+        <div class="g3-title" style="color:var(--green)">5 AI Agents (24/7)</div>
+        <div class="g3-desc">Weekly report, pet birthday messages, stock alerts, appointment reminders, and client reactivation. All running on a Railway server.</div>
+      </div>
+      <div class="g3-card" style="border-color:rgba(167,139,250,.3)">
+        <div class="g3-ico">🔄</div>
+        <div class="g3-title" style="color:#a78bfa">Reactivation Pipeline</div>
+        <div class="g3-desc">Identifies inactive clients, AI writes a personal message per pet and service, sends via WhatsApp. Recovers revenue that was sitting in the database.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 7. THE PROSPECTING MACHINE ─── -->
+  <div class="slide" id="s6">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="s-label">System #1</div>
+      <div class="s-title">The Prospecting Machine.</div>
+      <div class="s-sub">From "I need clients" to "here are 50 warm leads with personalized messages" — one command.</div>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-ico hl">🗺️</div>
+        <div class="flow-title">Google Maps</div>
+        <div class="flow-desc">Searches for clinics and pet shops in target cities. Filters out franchises.</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">🌐</div>
+        <div class="flow-title">Website Scraper</div>
+        <div class="flow-desc">Scrapes their site for phone, WhatsApp link, Instagram handle.</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">📸</div>
+        <div class="flow-title">Instagram Analysis</div>
+        <div class="flow-desc">Checks follower count and activity. Scores digital presence: weak / medium / strong.</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">
+        <div class="flow-ico hl">🤖</div>
+        <div class="flow-title">Claude AI Message</div>
+        <div class="flow-desc">Writes a personalized first message based on what was "observed". No AI mentions.</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">📋</div>
+        <div class="flow-title">Pipeline CRM</div>
+        <div class="flow-desc">Lead card created. WhatsApp button, DM button, status tracking.</div>
+      </div>
+    </div>
+    <div style="margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <span class="tag tag-g">52 leads already loaded</span>
+      <span class="tag tag-y">6 cities + 2 niches</span>
+      <span class="tag tag-b">Simulates without Google API key</span>
+      <span class="tag tag-t">Auto-runs Tue + Fri at 7am BRT</span>
+    </div>
+  </div>
+
+  <!-- ─── 8. FIRST CLIENT — PETS GO ─── -->
+  <div class="slide" id="s7">
+    <div class="two-col" style="align-items:center">
+      <div class="left">
+        <div class="s-label">First client</div>
+        <div class="s-title">Junior.<br/>Pet shop chain.<br/>3 branches.</div>
+        <div style="font-size:15px;color:var(--muted);font-weight:600;line-height:1.7;margin-top:14px;margin-bottom:20px">
+          Junior runs a pet shop chain in Brazil called <strong style="color:var(--text)">Pets Go</strong>. He's been managing everything manually — appointments, clients, stock, billing — across 3 locations.<br/><br/>
+          The deal: <strong style="color:var(--yellow)">commission per reactivated client</strong>. Every inactive customer that comes back = Guilherme earns. Then a monthly retainer to keep the system running.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="tag tag-g" style="width:fit-content">✅ CRM delivered</div>
+          <div class="tag tag-g" style="width:fit-content">✅ 5 AI agents live on Railway</div>
+          <div class="tag tag-y" style="width:fit-content">⏳ Waiting: his customer database</div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="card" style="border-color:rgba(233,158,34,.3);margin-bottom:14px">
+          <div style="font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Conservative ROI estimate</div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;font-weight:700"><span>Inactive clients in database</span><span>200</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;font-weight:700"><span>AI reactivation rate (10%)</span><span>20 clients</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;font-weight:700"><span>Average ticket</span><span>R$ 120</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0 0;font-size:15px;font-weight:900"><span>Per campaign (×2/month)</span><span style="color:var(--green)">R$ 4.8k</span></div>
+        </div>
+        <div class="card" style="padding:16px;background:rgba(233,158,34,.05);border-color:rgba(233,158,34,.25)">
+          <div style="font-size:13px;font-weight:900;line-height:1.5">With <span class="hl">3 branches</span>, that's <span class="hl">R$ 14k+/month</span> in revenue sitting dormant in a database.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 9. THE 5 AGENTS ─── -->
+  <div class="slide" id="s8">
+    <div style="text-align:center;margin-bottom:28px">
+      <div class="s-label">The AI agents — running 24/7 on a server</div>
+      <div class="s-title">Five agents working<br/>while Junior sleeps.</div>
+    </div>
+    <div class="feat-list" style="max-width:860px;width:100%">
+      <div class="feat-item">
+        <div class="feat-ico">📊</div>
+        <div class="feat-body"><div class="feat-title">Weekly Business Report — Monday 8am BRT</div><div class="feat-desc">Claude analyses the week's data and sends an executive summary directly to the owner's WhatsApp. Revenue, busiest branch, service breakdown, stock alerts.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-ico">🎂</div>
+        <div class="feat-body"><div class="feat-title">Pet Birthday Messages — Daily 9am</div><div class="feat-desc">Detects pets with a birthday today. Sends a personalised WhatsApp to the owner. Zero effort loyalty — clients love it.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-ico">📦</div>
+        <div class="feat-body"><div class="feat-title">Low Stock Alert — Daily 9am</div><div class="feat-desc">Checks items below minimum. Sends an alert before they run out. Never an "I didn't know" moment again.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-ico">⏰</div>
+        <div class="feat-body"><div class="feat-title">Appointment Reminders — Every Hour</div><div class="feat-desc">Checks for appointments tomorrow. Sends a WhatsApp reminder to the client 24h before. Drastically reduces no-shows.</div></div>
+      </div>
+      <div class="feat-item" style="border-color:rgba(233,158,34,.3);background:rgba(233,158,34,.04)">
+        <div class="feat-ico">🔄</div>
+        <div class="feat-body"><div class="feat-title" style="color:var(--yellow)">Client Reactivation — Tue & Thu 10am ⭐</div><div class="feat-desc">Identifies inactive clients (90+ days). Claude writes a personalised message per pet and service. Sends via WhatsApp. Cards move automatically through the kanban pipeline.</div><div class="feat-tag">The main revenue lever</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 10. BUSINESS MODEL ─── -->
+  <div class="slide" id="s9">
+    <div style="text-align:center;margin-bottom:32px">
+      <div class="s-label">Business model</div>
+      <div class="s-title">How the money works.</div>
+    </div>
+    <div class="two-col" style="gap:28px;max-width:960px">
+      <div style="flex:1">
+        <div class="card" style="margin-bottom:14px">
+          <div style="font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px">Revenue model per client</div>
+          <table class="money-table">
+            <tr><td>Setup fee (first delivery)</td><td style="color:var(--yellow);text-align:right">R$ 1.5–3k</td></tr>
+            <tr><td>Monthly retainer (system + agents)</td><td style="color:var(--yellow);text-align:right">R$ 600–1.2k</td></tr>
+            <tr><td>Commission on reactivations</td><td style="color:var(--green);text-align:right">10–15%</td></tr>
+          </table>
+        </div>
+        <div class="card" style="padding:16px">
+          <div style="font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">Monthly costs to run it all</div>
+          <table class="money-table" style="font-size:12px">
+            <tr><td>Railway server</td><td style="text-align:right;color:var(--muted)">~R$ 25</td></tr>
+            <tr><td>WhatsApp API (Evolution)</td><td style="text-align:right;color:var(--muted)">~R$ 80</td></tr>
+            <tr><td>Claude API</td><td style="text-align:right;color:var(--muted)">~R$ 30</td></tr>
+            <tr><td>Google Places</td><td style="text-align:right;color:var(--muted)">~R$ 20</td></tr>
+          </table>
+        </div>
+      </div>
+      <div style="flex:1">
+        <div class="card" style="border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.03);height:100%">
+          <div style="font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Why this model works</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;gap:12px">
+              <span style="font-size:20px">💡</span>
+              <div style="font-size:13px;font-weight:600;color:var(--muted);line-height:1.5"><strong style="color:var(--text)">Zero new skills needed for the client.</strong> They use WhatsApp like always. The system handles the rest.</div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <span style="font-size:20px">📈</span>
+              <div style="font-size:13px;font-weight:600;color:var(--muted);line-height:1.5"><strong style="color:var(--text)">Commission aligns incentives.</strong> Guilherme only earns if the client earns. No risk objection.</div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <span style="font-size:20px">🔁</span>
+              <div style="font-size:13px;font-weight:600;color:var(--muted);line-height:1.5"><strong style="color:var(--text)">Each client is a case study.</strong> Junior's results become the pitch for the next client.</div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <span style="font-size:20px">🚀</span>
+              <div style="font-size:13px;font-weight:600;color:var(--muted);line-height:1.5"><strong style="color:var(--text)">Franchise model.</strong> The whole system gets packaged and replicated across multiple pet shop chains.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 11. ROADMAP ─── -->
+  <div class="slide" id="s10">
+    <div style="text-align:center;margin-bottom:28px">
+      <div class="s-label">The plan</div>
+      <div class="s-title">Next 90 days.</div>
+    </div>
+    <div class="roadmap" style="max-width:960px;width:100%">
+      <div class="rm-col active">
+        <div class="rm-hd">
+          <div class="rm-period">Right now</div>
+          <div class="rm-title" style="color:var(--yellow)">Close Junior / Pets Go</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-item"><span class="ico">✅</span>CRM fully built</div>
+          <div class="rm-item"><span class="ico">✅</span>5 AI agents live on server</div>
+          <div class="rm-item"><span class="ico">✅</span>Reactivation pipeline ready</div>
+          <div class="rm-item"><span class="ico">⏳</span>Get Junior's customer database</div>
+          <div class="rm-item"><span class="ico">⏳</span>First reactivation campaign</div>
+          <div class="rm-item"><span class="ico">🎯</span>First commission payment</div>
+        </div>
+      </div>
+      <div class="rm-col">
+        <div class="rm-hd">
+          <div class="rm-period">Month 1–2</div>
+          <div class="rm-title">Prospecting activation</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-item"><span class="ico">🔍</span>Run prospecting agent live</div>
+          <div class="rm-item"><span class="ico">📱</span>Connect WhatsApp API</div>
+          <div class="rm-item"><span class="ico">💬</span>First automated outreach</div>
+          <div class="rm-item"><span class="ico">📹</span>Document everything for content</div>
+          <div class="rm-item"><span class="ico">🤝</span>Close second client</div>
+          <div class="rm-item"><span class="ico">💰</span>Cover monthly costs</div>
+        </div>
+      </div>
+      <div class="rm-col">
+        <div class="rm-hd">
+          <div class="rm-period">Month 3+</div>
+          <div class="rm-title">Scale & content</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-item"><span class="ico">📺</span>YouTube growing with real results</div>
+          <div class="rm-item"><span class="ico">🏪</span>3–5 clients paying retainer</div>
+          <div class="rm-item"><span class="ico">🚀</span>Package the model for franchising</div>
+          <div class="rm-item"><span class="ico">🌏</span>Costs fully covered remotely</div>
+          <div class="rm-item"><span class="ico">🎯</span>Sell the system, not the hours</div>
+          <div class="rm-item"><span class="ico">✈️</span>Next country, same infrastructure</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 12. CLOSING ─── -->
+  <div class="slide" id="s11">
+    <div style="text-align:center">
+      <div class="big-q" style="margin-bottom:20px">The cycle was:<br/><span class="hl">work → spend → work again.</span><br/>He's breaking it.<br/><span class="hl3">For good.</span></div>
+      <div style="font-size:16px;color:var(--muted);font-weight:600;max-width:560px;margin:0 auto 40px;line-height:1.6">The tools are built. The first client is in. The only variable left is time — and he's running out of the kind of time that lets you go back to painting walls in London.</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:var(--green)"></div>Server online</div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:var(--green)"></div>Pipeline live</div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:var(--green)"></div>5 agents running</div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:var(--yellow)"></div>First client: closing</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" onclick="navTo(cur-1)">←</button>
+  <div class="nav-dots" id="dots"></div>
+  <span class="slide-counter" id="counter"></span>
+  <button class="nav-btn" onclick="navTo(cur+1)">→</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0;
+const dotsEl     = document.getElementById('dots');
+const counterEl  = document.getElementById('counter');
+const progressEl = document.getElementById('progress');
+
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => navTo(i);
+  dotsEl.appendChild(d);
+});
+
+function navTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(() => slides[cur]?.classList.remove('out'), 380);
+  cur = n;
+  slides[cur].classList.add('active');
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  counterEl.textContent = `${cur + 1} / ${total}`;
+  progressEl.style.width = `${((cur + 1) / total) * 100}%`;
+}
+
+navTo(0);
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); navTo(cur + 1); }
+  if (['ArrowLeft', 'ArrowUp'     ].includes(e.key)) { e.preventDefault(); navTo(cur - 1); }
+  if (e.key === 'Home') navTo(0);
+  if (e.key === 'End')  navTo(total - 1);
+  if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
+});
+
+document.getElementById('deck').addEventListener('click', e => {
+  if (!e.target.closest('.nav')) navTo(cur + 1);
+});
+</script>
+</body>
+</html>

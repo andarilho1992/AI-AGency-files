@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orçamento — Orçamentos Pro</title>
+
+  <!--
+    =====================================================
+    O QUE É ESSA PÁGINA?
+    =====================================================
+    Esta é a página de VISUALIZAÇÃO do orçamento.
+    Ela faz 4 coisas:
+
+    1. Lê o ID do orçamento da URL (?id=abc123)
+    2. Busca os dados no localStorage
+    3. Renderiza o preview visual (como vai ficar o PDF)
+    4. Oferece ações: mudar status, editar, baixar PDF, enviar WhatsApp
+
+    É a tela mais importante do sistema para o cliente —
+    é aqui que ele vê o resultado e toma a ação.
+    =====================================================
+  -->
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!--
+    jsPDF — biblioteca para gerar PDF no browser
+    Carregada via CDN (servidor externo na internet)
+
+    Por que CDN e não baixar o arquivo?
+    CDN é mais rápido (servidores distribuídos globalmente),
+    sempre atualizado, e não precisa de npm install.
+    Desvantagem: precisa de internet para funcionar.
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <style>
+    /*
+      Estilos específicos desta página.
+      O resto vem do style.css global.
+    */
+
+    /* Botão do WhatsApp — verde característico */
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; }
+
+    /* Área de ações do WhatsApp com opções */
+    .whatsapp-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Badge de status maior na página de visualização */
+    .status-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* Tooltip de ajuda */
+    .help-text {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR com link de Configurações adicionado -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">📋</span>
+      <span class="logo-text">Orçamentos<strong>Pro</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon">◼</span> Dashboard
+      </a>
+      <a href="novo-orcamento.html" class="nav-item">
+        <span class="nav-icon">＋</span> Novo Orçamento
+      </a>
+      <a href="orcamentos.html" class="nav-item">
+        <span class="nav-icon">📄</span> Orçamentos
+      </a>
+      <a href="clientes.html" class="nav-item">
+        <span class="nav-icon">👥</span> Clientes
+      </a>
+      <a href="configuracoes.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Configurações
+      </a>
+    </nav>
+    <div class="sidebar-empresa">
+      <span id="empresa-nome">Minha Empresa</span>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!--
+      PAGE HEADER
+      Mostra o número do orçamento e as ações principais.
+      As ações ficam no lado direito: status, editar, WhatsApp, PDF.
+    -->
+    <header class="page-header">
+      <div>
+        <h1>Orçamento <span id="orc-numero">#---</span></h1>
+        <p class="subtitle" id="orc-status-label">—</p>
+      </div>
+
+      <div class="header-actions">
+
+        <!--
+          SELETOR DE STATUS
+          Permite mudar o status do orçamento sem precisar editar.
+          Quando muda, chama atualizarStatus() que salva no localStorage.
+
+          Fluxo típico:
+          Rascunho → Pendente → Enviado → Aceito (ou Recusado)
+        -->
+        <div class="status-selector">
+          <label>Status:</label>
+          <select id="status-select" onchange="atualizarStatus()">
+            <option value="rascunho">Rascunho</option>
+            <option value="pendente">Pendente</option>
+            <option value="enviado">Enviado ✉️</option>
+            <option value="aceito">Aceito ✓</option>
+            <option value="recusado">Recusado ✗</option>
+          </select>
+        </div>
+
+        <a id="btn-editar" href="#" class="btn btn-secondary">✏️ Editar</a>
+
+        <!--
+          BOTÃO WHATSAPP
+          Gera um link especial do WhatsApp com a mensagem já escrita.
+
+          Como funciona o link do WhatsApp:
+          https://wa.me/NUMERO?text=MENSAGEM_CODIFICADA
+
+          O número precisa ser só dígitos com DDI+DDD (ex: 5511999998888)
+          A mensagem precisa ser codificada com encodeURIComponent()
+          para substituir espaços e caracteres especiais.
+
+          Esse link abre o WhatsApp Web ou o app no celular diretamente
+          na conversa com o número, com a mensagem já digitada.
+        -->
+        <button onclick="abrirWhatsApp()" class="btn-whatsapp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Enviar WhatsApp
+        </button>
+
+        <button onclick="gerarPDF()" class="btn btn-primary">⬇ Baixar PDF</button>
+      </div>
+    </header>
+
+    <!-- PREVIEW DO ORÇAMENTO -->
+    <div class="section-card orc-preview" id="orc-preview">
+
+      <div class="orc-header">
+        <div class="orc-empresa-info">
+          <!--
+            Logo da empresa — aparece se estiver configurado.
+            display:none por padrão, ativado pelo JS quando existe logo.
+          -->
+          <div id="preview-logo-container" style="display:none;margin-bottom:10px">
+            <img id="preview-logo" style="max-height:60px;max-width:180px" />
+          </div>
+          <h2 id="preview-empresa">Minha Empresa</h2>
+          <p id="preview-empresa-contato"></p>
+        </div>
+        <div class="orc-numero-box">
+          <div class="orc-label">ORÇAMENTO</div>
+          <div class="orc-numero-grande" id="preview-numero">#001</div>
+          <div class="orc-data" id="preview-data">—</div>
+          <div class="orc-validade" id="preview-validade"></div>
+        </div>
+      </div>
+
+      <hr class="orc-divider" />
+
+      <!-- DADOS DO CLIENTE -->
+      <div class="orc-section">
+        <div class="orc-section-label">PARA</div>
+        <div class="orc-cliente">
+          <strong id="preview-cliente-nome">—</strong>
+          <span id="preview-cliente-empresa"></span>
+          <span id="preview-cliente-email"></span>
+          <span id="preview-cliente-tel"></span>
+        </div>
+      </div>
+
+      <!-- TÍTULO E DESCRIÇÃO -->
+      <div class="orc-section">
+        <h3 id="preview-titulo">—</h3>
+        <p id="preview-descricao" class="orc-descricao-text"></p>
+      </div>
+
+      <!-- TABELA DE ITENS -->
+      <table class="orc-itens-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Descrição</th>
+            <th style="width:60px;text-align:center">Qtd.</th>
+            <th style="width:120px;text-align:right">Valor Unit.</th>
+            <th style="width:130px;text-align:right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody id="preview-itens"></tbody>
+      </table>
+
+      <!-- TOTAIS -->
+      <div class="orc-totais">
+        <div class="orc-total-row">
+          <span>Subtotal</span>
+          <span id="preview-subtotal">R$ 0,00</span>
+        </div>
+        <div class="orc-total-row" id="row-desconto" style="display:none">
+          <span id="preview-desconto-label">Desconto (0%)</span>
+          <span id="preview-desconto-valor">− R$ 0,00</span>
+        </div>
+        <div class="orc-total-row orc-total-final">
+          <span>TOTAL</span>
+          <span id="preview-total">R$ 0,00</span>
+        </div>
+      </div>
+
+      <!-- OBSERVAÇÕES -->
+      <div class="orc-obs-box" id="orc-obs-box" style="display:none">
+        <div class="orc-section-label">OBSERVAÇÕES</div>
+        <p id="preview-obs"></p>
+      </div>
+
+      <!-- RODAPÉ -->
+      <div class="orc-rodape">
+        <p>Orçamento gerado por <strong id="rodape-empresa">Minha Empresa</strong></p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pdf.js"></script>
+  <script>
+    /*
+      Variável global que guarda o orçamento atual.
+      Declarada com 'let' pois vai ser atribuída depois
+      quando a página carregar e buscar os dados.
+
+      O pdf.js também usa essa variável — por isso precisa
+      ser global (fora de qualquer função).
+    */
+    let orcamento = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      /*
+        URLSearchParams é uma API do browser para ler
+        os parâmetros da URL.
+
+        Exemplo: visualizar-orcamento.html?id=abc123
+        params.get('id') retorna 'abc123'
+
+        Isso é chamado de "query string" — uma forma de
+        passar informação entre páginas sem banco de dados.
+      */
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      if (!id) {
+        // Se não tem ID na URL, redireciona para o início
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Busca o orçamento no array salvo no localStorage
+      orcamento = Storage.getOrcamentos().find(o => o.id === id);
+
+      if (!orcamento) {
+        alert('Orçamento não encontrado.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const config = Storage.getConfig();
+      renderizarPreview(orcamento, config);
+
+      // Configura os links e selects com os dados do orçamento
+      document.getElementById('btn-editar').href = `novo-orcamento.html?id=${id}`;
+      document.getElementById('status-select').value = orcamento.status;
+      document.getElementById('empresa-nome').textContent = config.empresa || 'Minha Empresa';
+    });
+
+    /*
+      Renderiza todos os dados do orçamento na tela.
+      Essa função recebe o objeto do orçamento e o objeto de config,
+      e preenche cada elemento HTML com os valores corretos.
+
+      Isso se chama "renderização" — pegar dados e transformar em HTML.
+    */
+    function renderizarPreview(orc, config) {
+      const empresa = config.empresa || 'Minha Empresa';
+
+      document.getElementById('orc-numero').textContent = `#${orc.numero}`;
+      document.getElementById('orc-status-label').textContent = traduzirStatus(orc.status);
+
+      // Logo
+      if (config.logo) {
+        document.getElementById('preview-logo').src = config.logo;
+        document.getElementById('preview-logo-container').style.display = 'block';
+      }
+
+      document.getElementById('preview-empresa').textContent = empresa;
+      document.getElementById('rodape-empresa').textContent = empresa;
+
+      // Monta linha de contato com os dados que existirem
+      const contato = [config.email, config.telefone, config.site]
+        .filter(Boolean)
+        .join(' · ');
+      document.getElementById('preview-empresa-contato').textContent = contato;
+
+      document.getElementById('preview-numero').textContent = `#${orc.numero}`;
+      document.getElementById('preview-data').textContent = 'Data: ' + formatarData(orc.criadoEm);
+      document.getElementById('preview-validade').textContent = orc.validade
+        ? 'Válido até: ' + formatarData(orc.validade)
+        : '';
+
+      // Cor principal da empresa no divisor
+      const cor = config.cor || '#2563eb';
+      document.querySelector('.orc-divider').style.borderColor = cor;
+      document.querySelector('.orc-numero-grande').style.color = cor;
+
+      // Dados do cliente
+      document.getElementById('preview-cliente-nome').textContent = orc.clienteNome;
+      setVisivel('preview-cliente-empresa', orc.clienteEmpresa);
+      setVisivel('preview-cliente-email', orc.clienteEmail);
+      setVisivel('preview-cliente-tel', orc.clienteTelefone);
+
+      document.getElementById('preview-titulo').textContent = orc.titulo;
+      setVisivel('preview-descricao', orc.descricao);
+
+      // Itens da tabela
+      const tbody = document.getElementById('preview-itens');
+      tbody.innerHTML = (orc.itens || []).map(item => `
+        <tr>
+          <td>${item.descricao}</td>
+          <td style="text-align:center">${item.qtd}</td>
+          <td style="text-align:right">${formatarMoeda(item.preco)}</td>
+          <td style="text-align:right">${formatarMoeda(item.subtotal)}</td>
+        </tr>
+      `).join('');
+
+      // Totais
+      document.getElementById('preview-subtotal').textContent = formatarMoeda(orc.subtotal);
+      document.getElementById('preview-total').textContent = formatarMoeda(orc.total);
+
+      if (orc.desconto > 0) {
+        document.getElementById('row-desconto').style.display = 'flex';
+        document.getElementById('preview-desconto-label').textContent = `Desconto (${orc.desconto}%)`;
+        document.getElementById('preview-desconto-valor').textContent =
+          `− ${formatarMoeda(orc.subtotal - orc.total)}`;
+      }
+
+      // Observações
+      if (orc.observacoes) {
+        document.getElementById('orc-obs-box').style.display = 'block';
+        document.getElementById('preview-obs').textContent = orc.observacoes;
+      }
+    }
+
+    /*
+      Helper para mostrar/esconder elementos com conteúdo.
+      Se o valor é vazio, esconde o elemento.
+    */
+    function setVisivel(id, valor) {
+      const el = document.getElementById(id);
+      el.textContent = valor || '';
+      el.style.display = valor ? 'block' : 'none';
+    }
+
+    /*
+      Atualiza o status do orçamento quando o select muda.
+      Salva no localStorage e atualiza o label do status na tela.
+    */
+    function atualizarStatus() {
+      const novoStatus = document.getElementById('status-select').value;
+      Storage.atualizarStatus(orcamento.id, novoStatus);
+      orcamento.status = novoStatus;
+      document.getElementById('orc-status-label').textContent = traduzirStatus(novoStatus);
+      mostrarToast('Status atualizado!');
+    }
+
+    /*
+      BOTÃO DE WHATSAPP
+      =====================================================
+      Gera um link de WhatsApp com a mensagem já escrita.
+
+      Como funciona:
+      1. Pega o telefone do cliente (ou pede se não tiver)
+      2. Limpa o número — remove tudo que não for dígito
+      3. Adiciona o DDI do Brasil (55) se não tiver
+      4. Monta a mensagem com os dados do orçamento
+      5. Codifica a mensagem com encodeURIComponent
+         (substitui espaços por %20, acentos por %XX, etc.)
+      6. Abre o link wa.me no browser
+
+      O WhatsApp Web abre automaticamente na conversa
+      com o número, com a mensagem já digitada.
+      O usuário só precisa clicar em Enviar.
+      =====================================================
+    */
+    function abrirWhatsApp() {
+      let telefone = orcamento.clienteTelefone || '';
+
+      // Se não tem telefone do cliente, pede pro usuário
+      if (!telefone) {
+        telefone = prompt(
+          `O cliente ${orcamento.clienteNome} não tem telefone cadastrado.\n\nDigite o WhatsApp (com DDD):`
+        );
+        if (!telefone) return;
+      }
+
+      // Remove tudo que não for número: parênteses, traços, espaços
+      // Ex: "(11) 99999-9999" → "11999999999"
+      const numeroLimpo = telefone.replace(/\D/g, '');
+
+      // Adiciona o DDI do Brasil (55) se o número não começar com ele
+      // Ex: "11999999999" → "5511999999999"
+      const numeroBR = numeroLimpo.startsWith('55')
+        ? numeroLimpo
+        : '55' + numeroLimpo;
+
+      // Monta a mensagem de texto
+      const config = Storage.getConfig();
+      const empresa = config.empresa || 'nossa empresa';
+
+      const mensagem =
+        `Olá, ${orcamento.clienteNome}! 👋\n\n` +
+        `Segue o orçamento *#${orcamento.numero}* de ${empresa}:\n\n` +
+        `📋 *${orcamento.titulo}*\n` +
+        `💰 Valor total: *${formatarMoeda(orcamento.total)}*\n` +
+        (orcamento.validade ? `📅 Válido até: ${formatarData(orcamento.validade)}\n` : '') +
+        `\nQualquer dúvida, estou à disposição!`;
+
+      /*
+        encodeURIComponent() converte caracteres especiais para
+        o formato aceito em URLs.
+        Ex: "Olá!" → "Ol%C3%A1!"
+            "R$ 1.500,00" → "R%24%201.500%2C00"
+
+        Sem isso, a URL quebraria nos caracteres especiais.
+      */
+      const urlWhatsApp = `https://wa.me/${numeroBR}?text=${encodeURIComponent(mensagem)}`;
+
+      // Abre em nova aba — '_blank' significa nova aba no browser
+      window.open(urlWhatsApp, '_blank');
+
+      // Atualiza o status para "Enviado" automaticamente
+      if (orcamento.status === 'pendente' || orcamento.status === 'rascunho') {
+        document.getElementById('status-select').value = 'enviado';
+        atualizarStatus();
+        mostrarToast('WhatsApp aberto e status atualizado para Enviado!');
+      }
+    }
+  </script>
+</body>
+</html>

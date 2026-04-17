@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Negócio — Andarilho Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0b0d14;
+      --bg2:       #111522;
+      --bg3:       #1a1f30;
+      --border:    #1e2436;
+      --border2:   #2d3454;
+      --text:      #e8dcc8;
+      --muted:     #7a7a8a;
+      --muted2:    #a09880;
+
+      /*
+        PALETA BASEADA EM #D9A168 (âmbar dourado)
+        ──────────────────────────────────────────
+        Destaque principal: #D9A168
+        Demais cores: tons mais claros do âmbar + complementares
+      */
+
+      /* 🟡 ÂMBAR PRINCIPAL — #D9A168 exato (Conteúdo / destaques gerais) */
+      --blue:      #D9A168;
+      --blue-dark: #8A5C2A;
+      --blue-bg:   #1E1208;
+
+      /* 💜 LAVANDA — complementar split do âmbar (Branding) */
+      --purple:    #C890D8;
+      --purple-dark:#784898;
+      --purple-bg: #1A0828;
+
+      /* 🟢 VERDE-TEAL — complementar frio do âmbar (Oferta) */
+      --green:     #68D990;
+      --green-dark:#208850;
+      --green-bg:  #081E12;
+
+      /* 🟠 ÂMBAR PROFUNDO — tom escuro do #D9A168 (Fechamento) */
+      --orange:    #D97840;
+      --orange-dark:#884020;
+      --orange-bg: #1C1008;
+
+      /* 🔴 CORAL-ÂMBAR — tom quente analógico (Resultado / alertas) */
+      --red:       #D96848;
+      --red-dark:  #983828;
+      --red-bg:    #1C0C08;
+
+      /* ✨ DOURADO CLARO — tom mais claro do âmbar */
+      --yellow:    #E8C490;
+      --yellow-bg: #201808;
+
+      /* 🔵 TEAL — complementar direto do âmbar (Entrega) */
+      --cyan:      #60B8D9;
+      --cyan-bg:   #081820;
+    }
+
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── HERO ───────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 56px 24px 40px;
+      background: linear-gradient(180deg, #120e06 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(217,161,104,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: rgba(217,161,104,0.15);
+      border: 1px solid rgba(217,161,104,0.3);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted2);
+      max-width: 560px;
+      margin: 0 auto 32px;
+    }
+
+    /* ── TABS ───────────────────────────────── */
+    .tabs-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,15,30,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      overflow-x: auto;
+    }
+    .tabs {
+      display: flex;
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .tab {
+      padding: 14px 18px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: white; border-bottom-color: var(--blue); }
+
+    /* ── SECTIONS ───────────────────────────── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── TYPOGRAPHY ─────────────────────────── */
+    .sec-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .sec-sub {
+      font-size: 15px;
+      color: var(--muted2);
+      margin-bottom: 36px;
+      max-width: 640px;
+      line-height: 1.7;
+    }
+    h3.label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* ── CARDS ──────────────────────────────── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .card-body {
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.7;
+    }
+
+    /* ── GRID ───────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+    /* ── DIVIDER ────────────────────────────── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+    /* ── BADGE ──────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    /* ── FLYWHEEL ───────────────────────────── */
+    .flywheel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 560px;
+      margin: 0 auto 48px;
+    }
+    .fw-center {
+      background: linear-gradient(135deg, var(--blue-dark), var(--purple-dark));
+      border-radius: 50%;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin: 16px 0;
+      box-shadow: 0 0 60px rgba(217,161,104,0.3);
+    }
+    .fw-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      justify-content: center;
+    }
+    .fw-node {
+      flex: 1;
+      max-width: 180px;
+      text-align: center;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .fw-arrow { font-size: 20px; color: var(--muted); }
+
+    /* ── FLUXO STEPS ────────────────────────── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex;
+      gap: 20px;
+    }
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 44px;
+      flex-shrink: 0;
+    }
+    .step-num {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: var(--border2);
+      margin: 6px 0;
+      min-height: 20px;
+    }
+    .step-content {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      flex: 1;
+    }
+    .step-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .step-content p { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+    .code-block {
+      margin-top: 10px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #7dd3fc;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    /* ── OFFER CARDS ────────────────────────── */
+    .offer-card {
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid;
+      position: relative;
+      overflow: hidden;
+    }
+    .offer-card.featured::before {
+      content: '⭐ CARRO-CHEFE';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      background: var(--yellow);
+      color: #000;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .offer-price {
+      font-size: 28px;
+      font-weight: 900;
+      margin: 10px 0 4px;
+    }
+    .offer-prazo {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .offer-item {
+      display: flex;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+      color: var(--muted2);
+      align-items: flex-start;
+    }
+    .offer-item:last-child { border-bottom: none; }
+    .offer-item-icon { flex-shrink: 0; }
+
+    /* ── WEEK SCHEDULE ──────────────────────── */
+    .week { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .day-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .day-name {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .day-item {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted2);
+      margin-bottom: 8px;
+      align-items: flex-start;
+      line-height: 1.4;
+    }
+
+    /* ── PIPELINE ───────────────────────────── */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .pipe-stage {
+      background: var(--bg2);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--border2);
+    }
+    .pipe-icon { font-size: 24px; margin-bottom: 8px; }
+    .pipe-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .pipe-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+    /* ── REVENUE TABLE ──────────────────────── */
+    .revenue {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .rev-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .rev-period {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .rev-value {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .rev-mix { font-size: 12px; color: var(--muted2); margin-bottom: 14px; }
+    .rev-focus {
+      font-size: 12px;
+      color: var(--muted2);
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      line-height: 1.5;
+    }
+    .rev-focus strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+    /* ── SCRIPT BOX ─────────────────────────── */
+    .script-box {
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.8;
+      margin: 12px 0;
+      font-style: italic;
+    }
+    .script-box strong { color: white; font-style: normal; }
+
+    /* ── HOOK LIST ──────────────────────────── */
+    .hook {
+      background: var(--bg2);
+      border-left: 3px solid var(--purple);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--muted2);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .hook em { color: white; font-style: normal; font-weight: 700; }
+
+    /* ── COMPARISON TABLE ───────────────────── */
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compare th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      border-bottom: 2px solid var(--border2);
+    }
+    .compare td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .compare tr:last-child td { border-bottom: none; }
+    .compare .bad { color: var(--red); }
+    .compare .good { color: var(--green); }
+
+    /* ── CHECKLIST ──────────────────────────── */
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--muted2);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist .check { color: var(--green); flex-shrink: 0; font-weight: 700; }
+
+    /* ── ACTION CARD ────────────────────────── */
+    .action-card {
+      background: linear-gradient(135deg, var(--blue-bg), var(--purple-bg));
+      border: 1px solid var(--blue-dark);
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .action-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .action-card p { font-size: 14px; color: var(--muted2); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+
+    /* ── PRINT ──────────────────────────────── */
+    @media print {
+      .tabs-wrapper { display: none; }
+      .section { display: block !important; page-break-before: always; }
+      body { background: white; color: black; }
+    }
+
+    /* ── BARRA DE EDIÇÃO ─────────────────────── */
+    .edit-toolbar {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+    }
+    .et-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .et-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .et-toggle {
+      background: var(--bg3);
+      color: var(--muted2);
+    }
+    .et-toggle.active {
+      background: var(--blue);
+      color: white;
+    }
+    .et-save {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-dark);
+      display: none;
+    }
+    .et-save:hover { background: #0a3d28; }
+    .et-reset {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid var(--red-dark);
+      display: none;
+    }
+    .et-reset:hover { background: #3a0a0a; }
+    .et-status {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 700;
+      display: none;
+    }
+    @keyframes fadeOut {
+      0%   { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Elementos editáveis — destaque visual no modo edição */
+    body.edit-mode [contenteditable="true"] {
+      outline: 1.5px dashed rgba(217,161,104,0.4);
+      border-radius: 4px;
+      cursor: text;
+      min-height: 1em;
+      transition: outline 0.15s, background 0.15s;
+    }
+    body.edit-mode [contenteditable="true"]:hover {
+      outline-color: var(--blue);
+      background: rgba(217,161,104,0.06);
+    }
+    body.edit-mode [contenteditable="true"]:focus {
+      outline: 2px solid var(--blue);
+      background: rgba(217,161,104,0.10);
+    }
+    .edit-hint {
+      display: none;
+      position: fixed;
+      bottom: 72px;
+      right: 24px;
+      background: var(--blue-dark);
+      color: white;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      z-index: 998;
+      animation: fadeOut 4s forwards;
+    }
+    body.edit-mode .edit-hint { display: block; }
+
+    /* ── ICON SLOTS ──────────────────────────── */
+    .icon-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .icon-slot img.icon-svg {
+      height: 1.2em;
+      width: auto;
+      vertical-align: middle;
+      object-fit: contain;
+    }
+    /* No modo edição: mostrar indicador de clicável */
+    body.edit-mode .icon-slot {
+      cursor: pointer;
+      outline: 1.5px dashed rgba(217,161,104,0.4);
+      padding: 2px 4px;
+    }
+    body.edit-mode .icon-slot:hover {
+      background: rgba(217,161,104,0.12);
+      outline-color: var(--blue);
+    }
+    body.edit-mode .icon-slot::after {
+      content: '↑SVG';
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--bg2);
+      border: 1px solid var(--blue-dark);
+      border-radius: 4px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+    }
+    body.edit-mode .icon-slot:hover::after { opacity: 1; }
+    /* Input de arquivo escondido */
+    #icon-file-input { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Andarilho Digital · Agência</div>
+  <h1>O Playbook da Agência</h1>
+  <p>Prospecção ativa, oferta posicionada e entrega que vira case. O motor é você encontrando quem tem dor — não esperando o cliente aparecer.</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab active" onclick="ir('visao')"><span class="icon-slot" data-key="tab-visao">🔄</span> Visão Geral</button>
+    <button class="tab" onclick="ir('conteudo')"><span class="icon-slot" data-key="tab-conteudo">🔍</span> Prospecção</button>
+    <button class="tab" onclick="ir('branding')"><span class="icon-slot" data-key="tab-branding">🎯</span> Branding</button>
+    <button class="tab" onclick="ir('oferta')"><span class="icon-slot" data-key="tab-oferta">💼</span> Oferta</button>
+    <button class="tab" onclick="ir('fechamento')"><span class="icon-slot" data-key="tab-fechamento">🤝</span> Fechamento</button>
+    <button class="tab" onclick="ir('entrega')"><span class="icon-slot" data-key="tab-entrega">🛠️</span> Entrega</button>
+    <button class="tab" onclick="ir('operacao')"><span class="icon-slot" data-key="tab-operacao">📅</span> Operação</button>
+    <button class="tab" onclick="ir('receita')"><span class="icon-slot" data-key="tab-receita">💰</span> Receita</button>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     VISÃO GERAL
+════════════════════════════════════════ -->
+<div class="section active" id="aba-visao">
+<div class="content">
+
+  <div class="sec-title">O Motor do Negócio</div>
+  <div class="sec-sub">O motor não é conteúdo. É prospecção ativa. Você não espera o cliente aparecer — você vai até onde ele está reclamando do problema que você resolve, identifica a dor e entra em contato. O ciclo começa com você, não com o algoritmo.</div>
+
+  <!-- PIPELINE VISUAL -->
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:40px;margin-bottom:36px">
+    <div style="text-align:center;margin-bottom:32px">
+      <h3 class="label">O ciclo completo</h3>
+    </div>
+
+    <!-- Linha de cima -->
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:24px;align-items:center">
+      <div class="fw-node" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">
+        <span class="icon-slot" data-key="fw-conteudo">🔍</span><br>Prospecção<br>
+        <span style="font-size:11px;font-weight:400;color:var(--muted)">Busca comentários</span>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--muted);font-size:20px">→</div>
+      <div class="fw-node" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">
+        <span class="icon-slot" data-key="fw-branding">🧠</span><br>Análise<br>
+        <span style="font-size:11px;font-weight:400;color:var(--muted)">Detecta 5 dores</span>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--muted);font-size:20px">→</div>
+      <div class="fw-node" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">
+        <span class="icon-slot" data-key="fw-oferta">🎯</span><br>Lead<br>
+        <span style="font-size:11px;font-weight:400;color:var(--muted)">Salvo no CRM</span>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:24px;color:var(--muted);margin-bottom:8px">↕</div>
+    <!-- Linha de baixo -->
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;flex-direction:row-reverse;align-items:center">
+      <div class="fw-node" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">
+        <span class="icon-slot" data-key="fw-fechamento">🤝</span><br>Fechamento<br>
+        <span style="font-size:11px;font-weight:400;color:var(--muted)">Proposta → contrato</span>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--muted);font-size:20px">→</div>
+      <div class="fw-node" style="background:var(--cyan-bg);border-color:#0e7490;color:var(--cyan)">
+        <span class="icon-slot" data-key="fw-entrega">💬</span><br>Contato<br>
+        <span style="font-size:11px;font-weight:400;color:var(--muted)">Abordagem da dor</span>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--muted);font-size:20px">→</div>
+      <div class="fw-node" style="background:var(--red-bg);border-color:var(--red-dark);color:var(--red)">
+        <span class="icon-slot" data-key="fw-resultado">🛠️</span><br>Entrega<br>
+        <span style="font-size:11px;font-weight:400;color:var(--muted)">Resolve e vira case</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;font-size:13px;color:var(--muted);font-style:italic">
+      O case vira prova social → a prova facilita o próximo contato → o ciclo recomeça
+    </div>
+  </div>
+
+  <!-- NOTA SOBRE FORASTEIRO -->
+  <div style="background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:12px;padding:20px 24px;margin-bottom:36px">
+    <div style="font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">🏕️ O Forasteiro — Presença, não motor</div>
+    <div style="font-size:14px;color:var(--muted2);line-height:1.7">
+      O canal no Instagram e YouTube existe para mostrar o que você está tentando construir — sem vender a ideia de que já deu certo. Quando alguém recebe sua mensagem de prospecção e vai te pesquisar, encontra alguém real, construindo algo. Isso gera confiança sem exigir que você poste toda semana. <strong style="color:var(--text)">Presença ≠ estratégia de conteúdo.</strong>
+    </div>
+  </div>
+
+  <!-- 4 ENGRENAGENS RESUMO -->
+  <h3 class="label">As engrenagens</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+
+    <div class="card" style="border-color:var(--blue-dark);background:var(--blue-bg)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--blue)">Motor principal</div>
+      <div class="card-title" style="color:var(--blue)">🔍 Prospecção Ativa</div>
+      <div class="card-body">Sistema que monitora comentários no YouTube e Reddit em PT-BR e EN. Detecta automaticamente 5 categorias de dor. Você recebe uma lista de leads com contexto — já sabe o problema antes de entrar em contato.</div>
+    </div>
+
+    <div class="card" style="border-color:var(--purple-dark);background:var(--purple-bg)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Confiança</div>
+      <div class="card-title" style="color:var(--purple)">🎯 Branding — Você parece real</div>
+      <div class="card-body">Posicionamento claro. Quando o lead te pesquisa após receber sua mensagem, encontra um profissional com identidade definida — não uma página vazia. O perfil existe para validar, não para atrair.</div>
+    </div>
+
+    <div class="card" style="border-color:var(--green-dark);background:var(--green-bg)">
+      <div class="badge" style="background:rgba(104,217,144,0.2);color:var(--green)">Conversão</div>
+      <div class="card-title" style="color:var(--green)">💼 Oferta — Design + Sites + SEO</div>
+      <div class="card-body">3 níveis: Presença (R$ 2.5–3.8k), Autoridade (R$ 5.5–8.5k), Dominância (R$ 12–18k). Você vende o resultado — ranqueamento, credibilidade, conversão — não o entregável.</div>
+    </div>
+
+    <div class="card" style="border-color:#0e7490;background:var(--cyan-bg)">
+      <div class="badge" style="background:rgba(96,184,217,0.2);color:var(--cyan)">Resultado</div>
+      <div class="card-title" style="color:var(--cyan)">🛠️ Entrega — Vira caso</div>
+      <div class="card-body">Processo em 3 semanas. Cada entrega bem feita gera um case real — e o case facilita o próximo contato de prospecção. O resultado é a prova social que o negócio precisa.</div>
+    </div>
+
+  </div>
+
+  <!-- REGRA DE OURO -->
+  <div class="action-card">
+    <h3>A mentalidade que une tudo</h3>
+    <p>Você não espera audiência para ter clientes. Você vai até onde a dor existe, identifica quem precisa do que você faz, e faz o primeiro movimento.<br><br>Você não vende serviço. Você resolve um problema específico que você já sabe que existe — porque leu o comentário onde a pessoa explicou.</p>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PROSPECÇÃO
+════════════════════════════════════════ -->
+<div class="section" id="aba-conteudo">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--blue)">🔍 Prospecção — O Motor</div>
+  <div class="sec-sub">O sistema monitora comentários no YouTube e Reddit, identifica quem está verbalizando uma dor que você resolve, e te entrega uma lista de leads com contexto. Você já sabe o problema antes de entrar em contato.</div>
+
+  <!-- COMO FUNCIONA -->
+  <h3 class="label">Como o sistema funciona</h3>
+  <div class="steps" style="margin-bottom:36px">
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark)">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--blue-dark)">
+        <h4 style="color:var(--blue)">Escolha a fonte</h4>
+        <p>Abra o sistema de prospecção e escolha entre YouTube ou Reddit. Para YouTube, cole a URL de um vídeo do nicho. Para Reddit, escolha um subreddit — ou rode em vários ao mesmo tempo.</p>
+        <div class="code-block">YouTube: youtube.com/watch?v=... (qualquer vídeo do seu nicho)
+Reddit: r/empreendedorismo · r/freelancers · r/meunegocio · r/brdev
+Busca por termo: "cobrar mais", "cliente sumiu", "site profissional"</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark)">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--blue-dark)">
+        <h4 style="color:var(--blue)">O sistema busca e analisa</h4>
+        <p>Para YouTube: busca até 1.000 comentários por vídeo (10 páginas de 100). Para Reddit: varre posts e comentários com pausa de 600ms entre requisições para respeitar o rate limit. Nenhuma API Key necessária para o Reddit.</p>
+        <div class="code-block">YouTube → API Key gratuita (Google Cloud) → 10.000 unidades/dia
+Reddit  → Sem API Key → API pública JSON → grátis e sem limite rígido</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark)">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--blue-dark)">
+        <h4 style="color:var(--blue)">Detecção de dores por keywords</h4>
+        <p>Cada comentário é comparado contra o dicionário de 5 categorias de dor (PT-BR + EN). O texto é normalizado: acentos removidos, caixa padronizada. Funciona para comentários misturados em português e inglês.</p>
+        <div class="code-block">normalizar("Tenho medo de COBRAR mais...") → "tenho medo de cobrar mais"
+match: 'cobrar', 'medo de cobrar' → categoria: Cobrança/Valor ✓</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark)">4</div>
+      </div>
+      <div class="step-content" style="border-color:var(--blue-dark)">
+        <h4 style="color:var(--blue)">Lead salvo no CRM</h4>
+        <p>Comentários com dores aparecem no Dashboard com badges por categoria. Você salva como lead com 1 clique. No CRM de Leads, gerencia o status: novo → contatado → negociando → fechado.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- 5 CATEGORIAS DE DOR -->
+  <h3 class="label">As 5 categorias de dor que o sistema detecta</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+
+    <div class="card" style="border-color:var(--orange-dark)">
+      <div class="badge" style="background:rgba(217,120,64,0.2);color:var(--orange)">💰 Cobrança / Valor</div>
+      <div class="card-title">Dificuldade em precificar</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px">Pessoa verbaliza medo de cobrar, sensação de desvalorização, concorrência por preço.</div>
+        <div class="code-block">PT: "medo de cobrar", "muito caro", "precificacao"
+EN: "afraid to charge", "raise my rates", "lowball", "race to the bottom"</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--gold-dark)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--blue)">🌐 Presença Digital</div>
+      <div class="card-title">Invisível online</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px">Não tem site, não aparece no Google, não sabe usar redes sociais, sem engajamento.</div>
+        <div class="code-block">PT: "ninguem me acha", "sem site", "nao apareço"
+EN: "not ranking", "no online presence", "cant be found", "brand awareness"</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--purple-dark)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">🎯 Captação de Clientes</div>
+      <div class="card-title">Sem leads ou sem conversão</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px">Dificuldade em atrair, fechar ou manter clientes. Funil parado.</div>
+        <div class="code-block">PT: "nao tenho cliente", "nao consigo vender"
+EN: "no leads", "cant close", "struggling to sell", "how to get clients"</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#0e7490">
+      <div class="badge" style="background:rgba(96,184,217,0.2);color:var(--cyan)">⚙️ Operacional / Gestão</div>
+      <div class="card-title">Sobrecarregado e sem processo</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px">Caos operacional, retrabalho, sem sistema, sem tempo. Tudo na cabeça.</div>
+        <div class="code-block">PT: "estou sobrecarregado", "bagunca", "sem processo"
+EN: "overwhelmed", "burned out", "no system", "cant delegate"</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--gold-dark);grid-column:1/-1">
+      <div class="badge" style="background:rgba(232,196,144,0.2);color:var(--yellow)">🏆 Credibilidade / Portfólio</div>
+      <div class="card-title">Não é levado a sério</div>
+      <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>Falta de autoridade, portfólio fraco, não tem cases, iniciante sem prova social.</div>
+        <div class="code-block">PT: "parece amador", "sem portfolio", "nao me levam a serio"
+EN: "imposter syndrome", "social proof", "no track record", "prove myself"</div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- COMO ABORDAR O LEAD -->
+  <h3 class="label">Como abordar o lead após encontrá-lo</h3>
+  <div class="card" style="border-color:var(--blue-dark);margin-bottom:16px">
+    <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--blue)">Regra de ouro da abordagem</div>
+    <div class="card-title">Mencione a dor específica que você viu — nunca aborde sem contexto</div>
+    <div class="card-body" style="margin-bottom:12px">Você tem uma vantagem enorme: sabe o problema antes de falar. Use isso. Não mande mensagem genérica. Referencie o comentário ou o contexto.</div>
+  </div>
+
+  <div class="card" style="border-color:var(--orange-dark);margin-bottom:16px">
+    <div class="badge" style="background:rgba(217,120,64,0.2);color:var(--orange)">Modelo · Dor: Cobrança</div>
+    <div class="script-box">"Oi [nome], vi seu comentário no vídeo sobre precificação — onde você falou que tem dificuldade de cobrar o que vale. <strong>Isso é exatamente o que eu ajudo a resolver para prestadores de serviço.</strong> Posso te mandar em 2 linhas o que geralmente trava a cobrança?"</div>
+  </div>
+
+  <div class="card" style="border-color:var(--gold-dark);margin-bottom:16px">
+    <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--blue)">Modelo · Dor: Presença Digital</div>
+    <div class="script-box">"Oi [nome], você comentou que não aparece no Google e não tem site profissional ainda. <strong>Resolvo exatamente isso — em até 10 dias.</strong> Quer ver o que seria possível para o seu negócio?"</div>
+  </div>
+
+  <div class="card" style="border-color:var(--purple-dark)">
+    <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Modelo · Dor: Captação</div>
+    <div class="script-box">"Vi que você está com dificuldade de conseguir clientes. <strong>A maioria dos casos que vejo é que o problema não é o serviço — é a presença digital que não converte.</strong> Te conto em 1 minuto o que resolve isso?"</div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- FONTES DISPONÍVEIS -->
+  <h3 class="label">Fontes disponíveis e quando usar cada uma</h3>
+  <div class="grid-2">
+    <div class="card" style="border-color:var(--red-dark)">
+      <div class="badge" style="background:rgba(217,104,72,0.15);color:var(--red)">▶ YouTube</div>
+      <div class="card-title">Quando usar</div>
+      <div class="card-body">Vídeos sobre empreendedorismo, freelance, marketing digital, presença online, MEI. Comentários tendem a ter mais contexto pessoal e dores expressas com emoção. Precisa de API Key gratuita do Google Cloud.</div>
+    </div>
+    <div class="card" style="border-color:#7a3a10">
+      <div class="badge" style="background:rgba(255,99,20,0.15);color:#ff6314">🟠 Reddit</div>
+      <div class="card-title">Quando usar</div>
+      <div class="card-body">Subreddits BR: r/empreendedorismo, r/freelancers, r/meunegocio, r/brdev, r/marketing, r/financaspessoais. Sem API Key. Ótimo para encontrar dores mais longas e bem articuladas — as pessoas escrevem mais no Reddit.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     BRANDING
+════════════════════════════════════════ -->
+<div class="section" id="aba-branding">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--purple)">🎯 Engrenagem 2 — Branding</div>
+  <div class="sec-sub">Branding é o que as pessoas falam sobre você quando você sai da sala. É a soma de todas as percepções. E percepção determina preço.</div>
+
+  <!-- POSICIONAMENTO -->
+  <div class="card" style="border-color:var(--purple-dark);background:var(--purple-bg);margin-bottom:24px">
+    <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Posicionamento</div>
+    <div class="card-title" style="font-size:20px;line-height:1.4;color:white">
+      "Ajudamos autônomos e pequenos negócios que faturam mas não são levados a sério — a construir presença digital que justifica cobrar mais."
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:36px">
+    <div class="card">
+      <div class="badge" style="background:rgba(200,144,216,0.15);color:var(--purple)">Público</div>
+      <div class="card-title">Para quem</div>
+      <div class="card-body">Prestadores de serviço que são bons no que fazem mas parecem amadores online — e perdem clientes para concorrentes piores mas melhor posicionados.</div>
+    </div>
+    <div class="card">
+      <div class="badge" style="background:rgba(200,144,216,0.15);color:var(--purple)">Problema real</div>
+      <div class="card-title">A dor profunda</div>
+      <div class="card-body">Não conseguem cobrar o que valem porque não parecem valer. A presença digital não reflete a qualidade do trabalho. Perdem credibilidade antes de abrir a boca.</div>
+    </div>
+    <div class="card">
+      <div class="badge" style="background:rgba(200,144,216,0.15);color:var(--purple)">Tom de voz</div>
+      <div class="card-title">Como falar</div>
+      <div class="card-body"><strong style="color:white">Direto</strong> — sem enrolação<br><strong style="color:white">Confiante</strong> — sem arrogância<br><strong style="color:white">Humano</strong> — sem formalidade</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Checklist de consistência</h3>
+  <div class="card" style="margin-bottom:36px">
+    <ul class="checklist">
+      <li><span class="check">□</span><span>Quem vê o Instagram e depois abre a proposta sente que é a mesma marca?</span></li>
+      <li><span class="check">□</span><span>O tom de voz do conteúdo é o mesmo da conversa de venda?</span></li>
+      <li><span class="check">□</span><span>O PDF de orçamento tem o mesmo nível visual do conteúdo que você posta?</span></li>
+      <li><span class="check">□</span><span>Bio do Instagram usa a fórmula de posicionamento (para quem + problema + resultado)?</span></li>
+      <li><span class="check">□</span><span>Site transmite o mesmo posicionamento do Instagram?</span></li>
+      <li><span class="check">□</span><span>Mensagem de primeiro contato no WhatsApp tem o mesmo tom do conteúdo?</span></li>
+    </ul>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Comunicação: o que evitar vs o que usar</h3>
+  <div style="overflow-x:auto">
+    <table class="compare" style="margin-bottom:36px">
+      <thead>
+        <tr>
+          <th>❌ Genérico (perde venda)</th>
+          <th>✓ Posicionado (fecha venda)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="bad">"Criamos identidades visuais para empresas"</td>
+          <td class="good">"Fazemos você parecer tão bom quanto você é"</td>
+        </tr>
+        <tr>
+          <td class="bad">"Desenvolvemos seu site profissional"</td>
+          <td class="good">"Seu site vai trabalhar por você enquanto você dorme"</td>
+        </tr>
+        <tr>
+          <td class="bad">"Atendimento personalizado e qualidade"</td>
+          <td class="good">"Você para de perder cliente antes de abrir a boca"</td>
+        </tr>
+        <tr>
+          <td class="bad">"Já ajudei vários clientes"</td>
+          <td class="good">"A [nome/nicho] fechou o primeiro cliente corporativo em 3 semanas"</td>
+        </tr>
+        <tr>
+          <td class="bad">"Pacote básico, intermediário e premium"</td>
+          <td class="good">"Fundação Digital · Presença, Posicionamento e Sistema"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ERROS COMUNS -->
+  <h3 class="label">Os 7 erros mais comuns de branding</h3>
+  <div class="grid-2">
+    <div class="card"><div class="card-title" style="color:var(--red)">1. Logo como identidade</div><div class="card-body">O logo é parte da identidade. Marcas fortes funcionam sem o logo — pela cor, pelo tom, pelo estilo.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--red)">2. Copiar referência sem filtro</div><div class="card-body">Ver Awwwards e replicar para um dentista de bairro. Referência é ponto de partida, não destino.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--red)">3. Tentar agradar todo mundo</div><div class="card-body">Marca que fala com todo mundo não ressoa com ninguém. Nichar dói no ego mas funciona no caixa.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--red)">4. Comunicar entrega, não transformação</div><div class="card-body">"Fazemos logo, site e social" vs "Fazemos você parecer tão bom quanto é". A segunda vende mais.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--red)">5. Inconsistência de aplicação</div><div class="card-body">Marca linda no site e horrível no orçamento. O cliente sente isso e desconfia inconscientemente.</div></div>
+    <div class="card"><div class="card-title" style="color:var(--red)">6. Tom diferente em cada canal</div><div class="card-body">Instagram animado, site formal, WhatsApp casual. O cliente não sente que está falando com a mesma marca.</div></div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     OFERTA
+════════════════════════════════════════ -->
+<div class="section" id="aba-oferta">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--green)">💼 Engrenagem 3 — Oferta</div>
+  <div class="sec-sub">Três serviços com foco claro: <strong style="color:var(--text)">Design, Sites e SEO</strong>. Cada nível resolve um estágio diferente da dor digital — você escolhe o que o lead precisa agora, não o que ele deveria ter.</div>
+
+  <!-- O QUE VOCÊ FAZ -->
+  <h3 class="label">O que você entrega</h3>
+  <div class="grid-3" style="margin-bottom:36px">
+    <div class="card" style="border-color:var(--blue-dark);text-align:center">
+      <div style="font-size:32px;margin-bottom:10px">🎨</div>
+      <div class="card-title" style="color:var(--blue)">Design</div>
+      <div class="card-body">Logo, identidade visual, paleta, tipografia, manual de marca. A base que faz o negócio parecer profissional antes de qualquer palavra.</div>
+    </div>
+    <div class="card" style="border-color:var(--green-dark);text-align:center">
+      <div style="font-size:32px;margin-bottom:10px">🌐</div>
+      <div class="card-title" style="color:var(--green)">Sites</div>
+      <div class="card-body">Landing pages e sites completos focados em conversão. Rápidos, responsivos, com copy alinhado à dor do cliente — não sites bonitos que não vendem.</div>
+    </div>
+    <div class="card" style="border-color:var(--purple-dark);text-align:center">
+      <div style="font-size:32px;margin-bottom:10px">📈</div>
+      <div class="card-title" style="color:var(--purple)">SEO</div>
+      <div class="card-body">Pesquisa de palavras-chave, otimização on-page, Google Meu Negócio, Search Console e estratégia de conteúdo para ranquear e ser encontrado.</div>
+    </div>
+  </div>
+
+  <!-- 3 NÍVEIS -->
+  <h3 class="label">Os 3 níveis de oferta</h3>
+  <div class="grid-3" style="margin-bottom:40px">
+
+    <!-- NÍVEL 1 -->
+    <div class="offer-card" style="background:var(--bg2);border-color:var(--blue-dark)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--blue)">Nível 1</div>
+      <div class="card-title" style="font-size:18px">Presença</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:8px">Para quem não existe online ainda</div>
+      <div class="offer-price" style="color:var(--blue)">R$ 2.500 – 3.800</div>
+      <div class="offer-prazo">10 dias úteis · Design + Landing Page</div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Logo + paleta + tipografia</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Landing page 1 página (conversão)</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Google Meu Negócio configurado</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>SEO básico (meta tags, velocidade, mobile)</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Botão WhatsApp + formulário de contato</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>1 revisão de cada entrega</span></div>
+      <div style="margin-top:16px;padding:12px;background:var(--blue-bg);border-radius:8px;font-size:12px;color:var(--muted2);line-height:1.5;font-style:italic">
+        "Você vai parar de perder clientes antes de eles chegarem a te conhecer."
+      </div>
+    </div>
+
+    <!-- NÍVEL 2 DESTAQUE -->
+    <div class="offer-card featured" style="background:linear-gradient(135deg,var(--green-bg),var(--blue-bg));border-color:var(--green-dark)">
+      <div class="badge" style="background:rgba(104,217,144,0.2);color:var(--green)">Nível 2 · Mais vendido</div>
+      <div class="card-title" style="font-size:18px">Autoridade</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:8px">Para quem quer ser encontrado e convencer</div>
+      <div class="offer-price" style="color:var(--green)">R$ 5.500 – 8.500</div>
+      <div class="offer-prazo">20 dias úteis · Design + Site + SEO</div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Tudo do Nível 1</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Identidade visual completa + manual de marca</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Site completo (até 5 páginas)</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Copy de todas as páginas</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Pesquisa de palavras-chave do nicho</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>SEO on-page em todas as páginas</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Google Analytics + Search Console</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>2 semanas de suporte pós-entrega</span></div>
+      <div style="margin-top:16px;padding:12px;background:rgba(104,217,144,0.08);border-radius:8px;font-size:12px;color:var(--muted2);line-height:1.5;font-style:italic">
+        "Você vai deixar de competir por preço e começar a ser encontrado por quem já quer o que você faz."
+      </div>
+    </div>
+
+    <!-- NÍVEL 3 -->
+    <div class="offer-card" style="background:var(--bg2);border-color:var(--purple-dark)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Nível 3</div>
+      <div class="card-title" style="font-size:18px">Dominância</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:8px">Para quem quer ranquear e ser referência</div>
+      <div class="offer-price" style="color:var(--purple)">R$ 12.000 – 18.000</div>
+      <div class="offer-prazo">35 dias + 3 meses de acompanhamento</div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Tudo do Nível 2</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Site com blog estruturado para SEO</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>SEO técnico completo (Core Web Vitals)</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Estratégia editorial de 3 meses</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Link building inicial (backlinks)</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>Relatório mensal de performance</span></div>
+      <div class="offer-item"><span class="offer-item-icon">→</span><span>3 meses de acompanhamento e ajustes</span></div>
+      <div style="margin-top:16px;padding:12px;background:var(--purple-bg);border-radius:8px;font-size:12px;color:var(--muted2);line-height:1.5;font-style:italic">
+        "Você vai aparecer antes da concorrência quando o cliente pesquisa o que você oferece."
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUAL NÍVEL VENDER PARA CADA DOR -->
+  <hr class="divider" />
+  <h3 class="label">Qual nível oferecer para cada dor detectada</h3>
+  <div class="card" style="border-color:var(--border2);margin-bottom:32px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;font-size:13px">
+      <div style="padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Dor detectada</div>
+      <div style="padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Oferta ideal</div>
+      <div style="padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Argumento</div>
+
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);color:var(--muted2)">"Ninguém me encontra online"</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--purple)">Nível 2 ou 3</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--muted2)">SEO é o produto central aqui</div>
+
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);color:var(--muted2)">"Meu site não converte"</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--green)">Nível 1 ou 2</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--muted2)">Design + copy + estrutura</div>
+
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);color:var(--muted2)">"Minha marca não passa credibilidade"</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--blue)">Nível 1</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--muted2)">Design + identidade visual</div>
+
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);color:var(--muted2)">"Não consigo cobrar mais"</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--green)">Nível 2</div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);color:var(--muted2)">Presença que justifica o preço</div>
+
+      <div style="padding:12px 16px;color:var(--muted2)">"Não consigo captar clientes"</div>
+      <div style="padding:12px 16px;border-left:1px solid var(--border2);color:var(--purple)">Nível 2 ou 3</div>
+      <div style="padding:12px 16px;border-left:1px solid var(--border2);color:var(--muted2)">Site + SEO + estratégia editorial</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Como justificar preço mais alto</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🎯 Perguntas que ancoram o valor</div>
+      <div class="script-box">"Quanto você está perdendo por mês porque seu site não aparece no Google?"</div>
+      <div class="script-box">"Se um cliente pesquisar agora o que você faz, ele encontra você — ou o concorrente?"</div>
+      <div class="script-box">"Quanto vale um novo cliente para o seu negócio? E quantos você precisa para pagar o investimento?"</div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ As 5 alavancas de valor</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px">1. <strong style="color:white">Mostre o diagnóstico</strong> — Video Audit antes de qualquer proposta</div>
+        <div style="margin-bottom:8px">2. <strong style="color:white">Ancore no concorrente</strong> — "seu concorrente aparece na posição 1"</div>
+        <div style="margin-bottom:8px">3. <strong style="color:white">Resultado, não entregável</strong> — venda ranqueamento, não "10 páginas"</div>
+        <div style="margin-bottom:8px">4. <strong style="color:white">Prova específica</strong> — nome do cliente, nicho, resultado real</div>
+        <div>5. <strong style="color:white">Silêncio após o preço</strong> — quem fala primeiro perde</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FECHAMENTO
+════════════════════════════════════════ -->
+<div class="section" id="aba-fechamento">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--orange)">🤝 Engrenagem 4 — Fechamento</div>
+  <div class="sec-sub">A venda acontece na conversa, não na proposta. Pergunte mais do que fale. Ouça mais do que responde. Quando o cliente sente que você entende o problema melhor que ele, você vira a solução óbvia.</div>
+
+  <h3 class="label">A jornada em 4 fases</h3>
+  <div class="steps" style="margin-bottom:36px">
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--orange-dark)">
+        <h4 style="color:var(--orange)">Abertura — Não mande preço</h4>
+        <p>Crie abertura para o cliente falar. Nunca comece com valor ou com lista de serviços.</p>
+        <div class="code-block">"Antes de qualquer número, me conta: qual é o maior problema que você quer resolver com isso?"</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--orange-dark)">
+        <h4 style="color:var(--orange)">Diagnóstico — 3 perguntas obrigatórias</h4>
+        <p>As perguntas certas fazem o cliente perceber o problema enquanto você escuta.</p>
+        <div class="code-block">→ "Como está chegando cliente hoje para você?"
+→ "Quando alguém te pesquisa online, o que encontra?"
+→ "Já perdeu oportunidade pela impressão que a marca passava?"</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:var(--orange-dark)">
+        <h4 style="color:var(--orange)">Reflexão — Mostre que entendeu</h4>
+        <p>Resume com as palavras dele. Quando ele diz "exatamente" — ele já aceitou o diagnóstico.</p>
+        <div class="code-block">"Então o que está acontecendo é: você tem um negócio bom mas a presença não reflete isso — e isso te trava de chegar em clientes maiores. É isso?"</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">4</div>
+      </div>
+      <div class="step-content" style="border-color:var(--orange-dark)">
+        <h4 style="color:var(--orange)">Convite — Não empurre, convide</h4>
+        <p>"Sem compromisso" remove a pressão. "Você decide" devolve o controle.</p>
+        <div class="code-block">"Você topa uma conversa de 30 minutos essa semana? Sem compromisso — você entende o caminho e decide se faz sentido."</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Objeções e respostas</h3>
+  <div class="grid-2" style="margin-bottom:36px">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">❌ "Está caro"</div>
+      <div class="script-box">"Entendo. Me ajuda a entender: caro comparado com o quê? Com outro orçamento que você recebeu, ou com o que você esperava investir?"</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--yellow)">⏳ "Vou pensar"</div>
+      <div class="script-box">"Claro. Só me diz: tem alguma dúvida que ficou que eu posso esclarecer agora? Às vezes o 'vou pensar' esconde uma pergunta sem resposta."</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--muted2)">💸 "Não tenho esse dinheiro"</div>
+      <div class="script-box">"Posso dividir o investimento em duas partes — metade no início, metade na entrega. Isso resolve?"</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--blue)">👀 "Preciso ver mais referências"</div>
+      <div class="script-box">"O que você quer ver — o estilo visual, a qualidade técnica, ou o resultado que gerou para o negócio?"</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Modelo de proposta — 1 página</h3>
+  <div class="card" style="border-color:var(--orange-dark);font-family:monospace;font-size:13px;line-height:2;color:var(--muted2)">
+    <div style="color:var(--orange);font-weight:700;margin-bottom:8px">PROPOSTA — [NOME DO CLIENTE] · [data]</div>
+    <div style="border-top:1px solid var(--border2);padding-top:12px;margin-bottom:12px">
+      <div style="color:white;font-weight:700;margin-bottom:4px">O QUE ENTENDEMOS</div>
+      [negócio] está no momento de [situação]. O principal desafio é [problema real]. O objetivo é [resultado desejado].
+    </div>
+    <div style="border-top:1px solid var(--border2);padding-top:12px;margin-bottom:12px">
+      <div style="color:white;font-weight:700;margin-bottom:4px">O QUE PROPOMOS</div>
+      Fundação Digital · [Nível escolhido]<br>
+      Em [prazo] dias você vai ter:<br>
+      → [Entregável + resultado que gera]<br>
+      → [Entregável + resultado que gera]<br>
+      → [X] semanas de suporte após entrega
+    </div>
+    <div style="border-top:1px solid var(--border2);padding-top:12px;margin-bottom:12px">
+      <div style="color:white;font-weight:700;margin-bottom:4px">INVESTIMENTO</div>
+      R$ [valor] · 50% na aprovação, 50% na entrega<br>
+      Validade desta proposta: [data — 5 a 7 dias]
+    </div>
+    <div style="border-top:1px solid var(--border2);padding-top:12px">
+      <div style="color:white;font-weight:700;margin-bottom:4px">PRÓXIMO PASSO</div>
+      É só responder com <span style="color:var(--green)">"vamos em frente"</span> e eu te mando as instruções para começarmos.
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     ENTREGA
+════════════════════════════════════════ -->
+<div class="section" id="aba-entrega">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--cyan)">🛠️ Engrenagem 5 — Design + Entrega</div>
+  <div class="sec-sub">O processo de entrega é o que transforma o cliente em case — e o case em conteúdo. Cada projeto bem entregue alimenta o ciclo inteiro.</div>
+
+  <h3 class="label">Processo em 3 semanas</h3>
+  <div class="steps" style="margin-bottom:36px">
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">S1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">Semana 1 — Estratégia + Wireframe</h4>
+        <div class="code-block">→ Briefing estratégico (documento 1 página)
+→ Wireframe no Figma (aprovação antes de design)
+→ Paleta, tipografia e direção visual definidas
+→ REGRA: nenhuma linha de código antes do wireframe aprovado</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">S2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">Semana 2 — UI Design + Desenvolvimento</h4>
+        <div class="code-block">→ UI Design completo no Figma
+→ Aprovação com comentários no próprio Figma
+→ Desenvolvimento iniciado (Astro ou WordPress)
+→ Componentes reutilizáveis desde o início</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--cyan-bg);color:var(--cyan);border:2px solid #0e7490">S3</div>
+      </div>
+      <div class="step-content" style="border-color:#0e7490">
+        <h4 style="color:var(--cyan)">Semana 3 — Revisão + Deploy + Entrega</h4>
+        <div class="code-block">→ Site em ambiente de teste
+→ Revisão e ajustes finais
+→ Sistema de orçamentos configurado (Nível 2+)
+→ Deploy + configurações de SEO técnico
+→ Manual de marca em PDF
+→ Vídeo curto explicando como usar
+→ Pedido de depoimento com foto</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Decisão técnica por nível</h3>
+  <div class="grid-3" style="margin-bottom:36px">
+    <div class="card" style="border-color:var(--blue-dark)">
+      <div class="badge" style="background:rgba(217,161,104,0.2);color:var(--blue)">Nível 1</div>
+      <div class="card-title">Astro + Tailwind + Netlify</div>
+      <div class="card-body">Landing page. Grátis pra hospedar. Carrega em menos de 1 segundo. Zero JavaScript desnecessário. Deploy com drag-and-drop.</div>
+    </div>
+    <div class="card" style="border-color:var(--green-dark)">
+      <div class="badge" style="background:rgba(104,217,144,0.2);color:var(--green)">Nível 2</div>
+      <div class="card-title">Astro + Sistema CRM + Netlify</div>
+      <div class="card-body">Site completo + sistema de orçamentos configurado e entregue. O diferencial que nenhum freelancer genérico oferece.</div>
+    </div>
+    <div class="card" style="border-color:var(--purple-dark)">
+      <div class="badge" style="background:rgba(200,144,216,0.2);color:var(--purple)">Nível 3</div>
+      <div class="card-title">WordPress + ACF + Automações</div>
+      <div class="card-body">Cliente atualiza sozinho. Blog, área restrita, formulários complexos, integrações com CRM e ERPs.</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Checklist SEO + Performance (todo projeto)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🔍 SEO técnico</div>
+      <ul class="checklist">
+        <li><span class="check">□</span><span>Title tag única por página (50-60 chars)</span></li>
+        <li><span class="check">□</span><span>Meta description com CTA (150-160 chars)</span></li>
+        <li><span class="check">□</span><span>Open Graph tags (imagem 1200x630)</span></li>
+        <li><span class="check">□</span><span>URL amigável (/servicos não /page?id=12)</span></li>
+        <li><span class="check">□</span><span>1x H1 por página, hierarquia H2/H3</span></li>
+        <li><span class="check">□</span><span>Alt text em todas as imagens</span></li>
+        <li><span class="check">□</span><span>Sitemap.xml + robots.txt</span></li>
+        <li><span class="check">□</span><span>Google Search Console conectado</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Performance</div>
+      <ul class="checklist">
+        <li><span class="check">□</span><span>Imagens em WebP ou AVIF (não JPG direto)</span></li>
+        <li><span class="check">□</span><span>Width e height definidos nas imagens</span></li>
+        <li><span class="check">□</span><span>Fonte com font-display: swap</span></li>
+        <li><span class="check">□</span><span>Scripts não essenciais com defer</span></li>
+        <li><span class="check">□</span><span>Nota PageSpeed 90+ mobile</span></li>
+        <li><span class="check">□</span><span>Cloudflare CDN ativado</span></li>
+        <li><span class="check">□</span><span>CSS crítico inline no head</span></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     OPERAÇÃO
+════════════════════════════════════════ -->
+<div class="section" id="aba-operacao">
+<div class="content">
+
+  <div class="sec-title">📅 Sistema Operacional</div>
+  <div class="sec-sub">Como rodar esse negócio na prática, semana a semana. O conteúdo sai quando você quiser — sem calendário editorial. O que tem agenda fixa é prospecção e entrega.</div>
+
+  <h3 class="label">Rotina semanal</h3>
+  <div class="week" style="margin-bottom:36px">
+    <div class="day-card" style="border-color:var(--blue-dark)">
+      <div class="day-name" style="color:var(--blue)">Segunda</div>
+      <div class="day-item">🔍 <span>Rodar prospecção (YouTube ou Reddit)</span></div>
+      <div class="day-item">📊 <span>Revisar dashboard de dores</span></div>
+      <div class="day-item">🎯 <span>Salvar leads com mais potencial</span></div>
+    </div>
+    <div class="day-card" style="border-color:var(--orange-dark)">
+      <div class="day-name" style="color:var(--orange)">Terça</div>
+      <div class="day-item">💬 <span>Abordar leads novos (mensagem personalizada)</span></div>
+      <div class="day-item">📞 <span>Calls de diagnóstico agendadas</span></div>
+      <div class="day-item">📄 <span>Enviar propostas das calls</span></div>
+    </div>
+    <div class="day-card" style="border-color:var(--purple-dark)">
+      <div class="day-name" style="color:var(--purple)">Quarta</div>
+      <div class="day-item">🛠️ <span>Entrega (foco total no cliente ativo)</span></div>
+      <div class="day-item">🔄 <span>Follow-up em propostas (+3 dias)</span></div>
+      <div class="day-item">📊 <span>Atualizar status no CRM de leads</span></div>
+    </div>
+    <div class="day-card">
+      <div class="day-name">Quinta</div>
+      <div class="day-item">🛠️ <span>Entrega (foco total)</span></div>
+      <div class="day-item">🤝 <span>Alinhamento com cliente ativo</span></div>
+      <div class="day-item">🔍 <span>Segunda rodada de prospecção (opcional)</span></div>
+    </div>
+    <div class="day-card" style="border-color:var(--green-dark)">
+      <div class="day-name" style="color:var(--green)">Sexta</div>
+      <div class="day-item">📊 <span>Fechar semana: contatou / respondeu / fechou</span></div>
+      <div class="day-item">💡 <span>Documentar 1 aprendizado</span></div>
+      <div class="day-item">🏕️ <span>Post no Instagram se tiver algo real pra contar</span></div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Distribuição de tempo por semana</h3>
+  <div class="grid-4" style="margin-bottom:36px">
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--blue)">25h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Entrega<br>(cliente ativo)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--purple)">4h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Prospecção<br>(busca + abordagem)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--orange)">3h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Vendas<br>(calls + follow-up)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--green)">1h</div>
+      <div style="font-size:13px;color:var(--muted2);margin-top:4px">Sistema<br>(CRM + pipeline)</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Pipeline — status dos orçamentos no CRM</h3>
+  <div class="pipeline" style="margin-bottom:36px">
+    <div class="pipe-stage" style="border-color:var(--muted)">
+      <div class="pipe-icon">📝</div>
+      <div class="pipe-name">Rascunho</div>
+      <div class="pipe-desc">Lead chegou, conversa iniciada</div>
+    </div>
+    <div class="pipe-stage" style="border-color:var(--yellow)">
+      <div class="pipe-icon">⏳</div>
+      <div class="pipe-name">Pendente</div>
+      <div class="pipe-desc">Proposta em elaboração</div>
+    </div>
+    <div class="pipe-stage" style="border-color:var(--blue)">
+      <div class="pipe-icon">✉️</div>
+      <div class="pipe-name">Enviado</div>
+      <div class="pipe-desc">PDF enviado, aguardando</div>
+    </div>
+    <div class="pipe-stage" style="border-color:var(--green)">
+      <div class="pipe-icon">✅</div>
+      <div class="pipe-name">Aceito</div>
+      <div class="pipe-desc">Cliente confirmou, iniciado</div>
+    </div>
+    <div class="pipe-stage" style="border-color:var(--cyan)">
+      <div class="pipe-icon">🚀</div>
+      <div class="pipe-name">Entregue</div>
+      <div class="pipe-desc">Suporte ativo, pedir case</div>
+    </div>
+    <div class="pipe-stage" style="border-color:var(--red)">
+      <div class="pipe-icon">📚</div>
+      <div class="pipe-name">Recusado</div>
+      <div class="pipe-desc">Aprender e documentar motivo</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--green-dark);background:var(--green-bg)">
+    <div class="card-title" style="color:var(--green)">Meta de pipeline saudável</div>
+    <div class="card-body">
+      Sempre ter simultaneamente: <strong style="color:white">2-3 conversas ativas</strong> (Rascunho/Pendente) + <strong style="color:white">1-2 propostas enviadas</strong> + <strong style="color:white">1 projeto em andamento</strong>.<br><br>
+      Isso garante receita contínua sem depender de um único cliente por vez.
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     RECEITA
+════════════════════════════════════════ -->
+<div class="section" id="aba-receita">
+<div class="content">
+
+  <div class="sec-title" style="color:var(--yellow)">💰 Projeção de Receita</div>
+  <div class="sec-sub">O que é possível com esse sistema rodando. Construído em camadas — não tente chegar no Mês 6 sem passar pelo Mês 1.</div>
+
+  <div class="revenue" style="margin-bottom:40px">
+    <div class="rev-card" style="border-color:var(--blue-dark)">
+      <div class="rev-period" style="color:var(--blue)">Mês 1–2 · Validação</div>
+      <div class="rev-value" style="color:var(--blue)">R$ 6–7k</div>
+      <div class="rev-mix">2× Nível 1</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Aprender o processo completo, coletar feedback real, ajustar a oferta, gerar os primeiros depoimentos.
+      </div>
+    </div>
+    <div class="rev-card" style="border-color:var(--orange-dark)">
+      <div class="rev-period" style="color:var(--orange)">Mês 3–4 · Tração</div>
+      <div class="rev-value" style="color:var(--orange)">R$ 9–12k</div>
+      <div class="rev-mix">1× Nível 1 + 1× Nível 2</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Primeiro case documentado. Prospecção mais precisa com as fontes e termos que convertiram melhor. Refinar a abordagem de contato.
+      </div>
+    </div>
+    <div class="rev-card" style="border-color:var(--green-dark)">
+      <div class="rev-period" style="color:var(--green)">Mês 5–6 · Escala</div>
+      <div class="rev-value" style="color:var(--green)">R$ 13–18k</div>
+      <div class="rev-mix">2× Nível 2</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Cases gerando indicações. Prospecção continua como base, mas agora alguns leads chegam por referência. Posicionamento já estabelecido — cobrar mais pelo mesmo serviço.
+      </div>
+    </div>
+    <div class="rev-card" style="border-color:var(--purple-dark)">
+      <div class="rev-period" style="color:var(--purple)">Mês 6+ · Consistência</div>
+      <div class="rev-value" style="color:var(--purple)">R$ 21–31k</div>
+      <div class="rev-mix">1× Nível 2 + 1× Nível 3</div>
+      <div class="rev-focus">
+        <strong>Foco desta fase:</strong>
+        Poucos clientes, ticket alto. Sistema rodando. Prospecção mais seletiva — só entra quem tem o perfil certo. Começa a pensar em produto SaaS e renda recorrente.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+  <h3 class="label">Plano de execução — primeiras 4 semanas</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--blue-bg);color:var(--blue);border:2px solid var(--blue-dark)">S1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <h4>Semana 1 — Configurar e prospectar</h4>
+        <div class="code-block">□ Configurar API Key do YouTube no sistema (Google Cloud, grátis)
+□ Rodar primeira busca no Reddit (r/empreendedorismo ou r/freelancers)
+□ Identificar 10 leads com dores claras e salvar no CRM
+□ Escrever o posicionamento da marca (1 parágrafo)</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--orange-bg);color:var(--orange);border:2px solid var(--orange-dark)">S2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <h4>Semana 2 — Abordagem e diagnóstico</h4>
+        <div class="code-block">□ Abordar os 10 leads com mensagem personalizada (mencionar a dor específica)
+□ Documentar os 3 níveis de oferta com entregáveis e preços
+□ Ter a primeira conversa de diagnóstico com quem responder
+□ Enviar proposta de 1 página pelo sistema de orçamentos</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--green-bg);color:var(--green);border:2px solid var(--green-dark)">S3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <h4>Semana 3 — Fechar e entregar</h4>
+        <div class="code-block">□ Fechar o primeiro cliente
+□ Executar com o processo de entrega documentado (3 semanas)
+□ Seguir prospectando em paralelo — nunca pare com 1 cliente ativo
+□ Pedir depoimento com foto ao final da entrega</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num" style="background:var(--purple-bg);color:var(--purple);border:2px solid var(--purple-dark)">S4</div>
+      </div>
+      <div class="step-content">
+        <h4>Semana 4 — Refinar e escalar</h4>
+        <div class="code-block">□ Analisar: qual fonte gerou mais leads? qual abordagem converteu melhor?
+□ Segunda rodada de prospecção com o que funcionou
+□ 2-3 conversas ativas no pipeline ao mesmo tempo
+□ Se tiver algo real para contar: postar no Instagram sem forçar</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-card" style="margin-top:40px">
+    <h3>Você já tem tudo que precisa</h3>
+    <p>O sistema de prospecção está pronto. O CRM de leads está pronto. A oferta está estruturada. O processo de entrega está definido.<br><br>
+    <strong style="color:white">O que falta agora não é planejamento. É rodar a primeira busca e mandar a primeira mensagem.</strong><br><br>
+    Abra o sistema de prospecção, escolha um subreddit e analise. O primeiro lead está lá esperando.</p>
+  </div>
+
+</div>
+</div>
+
+
+<!-- INPUT OCULTO PARA SVG -->
+<input type="file" id="icon-file-input" accept=".svg,image/svg+xml" />
+
+<!-- BARRA DE EDIÇÃO -->
+<div class="edit-toolbar">
+  <span class="et-label">✏️ Playbook</span>
+  <button class="et-btn et-toggle" onclick="toggleEdicao()">Editar</button>
+  <button class="et-btn" id="btn-cores" onclick="toggleCores()" style="background:var(--bg3);color:var(--muted2);display:none">🎨 Cores</button>
+  <button class="et-btn et-save" onclick="salvar()">💾 Salvar</button>
+  <button class="et-btn et-reset" onclick="resetar()">↺ Resetar</button>
+  <span class="et-status" id="et-status">✓ Salvo!</span>
+</div>
+<div class="edit-hint">Clique em qualquer texto para editar · Clique nos ícones (tabs/flywheel) para trocar por SVG</div>
+
+<!-- PAINEL DE CORES -->
+<div id="painel-cores" style="
+  display:none;
+  position:fixed;
+  bottom:72px;
+  right:24px;
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  padding:20px;
+  z-index:998;
+  box-shadow:0 8px 32px rgba(0,0,0,0.6);
+  min-width:280px;
+  max-height:70vh;
+  overflow-y:auto;
+">
+  <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px">🎨 Editor de Cores</div>
+  <div id="lista-cores"></div>
+  <div style="margin-top:14px;font-size:11px;color:var(--muted)">Alterações aplicadas em tempo real. Clique em 💾 Salvar para manter.</div>
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════════
+  // NAVEGAÇÃO
+  // ═══════════════════════════════════════════════════
+  const SECTION_IDS = ['visao','conteudo','branding','oferta','fechamento','entrega','operacao','receita'];
+
+  function ir(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('aba-' + id).classList.add('active');
+    const idx = SECTION_IDS.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ═══════════════════════════════════════════════════
+  // CONFIGURAÇÃO
+  // ═══════════════════════════════════════════════════
+  const STORE_TEXT  = 'andarilho_texto_v1';
+  const STORE_ICONS = 'andarilho_icones_v1';
+  const STORE_CORES = 'andarilho_cores_v1';
+
+  const EDITABLE_SEL = [
+    '.hero-tag', '.hero h1', '.hero p',
+    '.sec-title', '.sec-sub',
+    'h3.label',
+    '.card-title', '.card-body',
+    '.badge',
+    '.script-box',
+    '.hook',
+    '.day-name', '.day-item span',
+    '.offer-price', '.offer-prazo',
+    '.code-block',
+    '.step-content h4', '.step-content p',
+    '.rev-value', '.rev-mix', '.rev-focus',
+    '.pipe-name', '.pipe-desc',
+    '.action-card h3', '.action-card p',
+  ].join(', ');
+
+  // Variáveis CSS editáveis com rótulos legíveis
+  const CSS_VARS = [
+    // ── RETÂNGULOS COLORIDOS ─────────────────────────────────
+    { key: '--blue',         label: '🟡 Âmbar — texto/ícone (Conteúdo)' },
+    { key: '--blue-dark',    label: '🟡 Âmbar — borda do retângulo' },
+    { key: '--blue-bg',      label: '🟡 Âmbar — fundo do retângulo' },
+
+    { key: '--purple',       label: '💜 Lavanda — texto/ícone (Branding)' },
+    { key: '--purple-dark',  label: '💜 Lavanda — borda do retângulo' },
+    { key: '--purple-bg',    label: '💜 Lavanda — fundo do retângulo' },
+
+    { key: '--green',        label: '🟢 Verde-teal — texto/ícone (Oferta)' },
+    { key: '--green-dark',   label: '🟢 Verde-teal — borda do retângulo' },
+    { key: '--green-bg',     label: '🟢 Verde-teal — fundo do retângulo' },
+
+    { key: '--orange',       label: '🟠 Âmbar profundo — texto/ícone (Fechamento)' },
+    { key: '--orange-dark',  label: '🟠 Âmbar profundo — borda do retângulo' },
+    { key: '--orange-bg',    label: '🟠 Âmbar profundo — fundo do retângulo' },
+
+    { key: '--cyan',         label: '🔵 Teal — texto/ícone (Entrega)' },
+    { key: '--cyan-bg',      label: '🔵 Teal — fundo do retângulo' },
+
+    { key: '--red',          label: '🔴 Coral — texto/ícone (Resultado)' },
+    { key: '--red-dark',     label: '🔴 Coral — borda do retângulo' },
+    { key: '--red-bg',       label: '🔴 Coral — fundo do retângulo' },
+
+    { key: '--yellow',       label: '✨ Âmbar claro — destaques suaves' },
+    { key: '--yellow-bg',    label: '✨ Âmbar claro — fundo suave' },
+
+    // ── FUNDO E TEXTO ────────────────────────────────────────
+    { key: '--bg',           label: '⬛ Fundo principal da página' },
+    { key: '--bg2',          label: '⬛ Fundo dos cards' },
+    { key: '--bg3',          label: '⬛ Fundo terciário' },
+    { key: '--text',         label: '📝 Texto principal' },
+    { key: '--muted',        label: '📝 Texto secundário' },
+    { key: '--muted2',       label: '📝 Texto terciário' },
+    { key: '--border',       label: '▪ Borda sutil' },
+    { key: '--border2',      label: '▪ Borda visível' },
+  ];
+
+  // ═══════════════════════════════════════════════════
+  // MODO EDIÇÃO — TOGGLE
+  // ═══════════════════════════════════════════════════
+  let editando = false;
+
+  function toggleEdicao() {
+    editando = !editando;
+    document.body.classList.toggle('edit-mode', editando);
+
+    document.querySelectorAll(EDITABLE_SEL).forEach(el => {
+      if (editando) el.setAttribute('contenteditable', 'true');
+      else          el.removeAttribute('contenteditable');
+    });
+
+    const btn = document.querySelector('.et-toggle');
+    btn.textContent = editando ? '👁 Visualizar' : 'Editar';
+    btn.classList.toggle('active', editando);
+
+    const show = editando ? 'inline-block' : 'none';
+    document.querySelector('.et-save').style.display  = show;
+    document.querySelector('.et-reset').style.display = show;
+    document.getElementById('btn-cores').style.display = show;
+
+    // Fechar painel de cores ao sair do modo edição
+    if (!editando) document.getElementById('painel-cores').style.display = 'none';
+  }
+
+  // ═══════════════════════════════════════════════════
+  // SALVAR — texto + ícones + cores
+  // ═══════════════════════════════════════════════════
+  function salvar() {
+    // Remove contenteditable para ter HTML limpo
+    document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+    // Salvar texto das seções
+    const textos = {};
+    SECTION_IDS.forEach(id => {
+      const sec = document.getElementById('aba-' + id);
+      if (sec) {
+        const inner = sec.querySelector('.content');
+        textos[id] = inner ? inner.innerHTML : sec.innerHTML;
+      }
+    });
+    textos['hero'] = document.querySelector('.hero').innerHTML;
+    localStorage.setItem(STORE_TEXT, JSON.stringify(textos));
+
+    // Salvar cores atuais
+    const root = document.documentElement;
+    const cores = {};
+    CSS_VARS.forEach(v => {
+      cores[v.key] = getComputedStyle(root).getPropertyValue(v.key).trim();
+    });
+    localStorage.setItem(STORE_CORES, JSON.stringify(cores));
+
+    // Re-adicionar contenteditable (ainda em modo edição)
+    document.querySelectorAll(EDITABLE_SEL).forEach(el => el.setAttribute('contenteditable', 'true'));
+
+    // Feedback
+    const status = document.getElementById('et-status');
+    status.style.display = 'inline';
+    status.style.animation = 'none';
+    void status.offsetHeight;
+    status.style.animation = 'fadeOut 2.5s forwards';
+    setTimeout(() => { status.style.display = 'none'; }, 2600);
+  }
+
+  // ═══════════════════════════════════════════════════
+  // RESETAR
+  // ═══════════════════════════════════════════════════
+  function resetar() {
+    if (!confirm('Resetar tudo para o conteúdo original? Textos, ícones e cores serão restaurados.')) return;
+    [STORE_TEXT, STORE_ICONS, STORE_CORES].forEach(k => localStorage.removeItem(k));
+    location.reload();
+  }
+
+  // ═══════════════════════════════════════════════════
+  // CARREGAR DADOS SALVOS
+  // ═══════════════════════════════════════════════════
+  function carregarSalvo() {
+    // Textos
+    const rawTexto = localStorage.getItem(STORE_TEXT);
+    if (rawTexto) {
+      try {
+        const textos = JSON.parse(rawTexto);
+        SECTION_IDS.forEach(id => {
+          const sec = document.getElementById('aba-' + id);
+          if (!sec || !textos[id]) return;
+          const inner = sec.querySelector('.content');
+          if (inner) inner.innerHTML = textos[id];
+        });
+        if (textos['hero']) document.querySelector('.hero').innerHTML = textos['hero'];
+      } catch(e) { console.warn('Erro ao restaurar textos:', e); }
+    }
+
+    // Ícones são restaurados depois do autoWrapEmojis() via restaurarIcones()
+
+    // Cores
+    const rawCores = localStorage.getItem(STORE_CORES);
+    if (rawCores) {
+      try {
+        const cores = JSON.parse(rawCores);
+        const root = document.documentElement;
+        Object.entries(cores).forEach(([k, v]) => {
+          root.style.setProperty(k, v);
+        });
+      } catch(e) { console.warn('Erro ao restaurar cores:', e); }
+    }
+  }
+
+  // ═══════════════════════════════════════════════════
+  // ÍCONES SVG — upload e substituição
+  // ═══════════════════════════════════════════════════
+  let slotAtivo = null; // qual icon-slot está aguardando upload
+
+  function aplicarIconeSVG(slot, dataUrl) {
+    // Substitui o conteúdo do slot por uma <img> com o SVG
+    slot.innerHTML = `<img class="icon-svg" src="${dataUrl}" alt="ícone" />`;
+  }
+
+  // Clique em icon-slot (só em edit mode)
+  document.addEventListener('click', function(e) {
+    const slot = e.target.closest('.icon-slot');
+    if (!slot || !editando) return;
+    e.stopPropagation();
+    slotAtivo = slot;
+    document.getElementById('icon-file-input').click();
+  });
+
+  // Arquivo SVG selecionado
+  document.getElementById('icon-file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file || !slotAtivo) return;
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const dataUrl = ev.target.result;
+      const key = slotAtivo.dataset.key;
+
+      // Aplicar visualmente
+      aplicarIconeSVG(slotAtivo, dataUrl);
+
+      // Salvar no localStorage (separado dos textos)
+      const icons = JSON.parse(localStorage.getItem(STORE_ICONS) || '{}');
+      icons[key] = dataUrl;
+      localStorage.setItem(STORE_ICONS, JSON.stringify(icons));
+
+      slotAtivo = null;
+      e.target.value = ''; // limpa o input para permitir selecionar o mesmo arquivo de novo
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ═══════════════════════════════════════════════════
+  // EDITOR DE CORES HEX
+  // ═══════════════════════════════════════════════════
+  function toggleCores() {
+    const painel = document.getElementById('painel-cores');
+    const visivel = painel.style.display !== 'none';
+    painel.style.display = visivel ? 'none' : 'block';
+    if (!visivel) renderizarCores();
+  }
+
+  function renderizarCores() {
+    const root = document.documentElement;
+    const lista = document.getElementById('lista-cores');
+    lista.innerHTML = CSS_VARS.map(v => {
+      const valor = getComputedStyle(root).getPropertyValue(v.key).trim();
+      // Verifica se é uma cor hex válida para mostrar o color picker
+      const ehHex = /^#[0-9a-fA-F]{3,6}$/.test(valor);
+      return `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <label style="font-size:12px;color:var(--muted2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${v.key}">${v.label}</label>
+          ${ehHex ? `<input type="color" value="${valor}" oninput="aplicarCor('${v.key}', this.value)" style="width:32px;height:28px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0" />` : ''}
+          <input type="text" value="${valor}" oninput="aplicarCorHex('${v.key}', this)"
+            style="width:90px;font-size:11px;font-family:monospace;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:6px;padding:4px 8px;outline:none"
+          />
+        </div>`;
+    }).join('');
+  }
+
+  function aplicarCor(varName, valor) {
+    document.documentElement.style.setProperty(varName, valor);
+    // Sincronizar o input de texto ao lado
+    renderizarCores();
+  }
+
+  function aplicarCorHex(varName, input) {
+    const val = input.value.trim();
+    // Aceita hex (#fff ou #ffffff) ou qualquer valor CSS válido
+    document.documentElement.style.setProperty(varName, val);
+    input.style.borderColor = val.startsWith('#') && (val.length === 4 || val.length === 7)
+      ? 'var(--green)'
+      : 'var(--red)';
+  }
+
+  // ═══════════════════════════════════════════════════
+  // AUTO-WRAP DE EMOJIS — detecta e envolve todos os emojis
+  // do documento em <span class="icon-slot"> para serem
+  // substituídos por SVG no modo edição.
+  // ═══════════════════════════════════════════════════
+
+  // Regex para emojis Unicode (modern browsers com flag /u)
+  // Cobre: emojis de imagem, símbolos, flags, sequências com variação
+  const EMOJI_RE = /\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu;
+
+  let _emojiCounter = 0;
+
+  function autoWrapEmojis() {
+    // Áreas a processar: seções de conteúdo, hero e tabs
+    const areas = [
+      ...document.querySelectorAll('[id^="aba-"] .content'),
+      document.querySelector('.hero'),
+      document.querySelector('.tabs'),
+    ].filter(Boolean);
+
+    areas.forEach(area => {
+      const walker = document.createTreeWalker(
+        area,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode(node) {
+            // Pula se já está dentro de um icon-slot
+            if (node.parentElement.closest('.icon-slot')) return NodeFilter.FILTER_REJECT;
+            // Pula a barra de edição e painel de cores
+            if (node.parentElement.closest('.edit-toolbar, #painel-cores, #icon-file-input')) return NodeFilter.FILTER_REJECT;
+            // Aceita apenas nós com emoji
+            EMOJI_RE.lastIndex = 0;
+            return EMOJI_RE.test(node.textContent) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+          }
+        }
+      );
+
+      // Coleta todos os nós primeiro (não pode modificar DOM durante walk)
+      const nodes = [];
+      let n;
+      while ((n = walker.nextNode())) nodes.push(n);
+
+      nodes.forEach(textNode => {
+        EMOJI_RE.lastIndex = 0;
+        const text = textNode.textContent;
+        if (!EMOJI_RE.test(text)) return;
+
+        EMOJI_RE.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        let m;
+
+        while ((m = EMOJI_RE.exec(text)) !== null) {
+          // Texto antes do emoji
+          if (m.index > last) {
+            frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          }
+          // Span para o emoji
+          const span = document.createElement('span');
+          span.className = 'icon-slot';
+          // Chave estável: codepoint hex + contador sequencial por página
+          span.dataset.key = `auto-${m[0].codePointAt(0).toString(16)}-${_emojiCounter++}`;
+          span.textContent = m[0];
+          frag.appendChild(span);
+          last = m.index + m[0].length;
+        }
+
+        // Texto restante após último emoji
+        if (last < text.length) {
+          frag.appendChild(document.createTextNode(text.slice(last)));
+        }
+
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+    });
+  }
+
+  function restaurarIcones() {
+    const raw = localStorage.getItem(STORE_ICONS);
+    if (!raw) return;
+    try {
+      const icons = JSON.parse(raw);
+      document.querySelectorAll('.icon-slot').forEach(slot => {
+        const img = icons[slot.dataset.key];
+        if (img) aplicarIconeSVG(slot, img);
+      });
+    } catch(e) { console.warn('Erro ao restaurar ícones:', e); }
+  }
+
+  // ═══════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════
+  carregarSalvo();     // 1. Restaura textos editados (já inclui icon-slots salvos)
+  autoWrapEmojis();    // 2. Envolve emojis ainda não encapsulados
+  restaurarIcones();   // 3. Aplica SVGs salvos a todos os icon-slots
+</script>
+</body>
+</html>

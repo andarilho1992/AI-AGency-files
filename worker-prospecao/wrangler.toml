@@ -1,0 +1,29 @@
+name       = "andarilho-prospecao"
+main       = "src/index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[triggers]
+# UTC times — BRT = UTC-3
+# Prospectar:  Ter + Sex  07h BRT = 10h UTC
+# Enviar lote: Ter + Qui  10h BRT = 13h UTC
+# Follow-up:   Qua + Sab  10h BRT = 13h UTC
+crons = [
+  "0 10 * * 2",
+  "0 10 * * 5",
+  "0 13 * * 2",
+  "0 13 * * 4",
+  "0 13 * * 3",
+  "0 13 * * 6",
+]
+
+# Secrets — set via: wrangler secret put VARIABLE_NAME
+# SYNC_SECRET
+# ANTHROPIC_API_KEY
+# GOOGLE_PLACES_API_KEY
+# EVOLUTION_API_URL
+# EVOLUTION_API_KEY
+# EVOLUTION_INSTANCE
+# GITHUB_TOKEN
+# GH_OWNER
+# GH_REPO

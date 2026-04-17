@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Carrossel 02 — Andarilho Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #111113;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px 60px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── IG FRAME ── */
+.ig-frame {
+  width: 420px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 32px 100px rgba(0,0,0,0.7);
+  overflow: hidden;
+  user-select: none;
+}
+
+.ig-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.ig-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ae330a 0%, #e7c9a3 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.ig-info { flex: 1; }
+.ig-handle { font-size: 13px; font-weight: 600; color: #111; line-height: 1.2; }
+.ig-sub { font-size: 11px; color: #888; }
+.ig-more { color: #888; font-size: 18px; line-height: 1; padding: 0 4px; }
+
+.carousel-viewport {
+  width: 420px;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+.carousel-viewport:active { cursor: grabbing; }
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  will-change: transform;
+}
+
+/* ── SLIDES ── */
+.slide {
+  width: 420px;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Backgrounds */
+.bg-primary  { background: #0d0d0e; }
+.bg-secondary { background: #1a1a1c; }
+.bg-gradient {
+  background: linear-gradient(155deg, #0d0d0e 0%, #3d1005 40%, #ae330a 80%, #e7c9a3 100%);
+}
+
+/* Radial glow accent */
+.glow-rust::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 20% 85%, rgba(174,51,10,0.22) 0%, transparent 65%);
+  z-index: 1;
+}
+.glow-gold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 80% 20%, rgba(231,201,163,0.07) 0%, transparent 60%);
+  z-index: 1;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 28px 18px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress-track {
+  flex: 1; height: 3px;
+  border-radius: 2px; overflow: hidden;
+  background: rgba(255,255,255,0.12);
+}
+.progress-fill {
+  height: 100%; border-radius: 2px;
+  background: #e7c9a3;
+}
+.progress-label {
+  font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+}
+.bg-gradient .progress-fill { background: rgba(255,255,255,0.9); }
+.bg-gradient .progress-label { color: rgba(255,255,255,0.4); }
+.bg-gradient .progress-track { background: rgba(255,255,255,0.18); }
+
+/* ── SWIPE ARROW ── */
+.swipe-arrow {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 48px; z-index: 9;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.06));
+}
+
+/* ── SLIDE CONTENT ── */
+.slide-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 36px 52px;
+}
+.align-center { justify-content: center; }
+.align-bottom { justify-content: flex-end; }
+
+/* ── TYPOGRAPHY ── */
+.tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: #e7c9a3;
+  margin-bottom: 18px;
+}
+.tag-dim { color: rgba(255,255,255,0.35); }
+.tag-gradient { color: rgba(255,255,255,0.65); }
+
+.headline {
+  font-size: 32px; font-weight: 800;
+  color: #fff; line-height: 1.08;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.7), 0 1px 4px rgba(0,0,0,0.9);
+}
+.headline .gold { color: #e7c9a3; }
+.headline .rust { color: #ae330a; }
+.headline .dim  { color: rgba(255,255,255,0.45); }
+
+.headline-gradient {
+  font-size: 32px; font-weight: 800;
+  color: #fff; line-height: 1.08;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.8);
+}
+.headline-gradient .gold { color: #e7c9a3; text-shadow: 0 2px 20px rgba(231,201,163,0.5); }
+.headline-gradient .dim  { color: rgba(255,255,255,0.55); }
+
+.body {
+  font-size: 14px; font-weight: 400;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.6; margin-top: 14px;
+}
+.body strong { font-weight: 600; color: #fff; }
+.body-sm {
+  font-size: 13px; font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.55; margin-top: 8px;
+}
+
+/* ── STAT HERO ── */
+.stat-hero {
+  font-size: 80px; font-weight: 900;
+  color: #e7c9a3; line-height: 1;
+  letter-spacing: -3px;
+  margin-bottom: 6px;
+}
+.stat-hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.45);
+  letter-spacing: 0.5px; margin-bottom: 20px;
+}
+
+/* ── COMPARISON TABLE ── */
+.comparison { display: flex; flex-direction: column; gap: 0; margin-top: 20px; }
+.comp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  gap: 8px;
+}
+.comp-row:last-child { border-bottom: none; }
+.comp-label {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  font-weight: 500; text-align: left;
+}
+.comp-val {
+  font-size: 13px; font-weight: 700;
+  text-align: center;
+}
+.comp-val.good { color: #e7c9a3; }
+.comp-val.bad  { color: rgba(255,255,255,0.3); }
+.comp-header {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  text-align: center; color: rgba(255,255,255,0.35);
+}
+
+/* ── INSIGHT CARDS ── */
+.insight-list { display: flex; flex-direction: column; gap: 0; margin-top: 20px; }
+.insight-item {
+  display: flex; align-items: flex-start;
+  gap: 14px; padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.insight-item:last-child { border-bottom: none; }
+.insight-icon {
+  font-size: 16px; width: 20px;
+  text-align: center; flex-shrink: 0; margin-top: 1px;
+}
+.insight-title {
+  font-size: 14px; font-weight: 600;
+  color: #fff; line-height: 1.25;
+}
+.insight-desc {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  line-height: 1.4; margin-top: 2px;
+}
+
+/* ── STEP LIST ── */
+.step-list { display: flex; flex-direction: column; gap: 0; margin-top: 20px; }
+.step-item {
+  display: flex; align-items: flex-start;
+  gap: 16px; padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.step-item:last-child { border-bottom: none; }
+.step-num {
+  font-size: 24px; font-weight: 300;
+  color: #e7c9a3; min-width: 32px;
+  line-height: 1; letter-spacing: -1px;
+}
+.step-title {
+  font-size: 14px; font-weight: 600;
+  color: #fff; line-height: 1.25;
+}
+.step-desc {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  line-height: 1.4; margin-top: 2px;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 18px 0;
+}
+
+/* ── SOURCE TAG ── */
+.source {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.source-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%; background: #ae330a;
+  flex-shrink: 0;
+}
+
+/* ── QUOTE BOX ── */
+.quote-box {
+  padding: 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  border-left: 3px solid #ae330a;
+  margin-top: 16px;
+}
+.quote-text {
+  font-size: 14px; font-style: italic;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.55;
+}
+.quote-source {
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  margin-top: 8px; font-weight: 500;
+}
+
+/* ── LOGO LOCKUP ── */
+.logo-lockup {
+  display: flex; align-items: center;
+  gap: 10px; margin-bottom: 28px;
+}
+.logo-circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: #ae330a;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.logo-name {
+  font-size: 20px; font-weight: 700;
+  color: rgba(255,255,255,0.9); letter-spacing: 0.5px;
+}
+
+/* ── CTA BUTTON ── */
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 28px;
+  background: #ae330a; border: 1px solid #ae330a;
+  border-radius: 28px;
+  font-size: 14px; font-weight: 600; color: #e7c9a3;
+  margin-top: 24px; width: fit-content;
+  font-family: 'Inter', sans-serif;
+}
+.tagline {
+  font-size: 12px; color: rgba(255,255,255,0.3);
+  margin-top: 10px; letter-spacing: 0.5px;
+}
+
+/* ── IG DOTS ── */
+.ig-dots {
+  display: flex; justify-content: center;
+  gap: 5px; padding: 10px 0 6px;
+}
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #dbdbdb; transition: all 0.25s;
+}
+.dot.active { background: #3897f0; width: 18px; border-radius: 3px; }
+
+/* ── IG ACTIONS ── */
+.ig-actions {
+  display: flex; align-items: center;
+  padding: 6px 14px 4px; gap: 14px;
+}
+.ig-bookmark { margin-left: auto; }
+
+/* ── IG CAPTION ── */
+.ig-caption {
+  padding: 4px 14px 14px;
+  font-size: 13px; color: #111; line-height: 1.4;
+}
+.ig-caption strong { font-weight: 600; }
+.ig-caption .ts {
+  display: block; font-size: 11px;
+  color: #aaa; margin-top: 5px;
+}
+</style>
+</head>
+<body>
+
+<div class="ig-frame">
+
+  <!-- HEADER -->
+  <div class="ig-header">
+    <div class="ig-avatar">A</div>
+    <div class="ig-info">
+      <div class="ig-handle">andarilhodigital</div>
+      <div class="ig-sub">Automação & IA</div>
+    </div>
+    <span class="ig-more">···</span>
+  </div>
+
+  <!-- CAROUSEL -->
+  <div class="carousel-viewport" id="viewport">
+    <div class="carousel-track" id="track">
+
+      <!-- SLIDE 1 — HOOK -->
+      <div class="slide bg-primary glow-rust">
+        <div class="slide-content align-center">
+          <div class="source"><div class="source-dot"></div>Statista · Hootsuite 2024</div>
+          <div class="stat-hero">98%</div>
+          <div class="stat-hero-sub">Taxa de abertura do WhatsApp</div>
+          <div class="headline">
+            O canal mais poderoso<br>
+            do Brasil está sendo<br>
+            <span class="gold">desperdiçado.</span>
+          </div>
+        </div>
+        <div class="swipe-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:14.28%"></div></div>
+          <span class="progress-label">1/7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 — O DADO -->
+      <div class="slide bg-secondary glow-gold">
+        <div class="slide-content align-bottom">
+          <div class="tag">WhatsApp vs Email</div>
+          <div class="headline">
+            Seu email está<br>
+            <span class="gold">perdendo feio.</span>
+          </div>
+          <div class="comparison">
+            <div class="comp-row">
+              <div class="comp-label"></div>
+              <div class="comp-header">WhatsApp</div>
+              <div class="comp-header">Email</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-label">Taxa de abertura</div>
+              <div class="comp-val good">98%</div>
+              <div class="comp-val bad">20%</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-label">Taxa de resposta</div>
+              <div class="comp-val good">45%</div>
+              <div class="comp-val bad">6%</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-label">Tempo médio leitura</div>
+              <div class="comp-val good">3 min</div>
+              <div class="comp-val bad">48h</div>
+            </div>
+            <div class="comp-row">
+              <div class="comp-label">Usuários no Brasil</div>
+              <div class="comp-val good">169M</div>
+              <div class="comp-val bad">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="swipe-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:28.57%"></div></div>
+          <span class="progress-label">2/7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 — POR QUE DESPERDIÇA -->
+      <div class="slide bg-primary glow-rust">
+        <div class="slide-content align-bottom">
+          <div class="tag">O problema</div>
+          <div class="headline">
+            Ter WhatsApp<br>
+            <span class="dim">não é o mesmo que</span><br>
+            usar WhatsApp.
+          </div>
+          <div class="divider"></div>
+          <div class="body">
+            A maioria das empresas usa WhatsApp como se fosse um telefone.<br><br>
+            <strong>Responde quando pode. Esquece quando está ocupado. Perde lead quando dorme.</strong>
+          </div>
+        </div>
+        <div class="swipe-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:42.85%"></div></div>
+          <span class="progress-label">3/7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 — O QUE MUDA -->
+      <div class="slide bg-secondary">
+        <div class="slide-content align-bottom">
+          <div class="tag">O que as melhores fazem</div>
+          <div class="headline">
+            WhatsApp como<br>
+            <span class="gold">sistema,</span><br>
+            não como chat.
+          </div>
+          <div class="quote-box">
+            <div class="quote-text">"Empresas que respondem um lead em até 1 minuto têm <strong style="color:#e7c9a3;">7x mais chance</strong> de conversão do que as que demoram 1 hora."</div>
+            <div class="quote-source">— MIT Sloan Management Review</div>
+          </div>
+        </div>
+        <div class="swipe-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:57.14%"></div></div>
+          <span class="progress-label">4/7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 — NA PRÁTICA -->
+      <div class="slide bg-primary glow-rust">
+        <div class="slide-content align-bottom">
+          <div class="tag">Na prática</div>
+          <div class="headline">
+            3 automações que<br>
+            <span class="gold">mudam o jogo</span><br>
+            <span class="dim">no WhatsApp</span>
+          </div>
+          <div class="insight-list">
+            <div class="insight-item">
+              <div class="insight-icon">⚡</div>
+              <div>
+                <div class="insight-title">Resposta automática de primeiro contato</div>
+                <div class="insight-desc">Responde em segundos, coleta nome e interesse, passa pra fila certa</div>
+              </div>
+            </div>
+            <div class="insight-item">
+              <div class="insight-icon">📅</div>
+              <div>
+                <div class="insight-title">Agendamento sem intervenção humana</div>
+                <div class="insight-desc">Cliente escolhe horário, recebe confirmação, lembrete automático no dia</div>
+              </div>
+            </div>
+            <div class="insight-item">
+              <div class="insight-icon">🔁</div>
+              <div>
+                <div class="insight-title">Reativação de leads frios</div>
+                <div class="insight-desc">Manda mensagem automática pra quem não voltou em X dias</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swipe-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:71.42%"></div></div>
+          <span class="progress-label">5/7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 6 — COMO COMEÇA -->
+      <div class="slide bg-secondary">
+        <div class="slide-content align-bottom">
+          <div class="tag">Como começar</div>
+          <div class="headline">
+            Do WhatsApp<br>
+            manual ao<br>
+            <span class="gold">sistema em 7 dias</span>
+          </div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">01</div>
+              <div>
+                <div class="step-title">Mapeia o fluxo atual de atendimento</div>
+                <div class="step-desc">Quais perguntas chegam? Qual o caminho até a venda?</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">02</div>
+              <div>
+                <div class="step-title">Conecta WhatsApp Business API</div>
+                <div class="step-desc">É diferente do WhatsApp normal — permite automação real</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">03</div>
+              <div>
+                <div class="step-title">Configura o agente com a sua voz</div>
+                <div class="step-desc">Ele fala como você, não como robô</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swipe-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:85.71%"></div></div>
+          <span class="progress-label">6/7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 7 — CTA -->
+      <div class="slide bg-gradient">
+        <div class="slide-content align-center">
+          <div class="logo-lockup">
+            <div class="logo-circle">A</div>
+            <div class="logo-name">Andarilho</div>
+          </div>
+          <div class="headline-gradient">
+            98% de abertura.<br>
+            <span class="dim">Você ainda vai</span><br>
+            usar isso hoje?
+          </div>
+          <div class="cta-btn">Me manda uma DM →</div>
+          <div class="tagline">andarilhodigital.com</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+          <span class="progress-label">7/7</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOTS -->
+  <div class="ig-dots" id="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="ig-actions">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><line x1="22" y1="2" x2="11" y2="13" stroke="#262626" stroke-width="2" stroke-linecap="round"/><polygon points="22 2 15 22 11 13 2 9 22 2" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <svg class="ig-bookmark" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- CAPTION -->
+  <div class="ig-caption">
+    <strong>andarilhodigital</strong> WhatsApp tem 98% de taxa de abertura. Email tem 20%. Arrasta pra ver o que isso significa pro seu negócio →
+    <span class="ts">AGORA</span>
+  </div>
+
+</div>
+
+<script>
+const track = document.getElementById('track');
+const viewport = document.getElementById('viewport');
+const dots = document.querySelectorAll('.dot');
+const TOTAL = 7;
+let current = 0, startX = 0, isDragging = false, dragOffset = 0;
+
+function goTo(idx) {
+  current = Math.max(0, Math.min(TOTAL - 1, idx));
+  track.style.transform = `translateX(${-current * 420}px)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+}
+
+viewport.addEventListener('pointerdown', e => { isDragging = true; startX = e.clientX; track.style.transition = 'none'; viewport.setPointerCapture(e.pointerId); });
+viewport.addEventListener('pointermove', e => { if (!isDragging) return; dragOffset = e.clientX - startX; track.style.transform = `translateX(${-current * 420 + dragOffset}px)`; });
+viewport.addEventListener('pointerup', () => { if (!isDragging) return; isDragging = false; track.style.transition = 'transform 0.35s cubic-bezier(0.4,0,0.2,1)'; if (dragOffset < -60) goTo(current + 1); else if (dragOffset > 60) goTo(current - 1); else goTo(current); dragOffset = 0; });
+</script>
+</body>
+</html>

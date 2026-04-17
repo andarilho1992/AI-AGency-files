@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriSaaS - Painel da Nutricionista</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981; /* Emerald Green */
+            --primary-dark: #059669;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            width: var(--sidebar-width);
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #ecfdf5;
+            color: var(--primary-dark);
+        }
+
+        .nav-item svg { width: 20px; height: 20px; }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; }
+        .subtitle { color: var(--text-muted); font-size: 1rem; margin-top: 0.5rem; }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover { background-color: var(--primary-dark); transform: translateY(-1px); }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            padding: 1.5rem 1.75rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: box-shadow 0.2s;
+        }
+        
+        .kpi-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+
+        .kpi-title { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;}
+        .kpi-value { font-size: 2.5rem; font-weight: 700; margin-top: 0.5rem; letter-spacing: -0.02em; }
+        .kpi-status { font-size: 0.85rem; color: var(--primary); margin-top: 0.5rem; font-weight: 500;}
+
+        /* Table Area */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .table-header {
+            padding: 1.5rem 1.75rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h2 { font-size: 1.25rem; font-weight: 600; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 1.75rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-color);
+            background: #f8fafc;
+        }
+
+        td {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f1f5f9; cursor: pointer; }
+
+        .avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            font-weight: 600; color: var(--text-muted);
+            margin-right: 1rem;
+            vertical-align: middle;
+            font-size: 0.85rem;
+        }
+
+        .patient-name { font-weight: 500; color: var(--text-main); }
+        .pill {
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .pill.warning { background: #fef3c7; color: #d97706; }
+        .pill.success { background: #dcfce7; color: #15803d; }
+        .pill.gray { background: #f1f5f9; color: #64748b; }
+
+        .action-link {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .action-link:hover { color: var(--primary-dark); }
+
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            NutriSaaS
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Painel Geral
+                </a></li>
+                <li><a href="#" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Fichas & Pacientes
+                </a></li>
+                <li><a href="#" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Dietas <span class="pill gray" style="margin-left:auto; transform:scale(0.8)">Em breve</span>
+                </a></li>
+                <li style="margin-top: auto;"><a href="#" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Ajustes
+                </a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
+            <div>
+                <h1>Bom dia, Dra. Patrícia.</h1>
+                <p class="subtitle">Você tem <strong>3 novos formulários</strong> de pré-consulta aguardando revisão. </p>
+            </div>
+            <button class="btn-primary">+ Novo Paciente</button>
+        </header>
+
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">Pacientes Ativos</div>
+                <div class="kpi-value">142</div>
+                <div class="kpi-status">+4 esta semana</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Mural de Retornos</div>
+                <div class="kpi-value">18</div>
+                <div class="kpi-status" style="color:#d97706">5 urgentes para follow-up (whats)</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Novas Anamneses</div>
+                <div class="kpi-value">3</div>
+                <div class="kpi-status">Preenchidas pelo link hoje</div>
+            </div>
+        </section>
+
+        <section class="table-container">
+            <div class="table-header">
+                <h2>CRM Visual e Atendimentos</h2>
+                <div style="display:flex; gap: 10px;">
+                    <input type="text" placeholder="Buscar por nome ou CPF..." style="padding: 0.55rem 1rem; border-radius:6px; border:1px solid #e2e8f0; outline:none; font-family:'Inter'; width: 250px;">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Objetivo Central</th>
+                        <th>Última Consulta</th>
+                        <th>Status do Funil</th>
+                        <th>Ação Rápida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="avatar">MA</div>
+                            <span class="patient-name">Mateus Andrade</span>
+                        </td>
+                        <td>Hipertrofia</td>
+                        <td>Há 2 dias</td>
+                        <td><span class="pill success">Alinhado</span></td>
+                        <td><a href="#" class="action-link">Ver Ficha Médica</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="avatar">CO</div>
+                            <span class="patient-name">Camila Oliveira</span>
+                        </td>
+                        <td>Emagrecimento</td>
+                        <td>Há 3 semanas</td>
+                        <td><span class="pill warning">Aguardando Retorno</span></td>
+                        <td><a href="#" class="action-link" style="color:#059669">Enviar WhatsApp</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="avatar">RO</div>
+                            <span class="patient-name">Rafael Osorio</span>
+                        </td>
+                        <td>Reeducação Alimentar</td>
+                        <td>Ainda não realizou</td>
+                        <td><span class="pill gray">Formulário Recebido</span></td>
+                        <td><a href="#" class="action-link">Analisar Pré-Consulta</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+</body>
+</html>

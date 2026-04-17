@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetsControl — Gestão de Petshop com Busca e Entrega</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0f0a;
+    --bg-2: #101810;
+    --bg-3: #162016;
+    --bg-4: #1e2a1e;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8f0e8;
+    --muted: rgba(232,240,232,0.45);
+    --accent: #4ade80;
+    --accent-2: #86efac;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --blue: #60a5fa;
+    --orange: #fb923c;
+    --teal: #2dd4bf;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,15,10,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 60px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  .nav-logo-dot { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #4ade80, #2dd4bf); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .nav-tabs { display: flex; gap: 4px; }
+  .nav-tab { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all .2s; }
+  .nav-tab:hover { color: var(--text); background: var(--bg-3); }
+  .nav-tab.active { color: var(--text); background: var(--bg-4); }
+  .nav-badge { background: linear-gradient(135deg, #4ade80, #2dd4bf); color: #0a0f0a; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  .screen { display: none; min-height: 100vh; padding-top: 60px; }
+  .screen.active { display: block; }
+
+  /* HERO */
+  .hero { min-height: calc(100vh - 60px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); color: var(--accent-2); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 28px; }
+  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; max-width: 700px; margin-bottom: 20px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 17px; color: var(--muted); max-width: 520px; line-height: 1.65; margin-bottom: 44px; }
+  .hero-stats { display: flex; gap: 40px; margin-bottom: 52px; }
+  .hero-stat { text-align: center; }
+  .hero-stat-value { font-size: 36px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .hero-divider { width: 1px; background: var(--border); height: 50px; align-self: center; }
+  .hero-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
+  .hero-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; text-align: left; flex: 1; min-width: 180px; max-width: 220px; transition: all .2s; }
+  .hero-card:hover { border-color: rgba(74,222,128,0.3); transform: translateY(-2px); }
+  .hero-card-icon { font-size: 24px; margin-bottom: 10px; }
+  .hero-card-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .hero-card-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* SCREEN TITLE */
+  .screen-title { text-align: center; margin-bottom: 40px; }
+  .screen-title h2 { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 8px; }
+  .screen-title p { color: var(--muted); font-size: 14px; }
+
+  /* CARDS */
+  .card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .card-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+
+  .btn { padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+  .btn-primary { background: linear-gradient(135deg, #4ade80, #2dd4bf); color: #0a0f0a; }
+  .btn-ghost { background: var(--bg-3); color: var(--muted); border: 1px solid var(--border); }
+
+  /* AGENDA SCREEN */
+  .agenda-screen { padding: 40px 32px; }
+  .agenda-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .agenda-header h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+  .agenda-header p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .status-bar { display: flex; gap: 12px; margin-bottom: 24px; max-width: 1100px; margin-left: auto; margin-right: auto; flex-wrap: wrap; }
+  .status-pill { padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+
+  .pets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; max-width: 1100px; margin: 0 auto; }
+  .pet-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: all .2s; }
+  .pet-card:hover { border-color: rgba(74,222,128,0.25); transform: translateY(-1px); }
+  .pet-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .pet-avatar { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .pet-name { font-size: 14px; font-weight: 700; }
+  .pet-breed { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .pet-status-badge { margin-left: auto; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+  .pet-info-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pet-tag { background: var(--bg-4); border: 1px solid var(--border); padding: 3px 8px; border-radius: 6px; font-size: 10px; color: var(--muted); }
+  .pet-progress { margin-top: 12px; }
+  .pet-progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .pet-progress-label span { font-size: 10px; color: var(--muted); }
+  .prog-bar { height: 5px; background: var(--bg-4); border-radius: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 10px; transition: width 1s; }
+
+  /* DELIVERY SCREEN */
+  .delivery-screen { padding: 40px 32px; }
+  .delivery-grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; max-width: 1100px; margin: 0 auto; }
+
+  .route-list { display: flex; flex-direction: column; gap: 10px; }
+  .route-item { background: var(--bg-3); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; transition: all .2s; }
+  .route-item:hover { border-color: rgba(74,222,128,0.25); }
+  .route-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .route-info { flex: 1; }
+  .route-name { font-size: 13px; font-weight: 600; }
+  .route-addr { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .route-pet { font-size: 11px; color: var(--accent-2); margin-top: 2px; }
+  .route-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+  .route-action { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; }
+
+  .driver-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .driver-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .driver-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .driver-name { font-size: 14px; font-weight: 700; }
+  .driver-status { font-size: 11px; color: var(--green); margin-top: 2px; }
+  .driver-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .driver-stat { background: var(--bg-3); border-radius: 10px; padding: 12px; text-align: center; }
+  .driver-stat-val { font-size: 20px; font-weight: 800; color: var(--accent); }
+  .driver-stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* WHATSAPP TIMELINE */
+  .wa-screen { padding: 40px 32px; display: flex; flex-direction: column; align-items: center; }
+  .wa-flow { max-width: 900px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .timeline { display: flex; flex-direction: column; }
+  .tl-item { display: flex; gap: 14px; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+  .tl-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .tl-line { width: 2px; flex: 1; min-height: 16px; background: var(--border); margin: 3px 0; }
+  .tl-content { padding-bottom: 20px; flex: 1; }
+  .tl-when { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .tl-msg { background: var(--bg-3); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; font-size: 12px; line-height: 1.55; }
+  .tl-msg strong { color: var(--accent-2); }
+
+  /* METRICS */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 1100px; margin: 0 auto 24px; }
+  .metric-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; overflow: hidden; transition: all .2s; }
+  .metric-card:hover { border-color: rgba(74,222,128,0.25); transform: translateY(-1px); }
+  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 14px 14px 0 0; }
+  .metric-card.green::before { background: var(--green); }
+  .metric-card.teal::before { background: var(--teal); }
+  .metric-card.yellow::before { background: var(--yellow); }
+  .metric-card.orange::before { background: var(--orange); }
+  .metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 10px; }
+  .metric-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; margin-bottom: 6px; }
+  .metric-card.green .metric-value { color: var(--green); }
+  .metric-card.teal .metric-value { color: var(--teal); }
+  .metric-card.yellow .metric-value { color: var(--yellow); }
+  .metric-card.orange .metric-value { color: var(--orange); }
+  .metric-change { font-size: 11px; color: var(--green); }
+  .metric-icon { position: absolute; top: 18px; right: 18px; font-size: 22px; opacity: 0.2; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot">🐾</div>
+    PetsControl
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showScreen('hero', this)">Visão Geral</button>
+    <button class="nav-tab" onclick="showScreen('agenda', this)">Agenda do Dia</button>
+    <button class="nav-tab" onclick="showScreen('delivery', this)">Busca e Entrega</button>
+    <button class="nav-tab" onclick="showScreen('whatsapp', this)">Automação</button>
+    <button class="nav-tab" onclick="showScreen('painel', this)">Dashboard</button>
+  </div>
+  <div class="nav-badge">R$3.000 + R$400/mês</div>
+</nav>
+
+<!-- HERO -->
+<div class="screen active" id="screen-hero">
+  <div class="hero">
+    <div class="hero-tag">🐾 Sistema Completo de Petshop</div>
+    <h1>Gestão, agendamento e <span>busca do seu pet</span> em um só lugar</h1>
+    <p>Do agendamento do banho até a entrega do pet na porta de casa — tudo automatizado, com rastreamento em tempo real e notificações pelo WhatsApp.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value">100%</div><div class="hero-stat-label">automatizado</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-value">0</div><div class="hero-stat-label">ligações necessárias</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-value">24/7</div><div class="hero-stat-label">agendamento online</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-value">📍</div><div class="hero-stat-label">rastreamento real</div></div>
+    </div>
+    <div class="hero-cards">
+      <div class="hero-card"><div class="hero-card-icon">📅</div><div class="hero-card-title">Agendamento Online</div><div class="hero-card-desc">Cliente agenda banho e busca sem precisar ligar</div></div>
+      <div class="hero-card"><div class="hero-card-icon">🚗</div><div class="hero-card-title">Busca e Entrega</div><div class="hero-card-desc">App do motorista com rota, status e foto de confirmação</div></div>
+      <div class="hero-card"><div class="hero-card-icon">📱</div><div class="hero-card-title">WhatsApp Automático</div><div class="hero-card-desc">Dono do pet acompanha tudo pelo celular em tempo real</div></div>
+      <div class="hero-card"><div class="hero-card-icon">📊</div><div class="hero-card-title">Painel de Gestão</div><div class="hero-card-desc">Agenda, financeiro e métricas do petshop</div></div>
+      <div class="hero-card"><div class="hero-card-icon">💉</div><div class="hero-card-title">Histórico do Pet</div><div class="hero-card-desc">Vacinas, serviços, temperamento e observações</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENDA -->
+<div class="screen" id="screen-agenda">
+  <div class="agenda-screen">
+    <div class="agenda-header">
+      <div>
+        <h2>Agenda — Domingo, 06 de Abril</h2>
+        <p>8 pets agendados hoje • 2 na busca • 3 em atendimento • 2 prontos para entrega</p>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost">Histórico</button>
+        <button class="btn btn-primary">+ Novo agendamento</button>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-pill" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow)">🚗 2 Em busca</div>
+      <div class="status-pill" style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.2);color:var(--blue)">🛁 3 Em atendimento</div>
+      <div class="status-pill" style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:var(--green)">✅ 2 Prontos para entrega</div>
+      <div class="status-pill" style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);color:var(--red)">⏳ 1 Aguardando busca</div>
+    </div>
+
+    <div class="pets-grid">
+      <!-- PET 1 -->
+      <div class="pet-card">
+        <div class="pet-card-top">
+          <div class="pet-avatar" style="background:rgba(251,191,36,0.1)">🐕</div>
+          <div>
+            <div class="pet-name">Thor</div>
+            <div class="pet-breed">Golden Retriever • Grande</div>
+          </div>
+          <div class="pet-status-badge" style="background:rgba(251,191,36,0.12);color:var(--yellow);border:1px solid rgba(251,191,36,0.2)">🚗 Em busca</div>
+        </div>
+        <div class="pet-info-row">
+          <div class="pet-tag">Dono: Carlos</div>
+          <div class="pet-tag">Banho + Tosa</div>
+          <div class="pet-tag">09:00</div>
+          <div class="pet-tag">⚠️ Agitado</div>
+        </div>
+        <div class="pet-progress">
+          <div class="pet-progress-label"><span>Motorista a caminho</span><span style="color:var(--yellow)">~15 min</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:35%;background:var(--yellow)"></div></div>
+        </div>
+      </div>
+
+      <!-- PET 2 -->
+      <div class="pet-card">
+        <div class="pet-card-top">
+          <div class="pet-avatar" style="background:rgba(96,165,250,0.1)">🐩</div>
+          <div>
+            <div class="pet-name">Mel</div>
+            <div class="pet-breed">Poodle • Pequeno</div>
+          </div>
+          <div class="pet-status-badge" style="background:rgba(96,165,250,0.12);color:var(--blue);border:1px solid rgba(96,165,250,0.2)">🛁 Em atendimento</div>
+        </div>
+        <div class="pet-info-row">
+          <div class="pet-tag">Dona: Patricia</div>
+          <div class="pet-tag">Banho</div>
+          <div class="pet-tag">10:00</div>
+          <div class="pet-tag">😊 Dócil</div>
+        </div>
+        <div class="pet-progress">
+          <div class="pet-progress-label"><span>Banho em andamento</span><span style="color:var(--blue)">~30 min</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:60%;background:var(--blue)"></div></div>
+        </div>
+      </div>
+
+      <!-- PET 3 -->
+      <div class="pet-card">
+        <div class="pet-card-top">
+          <div class="pet-avatar" style="background:rgba(74,222,128,0.1)">🐶</div>
+          <div>
+            <div class="pet-name">Bob</div>
+            <div class="pet-breed">Shih Tzu • Pequeno</div>
+          </div>
+          <div class="pet-status-badge" style="background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.2)">✅ Pronto</div>
+        </div>
+        <div class="pet-info-row">
+          <div class="pet-tag">Dona: Mariana</div>
+          <div class="pet-tag">Tosa + Banho</div>
+          <div class="pet-tag">08:30</div>
+          <div class="pet-tag">😴 Calmo</div>
+        </div>
+        <div class="pet-progress">
+          <div class="pet-progress-label"><span>Aguardando motorista para entrega</span><span style="color:var(--green)">Pronto!</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--green)"></div></div>
+        </div>
+      </div>
+
+      <!-- PET 4 -->
+      <div class="pet-card">
+        <div class="pet-card-top">
+          <div class="pet-avatar" style="background:rgba(251,146,60,0.1)">🐾</div>
+          <div>
+            <div class="pet-name">Lilica</div>
+            <div class="pet-breed">Lhasa Apso • Pequeno</div>
+          </div>
+          <div class="pet-status-badge" style="background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)">⏳ Aguardando busca</div>
+        </div>
+        <div class="pet-info-row">
+          <div class="pet-tag">Dona: Fernanda</div>
+          <div class="pet-tag">Banho</div>
+          <div class="pet-tag">11:00</div>
+          <div class="pet-tag">💊 Medicação</div>
+        </div>
+        <div class="pet-progress">
+          <div class="pet-progress-label"><span>Busca agendada para 10h30</span><span style="color:var(--muted)">Em breve</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:10%;background:var(--muted)"></div></div>
+        </div>
+      </div>
+
+      <!-- PET 5 -->
+      <div class="pet-card">
+        <div class="pet-card-top">
+          <div class="pet-avatar" style="background:rgba(45,212,191,0.1)">🐕</div>
+          <div>
+            <div class="pet-name">Rex</div>
+            <div class="pet-breed">Labrador • Grande</div>
+          </div>
+          <div class="pet-status-badge" style="background:rgba(96,165,250,0.12);color:var(--blue);border:1px solid rgba(96,165,250,0.2)">🛁 Em atendimento</div>
+        </div>
+        <div class="pet-info-row">
+          <div class="pet-tag">Dono: Roberto</div>
+          <div class="pet-tag">Banho + Tosa</div>
+          <div class="pet-tag">09:30</div>
+          <div class="pet-tag">😊 Dócil</div>
+        </div>
+        <div class="pet-progress">
+          <div class="pet-progress-label"><span>Tosa em andamento</span><span style="color:var(--blue)">~45 min</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:40%;background:var(--blue)"></div></div>
+        </div>
+      </div>
+
+      <!-- PET 6 -->
+      <div class="pet-card">
+        <div class="pet-card-top">
+          <div class="pet-avatar" style="background:rgba(74,222,128,0.1)">🐩</div>
+          <div>
+            <div class="pet-name">Luna</div>
+            <div class="pet-breed">Maltês • Pequeno</div>
+          </div>
+          <div class="pet-status-badge" style="background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.2)">✅ Pronto</div>
+        </div>
+        <div class="pet-info-row">
+          <div class="pet-tag">Dona: Joana</div>
+          <div class="pet-tag">Banho + Perfume</div>
+          <div class="pet-tag">08:00</div>
+          <div class="pet-tag">🎀 VIP</div>
+        </div>
+        <div class="pet-progress">
+          <div class="pet-progress-label"><span>Motorista saiu para entrega</span><span style="color:var(--green)">~10 min</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:85%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELIVERY -->
+<div class="screen" id="screen-delivery">
+  <div class="delivery-screen">
+    <div class="screen-title">
+      <h2>Busca e Entrega de Pets</h2>
+      <p>App do motorista + rastreamento em tempo real para o dono do pet</p>
+    </div>
+    <div class="delivery-grid">
+      <!-- ROTAS -->
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header">
+            <div class="card-title">🗺️ Rota do dia — João (motorista)</div>
+            <span style="font-size:10px;background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:3px 8px;border-radius:20px">6 paradas</span>
+          </div>
+          <div class="route-list">
+            <div class="route-item">
+              <div class="route-num" style="background:rgba(74,222,128,0.15);color:var(--green)">✓</div>
+              <div class="route-info">
+                <div class="route-name">Carlos Silva — Bairro Moinhos</div>
+                <div class="route-addr">📍 Rua Padre Chagas, 320</div>
+                <div class="route-pet">🐕 Thor (Golden) • Busca • ⚠️ Agitado</div>
+              </div>
+              <div class="route-badge" style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)">Coletado ✓</div>
+            </div>
+            <div class="route-item" style="border-color:rgba(251,191,36,0.3)">
+              <div class="route-num" style="background:rgba(251,191,36,0.15);color:var(--yellow)">2</div>
+              <div class="route-info">
+                <div class="route-name">Fernanda Costa — Bela Vista</div>
+                <div class="route-addr">📍 Av. Getúlio Vargas, 890</div>
+                <div class="route-pet">🐾 Lilica (Lhasa) • Busca • 💊 Levar medicação</div>
+              </div>
+              <div class="route-badge" style="background:rgba(251,191,36,0.1);color:var(--yellow);border:1px solid rgba(251,191,36,0.2)">A caminho</div>
+            </div>
+            <div class="route-item">
+              <div class="route-num" style="background:var(--bg-4);color:var(--muted)">3</div>
+              <div class="route-info">
+                <div class="route-name">Mariana Luz — Petropolis</div>
+                <div class="route-addr">📍 Rua Mostardeiro, 155</div>
+                <div class="route-pet">🐶 Bob (Shih Tzu) • Entrega • ✅ Pronto</div>
+              </div>
+              <div class="route-badge" style="background:var(--bg-4);color:var(--muted);border:1px solid var(--border)">Pendente</div>
+            </div>
+            <div class="route-item">
+              <div class="route-num" style="background:var(--bg-4);color:var(--muted)">4</div>
+              <div class="route-info">
+                <div class="route-name">Joana Freitas — Auxiliadora</div>
+                <div class="route-addr">📍 Rua Henrique Dias, 78</div>
+                <div class="route-pet">🐩 Luna (Maltês) • Entrega • ✅ Pronta</div>
+              </div>
+              <div class="route-badge" style="background:var(--bg-4);color:var(--muted);border:1px solid var(--border)">Pendente</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- APP MOTORISTA MOCKUP -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📱 O que o motorista vê no celular</div>
+          </div>
+          <div style="background:var(--bg-3);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:10px">
+              <span style="font-size:20px">🐕</span>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:700">Lilica — Lhasa Apso</div>
+                <div style="font-size:10px;color:var(--muted)">Fernanda Costa • Bela Vista</div>
+                <div style="font-size:10px;color:var(--yellow);margin-top:2px">💊 Atenção: levar medicação</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.25);color:var(--blue);border-radius:10px;padding:10px;font-size:12px;font-weight:600;cursor:pointer">🗺️ Abrir Maps</button>
+              <button style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);color:var(--green);border-radius:10px;padding:10px;font-size:12px;font-weight:600;cursor:pointer">📸 Confirmar coleta</button>
+            </div>
+            <button style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:var(--red);border-radius:10px;padding:8px;font-size:11px;cursor:pointer">⚠️ Registrar ocorrência</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DRIVER INFO -->
+      <div>
+        <div class="driver-card" style="margin-bottom:16px">
+          <div class="driver-top">
+            <div class="driver-avatar">🚗</div>
+            <div>
+              <div class="driver-name">João Mendes</div>
+              <div class="driver-status">● Em rota agora</div>
+            </div>
+          </div>
+          <div class="driver-stats">
+            <div class="driver-stat">
+              <div class="driver-stat-val">6</div>
+              <div class="driver-stat-lbl">Paradas hoje</div>
+            </div>
+            <div class="driver-stat">
+              <div class="driver-stat-val">2</div>
+              <div class="driver-stat-lbl">Concluídas</div>
+            </div>
+            <div class="driver-stat">
+              <div class="driver-stat-val" style="color:var(--yellow)">1</div>
+              <div class="driver-stat-lbl">Em rota</div>
+            </div>
+            <div class="driver-stat">
+              <div class="driver-stat-val" style="color:var(--muted)">3</div>
+              <div class="driver-stat-lbl">Pendentes</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-3);border-radius:10px;padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Próxima parada</div>
+            <div style="font-size:13px;font-weight:600">Fernanda Costa</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Av. Getúlio Vargas, 890 — Bela Vista</div>
+            <div style="font-size:11px;color:var(--yellow);margin-top:4px">🐾 Lilica • Busca • ~8 min</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📸 Confirmações do dia</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-3);border-radius:10px">
+              <div style="width:40px;height:40px;border-radius:8px;background:rgba(74,222,128,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">📸</div>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:600">Thor coletado</div>
+                <div style="font-size:10px;color:var(--muted)">Foto enviada • 08:47</div>
+              </div>
+              <span style="font-size:10px;color:var(--green)">✓</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-3);border-radius:10px">
+              <div style="width:40px;height:40px;border-radius:8px;background:rgba(74,222,128,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">📸</div>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:600">Bob entregue</div>
+                <div style="font-size:10px;color:var(--muted)">Assinatura digital • 09:15</div>
+              </div>
+              <span style="font-size:10px;color:var(--green)">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP -->
+<div class="screen" id="screen-whatsapp">
+  <div class="wa-screen">
+    <div class="screen-title">
+      <h2>Automação WhatsApp</h2>
+      <p>O dono do pet acompanha tudo em tempo real sem precisar ligar para o petshop</p>
+    </div>
+    <div class="wa-flow">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📱 Mensagens para o dono do pet</div></div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-icon" style="background:rgba(74,222,128,0.15)">📅</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-when">D-1 — dia anterior</div><div class="tl-msg">Oi Carlos! Lembrando que amanhã às <strong>09h</strong> buscaremos o <strong>Thor</strong> para banho e tosa! 🐕<br><br>Endereço confirmado: Rua Padre Chagas, 320?<br>Responda <strong>SIM</strong> para confirmar.</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-icon" style="background:rgba(251,191,36,0.15)">🚗</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-when">Manhã — motorista saindo</div><div class="tl-msg">Bom dia Carlos! O João está a caminho para buscar o <strong>Thor</strong> 🚗<br><br>Previsão de chegada: <strong>~15 minutos</strong><br>Fique atento ao interfone!</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-icon" style="background:rgba(96,165,250,0.15)">🛁</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-when">Thor coletado</div><div class="tl-msg">✅ Thor chegou aqui no petshop! Está bem e vai começar o banho agora 🛁<br><br>Te avisamos quando estiver prontinho!</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-icon" style="background:rgba(74,222,128,0.15)">✂️</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-when">Serviço concluído</div><div class="tl-msg">🎉 O Thor ficou lindo! Banho e tosa concluídos!<br><br>O João vai levar ele pra casa até as <strong>17h</strong>. Te avisamos quando sair!</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-icon" style="background:rgba(74,222,128,0.15)">🏠</div></div>
+            <div class="tl-content"><div class="tl-when">Em rota de entrega</div><div class="tl-msg">🚗 Saímos! O Thor está a caminho da sua casa!<br><br>Previsão: <strong>~20 minutos</strong><br><br>Como foi o atendimento hoje? ⭐⭐⭐⭐⭐</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🔄 Lembretes automáticos futuros</div></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-icon" style="background:rgba(167,139,250,0.15);font-size:13px">💉</div><div class="tl-line"></div></div>
+              <div class="tl-content" style="padding-bottom:14px"><div class="tl-when">30 dias — vacina vencendo</div><div class="tl-msg">Carlos, a <strong>vacina V10 do Thor</strong> vence em 15 dias! Quer agendar a aplicação?</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-icon" style="background:rgba(45,212,191,0.15);font-size:13px">🛁</div></div>
+              <div class="tl-content"><div class="tl-when">45 dias — retorno do banho</div><div class="tl-msg">Oi Carlos! O Thor já tá na hora de um novo banho! 🐕 Quer agendar? Temos horários essa semana!</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">💡 Resultado para o petshop</div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:12px">
+              <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:4px">ZERO LIGAÇÕES OPERACIONAIS</div>
+              <div style="font-size:12px;color:var(--muted)">Dono do pet sabe o status do animal em tempo real — sem precisar ligar para saber onde está o pet</div>
+            </div>
+            <div style="background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.2);border-radius:10px;padding:12px">
+              <div style="font-size:11px;color:var(--teal);font-weight:700;margin-bottom:4px">RETENÇÃO AUTOMÁTICA</div>
+              <div style="font-size:12px;color:var(--muted)">Lembrete de banho a cada 45 dias + vacinas — cliente nunca some por esquecimento</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚙️ Motorista também recebe</div></div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            • Novo pedido alocado com endereço completo<br>
+            • Lembrete 30min antes da janela de coleta<br>
+            • Dados do pet (temperamento, observações)<br>
+            • Alerta de pet com comportamento especial
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="screen-painel">
+  <div style="padding:40px 32px">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
+        <div><h2 style="font-size:22px;font-weight:700;letter-spacing:-0.4px">Painel do Petshop — Abril 2025</h2><p style="font-size:12px;color:var(--muted);margin-top:2px">Visão geral do negócio em tempo real</p></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost">Relatório PDF</button>
+          <button class="btn btn-primary">+ Agendar</button>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card green"><div class="metric-icon">🐾</div><div class="metric-label">Pets atendidos (mês)</div><div class="metric-value">124</div><div class="metric-change">↑ 18 a mais que março</div></div>
+        <div class="metric-card teal"><div class="metric-icon">🚗</div><div class="metric-label">Buscas e entregas</div><div class="metric-value">89</div><div class="metric-change">↑ serviço mais pedido</div></div>
+        <div class="metric-card yellow"><div class="metric-icon">⭐</div><div class="metric-label">Avaliação média</div><div class="metric-value">4.9</div><div class="metric-change">↑ 47 avaliações</div></div>
+        <div class="metric-card orange"><div class="metric-icon">💰</div><div class="metric-label">Receita do mês</div><div class="metric-value">R$8.4k</div><div class="metric-change">↑ melhor mês do ano</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📅 Próximos agendamentos</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:18px">🐕</span>
+              <div style="flex:1"><div style="font-size:12px;font-weight:600">Max — Pastor Alemão</div><div style="font-size:10px;color:var(--muted)">Ana Lima • Banho + Tosa + Busca • 2ª às 09h</div></div>
+              <span style="font-size:10px;background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:2px 8px;border-radius:20px">Confirmado</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:18px">🐩</span>
+              <div style="flex:1"><div style="font-size:12px;font-weight:600">Nina — Bichon Frisé</div><div style="font-size:10px;color:var(--muted)">Clara Santos • Banho • 2ª às 11h</div></div>
+              <span style="font-size:10px;background:rgba(251,191,36,0.1);color:var(--yellow);border:1px solid rgba(251,191,36,0.2);padding:2px 8px;border-radius:20px">Pendente</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:18px">🐶</span>
+              <div style="flex:1"><div style="font-size:12px;font-weight:600">Pipoca — Yorkie</div><div style="font-size:10px;color:var(--muted)">Pedro Nunes • Tosa + Busca • 3ª às 10h</div></div>
+              <span style="font-size:10px;background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:2px 8px;border-radius:20px">Confirmado</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">💰 Financeiro — Abril</div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:12px">Banho e tosa</span>
+              <span style="font-size:13px;font-weight:700;color:var(--green)">R$4.200</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:12px">Busca e entrega</span>
+              <span style="font-size:13px;font-weight:700;color:var(--teal)">R$2.670</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg-3);border-radius:10px">
+              <span style="font-size:12px">Produtos e acessórios</span>
+              <span style="font-size:13px;font-weight:700;color:var(--yellow)">R$1.530</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:10px">
+              <span style="font-size:13px;font-weight:700">Total do mês</span>
+              <span style="font-size:16px;font-weight:800;color:var(--green)">R$8.400</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showScreen(name, btn) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

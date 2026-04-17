@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pets Go">
+<meta name="theme-color" content="#080c18">
+<title>Pets Go — Gestores</title>
+<link rel="manifest" href="/manifest.json">
+<style>
+:root {
+  --bg:     #080c18;
+  --bg2:    #0f1628;
+  --bg3:    #17213a;
+  --bg4:    #1e2d4d;
+  --border: rgba(255,255,255,0.07);
+  --text:   #e8f0fe;
+  --muted:  rgba(232,240,254,0.42);
+  --blue:   #4f8ef7;
+  --green:  #34d399;
+  --yellow: #fbbf24;
+  --red:    #f87171;
+  --orange: #fb923c;
+  --purple: #a78bfa;
+  --mono:   'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SCREENS ──────────────────────────── */
+.screen { display: none; flex-direction: column; height: 100%; }
+.screen.active { display: flex; }
+
+/* ─── PIN SCREEN ───────────────────────── */
+#pin-screen {
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  padding-top: calc(40px + var(--safe-top));
+  background: radial-gradient(ellipse at center, #0f1f3d 0%, var(--bg) 70%);
+}
+
+.pin-logo { font-size: 56px; margin-bottom: 12px; }
+.pin-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.pin-sub { font-size: 14px; color: var(--muted); margin-bottom: 40px; }
+
+.pin-dots {
+  display: flex; gap: 14px; justify-content: center;
+  margin-bottom: 36px;
+}
+.pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  background: transparent;
+  transition: all 0.2s;
+}
+.pin-dot.filled { background: var(--yellow); border-color: var(--yellow); }
+.pin-dot.error  { background: var(--red);    border-color: var(--red);    animation: shake .3s; }
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 72px);
+  gap: 14px;
+  justify-content: center;
+}
+.pin-btn {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.pin-btn:active { background: var(--bg4); transform: scale(0.94); }
+.pin-btn.action { font-size: 18px; color: var(--blue); }
+.pin-btn.del    { font-size: 20px; color: var(--muted); }
+
+/* ─── TOPBAR ───────────────────────────── */
+.topbar {
+  padding: calc(16px + var(--safe-top)) 20px 14px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.topbar-left { display: flex; flex-direction: column; gap: 2px; }
+.topbar-nome { font-size: 17px; font-weight: 800; }
+.topbar-sync { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+.btn-refresh {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+.btn-refresh:active { transform: scale(0.9); }
+.btn-refresh.loading { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── SCROLL BODY ──────────────────────── */
+.scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  padding-bottom: calc(80px + var(--safe-bot));
+}
+
+/* ─── CARDS ────────────────────────────── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: var(--mono);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ─── FAT GRID ─────────────────────────── */
+.fat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.fat-item {
+  background: var(--bg3);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+}
+.fat-value {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  line-height: 1;
+}
+.fat-label { font-size: 10px; color: var(--muted); }
+
+/* ─── STAT ROW ─────────────────────────── */
+.stat-row {
+  display: flex; gap: 10px; margin-bottom: 12px;
+}
+.stat-box {
+  flex: 1;
+  background: var(--bg3);
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  font-family: var(--mono);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-lbl { font-size: 10px; color: var(--muted); }
+
+/* ─── FILIAL ROW ───────────────────────── */
+.filial-row { display: flex; flex-direction: column; gap: 10px; }
+.filial-item { display: flex; flex-direction: column; gap: 6px; }
+.filial-header { display: flex; justify-content: space-between; align-items: center; }
+.filial-name { font-size: 13px; font-weight: 600; }
+.filial-count { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+.bar-track { height: 4px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.bar-fill  { height: 100%; border-radius: 3px; transition: width .4s; }
+
+/* ─── LIST ITEM ────────────────────────── */
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.list-item:last-child { border-bottom: none; }
+.list-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+.list-text { flex: 1; min-width: 0; }
+.list-main { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list-sub  { font-size: 11px; color: var(--muted); }
+.list-badge {
+  font-size: 10px; font-weight: 700; font-family: var(--mono);
+  padding: 3px 8px; border-radius: 20px; flex-shrink: 0;
+}
+
+/* ─── ALERT BADGE ──────────────────────── */
+.alert-cnt {
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px; height: 18px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+/* ─── AGENT STATUS ─────────────────────── */
+.agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.agent-item {
+  background: var(--bg3);
+  border-radius: 12px;
+  padding: 12px;
+}
+.agent-name { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+.agent-ts   { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+.agent-dot  { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+/* ─── BOTTOM NAV ───────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding-bottom: var(--safe-bot);
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  display: flex;
+}
+.nav-tab {
+  flex: 1;
+  padding: 10px 0;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s;
+  color: var(--muted);
+}
+.nav-tab.active { color: var(--yellow); }
+.nav-icon { font-size: 20px; line-height: 1; }
+.nav-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+/* ─── TAB PAGES ────────────────────────── */
+.tab-page { display: none; }
+.tab-page.active { display: block; }
+
+/* ─── EMPTY ────────────────────────────── */
+.empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ─── TOAST ────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: calc(70px + var(--safe-bot));
+  left: 50%; transform: translateX(-50%);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 999;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+  TELA DE PIN
+══════════════════════════════════ -->
+<div id="pin-screen" class="screen active">
+  <div class="pin-logo">🐾</div>
+  <div class="pin-title">Pets Go</div>
+  <div class="pin-sub">Painel de Gestores — Digite seu PIN</div>
+
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+
+  <div class="pin-pad">
+    <button class="pin-btn" onclick="pinDigit('1')">1</button>
+    <button class="pin-btn" onclick="pinDigit('2')">2</button>
+    <button class="pin-btn" onclick="pinDigit('3')">3</button>
+    <button class="pin-btn" onclick="pinDigit('4')">4</button>
+    <button class="pin-btn" onclick="pinDigit('5')">5</button>
+    <button class="pin-btn" onclick="pinDigit('6')">6</button>
+    <button class="pin-btn" onclick="pinDigit('7')">7</button>
+    <button class="pin-btn" onclick="pinDigit('8')">8</button>
+    <button class="pin-btn" onclick="pinDigit('9')">9</button>
+    <button class="pin-btn action" onclick="pinDigit('biometria')">⌫</button>
+    <button class="pin-btn" onclick="pinDigit('0')">0</button>
+    <button class="pin-btn del" onclick="pinDel()">⌫</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+  APP PRINCIPAL
+══════════════════════════════════ -->
+<div id="app-screen" class="screen">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-nome" id="topbar-nome">🐾 Pets Go</div>
+      <div class="topbar-sync" id="topbar-sync">Carregando...</div>
+    </div>
+    <button class="btn-refresh" id="btn-refresh" onclick="carregarDados()" title="Atualizar">↻</button>
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="scroll-body">
+
+    <!-- TAB: HOJE -->
+    <div id="tab-hoje" class="tab-page active">
+
+      <!-- Faturamento -->
+      <div class="card">
+        <div class="card-title">💰 Faturamento</div>
+        <div class="fat-grid">
+          <div class="fat-item">
+            <div class="fat-value" id="fat-hoje" style="color:var(--green)">R$ —</div>
+            <div class="fat-label">Hoje</div>
+          </div>
+          <div class="fat-item">
+            <div class="fat-value" id="fat-semana" style="color:var(--blue)">R$ —</div>
+            <div class="fat-label">Semana</div>
+          </div>
+          <div class="fat-item">
+            <div class="fat-value" id="fat-mes" style="color:var(--yellow)">R$ —</div>
+            <div class="fat-label">Mês</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atendimentos -->
+      <div class="card">
+        <div class="card-title">✂️ Atendimentos de Hoje</div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-value" id="atend-total" style="color:var(--blue)">—</div>
+            <div class="stat-lbl">Total</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="atend-andamento" style="color:var(--yellow)">—</div>
+            <div class="stat-lbl">Em andamento</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="atend-concluidos" style="color:var(--green)">—</div>
+            <div class="stat-lbl">Concluídos</div>
+          </div>
+        </div>
+        <div id="filial-rows" class="filial-row"></div>
+      </div>
+
+      <!-- Agendados hoje -->
+      <div class="card">
+        <div class="card-title">📅 Agendados para Hoje</div>
+        <div id="agenda-list"></div>
+      </div>
+
+    </div>
+
+    <!-- TAB: ALERTAS -->
+    <div id="tab-alertas" class="tab-page">
+
+      <div class="card">
+        <div class="card-title">
+          🎂 Aniversários Hoje
+          <span id="aniv-cnt"></span>
+        </div>
+        <div id="aniv-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          🔴 Estoque Crítico — Zerado
+          <span id="crit-cnt"></span>
+        </div>
+        <div id="estoque-critico-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          🟡 Estoque Baixo
+          <span id="baixo-cnt"></span>
+        </div>
+        <div id="estoque-baixo-list"></div>
+      </div>
+
+    </div>
+
+    <!-- TAB: AGENTES -->
+    <div id="tab-agentes" class="tab-page">
+
+      <div class="card">
+        <div class="card-title">🤖 Status dos Agentes IA</div>
+        <div class="agent-grid" id="agent-grid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px;">📋 Último Relatório Semanal</div>
+        <div id="ultimo-relatorio" style="font-size:13px;color:var(--muted);line-height:1.6;">
+          Nenhum relatório gerado ainda.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-tab active" onclick="trocarTab('hoje', this)">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Hoje</div>
+    </div>
+    <div class="nav-tab" onclick="trocarTab('alertas', this)" id="tab-nav-alertas">
+      <div class="nav-icon">🔔</div>
+      <div class="nav-label">Alertas</div>
+    </div>
+    <div class="nav-tab" onclick="trocarTab('agentes', this)">
+      <div class="nav-icon">🤖</div>
+      <div class="nav-label">Agentes</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ────────────────────────────────────
+// Após deploy no Railway, este arquivo é servido pelo mesmo servidor.
+// A URL base é a mesma origem — não precisa configurar nada.
+const API_BASE = '';  // vazio = mesma origem (Railway)
+
+// ─── ESTADO ────────────────────────────────────
+let pinBuffer = '';
+let pinAtual  = '';
+let dados     = null;
+
+// ─── PWA INSTALL ───────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+// ─── PIN ───────────────────────────────────────
+function pinDigit(d) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += d;
+  atualizarDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(verificarPin, 120);
+  }
+}
+
+function pinDel() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  atualizarDots();
+}
+
+function atualizarDots(erro = false) {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('d' + i);
+    dot.className = 'pin-dot' + (i < pinBuffer.length ? (erro ? ' error' : ' filled') : '');
+  }
+}
+
+async function verificarPin() {
+  try {
+    const res = await fetch(API_BASE + '/dashboard', {
+      headers: { 'x-pin': pinBuffer }
+    });
+    if (res.status === 401) {
+      atualizarDots(true);
+      setTimeout(() => { pinBuffer = ''; atualizarDots(); }, 600);
+      toast('PIN incorreto');
+      return;
+    }
+    dados   = await res.json();
+    pinAtual = pinBuffer;
+    sessionStorage.setItem('pg_pin', pinAtual);
+    mostrarApp();
+  } catch {
+    toast('Erro de conexão — tente novamente');
+    pinBuffer = '';
+    atualizarDots();
+  }
+}
+
+// Verifica se já tem PIN salvo na sessão
+const pinSalvo = sessionStorage.getItem('pg_pin');
+if (pinSalvo) {
+  pinBuffer = pinSalvo;
+  verificarPin();
+}
+
+// ─── NAVEGAÇÃO ─────────────────────────────────
+function mostrarApp() {
+  document.getElementById('pin-screen').classList.remove('active');
+  document.getElementById('app-screen').classList.add('active');
+  renderDados();
+}
+
+function trocarTab(nome, el) {
+  document.querySelectorAll('.tab-page').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + nome).classList.add('active');
+  el.classList.add('active');
+}
+
+// ─── ATUALIZAR DADOS ───────────────────────────
+async function carregarDados() {
+  const btn = document.getElementById('btn-refresh');
+  btn.classList.add('loading');
+  try {
+    const res = await fetch(API_BASE + '/dashboard', {
+      headers: { 'x-pin': pinAtual }
+    });
+    if (!res.ok) { toast('Erro ao carregar dados'); return; }
+    dados = await res.json();
+    renderDados();
+    toast('Dados atualizados ✓');
+  } catch {
+    toast('Sem conexão');
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
+// Auto-refresh a cada 5 minutos
+setInterval(() => { if (pinAtual) carregarDados(); }, 5 * 60 * 1000);
+
+// ─── RENDER ────────────────────────────────────
+function brl(v) {
+  if (v >= 1000) return 'R$' + (v / 1000).toFixed(1) + 'k';
+  return 'R$' + v.toFixed(0);
+}
+
+function tsRelativa(iso) {
+  if (!iso) return 'nunca';
+  const diff = Date.now() - new Date(iso).getTime();
+  const min  = Math.floor(diff / 60000);
+  if (min < 1)   return 'agora';
+  if (min < 60)  return min + 'min atrás';
+  const h = Math.floor(min / 60);
+  if (h < 24)    return h + 'h atrás';
+  return Math.floor(h / 24) + 'd atrás';
+}
+
+function renderDados() {
+  if (!dados) return;
+
+  // Topbar
+  document.getElementById('topbar-nome').textContent =
+    (dados.config?.emoji || '🐾') + ' ' + (dados.config?.nome || 'Pets Go');
+  document.getElementById('topbar-sync').textContent =
+    'Sync ' + tsRelativa(dados.ultimoSync);
+
+  // Faturamento
+  setText('fat-hoje',   brl(dados.faturamento?.hoje   || 0));
+  setText('fat-semana', brl(dados.faturamento?.semana || 0));
+  setText('fat-mes',    brl(dados.faturamento?.mes    || 0));
+
+  // Atendimentos
+  const at = dados.atendimentos || {};
+  setText('atend-total',      at.hoje       || 0);
+  setText('atend-andamento',  at.emAndamento || 0);
+  setText('atend-concluidos', at.concluidos  || 0);
+
+  // Por filial
+  const pf       = at.porFilial || {};
+  const filiais   = Object.entries(pf).sort((a, b) => b[1].atendimentos - a[1].atendimentos);
+  const maxAtend  = filiais[0]?.[1].atendimentos || 1;
+  const filEl     = document.getElementById('filial-rows');
+
+  if (filiais.length === 0) {
+    filEl.innerHTML = '<div class="empty">Nenhuma filial com atendimento hoje</div>';
+  } else {
+    filEl.innerHTML = filiais.map(([nome, info]) => {
+      const pct = Math.round((info.atendimentos / maxAtend) * 100);
+      return `
+        <div class="filial-item">
+          <div class="filial-header">
+            <span class="filial-name">${nome}</span>
+            <span class="filial-count">${info.atendimentos} atend · ${brl(info.faturamento)}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${pct}%;background:var(--blue)"></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // Agendados hoje
+  const agenda = dados.agendamentosHoje || [];
+  const agendaEl = document.getElementById('agenda-list');
+  if (agenda.length === 0) {
+    agendaEl.innerHTML = '<div class="empty">Nenhum agendamento pendente hoje</div>';
+  } else {
+    agendaEl.innerHTML = agenda.map(a => `
+      <div class="list-item">
+        <div class="list-icon" style="background:rgba(79,142,247,.12)">📅</div>
+        <div class="list-text">
+          <div class="list-main">${a.pet} — ${a.servico || '—'}</div>
+          <div class="list-sub">${a.filial} · ${a.horario}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── ALERTAS ──
+  const al = dados.alertas || {};
+
+  // Aniversários
+  const anivs = al.aniversariosHoje || [];
+  document.getElementById('aniv-cnt').innerHTML =
+    anivs.length ? `<span class="alert-cnt">${anivs.length}</span>` : '';
+  document.getElementById('aniv-list').innerHTML = anivs.length === 0
+    ? '<div class="empty">Nenhum aniversário hoje 🎉</div>'
+    : anivs.map(p => `
+        <div class="list-item">
+          <div class="list-icon" style="background:rgba(251,191,36,.12)">🎂</div>
+          <div class="list-text">
+            <div class="list-main">${p.nome}</div>
+            <div class="list-sub">Nascimento: ${p.dtnasc || '—'}</div>
+          </div>
+        </div>`).join('');
+
+  // Estoque crítico
+  const criticos = al.estoqueCritico || [];
+  document.getElementById('crit-cnt').innerHTML =
+    criticos.length ? `<span class="alert-cnt">${criticos.length}</span>` : '';
+  document.getElementById('estoque-critico-list').innerHTML = criticos.length === 0
+    ? '<div class="empty">Nenhum item zerado ✓</div>'
+    : criticos.map(e => `
+        <div class="list-item">
+          <div class="list-icon" style="background:rgba(248,113,113,.12)">🔴</div>
+          <div class="list-text">
+            <div class="list-main">${e.nome}</div>
+            <div class="list-sub">${e.filial}</div>
+          </div>
+          <span class="list-badge" style="background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)">ZERADO</span>
+        </div>`).join('');
+
+  // Estoque baixo
+  const baixos = al.estoqueBaixo || [];
+  document.getElementById('baixo-cnt').innerHTML =
+    baixos.length ? `<span class="alert-cnt" style="background:var(--orange)">${baixos.length}</span>` : '';
+  document.getElementById('estoque-baixo-list').innerHTML = baixos.length === 0
+    ? '<div class="empty">Todos os itens no nível adequado ✓</div>'
+    : baixos.map(e => `
+        <div class="list-item">
+          <div class="list-icon" style="background:rgba(251,146,60,.12)">🟡</div>
+          <div class="list-text">
+            <div class="list-main">${e.nome}</div>
+            <div class="list-sub">${e.filial} · ${e.quantidade} un. restantes</div>
+          </div>
+        </div>`).join('');
+
+  // Badge alerta na nav
+  const navAlerta = document.getElementById('tab-nav-alertas');
+  const totalAlert = (al.estoqueCritico?.length || 0) + (al.aniversariosHoje?.length || 0);
+  navAlerta.querySelector('.nav-icon').textContent = totalAlert > 0
+    ? '🔔' : '🔕';
+
+  // ── AGENTES ──
+  const agGrid = document.getElementById('agent-grid');
+  const ags = dados.agentes || {};
+  const configs = [
+    { key: 'relatorio',   nome: 'Relatório Semanal', icon: '📊' },
+    { key: 'aniversario', nome: 'Aniversário Pets',  icon: '🎂' },
+    { key: 'estoque',     nome: 'Alerta Estoque',    icon: '📦' },
+    { key: 'lembrete',    nome: 'Lembretes',         icon: '🔔' }
+  ];
+  agGrid.innerHTML = configs.map(({ key, nome, icon }) => {
+    const log  = ags[key];
+    const ok   = log?.status === 'ok';
+    const cor  = ok ? 'var(--green)' : 'var(--muted)';
+    return `
+      <div class="agent-item">
+        <div class="agent-name">${icon} ${nome}</div>
+        <div class="agent-ts">
+          <span class="agent-dot" style="background:${cor}"></span>
+          ${log ? tsRelativa(log.ts) : 'aguardando'}
+        </div>
+        ${log?.resumo ? `<div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4">${log.resumo}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  // Último relatório
+  const relEl = document.getElementById('ultimo-relatorio');
+  const relLog = ags.relatorio;
+  relEl.textContent = relLog?.resumo
+    ? `Última análise (${tsRelativa(relLog.ts)}): ${relLog.resumo}`
+    : 'Nenhum relatório gerado ainda. O próximo sai na próxima segunda-feira às 8h.';
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+// ─── TOAST ─────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

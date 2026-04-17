@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa Mental — Orçamentos Pro</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 15px;
+      color: #94a3b8;
+    }
+
+    /* TABS DE NAVEGAÇÃO */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 20px 32px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #1e293b;
+      color: #94a3b8;
+    }
+    .tab.active {
+      color: white;
+    }
+    .tab:hover { opacity: 0.85; }
+
+    /* SECTIONS */
+    .section { display: none; padding: 0 24px 60px; max-width: 1100px; margin: 0 auto; }
+    .section.active { display: block; }
+
+    /* ========================
+       SEÇÃO 1 — O QUE É
+    ======================== */
+    .what-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .what-card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #334155;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .what-card:hover { transform: translateY(-4px); }
+
+    .what-icon { font-size: 36px; margin-bottom: 12px; }
+    .what-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .what-card p { font-size: 14px; color: #94a3b8; line-height: 1.6; }
+
+    /* CAMADAS VISUAIS */
+    .layers {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 32px;
+    }
+    .layer {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 24px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .layer-icon { font-size: 32px; flex-shrink: 0; }
+    .layer-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .layer-content p { font-size: 13px; color: #94a3b8; }
+    .layer-arrow {
+      text-align: center;
+      font-size: 20px;
+      color: #475569;
+      padding: 4px 0;
+    }
+
+    /* ========================
+       SEÇÃO 2 — ARQUIVOS
+    ======================== */
+    .files-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+    }
+
+    .file-card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 18px 20px;
+      border: 1px solid #334155;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: transform 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .file-card:hover { transform: translateX(4px); }
+
+    .file-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .file-info { flex: 1; }
+    .file-name {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: monospace;
+      margin-bottom: 4px;
+    }
+    .file-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .file-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* ========================
+       SEÇÃO 3 — TECNOLOGIAS
+    ======================== */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .tech-card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #334155;
+      transition: transform 0.2s;
+    }
+    .tech-card:hover { transform: translateY(-4px); }
+    .tech-logo { font-size: 40px; margin-bottom: 12px; }
+    .tech-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .tech-card p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+    .tech-analogy {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      font-size: 12px;
+      color: #64748b;
+    }
+    .tech-analogy strong { color: #94a3b8; }
+
+    /* ========================
+       SEÇÃO 4 — FLUXO
+    ======================== */
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .flow-step {
+      display: flex;
+      gap: 20px;
+      position: relative;
+    }
+    .flow-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50px;
+      flex-shrink: 0;
+    }
+    .flow-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .flow-line {
+      width: 2px;
+      flex: 1;
+      background: #1e293b;
+      margin: 6px 0;
+    }
+    .flow-content {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      flex: 1;
+      border: 1px solid #334155;
+    }
+    .flow-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .flow-content p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+    .flow-content .code {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: #0f172a;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #7dd3fc;
+    }
+
+    /* ========================
+       SEÇÃO 5 — PRÓXIMOS PASSOS
+    ======================== */
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .phase-card {
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #334155;
+    }
+    .phase-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+    .phase-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .phase-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #1e293b;
+      font-size: 14px;
+    }
+    .phase-item:last-child { border-bottom: none; }
+    .phase-item-icon { flex-shrink: 0; font-size: 16px; }
+    .phase-item-text { color: #cbd5e1; line-height: 1.4; }
+    .phase-item-text strong { color: white; display: block; }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: white;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid #1e293b;
+      margin: 28px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🗺️ Mapa Mental — Orçamentos Pro</h1>
+    <p>Entenda cada parte do que foi construído e o que vem a seguir</p>
+  </div>
+
+  <!-- NAVEGAÇÃO POR ABAS -->
+  <div class="tabs">
+    <button class="tab active" style="background:#1e40af" onclick="mostrarAba('oqueé')">1. O que é o sistema</button>
+    <button class="tab" onclick="mostrarAba('arquivos')" data-color="#6d28d9">2. Arquivos do projeto</button>
+    <button class="tab" onclick="mostrarAba('tecnologias')" data-color="#065f46">3. Tecnologias usadas</button>
+    <button class="tab" onclick="mostrarAba('fluxo')" data-color="#92400e">4. Como os dados fluem</button>
+    <button class="tab" onclick="mostrarAba('proximos')" data-color="#991b1b">5. Próximos passos</button>
+  </div>
+
+  <!-- ABA 1: O QUE É -->
+  <div class="section active" id="aba-oqueé">
+    <div class="section-title">O que é o sistema?</div>
+    <div class="section-subtitle">
+      Você construiu um sistema web completo — igual a qualquer sistema que uma empresa paga caro para ter.
+      Ele roda no browser, não precisa de app instalado, funciona em qualquer computador.
+    </div>
+
+    <div class="what-grid">
+      <div class="what-card" style="border-color:#1d4ed8">
+        <div class="what-icon">📋</div>
+        <h3>Sistema de Orçamentos</h3>
+        <p>Cria orçamentos profissionais em segundos. O cliente recebe um PDF com o logo da empresa, itens detalhados e valor total. Elimina o Word, o Excel e o papel.</p>
+      </div>
+      <div class="what-card" style="border-color:#6d28d9">
+        <div class="what-icon">👥</div>
+        <h3>CRM Básico de Clientes</h3>
+        <p>Guarda todos os clientes com nome, email, telefone e empresa. Você sabe quantos orçamentos cada um recebeu e qual foi o histórico de negociação.</p>
+      </div>
+      <div class="what-card" style="border-color:#065f46">
+        <div class="what-icon">📊</div>
+        <h3>Dashboard com Métricas</h3>
+        <p>Mostra em tempo real: valor total em aberto, quanto foi aceito no mês, quantos clientes você tem e sua taxa de conversão.</p>
+      </div>
+      <div class="what-card" style="border-color:#92400e">
+        <div class="what-icon">📄</div>
+        <h3>Geração de PDF Profissional</h3>
+        <p>Um clique gera um PDF com o nome da empresa, dados do cliente, tabela de itens, desconto e total. Pronto para enviar pelo WhatsApp ou email.</p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section-title" style="font-size:18px">As 3 camadas do sistema</div>
+    <p class="section-subtitle">Todo sistema digital funciona em camadas. Entender isso é a base de tudo.</p>
+
+    <div class="layers">
+      <div class="layer" style="background:#1e293b; border:1px solid #1d4ed8">
+        <div class="layer-icon">🖥️</div>
+        <div class="layer-content">
+          <h4 style="color:#60a5fa">Camada 1 — Interface (o que o usuário vê)</h4>
+          <p>São os arquivos <strong>.html</strong> e <strong>.css</strong>. O que aparece na tela: botões, formulários, tabelas, cores, layout. O usuário interage com essa camada.</p>
+        </div>
+      </div>
+      <div class="layer-arrow">↕</div>
+      <div class="layer" style="background:#1e293b; border:1px solid #6d28d9">
+        <div class="layer-icon">⚙️</div>
+        <div class="layer-content">
+          <h4 style="color:#c084fc">Camada 2 — Lógica (o que faz as coisas funcionarem)</h4>
+          <p>São os arquivos <strong>.js</strong>. Quando você clica em "Salvar", o JavaScript pega os dados do formulário, valida, formata e manda pro banco. É a inteligência do sistema.</p>
+        </div>
+      </div>
+      <div class="layer-arrow">↕</div>
+      <div class="layer" style="background:#1e293b; border:1px solid #065f46">
+        <div class="layer-icon">💾</div>
+        <div class="layer-content">
+          <h4 style="color:#34d399">Camada 3 — Dados (onde as informações ficam guardadas)</h4>
+          <p>Hoje usamos o <strong>localStorage</strong> — uma memória interna do browser. Na Fase 2, migramos pro <strong>Supabase</strong> (banco de dados real na nuvem). A lógica não muda, só onde os dados vão.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 2: ARQUIVOS -->
+  <div class="section" id="aba-arquivos">
+    <div class="section-title">Arquivos do projeto</div>
+    <div class="section-subtitle">
+      Cada arquivo tem uma responsabilidade única. Isso se chama <strong>separação de responsabilidades</strong> — um princípio fundamental de desenvolvimento.
+    </div>
+
+    <p style="font-size:13px;color:#64748b;margin-bottom:16px;font-family:monospace">
+      📁 orcamentos-crm/
+    </p>
+
+    <div class="files-grid">
+
+      <div class="file-card" style="border-color:#1d4ed8">
+        <div class="file-icon" style="background:#1e3a8a">🏠</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#60a5fa">index.html</div>
+          <div class="file-desc">A porta de entrada. Todo site do mundo usa <code>index</code> como página inicial — é uma convenção universal. Aqui fica o Dashboard com as métricas do negócio.</div>
+          <div class="file-tag" style="background:#1e3a8a;color:#93c5fd">Página inicial</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#6d28d9">
+        <div class="file-icon" style="background:#3b0764">📝</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#c084fc">novo-orcamento.html</div>
+          <div class="file-desc">O formulário de criação e edição de orçamentos. Tem os campos do cliente, os itens com quantidade e preço, cálculo automático de total e desconto.</div>
+          <div class="file-tag" style="background:#3b0764;color:#d8b4fe">Formulário</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#065f46">
+        <div class="file-icon" style="background:#022c22">👁️</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#34d399">visualizar-orcamento.html</div>
+          <div class="file-desc">A tela de visualização do orçamento finalizado. Mostra como vai ficar o PDF, permite mudar o status (Enviado, Aceito, Recusado) e tem o botão de baixar PDF.</div>
+          <div class="file-tag" style="background:#022c22;color:#6ee7b7">Visualização + PDF</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#92400e">
+        <div class="file-icon" style="background:#431407">📋</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#fb923c">orcamentos.html</div>
+          <div class="file-desc">A lista completa de todos os orçamentos criados. Tem busca por nome/título e filtro por status. Você vê tudo de uma vez e navega fácil.</div>
+          <div class="file-tag" style="background:#431407;color:#fdba74">Lista + Filtros</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#991b1b">
+        <div class="file-icon" style="background:#450a0a">👥</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#f87171">clientes.html</div>
+          <div class="file-desc">O CRM básico. Cadastra, edita e busca clientes. Mostra quantos orçamentos cada cliente recebeu. Tem botão de criar orçamento direto para um cliente.</div>
+          <div class="file-tag" style="background:#450a0a;color:#fca5a5">CRM de Clientes</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#0369a1">
+        <div class="file-icon" style="background:#0c4a6e">🎨</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#38bdf8">css/style.css</div>
+          <div class="file-desc">Toda a aparência visual do sistema: cores, fontes, espaçamentos, botões, tabelas, badges de status, modal, layout da sidebar. É a "roupa" de tudo.</div>
+          <div class="file-tag" style="background:#0c4a6e;color:#7dd3fc">Estilo Visual</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#166534">
+        <div class="file-icon" style="background:#052e16">💾</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#4ade80">js/storage.js</div>
+          <div class="file-desc">A camada de dados. Toda operação de salvar, buscar, editar e excluir passa por aqui. Hoje usa localStorage. Na Fase 2, só esse arquivo muda — o resto do sistema não precisa saber onde os dados estão.</div>
+          <div class="file-tag" style="background:#052e16;color:#86efac">Banco de Dados</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#1e40af">
+        <div class="file-icon" style="background:#1e3a8a">⚙️</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#818cf8">js/app.js</div>
+          <div class="file-desc">Funções que todas as páginas usam: formatar moeda (R$ 1.500,00), formatar data, mostrar notificação toast, verificar configuração inicial. Carregado em todas as páginas.</div>
+          <div class="file-tag" style="background:#1e3a8a;color:#a5b4fc">Funções Globais</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#7c2d12">
+        <div class="file-icon" style="background:#431407">📄</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#fb923c">js/pdf.js</div>
+          <div class="file-desc">Toda a lógica de geração do PDF. Usa a biblioteca jsPDF (carregada via internet). Monta o cabeçalho com nome da empresa, dados do cliente, tabela de itens, totais e rodapé.</div>
+          <div class="file-tag" style="background:#431407;color:#fed7aa">Gerador de PDF</div>
+        </div>
+      </div>
+
+      <div class="file-card" style="border-color:#334155">
+        <div class="file-icon" style="background:#0f172a">🚀</div>
+        <div class="file-info">
+          <div class="file-name" style="color:#94a3b8">server.js + iniciar.bat</div>
+          <div class="file-desc">Um servidor local simples para rodar o sistema no seu computador durante o desenvolvimento. Em produção (quando estiver online), o Netlify ou Vercel faz esse papel automaticamente.</div>
+          <div class="file-tag" style="background:#0f172a;color:#64748b">Servidor Local</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ABA 3: TECNOLOGIAS -->
+  <div class="section" id="aba-tecnologias">
+    <div class="section-title">Tecnologias usadas</div>
+    <div class="section-subtitle">
+      Cada tecnologia foi escolhida por um motivo. Nada foi adicionado sem necessidade.
+    </div>
+
+    <div class="tech-grid">
+
+      <div class="tech-card" style="border-color:#f97316">
+        <div class="tech-logo">🧱</div>
+        <h3 style="color:#fb923c">HTML</h3>
+        <p>Define a <strong>estrutura</strong> da página. Cada elemento (botão, campo, tabela) é uma tag HTML. É a espinha dorsal de qualquer sistema web — existe desde o início da internet.</p>
+        <div class="tech-analogy">
+          <strong>Analogia:</strong> As paredes, portas e janelas de uma casa. A estrutura física.
+        </div>
+      </div>
+
+      <div class="tech-card" style="border-color:#3b82f6">
+        <div class="tech-logo">🎨</div>
+        <h3 style="color:#60a5fa">CSS</h3>
+        <p>Define a <strong>aparência visual</strong>. Cor dos botões, tamanho das fontes, espaçamentos, animações, layout da sidebar. Sem CSS, o sistema seria só texto preto numa página branca.</p>
+        <div class="tech-analogy">
+          <strong>Analogia:</strong> A pintura, os móveis, a iluminação. A decoração da casa.
+        </div>
+      </div>
+
+      <div class="tech-card" style="border-color:#eab308">
+        <div class="tech-logo">⚡</div>
+        <h3 style="color:#facc15">JavaScript</h3>
+        <p>Dá <strong>vida</strong> ao sistema. Quando você clica em um botão, preenche um campo ou vê o total calculando automaticamente — é o JavaScript agindo. É a única linguagem que roda no browser.</p>
+        <div class="tech-analogy">
+          <strong>Analogia:</strong> A eletricidade e a hidráulica. O que faz as coisas funcionarem.
+        </div>
+      </div>
+
+      <div class="tech-card" style="border-color:#22c55e">
+        <div class="tech-logo">💾</div>
+        <h3 style="color:#4ade80">localStorage</h3>
+        <p>Um banco de dados que já vem embutido em todo browser. Guarda dados em formato JSON no próprio computador. Funciona offline, sem internet. Limite: ~5MB por domínio.</p>
+        <div class="tech-analogy">
+          <strong>Analogia:</strong> Uma gaveta de arquivos dentro do computador. Simples e eficiente pro MVP.
+        </div>
+      </div>
+
+      <div class="tech-card" style="border-color:#ef4444">
+        <div class="tech-logo">📄</div>
+        <h3 style="color:#f87171">jsPDF</h3>
+        <p>Uma biblioteca JavaScript que gera PDFs diretamente no browser, sem precisar de servidor. Carregada via CDN (uma URL) — sem instalar nada. Suporta texto, tabelas, cores e formas.</p>
+        <div class="tech-analogy">
+          <strong>Analogia:</strong> Uma impressora inteligente dentro do browser que cria documentos profissionais.
+        </div>
+      </div>
+
+      <div class="tech-card" style="border-color:#8b5cf6">
+        <div class="tech-logo">📡</div>
+        <h3 style="color:#a78bfa">CDN</h3>
+        <p><em>Content Delivery Network</em>. Um servidor na internet que distribui bibliotecas prontas. Quando usamos jsPDF via CDN, estamos pegando esse código de um servidor externo — não precisamos baixar nem instalar nada.</p>
+        <div class="tech-analogy">
+          <strong>Analogia:</strong> Uma loja de ferramentas na nuvem. Você "aluga" a ferramenta quando precisa, sem comprar.
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section-title" style="font-size:18px">O que vem na Fase 2</div>
+    <p class="section-subtitle">Quando você tiver o primeiro cliente pagando, adicionamos essas tecnologias:</p>
+
+    <div class="tech-grid">
+      <div class="tech-card" style="border-color:#0891b2;opacity:0.7">
+        <div class="tech-logo">🗄️</div>
+        <h3 style="color:#22d3ee">Supabase</h3>
+        <p>Banco de dados PostgreSQL na nuvem com API REST automática. Substitui o localStorage. Dados ficam na internet, acessíveis de qualquer lugar. Gratuito até 50.000 linhas.</p>
+      </div>
+      <div class="tech-card" style="border-color:#6366f1;opacity:0.7">
+        <div class="tech-logo">⚛️</div>
+        <h3 style="color:#818cf8">Next.js</h3>
+        <p>Framework React para construir sistemas mais complexos. Adiciona rotas, autenticação, server-side rendering. A escolha padrão do mercado para SaaS em 2026.</p>
+      </div>
+      <div class="tech-card" style="border-color:#10b981;opacity:0.7">
+        <div class="tech-logo">💳</div>
+        <h3 style="color:#34d399">Stripe</h3>
+        <p>Plataforma de pagamento. Quando virar SaaS, o cliente assina um plano e paga automaticamente todo mês. Você recebe sem fazer nada manualmente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 4: FLUXO -->
+  <div class="section" id="aba-fluxo">
+    <div class="section-title">Como os dados fluem</div>
+    <div class="section-subtitle">
+      Entender esse fluxo é entender como qualquer sistema digital funciona. Segue o caminho de um orçamento desde o clique até o PDF.
+    </div>
+
+    <div class="flow">
+
+      <div class="flow-step">
+        <div class="flow-left">
+          <div class="flow-num" style="background:#1d4ed8">1</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-content" style="border-color:#1d4ed8">
+          <h4 style="color:#60a5fa">Usuário preenche o formulário</h4>
+          <p>Em <code>novo-orcamento.html</code>, você digita nome do cliente, adiciona itens com preço e quantidade. O JavaScript calcula os totais em tempo real enquanto você digita.</p>
+          <div class="code">oninput="calcularItem(idx)" → atualiza subtotal automaticamente</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left">
+          <div class="flow-num" style="background:#6d28d9">2</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-content" style="border-color:#6d28d9">
+          <h4 style="color:#c084fc">Clica em "Salvar e Visualizar"</h4>
+          <p>O JavaScript coleta todos os dados do formulário, valida (nome preenchido? tem itens?), e chama a função <code>Storage.salvarOrcamento()</code>.</p>
+          <div class="code">const dados = coletarDados() → Storage.salvarOrcamento(dados)</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left">
+          <div class="flow-num" style="background:#065f46">3</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-content" style="border-color:#065f46">
+          <h4 style="color:#34d399">storage.js salva no banco</h4>
+          <p>O arquivo <code>storage.js</code> pega esses dados, adiciona um ID único e a data de criação, e salva em <code>localStorage</code>. Pensa no localStorage como uma gaveta JSON dentro do browser.</p>
+          <div class="code">localStorage.setItem('orcamentos', JSON.stringify(lista))</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left">
+          <div class="flow-num" style="background:#92400e">4</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-content" style="border-color:#92400e">
+          <h4 style="color:#fb923c">Browser redireciona para visualização</h4>
+          <p>Após salvar, o sistema redireciona para <code>visualizar-orcamento.html?id=abc123</code>. O <code>?id=abc123</code> na URL é chamado de <em>query string</em> — é como passamos informação entre páginas.</p>
+          <div class="code">window.location.href = `visualizar-orcamento.html?id=${orc.id}`</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left">
+          <div class="flow-num" style="background:#991b1b">5</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-content" style="border-color:#991b1b">
+          <h4 style="color:#f87171">Página lê o orçamento e renderiza</h4>
+          <p>A página de visualização pega o <code>id</code> da URL, busca o orçamento no localStorage, e escreve os dados no HTML dinamicamente. Isso se chama <em>renderização</em>.</p>
+          <div class="code">const id = params.get('id') → Storage.getOrcamentos().find(o => o.id === id)</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left">
+          <div class="flow-num" style="background:#0369a1">6</div>
+        </div>
+        <div class="flow-content" style="border-color:#0369a1">
+          <h4 style="color:#38bdf8">Clica "Baixar PDF" → gerarPDF()</h4>
+          <p>O <code>pdf.js</code> usa a biblioteca jsPDF para criar um documento PDF em memória, monta o layout com os dados do orçamento, e dispara o download automático no browser. Tudo sem servidor.</p>
+          <div class="code">const doc = new jsPDF() → doc.save('orcamento-001.pdf')</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ABA 5: PRÓXIMOS PASSOS -->
+  <div class="section" id="aba-proximos">
+    <div class="section-title">Próximos passos</div>
+    <div class="section-subtitle">
+      O projeto está dividido em 3 fases. Cada fase tem um objetivo claro de negócio e um conjunto de funcionalidades técnicas.
+    </div>
+
+    <div class="phases">
+
+      <div class="phase-card" style="background:#0c1a3b; border-color:#1d4ed8">
+        <div class="phase-tag" style="background:#1e3a8a;color:#93c5fd">Fase 1 — Hoje</div>
+        <h3>MVP Vendável</h3>
+
+        <div class="phase-item">
+          <div class="phase-item-icon">⚙️</div>
+          <div class="phase-item-text">
+            <strong>Página de Configurações</strong>
+            Logo da empresa, telefone, email, endereço — aparece no PDF gerado
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">💬</div>
+          <div class="phase-item-text">
+            <strong>Botão de WhatsApp</strong>
+            Abre conversa com o cliente com mensagem já escrita sobre o orçamento
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">📄</div>
+          <div class="phase-item-text">
+            <strong>PDF aprimorado</strong>
+            Logo da empresa no cabeçalho, cores personalizadas, rodapé com contato
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">🌐</div>
+          <div class="phase-item-text">
+            <strong>Deploy no Netlify</strong>
+            O sistema fica online com um link real — você pode mostrar para qualquer cliente
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">💰</div>
+          <div class="phase-item-text">
+            <strong>Meta de negócio</strong>
+            Fechar os primeiros 2–3 clientes pagando R$ 800–1.500 por setup
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card" style="background:#0d2618; border-color:#16a34a">
+        <div class="phase-tag" style="background:#14532d;color:#86efac">Fase 2 — Semanas 2–4</div>
+        <h3>Versão com Login</h3>
+
+        <div class="phase-item">
+          <div class="phase-item-icon">🔐</div>
+          <div class="phase-item-text">
+            <strong>Autenticação</strong>
+            Login com email e senha via Supabase Auth. Cada empresa acessa só os próprios dados
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">☁️</div>
+          <div class="phase-item-text">
+            <strong>Supabase (banco real)</strong>
+            Dados na nuvem, acessíveis de qualquer computador. Fim do localStorage
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">📧</div>
+          <div class="phase-item-text">
+            <strong>Envio de email</strong>
+            Envia o orçamento direto pelo sistema com link de aceitação para o cliente
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">🏢</div>
+          <div class="phase-item-text">
+            <strong>Multi-tenant</strong>
+            Múltiplas empresas usando o mesmo sistema, cada uma isolada
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">💰</div>
+          <div class="phase-item-text">
+            <strong>Meta de negócio</strong>
+            Cobrar mensalidade de R$ 100–200/mês por empresa
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card" style="background:#200a3b; border-color:#7c3aed">
+        <div class="phase-tag" style="background:#3b0764;color:#d8b4fe">Fase 3 — Mês 2–3</div>
+        <h3>Produto SaaS</h3>
+
+        <div class="phase-item">
+          <div class="phase-item-icon">💳</div>
+          <div class="phase-item-text">
+            <strong>Stripe (cobrança automática)</strong>
+            Cliente escolhe o plano e paga sozinho. Você recebe todo mês sem esforço
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">📱</div>
+          <div class="phase-item-text">
+            <strong>PWA (funciona no celular)</strong>
+            Pode ser instalado como app no iPhone/Android sem precisar da App Store
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">🤖</div>
+          <div class="phase-item-text">
+            <strong>IA com Ollama</strong>
+            Você já tem instalado. Sugere descrições de itens, estima preços, gera proposta automática
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">📊</div>
+          <div class="phase-item-text">
+            <strong>Relatórios avançados</strong>
+            Gráficos de faturamento, melhores clientes, sazonalidade, previsão de receita
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-item-icon">💰</div>
+          <div class="phase-item-text">
+            <strong>Meta de negócio</strong>
+            50 empresas × R$ 150/mês = R$ 7.500/mês recorrente
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+
+    <div style="background:#1e293b;border-radius:16px;padding:28px;border:1px solid #334155;max-width:700px;margin:0 auto;text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">🎯</div>
+      <h3 style="font-size:18px;margin-bottom:10px">Ação imediata</h3>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7">
+        Teste o sistema agora: crie um orçamento fictício, gere o PDF e veja se parece profissional o suficiente para mostrar a alguém.
+        <br /><br />
+        Depois mostre para <strong style="color:white">3 pessoas com pequenos negócios</strong> e pergunte:
+        <br /><em style="color:#facc15">"Você pagaria R$ 800 pra eu configurar isso personalizado pra você?"</em>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function mostrarAba(id) {
+      // Esconde todas as seções
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      // Desativa todos os tabs
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+        t.style.background = '#1e293b';
+        t.style.color = '#94a3b8';
+      });
+
+      // Ativa a seção
+      document.getElementById('aba-' + id).classList.add('active');
+
+      // Ativa o tab clicado
+      const tabs = document.querySelectorAll('.tab');
+      const cores = ['#1e40af', '#6d28d9', '#065f46', '#92400e', '#991b1b'];
+      const nomes = ['oqueé', 'arquivos', 'tecnologias', 'fluxo', 'proximos'];
+      const idx = nomes.indexOf(id);
+      if (idx >= 0) {
+        tabs[idx].classList.add('active');
+        tabs[idx].style.background = cores[idx];
+        tabs[idx].style.color = 'white';
+      }
+    }
+  </script>
+</body>
+</html>

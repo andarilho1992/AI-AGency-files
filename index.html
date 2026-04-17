@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andarilho Digital — Design Estratégico & SEO</title>
+  <meta name="description" content="Design de marca, sites de alta conversão e SEO para negócios que querem crescer sem depender de anúncios.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void:       '#0D0D0E',
+            surface:    '#161619',
+            'surface2': '#1E1E23',
+            spark:      '#AE330A',
+            'spark-d':  '#8a2808',
+            cream:      '#E7C9A3',
+            'cream-d':  'rgba(231,201,163,0.12)',
+            white:      '#F2F2F2',
+            muted:      '#A1A1AA',
+            'border-d': 'rgba(255,255,255,0.07)',
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            inter:  ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0D0D0E;
+      color: #F2F2F2;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+
+    /* Glow no CTA */
+    .btn-spark {
+      background: #AE330A;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 18px rgba(174,51,10,0.35), 0 0 36px rgba(174,51,10,0.15);
+    }
+    .btn-spark:hover {
+      background: #8a2808;
+      box-shadow: 0 0 28px rgba(174,51,10,0.55), 0 0 56px rgba(174,51,10,0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Gradient text */
+    .text-gradient {
+      background: linear-gradient(120deg, #E7C9A3 0%, #AE330A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Hero radial glow */
+    .hero-glow {
+      background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(174,51,10,0.13) 0%, transparent 68%);
+    }
+
+    /* Card hover */
+    .card-lift {
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1),
+                  border-color 0.3s ease,
+                  box-shadow 0.3s ease;
+    }
+    .card-lift:hover {
+      transform: translateY(-10px);
+      border-color: rgba(174,51,10,0.3) !important;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Service number ghost */
+    .ghost-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 7rem;
+      font-weight: 800;
+      line-height: 1;
+      color: rgba(174,51,10,0.06);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Noise texture */
+    .noise::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* Dot grid */
+    .dot-grid {
+      background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Smooth scroll offset */
+    section { scroll-margin-top: 80px; }
+
+    /* Nav link hover */
+    .nav-link {
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1.5px;
+      background: #AE330A;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #F2F2F2; }
+
+    /* Service icon wrapper */
+    .icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(174,51,10,0.1);
+      border: 1px solid rgba(174,51,10,0.2);
+      transition: all 0.3s;
+    }
+    .group:hover .icon-wrap {
+      background: rgba(174,51,10,0.18);
+      border-color: rgba(174,51,10,0.4);
+    }
+
+    /* Pill badge */
+    .badge-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 18px;
+      border-radius: 999px;
+      background: rgba(231,201,163,0.08);
+      border: 1px solid rgba(231,201,163,0.2);
+      color: #E7C9A3;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* Divider */
+    .divider-gradient {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    }
+
+    /* About photo placeholder */
+    .photo-placeholder {
+      background: linear-gradient(135deg, #1E1E23 0%, #2a2a30 100%);
+      border: 1px solid rgba(255,255,255,0.07);
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(174,51,10,0.05) 0%, transparent 60%);
+    }
+
+    /* Stats */
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #E7C9A3;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0D0D0E; }
+    ::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 4px; }
+  </style>
+</head>
+
+<body class="antialiased">
+
+<!-- ═══════════════════════════════════════
+     HEADER — NAVEGAÇÃO FIXA
+════════════════════════════════════════ -->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+    <div class="flex items-center justify-between h-20">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div id="logo-icon-wrap" class="flex items-center justify-center transition-all group-hover:scale-105 overflow-hidden" style="height:38px;">
+          <img id="logo-img" src="assets/img/logo.svg" style="height:38px;width:auto;object-fit:contain;" alt="Logo da Andarilho Digital">
+        </div>
+        <span class="font-outfit font-800 text-xl tracking-tight">
+          <span class="text-white font-semibold">Andarilho</span><span class="text-spark font-bold">.</span>
+        </span>
+      </a>
+
+      <!-- Nav Desktop -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#servicos" class="nav-link text-muted text-sm font-medium font-inter">Serviços</a>
+        <a href="#portfolio" class="nav-link text-muted text-sm font-medium font-inter">Portfólio</a>
+        <a href="#sobre" class="nav-link text-muted text-sm font-medium font-inter">Sobre</a>
+        <a href="#contato" class="nav-link text-muted text-sm font-medium font-inter">Contato</a>
+        <a href="#contato" data-cta="whatsapp" class="btn-spark text-white text-sm font-semibold font-inter px-5 py-2.5 rounded-xl">
+          Diagnóstico Grátis →
+        </a>
+      </nav>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-toggle" class="md:hidden text-muted hover:text-white transition-colors p-2">
+        <i class="ph-bold ph-list text-2xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-surface border-t border-white/5 px-6 py-6">
+    <nav class="flex flex-col gap-5">
+      <a href="#servicos" class="text-muted hover:text-white transition font-inter text-sm" onclick="closeMenu()">Serviços</a>
+      <a href="#sobre" class="text-muted hover:text-white transition font-inter text-sm" onclick="closeMenu()">Sobre</a>
+      <a href="#contato" class="text-muted hover:text-white transition font-inter text-sm" onclick="closeMenu()">Contato</a>
+      <a href="#contato" data-cta="whatsapp" class="btn-spark text-white text-sm font-semibold font-inter px-5 py-3 rounded-xl text-center mt-2">
+        Diagnóstico Grátis →
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════ -->
+<section id="hero-section" class="relative min-h-screen flex items-center justify-center dot-grid overflow-hidden pt-20">
+
+  <!-- Imagem de fundo -->
+  <div id="hero-bg" class="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none" style="opacity:0.28; background-image: url('assets/img/hero-bg.jpg');"></div>
+
+  <!-- Glow radial atrás -->
+  <div class="hero-glow absolute inset-0 pointer-events-none"></div>
+
+  <!-- Orbs decorativos -->
+  <div class="absolute top-1/4 -left-32 w-80 h-80 rounded-full bg-spark/5 blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-spark/5 blur-3xl pointer-events-none"></div>
+
+  <div class="relative z-10 mx-auto max-w-5xl px-6 lg:px-10 text-center py-32">
+
+    <!-- Badge -->
+    <div class="flex justify-center mb-8">
+      <span class="badge-pill">
+        <span class="w-2 h-2 rounded-full bg-spark animate-pulse"></span>
+        Agência de Design Estratégico &amp; SEO
+      </span>
+    </div>
+
+    <!-- H1 -->
+    <h1 class="font-outfit font-extrabold text-5xl sm:text-6xl lg:text-7xl leading-[1.08] tracking-tight mb-8">
+      Nós não fazemos<br class="hidden sm:block">
+      apenas sites bonitos.<br>
+      <span class="text-gradient">Construímos ativos</span><br class="hidden sm:block">
+      que geram vendas<br class="hidden sm:block">
+      todos os dias.
+    </h1>
+
+    <!-- Subtítulo -->
+    <p class="font-inter text-muted text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+      Design de marca, sites de alta conversão e inteligência orgânica (SEO) para negócios que não têm tempo a perder.
+    </p>
+
+    <!-- CTA -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a href="#contato" data-cta="whatsapp" class="btn-spark text-white font-inter font-semibold text-base px-8 py-4 rounded-2xl w-full sm:w-auto">
+        Agendar Diagnóstico Gratuito →
+      </a>
+      <a href="#servicos" class="text-muted hover:text-white font-inter text-sm transition-colors flex items-center gap-2 group">
+        Ver serviços
+        <i class="ph-bold ph-arrow-down text-sm group-hover:translate-y-1 transition-transform"></i>
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30 animate-bounce">
+      <div class="w-px h-12 bg-gradient-to-b from-transparent to-muted"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     PROBLEMA — 3 CARDS
+════════════════════════════════════════ -->
+<section id="problema" class="py-28 relative">
+  <div class="divider-gradient mb-28"></div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+
+    <!-- Título -->
+    <div class="text-center mb-16 max-w-3xl mx-auto">
+      <p class="font-inter text-cream text-sm font-medium tracking-widest uppercase mb-4">O Problema</p>
+      <h2 class="font-outfit font-extrabold text-4xl sm:text-5xl leading-tight">
+        A regra é clara: Se você não é encontrado, <span class="text-gradient">seu concorrente fatura por você.</span>
+      </h2>
+    </div>
+
+    <!-- Grid de cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Card 1 -->
+      <div class="card-lift group bg-surface border border-white/7 rounded-2xl p-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-spark/5 rounded-full -translate-y-16 translate-x-16 blur-xl"></div>
+        <div id="icon-prob-1" class="icon-wrap mb-6">
+          <i id="ic-ip1" class="ph-bold ph-gauge text-2xl text-spark"></i>
+        </div>
+        <h3 class="font-outfit font-semibold text-xl text-white mb-3">Site que é um peso morto</h3>
+        <p class="font-inter text-muted text-sm leading-relaxed">
+          Lento, sem tráfego e incapaz de converter. Cada segundo de carregamento custa visitantes — e visitantes custam dinheiro.
+        </p>
+        <div class="mt-6 pt-6 border-t border-white/5">
+          <span class="font-inter text-xs text-muted/60 uppercase tracking-widest">Impacto direto em receita</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card-lift group bg-surface border border-white/7 rounded-2xl p-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-spark/5 rounded-full -translate-y-16 translate-x-16 blur-xl"></div>
+        <div id="icon-prob-2" class="icon-wrap mb-6">
+          <i id="ic-ip2" class="ph-bold ph-shield-slash text-2xl text-spark"></i>
+        </div>
+        <h3 class="font-outfit font-semibold text-xl text-white mb-3">Marca sem confiança</h3>
+        <p class="font-inter text-muted text-sm leading-relaxed">
+          Design amador transmite amadorismo. Quando a marca não convence, o cliente pede desconto — ou vai para o concorrente sem hesitar.
+        </p>
+        <div class="mt-6 pt-6 border-t border-white/5">
+          <span class="font-inter text-xs text-muted/60 uppercase tracking-widest">Impacto direto no preço</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card-lift group bg-surface border border-white/7 rounded-2xl p-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-spark/5 rounded-full -translate-y-16 translate-x-16 blur-xl"></div>
+        <div id="icon-prob-3" class="icon-wrap mb-6">
+          <i id="ic-ip3" class="ph-bold ph-magnifying-glass-slash text-2xl text-spark"></i>
+        </div>
+        <h3 class="font-outfit font-semibold text-xl text-white mb-3">Invisível no Google</h3>
+        <p class="font-inter text-muted text-sm leading-relaxed">
+          Dependência 100% de anúncios caros e instáveis. Quando o dinheiro dos ads acaba, o fluxo de clientes seca junto com ele.
+        </p>
+        <div class="mt-6 pt-6 border-t border-white/5">
+          <span class="font-inter text-xs text-muted/60 uppercase tracking-widest">Impacto na sustentabilidade</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SERVIÇOS — ECOSSISTEMA DIGITAL
+════════════════════════════════════════ -->
+<section id="servicos" class="py-28 relative">
+  <div class="divider-gradient mb-28"></div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+
+    <!-- Título -->
+    <div class="text-center mb-20">
+      <p class="font-inter text-cream text-sm font-medium tracking-widest uppercase mb-4">O Ecossistema Digital</p>
+      <h2 class="font-outfit font-extrabold text-4xl sm:text-5xl leading-tight max-w-3xl mx-auto">
+        Três pilares que trabalham juntos.<br>
+        <span class="text-gradient">Um resultado que escala.</span>
+      </h2>
+    </div>
+
+    <!-- Serviço 1 — Texto à esquerda -->
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-24 group">
+
+      <div class="flex-1 order-2 lg:order-1">
+        <div class="ghost-num mb-2">01</div>
+        <div id="icon-serv-1" class="icon-wrap mb-5">
+          <i id="ic-is1" class="ph-bold ph-paint-brush text-2xl text-spark"></i>
+        </div>
+        <div class="inline-block bg-spark/10 border border-spark/20 text-spark text-xs font-inter font-medium px-3 py-1 rounded-full mb-4">Fundação</div>
+        <h3 class="font-outfit font-bold text-3xl sm:text-4xl text-white mb-5 leading-tight">
+          Identidade Visual
+        </h3>
+        <p class="font-inter text-muted text-base leading-relaxed mb-8">
+          A marca é o que o cliente sente antes de ler qualquer palavra. Logo, paleta, tipografia e manual de identidade construídos para comunicar autoridade no primeiro segundo — e justificar preços mais altos do que o mercado.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Logo profissional + variações de uso
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Paleta de cores e tipografia definidas
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Manual de marca completo (PDF)
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Templates de redes sociais
+          </li>
+        </ul>
+        <a href="#contato" data-cta="whatsapp" class="btn-spark inline-flex items-center gap-2 text-white font-inter font-semibold text-sm px-6 py-3 rounded-xl">
+          Quero minha identidade visual
+          <i class="ph-bold ph-arrow-right text-sm"></i>
+        </a>
+      </div>
+
+      <div class="flex-1 order-1 lg:order-2">
+        <div class="bg-surface2 border border-white/7 rounded-3xl p-2 shadow-2xl">
+          <div id="mock-serv-1" class="bg-surface rounded-2xl overflow-hidden aspect-[4/3] relative flex items-center justify-center">
+            <img id="mock-serv-1-img" src="assets/img/mockup-1.jpg" alt="Mockup Identidade Visual" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:20;">
+            <div class="absolute inset-0 bg-gradient-to-br from-spark/10 via-transparent to-transparent"></div>
+            <div class="relative z-10 text-center px-10">
+              <div class="w-20 h-20 bg-spark/10 border border-spark/20 rounded-2xl mx-auto mb-5 flex items-center justify-center">
+                <i class="ph-bold ph-paint-brush text-3xl text-spark"></i>
+              </div>
+              <p class="font-outfit font-semibold text-white text-xl mb-2">Identidade Visual</p>
+              <p class="font-inter text-muted text-sm">Logo · Paleta · Tipografia · Manual</p>
+              <div class="flex justify-center gap-2 mt-6">
+                <div class="w-8 h-8 rounded-full bg-spark"></div>
+                <div class="w-8 h-8 rounded-full bg-surface2 border border-white/10"></div>
+                <div class="w-8 h-8 rounded-full" style="background:#1E3A5F"></div>
+                <div class="w-8 h-8 rounded-full" style="background:#F2F2F2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-gradient my-0 mb-24"></div>
+
+    <!-- Serviço 2 — Texto à direita -->
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-24 group">
+
+      <div class="flex-1">
+        <div class="bg-surface2 border border-white/7 rounded-3xl p-2 shadow-2xl">
+          <div id="mock-serv-2" class="bg-surface rounded-2xl overflow-hidden aspect-[4/3] relative flex items-center justify-center">
+            <img id="mock-serv-2-img" src="assets/img/mockup-2.jpg" alt="Mockup Web Design" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:20;">
+            <div class="absolute inset-0 bg-gradient-to-br from-transparent to-spark/10"></div>
+            <div class="relative z-10 text-center px-6">
+              <!-- Mock browser -->
+              <div class="bg-void border border-white/10 rounded-xl overflow-hidden text-left">
+                <div class="flex items-center gap-1.5 px-3 py-2.5 border-b border-white/5">
+                  <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-green-500/60"></div>
+                  <div class="flex-1 ml-2 bg-surface rounded px-2 py-1">
+                    <span class="text-muted/40 text-xs font-inter">andarilho.digital</span>
+                  </div>
+                </div>
+                <div class="p-4 space-y-2">
+                  <div class="h-4 bg-spark/20 rounded w-3/4"></div>
+                  <div class="h-3 bg-white/5 rounded w-full"></div>
+                  <div class="h-3 bg-white/5 rounded w-5/6"></div>
+                  <div class="h-8 bg-spark/40 rounded-lg w-1/2 mt-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1">
+        <div class="ghost-num mb-2">02</div>
+        <div id="icon-serv-2" class="icon-wrap mb-5">
+          <i id="ic-is2" class="ph-bold ph-browser text-2xl text-spark"></i>
+        </div>
+        <div class="inline-block bg-spark/10 border border-spark/20 text-spark text-xs font-inter font-medium px-3 py-1 rounded-full mb-4">A Máquina</div>
+        <h3 class="font-outfit font-bold text-3xl sm:text-4xl text-white mb-5 leading-tight">
+          Web Design Conversivo
+        </h3>
+        <p class="font-inter text-muted text-base leading-relaxed mb-8">
+          Sites que não são portfólio — são ferramentas de venda. Cada elemento da página existe para transformar visitante em contato. Copy, estrutura e design trabalhando em conjunto para um único objetivo: converter.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Landing page ou site completo (até 5 páginas)
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Copy estratégico de todas as páginas
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Responsivo · Rápido · Seguro (HTTPS)
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Integração WhatsApp + formulário de leads
+          </li>
+        </ul>
+        <a href="#contato" data-cta="whatsapp" class="btn-spark inline-flex items-center gap-2 text-white font-inter font-semibold text-sm px-6 py-3 rounded-xl">
+          Quero um site que converte
+          <i class="ph-bold ph-arrow-right text-sm"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="divider-gradient my-0 mb-24"></div>
+
+    <!-- Serviço 3 — Texto à esquerda -->
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 group">
+
+      <div class="flex-1 order-2 lg:order-1">
+        <div class="ghost-num mb-2">03</div>
+        <div id="icon-serv-3" class="icon-wrap mb-5">
+          <i id="ic-is3" class="ph-bold ph-chart-line-up text-2xl text-spark"></i>
+        </div>
+        <div class="inline-block bg-spark/10 border border-spark/20 text-spark text-xs font-inter font-medium px-3 py-1 rounded-full mb-4">O Combustível</div>
+        <h3 class="font-outfit font-bold text-3xl sm:text-4xl text-white mb-5 leading-tight">
+          Engenharia de SEO
+        </h3>
+        <p class="font-inter text-muted text-base leading-relaxed mb-8">
+          Tráfego orgânico é o único canal que escala sem escalar o investimento. Pesquisa de palavras-chave, otimização técnica e estratégia editorial para o seu negócio aparecer antes da concorrência quando o cliente está pronto para comprar.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Pesquisa de palavras-chave do nicho
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            SEO técnico + Core Web Vitals
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Google Meu Negócio + Search Console
+          </li>
+          <li class="flex items-center gap-3 font-inter text-sm text-muted">
+            <i class="ph-bold ph-check-circle text-cream text-base flex-shrink-0"></i>
+            Estratégia editorial mensal + relatório
+          </li>
+        </ul>
+        <a href="#contato" data-cta="whatsapp" class="btn-spark inline-flex items-center gap-2 text-white font-inter font-semibold text-sm px-6 py-3 rounded-xl">
+          Quero ranquear no Google
+          <i class="ph-bold ph-arrow-right text-sm"></i>
+        </a>
+      </div>
+
+      <div class="flex-1 order-1 lg:order-2">
+        <div class="bg-surface2 border border-white/7 rounded-3xl p-2 shadow-2xl">
+          <div id="mock-serv-3" class="bg-surface rounded-2xl overflow-hidden aspect-[4/3] relative flex items-center justify-center p-6">
+            <img id="mock-serv-3-img" src="assets/img/mockup-3.jpg" alt="Mockup SEO" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:20;">
+            <div class="absolute inset-0 bg-gradient-to-br from-spark/5 via-transparent to-transparent"></div>
+            <!-- Mock SEO chart -->
+            <div class="relative z-10 w-full">
+              <div class="flex items-end justify-between gap-2 h-28 mb-3">
+                <div class="flex-1 bg-spark/10 rounded-t-sm" style="height:20%"></div>
+                <div class="flex-1 bg-spark/20 rounded-t-sm" style="height:30%"></div>
+                <div class="flex-1 bg-spark/25 rounded-t-sm" style="height:40%"></div>
+                <div class="flex-1 bg-spark/35 rounded-t-sm" style="height:55%"></div>
+                <div class="flex-1 bg-spark/50 rounded-t-sm" style="height:65%"></div>
+                <div class="flex-1 bg-spark/65 rounded-t-sm" style="height:80%"></div>
+                <div class="flex-1 bg-spark/80 rounded-t-sm" style="height:90%"></div>
+                <div class="flex-1 bg-spark rounded-t-lg" style="height:100%"></div>
+              </div>
+              <div class="border-t border-white/10 pt-3 flex justify-between">
+                <span class="font-inter text-xs text-muted">Jan</span>
+                <span class="font-inter text-xs text-muted">Ago</span>
+              </div>
+              <div class="mt-3 flex items-center gap-2">
+                <i class="ph-bold ph-trend-up text-spark"></i>
+                <span class="font-outfit font-semibold text-white text-sm">+340% em tráfego orgânico</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     NÚMEROS / STATS
+════════════════════════════════════════ -->
+<section class="py-20 relative">
+  <div class="divider-gradient mb-0"></div>
+  <div class="bg-surface border-y border-white/5 py-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="stat-num"><span class="counter" data-target="35" data-decimals="0">0</span><span class="text-cream/60 text-3xl">+</span></div>
+          <p class="font-inter text-muted text-sm mt-1">Projetos entregues</p>
+        </div>
+        <div>
+          <div class="stat-num"><span class="counter" data-target="4.8" data-decimals="1">0</span><span class="text-cream/60 text-2xl">★</span></div>
+          <p class="font-inter text-muted text-sm mt-1">Avaliação média</p>
+        </div>
+        <div>
+          <div class="stat-num"><span class="counter" data-target="10" data-decimals="0">0</span><span class="text-muted text-2xl font-inter"> dias</span></div>
+          <p class="font-inter text-muted text-sm mt-1">Prazo do Nível 1</p>
+        </div>
+        <div>
+          <div class="stat-num"><span class="counter" data-target="3" data-decimals="0">0</span><span class="text-cream/60 text-3xl">×</span></div>
+          <p class="font-inter text-muted text-sm mt-1">Aumento médio em conversão</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     PORTFÓLIO
+════════════════════════════════════════ -->
+<section id="portfolio" class="py-28 relative">
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <p class="font-inter text-cream text-sm font-medium tracking-widest uppercase mb-4">Portfólio</p>
+      <h2 class="font-outfit font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-5">
+        Trabalhos que <span class="text-gradient">geram resultado</span>
+      </h2>
+      <p class="font-inter text-muted text-lg max-w-xl mx-auto">
+        Cada projeto foi construído com um objetivo claro — não apenas parecer bem, mas converter.
+      </p>
+    </div>
+
+    <!-- Grid de projetos: 2 grandes + 3 menores -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+      <!-- Projeto 1 — card grande (col-span-7) -->
+      <div class="lg:col-span-7 group relative rounded-3xl overflow-hidden cursor-pointer" style="min-height:380px;background:#161619;border:1px solid rgba(255,255,255,0.07);">
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-40">
+          <i class="ph-bold ph-image text-5xl text-muted"></i>
+          <span class="font-inter text-muted text-sm">Imagem do projeto</span>
+        </div>
+        <!-- Overlay info — aparece no hover -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-400 flex flex-col justify-end p-8">
+          <span class="inline-block bg-spark/20 text-cream text-xs font-inter font-semibold px-3 py-1 rounded-full mb-3 w-fit">Identidade Visual + Site</span>
+          <h3 class="font-outfit font-bold text-2xl text-white mb-1">Nome do Projeto</h3>
+          <p class="font-inter text-muted text-sm mb-4">Breve descrição do resultado alcançado com esse projeto.</p>
+          <a href="#contato" data-cta="whatsapp" class="inline-flex items-center gap-2 text-cream text-sm font-inter font-semibold hover:text-white transition-colors">
+            Ver case completo <i class="ph-bold ph-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Projeto 2 — card grande (col-span-5) -->
+      <div class="lg:col-span-5 group relative rounded-3xl overflow-hidden cursor-pointer" style="min-height:380px;background:#161619;border:1px solid rgba(255,255,255,0.07);">
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-40">
+          <i class="ph-bold ph-image text-5xl text-muted"></i>
+          <span class="font-inter text-muted text-sm">Imagem do projeto</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-400 flex flex-col justify-end p-8">
+          <span class="inline-block bg-spark/20 text-cream text-xs font-inter font-semibold px-3 py-1 rounded-full mb-3 w-fit">SEO + Tráfego Orgânico</span>
+          <h3 class="font-outfit font-bold text-2xl text-white mb-1">Nome do Projeto</h3>
+          <p class="font-inter text-muted text-sm mb-4">Breve descrição do resultado alcançado com esse projeto.</p>
+          <a href="#contato" data-cta="whatsapp" class="inline-flex items-center gap-2 text-cream text-sm font-inter font-semibold hover:text-white transition-colors">
+            Ver case completo <i class="ph-bold ph-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Projeto 3 — card menor (col-span-4) -->
+      <div class="lg:col-span-4 group relative rounded-3xl overflow-hidden cursor-pointer" style="min-height:260px;background:#161619;border:1px solid rgba(255,255,255,0.07);">
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-40">
+          <i class="ph-bold ph-image text-4xl text-muted"></i>
+          <span class="font-inter text-muted text-sm">Imagem do projeto</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-400 flex flex-col justify-end p-6">
+          <span class="inline-block bg-spark/20 text-cream text-xs font-inter font-semibold px-3 py-1 rounded-full mb-2 w-fit">Web Design</span>
+          <h3 class="font-outfit font-bold text-xl text-white mb-1">Nome do Projeto</h3>
+          <p class="font-inter text-muted text-xs">Breve resultado.</p>
+        </div>
+      </div>
+
+      <!-- Projeto 4 — card menor (col-span-4) -->
+      <div class="lg:col-span-4 group relative rounded-3xl overflow-hidden cursor-pointer" style="min-height:260px;background:#161619;border:1px solid rgba(255,255,255,0.07);">
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-40">
+          <i class="ph-bold ph-image text-4xl text-muted"></i>
+          <span class="font-inter text-muted text-sm">Imagem do projeto</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-400 flex flex-col justify-end p-6">
+          <span class="inline-block bg-spark/20 text-cream text-xs font-inter font-semibold px-3 py-1 rounded-full mb-2 w-fit">Identidade Visual</span>
+          <h3 class="font-outfit font-bold text-xl text-white mb-1">Nome do Projeto</h3>
+          <p class="font-inter text-muted text-xs">Breve resultado.</p>
+        </div>
+      </div>
+
+      <!-- Projeto 5 — card menor (col-span-4) -->
+      <div class="lg:col-span-4 group relative rounded-3xl overflow-hidden cursor-pointer" style="min-height:260px;background:#161619;border:1px solid rgba(255,255,255,0.07);">
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-40">
+          <i class="ph-bold ph-image text-4xl text-muted"></i>
+          <span class="font-inter text-muted text-sm">Imagem do projeto</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-400 flex flex-col justify-end p-6">
+          <span class="inline-block bg-spark/20 text-cream text-xs font-inter font-semibold px-3 py-1 rounded-full mb-2 w-fit">SEO</span>
+          <h3 class="font-outfit font-bold text-xl text-white mb-1">Nome do Projeto</h3>
+          <p class="font-inter text-muted text-xs">Breve resultado.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA portfólio -->
+    <div class="text-center mt-12">
+      <p class="font-inter text-muted text-sm mb-4">Quer ver mais detalhes de algum projeto?</p>
+      <a href="#contato" data-cta="whatsapp" class="btn-spark inline-flex items-center gap-2 text-white font-inter font-semibold text-sm px-7 py-3.5 rounded-xl">
+        <i class="ph-bold ph-chat-circle-text"></i> Falar sobre seu projeto
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SOBRE — O ANDARILHO
+════════════════════════════════════════ -->
+<section id="sobre" class="py-28 relative">
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+    <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+
+      <!-- Foto do Founder -->
+      <div class="flex-shrink-0 w-full max-w-xs lg:max-w-sm mx-auto lg:mx-0">
+        <div id="foto-sobre" class="photo-placeholder rounded-3xl aspect-[3/4] flex flex-col items-center justify-center gap-4" style="background-image: url('assets/img/foto.jpg'); background-size: cover; background-position: center;">
+          <!-- Placeholder icons hidden since background image is set -->
+        </div>
+        <!-- Floating badge -->
+        <div class="relative -mt-6 ml-4">
+          <div class="inline-flex items-center gap-2 bg-spark text-white text-xs font-inter font-semibold px-4 py-2.5 rounded-full shadow-lg">
+            <i class="ph-bold ph-map-pin text-sm"></i>
+            Nômade Digital · Brasil → Mundo
+          </div>
+        </div>
+      </div>
+
+      <!-- Texto -->
+      <div class="flex-1">
+        <p class="font-inter text-cream text-sm font-medium tracking-widest uppercase mb-4">O Andarilho</p>
+        <h2 class="font-outfit font-extrabold text-4xl sm:text-5xl leading-tight mb-6">
+          Mover-se em direção<br>
+          <span class="text-gradient">a resultados.</span>
+        </h2>
+        <p class="font-inter text-muted text-base leading-relaxed mb-6">
+          Agências tradicionais têm 50 funcionários, 3 meses de prazo e uma conta de e-mail com ticket de suporte. Você não tem tempo para isso — e eu também não.
+        </p>
+        <p class="font-inter text-muted text-base leading-relaxed mb-6">
+          A Andarilho Digital é uma operação enxuta e obcecada pelo negócio do cliente. Cada projeto começa com uma pergunta: <strong class="text-white font-medium">"O que esse cliente precisa para crescer?"</strong> — não "como encaixo isso no nosso processo padrão".
+        </p>
+        <p class="font-inter text-muted text-base leading-relaxed mb-10">
+          Sou designer, desenvolvedor e estrategista. Trabalho de onde estiver — mas a entrega tem data, o trabalho tem qualidade, e o cliente tem acesso direto. Sem intermediário, sem ruído.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-6 sm:items-center">
+          <a href="#contato" data-cta="whatsapp" class="btn-spark inline-flex items-center justify-center gap-2 text-white font-inter font-semibold text-sm px-6 py-3.5 rounded-xl">
+            Conversar com o Andarilho
+            <i class="ph-bold ph-arrow-right text-sm"></i>
+          </a>
+          <div class="flex items-center gap-3">
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full bg-surface2 border-2 border-void flex items-center justify-center text-xs text-muted">G</div>
+              <div class="w-8 h-8 rounded-full bg-surface2 border-2 border-void flex items-center justify-center text-xs text-muted">R</div>
+              <div class="w-8 h-8 rounded-full bg-surface2 border-2 border-void flex items-center justify-center text-xs text-muted">M</div>
+            </div>
+            <p class="font-inter text-muted text-xs">+32 clientes satisfeitos</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     COMO FUNCIONA
+════════════════════════════════════════ -->
+<section class="py-24 relative">
+  <div class="divider-gradient mb-24"></div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+    <div class="text-center mb-16">
+      <p class="font-inter text-cream text-sm font-medium tracking-widest uppercase mb-4">O Processo</p>
+      <h2 class="font-outfit font-extrabold text-4xl sm:text-5xl leading-tight">
+        Do zero ao ar em <span class="text-gradient">10 a 35 dias.</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+      <!-- Linha conectora (desktop) -->
+      <div class="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-spark/30 to-transparent pointer-events-none"></div>
+
+      <!-- Step 1 -->
+      <div class="text-center relative">
+        <div class="w-16 h-16 bg-spark/10 border border-spark/30 rounded-2xl mx-auto mb-5 flex items-center justify-center font-outfit font-bold text-spark text-xl relative z-10">
+          01
+        </div>
+        <h4 class="font-outfit font-semibold text-white text-lg mb-2">Diagnóstico</h4>
+        <p class="font-inter text-muted text-sm leading-relaxed">Entendemos o negócio, o cliente ideal e os objetivos reais do projeto.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="text-center relative">
+        <div class="w-16 h-16 bg-spark/10 border border-spark/30 rounded-2xl mx-auto mb-5 flex items-center justify-center font-outfit font-bold text-spark text-xl relative z-10">
+          02
+        </div>
+        <h4 class="font-outfit font-semibold text-white text-lg mb-2">Estratégia</h4>
+        <p class="font-inter text-muted text-sm leading-relaxed">Definimos escopo, prazo e entregáveis. Sem surpresa no processo.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="text-center relative">
+        <div class="w-16 h-16 bg-spark/10 border border-spark/30 rounded-2xl mx-auto mb-5 flex items-center justify-center font-outfit font-bold text-spark text-xl relative z-10">
+          03
+        </div>
+        <h4 class="font-outfit font-semibold text-white text-lg mb-2">Execução</h4>
+        <p class="font-inter text-muted text-sm leading-relaxed">Design, desenvolvimento e otimização. Você acompanha cada etapa.</p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="text-center relative">
+        <div class="w-16 h-16 bg-spark rounded-2xl mx-auto mb-5 flex items-center justify-center font-outfit font-bold text-white text-xl relative z-10 shadow-lg" style="box-shadow: 0 0 20px rgba(174,51,10,0.4)">
+          04
+        </div>
+        <h4 class="font-outfit font-semibold text-white text-lg mb-2">Lançamento</h4>
+        <p class="font-inter text-muted text-sm leading-relaxed">Entrega, suporte pós-projeto e acompanhamento dos primeiros resultados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     CTA FINAL / FOOTER
+════════════════════════════════════════ -->
+<section id="contato" class="py-32 relative overflow-hidden">
+  <div class="divider-gradient mb-32"></div>
+
+  <!-- Background glow -->
+  <div class="absolute inset-0 hero-glow pointer-events-none"></div>
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-spark/8 blur-3xl rounded-full pointer-events-none"></div>
+
+  <div class="relative z-10 mx-auto max-w-4xl px-6 lg:px-10 text-center">
+
+    <p class="font-inter text-cream text-sm font-medium tracking-widest uppercase mb-6">Próximo Passo</p>
+
+    <h2 class="font-outfit font-extrabold text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight mb-8">
+      Pronto para dar o<br>
+      <span class="text-gradient">próximo passo digital?</span>
+    </h2>
+
+    <p class="font-inter text-muted text-lg max-w-xl mx-auto mb-12 leading-relaxed">
+      Uma conversa de 30 minutos para entender onde você está e o que precisa mudar. Sem pitch de vendas — diagnóstico real.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+      <!-- WhatsApp CTA -->
+      <a
+        href="https://wa.me/5500000000000?text=Olá! Quero agendar um diagnóstico gratuito com a Andarilho Digital."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-spark flex items-center justify-center gap-3 text-white font-inter font-semibold text-base px-8 py-4 rounded-2xl w-full sm:w-auto"
+      >
+        <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+        Falar no WhatsApp
+      </a>
+      <a
+        href="mailto:contato@andarilhodigital.com"
+        class="flex items-center justify-center gap-2 text-muted hover:text-white font-inter text-sm transition-colors border border-white/10 hover:border-white/20 px-6 py-4 rounded-2xl w-full sm:w-auto"
+      >
+        <i class="ph-bold ph-envelope text-base"></i>
+        Enviar e-mail
+      </a>
+    </div>
+
+    <!-- Garantias -->
+    <div class="flex flex-wrap justify-center gap-6">
+      <div class="flex items-center gap-2 font-inter text-muted text-xs">
+        <i class="ph-bold ph-check-circle text-cream"></i>
+        Sem compromisso
+      </div>
+      <div class="flex items-center gap-2 font-inter text-muted text-xs">
+        <i class="ph-bold ph-check-circle text-cream"></i>
+        Resposta em até 24h
+      </div>
+      <div class="flex items-center gap-2 font-inter text-muted text-xs">
+        <i class="ph-bold ph-check-circle text-cream"></i>
+        Diagnóstico 100% gratuito
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER INFERIOR
+════════════════════════════════════════ -->
+<footer class="border-t border-white/5 bg-surface">
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 py-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5">
+        <img id="footer-logo-img" src="assets/img/logo.svg" style="height:30px;width:auto;object-fit:contain;" alt="Logo da Andarilho Digital">
+        <span class="font-outfit font-semibold text-lg text-white">Andarilho<span class="text-spark">.</span></span>
+      </a>
+
+      <!-- Links -->
+      <div class="flex items-center gap-6">
+        <a href="#servicos" class="font-inter text-muted hover:text-white text-xs transition-colors">Serviços</a>
+        <a href="#sobre" class="font-inter text-muted hover:text-white text-xs transition-colors">Sobre</a>
+        <a href="#contato" class="font-inter text-muted hover:text-white text-xs transition-colors">Contato</a>
+      </div>
+
+      <!-- Direitos autorais -->
+      <p class="font-inter text-muted/50 text-xs text-center md:text-right">
+        © 2026 Andarilho Digital. Todos os direitos reservados.
+      </p>
+
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

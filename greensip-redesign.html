@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Sip — Brand Identity Redesign</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:  #0F1A14;
+  --deep:    #1F3528;
+  --sage:    #4A6B57;
+  --gold:    #C4A563;
+  --gold-lt: #D4B87A;
+  --cream:   #F5EDD8;
+  --cream-dk:#E8DCC4;
+  --espresso:#1A0F08;
+  --w: 1120px;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); -webkit-font-smoothing: antialiased; }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.rv1 { transition-delay: .1s; } .rv2 { transition-delay: .2s; } .rv3 { transition-delay: .3s; }
+
+/* ── LAYOUT ── */
+.wrap { max-width: var(--w); margin: 0 auto; padding: 0 56px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+/* ── UTILS ── */
+.sec-label { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 14px; }
+.sec-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px, 4.5vw, 64px); font-weight: 600; line-height: 1.04; letter-spacing: -.01em; }
+.sec-h em { font-style: italic; }
+.sec-body { font-size: 16px; line-height: 1.8; max-width: 560px; margin-top: 20px; }
+.divider { width: 36px; height: 2px; border-radius: 1px; background: var(--gold); margin: 24px 0; }
+.pill { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 6px 16px; border-radius: 40px; }
+
+/* ── HEADER ── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 56px; height: 60px;
+  background: rgba(15,26,20,.92); backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(196,165,99,.1);
+}
+.h-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--gold); letter-spacing: .04em; display: flex; align-items: center; gap: 10px; }
+.h-logo::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+.h-tag { font-size: 10px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: rgba(245,237,216,.28); }
+.h-year { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: rgba(196,165,99,.45); font-style: italic; }
+
+/* ══════════════════════════════════
+   01 — HERO
+══════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  display: flex;
+  align-items: flex-end;
+  padding: 60px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 75% 40%, rgba(196,165,99,.07) 0%, transparent 55%);
+  pointer-events: none;
+}
+.hero-eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.hero-line { width: 32px; height: 1px; background: var(--gold); opacity: .5; }
+.hero-eyebrow-text { font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+
+.hero-h {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(64px, 8.5vw, 130px);
+  font-weight: 300;
+  line-height: .95;
+  letter-spacing: -.03em;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.hero-h strong { font-weight: 700; display: block; }
+.hero-h em { color: var(--gold); font-style: italic; display: block; }
+
+.hero-sub {
+  font-size: 17px;
+  color: rgba(245,237,216,.38);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-top: 28px;
+  margin-bottom: 40px;
+}
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-tag-pill {
+  font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  padding: 7px 18px; border-radius: 40px;
+  border: 1px solid rgba(196,165,99,.25); color: rgba(196,165,99,.65);
+}
+
+/* Decorative right side */
+.hero-deco {
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .12;
+}
+
+/* ══════════════════════════════════
+   02 — PRINCÍPIOS (cream)
+══════════════════════════════════ */
+.section-cream { background: var(--cream); color: var(--espresso); padding: 100px 0; }
+.section-cream .sec-label { color: var(--sage); }
+.section-cream .sec-h { color: var(--espresso); }
+.section-cream .sec-body { color: rgba(26,15,8,.55); }
+.section-cream .divider { background: var(--gold); }
+
+.principle-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px 28px;
+  border: 1px solid rgba(74,107,87,.1);
+  transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s;
+}
+.principle-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(31,53,40,.12); }
+.principle-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px; font-weight: 300; line-height: 1;
+  color: rgba(196,165,99,.25); margin-bottom: 16px;
+}
+.principle-title { font-size: 16px; font-weight: 600; color: var(--deep); margin-bottom: 10px; }
+.principle-body { font-size: 14px; color: rgba(31,53,40,.5); line-height: 1.7; }
+
+/* Comparison strip */
+.compare-strip {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 24px; align-items: center; margin-top: 56px;
+}
+.compare-item { text-align: center; }
+.compare-label { font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 12px; }
+.compare-divider-arrow { font-size: 24px; color: var(--gold); opacity: .6; }
+
+/* ══════════════════════════════════
+   03 — O SÍMBOLO (deep forest)
+══════════════════════════════════ */
+.section-deep { background: var(--deep); color: var(--cream); padding: 100px 0; }
+.section-deep .sec-label { color: var(--gold); }
+.section-deep .divider { background: var(--gold); }
+
+.badge-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 56px; }
+.badge-cell {
+  padding: 56px 40px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+  border-radius: 16px;
+}
+.badge-cell-label { font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; text-align: center; }
+
+/* ══════════════════════════════════
+   04 — LOGO SYSTEM (forest)
+══════════════════════════════════ */
+.section-forest { background: var(--forest); color: var(--cream); padding: 100px 0; }
+.section-forest .sec-label { color: var(--gold); }
+.section-forest .divider { background: var(--gold); }
+
+.logo-variation { border-radius: 16px; padding: 48px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; min-height: 200px; }
+.logo-variation-label { font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; opacity: .4; }
+
+.wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.wordmark-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════
+   05 — PALETA
+══════════════════════════════════ */
+.palette-grid { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr; gap: 16px; margin-top: 56px; }
+.palette-item { border-radius: 14px; overflow: hidden; }
+.palette-color { height: 200px; position: relative; }
+.palette-info { padding: 18px 16px; }
+.palette-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.palette-hex { font-family: monospace; font-size: 11px; opacity: .55; }
+.palette-use { font-size: 11px; opacity: .4; margin-top: 6px; line-height: 1.4; }
+.palette-cmyk { font-family: monospace; font-size: 9px; opacity: .3; margin-top: 4px; }
+
+/* ══════════════════════════════════
+   06 — TIPOGRAFIA (cream)
+══════════════════════════════════ */
+.type-section { background: var(--cream); color: var(--espresso); padding: 100px 0; }
+.type-section .sec-label { color: var(--sage); }
+
+.type-showcase { margin-top: 56px; }
+.type-block { padding: 40px 0; border-bottom: 1px solid rgba(31,53,40,.1); display: grid; grid-template-columns: 180px 1fr; gap: 32px; align-items: center; }
+.type-block:last-child { border-bottom: none; }
+.type-meta-name { font-size: 11px; font-weight: 600; color: var(--deep); letter-spacing: .05em; }
+.type-meta-weight { font-size: 11px; color: rgba(31,53,40,.4); margin-top: 3px; font-family: monospace; }
+.type-meta-use { font-size: 10px; color: rgba(74,107,87,.7); margin-top: 6px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+
+.font-display-a {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 80px; line-height: 1;
+  letter-spacing: -.02em; color: var(--espresso);
+}
+.font-body-sample { font-family: 'DM Sans', sans-serif; font-size: 15px; color: rgba(26,15,8,.45); line-height: 1.8; }
+
+.font-pair-label {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+  background: rgba(74,107,87,.1); color: var(--sage);
+}
+
+/* ══════════════════════════════════
+   07 — APLICAÇÕES
+══════════════════════════════════ */
+.app-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 56px; }
+.app-item {
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(196,165,99,.12);
+  transition: transform .3s cubic-bezier(.22,1,.36,1);
+}
+.app-item:hover { transform: translateY(-4px); }
+.app-visual { aspect-ratio: 16/10; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.app-footer { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(196,165,99,.1); }
+.app-footer-name { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(245,237,216,.45); }
+.app-footer-tag { font-size: 9px; color: rgba(196,165,99,.5); letter-spacing: .08em; text-transform: uppercase; }
+
+/* ══════════════════════════════════
+   08 — NOMADSIP TEASER
+══════════════════════════════════ */
+.nomad-section { background: var(--espresso); padding: 100px 0; position: relative; overflow: hidden; }
+.nomad-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(74,107,87,.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.nomad-badge {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--deep) 0%, #2E5240 100%);
+  border: 1px solid rgba(196,165,99,.2);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+.nomad-feature {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 0; border-bottom: 1px solid rgba(245,237,216,.06);
+}
+.nomad-feature:last-child { border-bottom: none; }
+.nomad-feature-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(196,165,99,.08); border: 1px solid rgba(196,165,99,.15);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+
+/* ══════════════════════════════════
+   FOOTER
+══════════════════════════════════ */
+.footer { background: #080E0A; padding: 40px 56px; border-top: 1px solid rgba(196,165,99,.08); display: flex; align-items: center; justify-content: space-between; }
+.footer-copy { font-size: 12px; color: rgba(245,237,216,.22); }
+.footer-copy strong { color: rgba(196,165,99,.5); }
+
+/* ── Progress bar ── */
+#spb { position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--sage),var(--gold));z-index:9999;width:0%;pointer-events:none; }
+</style>
+</head>
+<body>
+
+<div id="spb"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="h-logo">Green Sip</div>
+  <div class="h-tag">Brand Identity Redesign</div>
+  <div class="h-year">2026</div>
+</header>
+
+<!-- ══════════════════════════════════
+     01 — HERO
+══════════════════════════════════ -->
+<section class="hero">
+  <!-- Decorative badge outline (large, faded) -->
+  <div class="hero-deco">
+    <svg viewBox="0 0 200 240" width="420" opacity="1">
+      <ellipse cx="100" cy="118" rx="88" ry="108" fill="none" stroke="#C4A563" stroke-width="1"/>
+      <ellipse cx="100" cy="118" rx="78" ry="98" fill="none" stroke="#C4A563" stroke-width=".5" opacity=".4"/>
+      <line x1="12" y1="118" x2="188" y2="118" stroke="#C4A563" stroke-width=".5" opacity=".25"/>
+      <line x1="100" y1="10" x2="100" y2="226" stroke="#C4A563" stroke-width=".5" opacity=".25"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="hero-eyebrow reveal">
+      <div class="hero-line"></div>
+      <span class="hero-eyebrow-text">Brand Identity Redesign · 2026</span>
+    </div>
+    <div class="hero-h reveal rv1">
+      <span>Green</span>
+      <strong>Sip</strong>
+      <em>Coffee Space</em>
+    </div>
+    <p class="hero-sub reveal rv2">Da ideia original a um sistema visual completo — mais limpo, mais escalável, com sub-marca digital integrada.</p>
+    <div class="hero-tags reveal rv3">
+      <span class="hero-tag-pill">Branding</span>
+      <span class="hero-tag-pill">Logo Design</span>
+      <span class="hero-tag-pill">Brand System</span>
+      <span class="hero-tag-pill">App UI</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     02 — PRINCÍPIOS
+══════════════════════════════════ -->
+<section class="section-cream">
+  <div class="wrap">
+    <div class="sec-label reveal">O Redesign</div>
+    <h2 class="sec-h reveal rv1">Mesmo conceito.<br><em>Mais intenção.</em></h2>
+    <p class="sec-body reveal rv2">A identidade original tinha personalidade, mas faltava clareza. O redesign não reinventa — ele refina. Cada decisão tem uma razão estratégica.</p>
+    <div class="divider reveal rv3"></div>
+
+    <div class="grid-3" style="margin-top:48px;">
+      <div class="principle-card reveal rv1">
+        <div class="principle-num">01</div>
+        <div class="principle-title">Símbolo mais limpo</div>
+        <div class="principle-body">O badge mantém os 4 elementos (sol, planta, café, xícara), mas com mais respiro entre eles. A composição em grade torna o símbolo legível em qualquer tamanho — de ícone de app a fachada.</div>
+      </div>
+      <div class="principle-card reveal rv2">
+        <div class="principle-num">02</div>
+        <div class="principle-title">Tipografia com caráter</div>
+        <div class="principle-body">Montserrat é neutro demais para um café specialty. Cormorant Garamond traz elegância editorial e personalidade — enquanto DM Sans garante legibilidade no app e nos materiais digitais.</div>
+      </div>
+      <div class="principle-card reveal rv3">
+        <div class="principle-num">03</div>
+        <div class="principle-title">Sistema coeso</div>
+        <div class="principle-body">A marca não é só um logo. É um sistema: paleta revisada, pesos de cor definidos, variações de logo para cada contexto e uma sub-marca digital — NomadSip — que cresce junto.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     03 — O SÍMBOLO
+══════════════════════════════════ -->
+<section class="section-deep">
+  <div class="wrap">
+    <div class="sec-label reveal">Símbolo</div>
+    <h2 class="sec-h reveal rv1">Quatro elementos.<br><em>Uma leitura.</em></h2>
+    <p class="sec-body reveal rv2" style="color:rgba(245,237,216,.5);">Sol · Planta · Café · Xícara — organizados em grade, cada um no seu espaço. O badge em oval remete ao estilo clássico das marcas de café de origem.</p>
+  </div>
+
+  <!-- Badge grid -->
+  <div class="wrap" style="margin-top:64px;">
+    <div class="badge-grid">
+
+      <!-- Principal — cream -->
+      <div class="badge-cell reveal rv1" style="background:var(--cream);">
+        <!-- BADGE SVG — PRINCIPAL -->
+        <svg viewBox="0 0 200 240" width="220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="oval-clip-1"><ellipse cx="100" cy="118" rx="86" ry="106"/></clipPath>
+          </defs>
+          <ellipse cx="100" cy="118" rx="88" ry="108" fill="#F5EDD8"/>
+          <g clip-path="url(#oval-clip-1)">
+            <!-- Quadrant guides -->
+            <line x1="12" y1="118" x2="188" y2="118" stroke="#C4A563" stroke-width=".8" opacity=".3"/>
+            <line x1="100" y1="10" x2="100" y2="226" stroke="#C4A563" stroke-width=".8" opacity=".3"/>
+            <!-- TL: SUN -->
+            <circle cx="58" cy="67" r="10" fill="none" stroke="#C4A563" stroke-width="1.8"/>
+            <line x1="58" y1="52" x2="58" y2="47" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="58" y1="82" x2="58" y2="87" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="43" y1="67" x2="38" y2="67" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="73" y1="67" x2="78" y2="67" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="48" y1="57" x2="44" y2="53" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="68" y1="57" x2="72" y2="53" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="48" y1="77" x2="44" y2="81" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="68" y1="77" x2="72" y2="81" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <!-- TR: COFFEE PLANT -->
+            <path d="M 138,118 C 138,100 137,80 138,42" fill="none" stroke="#1F3528" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M 138,92 C 128,85 120,81 115,77" fill="none" stroke="#1F3528" stroke-width="1.3" stroke-linecap="round"/>
+            <ellipse cx="111" cy="75" rx="7" ry="4.5" fill="none" stroke="#C4A563" stroke-width="1.3" transform="rotate(-28 111 75)"/>
+            <line x1="111" y1="71" x2="111" y2="79" stroke="#C4A563" stroke-width=".9" transform="rotate(-28 111 75)"/>
+            <path d="M 138,68" fill="none"/>
+            <path d="M 137,70 C 148,64 155,60 160,55" fill="none" stroke="#1F3528" stroke-width="1.3" stroke-linecap="round"/>
+            <ellipse cx="163" cy="53" rx="7" ry="4.5" fill="none" stroke="#C4A563" stroke-width="1.3" transform="rotate(22 163 53)"/>
+            <line x1="163" y1="49" x2="163" y2="57" stroke="#C4A563" stroke-width=".9" transform="rotate(22 163 53)"/>
+            <path d="M 138,42 C 132,34 134,22 138,42 Z" fill="#C4A563" opacity=".7"/>
+            <path d="M 138,42 C 144,34 142,22 138,42 Z" fill="#C4A563" opacity=".5"/>
+            <!-- BL: CAFÉ FACADE -->
+            <rect x="28" y="138" width="52" height="40" rx="2" fill="none" stroke="#1F3528" stroke-width="1.5"/>
+            <path d="M 24,138 L 54,128 L 84,138" fill="none" stroke="#C4A563" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M 44,178 L 44,160 Q 54,151 64,160 L 64,178" fill="none" stroke="#1F3528" stroke-width="1.2"/>
+            <rect x="29" y="144" width="10" height="8" rx="1" fill="none" stroke="#1F3528" stroke-width="1"/>
+            <rect x="68" y="144" width="10" height="8" rx="1" fill="none" stroke="#1F3528" stroke-width="1"/>
+            <!-- BR: COFFEE CUP -->
+            <path d="M 112,150 L 115,172 L 155,172 L 158,150 Z" fill="none" stroke="#1F3528" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M 158,156 C 167,156 167,166 158,166" fill="none" stroke="#1F3528" stroke-width="1.5"/>
+            <ellipse cx="135" cy="174" rx="20" ry="4.5" fill="none" stroke="#1F3528" stroke-width="1.5"/>
+            <path d="M 122,147 C 120,140 124,133 122,125" fill="none" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 135,146 C 133,139 137,132 135,124" fill="none" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 148,147 C 146,140 150,133 148,125" fill="none" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+          <!-- Outer border on top -->
+          <ellipse cx="100" cy="118" rx="88" ry="108" fill="none" stroke="#C4A563" stroke-width="2.5"/>
+          <ellipse cx="100" cy="118" rx="80" ry="100" fill="none" stroke="#C4A563" stroke-width=".7" opacity=".4"/>
+        </svg>
+        <!-- Wordmark below badge -->
+        <div style="text-align:center;">
+          <div class="wordmark" style="color:var(--deep);font-size:28px;">GreenSip</div>
+          <div class="wordmark-sub" style="color:var(--sage);">Coffee Space</div>
+        </div>
+        <div class="badge-cell-label" style="color:rgba(31,53,40,.35);">Principal · Fundo claro</div>
+      </div>
+
+      <!-- Escuro — dark green -->
+      <div class="badge-cell reveal rv2" style="background:var(--forest);">
+        <!-- BADGE SVG — DARK VERSION -->
+        <svg viewBox="0 0 200 240" width="220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="oval-clip-2"><ellipse cx="100" cy="118" rx="86" ry="106"/></clipPath>
+          </defs>
+          <ellipse cx="100" cy="118" rx="88" ry="108" fill="rgba(31,53,40,.6)"/>
+          <g clip-path="url(#oval-clip-2)">
+            <line x1="12" y1="118" x2="188" y2="118" stroke="#C4A563" stroke-width=".8" opacity=".2"/>
+            <line x1="100" y1="10" x2="100" y2="226" stroke="#C4A563" stroke-width=".8" opacity=".2"/>
+            <!-- TL: SUN -->
+            <circle cx="58" cy="67" r="10" fill="none" stroke="#C4A563" stroke-width="1.8"/>
+            <line x1="58" y1="52" x2="58" y2="47" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="58" y1="82" x2="58" y2="87" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="43" y1="67" x2="38" y2="67" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="73" y1="67" x2="78" y2="67" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="48" y1="57" x2="44" y2="53" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="68" y1="57" x2="72" y2="53" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="48" y1="77" x2="44" y2="81" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <line x1="68" y1="77" x2="72" y2="81" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <!-- TR: COFFEE PLANT (cream) -->
+            <path d="M 138,118 C 138,100 137,80 138,42" fill="none" stroke="#F5EDD8" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M 138,92 C 128,85 120,81 115,77" fill="none" stroke="#F5EDD8" stroke-width="1.3" stroke-linecap="round"/>
+            <ellipse cx="111" cy="75" rx="7" ry="4.5" fill="none" stroke="#C4A563" stroke-width="1.3" transform="rotate(-28 111 75)"/>
+            <line x1="111" y1="71" x2="111" y2="79" stroke="#C4A563" stroke-width=".9" transform="rotate(-28 111 75)"/>
+            <path d="M 137,70 C 148,64 155,60 160,55" fill="none" stroke="#F5EDD8" stroke-width="1.3" stroke-linecap="round"/>
+            <ellipse cx="163" cy="53" rx="7" ry="4.5" fill="none" stroke="#C4A563" stroke-width="1.3" transform="rotate(22 163 53)"/>
+            <line x1="163" y1="49" x2="163" y2="57" stroke="#C4A563" stroke-width=".9" transform="rotate(22 163 53)"/>
+            <path d="M 138,42 C 132,34 134,22 138,42 Z" fill="#C4A563" opacity=".7"/>
+            <path d="M 138,42 C 144,34 142,22 138,42 Z" fill="#C4A563" opacity=".5"/>
+            <!-- BL: CAFÉ (cream) -->
+            <rect x="28" y="138" width="52" height="40" rx="2" fill="none" stroke="#F5EDD8" stroke-width="1.5"/>
+            <path d="M 24,138 L 54,128 L 84,138" fill="none" stroke="#C4A563" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M 44,178 L 44,160 Q 54,151 64,160 L 64,178" fill="none" stroke="#F5EDD8" stroke-width="1.2"/>
+            <rect x="29" y="144" width="10" height="8" rx="1" fill="none" stroke="#F5EDD8" stroke-width="1"/>
+            <rect x="68" y="144" width="10" height="8" rx="1" fill="none" stroke="#F5EDD8" stroke-width="1"/>
+            <!-- BR: CUP (cream) -->
+            <path d="M 112,150 L 115,172 L 155,172 L 158,150 Z" fill="none" stroke="#F5EDD8" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M 158,156 C 167,156 167,166 158,166" fill="none" stroke="#F5EDD8" stroke-width="1.5"/>
+            <ellipse cx="135" cy="174" rx="20" ry="4.5" fill="none" stroke="#F5EDD8" stroke-width="1.5"/>
+            <path d="M 122,147 C 120,140 124,133 122,125" fill="none" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 135,146 C 133,139 137,132 135,124" fill="none" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 148,147 C 146,140 150,133 148,125" fill="none" stroke="#C4A563" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+          <ellipse cx="100" cy="118" rx="88" ry="108" fill="none" stroke="#C4A563" stroke-width="2.5"/>
+          <ellipse cx="100" cy="118" rx="80" ry="100" fill="none" stroke="#C4A563" stroke-width=".7" opacity=".35"/>
+        </svg>
+        <div style="text-align:center;">
+          <div class="wordmark" style="color:var(--cream);font-size:28px;">GreenSip</div>
+          <div class="wordmark-sub" style="color:var(--gold);">Coffee Space</div>
+        </div>
+        <div class="badge-cell-label" style="color:rgba(245,237,216,.25);">Negativo · Fundo escuro</div>
+      </div>
+
+      <!-- Símbolo isolado -->
+      <div class="badge-cell reveal rv3" style="background:#2E5240;">
+        <!-- Symbol mark -->
+        <svg viewBox="0 0 80 80" width="140" height="140" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="42" r="35" fill="none" stroke="#C4A563" stroke-width="1.8"/>
+          <circle cx="40" cy="42" r="28" fill="none" stroke="#C4A563" stroke-width=".6" opacity=".3"/>
+          <ellipse cx="40" cy="48" rx="12" ry="18" fill="none" stroke="#F5EDD8" stroke-width="1.8"/>
+          <line x1="40" y1="31" x2="40" y2="65" stroke="#F5EDD8" stroke-width="1.1"/>
+          <path d="M 40,30 C 34,21 30,11 37,8 C 44,5 48,17 40,30 Z" fill="#C4A563"/>
+        </svg>
+        <div style="text-align:center;">
+          <div class="wordmark" style="color:var(--gold);font-size:20px;letter-spacing:.12em;">GS</div>
+        </div>
+        <div class="badge-cell-label" style="color:rgba(196,165,99,.35);">Símbolo isolado · App icon</div>
+      </div>
+
+    </div><!-- /badge-grid -->
+  </div>
+
+  <!-- Symbol anatomy -->
+  <div class="wrap" style="margin-top:80px;padding-top:64px;border-top:1px solid rgba(196,165,99,.1);">
+    <div class="sec-label" style="color:var(--gold);">Anatomia</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:32px;">
+      <div class="reveal rv1" style="display:flex;align-items:flex-start;gap:14px;padding:20px;background:rgba(196,165,99,.05);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(196,165,99,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="#C4A563" stroke-width="1.8"/><line x1="12" y1="2" x2="12" y2="5" stroke="#C4A563" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="#C4A563" stroke-width="1.8" stroke-linecap="round"/><line x1="2" y1="12" x2="5" y2="12" stroke="#C4A563" stroke-width="1.8" stroke-linecap="round"/><line x1="19" y1="12" x2="22" y2="12" stroke="#C4A563" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--gold);margin-bottom:4px;">Sol</div>
+          <div style="font-size:12px;color:rgba(245,237,216,.4);line-height:1.5;">Energia, origem, vitalidade do grão</div>
+        </div>
+      </div>
+      <div class="reveal rv2" style="display:flex;align-items:flex-start;gap:14px;padding:20px;background:rgba(196,165,99,.05);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(196,165,99,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 6 7 4 7 4M12 12C12 6 17 4 17 4" stroke="#C4A563" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--gold);margin-bottom:4px;">Planta</div>
+          <div style="font-size:12px;color:rgba(245,237,216,.4);line-height:1.5;">Natureza, sustentabilidade, origem</div>
+        </div>
+      </div>
+      <div class="reveal rv3" style="display:flex;align-items:flex-start;gap:14px;padding:20px;background:rgba(196,165,99,.05);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(196,165,99,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="#C4A563" stroke-width="1.8"/><path d="M8 9V5a2 2 0 1 1 4 0v4" stroke="#C4A563" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--gold);margin-bottom:4px;">Café</div>
+          <div style="font-size:12px;color:rgba(245,237,216,.4);line-height:1.5;">Tradição, acolhimento, pertencimento</div>
+        </div>
+      </div>
+      <div class="reveal rv3" style="display:flex;align-items:flex-start;gap:14px;padding:20px;background:rgba(196,165,99,.05);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(196,165,99,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1" stroke="#C4A563" stroke-width="1.8"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke="#C4A563" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--gold);margin-bottom:4px;">Xícara</div>
+          <div style="font-size:12px;color:rgba(245,237,216,.4);line-height:1.5;">O momento. O ritual. A pausa.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     04 — PALETA DE CORES
+══════════════════════════════════ -->
+<section class="section-forest">
+  <div class="wrap">
+    <div class="sec-label reveal">Paleta de Cores</div>
+    <h2 class="sec-h reveal rv1">Cinco cores.<br><em>Cada uma no lugar certo.</em></h2>
+    <div class="divider reveal rv2"></div>
+
+    <div class="palette-grid reveal">
+      <!-- Deep Forest — primary -->
+      <div class="palette-item">
+        <div class="palette-color" style="background:#1F3528;height:240px;"></div>
+        <div class="palette-info" style="background:#1a2e22;">
+          <div class="palette-name" style="color:var(--cream);">Deep Forest</div>
+          <div class="palette-hex" style="color:var(--cream);">#1F3528</div>
+          <div class="palette-use" style="color:rgba(245,237,216,.4);">Fundo principal, texto sobre claro</div>
+          <div class="palette-cmyk" style="color:rgba(245,237,216,.25);">CMYK 43% 0% 25% 79%</div>
+        </div>
+      </div>
+      <!-- Sage -->
+      <div class="palette-item">
+        <div class="palette-color" style="background:#4A6B57;height:240px;"></div>
+        <div class="palette-info" style="background:#3d5a48;">
+          <div class="palette-name" style="color:var(--cream);">Sage</div>
+          <div class="palette-hex" style="color:var(--cream);">#4A6B57</div>
+          <div class="palette-use" style="color:rgba(245,237,216,.4);">Acento verde, backgrounds secundários</div>
+          <div class="palette-cmyk" style="color:rgba(245,237,216,.25);">CMYK 31% 0% 19% 58%</div>
+        </div>
+      </div>
+      <!-- Gold -->
+      <div class="palette-item">
+        <div class="palette-color" style="background:#C4A563;height:240px;"></div>
+        <div class="palette-info" style="background:#b8964f;">
+          <div class="palette-name" style="color:var(--cream);">Gold</div>
+          <div class="palette-hex" style="color:var(--cream);">#C4A563</div>
+          <div class="palette-use" style="color:rgba(245,237,216,.4);">Acento, logo, detalhes premium</div>
+          <div class="palette-cmyk" style="color:rgba(245,237,216,.25);">CMYK 0% 16% 49% 23%</div>
+        </div>
+      </div>
+      <!-- Cream -->
+      <div class="palette-item">
+        <div class="palette-color" style="background:#F5EDD8;height:240px;"></div>
+        <div class="palette-info" style="background:#ede4cc;">
+          <div class="palette-name" style="color:var(--espresso);">Cream</div>
+          <div class="palette-hex" style="color:var(--espresso);">#F5EDD8</div>
+          <div class="palette-use" style="color:rgba(26,15,8,.4);">Fundo de sections, badges, texto negativo</div>
+          <div class="palette-cmyk" style="color:rgba(26,15,8,.3);">CMYK 0% 5% 11% 4%</div>
+        </div>
+      </div>
+      <!-- Espresso -->
+      <div class="palette-item">
+        <div class="palette-color" style="background:#1A0F08;height:240px;"></div>
+        <div class="palette-info" style="background:#120a04;">
+          <div class="palette-name" style="color:var(--cream);">Espresso</div>
+          <div class="palette-hex" style="color:var(--cream);">#1A0F08</div>
+          <div class="palette-use" style="color:rgba(245,237,216,.4);">Footer, texto primário, máxima profundidade</div>
+          <div class="palette-cmyk" style="color:rgba(245,237,216,.25);">CMYK 0% 18% 34% 90%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usage guide -->
+    <div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" class="reveal">
+      <div style="padding:20px 24px;background:rgba(196,165,99,.06);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Dominância</div>
+        <div style="font-size:13px;color:rgba(245,237,216,.5);line-height:1.6;">70% Deep Forest + Cream · 20% Sage · 10% Gold</div>
+      </div>
+      <div style="padding:20px 24px;background:rgba(196,165,99,.06);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Contraste mínimo</div>
+        <div style="font-size:13px;color:rgba(245,237,216,.5);line-height:1.6;">Gold sobre Forest: 5.2:1 ✓ · Cream sobre Forest: 9.1:1 ✓</div>
+      </div>
+      <div style="padding:20px 24px;background:rgba(196,165,99,.06);border:1px solid rgba(196,165,99,.12);border-radius:12px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Proibido</div>
+        <div style="font-size:13px;color:rgba(245,237,216,.5);line-height:1.6;">Gold sobre Cream · Sage sobre Espresso · Cores fora da paleta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     05 — TIPOGRAFIA
+══════════════════════════════════ -->
+<section class="type-section">
+  <div class="wrap">
+    <div class="sec-label reveal">Tipografia</div>
+    <h2 class="sec-h reveal rv1">Duas vozes.<br><em>Um sistema.</em></h2>
+    <p class="sec-body reveal rv2" style="color:rgba(26,15,8,.45);">Cormorant Garamond para o display — elegante, editorial, com personalidade. DM Sans para o corpo — limpo, legível, neutro quando precisa ser.</p>
+    <div class="divider reveal rv3"></div>
+
+    <div class="type-showcase">
+      <!-- Cormorant Display -->
+      <div class="type-block reveal">
+        <div>
+          <div class="type-meta-name">Cormorant Garamond</div>
+          <div class="type-meta-weight">600 / Italic</div>
+          <div class="type-meta-use">Display · Headings</div>
+        </div>
+        <div>
+          <div style="display:flex;gap:12px;margin-bottom:12px;">
+            <span class="font-pair-label">Serif · Display</span>
+          </div>
+          <div class="font-display-a" style="color:var(--deep);line-height:.9;">Aa</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--deep);margin-top:16px;letter-spacing:-.01em;line-height:1.2;">
+            "Um bom café muda<br>a qualidade do seu dia."
+          </div>
+        </div>
+      </div>
+      <!-- Cormorant weights -->
+      <div class="type-block reveal rv1">
+        <div>
+          <div class="type-meta-name">Cormorant Garamond</div>
+          <div class="type-meta-weight">300 · 400 · 600 · 700</div>
+          <div class="type-meta-use">Hierarquia completa</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--espresso);line-height:1;letter-spacing:-.02em;">GREENSIP — Bold 700</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--deep);line-height:1;letter-spacing:-.02em;">GREENSIP — SemiBold 600</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;font-style:italic;color:var(--sage);line-height:1;">GreenSip — Regular Italic</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:rgba(31,53,40,.4);line-height:1;">GreenSip — Light 300</div>
+        </div>
+      </div>
+      <!-- DM Sans -->
+      <div class="type-block reveal rv2">
+        <div>
+          <div class="type-meta-name">DM Sans</div>
+          <div class="type-meta-weight">400 · 500 · 600</div>
+          <div class="type-meta-use">UI · Body · Labels</div>
+        </div>
+        <div>
+          <div style="display:flex;gap:12px;margin-bottom:16px;">
+            <span class="font-pair-label">Sans-serif · UI</span>
+          </div>
+          <div class="font-body-sample" style="font-size:18px;color:rgba(26,15,8,.6);">O café especialidade não é apenas uma bebida — é uma escolha. Uma pausa intencional em um dia que não para.</div>
+          <div style="margin-top:12px;display:flex;gap:16px;">
+            <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);">Pedir na mesa →</span>
+            <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:rgba(31,53,40,.35);">12g · Água 92°C · 4min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     06 — APLICAÇÕES
+══════════════════════════════════ -->
+<section class="section-deep">
+  <div class="wrap">
+    <div class="sec-label reveal">Aplicações</div>
+    <h2 class="sec-h reveal rv1">A marca<br><em>no espaço físico.</em></h2>
+    <p class="sec-body reveal rv2" style="color:rgba(245,237,216,.45);">Cada aplicação reforça a mesma personalidade — do copo que vai na mesa ao ponto de ônibus na rua.</p>
+  </div>
+  <div class="wrap" style="margin-top:56px;">
+    <div class="app-grid">
+
+      <!-- Copo térmico -->
+      <div class="app-item reveal rv1">
+        <div class="app-visual" style="background:linear-gradient(135deg,var(--forest) 0%,var(--deep) 100%);">
+          <div style="display:flex;gap:32px;align-items:center;">
+            <!-- Copo shape -->
+            <div style="position:relative;">
+              <div style="width:72px;height:110px;background:linear-gradient(180deg,#2a4535 0%,#1a2e22 100%);border-radius:8px 8px 12px 12px;border:1.5px solid rgba(196,165,99,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+                <svg viewBox="0 0 200 240" width="42" height="52">
+                  <ellipse cx="100" cy="118" rx="88" ry="108" fill="rgba(31,53,40,.3)" stroke="#C4A563" stroke-width="3"/>
+                  <line x1="12" y1="118" x2="188" y2="118" stroke="#C4A563" stroke-width="1" opacity=".3"/>
+                  <line x1="100" y1="10" x2="100" y2="226" stroke="#C4A563" stroke-width="1" opacity=".3"/>
+                  <circle cx="58" cy="67" r="10" fill="none" stroke="#C4A563" stroke-width="2.5"/>
+                  <line x1="58" y1="52" x2="58" y2="46" stroke="#C4A563" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="58" y1="82" x2="58" y2="88" stroke="#C4A563" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="43" y1="67" x2="37" y2="67" stroke="#C4A563" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="73" y1="67" x2="79" y2="67" stroke="#C4A563" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M 138,118 C 138,100 137,80 138,42" fill="none" stroke="#F5EDD8" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M 138,92 C 128,85 120,81 115,77" fill="none" stroke="#F5EDD8" stroke-width="1.8" stroke-linecap="round"/>
+                  <ellipse cx="111" cy="75" rx="7" ry="4.5" fill="none" stroke="#C4A563" stroke-width="1.8" transform="rotate(-28 111 75)"/>
+                  <rect x="28" y="138" width="52" height="40" rx="2" fill="none" stroke="#F5EDD8" stroke-width="2"/>
+                  <path d="M 24,138 L 54,128 L 84,138" fill="none" stroke="#C4A563" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M 112,150 L 115,172 L 155,172 L 158,150 Z" fill="none" stroke="#F5EDD8" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M 135,146 C 133,139 137,132 135,124" fill="none" stroke="#C4A563" stroke-width="1.8" stroke-linecap="round"/>
+                  <ellipse cx="100" cy="118" rx="88" ry="108" fill="none" stroke="#C4A563" stroke-width="3"/>
+                </svg>
+              </div>
+              <!-- lid -->
+              <div style="width:80px;height:12px;background:rgba(196,165,99,.15);border:1px solid rgba(196,165,99,.3);border-radius:4px 4px 0 0;margin-top:-2px;"></div>
+            </div>
+            <div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--gold);letter-spacing:.08em;">GREENSIP</div>
+              <div style="font-size:9px;color:rgba(196,165,99,.4);letter-spacing:.14em;text-transform:uppercase;margin-top:3px;">Coffee Space</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-footer" style="background:rgba(15,26,20,.8);">
+          <span class="app-footer-name">Copo Térmico</span>
+          <span class="app-footer-tag">Merch · Take-away</span>
+        </div>
+      </div>
+
+      <!-- Embalagem / Bag -->
+      <div class="app-item reveal rv2">
+        <div class="app-visual" style="background:linear-gradient(135deg,var(--cream) 0%,#E8DCC4 100%);">
+          <div style="width:100px;height:130px;background:var(--cream);border:1.5px solid rgba(31,53,40,.15);border-radius:6px 6px 12px 12px;box-shadow:4px 8px 24px rgba(31,53,40,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;">
+            <svg viewBox="0 0 80 80" width="44" height="44">
+              <circle cx="40" cy="42" r="34" fill="none" stroke="#C4A563" stroke-width="2"/>
+              <ellipse cx="40" cy="48" rx="12" ry="18" fill="none" stroke="#1F3528" stroke-width="2"/>
+              <line x1="40" y1="31" x2="40" y2="65" stroke="#1F3528" stroke-width="1.2"/>
+              <path d="M 40,30 C 34,21 30,11 37,8 C 44,5 48,17 40,30 Z" fill="#C4A563"/>
+            </svg>
+            <div style="text-align:center;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:700;color:var(--deep);letter-spacing:.08em;text-transform:uppercase;">GreenSip</div>
+              <div style="font-size:7px;color:var(--sage);letter-spacing:.16em;text-transform:uppercase;margin-top:2px;">Coffee Space</div>
+            </div>
+            <div style="width:60px;height:1px;background:rgba(196,165,99,.4);"></div>
+            <div style="font-size:7px;color:rgba(31,53,40,.35);letter-spacing:.08em;text-transform:uppercase;">Blend Especial · 250g</div>
+          </div>
+        </div>
+        <div class="app-footer" style="background:rgba(15,26,20,.8);">
+          <span class="app-footer-name">Embalagem</span>
+          <span class="app-footer-tag">Produto · Varejo</span>
+        </div>
+      </div>
+
+      <!-- Cardápio -->
+      <div class="app-item reveal rv1">
+        <div class="app-visual" style="background:var(--cream);position:relative;">
+          <div style="width:160px;height:210px;background:#fff;border:1px solid rgba(31,53,40,.1);border-radius:4px;box-shadow:6px 10px 32px rgba(31,53,40,.12);padding:20px 16px;display:flex;flex-direction:column;gap:10px;">
+            <div style="text-align:center;margin-bottom:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--deep);letter-spacing:.06em;">GreenSip</div>
+              <div style="font-size:7px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Coffee Space · Menu</div>
+              <div style="width:40px;height:1px;background:var(--gold);margin:8px auto;"></div>
+            </div>
+            <div style="font-size:8px;font-weight:700;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;">Espresso</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:11px;font-weight:600;color:var(--deep);">Espresso Simples</span>
+              <span style="font-size:10px;color:var(--gold);font-family:monospace;">R$8</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:11px;font-weight:600;color:var(--deep);">Cappuccino</span>
+              <span style="font-size:10px;color:var(--gold);font-family:monospace;">R$14</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:11px;font-weight:600;color:var(--deep);">Filtrado V60</span>
+              <span style="font-size:10px;color:var(--gold);font-family:monospace;">R$16</span>
+            </div>
+            <div style="width:100%;height:1px;background:rgba(31,53,40,.08);margin-top:4px;"></div>
+            <div style="font-size:8px;font-weight:700;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;">NomadSip</div>
+            <div style="font-size:8px;color:rgba(31,53,40,.4);line-height:1.4;">Peça na mesa via QR code. Sem sair do seu flow.</div>
+          </div>
+        </div>
+        <div class="app-footer" style="background:rgba(15,26,20,.8);">
+          <span class="app-footer-name">Cardápio</span>
+          <span class="app-footer-tag">Print · Digital</span>
+        </div>
+      </div>
+
+      <!-- Fachada / ambiente -->
+      <div class="app-item reveal rv2">
+        <div class="app-visual" style="background:linear-gradient(180deg,#8B9E84 0%,#6B8860 50%,#4A6B57 100%);position:relative;overflow:hidden;">
+          <!-- Parede -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:65%;background:#F5EDD8;"></div>
+          <!-- Awning -->
+          <div style="position:absolute;bottom:65%;left:15%;right:15%;height:20px;background:var(--deep);clip-path:polygon(0 100%,50% 0%,100% 100%);"></div>
+          <!-- Janela -->
+          <div style="position:absolute;bottom:35%;left:50%;transform:translateX(-50%);width:80px;height:55px;background:rgba(74,107,87,.15);border:2px solid var(--deep);border-radius:4px 4px 0 0;display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:10px;font-weight:700;color:var(--deep);letter-spacing:.06em;">GreenSip</div>
+              <div style="font-size:6px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;">Coffee Space</div>
+            </div>
+          </div>
+          <!-- Letras na fachada -->
+          <div style="position:absolute;bottom:20%;left:0;right:0;text-align:center;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--deep);letter-spacing:.12em;text-transform:uppercase;">GREENSIP</div>
+          </div>
+        </div>
+        <div class="app-footer" style="background:rgba(15,26,20,.8);">
+          <span class="app-footer-name">Fachada</span>
+          <span class="app-footer-tag">Ambiente · Sinalização</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     07 — NOMADSIP TEASER
+══════════════════════════════════ -->
+<section class="nomad-section">
+  <div class="wrap" style="position:relative;z-index:1;">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:32px;" class="reveal">
+          <div class="nomad-badge">
+            <svg viewBox="0 0 80 80" width="40" height="40">
+              <circle cx="40" cy="42" r="28" fill="none" stroke="#C4A563" stroke-width="1.5"/>
+              <ellipse cx="40" cy="48" rx="9" ry="14" fill="none" stroke="#F5EDD8" stroke-width="1.5"/>
+              <line x1="40" y1="35" x2="40" y2="61" stroke="#F5EDD8" stroke-width="1"/>
+              <path d="M 40,34 C 36,27 33,20 38,18 C 43,16 46,24 40,34 Z" fill="#C4A563"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:.04em;">NomadSip</div>
+            <div style="font-size:9px;color:rgba(196,165,99,.4);letter-spacing:.14em;text-transform:uppercase;margin-top:2px;">Sub-marca digital</div>
+          </div>
+        </div>
+
+        <div class="sec-label reveal" style="color:var(--sage);">Próximo Capítulo</div>
+        <h2 class="sec-h reveal rv1" style="color:var(--cream);">O café que não<br><em style="color:var(--gold);">interrompe seu flow.</em></h2>
+        <p style="font-size:16px;line-height:1.75;color:rgba(245,237,216,.42);margin-top:20px;max-width:460px;" class="reveal rv2">Um app para cafés que atendem nômades digitais. Peça da mesa, acompanhe, pague — sem perder seu lugar nem sua concentração.</p>
+
+        <div style="margin-top:32px;display:flex;gap:10px;flex-wrap:wrap;" class="reveal rv3">
+          <span class="pill" style="background:rgba(196,165,99,.1);color:var(--gold);border:1px solid rgba(196,165,99,.2);">MVP em desenvolvimento</span>
+          <span class="pill" style="background:rgba(74,107,87,.1);color:var(--sage);border:1px solid rgba(74,107,87,.2);">Case completo em breve</span>
+        </div>
+      </div>
+
+      <div class="reveal rv2">
+        <div class="nomad-feature">
+          <div class="nomad-feature-icon">
+            <svg width="16" height="16" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:4px;">Peça sem sair do lugar</div>
+            <div style="font-size:13px;color:rgba(245,237,216,.38);line-height:1.6;">QR fixo na mesa. Abre o cardápio, monta o pedido, confirma. O café vem até você.</div>
+          </div>
+        </div>
+        <div class="nomad-feature">
+          <div class="nomad-feature-icon">
+            <svg width="16" height="16" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:4px;">WiFi + nível de ruído ao vivo</div>
+            <div style="font-size:13px;color:rgba(245,237,216,.38);line-height:1.6;">Antes de entrar, você sabe se o lugar tem tomada, WiFi decente e ambiente tranquilo.</div>
+          </div>
+        </div>
+        <div class="nomad-feature">
+          <div class="nomad-feature-icon">
+            <svg width="16" height="16" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:4px;">Perfil portátil</div>
+            <div style="font-size:13px;color:rgba(245,237,216,.38);line-height:1.6;">Suas preferências viajam com você. Seja no Green Sip ou em qualquer café parceiro.</div>
+          </div>
+        </div>
+        <div class="nomad-feature">
+          <div class="nomad-feature-icon">
+            <svg width="16" height="16" fill="none" stroke="#C4A563" stroke-width="1.8" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--cream);margin-bottom:4px;">Histórico e controle de gasto</div>
+            <div style="font-size:13px;color:rgba(245,237,216,.38);line-height:1.6;">Sabe quanto você gasta por mês em cafés? O app mostra — com gráficos e tudo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-copy">Brand Identity Redesign por <strong>Guilherme Andrade</strong> · Andarilho Digital</div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:rgba(196,165,99,.4);">GreenSip</div>
+    <div style="width:1px;height:16px;background:rgba(196,165,99,.15);"></div>
+    <div style="font-size:10px;color:rgba(245,237,216,.2);letter-spacing:.1em;text-transform:uppercase;">2026</div>
+  </div>
+</footer>
+
+<script>
+// Scroll progress
+const pb = document.getElementById('spb');
+window.addEventListener('scroll', () => {
+  pb.style.width = (scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
+}, { passive: true });
+
+// Reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -24px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORNADA — Andarilho Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:   #0d0d0e;
+      --bg2:  #1a1a1c;
+      --gold: #e7c9a3;
+      --rust: #ae330a;
+      --white:#ffffff;
+      --max:  1100px;
+      --px:   clamp(20px, 5vw, 80px);
+      --green:#4ade80;
+      --blue: #60a5fa;
+      --purple:#a78bfa;
+      --yellow:#fbbf24;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    .wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--px); }
+
+    .tag {
+      display: inline-block;
+      background: var(--rust);
+      color: var(--gold);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 6px;
+    }
+    .tag-dev {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3);
+      color: #fbbf24; font-size: 11px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 6px;
+    }
+    .tag-dev::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #fbbf24; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .prancheta {
+      padding-block: 100px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .section-header { margin-bottom: 56px; }
+    .section-header h2 {
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 800; line-height: 1.1;
+      margin-top: 16px; color: var(--gold);
+    }
+    .section-header p {
+      font-size: 16px; color: rgba(255,255,255,.6);
+      margin-top: 12px; max-width: 560px; line-height: 1.75;
+    }
+
+    /* ── BACK NAV ── */
+    .back-nav {
+      position: fixed; top: 24px; left: 24px; z-index: 100;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(13,13,14,.85); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 100px;
+      padding: 8px 16px; font-size: 13px; color: rgba(255,255,255,.6);
+      transition: color .2s;
+    }
+    .back-nav:hover { color: var(--gold); }
+
+    /* ── COVER ── */
+    #cover {
+      min-height: 100vh; display: flex; align-items: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.28) 0%, var(--bg) 65%);
+      padding-block: 140px;
+    }
+    .cover-inner { display: flex; flex-direction: column; gap: 28px; }
+    .cover-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .cover-num { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.35); letter-spacing: .1em; text-transform: uppercase; }
+    .cover-title {
+      font-size: clamp(28px, 3.8vw, 52px);
+      font-weight: 900; line-height: 1.1; letter-spacing: -.02em;
+    }
+    .cover-title .gold { color: var(--gold); }
+    .cover-sub {
+      font-size: clamp(13px, 1vw, 15px);
+      color: rgba(255,255,255,.6); max-width: 480px; line-height: 1.7;
+    }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cover-tag {
+      padding: 6px 14px; border: 1px solid rgba(231,201,163,.2);
+      border-radius: 100px; font-size: 12px; font-weight: 500; color: var(--gold);
+    }
+    .cover-stats { display: flex; gap: 48px; padding-top: 8px; }
+    .stat-num { font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ── PROBLEMA ── */
+    #problema { background: var(--bg2); }
+    .prob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .prob-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .prob-icon {
+      width: 44px; height: 44px; background: rgba(174,51,10,.15);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .prob-card h3 { font-size: 17px; font-weight: 700; color: var(--gold); }
+    .prob-card p { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.65; }
+
+    /* ── MÓDULOS ── */
+    #modulos { background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.18) 0%, var(--bg) 65%); }
+    .modulos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+    .modulo-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 24px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: border-color .2s;
+    }
+    .modulo-card:hover { border-color: rgba(174,51,10,.35); }
+    .modulo-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .mi-rust { background: rgba(174,51,10,.15); }
+    .mi-gold { background: rgba(231,201,163,.1); }
+    .mi-green { background: rgba(74,222,128,.1); }
+    .mi-blue { background: rgba(96,165,250,.1); }
+    .mi-purple { background: rgba(167,139,250,.1); }
+    .mi-yellow { background: rgba(251,191,36,.1); }
+    .mi-orange { background: rgba(251,146,60,.1); }
+    .mi-teal { background: rgba(45,212,191,.1); }
+
+    /* ── DIFFICULTY TABLE ── */
+    .diff-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 20px; }
+    .diff-card {
+      border-radius: 12px; padding: 16px 14px; text-align: center;
+      border: 1px solid rgba(255,255,255,.07);
+    }
+    .diff-card .diff-label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; }
+    .diff-card .diff-mult { font-size: 22px; font-weight: 800; }
+    .diff-card .diff-desc { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 4px; }
+    .diff-trivial { background: rgba(74,222,128,.06); border-color: rgba(74,222,128,.15); }
+    .diff-trivial .diff-label, .diff-trivial .diff-mult { color: #4ade80; }
+    .diff-normal { background: rgba(96,165,250,.06); border-color: rgba(96,165,250,.15); }
+    .diff-normal .diff-label, .diff-normal .diff-mult { color: #60a5fa; }
+    .diff-hard { background: rgba(251,191,36,.06); border-color: rgba(251,191,36,.15); }
+    .diff-hard .diff-label, .diff-hard .diff-mult { color: #fbbf24; }
+    .diff-epic { background: rgba(167,139,250,.06); border-color: rgba(167,139,250,.15); }
+    .diff-epic .diff-label, .diff-epic .diff-mult { color: #a78bfa; }
+
+    /* ── RANKS ── */
+    .ranks-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 20px; }
+    .rank-card {
+      border-radius: 12px; padding: 16px 14px; text-align: center;
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    }
+    .rank-card .rank-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+    .rank-card .rank-level { font-size: 10px; font-weight: 600; color: rgba(255,255,255,.4); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ── RARITIES ── */
+    .rarities-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .rarity {
+      padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    }
+    .r-comum { background: rgba(255,255,255,.06); color: rgba(255,255,255,.5); }
+    .r-incomum { background: rgba(74,222,128,.1); color: #4ade80; }
+    .r-raro { background: rgba(96,165,250,.1); color: #60a5fa; }
+    .r-epico { background: rgba(167,139,250,.12); color: #a78bfa; }
+    .r-lendario { background: rgba(251,191,36,.12); color: #fbbf24; }
+
+    /* ── SKILL TREE VISUAL ── */
+    .skill-tree { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .skill-row { display: flex; gap: 8px; }
+    .skill-node {
+      width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,.1); font-size: 11px; font-weight: 700; cursor: default;
+    }
+    .sn-locked { background: rgba(255,255,255,.03); color: rgba(255,255,255,.2); }
+    .sn-unlocked { background: rgba(174,51,10,.2); border-color: rgba(174,51,10,.5); color: var(--gold); }
+    .sn-max { background: rgba(251,191,36,.15); border-color: rgba(251,191,36,.4); color: #fbbf24; }
+    .modulo-num { font-size: 10px; font-weight: 700; color: rgba(174,51,10,.7); letter-spacing: .12em; text-transform: uppercase; }
+    .modulo-card h3 { font-size: 16px; font-weight: 700; color: var(--gold); }
+    .modulo-card p { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.65; }
+    .modulo-features { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .modulo-feat {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: rgba(255,255,255,.5);
+    }
+    .modulo-feat::before {
+      content: ''; width: 4px; height: 4px;
+      background: var(--rust); border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ── GAMIFICAÇÃO ── */
+    #gamificacao { background: var(--bg2); }
+    .rpg-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 48px; align-items: start; }
+    .rpg-char {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 20px; padding: 32px;
+    }
+    .rpg-char-top { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .rpg-avatar {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: rgba(174,51,10,.2); border: 2px solid rgba(174,51,10,.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rpg-level { font-size: 11px; font-weight: 700; color: var(--rust); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+    .rpg-name { font-size: 18px; font-weight: 800; color: var(--gold); }
+    .rpg-xp-bar-wrap { margin-bottom: 24px; }
+    .rpg-xp-label { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,.4); margin-bottom: 6px; }
+    .rpg-xp-bar { height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+    .rpg-xp-fill { height: 100%; border-radius: 3px; background: linear-gradient(to right, var(--rust), var(--gold)); width: 62%; }
+    .rpg-attrs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .rpg-attr {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .rpg-attr-name { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+    .rpg-attr-val { font-size: 20px; font-weight: 800; }
+    .attr-forca .rpg-attr-name { color: rgba(248,113,113,.7); }
+    .attr-forca .rpg-attr-val { color: #f87171; }
+    .attr-mente .rpg-attr-name { color: rgba(96,165,250,.7); }
+    .attr-mente .rpg-attr-val { color: var(--blue); }
+    .attr-disciplina .rpg-attr-name { color: rgba(167,139,250,.7); }
+    .attr-disciplina .rpg-attr-val { color: var(--purple); }
+    .attr-riqueza .rpg-attr-name { color: rgba(251,191,36,.7); }
+    .attr-riqueza .rpg-attr-val { color: var(--yellow); }
+
+    .rpg-rules { display: flex; flex-direction: column; gap: 20px; }
+    .rpg-rule {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px; padding: 20px;
+    }
+    .rpg-rule-icon {
+      width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rpg-rule h4 { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .rpg-rule p { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.55; }
+
+    /* ── STACK ── */
+    #stack { background: var(--bg); }
+    .stack-flow { display: flex; align-items: center; gap: 0; margin-top: 48px; flex-wrap: wrap; }
+    .stack-item { display: flex; flex-direction: column; align-items: center; gap: 12px; flex: 1; min-width: 120px; }
+    .stack-icon {
+      width: 72px; height: 72px; background: var(--bg2);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stack-name { font-size: 13px; font-weight: 600; color: var(--gold); text-align: center; }
+    .stack-role { font-size: 11px; color: rgba(255,255,255,.4); text-align: center; }
+    .stack-arrow { font-size: 22px; color: rgba(174,51,10,.6); padding: 0 4px; flex-shrink: 0; margin-bottom: 36px; }
+
+    /* ── MOCKUPS ── */
+    #mockups { background: var(--bg2); }
+    .mock-placeholder {
+      width: 100%; aspect-ratio: 16/7;
+      background: rgba(255,255,255,.02); border: 1px dashed rgba(231,201,163,.12);
+      border-radius: 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      margin-bottom: 20px;
+    }
+    .mock-placeholder-sm {
+      aspect-ratio: 4/3; background: rgba(255,255,255,.02);
+      border: 1px dashed rgba(231,201,163,.12); border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .mock-ph-label { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .mock-ph-label svg { opacity: .18; }
+    .mock-ph-label span { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(231,201,163,.3); }
+    .mock-ph-label small { font-size: 10px; color: rgba(255,255,255,.18); }
+    .mock-row { display: grid; gap: 16px; margin-bottom: 16px; }
+    .mock-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .mock-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+    /* ── ENTREGÁVEIS ── */
+    #entregaveis { background: radial-gradient(ellipse at 50% 0%, rgba(174,51,10,.14) 0%, var(--bg) 70%); }
+    .deliverables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 48px; }
+    .deliver-block h3 { font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 20px; letter-spacing: .16em; text-transform: uppercase; }
+    .deliver-list { display: flex; flex-direction: column; gap: 14px; }
+    .deliver-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.5; }
+    .deliver-item::before { content: ''; width: 6px; height: 6px; background: var(--rust); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+    .result-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px; padding: 20px 24px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .result-num { font-size: 32px; font-weight: 800; color: var(--gold); line-height: 1; min-width: 56px; }
+    .result-label { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5; }
+
+    /* ── STATUS ── */
+    #status-final {
+      background: var(--bg2);
+      text-align: center;
+    }
+    .status-badge-wrap { display: flex; justify-content: center; margin-bottom: 24px; }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25);
+      color: #fbbf24; font-size: 12px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: 10px 20px; border-radius: 100px;
+    }
+    .status-badge::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: #fbbf24; animation: pulse 2s infinite;
+    }
+    #status-final h2 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: var(--gold); margin-bottom: 16px; }
+    #status-final p { font-size: 16px; color: rgba(255,255,255,.6); max-width: 480px; margin: 0 auto 48px; line-height: 1.7; }
+    .timeline-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: left; }
+    .tl-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px; padding: 20px; position: relative;
+    }
+    .tl-card.active { border-color: rgba(174,51,10,.4); background: rgba(174,51,10,.06); }
+    .tl-step { font-size: 10px; font-weight: 700; color: var(--rust); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+    .tl-step.done { color: rgba(74,222,128,.8); }
+    .tl-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .tl-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.5; }
+    .tl-dot { position: absolute; top: 20px; right: 20px; width: 8px; height: 8px; border-radius: 50%; }
+    .tl-dot.active { background: var(--rust); animation: pulse 2s infinite; }
+    .tl-dot.done { background: #4ade80; }
+    .tl-dot.pending { background: rgba(255,255,255,.2); }
+
+    /* ── DEMO SECTION ── */
+    #demo { background: radial-gradient(ellipse at 50% 100%, rgba(174,51,10,.18) 0%, var(--bg) 65%); text-align: center; border-bottom: none; }
+    #demo h2 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: var(--gold); margin-top: 16px; margin-bottom: 12px; }
+    #demo p { font-size: 16px; color: rgba(255,255,255,.6); margin-bottom: 36px; max-width: 480px; margin-inline: auto; margin-bottom: 36px; }
+    .demo-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: 700;
+      border: 1px solid transparent; cursor: pointer; text-decoration: none;
+      transition: opacity .2s;
+    }
+    .btn-rust { background: var(--rust); color: var(--gold); border-color: var(--rust); }
+    .btn-outline { background: rgba(231,201,163,.08); color: var(--gold); border-color: rgba(231,201,163,.3); }
+    .btn:hover { opacity: .85; }
+
+    /* ── EXPORT ── */
+    .export-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100;
+      background: var(--bg2); color: rgba(255,255,255,.5);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 100px;
+      padding: 10px 18px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+    }
+    .export-btn:hover { color: var(--gold); border-color: rgba(231,201,163,.3); }
+    body.prancheta-mode .back-nav,
+    body.prancheta-mode .export-btn { display: none; }
+
+    @media (max-width: 768px) {
+      .prob-grid, .modulos-grid { grid-template-columns: 1fr; }
+      .rpg-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .deliverables-grid { grid-template-columns: 1fr; gap: 40px; }
+      .mock-row.cols-2, .mock-row.cols-3 { grid-template-columns: 1fr; }
+      .cover-stats { gap: 28px; }
+      .timeline-mini { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="lp-andarilho.html#portfolio" class="back-nav">← Voltar ao portfólio</a>
+
+<!-- PRANCHETA 1 — COVER -->
+<section id="cover" class="prancheta">
+  <div class="wrap">
+    <div class="cover-inner">
+      <div class="cover-meta">
+        <span class="tag">Projeto 04</span>
+        <span class="cover-num">Lifestyle · Finanças · Gamificação</span>
+        <span class="tag-dev">Em desenvolvimento</span>
+      </div>
+      <h1 class="cover-title">JORNADA<br><span class="gold">— Gerencie sua vida como um RPG</span></h1>
+      <p class="cover-sub">App de gestão de vida completo: missões, habilidades, inventário, finanças, dieta, treinos — tudo conectado num sistema de XP, níveis, ranks e raridades.</p>
+      <div class="cover-tags">
+        <span class="cover-tag">HTML</span>
+        <span class="cover-tag">CSS</span>
+        <span class="cover-tag">JavaScript</span>
+        <span class="cover-tag">LocalStorage</span>
+        <span class="cover-tag">Zero dependências</span>
+      </div>
+      <div class="cover-stats">
+        <div>
+          <div class="stat-num">8</div>
+          <div class="stat-label">Módulos</div>
+        </div>
+        <div>
+          <div class="stat-num">4</div>
+          <div class="stat-label">Atributos RPG</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Missões</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 2 — PROBLEMA -->
+<section id="problema" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O Problema</span>
+      <h2>Você tem 7 apps abertos<br>e ainda não se organiza</h2>
+      <p>Um app pra dieta, outro pra treino, outro pra finanças, outro pra hábitos. Nenhum conversa com o outro e nenhum te motiva a continuar.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>Fragmentação total</h3>
+        <p>Treino no Strava, dieta no MyFitnessPal, finanças no Notion, hábitos no Streaks. Você gerencia apps, não sua vida.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Sem motivação pra continuar</h3>
+        <p>Aplicativos comuns não recompensam consistência. Você faz 3 dias, some por 2, e não sente evolução nenhuma.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Dados sem contexto</h3>
+        <p>Você registra o treino mas não vê como ele impacta seu humor, seu sono, sua produtividade ou seu dinheiro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 3 — MÓDULOS -->
+<section id="modulos" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Os Módulos</span>
+      <h2>Oito módulos.<br>Um sistema só.</h2>
+      <p>Cada módulo é uma área da sua vida. Cada ação dentro deles gera XP, evolui atributos e pode dropar itens no seu inventário.</p>
+    </div>
+    <div class="modulos-grid">
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-rust">
+          <svg width="22" height="22" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="modulo-num">01 — Missões</div>
+        <h3>Quests da Vida Real</h3>
+        <p>Hábitos e tarefas transformados em quests com dificuldade ajustável. Missões mais difíceis rendem mais XP.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">4 níveis de dificuldade com multiplicadores</div>
+          <div class="modulo-feat">Missões únicas, diárias, semanais e mensais</div>
+          <div class="modulo-feat">Streak multiplier: 3d +1.5x / 7d +2x</div>
+          <div class="modulo-feat">Agrupamento por Área da vida</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-blue">
+          <svg width="22" height="22" fill="none" stroke="#60a5fa" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="modulo-num">02 — Áreas</div>
+        <h3>Territórios da Jornada</h3>
+        <p>Categorize missões por área da vida. Veja quanto XP cada território gerou e onde você está negligenciando.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Áreas personalizáveis com cor e ícone</div>
+          <div class="modulo-feat">Dashboard de XP por área no mês</div>
+          <div class="modulo-feat">Balanceamento visual da sua vida</div>
+          <div class="modulo-feat">Missões linkadas a múltiplas áreas</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-purple">
+          <svg width="22" height="22" fill="none" stroke="#a78bfa" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <div class="modulo-num">03 — Árvore de Habilidades</div>
+        <h3>Skills & Desbloqueios</h3>
+        <p>Arvore visual de habilidades. Complete missões suficientes para desbloquear novos nós e evoluir sua classe.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Nós bloqueados, desbloqueados e no máximo</div>
+          <div class="modulo-feat">Ramificações por atributo (Força, Mente...)</div>
+          <div class="modulo-feat">Skills influenciam XP e drops de inventário</div>
+          <div class="modulo-feat">Visual tipo ARPG — não é só lista</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-yellow">
+          <svg width="22" height="22" fill="none" stroke="#fbbf24" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div class="modulo-num">04 — Inventário</div>
+        <h3>Itens & Raridades</h3>
+        <p>Missões dropam itens com raridade. Comum, Incomum, Raro, Épico e Lendário — cada item tem efeito e história.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">5 raridades com visual e cor distintos</div>
+          <div class="modulo-feat">Itens com descrição e atributo bônus</div>
+          <div class="modulo-feat">Drop chance varia por dificuldade da missão</div>
+          <div class="modulo-feat">Coleção e conquistas por raridade</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-green">
+          <svg width="22" height="22" fill="none" stroke="#4ade80" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div class="modulo-num">05 — Dieta & Corpo</div>
+        <h3>Nutrição & Treinos</h3>
+        <p>Registro unificado de refeições e sessões de treino. Calorias, macros, séries, cargas — tudo num único painel.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Log de refeições com calorias e macros</div>
+          <div class="modulo-feat">Treinos com séries, reps e progressão de carga</div>
+          <div class="modulo-feat">Templates reutilizáveis de treino</div>
+          <div class="modulo-feat">Cada sessão gera XP de Força ou Disciplina</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-orange">
+          <svg width="22" height="22" fill="none" stroke="#fb923c" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="modulo-num">06 — Relatório de Vida</div>
+        <h3>Finanças & Analytics</h3>
+        <p>O "Relatório de Expedição" da sua jornada. Receitas, despesas, metas de poupança e visão geral da saúde financeira.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Entradas e saídas com categorias</div>
+          <div class="modulo-feat">Limite mensal por categoria de gasto</div>
+          <div class="modulo-feat">Meta de reserva com progresso visual</div>
+          <div class="modulo-feat">Gastos conscientes geram XP de Riqueza</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon" style="background:rgba(248,113,113,.1)">
+          <svg width="22" height="22" fill="none" stroke="#f87171" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="modulo-num">07 — Personagem</div>
+        <h3>Rank & Evolução</h3>
+        <p>Seu painel de personagem RPG. Atributos, nível, rank atual, conquistas e histórico de evolução ao longo do tempo.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">4 atributos: Força, Mente, Disciplina, Riqueza</div>
+          <div class="modulo-feat">Ranks por nível: Novato → Aventureiro → Herói → Lendário</div>
+          <div class="modulo-feat">XP total e histórico de level up</div>
+          <div class="modulo-feat">Gráfico de evolução por atributo</div>
+        </div>
+      </div>
+
+      <div class="modulo-card">
+        <div class="modulo-icon mi-teal">
+          <svg width="22" height="22" fill="none" stroke="#2dd4bf" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        </div>
+        <div class="modulo-num">08 — Configurações</div>
+        <h3>Personalização Total</h3>
+        <p>Tema de cor, fonte, idioma e portabilidade. O app se adapta a você — não o contrário.</p>
+        <div class="modulo-features">
+          <div class="modulo-feat">Fonte customizável via Google Fonts</div>
+          <div class="modulo-feat">Cor de destaque, fundo e texto ajustáveis</div>
+          <div class="modulo-feat">Export / import JSON — seus dados são seus</div>
+          <div class="modulo-feat">Toggle PT / EN com tradução via IA</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 4 — GAMIFICAÇÃO -->
+<section id="gamificacao" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O Sistema RPG</span>
+      <h2>Sua vida vira um jogo.<br>Sem perder a seriedade.</h2>
+      <p>Cada ação real — treinar, economizar, estudar, dormir bem — gera XP. XP evolui atributos. Atributos sobem de nível. Você sente progresso mesmo nos dias difíceis.</p>
+    </div>
+
+    <div class="rpg-wrap">
+      <!-- Personagem demo -->
+      <div class="rpg-char">
+        <div class="rpg-char-top">
+          <div class="rpg-avatar">
+            <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="rpg-level">Nível 12 · Aventureiro</div>
+            <div class="rpg-name">Seu Personagem</div>
+          </div>
+        </div>
+        <div class="rpg-xp-bar-wrap">
+          <div class="rpg-xp-label"><span>XP</span><span>1.240 / 2.000</span></div>
+          <div class="rpg-xp-bar"><div class="rpg-xp-fill"></div></div>
+        </div>
+        <div class="rpg-attrs">
+          <div class="rpg-attr attr-forca">
+            <div class="rpg-attr-name">Força</div>
+            <div class="rpg-attr-val">34</div>
+          </div>
+          <div class="rpg-attr attr-mente">
+            <div class="rpg-attr-name">Mente</div>
+            <div class="rpg-attr-val">28</div>
+          </div>
+          <div class="rpg-attr attr-disciplina">
+            <div class="rpg-attr-name">Disciplina</div>
+            <div class="rpg-attr-val">41</div>
+          </div>
+          <div class="rpg-attr attr-riqueza">
+            <div class="rpg-attr-name">Riqueza</div>
+            <div class="rpg-attr-val">19</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regras do sistema -->
+      <div class="rpg-rules">
+        <div class="rpg-rule">
+          <div class="rpg-rule-icon" style="background:rgba(174,51,10,.15)">
+            <svg width="20" height="20" fill="none" stroke="#ae330a" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div style="flex:1">
+            <h4>Dificuldade multiplica XP</h4>
+            <p style="margin-bottom:10px">Missões mais difíceis rendem mais XP. Escolha o desafio certo e cresça mais rápido.</p>
+            <div class="diff-grid">
+              <div class="diff-card diff-trivial"><div class="diff-label">Trivial</div><div class="diff-mult">1×</div><div class="diff-desc">base</div></div>
+              <div class="diff-card diff-normal"><div class="diff-label">Normal</div><div class="diff-mult">1.5×</div><div class="diff-desc">padrão</div></div>
+              <div class="diff-card diff-hard"><div class="diff-label">Difícil</div><div class="diff-mult">2×</div><div class="diff-desc">desafio</div></div>
+              <div class="diff-card diff-epic"><div class="diff-label">Épico</div><div class="diff-mult">3×</div><div class="diff-desc">lendário</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="rpg-rule">
+          <div class="rpg-rule-icon" style="background:rgba(167,139,250,.1)">
+            <svg width="20" height="20" fill="none" stroke="#a78bfa" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div style="flex:1">
+            <h4>Streak multiplica o ganho</h4>
+            <p style="margin-bottom:10px">3 dias seguidos: +1.5x XP. 7 dias: +2x XP. Consistência é recompensada exponencialmente.</p>
+            <div class="ranks-grid" style="grid-template-columns:repeat(4,1fr)">
+              <div class="rank-card"><div class="rank-title" style="color:#9ca3af">Novato</div><div class="rank-level">Lv 1–4</div></div>
+              <div class="rank-card"><div class="rank-title" style="color:#4ade80">Aventureiro</div><div class="rank-level">Lv 5–9</div></div>
+              <div class="rank-card"><div class="rank-title" style="color:#60a5fa">Herói</div><div class="rank-level">Lv 10–19</div></div>
+              <div class="rank-card"><div class="rank-title" style="color:#fbbf24">Lendário</div><div class="rank-level">Lv 20+</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="rpg-rule">
+          <div class="rpg-rule-icon" style="background:rgba(251,191,36,.1)">
+            <svg width="20" height="20" fill="none" stroke="#fbbf24" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div style="flex:1">
+            <h4>Missões dropam itens raros</h4>
+            <p style="margin-bottom:10px">Completar missões tem chance de dropar itens no inventário. Missões épicas têm maior chance de Lendários.</p>
+            <div class="rarities-row">
+              <span class="rarity r-comum">Comum</span>
+              <span class="rarity r-incomum">Incomum</span>
+              <span class="rarity r-raro">Raro</span>
+              <span class="rarity r-epico">Épico</span>
+              <span class="rarity r-lendario">Lendário</span>
+            </div>
+          </div>
+        </div>
+        <div class="rpg-rule">
+          <div class="rpg-rule-icon" style="background:rgba(96,165,250,.1)">
+            <svg width="20" height="20" fill="none" stroke="#60a5fa" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div>
+            <h4>Evolução visível ao longo do tempo</h4>
+            <p>Gráfico de atributos mostra como você evoluiu em cada área nos últimos 30, 60 e 90 dias.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 5 — STACK -->
+<section id="stack" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Stack</span>
+      <h2>Zero dependências.<br>Roda em qualquer lugar.</h2>
+      <p>Filosofia idêntica ao CRM: um arquivo, tudo dentro. Sem servidor, sem conta, sem assinatura.</p>
+    </div>
+    <div class="stack-flow">
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+        </div>
+        <div class="stack-name">HTML</div>
+        <div class="stack-role">Estrutura</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="stack-name">CSS</div>
+        <div class="stack-role">Interface & tema</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="stack-name">JavaScript</div>
+        <div class="stack-role">Lógica & RPG engine</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div class="stack-name">LocalStorage</div>
+        <div class="stack-role">Persistência local</div>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-item">
+        <div class="stack-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e7c9a3" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="stack-name">IndexedDB</div>
+        <div class="stack-role">Histórico & logs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 6 — MOCKUPS -->
+<section id="mockups" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">Mockups</span>
+      <h2>Telas em construção</h2>
+      <p>Design do app sendo desenvolvido. Os slots abaixo representam cada tela principal da experiência.</p>
+    </div>
+
+    <!-- Dashboard principal -->
+    <div class="mock-placeholder">
+      <div class="mock-ph-label">
+        <svg width="32" height="32" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Mockup 01</span>
+        <small>Dashboard principal · 16:7</small>
+      </div>
+    </div>
+
+    <!-- Personagem + Missões -->
+    <div class="mock-row cols-2">
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Mockup 02</span>
+          <small>Personagem & Rank · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Mockup 03</span>
+          <small>Missões com dificuldade · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventário + Árvore + Relatório de Vida -->
+    <div class="mock-row cols-3">
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span>Mockup 04</span>
+          <small>Inventário & Raridades · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <span>Mockup 05</span>
+          <small>Árvore de Habilidades · 4:3</small>
+        </div>
+      </div>
+      <div class="mock-placeholder-sm">
+        <div class="mock-ph-label">
+          <svg width="28" height="28" fill="none" stroke="#e7c9a3" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Mockup 06</span>
+          <small>Relatório de Vida · 4:3</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRANCHETA 7 — ENTREGÁVEIS -->
+<section id="entregaveis" class="prancheta">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="tag">O que é entregue</span>
+      <h2>Um app completo.<br>Sua vida num arquivo só.</h2>
+    </div>
+    <div class="deliverables-grid">
+      <div class="deliver-block">
+        <h3>Entregáveis</h3>
+        <div class="deliver-list">
+          <div class="deliver-item">8 módulos: Missões, Áreas, Árvore de Habilidades, Inventário, Dieta & Corpo, Relatório de Vida, Personagem e Configurações</div>
+          <div class="deliver-item">Sistema RPG completo: XP, níveis, 4 atributos e 4 ranks</div>
+          <div class="deliver-item">4 níveis de dificuldade com multiplicadores de XP (1x → 3x)</div>
+          <div class="deliver-item">Inventário com 5 raridades e sistema de drops</div>
+          <div class="deliver-item">Árvore de habilidades visual estilo ARPG</div>
+          <div class="deliver-item">Export / import JSON — seus dados são seus</div>
+          <div class="deliver-item">Zero dependências — roda offline, sem conta</div>
+        </div>
+      </div>
+      <div class="deliver-block">
+        <h3>Diferenciais</h3>
+        <div class="deliver-list" style="gap:14px">
+          <div class="result-card">
+            <div class="result-num">8</div>
+            <div class="result-label">Módulos conectados num sistema único de XP</div>
+          </div>
+          <div class="result-card">
+            <div class="result-num">0</div>
+            <div class="result-label">Custo mensal — sem assinatura, sem servidor</div>
+          </div>
+          <div class="result-card">
+            <div class="result-num">3×</div>
+            <div class="result-label">XP máximo em missões épicas — dificuldade recompensada</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 8 — STATUS -->
+<section id="status-final" class="prancheta">
+  <div class="wrap">
+    <div class="status-badge-wrap">
+      <div class="status-badge">Em desenvolvimento</div>
+    </div>
+    <h2>App sendo construído</h2>
+    <p>Escopo definido, arquitetura planejada. O desenvolvimento segue a mesma filosofia do CRM — um arquivo, sem dependências, funcional do primeiro dia.</p>
+
+    <div class="timeline-mini">
+      <div class="tl-card">
+        <div class="tl-dot done"></div>
+        <div class="tl-step done">Concluído</div>
+        <div class="tl-title">Escopo definido</div>
+        <div class="tl-desc">8 módulos, sistema RPG, ranks, raridades e mecânicas de gamificação mapeados.</div>
+      </div>
+      <div class="tl-card active">
+        <div class="tl-dot active"></div>
+        <div class="tl-step">Agora</div>
+        <div class="tl-title">Design & arquitetura</div>
+        <div class="tl-desc">Interface dark mode, componentes, estrutura de dados e engine de XP.</div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-dot pending"></div>
+        <div class="tl-step">Próximo</div>
+        <div class="tl-title">MVP funcional</div>
+        <div class="tl-desc">Hábitos + Personagem + XP rodando. Primeiros testes com usuários reais.</div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-dot pending"></div>
+        <div class="tl-step">Futuro</div>
+        <div class="tl-title">App completo</div>
+        <div class="tl-desc">Todos os 8 módulos, conquistas, histórico e versão mobile.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRANCHETA 9 — TRIAL -->
+<section id="demo" class="prancheta">
+  <div class="wrap">
+    <span class="tag">Beta aberta</span>
+    <h2>Teste grátis por 3 meses.<br>Sem cadastro, sem instalação.</h2>
+    <p>Abra o app direto no browser. Seus dados ficam salvos localmente — nada vai a servidor nenhum.</p>
+    <div class="demo-btns">
+      <a href="jornada-trial.html" class="btn btn-rust" target="_blank">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Abrir o JORNADA
+      </a>
+      <a href="lp-andarilho.html#proximo" class="btn btn-outline">Quero um sistema assim</a>
+    </div>
+  </div>
+</section>
+
+<button class="export-btn" onclick="document.body.classList.toggle('prancheta-mode'); this.textContent = document.body.classList.contains('prancheta-mode') ? '✕ Sair do modo' : '⊞ Modo Prancheta'">
+  ⊞ Modo Prancheta
+</button>
+
+</body>
+</html>

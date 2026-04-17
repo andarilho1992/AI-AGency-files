@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novo Orçamento — Orçamentos Pro</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">📋</span>
+      <span class="logo-text">Orçamentos<strong>Pro</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon">◼</span> Dashboard
+      </a>
+      <a href="novo-orcamento.html" class="nav-item active">
+        <span class="nav-icon">＋</span> Novo Orçamento
+      </a>
+      <a href="orcamentos.html" class="nav-item">
+        <span class="nav-icon">📄</span> Orçamentos
+      </a>
+      <a href="clientes.html" class="nav-item">
+        <span class="nav-icon">👥</span> Clientes
+      </a>
+      <a href="configuracoes.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Configurações
+      </a>
+    </nav>
+    <div class="sidebar-empresa">
+      <span id="empresa-nome">Minha Empresa</span>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <h1 id="page-title">Novo Orçamento</h1>
+        <p class="subtitle">Preencha os dados e adicione os itens</p>
+      </div>
+      <div class="header-actions">
+        <button onclick="salvarRascunho()" class="btn btn-secondary">Salvar Rascunho</button>
+        <button onclick="salvarEVisualizar()" class="btn btn-primary">Salvar e Visualizar →</button>
+      </div>
+    </header>
+
+    <form id="form-orcamento" class="form-layout">
+
+      <!-- BLOCO: CLIENTE -->
+      <div class="section-card">
+        <h2 class="section-title">1. Cliente</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cliente-select">Selecionar cliente existente</label>
+            <select id="cliente-select" onchange="preencherCliente()">
+              <option value="">— Novo cliente —</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cliente-nome">Nome / Razão Social <span class="required">*</span></label>
+            <input type="text" id="cliente-nome" placeholder="Ex: João Silva" required />
+          </div>
+          <div class="form-group">
+            <label for="cliente-email">E-mail</label>
+            <input type="email" id="cliente-email" placeholder="joao@email.com" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cliente-telefone">Telefone / WhatsApp</label>
+            <input type="tel" id="cliente-telefone" placeholder="(11) 99999-9999" />
+          </div>
+          <div class="form-group">
+            <label for="cliente-empresa">Empresa (opcional)</label>
+            <input type="text" id="cliente-empresa" placeholder="Ex: Silva & Associados" />
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCO: DETALHES DO ORÇAMENTO -->
+      <div class="section-card">
+        <h2 class="section-title">2. Detalhes</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="orc-titulo">Título do Orçamento <span class="required">*</span></label>
+            <input type="text" id="orc-titulo" placeholder="Ex: Desenvolvimento de Site Institucional" required />
+          </div>
+          <div class="form-group">
+            <label for="orc-validade">Válido até</label>
+            <input type="date" id="orc-validade" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="orc-descricao">Descrição / Contexto (opcional)</label>
+            <textarea id="orc-descricao" rows="3" placeholder="Descreva o escopo geral do projeto..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCO: ITENS -->
+      <div class="section-card">
+        <h2 class="section-title">3. Itens do Orçamento</h2>
+
+        <div class="items-table-header">
+          <span style="flex:3">Descrição do Item</span>
+          <span style="flex:1;text-align:center">Qtd.</span>
+          <span style="flex:1;text-align:right">Valor Unit.</span>
+          <span style="flex:1;text-align:right">Subtotal</span>
+          <span style="width:40px"></span>
+        </div>
+
+        <div id="itens-container">
+          <!-- itens adicionados dinamicamente -->
+        </div>
+
+        <button type="button" onclick="adicionarItem()" class="btn-add-item">
+          + Adicionar Item
+        </button>
+
+        <!-- TOTAIS -->
+        <div class="totais-box">
+          <div class="totais-row">
+            <span>Subtotal</span>
+            <span id="subtotal">R$ 0,00</span>
+          </div>
+          <div class="totais-row">
+            <span>Desconto</span>
+            <div class="desconto-input">
+              <input type="number" id="desconto" value="0" min="0" max="100" onchange="calcularTotais()" />
+              <span>%</span>
+            </div>
+          </div>
+          <div class="totais-row total-final">
+            <span>TOTAL</span>
+            <span id="total-final">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCO: OBSERVAÇÕES -->
+      <div class="section-card">
+        <h2 class="section-title">4. Observações e Condições</h2>
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="orc-obs">Observações</label>
+            <textarea id="orc-obs" rows="4" placeholder="Condições de pagamento, prazo de entrega, o que está incluído ou não..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let orcamentoId = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Preencher dropdown de clientes
+      const clientes = Storage.getClientes();
+      const select = document.getElementById('cliente-select');
+      clientes.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.nome + (c.empresa ? ` (${c.empresa})` : '');
+        select.appendChild(opt);
+      });
+
+      // Validade padrão: 30 dias
+      const dataValidade = new Date();
+      dataValidade.setDate(dataValidade.getDate() + 30);
+      document.getElementById('orc-validade').value = dataValidade.toISOString().split('T')[0];
+
+      // Checar se estamos editando
+      const params = new URLSearchParams(window.location.search);
+      orcamentoId = params.get('id');
+      if (orcamentoId) {
+        carregarOrcamento(orcamentoId);
+        document.getElementById('page-title').textContent = 'Editar Orçamento';
+      } else {
+        // Começa com 1 item em branco
+        adicionarItem();
+      }
+
+      // Config
+      const config = Storage.getConfig();
+      if (config.empresa) {
+        document.getElementById('empresa-nome').textContent = config.empresa;
+      }
+    });
+
+    function preencherCliente() {
+      const id = document.getElementById('cliente-select').value;
+      if (!id) {
+        document.getElementById('cliente-nome').value = '';
+        document.getElementById('cliente-email').value = '';
+        document.getElementById('cliente-telefone').value = '';
+        document.getElementById('cliente-empresa').value = '';
+        return;
+      }
+      const cliente = Storage.getClientes().find(c => c.id === id);
+      if (cliente) {
+        document.getElementById('cliente-nome').value = cliente.nome;
+        document.getElementById('cliente-email').value = cliente.email || '';
+        document.getElementById('cliente-telefone').value = cliente.telefone || '';
+        document.getElementById('cliente-empresa').value = cliente.empresa || '';
+      }
+    }
+
+    let contadorItens = 0;
+
+    function adicionarItem(item = null) {
+      contadorItens++;
+      const idx = contadorItens;
+      const container = document.getElementById('itens-container');
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.id = `item-${idx}`;
+      div.innerHTML = `
+        <input type="text" class="item-descricao" placeholder="Ex: Criação de logotipo"
+          value="${item ? item.descricao : ''}" onchange="calcularTotais()" />
+        <input type="number" class="item-qtd" value="${item ? item.qtd : 1}" min="1" step="1"
+          onchange="calcularItem(${idx})" oninput="calcularItem(${idx})" style="flex:1;text-align:center" />
+        <input type="number" class="item-preco" value="${item ? item.preco : ''}" min="0" step="0.01"
+          placeholder="0,00" onchange="calcularItem(${idx})" oninput="calcularItem(${idx})"
+          style="flex:1;text-align:right" />
+        <span class="item-subtotal" id="sub-${idx}" style="flex:1;text-align:right;padding:0 8px;line-height:40px">R$ 0,00</span>
+        <button type="button" onclick="removerItem(${idx})" class="btn-remove-item" title="Remover item">✕</button>
+      `;
+      container.appendChild(div);
+      if (item) calcularItem(idx);
+    }
+
+    function calcularItem(idx) {
+      const row = document.getElementById(`item-${idx}`);
+      if (!row) return;
+      const qtd = parseFloat(row.querySelector('.item-qtd').value) || 0;
+      const preco = parseFloat(row.querySelector('.item-preco').value) || 0;
+      const sub = qtd * preco;
+      row.querySelector(`#sub-${idx}`).textContent = formatarMoeda(sub);
+      calcularTotais();
+    }
+
+    function calcularTotais() {
+      const rows = document.querySelectorAll('.item-row');
+      let subtotal = 0;
+      rows.forEach(row => {
+        const qtd = parseFloat(row.querySelector('.item-qtd').value) || 0;
+        const preco = parseFloat(row.querySelector('.item-preco').value) || 0;
+        subtotal += qtd * preco;
+      });
+      const desconto = parseFloat(document.getElementById('desconto').value) || 0;
+      const total = subtotal * (1 - desconto / 100);
+      document.getElementById('subtotal').textContent = formatarMoeda(subtotal);
+      document.getElementById('total-final').textContent = formatarMoeda(total);
+    }
+
+    function removerItem(idx) {
+      const row = document.getElementById(`item-${idx}`);
+      if (row) {
+        row.remove();
+        calcularTotais();
+      }
+    }
+
+    function coletarDados() {
+      const itens = [];
+      document.querySelectorAll('.item-row').forEach(row => {
+        const descricao = row.querySelector('.item-descricao').value.trim();
+        const qtd = parseFloat(row.querySelector('.item-qtd').value) || 1;
+        const preco = parseFloat(row.querySelector('.item-preco').value) || 0;
+        if (descricao) {
+          itens.push({ descricao, qtd, preco, subtotal: qtd * preco });
+        }
+      });
+
+      const subtotal = itens.reduce((acc, i) => acc + i.subtotal, 0);
+      const desconto = parseFloat(document.getElementById('desconto').value) || 0;
+      const total = subtotal * (1 - desconto / 100);
+
+      return {
+        clienteNome: document.getElementById('cliente-nome').value.trim(),
+        clienteEmail: document.getElementById('cliente-email').value.trim(),
+        clienteTelefone: document.getElementById('cliente-telefone').value.trim(),
+        clienteEmpresa: document.getElementById('cliente-empresa').value.trim(),
+        clienteId: document.getElementById('cliente-select').value,
+        titulo: document.getElementById('orc-titulo').value.trim(),
+        descricao: document.getElementById('orc-descricao').value.trim(),
+        validade: document.getElementById('orc-validade').value,
+        observacoes: document.getElementById('orc-obs').value.trim(),
+        itens,
+        subtotal,
+        desconto,
+        total,
+      };
+    }
+
+    function validar(dados) {
+      if (!dados.clienteNome) {
+        alert('Informe o nome do cliente.');
+        document.getElementById('cliente-nome').focus();
+        return false;
+      }
+      if (!dados.titulo) {
+        alert('Informe o título do orçamento.');
+        document.getElementById('orc-titulo').focus();
+        return false;
+      }
+      if (dados.itens.length === 0) {
+        alert('Adicione ao menos um item ao orçamento.');
+        return false;
+      }
+      return true;
+    }
+
+    function salvarRascunho() {
+      const dados = coletarDados();
+      const orc = Storage.salvarOrcamento({ ...dados, status: 'rascunho' }, orcamentoId);
+      orcamentoId = orc.id;
+      history.replaceState(null, '', `?id=${orc.id}`);
+      mostrarToast('Rascunho salvo!');
+    }
+
+    function salvarEVisualizar() {
+      const dados = coletarDados();
+      if (!validar(dados)) return;
+      const orc = Storage.salvarOrcamento({ ...dados, status: 'pendente' }, orcamentoId);
+      window.location.href = `visualizar-orcamento.html?id=${orc.id}`;
+    }
+
+    function carregarOrcamento(id) {
+      const orc = Storage.getOrcamentos().find(o => o.id === id);
+      if (!orc) return;
+
+      document.getElementById('cliente-nome').value = orc.clienteNome || '';
+      document.getElementById('cliente-email').value = orc.clienteEmail || '';
+      document.getElementById('cliente-telefone').value = orc.clienteTelefone || '';
+      document.getElementById('cliente-empresa').value = orc.clienteEmpresa || '';
+      document.getElementById('orc-titulo').value = orc.titulo || '';
+      document.getElementById('orc-descricao').value = orc.descricao || '';
+      document.getElementById('orc-validade').value = orc.validade || '';
+      document.getElementById('orc-obs').value = orc.observacoes || '';
+      document.getElementById('desconto').value = orc.desconto || 0;
+
+      // Selecionar cliente no dropdown se tiver id
+      if (orc.clienteId) {
+        document.getElementById('cliente-select').value = orc.clienteId;
+      }
+
+      // Itens
+      (orc.itens || []).forEach(item => adicionarItem(item));
+      calcularTotais();
+    }
+  </script>
+</body>
+</html>

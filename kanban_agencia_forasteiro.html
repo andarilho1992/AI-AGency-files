@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QG Forasteiro | Master Kanban</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f3f4f6;
+            --bg-board: #e5e7eb;
+            --bg-col: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent: #2563eb;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.05em; color: #0f172a; }
+        .logo span { color: var(--accent); }
+        .subtitle { font-size: 0.85rem; color: var(--text-sub); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .btn {
+            background: var(--text-main);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover { background: #0f172a; }
+
+        .board-container {
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .kanban-col {
+            background-color: var(--bg-col);
+            border-radius: 8px;
+            min-width: 320px;
+            max-width: 320px;
+            max-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .col-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .col-title { font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+        .col-count { background: var(--bg-board); color: var(--text-sub); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+
+        .col-cards {
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            cursor: grab;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card:active { cursor: grabbing; }
+
+        .project-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .tag-sage { background: #eef2ed; color: #5a6b56; border: 1px solid #d5dfd3; }
+
+        .card-title { font-size: 0.95rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.5rem; }
+        .card-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 1rem; }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-sub);
+        }
+
+        .status-done { color: var(--success); display: flex; align-items: center; gap: 4px;}
+        .status-wait { color: var(--warning); display: flex; align-items: center; gap: 4px;}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <div class="logo">QG <span>Forasteiro</span></div>
+            <div class="subtitle">Visão de Projetos High-Ticket</div>
+        </div>
+        <div>
+            <button class="btn">+ Criar Projeto</button>
+        </div>
+    </header>
+
+    <div class="board-container">
+        
+        <!-- Coluna 1 -->
+        <div class="kanban-col">
+            <div class="col-header">
+                <span class="col-title">📥 Backlog & Visão</span>
+                <span class="col-count">2</span>
+            </div>
+            <div class="col-cards">
+                <!-- Cartao Concluído -->
+                <div class="card" style="opacity: 0.7;">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Definição do Nicho e Escopo</div>
+                    <div class="card-desc">Validar "Nutricionista Mounjaro/Ozempic".</div>
+                    <div class="card-footer">
+                        <span class="status-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Concluído</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="kanban-col">
+            <div class="col-header">
+                <span class="col-title">✍️ Estratégia / Copy</span>
+                <span class="col-count">1</span>
+            </div>
+            <div class="col-cards">
+                <div class="card" style="opacity: 0.7;">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Desenvolver Copy da Página</div>
+                    <div class="card-desc">Desvincular das dietas comuns, focar exclusivamente em preservação de massa e combate de colaterais do medicamento.</div>
+                    <div class="card-footer">
+                        <span class="status-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Concluído</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="kanban-col">
+            <div class="col-header">
+                <span class="col-title">🎨 Design (Hi-Fi) / Código</span>
+                <span class="col-count">1</span>
+            </div>
+            <div class="col-cards">
+                <div class="card" style="opacity: 0.7; border-left: 3px solid var(--success);">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Codificação HTML/CSS da LP</div>
+                    <div class="card-desc">Implementar classes e grid em Plus Jakarta, com paleta Sage/Terra.</div>
+                    <div class="card-footer">
+                        <span class="status-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Códado com Sucesso</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 4 : NÓS ESTAMOS AQUI -->
+        <div class="kanban-col" style="border: 2px solid var(--status-wait); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);">
+            <div class="col-header" style="border-bottom-color: var(--warning);">
+                <span class="col-title">🛑 Aprovação do Cliente</span>
+                <span class="col-count" style="background: var(--warning); color: #fff;">VOCÊ ESTÁ AQUI</span>
+            </div>
+            <div class="col-cards">
+                <!-- Cartão Ativo 1 -->
+                <div class="card" style="border-left: 3px solid var(--warning);">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Apresentação: Call de Agregamento de Valor</div>
+                    <div class="card-desc">Marcar call. Exibir HTML da LP funcionando no browser + Ancorar preço com o protótipo do Ecossistema SaaS do Figma.</div>
+                    <div class="card-footer">
+                        <span class="status-wait">Prioridade Máxima</span>
+                        <span>Fazer essa semana</span>
+                    </div>
+                </div>
+                <!-- Cartão Ativo 2 -->
+                <div class="card">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Coletar Validações</div>
+                    <div class="card-desc">Ela aprova os textos (CRN, endereço) e fotos usadas? Se assinou embaixo, mande para "Refinamento".</div>
+                    <div class="card-footer">
+                        <span>Aguardando Reunião</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 5 -->
+        <div class="kanban-col">
+            <div class="col-header">
+                <span class="col-title">🛠 Refinamento & Deploy</span>
+                <span class="col-count">2</span>
+            </div>
+            <div class="col-cards">
+                <div class="card">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Ajustes HTML / Links WhatsApp</div>
+                    <div class="card-desc">Alterar pequenas cópias e embedar links de conversão no ".btn-terra".</div>
+                    <div class="card-footer">
+                        <span>Pós-Aprovação</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Servidor e Domínio Oficial</div>
+                    <div class="card-desc">Apontar DNS de 'nutricionistapatriciafernandes.com' e fazer deploy do HTML final.</div>
+                    <div class="card-footer">
+                        <span>Infraestrutura</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 6 -->
+        <div class="kanban-col">
+            <div class="col-header">
+                <span class="col-title">🚀 Lançamento / Case Final</span>
+                <span class="col-count">1</span>
+            </div>
+            <div class="col-cards">
+                <div class="card">
+                    <span class="project-tag tag-sage">LP Patrícia Ozempic</span>
+                    <div class="card-title">Publicação Portfólio Behance</div>
+                    <div class="card-desc">Imprimir as "5 Pranchas" do Case de Sucesso no Behance mostrando o sub-nicho High-Ticket que resolvemos.</div>
+                    <div class="card-footer">
+                        <span>Ação de Marketing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

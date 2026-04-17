@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Budget — Pets Go SaaS + Andarilho Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0b;--bg2:#111113;--bg3:#17171a;--card:#141416;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --gold:#e7c9a3;--gold-dim:rgba(231,201,163,.08);
+  --rust:#C13D14;--rust-dim:rgba(193,61,20,.1);
+  --text:#f0ede6;--muted:#5e5e64;--muted2:#9898a0;
+  --green:#4ade80;--green-dim:rgba(74,222,128,.1);
+  --blue:#60a5fa;--blue-dim:rgba(96,165,250,.1);
+  --yellow:#fbbf24;--yellow-dim:rgba(251,191,36,.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+.hero{padding:80px 24px 60px;text-align:center;max-width:760px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--rust-dim);border:1px solid rgba(193,61,20,.3);color:var(--rust);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:28px}
+.hero h1{font-size:clamp(26px,4vw,44px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--rust)}
+.hero p{font-size:15px;color:var(--muted2);line-height:1.7}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 24px 80px}
+
+/* SECTION */
+.s-label{font-size:10px;font-weight:700;color:var(--rust);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+.s-title{font-size:clamp(20px,3vw,30px);font-weight:900;letter-spacing:-.02em;margin-bottom:6px}
+.s-sub{font-size:14px;color:var(--muted2);line-height:1.6;margin-bottom:32px}
+
+/* TABLE */
+.table-wrap{border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:40px}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bg3)}
+thead th{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);padding:14px 20px;text-align:left}
+thead th:last-child{text-align:right}
+tbody tr{border-top:1px solid var(--border);transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+tbody td{padding:16px 20px;font-size:13px;vertical-align:top}
+tbody td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+.td-name{font-weight:600;font-size:13px;margin-bottom:3px}
+.td-desc{font-size:12px;color:var(--muted2);line-height:1.5}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:.05em;margin-bottom:4px}
+.tag-obrig{background:var(--rust-dim);color:var(--rust)}
+.tag-opt{background:var(--blue-dim);color:var(--blue)}
+.tag-free{background:var(--green-dim);color:var(--green)}
+.tag-unico{background:var(--yellow-dim);color:var(--yellow)}
+tfoot tr{background:var(--bg3);border-top:2px solid var(--border2)}
+tfoot td{padding:16px 20px;font-size:14px;font-weight:700}
+tfoot td:last-child{text-align:right;font-size:18px;color:var(--gold)}
+
+/* TOTAL BOX */
+.total-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:40px 0}
+.total-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px}
+.total-card.dest{border-color:rgba(193,61,20,.4);background:linear-gradient(135deg,var(--rust-dim),var(--card))}
+.tc-label{font-size:10px;font-weight:700;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.tc-val{font-size:36px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.tc-val span{font-size:14px;font-weight:400;color:var(--muted2)}
+.tc-sub{font-size:12px;color:var(--muted2);margin-top:6px;line-height:1.5}
+
+/* HIGHLIGHT */
+.highlight{background:linear-gradient(135deg,rgba(193,61,20,.08),rgba(231,201,163,.04));border:1px solid rgba(193,61,20,.2);border-radius:16px;padding:36px;margin:40px 0}
+.highlight h3{font-size:20px;font-weight:800;margin-bottom:10px;letter-spacing:-.02em}
+.highlight p{font-size:14px;color:var(--muted2);line-height:1.7}
+
+/* ROI */
+.roi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
+.roi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
+.roi-num{font-size:32px;font-weight:900;letter-spacing:-.02em;color:var(--green)}
+.roi-label{font-size:12px;color:var(--muted2);margin-top:4px;line-height:1.5}
+
+/* DIVIDER */
+hr{border:none;border-top:1px solid var(--border);margin:60px 0}
+
+/* FASE */
+.fase-grid{display:grid;gap:16px;margin-bottom:40px}
+.fase{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;gap:20px;align-items:flex-start}
+.fase-num{width:40px;height:40px;border-radius:10px;background:var(--rust-dim);border:1px solid rgba(193,61,20,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--rust);flex-shrink:0}
+.fase h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.fase p{font-size:13px;color:var(--muted2);line-height:1.6}
+.fase-prazo{font-size:11px;color:var(--rust);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border)}
+.footer p{font-size:13px;color:var(--muted);line-height:1.8}
+.footer strong{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Documento interno · Abril 2026</div>
+  <h1>Budget completo — <em>Pets Go SaaS</em><br/>+ Andarilho Digital</h1>
+  <p>Todos os gastos necessários para desenvolver, hospedar e operar o sistema — do bot da creche ao produto replicável em escala.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- FASE 1 — PETS GO COMPANY -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="s-label">Fase 1</div>
+  <div class="s-title">Pets Go Company — Bot + CRM</div>
+  <div class="s-sub">Custos mensais para operar o sistema da creche do Junior.</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Serviço</th>
+          <th>Descrição</th>
+          <th>Custo/mês</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Obrigatório</div>
+            <div class="td-name">Z-API</div>
+          </td>
+          <td class="td-desc">WhatsApp Business API. Instância para o bot da Pets Go responder tutores automaticamente 24h.</td>
+          <td>R$ 99</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Obrigatório</div>
+            <div class="td-name">Claude API (Anthropic)</div>
+          </td>
+          <td class="td-desc">IA que responde os tutores, qualifica leads e gera mensagens. Estimativa: 500 conversas/mês × ~1.500 tokens = ~750K tokens. claude-haiku-4-5 = ~R$ 4/mês em volume baixo. Com volume alto (Sonnet): ~R$ 50–80/mês.</td>
+          <td>R$ 5–80</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Obrigatório</div>
+            <div class="td-name">Railway (servidor)</div>
+          </td>
+          <td class="td-desc">Hospedagem do server.js 24/7. O bot precisa de um servidor sempre online para receber e responder mensagens.</td>
+          <td>R$ 28</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-opt">Opcional</div>
+            <div class="td-name">Domínio</div>
+          </td>
+          <td class="td-desc">Ex: petsgo.app ou sistemapets.com.br. Para o painel do Junior ter URL própria.</td>
+          <td>R$ 5</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-free">Incluso grátis</div>
+            <div class="td-name">Google Places API</div>
+          </td>
+          <td class="td-desc">Para prospecção de novas creches. $200 de crédito grátis/mês — cobre ~6.000 buscas. Mais do que suficiente.</td>
+          <td>R$ 0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-free">Incluso grátis</div>
+            <div class="td-name">n8n (self-hosted)</div>
+          </td>
+          <td class="td-desc">Orquestrador de fluxos. Hospedado no próprio Railway — sem custo adicional de licença.</td>
+          <td>R$ 0</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total mensal Fase 1 (estimativa realista)</td>
+          <td>R$ 132–212</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- FASE 2 — SAAS MULTI-TENANT -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="s-label">Fase 2</div>
+  <div class="s-title">SaaS — Replicação para outras creches</div>
+  <div class="s-sub">Custos adicionais quando o produto escalar para múltiplos clientes.</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Serviço</th>
+          <th>Descrição</th>
+          <th>Custo/mês</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Por cliente</div>
+            <div class="td-name">Z-API (por instância)</div>
+          </td>
+          <td class="td-desc">Cada creche precisa de 1 instância Z-API ligada ao WhatsApp dela. Repassado como custo da mensalidade do cliente.</td>
+          <td>R$ 99/cliente</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Escala</div>
+            <div class="td-name">Claude API</div>
+          </td>
+          <td class="td-desc">Escala linear com volume. 10 clientes com 500 conversas/mês cada = ~R$ 50–800/mês. Margem de segurança: orçar R$ 100/cliente/mês.</td>
+          <td>R$ 100/cliente</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Infraestrutura</div>
+            <div class="td-name">Railway (upgrade)</div>
+          </td>
+          <td class="td-desc">Com 5+ clientes, subir para plano Pro ($20/mês). Com 20+ clientes, VPS dedicado (~R$ 120/mês).</td>
+          <td>R$ 112–672</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-opt">Recomendado</div>
+            <div class="td-name">PostgreSQL (banco de dados)</div>
+          </td>
+          <td class="td-desc">Quando passar de 3 clientes, migrar do JSON file para banco real. Railway PostgreSQL: $5/mês (~R$ 28).</td>
+          <td>R$ 28</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-opt">Recomendado</div>
+            <div class="td-name">Cloudflare (CDN + DNS)</div>
+          </td>
+          <td class="td-desc">Free plan cobre DNS, SSL e proteção básica. Zero custo até escala relevante.</td>
+          <td>R$ 0</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Custo por cliente (repassado na mensalidade R$ 400)</td>
+          <td>~R$ 200/cliente</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- PROJETO ANDARILHO DIGITAL -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="s-label">Andarilho Digital</div>
+  <div class="s-title">Canal + Ferramentas de IA pessoais</div>
+  <div class="s-sub">Custos da operação do Guilherme como nômade digital — canal, prospecção e sistemas próprios.</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Serviço</th>
+          <th>Descrição</th>
+          <th>Custo/mês</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Obrigatório</div>
+            <div class="td-name">Claude Code (Anthropic)</div>
+          </td>
+          <td class="td-desc">Ferramenta de desenvolvimento com IA. Usado para construir todo o sistema. Plano Pro: $20/mês (~R$ 112).</td>
+          <td>R$ 112</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-obrig">Obrigatório</div>
+            <div class="td-name">Railway (agência + canal)</div>
+          </td>
+          <td class="td-desc">Servidor do agente de prospecção + pipeline. Compartilha com o server do Pets Go quando escalado.</td>
+          <td>R$ 28</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-opt">Recomendado</div>
+            <div class="td-name">CapCut Pro</div>
+          </td>
+          <td class="td-desc">Edição de Reels com IA. Legendas automáticas, templates. Plano Pro: ~R$ 50/mês.</td>
+          <td>R$ 50</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-opt">Recomendado</div>
+            <div class="td-name">ElevenLabs</div>
+          </td>
+          <td class="td-desc">Voz em IA para narração de vídeos. Plano Starter: $5/mês (~R$ 28). Opcional se gravar voz própria.</td>
+          <td>R$ 28</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-free">Incluso grátis</div>
+            <div class="td-name">YouTube Analytics API</div>
+          </td>
+          <td class="td-desc">Para o agente de conteúdo monitorar performance dos vídeos automaticamente. Free.</td>
+          <td>R$ 0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tag tag-free">Incluso grátis</div>
+            <div class="td-name">Google Places API</div>
+          </td>
+          <td class="td-desc">Prospecção de leads por nicho e cidade. $200 de crédito grátis/mês.</td>
+          <td>R$ 0</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total mensal operação Andarilho Digital</td>
+          <td>R$ 140–218</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TOTAIS -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="s-label">Resumo</div>
+  <div class="s-title">Custo total consolidado</div>
+  <div class="s-sub">O que sai do cartão do Junior vs. o que é custo seu.</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Categoria</th>
+          <th>Pago por</th>
+          <th>Valor/mês</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="td-name">Z-API (Pets Go)</div>
+            <div class="td-desc">WhatsApp bot da creche</div>
+          </td>
+          <td><span style="color:var(--green);font-weight:700">Cartão Junior</span></td>
+          <td>R$ 99</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-name">Claude API (Pets Go)</div>
+            <div class="td-desc">IA do bot</div>
+          </td>
+          <td><span style="color:var(--green);font-weight:700">Cartão Junior</span></td>
+          <td>R$ 5–80</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-name">Railway</div>
+            <div class="td-desc">Servidor 24/7</div>
+          </td>
+          <td><span style="color:var(--green);font-weight:700">Cartão Junior</span></td>
+          <td>R$ 28</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-name">Domínio</div>
+            <div class="td-desc">URL do sistema</div>
+          </td>
+          <td><span style="color:var(--green);font-weight:700">Cartão Junior</span></td>
+          <td>R$ 5</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-name">Claude Code (desenvolvimento)</div>
+            <div class="td-desc">Sua ferramenta de trabalho</div>
+          </td>
+          <td><span style="color:var(--gold);font-weight:700">Cartão Junior *</span></td>
+          <td>R$ 112</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-name">CapCut Pro (canal)</div>
+            <div class="td-desc">Edição de conteúdo</div>
+          </td>
+          <td><span style="color:var(--muted2);font-weight:700">Você</span></td>
+          <td>R$ 50</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total no cartão do Junior (setup mês 1)</td>
+          <td>R$ 244–324</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted2);margin-top:-24px;margin-bottom:40px">* Claude Code é a ferramenta usada para construir o sistema dele — cabe no escopo de "todos os gastos do projeto".</p>
+
+  <div class="total-box">
+    <div class="total-card dest">
+      <div class="tc-label">Cartão Junior / mês</div>
+      <div class="tc-val">R$ 244 <span>– R$ 324</span></div>
+      <div class="tc-sub">Z-API + Claude API + Railway + domínio + Claude Code</div>
+    </div>
+    <div class="total-card">
+      <div class="tc-label">Custo seu / mês</div>
+      <div class="tc-val">R$ 50 <span>opcional</span></div>
+      <div class="tc-sub">CapCut Pro para o canal. Tudo do projeto em si cai no cartão dele.</div>
+    </div>
+    <div class="total-card">
+      <div class="tc-label">Margem por cliente (SaaS)</div>
+      <div class="tc-val">R$ 200 <span>/cliente</span></div>
+      <div class="tc-sub">Mensalidade R$ 400 − custo ~R$ 200 = R$ 200 de margem por creche</div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ROI -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="s-label">Projeção</div>
+  <div class="s-title">Quando o projeto se paga</div>
+
+  <div class="roi-grid">
+    <div class="roi-card">
+      <div class="roi-num">Mês 1</div>
+      <div class="roi-label">Pets Go no ar. R$ 2.000 do Junior entram. Custo: ~R$ 300. Lucro: R$ 1.700.</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-num">3 clientes</div>
+      <div class="roi-label">R$ 1.200/mês recorrente. Cobre custo de vida + caixa para crescer.</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-num">10 clientes</div>
+      <div class="roi-label">R$ 4.000/mês recorrente. SaaS validado. Começa a vender filiais automatizadas.</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-num">Filial</div>
+      <div class="roi-label">Vende a creche pronta + sistema. Setup R$ 4k–8k + mensalidade. Escala sem mais horas de desenvolvimento.</div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CRONOGRAMA DE ATIVAÇÃO -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="s-label">Ordem de ativação</div>
+  <div class="s-title">O que contratar e quando</div>
+
+  <div class="fase-grid">
+    <div class="fase">
+      <div class="fase-num">1</div>
+      <div>
+        <h4>Hoje — acesso ao cartão</h4>
+        <p>Cria conta Railway → sobe o server.js → testa o endpoint /health online. Cria conta Z-API → conecta o WhatsApp do Junior. Ativa Claude Code Pro.</p>
+        <div class="fase-prazo">Custo imediato: ~R$ 240</div>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="fase-num">2</div>
+      <div>
+        <h4>Semana 1 — bot funcionando</h4>
+        <p>Treina a IA com os serviços e preços da Pets Go. Bot responde automaticamente tutores no WhatsApp do Junior. CRM básico online.</p>
+        <div class="fase-prazo">Sem custo adicional</div>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="fase-num">3</div>
+      <div>
+        <h4>Semana 2–3 — CRM completo</h4>
+        <p>Check-in/out de pets. Cadastro de tutores e animais. Histórico de serviços. Relatório de receita.</p>
+        <div class="fase-prazo">Domínio: ~R$ 40 único</div>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="fase-num">4</div>
+      <div>
+        <h4>Semana 4 — entrega + documentação</h4>
+        <p>Junior treinado para usar o sistema. Manual de uso. Ajustes finais. Coleta do case para replicar.</p>
+        <div class="fase-prazo">R$ 2.000 recebidos integralmente</div>
+      </div>
+    </div>
+    <div class="fase">
+      <div class="fase-num">5</div>
+      <div>
+        <h4>Mês 2+ — replicação</h4>
+        <p>Prospecta outras creches pets com o case do Junior. Vende o sistema pronto. Cada novo cliente = R$ 200/mês de margem com custo fixo já pago.</p>
+        <div class="fase-prazo">PostgreSQL: +R$ 28/mês quando 3+ clientes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <h3>Bottom line</h3>
+    <p>O cartão do Junior cobre tudo que é necessário para construir e operar o sistema dele — incluindo as ferramentas de desenvolvimento. Seu custo real nesse mês é zero. A partir do mês 2, a mensalidade de R$ 400 do Junior paga o custo operacional com R$ 200 de margem sobrando. Cada novo cliente replica essa margem com custo incremental baixo.</p>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p><strong>Guilherme Andrade</strong> · Andarilho Digital<br/>
+  Documento interno — Budget e projeção de custos · Abril 2026</p>
+</footer>
+
+</body>
+</html>

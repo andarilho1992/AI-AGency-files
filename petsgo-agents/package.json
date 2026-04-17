@@ -1,0 +1,19 @@
+{
+  "name": "petsgo-agents",
+  "version": "1.0.0",
+  "description": "Agentes de IA 24/7 para o sistema Pets Go",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

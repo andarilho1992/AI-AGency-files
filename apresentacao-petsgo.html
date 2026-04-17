@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go — Apresentação do Sistema</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow: #E99E22;
+  --navy: #4130B4;
+  --bg: #0b0e18;
+  --card: #131825;
+  --border: rgba(255,255,255,.07);
+  --text: #f0f2f8;
+  --muted: #6b7280;
+  --green: #22c55e;
+  --red: #ef4444;
+  --teal: #14b8a6;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+.deck { width: 100%; height: 100vh; position: relative; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 80px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+  transform: translateX(48px);
+}
+.slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.out    { opacity: 0; transform: translateX(-48px); }
+
+.nav {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px; z-index: 100;
+}
+.nav-dots { display: flex; gap: 7px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); cursor: pointer; transition: all .2s; }
+.dot.active { background: var(--yellow); transform: scale(1.4); }
+.nav-btn {
+  width: 38px; height: 38px; border-radius: 9px;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text); font-size: 17px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s;
+}
+.nav-btn:hover { border-color: var(--yellow); }
+.slide-counter { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 38px; text-align: center; }
+
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--yellow); transition: width .35s ease; z-index: 200; }
+
+.logomark {
+  position: fixed; top: 22px; left: 28px;
+  font-size: 12px; font-weight: 800; color: var(--muted);
+  display: flex; align-items: center; gap: 7px;
+}
+.logomark span { color: var(--yellow); }
+
+/* ── COVER ── */
+.s1-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 20px; }
+.s1-title { font-size: clamp(48px, 8vw, 88px); font-weight: 900; line-height: 1; text-align: center; margin-bottom: 18px; }
+.s1-title .hl { color: var(--yellow); }
+.s1-sub { font-size: clamp(15px, 2.2vw, 20px); color: var(--muted); font-weight: 600; text-align: center; max-width: 580px; line-height: 1.55; margin-bottom: 48px; }
+.pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.25); border-radius: 40px; padding: 10px 24px; font-size: 13px; font-weight: 800; color: var(--yellow); }
+
+/* ── GENERICS ── */
+.s-title { font-size: clamp(30px, 4.5vw, 52px); font-weight: 900; line-height: 1.1; margin-bottom: 10px; }
+.s-sub { font-size: 15px; color: var(--muted); font-weight: 600; margin-bottom: 44px; }
+
+/* ── PROBLEMA ── */
+.prob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: 100%; max-width: 880px; }
+.prob-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-align: center; }
+.prob-num { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 8px; color: var(--red); }
+.prob-label { font-size: 14px; font-weight: 700; color: var(--muted); line-height: 1.4; }
+
+/* ── REALIDADE ── */
+.real-layout { display: flex; gap: 48px; align-items: center; width: 100%; max-width: 940px; }
+.real-left { flex: 1; }
+.real-quote { font-size: clamp(20px, 2.8vw, 34px); font-weight: 900; line-height: 1.3; margin-bottom: 28px; }
+.real-quote .hl { color: var(--yellow); }
+.real-quote .hl2 { color: var(--red); }
+.real-list { display: flex; flex-direction: column; gap: 14px; }
+.real-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; font-weight: 600; line-height: 1.4; }
+.real-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.real-right { flex: 0 0 280px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px; text-align: center; }
+.real-stat { margin-bottom: 20px; }
+.real-stat:last-child { margin-bottom: 0; }
+.real-stat-num { font-size: 44px; font-weight: 900; color: var(--yellow); line-height: 1; }
+.real-stat-label { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 4px; line-height: 1.4; }
+
+/* ── SOLUÇÃO ── */
+.sol-layout { display: flex; flex-direction: column; align-items: center; gap: 32px; width: 100%; max-width: 960px; }
+.sol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; }
+.sol-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; overflow: hidden; }
+.sol-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--yellow); }
+.sol-ico { font-size: 26px; margin-bottom: 10px; }
+.sol-name { font-size: 14px; font-weight: 900; margin-bottom: 5px; }
+.sol-desc { font-size: 12px; color: var(--muted); font-weight: 600; line-height: 1.5; }
+.sol-center-tag { background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.22); border-radius: 12px; padding: 14px 32px; font-size: 17px; font-weight: 800; color: var(--yellow); text-align: center; }
+
+/* ── AGENTES ── */
+.agents-grid { display: flex; flex-direction: column; gap: 9px; width: 100%; max-width: 840px; }
+.agent-row { display: flex; align-items: center; gap: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 14px 22px; }
+.agent-num { width: 34px; height: 34px; border-radius: 9px; background: var(--yellow); color: #111; font-size: 15px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.agent-info { flex: 1; }
+.agent-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.agent-desc { font-size: 12px; color: var(--muted); font-weight: 600; }
+.agent-freq { font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--yellow); background: rgba(233,158,34,.1); border-radius: 20px; padding: 4px 11px; white-space: nowrap; }
+
+/* ── PIPELINE ── */
+.pipe-layout { display: flex; flex-direction: column; align-items: center; gap: 28px; width: 100%; max-width: 960px; }
+.pipe-cols { display: flex; gap: 10px; width: 100%; }
+.pipe-col { flex: 1; border-radius: 11px; border: 1px solid var(--border); background: var(--card); overflow: hidden; }
+.pipe-col-hd { padding: 10px 14px; font-size: 11px; font-weight: 800; border-bottom: 1px solid var(--border); }
+.pipe-col-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+.pipe-mini-card { background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 9px 11px; }
+.pipe-card-name { font-size: 12px; font-weight: 800; margin-bottom: 2px; }
+.pipe-card-meta { font-size: 10px; color: var(--muted); font-weight: 600; }
+.pipe-card-dias { font-size: 10px; font-weight: 800; margin-top: 3px; }
+
+/* ── FLUXO ── */
+.flow { display: flex; align-items: flex-start; gap: 0; width: 100%; max-width: 960px; }
+.flow-step { flex: 1; text-align: center; padding: 0 6px; }
+.flow-ico { width: 60px; height: 60px; border-radius: 50%; background: var(--card); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 10px; }
+.flow-ico.hl { border-color: var(--yellow); background: rgba(233,158,34,.1); }
+.flow-step-title { font-size: 12px; font-weight: 800; margin-bottom: 4px; }
+.flow-step-desc { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.4; }
+.flow-arrow { font-size: 18px; color: var(--muted); flex-shrink: 0; padding: 0 2px; margin-top: 20px; }
+
+/* ── ROI ── */
+.roi-layout { display: flex; gap: 36px; align-items: flex-start; width: 100%; max-width: 940px; }
+.roi-left { flex: 1.2; }
+.roi-right { flex: 1; }
+.roi-calc { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 14px; }
+.roi-line { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; }
+.roi-line:last-child { border-bottom: none; }
+.roi-line .val { font-weight: 900; }
+.roi-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 0; font-size: 17px; font-weight: 900; }
+.roi-total .val { color: var(--green); font-size: 26px; }
+.roi-note { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.5; }
+.roi-quote-box { background: rgba(233,158,34,.07); border: 1px solid rgba(233,158,34,.2); border-radius: 14px; padding: 24px; }
+.roi-quote-text { font-size: clamp(16px, 2.2vw, 22px); font-weight: 900; line-height: 1.4; margin-bottom: 10px; }
+.roi-quote-text .hl { color: var(--yellow); }
+.roi-quote-who { font-size: 12px; color: var(--muted); font-weight: 700; }
+
+/* ── PRÓXIMOS PASSOS ── */
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: 100%; max-width: 880px; }
+.step-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.step-card.active-step { border-color: var(--yellow); background: rgba(233,158,34,.04); }
+.step-badge { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 4px 11px; border-radius: 20px; background: rgba(233,158,34,.12); color: var(--yellow); margin-bottom: 14px; }
+.step-badge.done { background: rgba(34,197,94,.12); color: var(--green); }
+.step-badge.soon { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+.step-title { font-size: 17px; font-weight: 900; margin-bottom: 12px; line-height: 1.2; }
+.step-list { display: flex; flex-direction: column; gap: 8px; }
+.step-item { display: flex; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+.step-item .ico { flex-shrink: 0; }
+
+/* ── CLOSING ── */
+.closing { text-align: center; }
+.closing-big { font-size: clamp(38px, 6.5vw, 78px); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+.closing-big .hl { color: var(--yellow); }
+.closing-sub { font-size: 17px; color: var(--muted); font-weight: 600; max-width: 500px; margin: 0 auto 40px; line-height: 1.55; }
+.closing-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cpill { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 18px; font-size: 13px; font-weight: 700; }
+.cpill .dot2 { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="logomark">🐾 <span>Pets Go</span> — Sistema de Gestão com IA</div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 — COVER -->
+  <div class="slide active" id="s0">
+    <div class="s1-eyebrow">Sistema de Gestão com Inteligência Artificial</div>
+    <div class="s1-title">Pet<span class="hl">shop</span><br/>no piloto<br/>automático.</div>
+    <div class="s1-sub">CRM completo + 5 agentes de IA rodando 24/7. Do check-in ao cliente inativo que volta sozinho.</div>
+    <div class="pill">🐾 Pets Go — by Guilherme Andrade</div>
+  </div>
+
+  <!-- SLIDE 2 — PROBLEMA -->
+  <div class="slide" id="s1">
+    <div class="s-title">O problema<br/>que ninguém vê.</div>
+    <div class="s-sub">Petshops perdem clientes todo mês. E quase nunca sabem disso.</div>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-num">68%</div>
+        <div class="prob-label">dos clientes que param de vir nunca receberam uma mensagem de retorno</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">5×</div>
+        <div class="prob-label">mais barato reativar um cliente do que conquistar um novo</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">90 dias</div>
+        <div class="prob-label">é o tempo médio antes de um cliente "em risco" ser considerado perdido</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — REALIDADE -->
+  <div class="slide" id="s2">
+    <div class="real-layout">
+      <div class="real-left">
+        <div class="real-quote">Você tem <span class="hl">centenas de clientes</span> que já pagaram, já confiaram, <span class="hl2">e sumiram.</span></div>
+        <div class="real-list">
+          <div class="real-item"><div class="real-ico">📋</div><div>O sistema atual não avisa quando um cliente para de aparecer</div></div>
+          <div class="real-item"><div class="real-ico">📱</div><div>Não tem como saber quem está "em risco" sem abrir planilha por planilha</div></div>
+          <div class="real-item"><div class="real-ico">💬</div><div>Mandar mensagem manual pra cada um é inviável — então ninguém faz</div></div>
+          <div class="real-item"><div class="real-ico">🎂</div><div>Aniversários dos pets, lembretes de banho — tudo na memória ou no grupo</div></div>
+        </div>
+      </div>
+      <div class="real-right">
+        <div class="real-stat">
+          <div class="real-stat-num">1 em 3</div>
+          <div class="real-stat-label">petshops fecha nos primeiros 2 anos por falta de recorrência</div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:16px 0"></div>
+        <div class="real-stat">
+          <div class="real-stat-num">R$ 0</div>
+          <div class="real-stat-label">gerado por clientes no cadastro que não voltaram nos últimos 6 meses</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — SOLUÇÃO -->
+  <div class="slide" id="s3">
+    <div class="sol-layout">
+      <div style="text-align:center">
+        <div class="s-title">A solução completa.</div>
+        <div class="s-sub">Um sistema que gerencia, avisa e contata. Sem precisar de você.</div>
+      </div>
+      <div class="sol-center-tag">🐾 CRM Pets Go + 5 Agentes de IA</div>
+      <div class="sol-grid">
+        <div class="sol-card"><div class="sol-ico">📊</div><div class="sol-name">Dashboard em tempo real</div><div class="sol-desc">Pets na creche, faturamento do dia, agendamentos. Tudo numa tela, sem planilha.</div></div>
+        <div class="sol-card"><div class="sol-ico">🐾</div><div class="sol-name">Ficha completa de cada pet</div><div class="sol-desc">Raça, vacinas, alergias, prontuário, histórico de serviços e valor total gasto.</div></div>
+        <div class="sol-card"><div class="sol-ico">📦</div><div class="sol-name">Estoque com alerta</div><div class="sol-desc">Quando o shampoo acabar, o sistema avisa no WhatsApp. Sem surpresa na hora errada.</div></div>
+        <div class="sol-card"><div class="sol-ico">🚗</div><div class="sol-name">Tele-busca e agendamentos</div><div class="sol-desc">Controle de buscas e entregas, com lembrete automático 24h antes pro tutor.</div></div>
+        <div class="sol-card"><div class="sol-ico">💰</div><div class="sol-name">Faturamento por filial</div><div class="sol-desc">Relatório financeiro protegido por PIN. Cada unidade separada, comparação mensal.</div></div>
+        <div class="sol-card" style="border-color:rgba(233,158,34,.4);background:rgba(233,158,34,.05)"><div class="sol-ico">🔄</div><div class="sol-name" style="color:var(--yellow)">Pipeline de Reativação ⭐</div><div class="sol-desc">Clientes inativos entram num pipeline. A IA contata com mensagem personalizada.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — AGENTES -->
+  <div class="slide" id="s4">
+    <div class="s-title">5 agentes trabalhando<br/>enquanto você dorme.</div>
+    <div class="s-sub">Rodando no servidor 24 horas por dia, 7 dias por semana. Custo próximo de zero.</div>
+    <div class="agents-grid">
+      <div class="agent-row"><div class="agent-num">1</div><div class="agent-info"><div class="agent-name">Relatório Semanal</div><div class="agent-desc">Claude analisa os dados da semana e envia um resumo executivo direto no WhatsApp do gestor</div></div><div class="agent-freq">Segunda 8h</div></div>
+      <div class="agent-row"><div class="agent-num">2</div><div class="agent-info"><div class="agent-name">Aniversário dos Pets</div><div class="agent-desc">Detecta aniversários todo dia e envia felicitação automática ao tutor — fideliza sem esforço</div></div><div class="agent-freq">Diário 9h</div></div>
+      <div class="agent-row"><div class="agent-num">3</div><div class="agent-info"><div class="agent-name">Alerta de Estoque</div><div class="agent-desc">Verifica produtos abaixo do mínimo e avisa antes de zerar. Nunca mais ficar sem produto</div></div><div class="agent-freq">Diário 9h</div></div>
+      <div class="agent-row"><div class="agent-num">4</div><div class="agent-info"><div class="agent-name">Lembrete de Agendamento</div><div class="agent-desc">Avisa o tutor 24h antes do banho ou tosa. Reduz no-shows sem precisar ligar pra ninguém</div></div><div class="agent-freq">A cada hora</div></div>
+      <div class="agent-row" style="border-color:rgba(233,158,34,.35);background:rgba(233,158,34,.04)"><div class="agent-num">5</div><div class="agent-info"><div class="agent-name" style="color:var(--yellow)">Reativação de Clientes ⭐</div><div class="agent-desc">Identifica inativos, gera mensagem personalizada por pet e serviço, envia WA. Cliente some — a IA busca.</div></div><div class="agent-freq">Ter / Qui 10h</div></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — PIPELINE VISUAL -->
+  <div class="slide" id="s5">
+    <div class="pipe-layout">
+      <div style="text-align:center">
+        <div class="s-title">Pipeline de Reativação.</div>
+        <div class="s-sub">Cada cliente inativo tem um cartão. A IA move sozinha. Você acompanha em tempo real.</div>
+      </div>
+      <div class="pipe-cols">
+        <div class="pipe-col">
+          <div class="pipe-col-hd" style="color:var(--green)">✅ Ativo</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card"><div class="pipe-card-name">Maria S.</div><div class="pipe-card-meta">🐾 Rex · banho</div><div class="pipe-card-dias" style="color:var(--green)">12d sem visita</div></div>
+          </div>
+        </div>
+        <div class="pipe-col" style="border-color:rgba(233,158,34,.3)">
+          <div class="pipe-col-hd" style="color:var(--yellow)">⚠️ Em Risco</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card"><div class="pipe-card-name">João P.</div><div class="pipe-card-meta">🐾 Mel · creche</div><div class="pipe-card-dias" style="color:var(--yellow)">54d sem visita</div></div>
+            <div class="pipe-mini-card"><div class="pipe-card-name">Ana L.</div><div class="pipe-card-meta">🐾 Thor · tosa</div><div class="pipe-card-dias" style="color:var(--yellow)">71d sem visita</div></div>
+          </div>
+        </div>
+        <div class="pipe-col" style="border-color:rgba(239,68,68,.3)">
+          <div class="pipe-col-hd" style="color:var(--red)">🔴 Inativo</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card"><div class="pipe-card-name">Carlos M.</div><div class="pipe-card-meta">🐾 Bolinha · hotel</div><div class="pipe-card-dias" style="color:var(--red)">127d sem visita</div></div>
+          </div>
+        </div>
+        <div class="pipe-col">
+          <div class="pipe-col-hd" style="color:#38bdf8">📲 Contatado</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card" style="border-color:rgba(56,189,248,.2)"><div class="pipe-card-name">Sandra R. <span style="font-size:9px;background:rgba(37,211,102,.15);color:#25d366;border-radius:8px;padding:1px 5px">WA</span></div><div class="pipe-card-meta">🐾 Luna · banho+tosa</div><div class="pipe-card-meta" style="color:#38bdf8;font-weight:800;margin-top:3px">IA enviou mensagem</div></div>
+          </div>
+        </div>
+        <div class="pipe-col" style="border-color:rgba(20,184,166,.3)">
+          <div class="pipe-col-hd" style="color:var(--teal)">🎉 Voltou!</div>
+          <div class="pipe-col-body">
+            <div class="pipe-mini-card" style="border-color:rgba(20,184,166,.2)"><div class="pipe-card-name">Pedro F.</div><div class="pipe-card-meta">🐾 Frida · creche</div><div class="pipe-card-meta" style="color:var(--teal);font-weight:800;margin-top:3px">Agendou hoje ✓</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 — FLUXO -->
+  <div class="slide" id="s6">
+    <div class="s-title" style="text-align:center;margin-bottom:10px">Como funciona na prática.</div>
+    <div class="s-sub" style="text-align:center;margin-bottom:48px">Do cliente sumido ao agendamento — sem você fazer nada.</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-ico">📋</div>
+        <div class="flow-step-title">Dados no sistema</div>
+        <div class="flow-step-desc">Tutor e pet cadastrados. Histórico de atendimentos salvo.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">⏱️</div>
+        <div class="flow-step-title">90 dias sem visita</div>
+        <div class="flow-step-desc">Sistema detecta automaticamente. Card entra no pipeline de reativação.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico hl">🤖</div>
+        <div class="flow-step-title">IA gera mensagem</div>
+        <div class="flow-step-desc">"Oi Maria! Faz tempo que o Rex não aparece. Saudade! 🐾"</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico hl">📲</div>
+        <div class="flow-step-title">WhatsApp enviado</div>
+        <div class="flow-step-desc">Mensagem personalizada com nome e pet. Não parece robô.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-ico">🎉</div>
+        <div class="flow-step-title">Cliente responde</div>
+        <div class="flow-step-desc">Status atualiza automático. Você fecha o agendamento.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 — ROI -->
+  <div class="slide" id="s7">
+    <div class="s-title" style="margin-bottom:28px">O retorno financeiro.</div>
+    <div class="roi-layout">
+      <div class="roi-left">
+        <div class="roi-calc">
+          <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em">Cenário conservador — 1 unidade</div>
+          <div class="roi-line"><span>Clientes inativos no cadastro</span><span class="val">200</span></div>
+          <div class="roi-line"><span>Taxa de retorno da IA (10%)</span><span class="val">20 clientes</span></div>
+          <div class="roi-line"><span>Ticket médio por visita</span><span class="val">R$ 120</span></div>
+          <div class="roi-line"><span>Receita por rodada</span><span class="val" style="color:var(--yellow)">R$ 2.400</span></div>
+          <div style="height:1px;background:var(--border);margin:6px 0"></div>
+          <div class="roi-total"><span>Mensal (2 rodadas)</span><span class="val">R$ 4.800</span></div>
+        </div>
+        <div class="roi-note">* Sem contar retenção. Clientes que voltam frequentam por pelo menos 6 meses. O valor real é 3–5× maior na visão anual.</div>
+      </div>
+      <div class="roi-right">
+        <div class="roi-quote-box">
+          <div class="roi-quote-text">Com <span class="hl">3 filiais</span>, são <span class="hl">R$ 14.000+/mês</span> em receita que estava dormindo no cadastro.</div>
+          <div class="roi-quote-who">— Estimativa para a rede Pets Go</div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="roi-calc" style="padding:18px">
+          <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Custo mensal do sistema</div>
+          <div class="roi-line" style="font-size:12px"><span>CRM + Agentes IA</span><span class="val">Incluso</span></div>
+          <div class="roi-line" style="font-size:12px"><span>Servidor Railway</span><span class="val">~R$ 25</span></div>
+          <div class="roi-line" style="font-size:12px"><span>API WhatsApp (Evolution)</span><span class="val">~R$ 80</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 — PRÓXIMOS PASSOS -->
+  <div class="slide" id="s8">
+    <div class="s-title" style="text-align:center;margin-bottom:10px">O que falta para ligar.</div>
+    <div class="s-sub" style="text-align:center;margin-bottom:36px">Sistema pronto. Só precisa dos dados e da conexão WhatsApp.</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-badge done">✓ Pronto</div>
+        <div class="step-title">Sistema completo desenvolvido</div>
+        <div class="step-list">
+          <div class="step-item"><span class="ico">✅</span>CRM com todas as telas</div>
+          <div class="step-item"><span class="ico">✅</span>5 agentes de IA configurados</div>
+          <div class="step-item"><span class="ico">✅</span>Pipeline de Reativação</div>
+          <div class="step-item"><span class="ico">✅</span>Servidor Railway (online)</div>
+          <div class="step-item"><span class="ico">✅</span>Webhook WhatsApp pronto</div>
+        </div>
+      </div>
+      <div class="step-card active-step">
+        <div class="step-badge">→ Próximo</div>
+        <div class="step-title">Importar base de clientes</div>
+        <div class="step-list">
+          <div class="step-item"><span class="ico">📋</span>Exportar do Pets Control 2.0</div>
+          <div class="step-item"><span class="ico">📂</span>Importar CSV no pipeline</div>
+          <div class="step-item"><span class="ico">🤖</span>IA classifica: ativo / em risco / inativo</div>
+          <div class="step-item"><span class="ico">📲</span>Primeira rodada de reativação</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge soon">Em breve</div>
+        <div class="step-title">Escalar para outras unidades</div>
+        <div class="step-list">
+          <div class="step-item"><span class="ico">🏪</span>Configurar cada filial</div>
+          <div class="step-item"><span class="ico">📱</span>WhatsApp de cada unidade</div>
+          <div class="step-item"><span class="ico">📊</span>Dashboard consolidado</div>
+          <div class="step-item"><span class="ico">🚀</span>Modo franquia: replicar o modelo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 — CLOSING -->
+  <div class="slide" id="s9">
+    <div class="closing">
+      <div class="closing-big">Seus clientes<br/><span class="hl">já existem.</span><br/>É só buscá-los.</div>
+      <div class="closing-sub">O sistema está pronto. Os agentes estão de pé. O próximo passo é colocar os dados e deixar a IA trabalhar.</div>
+      <div class="closing-pills">
+        <div class="cpill"><div class="dot2"></div>CRM online</div>
+        <div class="cpill"><div class="dot2"></div>5 agentes ativos</div>
+        <div class="cpill"><div class="dot2"></div>Pipeline de reativação</div>
+        <div class="cpill"><div class="dot2"></div>Webhook WhatsApp pronto</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" onclick="navTo(cur-1)">←</button>
+  <div class="nav-dots" id="dots"></div>
+  <span class="slide-counter" id="counter"></span>
+  <button class="nav-btn" onclick="navTo(cur+1)">→</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0;
+
+const dotsEl     = document.getElementById('dots');
+const counterEl  = document.getElementById('counter');
+const progressEl = document.getElementById('progress');
+
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => navTo(i);
+  dotsEl.appendChild(d);
+});
+
+function navTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(() => slides[cur]?.classList.remove('out'), 380);
+  cur = n;
+  slides[cur].classList.add('active');
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  counterEl.textContent = `${cur + 1} / ${total}`;
+  progressEl.style.width = `${((cur + 1) / total) * 100}%`;
+}
+
+navTo(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navTo(cur + 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); navTo(cur - 1); }
+  if (e.key === 'Home') navTo(0);
+  if (e.key === 'End')  navTo(total - 1);
+  if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
+});
+
+document.getElementById('deck').addEventListener('click', e => {
+  if (!e.target.closest('.nav')) navTo(cur + 1);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stack Técnica — Automação & IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --bg:#0c0e1a; --bg2:#131828; --bg3:#1b2240; --border:#1e2840; --border2:#253560;
+      --text:#f0ede6; --muted:#6b7080; --muted2:#9098a8;
+      --gold:#C8892C; --gold-light:#D9A850; --gold-dark:#7a5010; --gold-bg:#1a1208;
+      --blue:#60a5fa; --blue-dark:#1d4ed8; --blue-bg:#0a1628;
+      --green:#4ade80; --green-dark:#15803d; --green-bg:#061a0c;
+      --purple:#a78bfa; --purple-dark:#5b21b6; --purple-bg:#1a0d35;
+      --orange:#fb923c; --orange-dark:#c2410c; --orange-bg:#1c0e06;
+      --red:#f87171; --red-dark:#b91c1c; --red-bg:#1c0808;
+      --cyan:#38bdf8; --cyan-dark:#0e7490; --cyan-bg:#071820;
+      --pink:#f472b6; --pink-dark:#9d174d; --pink-bg:#1c0814;
+      --yellow:#fbbf24; --yellow-bg:#1c1608;
+    }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); }
+
+    /* ── HERO ─── */
+    .hero {
+      background:linear-gradient(160deg,#060810 0%,#0c0e1a 100%);
+      border-bottom:1px solid var(--border); padding:52px 52px 44px;
+      position:relative; overflow:hidden;
+    }
+    .hero::before {
+      content:''; position:absolute; top:-80px; right:-60px;
+      width:500px; height:500px;
+      background:radial-gradient(circle,rgba(200,137,44,.07) 0%,transparent 65%);
+    }
+    .badge { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); display:flex; align-items:center; gap:8px; margin-bottom:20px; }
+    .badge::before { content:''; display:block; width:24px; height:1px; background:var(--gold); }
+    .hero h1 { font-family:'Cinzel',serif; font-size:clamp(24px,4vw,48px); font-weight:900; line-height:1.1; margin-bottom:14px; }
+    .hero h1 em { color:var(--gold); font-style:normal; }
+    .hero-sub { font-size:15px; color:var(--muted2); max-width:700px; line-height:1.85; margin-bottom:32px; }
+    .hero-sub strong { color:var(--text); }
+    .stat-row { display:flex; gap:32px; flex-wrap:wrap; }
+    .stat { text-align:center; }
+    .stat-num { font-size:28px; font-weight:900; font-family:'Cinzel',serif; color:var(--gold); }
+    .stat-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:4px; }
+
+    /* ── TABS ─── */
+    .tabs-bar {
+      display:flex; border-bottom:1px solid var(--border); background:var(--bg2);
+      padding:0 52px; overflow-x:auto; position:sticky; top:0; z-index:100;
+    }
+    .tab {
+      padding:14px 18px; font-size:13px; font-weight:600; color:var(--muted2);
+      background:none; border:none; cursor:pointer; border-bottom:2px solid transparent;
+      font-family:inherit; white-space:nowrap; margin-bottom:-1px; transition:all .15s;
+    }
+    .tab:hover { color:var(--text); }
+    .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+    /* ── SECTIONS ─── */
+    .section { display:none; padding:52px 52px 100px; max-width:1200px; }
+    .section.active { display:block; }
+
+    /* ── TIPO ─── */
+    .eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:8px; }
+    .sec-title { font-family:'Cinzel',serif; font-size:clamp(20px,3vw,34px); font-weight:700; margin-bottom:12px; }
+    .sec-title em { color:var(--gold); font-style:normal; }
+    .sec-lead { font-size:15px; color:var(--muted2); line-height:1.9; margin-bottom:40px; max-width:740px; }
+    .sec-lead strong { color:var(--text); }
+    .label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:18px; }
+    .divider { border:none; border-top:1px solid var(--border); margin:44px 0; }
+
+    /* ── CAMADA ─── */
+    .camada { margin-bottom:52px; }
+    .camada-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .camada-icon { font-size:22px; }
+    .camada-nome { font-size:18px; font-weight:800; }
+    .camada-desc { font-size:13px; color:var(--muted2); margin-top:2px; }
+    .camada-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
+    @media(max-width:780px) { .camada-grid { grid-template-columns:1fr; } }
+
+    /* ── TOOL CARD ─── */
+    .tool {
+      background:var(--bg2); border:1px solid var(--border2); border-radius:16px;
+      overflow:hidden; transition:border-color .2s;
+    }
+    .tool:hover { border-color:var(--border2); }
+    .tool-header { padding:18px 20px 14px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .tool-logo-area { display:flex; align-items:center; gap:12px; }
+    .tool-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; border:1px solid; }
+    .tool-name { font-size:16px; font-weight:800; }
+    .tool-category { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-top:2px; }
+    .tool-badge {
+      font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.06em;
+      padding:3px 10px; border-radius:99px; border:1px solid; white-space:nowrap; flex-shrink:0;
+    }
+    .tool-body { padding:18px 20px; }
+    .tool-desc { font-size:13px; color:var(--muted2); line-height:1.8; margin-bottom:16px; }
+    .tool-desc strong { color:var(--text); }
+
+    .tool-section-title { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:10px; margin-top:16px; }
+    .tool-item { display:flex; gap:8px; font-size:12px; color:var(--muted2); line-height:1.5; padding:5px 0; border-bottom:1px solid rgba(255,255,255,.03); }
+    .tool-item:last-child { border-bottom:none; }
+    .tool-item-icon { flex-shrink:0; font-size:13px; }
+    .tool-item strong { color:var(--text); }
+
+    .tool-connects { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,.04); }
+    .tool-connects-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); width:100%; margin-bottom:4px; }
+    .conn-tag { font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; border:1px solid; }
+
+    /* ── CUSTO ─── */
+    .tool-cost { display:flex; gap:16px; margin-top:16px; padding:12px 14px; background:var(--bg3); border-radius:10px; }
+    .cost-item { flex:1; }
+    .cost-label { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:4px; }
+    .cost-val { font-size:14px; font-weight:800; }
+
+    /* ── POR SISTEMA (aba 2) ─── */
+    .sistema-block { background:var(--bg2); border:1px solid var(--border2); border-radius:18px; overflow:hidden; margin-bottom:28px; }
+    .sistema-head { padding:22px 26px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:14px; }
+    .sistema-num { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; font-family:'Cinzel',serif; border:2px solid; flex-shrink:0; }
+    .sistema-info { flex:1; }
+    .sistema-nome { font-size:17px; font-weight:800; margin-bottom:4px; }
+    .sistema-tag { font-size:11px; color:var(--muted2); }
+    .sistema-body { padding:22px 26px; }
+    .sistema-tools { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+    .stool { background:var(--bg3); border:1px solid var(--border2); border-radius:12px; padding:14px; }
+    .stool-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .stool-icon { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; border:1px solid; flex-shrink:0; }
+    .stool-name { font-size:13px; font-weight:800; }
+    .stool-role { font-size:11px; color:var(--muted2); margin-top:2px; }
+    .stool-desc { font-size:12px; color:var(--muted2); line-height:1.6; }
+
+    .fluxo { display:flex; gap:0; flex-wrap:wrap; margin:20px 0; align-items:stretch; }
+    .fluxo-step { flex:1; min-width:110px; background:var(--bg3); border:1px solid var(--border2); padding:12px 10px; text-align:center; }
+    .fluxo-step + .fluxo-step { margin-left:-1px; }
+    .fluxo-step:first-child { border-radius:10px 0 0 10px; }
+    .fluxo-step:last-child { border-radius:0 10px 10px 0; }
+    .fluxo-icon { font-size:18px; margin-bottom:6px; }
+    .fluxo-tool { font-size:11px; font-weight:800; margin-bottom:3px; }
+    .fluxo-role { font-size:10px; color:var(--muted); line-height:1.3; }
+    .fluxo-arr { display:flex; align-items:center; padding:0 6px; color:var(--muted); font-size:16px; flex-shrink:0; }
+
+    /* ── MAPA MENTAL (aba 3) ─── */
+    .mm-wrap { width:100%; overflow-x:auto; padding:20px 0 60px; }
+    .mm { position:relative; width:1200px; height:800px; margin:0 auto; }
+    .mm svg.lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+    .mm-node {
+      position:absolute; border-radius:10px; padding:9px 13px;
+      font-size:11px; font-weight:700; line-height:1.3; text-align:center;
+      border:1px solid; cursor:default; transition:all .2s; white-space:nowrap;
+    }
+    .mm-node:hover { transform:scale(1.07); z-index:10; box-shadow:0 4px 20px rgba(0,0,0,.5); }
+    .mm-center {
+      width:160px; height:80px; padding:14px 12px; font-family:'Cinzel',serif; font-size:12px; font-weight:900;
+      border-radius:16px; line-height:1.4; white-space:normal; text-align:center;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,var(--gold-bg),#1a0d35);
+      border:2px solid var(--gold-dark); color:var(--gold);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+    }
+    .mm-center:hover { transform:translate(-50%,-50%) scale(1.04); }
+    .mm-b1 { background:var(--orange-bg); border-color:var(--orange-dark); color:var(--orange); }
+    .mm-b2 { background:var(--blue-bg);   border-color:var(--blue-dark);   color:var(--blue); }
+    .mm-b3 { background:var(--green-bg);  border-color:var(--green-dark);  color:var(--green); }
+    .mm-b4 { background:var(--purple-bg); border-color:var(--purple-dark); color:var(--purple); }
+    .mm-b5 { background:var(--cyan-bg);   border-color:var(--cyan-dark);   color:var(--cyan); }
+    .mm-b6 { background:var(--pink-bg);   border-color:var(--pink-dark);   color:var(--pink); }
+    .mm-b7 { background:var(--yellow-bg); border-color:#7a5010;            color:var(--yellow); }
+    .mm-sub { font-size:10px; font-weight:600; padding:6px 11px; opacity:.85; }
+    .mm-sub:hover { opacity:1; }
+
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--gold-dark); color:var(--text); padding:12px 20px; border-radius:10px; font-size:14px; z-index:9999; display:none; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">Referência Técnica · Agência de Automação & IA</div>
+  <h1>A stack completa de<br><em>automação & inteligência artificial</em></h1>
+  <p class="hero-sub">Cada ferramenta, o que faz, como usa, quanto custa e com quem conecta. <strong>Base para o mapa mental e para explicar para clientes.</strong></p>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">Ferramentas</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Camadas técnicas</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Sistemas automatizados</div></div>
+    <div class="stat"><div class="stat-num">~R$800</div><div class="stat-label">Custo mensal da stack</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab active" onclick="ir('ferramentas',this)">🧰 Todas as Ferramentas</button>
+  <button class="tab" onclick="ir('sistemas',this)">⚡ Por Sistema</button>
+  <button class="tab" onclick="ir('mapa',this)">🧠 Mapa Mental</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 1 — FERRAMENTAS
+══════════════════════════════════════════ -->
+<div class="section active" id="aba-ferramentas">
+
+  <div class="eyebrow">Stack Técnica</div>
+  <div class="sec-title">12 ferramentas, <em>5 camadas</em></div>
+  <p class="sec-lead">A stack é organizada em camadas: orquestração no centro, comunicação na borda, IA como cérebro, infraestrutura como base. <strong>Nenhuma ferramenta é isolada — tudo passa pelo n8n.</strong></p>
+
+
+  <!-- ════ CAMADA 1: ORQUESTRAÇÃO ════ -->
+  <div class="camada">
+    <div class="camada-header">
+      <span class="camada-icon">🔗</span>
+      <div>
+        <div class="camada-nome" style="color:var(--orange)">Camada 1 — Orquestração</div>
+        <div class="camada-desc">O centro de controle. Tudo passa por aqui. Liga todas as outras ferramentas.</div>
+      </div>
+    </div>
+    <div class="camada-grid">
+
+      <!-- N8N -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">⚙️</div>
+            <div>
+              <div class="tool-name">n8n</div>
+              <div class="tool-category">Orquestrador Central · Self-hosted</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">NÚCLEO</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            O <strong>sistema nervoso central da automação</strong>. Pensa nele como um "Excel inteligente que conecta tudo". Você cria fluxos visuais (nodes) que executam tarefas na ordem certa: recebe um dado, processa, consulta a IA, salva no banco, envia no WhatsApp. Sem n8n, as outras ferramentas não se conversam.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Fluxos de trabalho visuais:</strong> conecta ferramentas por drag-and-drop, sem código obrigatório</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Gatilhos (triggers):</strong> acorda quando recebe webhook, e-mail, horário agendado ou chamada de API</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Transforma dados:</strong> reformata JSON, filtra, calcula, traduz entre formatos</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Integra com 400+ apps:</strong> Google Sheets, Gmail, Slack, WhatsApp, bancos de dados, APIs</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Lógica condicional:</strong> "se cliente disse X, faça Y; se não, faça Z"</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Agendamento:</strong> executa tarefas em horários específicos (relatório todo dia 1, por exemplo)</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Gera PDFs:</strong> via HTML para PDF + armazena no R2</span></div>
+
+          <div class="tool-section-title">Como usamos</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Recebe chamado do WhatsApp → manda para Claude → salva no banco → atualiza CRM</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Todo dia 1: pega dados do Sheets → manda para Claude → gera PDF → envia por e-mail/WPP</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Formulário de proposta preenchido → gera PDF → envia → agenda follow-up em 24h e 72h</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Lead novo do Clay → enriquece com Claude → envia mensagem personalizada → registra no CRM</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Self-hosted (VPS)</div><div class="cost-val" style="color:var(--green)">Grátis</div></div>
+            <div class="cost-item"><div class="cost-label">Cloud (n8n.io)</div><div class="cost-val" style="color:var(--gold)">US$ 20–50/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Recomendação</div><div class="cost-val">Self-hosted no Cloudflare Workers ou VPS barato</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--cyan-bg);border-color:var(--cyan-dark);color:var(--cyan)">Z-API</span>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude API</span>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Google Sheets</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare D1</span>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">Clay</span>
+            <span class="conn-tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">Typebot</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ════ CAMADA 2: COMUNICAÇÃO/WHATSAPP ════ -->
+  <div class="camada">
+    <div class="camada-header">
+      <span class="camada-icon">📱</span>
+      <div>
+        <div class="camada-nome" style="color:var(--green)">Camada 2 — Comunicação</div>
+        <div class="camada-desc">A porta de entrada e saída. WhatsApp, e-mail e chatbots.</div>
+      </div>
+    </div>
+    <div class="camada-grid">
+
+      <!-- Z-API -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">📲</div>
+            <div>
+              <div class="tool-name">Z-API</div>
+              <div class="tool-category">WhatsApp API · Alternativa: Evolution API</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">WPP GATEWAY</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            A <strong>"ponte" entre o WhatsApp e a automação</strong>. O WhatsApp oficial não tem API aberta para pequenos negócios. O Z-API (e alternativas como Evolution API) conecta um número de WhatsApp real a um sistema externo — você envia e recebe mensagens via código, não pelo celular.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Recebe mensagens:</strong> toda mensagem que chega no WPP dispara um webhook para o n8n</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Envia mensagens:</strong> texto, imagem, PDF, áudio, localização — por código</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Grupos e listas:</strong> envia para grupos ou listas de transmissão automaticamente</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Multi-dispositivo:</strong> funciona com WhatsApp Business ou pessoal</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Status de entrega:</strong> sabe se mensagem foi lida ou não</span></div>
+
+          <div class="tool-section-title">Como usamos</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span>Cliente manda mensagem → Z-API avisa o n8n → n8n manda para o Typebot/Claude → responde</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span>Sistema precisa enviar relatório → n8n manda para o Z-API → Z-API entrega no WPP do cliente</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span>Follow-up de proposta → n8n agenda → Z-API envia na hora exata</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Z-API</div><div class="cost-val" style="color:var(--gold)">R$ 100–150/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Evolution API</div><div class="cost-val" style="color:var(--green)">Grátis (self-hosted)</div></div>
+            <div class="cost-item"><div class="cost-label">Limite</div><div class="cost-val">1 número por instância</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">Typebot</span>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude API</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPEBOT -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">🤖</div>
+            <div>
+              <div class="tool-name">Typebot</div>
+              <div class="tool-category">Chatbot Builder · Open Source</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">CHATBOT</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>Construtor visual de fluxos de conversa</strong>. Você desenha a conversa que o bot vai ter — "se o cliente disser X, responda Y e pergunte Z". É o "rosto" que o cliente vê. O Z-API traz a mensagem, o Typebot decide o que responder, o n8n executa as ações.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span><strong>Fluxo de conversa visual:</strong> cria sequências de perguntas e respostas sem código</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span><strong>Coleta de dados:</strong> pede informações ao usuário (nome, equipamento, problema) e salva</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span><strong>Integra com IA:</strong> em um ponto do fluxo, chama Claude para resposta inteligente</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span><strong>Webhooks:</strong> quando o cliente completa o fluxo, envia os dados para o n8n processar</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span><strong>Multi-canal:</strong> funciona no WhatsApp (via Z-API), site, ou app</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span><strong>Lógica de roteamento:</strong> "problema de toner? vai para fluxo de toner. hardware? para técnico"</span></div>
+
+          <div class="tool-section-title">Como usamos</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Atendimento de chamados: cliente inicia → Typebot coleta tipo de problema → aciona n8n</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Qualificação de lead: novo contato → Typebot pergunta segmento, porte, necessidade → envia para CRM</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Self-hosted</div><div class="cost-val" style="color:var(--green)">Grátis</div></div>
+            <div class="cost-item"><div class="cost-label">Cloud</div><div class="cost-val" style="color:var(--gold)">US$ 39/mês</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Z-API</span>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude API</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ════ CAMADA 3: INTELIGÊNCIA ARTIFICIAL ════ -->
+  <div class="camada">
+    <div class="camada-header">
+      <span class="camada-icon">🧠</span>
+      <div>
+        <div class="camada-nome" style="color:var(--purple)">Camada 3 — Inteligência Artificial</div>
+        <div class="camada-desc">O cérebro. Lê, interpreta, escreve, analisa e decide.</div>
+      </div>
+    </div>
+    <div class="camada-grid">
+
+      <!-- CLAUDE API -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">🧠</div>
+            <div>
+              <div class="tool-name">Claude API (Anthropic)</div>
+              <div class="tool-category">Large Language Model · IA Principal</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">IA PRINCIPAL</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            O <strong>cérebro de todo o sistema</strong>. Claude é o modelo de IA da Anthropic — o mesmo que alimenta o Claude.ai. Pela API, qualquer automação pode "contratar" a inteligência do Claude: mandar um contexto, fazer uma pergunta ou pedido, e receber uma resposta gerada com raciocínio real.
+          </div>
+
+          <div class="tool-section-title">O que faz neste contexto</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Interpreta chamados:</strong> lê a mensagem do cliente e classifica — toner, papel, hardware, conectividade</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Gera relatórios:</strong> recebe dados brutos de impressão → escreve análise em português natural</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Escreve propostas:</strong> com base no perfil do lead, gera texto personalizado por segmento</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Personaliza mensagens outbound:</strong> para cada empresa prospectada, cria mensagem específica</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Atendimento conversacional:</strong> responde perguntas técnicas do cliente com contexto da empresa</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Extrai dados:</strong> lê um site ou texto e extrai informações estruturadas (setor, porte, contato)</span></div>
+
+          <div class="tool-section-title">Modelos disponíveis</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Haiku 4.5:</strong> rápido, barato — para classificação e respostas curtas (atendimento de chamados)</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Sonnet 4.6:</strong> equilíbrio qualidade/custo — para relatórios, propostas, mensagens outbound</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Opus 4.6:</strong> máxima qualidade — para análises complexas (quando o custo justifica)</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Haiku (por ~1k msgs)</div><div class="cost-val" style="color:var(--green)">~R$ 2–5</div></div>
+            <div class="cost-item"><div class="cost-label">Sonnet (relatórios)</div><div class="cost-val" style="color:var(--gold)">~R$ 15–30/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Estimativa mensal total</div><div class="cost-val">R$ 50–150</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">Typebot</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare Workers</span>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Astro (servidor)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ════ CAMADA 4: PROSPECÇÃO ════ -->
+  <div class="camada">
+    <div class="camada-header">
+      <span class="camada-icon">🎯</span>
+      <div>
+        <div class="camada-nome" style="color:var(--cyan)">Camada 4 — Prospecção</div>
+        <div class="camada-desc">Encontra empresas, acha os decisores e alimenta o funil automaticamente.</div>
+      </div>
+    </div>
+    <div class="camada-grid">
+
+      <!-- CLAY -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--cyan-bg);border-color:var(--cyan-dark);color:var(--cyan)">🧱</div>
+            <div>
+              <div class="tool-name">Clay</div>
+              <div class="tool-category">Lead Enrichment · Outbound Automation</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--cyan-bg);border-color:var(--cyan-dark);color:var(--cyan)">PROSPECÇÃO</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>A ferramenta mais poderosa para prospecção outbound moderna</strong>. Clay é uma "planilha inteligente" que enriquece dados de empresas automaticamente: você diz o segmento e a cidade, ele encontra as empresas, acha os decisores, pega os contatos, e já prepara a mensagem personalizada para cada um.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--cyan)">→</span><span><strong>Busca de empresas:</strong> Google Maps, LinkedIn, Apollo, sites — tudo numa tabela</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--cyan)">→</span><span><strong>Enriquecimento automático:</strong> para cada empresa, busca: quem é o dono, e-mail, telefone, LinkedIn</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--cyan)">→</span><span><strong>IA integrada:</strong> usa Claude ou GPT para escrever mensagem personalizada por empresa</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--cyan)">→</span><span><strong>Filtros inteligentes:</strong> só exporta empresas com e-mail verificado, de um porte específico</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--cyan)">→</span><span><strong>Exporta para n8n:</strong> envia o lead enriquecido + mensagem já escrita para o n8n disparar</span></div>
+
+          <div class="tool-section-title">Como usamos</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Tipo: "escritórios de advocacia em Porto Alegre com mais de 10 funcionários"</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Clay encontra 300 escritórios, busca e-mail e WhatsApp do sócio-administrador</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Claude escreve mensagem citando o nome do escritório e a dor específica do segmento</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>n8n recebe → dispara via WhatsApp (Z-API) ou e-mail → registra no CRM</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Plano Starter</div><div class="cost-val" style="color:var(--gold)">US$ 149/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Créditos incluídos</div><div class="cost-val">2.000 enriquecimentos</div></div>
+            <div class="cost-item"><div class="cost-label">Alternativa</div><div class="cost-val">Apollo.io (mais barato)</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude API</span>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Google Sheets</span>
+            <span class="conn-tag" style="background:var(--pink-bg);border-color:var(--pink-dark);color:var(--pink)">Apollo.io</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- APOLLO -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--pink-bg);border-color:var(--pink-dark);color:var(--pink)">🚀</div>
+            <div>
+              <div class="tool-name">Apollo.io</div>
+              <div class="tool-category">Sales Intelligence · Lead Database</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--pink-bg);border-color:var(--pink-dark);color:var(--pink)">BASE DE LEADS</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>Base de dados de 275 milhões de contatos B2B</strong>. Enquanto o Clay "monta" a lista dinamicamente, o Apollo tem uma base pré-existente de empresas e decisores com e-mail, cargo, LinkedIn e informações da empresa. Você filtra e exporta.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--pink)">→</span><span><strong>Busca por filtros:</strong> setor, cidade, porte, cargo do decisor, tecnologia usada</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--pink)">→</span><span><strong>E-mails verificados:</strong> exporta contatos com e-mail já validado</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--pink)">→</span><span><strong>Sequências de e-mail:</strong> tem CRM simples embutido para cadência de abordagem</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--pink)">→</span><span><strong>LinkedIn Scraping:</strong> integra com extensão do LinkedIn para capturar contatos</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--pink)">→</span><span><strong>API disponível:</strong> n8n consulta Apollo diretamente para enriquecer leads</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Gratuito</div><div class="cost-val" style="color:var(--green)">50 e-mails/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Basic</div><div class="cost-val" style="color:var(--gold)">US$ 49/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Uso ideal</div><div class="cost-val">Alimentar o Clay com dados</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--cyan-bg);border-color:var(--cyan-dark);color:var(--cyan)">Clay</span>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Google Sheets</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ════ CAMADA 5: DADOS ════ -->
+  <div class="camada">
+    <div class="camada-header">
+      <span class="camada-icon">🗄️</span>
+      <div>
+        <div class="camada-nome" style="color:var(--blue)">Camada 5 — Dados & Armazenamento</div>
+        <div class="camada-desc">Onde tudo é guardado. Planilhas, banco de dados e arquivos.</div>
+      </div>
+    </div>
+    <div class="camada-grid">
+
+      <!-- GOOGLE SHEETS -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">📊</div>
+            <div>
+              <div class="tool-name">Google Sheets</div>
+              <div class="tool-category">Planilha · Input de Dados</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">INPUT</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            A <strong>planilha que alimenta as automações</strong>. Não precisa ser banco de dados sofisticado para começar. O Sheets é o lugar onde o cliente lança os dados de impressão mensalmente — ou onde a equipe registra manualmente o que ainda não está automatizado. O n8n lê e processa.
+          </div>
+
+          <div class="tool-section-title">Como usamos</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Base de dados de impressão:</strong> páginas por equipamento, por cliente, por mês</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>CRM simples:</strong> lista de leads com status, data de contato, próximo follow-up</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Tabela de preços:</strong> n8n consulta para calcular propostas automaticamente</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">→</span><span><strong>Log de chamados:</strong> backup de todos os chamados atendidos pela IA</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Custo</div><div class="cost-val" style="color:var(--green)">Grátis</div></div>
+            <div class="cost-item"><div class="cost-label">Limite</div><div class="cost-val">10 milhões de células</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--cyan-bg);border-color:var(--cyan-dark);color:var(--cyan)">Clay</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOUDFLARE D1 -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">🗃️</div>
+            <div>
+              <div class="tool-name">Cloudflare D1</div>
+              <div class="tool-category">Banco de Dados SQLite · Edge</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">BANCO EDGE</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>Banco de dados SQLite que roda na borda da internet</strong>. Parte do ecossistema Cloudflare. Para os projetos mais avançados (o dashboard de parque, Sistema 5), D1 é onde ficam os dados reais de clientes, equipamentos, chamados e histórico — acessíveis em milissegundos de qualquer lugar do mundo.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>SQLite serverless:</strong> banco SQL completo sem precisar de servidor dedicado</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Integra com Workers:</strong> o código Cloudflare Workers consulta o D1 diretamente</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Edge replication:</strong> dado servido do ponto mais próximo do usuário — velocidade máxima</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Backup automático:</strong> Cloudflare gerencia disponibilidade e redundância</span></div>
+
+          <div class="tool-section-title">Quando usar</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span>Sistema 5 (Dashboard): dados de equipamentos, clientes, chamados — estruturados e consultáveis</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">→</span><span>Qualquer automação que precisa de histórico persistente mais robusto que Sheets</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Free tier</div><div class="cost-val" style="color:var(--green)">5GB + 25M leituras/dia</div></div>
+            <div class="cost-item"><div class="cost-label">Pago</div><div class="cost-val" style="color:var(--gold)">US$ 0,75/GB além</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare Workers</span>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Astro</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOUDFLARE R2 -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">📁</div>
+            <div>
+              <div class="tool-name">Cloudflare R2</div>
+              <div class="tool-category">Object Storage · Arquivos</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">ARQUIVOS</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>Armazenamento de arquivos sem custo de saída (egress)</strong>. É o equivalente ao Amazon S3, mas sem cobrar para baixar arquivos — o que muda tudo no custo. Onde ficam os PDFs gerados: propostas, relatórios, contratos.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Guarda arquivos:</strong> PDFs de propostas e relatórios gerados pelo n8n</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Link público ou privado:</strong> gera URL para compartilhar no WhatsApp ou e-mail</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Sem custo de egress:</strong> diferente do S3, baixar o arquivo é gratuito</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Integra com Workers:</strong> Workers servem o arquivo do R2 diretamente</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Free tier</div><div class="cost-val" style="color:var(--green)">10GB storage grátis</div></div>
+            <div class="cost-item"><div class="cost-label">Pago</div><div class="cost-val" style="color:var(--gold)">US$ 0,015/GB além</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare Workers</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ════ CAMADA 6: INFRAESTRUTURA ════ -->
+  <div class="camada">
+    <div class="camada-header">
+      <span class="camada-icon">🏗️</span>
+      <div>
+        <div class="camada-nome" style="color:var(--yellow)">Camada 6 — Infraestrutura</div>
+        <div class="camada-desc">Onde tudo roda. Serverless, edge computing, e o framework que constrói o produto.</div>
+      </div>
+    </div>
+    <div class="camada-grid">
+
+      <!-- CLOUDFLARE WORKERS -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">⚡</div>
+            <div>
+              <div class="tool-name">Cloudflare Workers</div>
+              <div class="tool-category">Serverless Edge · Backend sem servidor</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">SERVERLESS</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>Código que roda na borda da internet — sem servidor para gerenciar</strong>. Workers é onde o backend do dashboard (Sistema 5) vive. Você escreve funções JavaScript/TypeScript, publica, e elas ficam disponíveis em 200+ locais no mundo automaticamente. Sem VPS, sem manutenção, sem escalar manualmente.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>API Backend:</strong> recebe requisições do frontend Astro e responde com dados do D1</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Webhook handler:</strong> recebe dados do n8n, processa, salva no D1</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Autenticação:</strong> valida login do cliente/prestador no portal</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Serve arquivos do R2:</strong> quando cliente pede o relatório, Workers busca no R2 e entrega</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Chamada à Claude API:</strong> Workers chama Claude para análises sob demanda no dashboard</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Zero cold start:</strong> diferente de outras funções serverless, Workers inicializa em &lt;1ms</span></div>
+
+          <div class="tool-section-title">Por que Cloudflare e não AWS/GCP</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Free tier generoso: 100k requisições/dia de graça</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>D1 + R2 + Pages + Workers — stack completa no mesmo ecossistema</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>Sem custo de egress (AWS cobra caro para sair dados)</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--green)">✓</span><span>EmDash (lançado em Abr/2026): Workers + D1 + Astro integrados nativamente</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Free tier</div><div class="cost-val" style="color:var(--green)">100k req/dia</div></div>
+            <div class="cost-item"><div class="cost-label">Workers Paid</div><div class="cost-val" style="color:var(--gold)">US$ 5/mês</div></div>
+            <div class="cost-item"><div class="cost-label">Custo real do sistema</div><div class="cost-val">~US$ 5–15/mês total</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">n8n</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">D1 (banco)</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">R2 (arquivos)</span>
+            <span class="conn-tag" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">Astro</span>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude API</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASTRO -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">🚀</div>
+            <div>
+              <div class="tool-name">Astro</div>
+              <div class="tool-category">Web Framework · Frontend + SSR</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">FRAMEWORK</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>O framework que constrói o dashboard e o portal do cliente</strong>. Astro é moderno, rápido e integra nativamente com Cloudflare Workers. Você escreve HTML/CSS/JS (com componentes opcionais de React/Vue) e o Astro gera páginas ultra-rápidas. Para o Sistema 5 (Dashboard), Astro é o frontend que o prestador e o cliente usam.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Server-Side Rendering (SSR):</strong> páginas geradas no servidor — dados sempre frescos</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>API Routes:</strong> junto com Workers, cria endpoints de API diretamente no projeto</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Zero JavaScript por padrão:</strong> páginas carregam instantaneamente — sem bundle pesado</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Componentes:</strong> cria UI reutilizável — dashboard, tabelas, gráficos, formulários</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>Deploy no Cloudflare Pages:</strong> integração nativa — push no Git → deploy automático</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--purple)">→</span><span><strong>EmDash nativo:</strong> novo adapter Cloudflare (Abr/2026) torna integração Workers + D1 trivial</span></div>
+
+          <div class="tool-section-title">O que construímos com Astro</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span><strong>Portal do prestador:</strong> dashboard com todos os clientes, chamados, SLA e relatórios</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span><strong>Portal do cliente:</strong> login próprio, histórico de chamados, relatórios para baixar</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span><strong>Formulário de proposta:</strong> frontend do Sistema 3 — vendedor preenche, aciona n8n</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--blue)">✓</span><span><strong>Landing page da agência:</strong> site institucional hospedado em Pages</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Framework</div><div class="cost-val" style="color:var(--green)">Open source · Grátis</div></div>
+            <div class="cost-item"><div class="cost-label">Hosting (CF Pages)</div><div class="cost-val" style="color:var(--green)">Grátis (ilimitado)</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">Cloudflare Workers</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare D1</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">Cloudflare Pages</span>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Claude API</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOUDFLARE PAGES -->
+      <div class="tool">
+        <div class="tool-header">
+          <div class="tool-logo-area">
+            <div class="tool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">🌐</div>
+            <div>
+              <div class="tool-name">Cloudflare Pages</div>
+              <div class="tool-category">Hosting & Deploy · Git-based</div>
+            </div>
+          </div>
+          <span class="tool-badge" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">HOSTING</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-desc">
+            <strong>Hosting gratuito e global para sites e aplicações</strong>. Conecta ao GitHub/GitLab, e toda vez que você faz push, o deploy acontece automaticamente. Integra com Workers nativamente — é onde o Astro fica hospedado.
+          </div>
+
+          <div class="tool-section-title">O que faz</div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Deploy automático:</strong> push no GitHub → site atualizado em segundos</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Preview branches:</strong> cada PR tem URL de preview para testar antes de publicar</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>CDN global:</strong> site servido de 200+ locais — velocidade máxima para o usuário</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>SSL automático:</strong> HTTPS sem configurar nada</span></div>
+          <div class="tool-item"><span class="tool-item-icon" style="color:var(--orange)">→</span><span><strong>Workers integrado:</strong> funções serverless rodam junto com o site no mesmo deploy</span></div>
+
+          <div class="tool-cost">
+            <div class="cost-item"><div class="cost-label">Custo</div><div class="cost-val" style="color:var(--green)">Grátis (ilimitado)</div></div>
+            <div class="cost-item"><div class="cost-label">Domínio customizado</div><div class="cost-val" style="color:var(--green)">Grátis incluído</div></div>
+          </div>
+
+          <div class="tool-connects">
+            <div class="tool-connects-label">Conecta com</div>
+            <span class="conn-tag" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">Astro</span>
+            <span class="conn-tag" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">Cloudflare Workers</span>
+            <span class="conn-tag" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">GitHub</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 2 — POR SISTEMA
+══════════════════════════════════════════ -->
+<div class="section" id="aba-sistemas">
+
+  <div class="eyebrow">Visão por Produto</div>
+  <div class="sec-title">Qual ferramenta serve<br><em>cada sistema</em></div>
+  <p class="sec-lead">A mesma stack serve todos os 5 sistemas. O que muda é como as ferramentas são combinadas e qual delas assume o papel principal em cada fluxo.</p>
+
+  <!-- SISTEMA 1 -->
+  <div class="sistema-block">
+    <div class="sistema-head">
+      <div class="sistema-num" style="background:var(--blue-bg);border-color:var(--blue-dark);color:var(--blue)">01</div>
+      <div class="sistema-info">
+        <div class="sistema-nome">Atendimento de Chamados via WhatsApp + IA</div>
+        <div class="sistema-tag">Suporte técnico 24h automatizado</div>
+      </div>
+    </div>
+    <div class="sistema-body">
+      <div class="label">Fluxo de dados</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--green-dark)">
+          <div class="fluxo-icon">📱</div>
+          <div class="fluxo-tool" style="color:var(--green)">Z-API</div>
+          <div class="fluxo-role">Recebe mensagem do cliente</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--gold-dark)">
+          <div class="fluxo-icon">🤖</div>
+          <div class="fluxo-tool" style="color:var(--gold)">Typebot</div>
+          <div class="fluxo-role">Coleta tipo e urgência</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark)">
+          <div class="fluxo-icon">🧠</div>
+          <div class="fluxo-tool" style="color:var(--purple)">Claude API</div>
+          <div class="fluxo-role">Classifica e sugere solução</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--orange-dark)">
+          <div class="fluxo-icon">⚙️</div>
+          <div class="fluxo-tool" style="color:var(--orange)">n8n</div>
+          <div class="fluxo-role">Agenda técnico + notifica</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark)">
+          <div class="fluxo-icon">🗃️</div>
+          <div class="fluxo-tool" style="color:var(--blue)">Sheets / D1</div>
+          <div class="fluxo-role">Registra histórico</div>
+        </div>
+      </div>
+      <div class="sistema-tools">
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--green-bg);border-color:var(--green-dark)">📲</div><div><div class="stool-name">Z-API</div><div class="stool-role">Gateway WPP</div></div></div>
+          <div class="stool-desc">Porta de entrada. Toda mensagem do cliente chega aqui primeiro e é repassada para o fluxo.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--gold-bg);border-color:var(--gold-dark)">🤖</div><div><div class="stool-name">Typebot</div><div class="stool-role">Chatbot</div></div></div>
+          <div class="stool-desc">Faz as perguntas certas: qual equipamento, qual problema, qual urgência. Sem o técnico precisar responder.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🧠</div><div><div class="stool-name">Claude Haiku</div><div class="stool-role">IA de classificação</div></div></div>
+          <div class="stool-desc">Lê o problema descrito e classifica: toner, papel, hardware, rede. Sugere solução remota se possível.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark)">⚙️</div><div><div class="stool-name">n8n</div><div class="stool-role">Orquestrador</div></div></div>
+          <div class="stool-desc">Coordena tudo: aciona agendamento, envia notificação ao técnico, atualiza o cliente com status.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--blue-bg);border-color:var(--blue-dark)">📊</div><div><div class="stool-name">Google Sheets</div><div class="stool-role">Registro</div></div></div>
+          <div class="stool-desc">Salva todos os chamados com data, tipo, resolução. Base para o relatório de SLA mensal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 2 -->
+  <div class="sistema-block">
+    <div class="sistema-head">
+      <div class="sistema-num" style="background:var(--gold-bg);border-color:var(--gold-dark);color:var(--gold)">02</div>
+      <div class="sistema-info">
+        <div class="sistema-nome">Relatório Mensal Automático</div>
+        <div class="sistema-tag">PDF com análise de IA gerado e enviado no dia 1</div>
+      </div>
+    </div>
+    <div class="sistema-body">
+      <div class="label">Fluxo de dados</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--green-dark)">
+          <div class="fluxo-icon">📊</div>
+          <div class="fluxo-tool" style="color:var(--green)">Google Sheets</div>
+          <div class="fluxo-role">Dados de impressão do mês</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--orange-dark)">
+          <div class="fluxo-icon">⚙️</div>
+          <div class="fluxo-tool" style="color:var(--orange)">n8n</div>
+          <div class="fluxo-role">Aciona no dia 1 do mês</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark)">
+          <div class="fluxo-icon">🧠</div>
+          <div class="fluxo-tool" style="color:var(--purple)">Claude Sonnet</div>
+          <div class="fluxo-role">Analisa e escreve relatório</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark)">
+          <div class="fluxo-icon">📄</div>
+          <div class="fluxo-tool" style="color:var(--blue)">n8n → PDF</div>
+          <div class="fluxo-role">Gera PDF com marca</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark)">
+          <div class="fluxo-icon">📨</div>
+          <div class="fluxo-tool" style="color:var(--green)">Z-API + Email</div>
+          <div class="fluxo-role">Envia para o cliente</div>
+        </div>
+      </div>
+      <div class="sistema-tools">
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--green-bg);border-color:var(--green-dark)">📊</div><div><div class="stool-name">Google Sheets</div><div class="stool-role">Fonte de dados</div></div></div>
+          <div class="stool-desc">Onde fica o registro de impressão por equipamento, por cliente, por mês.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark)">⚙️</div><div><div class="stool-name">n8n</div><div class="stool-role">Gatilho + geração</div></div></div>
+          <div class="stool-desc">Agendado para o dia 1. Busca dados, monta o HTML do relatório, gera PDF, envia.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🧠</div><div><div class="stool-name">Claude Sonnet</div><div class="stool-role">Análise textual</div></div></div>
+          <div class="stool-desc">Recebe os números e escreve a análise: crescimento, anomalias, recomendações em linguagem natural.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--blue-bg);border-color:var(--blue-dark)">📁</div><div><div class="stool-name">Cloudflare R2</div><div class="stool-role">Storage de PDFs</div></div></div>
+          <div class="stool-desc">PDFs gerados ficam armazenados no R2. Link enviado ao cliente; histórico preservado.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 3 -->
+  <div class="sistema-block">
+    <div class="sistema-head">
+      <div class="sistema-num" style="background:var(--green-bg);border-color:var(--green-dark);color:var(--green)">03</div>
+      <div class="sistema-info">
+        <div class="sistema-nome">Gerador de Proposta Comercial + Follow-up</div>
+        <div class="sistema-tag">Proposta em PDF em 30 segundos, follow-up automático</div>
+      </div>
+    </div>
+    <div class="sistema-body">
+      <div class="label">Fluxo de dados</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--purple-dark)">
+          <div class="fluxo-icon">📝</div>
+          <div class="fluxo-tool" style="color:var(--purple)">Astro (form)</div>
+          <div class="fluxo-role">Vendedor preenche 5 campos</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--orange-dark)">
+          <div class="fluxo-icon">⚙️</div>
+          <div class="fluxo-tool" style="color:var(--orange)">n8n</div>
+          <div class="fluxo-role">Calcula preço e processa</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark)">
+          <div class="fluxo-icon">🧠</div>
+          <div class="fluxo-tool" style="color:var(--purple)">Claude Sonnet</div>
+          <div class="fluxo-role">Escreve proposta personalizada</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark)">
+          <div class="fluxo-icon">📄</div>
+          <div class="fluxo-tool" style="color:var(--blue)">PDF → R2</div>
+          <div class="fluxo-role">Gera e armazena PDF</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark)">
+          <div class="fluxo-icon">🔁</div>
+          <div class="fluxo-tool" style="color:var(--green)">n8n agenda</div>
+          <div class="fluxo-role">Follow-up 24h e 72h</div>
+        </div>
+      </div>
+      <div class="sistema-tools">
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🚀</div><div><div class="stool-name">Astro</div><div class="stool-role">Formulário frontend</div></div></div>
+          <div class="stool-desc">Página web simples onde o vendedor preenche os dados do lead. Envia para Workers/n8n.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark)">⚙️</div><div><div class="stool-name">n8n</div><div class="stool-role">Cálculo e orquestração</div></div></div>
+          <div class="stool-desc">Consulta tabela de preços no Sheets, calcula o valor, prepara o contexto para o Claude.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🧠</div><div><div class="stool-name">Claude Sonnet</div><div class="stool-role">Geração de conteúdo</div></div></div>
+          <div class="stool-desc">Escreve o texto personalizado da proposta baseado no segmento e nas dores específicas do lead.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--blue-bg);border-color:var(--blue-dark)">📁</div><div><div class="stool-name">R2 + Z-API</div><div class="stool-role">Entrega</div></div></div>
+          <div class="stool-desc">PDF salvo no R2, link enviado via Z-API no WhatsApp ou por e-mail. Follow-up automático agendado.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 4 -->
+  <div class="sistema-block">
+    <div class="sistema-head">
+      <div class="sistema-num" style="background:var(--orange-bg);border-color:var(--orange-dark);color:var(--orange)">04</div>
+      <div class="sistema-info">
+        <div class="sistema-nome">Motor de Prospecção Outbound</div>
+        <div class="sistema-tag">Identifica, enriquece, personaliza e dispara automaticamente</div>
+      </div>
+    </div>
+    <div class="sistema-body">
+      <div class="label">Fluxo de dados</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--pink-dark)">
+          <div class="fluxo-icon">🔍</div>
+          <div class="fluxo-tool" style="color:var(--pink)">Apollo.io</div>
+          <div class="fluxo-role">Base de empresas filtradas</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--cyan-dark)">
+          <div class="fluxo-icon">🧱</div>
+          <div class="fluxo-tool" style="color:var(--cyan)">Clay</div>
+          <div class="fluxo-role">Enriquece dados + decisor</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--purple-dark)">
+          <div class="fluxo-icon">🧠</div>
+          <div class="fluxo-tool" style="color:var(--purple)">Claude Sonnet</div>
+          <div class="fluxo-role">Personaliza mensagem</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--orange-dark)">
+          <div class="fluxo-icon">⚙️</div>
+          <div class="fluxo-tool" style="color:var(--orange)">n8n</div>
+          <div class="fluxo-role">Dispara e agenda sequência</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--green-dark)">
+          <div class="fluxo-icon">🎯</div>
+          <div class="fluxo-tool" style="color:var(--green)">CRM / Sheets</div>
+          <div class="fluxo-role">Interessados no funil</div>
+        </div>
+      </div>
+      <div class="sistema-tools">
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--pink-bg);border-color:var(--pink-dark)">🚀</div><div><div class="stool-name">Apollo.io</div><div class="stool-role">Banco de leads</div></div></div>
+          <div class="stool-desc">275M de contatos B2B filtráveis por setor, cidade, porte e cargo do decisor.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--cyan-bg);border-color:var(--cyan-dark)">🧱</div><div><div class="stool-name">Clay</div><div class="stool-role">Enriquecimento</div></div></div>
+          <div class="stool-desc">Pega a lista do Apollo, busca e-mail verificado, LinkedIn, site e informações adicionais da empresa.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🧠</div><div><div class="stool-name">Claude Sonnet</div><div class="stool-role">Personalização</div></div></div>
+          <div class="stool-desc">Dentro do Clay ou via n8n: escreve mensagem única para cada empresa citando dor do segmento.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark)">⚙️</div><div><div class="stool-name">n8n + Z-API</div><div class="stool-role">Disparo e sequência</div></div></div>
+          <div class="stool-desc">n8n dispara via WhatsApp (Z-API) ou e-mail. Agenda segundo contato se sem resposta em 3 dias.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA 5 -->
+  <div class="sistema-block">
+    <div class="sistema-head">
+      <div class="sistema-num" style="background:var(--purple-bg);border-color:var(--purple-dark);color:var(--purple)">05</div>
+      <div class="sistema-info">
+        <div class="sistema-nome">Dashboard de Gestão de Parque — SaaS</div>
+        <div class="sistema-tag">Portal do prestador + portal do cliente em tempo real</div>
+      </div>
+    </div>
+    <div class="sistema-body">
+      <div class="label">Arquitetura técnica</div>
+      <div class="fluxo">
+        <div class="fluxo-step" style="border-color:var(--purple-dark)">
+          <div class="fluxo-icon">🚀</div>
+          <div class="fluxo-tool" style="color:var(--purple)">Astro</div>
+          <div class="fluxo-role">Frontend do dashboard</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--orange-dark)">
+          <div class="fluxo-icon">⚡</div>
+          <div class="fluxo-tool" style="color:var(--orange)">CF Workers</div>
+          <div class="fluxo-role">API e lógica backend</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark)">
+          <div class="fluxo-icon">🗃️</div>
+          <div class="fluxo-tool" style="color:var(--blue)">D1</div>
+          <div class="fluxo-role">Dados de clientes e equipamentos</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--blue-dark)">
+          <div class="fluxo-icon">📁</div>
+          <div class="fluxo-tool" style="color:var(--blue)">R2</div>
+          <div class="fluxo-role">PDFs e arquivos</div>
+        </div>
+        <div class="fluxo-arr">→</div>
+        <div class="fluxo-step" style="border-color:var(--orange-dark)">
+          <div class="fluxo-icon">⚙️</div>
+          <div class="fluxo-tool" style="color:var(--orange)">n8n</div>
+          <div class="fluxo-role">Alimenta dados + alertas</div>
+        </div>
+      </div>
+      <div class="sistema-tools">
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🚀</div><div><div class="stool-name">Astro + CF Pages</div><div class="stool-role">Interface</div></div></div>
+          <div class="stool-desc">Dashboard visual do prestador e portal do cliente. Deploy automático, grátis, CDN global.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark)">⚡</div><div><div class="stool-name">Cloudflare Workers</div><div class="stool-role">Backend / API</div></div></div>
+          <div class="stool-desc">Toda a lógica de negócio: autenticação, consultas ao D1, chamadas à Claude API, alertas.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--blue-bg);border-color:var(--blue-dark)">🗃️</div><div><div class="stool-name">Cloudflare D1</div><div class="stool-role">Banco de dados</div></div></div>
+          <div class="stool-desc">SQLite edge: clientes, equipamentos, chamados, contratos, histórico. Rápido e barato.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--blue-bg);border-color:var(--blue-dark)">📁</div><div><div class="stool-name">Cloudflare R2</div><div class="stool-role">Arquivos</div></div></div>
+          <div class="stool-desc">Relatórios em PDF, documentos de contrato — acessíveis pelo portal do cliente.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--orange-bg);border-color:var(--orange-dark)">⚙️</div><div><div class="stool-name">n8n</div><div class="stool-role">Alimentação e alertas</div></div></div>
+          <div class="stool-desc">Continua recebendo dados do WPP e dos sistemas 1-4, salva no D1. Gera alertas automáticos.</div>
+        </div>
+        <div class="stool">
+          <div class="stool-header"><div class="stool-icon" style="background:var(--purple-bg);border-color:var(--purple-dark)">🧠</div><div><div class="stool-name">Claude API</div><div class="stool-role">Análise on-demand</div></div></div>
+          <div class="stool-desc">Chamado via Workers quando o prestador pede análise: "qual cliente está mais em risco de churn?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ABA 3 — MAPA MENTAL
+══════════════════════════════════════════ -->
+<div class="section" id="aba-mapa">
+
+  <div class="eyebrow">Mapa Mental · Stack Completa</div>
+  <div class="sec-title">Todas as ferramentas<br><em>conectadas</em></div>
+  <p class="sec-lead">Visão de pássaro da stack. O n8n é o nó central — tudo passa por ele. As ferramentas nas bordas são especializadas: entrada, inteligência, dados, infraestrutura.</p>
+
+  <div class="mm-wrap">
+    <div class="mm" id="mindmap">
+      <svg class="lines" id="mm-svg"></svg>
+
+      <div class="mm-node mm-center" id="mm-c">n8n<br><span style="font-size:9px;font-family:Inter;font-weight:400;opacity:.7">Orquestrador Central</span></div>
+
+      <!-- Topo esquerda: Comunicação -->
+      <div class="mm-node mm-b1" id="mm-1" style="top:60px;left:60px">📱 Comunicação</div>
+      <div class="mm-node mm-b1 mm-sub" id="mm-1a" style="top:20px;left:230px">Z-API · gateway WPP</div>
+      <div class="mm-node mm-b1 mm-sub" id="mm-1b" style="top:60px;left:230px">Typebot · chatbot builder</div>
+      <div class="mm-node mm-b1 mm-sub" id="mm-1c" style="top:100px;left:230px">SMTP / Email</div>
+
+      <!-- Topo direita: IA -->
+      <div class="mm-node mm-b2" id="mm-2" style="top:60px;right:60px">🧠 Inteligência</div>
+      <div class="mm-node mm-b2 mm-sub" id="mm-2a" style="top:20px;right:230px">Claude Haiku · rápido/barato</div>
+      <div class="mm-node mm-b2 mm-sub" id="mm-2b" style="top:60px;right:230px">Claude Sonnet · qualidade</div>
+      <div class="mm-node mm-b2 mm-sub" id="mm-2c" style="top:100px;right:230px">Claude Opus · análise</div>
+
+      <!-- Meio esquerda: Prospecção -->
+      <div class="mm-node mm-b3" id="mm-3" style="top:280px;left:20px">🎯 Prospecção</div>
+      <div class="mm-node mm-b3 mm-sub" id="mm-3a" style="top:230px;left:200px">Clay · enriquecimento</div>
+      <div class="mm-node mm-b3 mm-sub" id="mm-3b" style="top:270px;left:200px">Apollo.io · base B2B</div>
+      <div class="mm-node mm-b3 mm-sub" id="mm-3c" style="top:310px;left:200px">Google Maps · localização</div>
+
+      <!-- Meio direita: Dados -->
+      <div class="mm-node mm-b4" id="mm-4" style="top:280px;right:20px">🗄️ Dados</div>
+      <div class="mm-node mm-b4 mm-sub" id="mm-4a" style="top:230px;right:200px">Google Sheets · input</div>
+      <div class="mm-node mm-b4 mm-sub" id="mm-4b" style="top:270px;right:200px">Cloudflare D1 · banco SQL</div>
+      <div class="mm-node mm-b4 mm-sub" id="mm-4c" style="top:310px;right:200px">Cloudflare R2 · arquivos</div>
+
+      <!-- Baixo esquerda: Infraestrutura -->
+      <div class="mm-node mm-b5" id="mm-5" style="bottom:80px;left:60px">🏗️ Infraestrutura</div>
+      <div class="mm-node mm-b5 mm-sub" id="mm-5a" style="bottom:120px;left:240px">CF Workers · serverless</div>
+      <div class="mm-node mm-b5 mm-sub" id="mm-5b" style="bottom:80px;left:240px">CF Pages · hosting grátis</div>
+      <div class="mm-node mm-b5 mm-sub" id="mm-5c" style="bottom:40px;left:240px">Astro · web framework</div>
+
+      <!-- Baixo direita: Sistemas -->
+      <div class="mm-node mm-b6" id="mm-6" style="bottom:80px;right:60px">⚡ Sistemas</div>
+      <div class="mm-node mm-b6 mm-sub" id="mm-6a" style="bottom:140px;right:220px">S1 · Chamados WPP</div>
+      <div class="mm-node mm-b6 mm-sub" id="mm-6b" style="bottom:100px;right:220px">S2 · Relatório Auto</div>
+      <div class="mm-node mm-b6 mm-sub" id="mm-6c" style="bottom:60px;right:220px">S3 · Proposta Inteligente</div>
+      <div class="mm-node mm-b6 mm-sub" id="mm-6d" style="bottom:20px;right:220px">S4 · Prospecção · S5 · Dashboard</div>
+
+      <!-- Centro-topo: Custo -->
+      <div class="mm-node mm-b7" id="mm-7" style="top:20px;left:50%;transform:translateX(-50%)">💰 Stack mensal: ~R$ 500–800</div>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">Passe o mouse sobre os nós para destacar · Use este mapa como base para Figma/Miro</p>
+
+  <div class="divider"></div>
+
+  <div class="label">Estrutura hierárquica para importar no Figma ou Miro</div>
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px;font-family:monospace;font-size:12px;color:var(--muted2);line-height:2;overflow-x:auto">
+    <span style="color:var(--gold)">STACK DE AUTOMAÇÃO (n8n — Orquestrador Central)</span><br>
+    ├── <span style="color:var(--orange)">📱 COMUNICAÇÃO</span><br>
+    │   ├── Z-API · gateway WhatsApp · R$100–150/mês<br>
+    │   ├── Typebot · chatbot visual · grátis self-hosted<br>
+    │   └── SMTP/SendGrid · envio de e-mail<br>
+    ├── <span style="color:var(--purple)">🧠 INTELIGÊNCIA ARTIFICIAL</span><br>
+    │   ├── Claude Haiku · classificação rápida · R$2–5/mil msgs<br>
+    │   ├── Claude Sonnet · relatórios e propostas · R$15–30/mês<br>
+    │   └── Claude Opus · análise complexa · sob demanda<br>
+    ├── <span style="color:var(--cyan)">🎯 PROSPECÇÃO</span><br>
+    │   ├── Apollo.io · base B2B 275M contatos · US$49/mês<br>
+    │   ├── Clay · enriquecimento automático · US$149/mês<br>
+    │   └── Google Maps API · busca local de empresas<br>
+    ├── <span style="color:var(--blue)">🗄️ DADOS</span><br>
+    │   ├── Google Sheets · input e CRM simples · grátis<br>
+    │   ├── Cloudflare D1 · banco SQL edge · grátis (5GB)<br>
+    │   └── Cloudflare R2 · storage de PDFs · grátis (10GB)<br>
+    └── <span style="color:var(--green)">🏗️ INFRAESTRUTURA</span><br>
+        ├── Cloudflare Workers · serverless · US$5/mês<br>
+        ├── Cloudflare Pages · hosting · grátis<br>
+        └── Astro · web framework · open source
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function ir(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('aba-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'mapa') setTimeout(desenharLinhas, 80);
+}
+
+function centro(el) {
+  const mm  = document.getElementById('mindmap');
+  const mmR = mm.getBoundingClientRect();
+  const r   = el.getBoundingClientRect();
+  return { x: r.left - mmR.left + r.width / 2, y: r.top - mmR.top + r.height / 2 };
+}
+
+function curva(svg, x1, y1, x2, y2, cor) {
+  const p  = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const cx = (x1 + x2) / 2;
+  p.setAttribute('d', `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`);
+  p.setAttribute('stroke', cor);
+  p.setAttribute('stroke-width', '1.5');
+  p.setAttribute('fill', 'none');
+  p.setAttribute('opacity', '0.4');
+  svg.appendChild(p);
+}
+
+const COR = { b1:'#fb923c', b2:'#4ade80', b3:'#38bdf8', b4:'#a78bfa', b5:'#60a5fa', b6:'#f472b6', b7:'#fbbf24' };
+
+function desenharLinhas() {
+  const svg = document.getElementById('mm-svg');
+  svg.innerHTML = '';
+  const ligacoes = [
+    ['mm-c','mm-1',COR.b1], ['mm-1','mm-1a',COR.b1], ['mm-1','mm-1b',COR.b1], ['mm-1','mm-1c',COR.b1],
+    ['mm-c','mm-2',COR.b2], ['mm-2','mm-2a',COR.b2], ['mm-2','mm-2b',COR.b2], ['mm-2','mm-2c',COR.b2],
+    ['mm-c','mm-3',COR.b3], ['mm-3','mm-3a',COR.b3], ['mm-3','mm-3b',COR.b3], ['mm-3','mm-3c',COR.b3],
+    ['mm-c','mm-4',COR.b4], ['mm-4','mm-4a',COR.b4], ['mm-4','mm-4b',COR.b4], ['mm-4','mm-4c',COR.b4],
+    ['mm-c','mm-5',COR.b5], ['mm-5','mm-5a',COR.b5], ['mm-5','mm-5b',COR.b5], ['mm-5','mm-5c',COR.b5],
+    ['mm-c','mm-6',COR.b6], ['mm-6','mm-6a',COR.b6], ['mm-6','mm-6b',COR.b6], ['mm-6','mm-6c',COR.b6], ['mm-6','mm-6d',COR.b6],
+    ['mm-c','mm-7',COR.b7],
+  ];
+  ligacoes.forEach(([a, b, cor]) => {
+    const eA = document.getElementById(a);
+    const eB = document.getElementById(b);
+    if (!eA || !eB) return;
+    const ca = centro(eA), cb = centro(eB);
+    curva(svg, ca.x, ca.y, cb.x, cb.y, cor);
+  });
+}
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('aba-mapa').classList.contains('active')) desenharLinhas();
+});
+</script>
+</body>
+</html>
