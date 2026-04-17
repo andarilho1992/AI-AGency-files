@@ -606,6 +606,7 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-ghost" id="btn-sync" style="font-size:12px;padding:7px 12px" onclick="syncWorker()">⟳ Sync Worker</button>
+          <button class="btn btn-ghost" style="font-size:12px;padding:7px 12px" onclick="pipeAbrirImport()">↑ Importar dados</button>
           <button class="btn btn-primary" style="font-size:12px;padding:7px 14px" onclick="pipeAbrirNovo()">
             <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Novo Lead
           </button>
@@ -658,6 +659,30 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
 </div>
 
 <div class="toast-wrap" id="toasts"></div>
+
+<!-- PIPELINE MODAL — IMPORTAR -->
+<div class="overlay" id="pipe-overlay-import" onclick="if(event.target===this)pipeFecharImport()">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-hd">
+      <div class="modal-title">Recuperar dados do pipeline</div>
+      <div class="modal-x" onclick="pipeFecharImport()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted2);margin-bottom:14px;line-height:1.6">
+        <strong style="color:var(--text)">Passo 1:</strong> Abre o <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">leads-pipeline.html</code> no browser<br>
+        <strong style="color:var(--text)">Passo 2:</strong> Aperta <kbd style="background:var(--bg3);padding:2px 6px;border-radius:4px">F12</kbd> → Console → cola isso e aperta Enter:<br>
+        <code style="display:block;background:var(--bg3);padding:10px;border-radius:7px;margin:8px 0;font-size:12px;color:var(--gold);word-break:break-all">copy(localStorage.getItem('pipeline_leads'))</code>
+        <strong style="color:var(--text)">Passo 3:</strong> Cola aqui embaixo o que foi copiado:
+      </p>
+      <textarea class="ft" id="pipe-import-txt" style="min-height:120px;font-size:12px;font-family:monospace" placeholder='[{"id":"...","nome":"..."}]'></textarea>
+      <p id="pipe-import-status" style="font-size:12px;margin-top:8px;color:var(--muted)"></p>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="pipeFecharImport()">Cancelar</button>
+      <button class="btn btn-primary" onclick="pipeExecutarImport()">Importar leads</button>
+    </div>
+  </div>
+</div>
 
 <!-- PIPELINE MODAL — NOVO LEAD -->
 <div class="overlay" id="pipe-overlay-novo" onclick="if(event.target===this)pipeFecharNovo()">
@@ -1161,6 +1186,26 @@ function _pipeConverterCRM(lead){
   pipeRender();
   if(cur!=='dashboard') renderDash();
   logAct(`Lead <strong>${lead.nome}</strong> convertido para cliente`,'var(--green)');
+}
+
+// import
+function pipeAbrirImport(){ R('pipe-overlay-import').classList.add('open'); setTimeout(()=>document.getElementById('pipe-import-txt')?.focus(),60); }
+function pipeFecharImport(){ R('pipe-overlay-import').classList.remove('open'); document.getElementById('pipe-import-txt').value=''; document.getElementById('pipe-import-status').textContent=''; }
+function pipeExecutarImport(){
+  const raw = (document.getElementById('pipe-import-txt').value||'').trim();
+  const status = document.getElementById('pipe-import-status');
+  if(!raw){ status.textContent='Cola o JSON primeiro.'; status.style.color='var(--red)'; return; }
+  let novos;
+  try { novos = JSON.parse(raw); } catch(e){ status.textContent='JSON inválido — copia de novo do console.'; status.style.color='var(--red)'; return; }
+  if(!Array.isArray(novos)){ status.textContent='Esperado um array de leads.'; status.style.color='var(--red)'; return; }
+  const ids = new Set(pipeLeads.map(l=>l.id));
+  const paraAdd = novos.filter(l=>!ids.has(l.id));
+  pipeLeads = [...paraAdd, ...pipeLeads];
+  pipeSave(); pipeRender();
+  status.textContent=`${paraAdd.length} leads importados, ${novos.length-paraAdd.length} já existiam.`;
+  status.style.color='var(--green)';
+  setTimeout(()=>pipeFecharImport(), 1500);
+  toast(`${paraAdd.length} leads recuperados!`);
 }
 
 // worker sync
