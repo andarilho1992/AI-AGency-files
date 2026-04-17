@@ -1328,8 +1328,133 @@ function converterParaCRM(leadId) {
   logAct(`Lead <strong>${lead.nome}</strong> convertido para cliente`, 'var(--green)');
 }
 
+// ── SEED PETS GO ────────────────────────────────────────
+function seedPetsGo() {
+  const jaExiste = D.clientes.some(c => c.empresa === 'Pets Go');
+  if (jaExiste) return;
+
+  const cliId  = 'petsgo-junior-001';
+  const proj1  = 'petsgo-proj-crm';
+  const proj2  = 'petsgo-proj-agents';
+  const prop1  = 'petsgo-prop-001';
+  const fat1   = 'petsgo-fat-001';
+
+  D.clientes.push({
+    id: cliId,
+    nome: 'Junior',
+    empresa: 'Pets Go',
+    email: '',
+    telefone: '',
+    notas: 'Investidor anjo — paga todas as ferramentas do projeto.\nCliente #1 da agência.\nDono do Pets Go (pet shop + clínica veterinária).\n\nURLs de produção:\n• CRM: https://icy-wave-ee65.braziliangui1992.workers.dev/\n• Agentes: https://petsgo-agents-production.up.railway.app\n\nStatus geral: sistemas no ar, sync CRM → Railway pendente.',
+  });
+
+  D.projetos.push({
+    id: proj1,
+    titulo: 'CRM Pets Go — Dashboard + Pipeline',
+    clienteId: cliId,
+    status: 'Ativo',
+    valor: 'R$0 (equity/investidor)',
+    data: '2026-03-01',
+    notas: `CONCLUÍDO ✅
+• CRM completo no ar (Cloudflare Workers)
+• Dashboard com KPIs: faturamento, pets ativos, agendamentos, reativação
+• Módulo de pets — cadastro + histórico
+• Módulo de estoque — produtos, alertas de baixo estoque
+• Pipeline de reativação de clientes inativos
+• App mobile para gestores (mesma URL)
+• Apresentação de vendas entregue (PT + EN)
+• Intake form criado para coleta de dados reais
+
+PENDENTE ❌
+• Debug sync CRM → Railway (CORS em resolução)
+• Importar dados reais do Pets Control 2.0
+• Coletar informações do Junior via intake-petsgo.html`,
+  });
+
+  D.projetos.push({
+    id: proj2,
+    titulo: 'Agentes IA Pets Go — WhatsApp Automação',
+    clienteId: cliId,
+    status: 'Pausado',
+    valor: 'R$0 (equity/investidor)',
+    data: '2026-03-15',
+    notas: `CONCLUÍDO ✅
+• 5 agentes IA configurados (Node.js, Railway)
+• Agente de reativação de clientes inativos
+• Agente de follow-up pós-consulta
+• Agente de lembrete de vacinas/consultas
+• Agente de resposta automática WhatsApp
+• Deploy Railway ativo (trial 30 dias)
+• ANTHROPIC_API_KEY configurada
+
+PENDENTE ❌
+• Evolution API / WhatsApp: aguarda budget do Junior
+• Upgrade Railway trial → Hobby Plan ($5/mês) — URGENTE antes do trial expirar
+• Sync CRM → Railway (CORS pendente)
+• Dados reais de clientes do Pets Control 2.0
+• Testar agentes com dados reais em produção`,
+  });
+
+  D.propostas.push({
+    id: prop1,
+    titulo: 'Proposta Pets Go — Sistema Completo de IA',
+    clienteId: cliId,
+    status: 'Aceita',
+    valor: 'Equity + ferramentas',
+    data: '2026-02-20',
+    notas: 'Proposta aceita. Junior entrou como investidor anjo. Cobre todas as ferramentas em todos os projetos da agência em troca de participação nos resultados.',
+  });
+
+  D.faturas.push({
+    id: fat1,
+    titulo: 'Ferramentas Março/Abril 2026',
+    clienteId: cliId,
+    status: 'Pendente',
+    valor: 'R$764/mês',
+    data: '2026-04-01',
+    notas: 'Claude Max $100 + Railway $5 + Evolution API $15 + Cloudflare $5 + Anthropic API ~$5 + Google Places R$40 one-time + Domínio $12/ano.\nJunior disponibilizou cartão de crédito para ativação.',
+  });
+
+  D.reunioes.push({
+    id: 'petsgo-reu-001',
+    titulo: 'Kick-off — Apresentação do Sistema CRM',
+    clienteId: cliId,
+    data: '2026-03-10',
+    hora: '10:00',
+    status: 'Realizada',
+    link: '',
+    notas: 'Apresentação do CRM completo. Junior aprovou a proposta e confirmou investimento nas ferramentas.',
+  });
+
+  D.reunioes.push({
+    id: 'petsgo-reu-002',
+    titulo: 'Review — Agentes IA + WhatsApp',
+    clienteId: cliId,
+    data: '2026-04-16',
+    hora: '14:00',
+    status: 'Realizada',
+    link: 'https://petsgo-agents-production.up.railway.app',
+    notas: 'Demonstração dos 5 agentes. Pendências: sync CORS, Evolution API aguarda budget, dados do Pets Control 2.0.',
+  });
+
+  D.reunioes.push({
+    id: 'petsgo-reu-003',
+    titulo: 'Ativação ferramentas + sync final',
+    clienteId: cliId,
+    data: '2026-04-20',
+    hora: '10:00',
+    status: 'Agendada',
+    link: '',
+    notas: 'Junior traz o cartão. Ativar: Google Places (R$40), Claude Max, Evolution API. Resolver sync CRM → Railway.',
+  });
+
+  logAct('Projeto <strong>Pets Go</strong> importado para o CRM', 'var(--green)');
+  save();
+}
+
 // ── INIT ────────────────────────────────────────────────
 load();
+seedPetsGo();
 renderDash();
 renderPipeline();
 </script>
