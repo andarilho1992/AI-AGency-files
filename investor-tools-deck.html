@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Investment Stack — Andarilho Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --yellow: #E99E22; --bg: #0b0e18; --card: #131825;
+  --border: rgba(255,255,255,.07); --text: #f0f2f8;
+  --muted: #6b7280; --green: #22c55e; --red: #ef4444; --teal: #14b8a6;
+}
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; width: 100vw; user-select: none; }
+.deck { width: 100%; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 80px 100px; opacity: 0; pointer-events: none; transition: opacity .35s ease, transform .35s ease; transform: translateX(48px); }
+.slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.out    { opacity: 0; transform: translateX(-48px); }
+.nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; z-index: 100; }
+.nav-dots { display: flex; gap: 7px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); cursor: pointer; transition: all .2s; }
+.dot.active { background: var(--yellow); transform: scale(1.4); }
+.nav-btn { width: 38px; height: 38px; border-radius: 9px; background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .15s; }
+.nav-btn:hover { border-color: var(--yellow); }
+.slide-counter { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 38px; text-align: center; }
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--yellow); transition: width .35s ease; z-index: 200; }
+.logomark { position: fixed; top: 22px; left: 28px; font-size: 12px; font-weight: 800; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+.logomark span { color: var(--yellow); }
+.eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 20px; }
+.big-title { font-size: clamp(44px, 7vw, 82px); font-weight: 900; line-height: 1; text-align: center; margin-bottom: 18px; }
+.big-title .hl { color: var(--yellow); }
+.big-sub { font-size: clamp(14px, 2vw, 18px); color: var(--muted); font-weight: 600; text-align: center; max-width: 560px; line-height: 1.55; margin-bottom: 48px; }
+.pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.25); border-radius: 40px; padding: 10px 24px; font-size: 13px; font-weight: 800; color: var(--yellow); }
+.s-title { font-size: clamp(28px, 4vw, 48px); font-weight: 900; line-height: 1.1; margin-bottom: 8px; text-align: center; }
+.s-sub { font-size: 14px; color: var(--muted); font-weight: 600; margin-bottom: 36px; text-align: center; }
+
+/* TOOL CARD */
+.tool-layout { display: flex; gap: 52px; align-items: center; width: 100%; max-width: 960px; }
+.tool-left { flex: 1; }
+.tool-ico-wrap { width: 80px; height: 80px; border-radius: 20px; background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.25); display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 24px; }
+.tool-name { font-size: clamp(28px, 4vw, 46px); font-weight: 900; margin-bottom: 8px; }
+.tool-name .hl { color: var(--yellow); }
+.tool-tagline { font-size: 16px; color: var(--muted); font-weight: 600; line-height: 1.5; margin-bottom: 28px; max-width: 440px; }
+.tool-bullets { display: flex; flex-direction: column; gap: 12px; }
+.tool-bullet { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; font-weight: 600; line-height: 1.4; }
+.tool-bullet .ico { font-size: 18px; flex-shrink: 0; }
+.tool-right { flex: 0 0 280px; }
+.price-card { background: var(--card); border: 1px solid rgba(233,158,34,.3); border-radius: 18px; padding: 28px; text-align: center; margin-bottom: 14px; }
+.price-val { font-size: 52px; font-weight: 900; color: var(--yellow); line-height: 1; }
+.price-period { font-size: 13px; color: var(--muted); font-weight: 700; margin-top: 4px; }
+.price-brl { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 8px; }
+.verdict-card { background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.2); border-radius: 14px; padding: 18px; }
+.verdict-label { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+.verdict-text { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.5; }
+
+/* TOTAL SLIDE */
+.total-layout { display: flex; gap: 40px; align-items: flex-start; width: 100%; max-width: 960px; }
+.total-left { flex: 1.2; }
+.total-table { width: 100%; border-collapse: collapse; }
+.total-table th { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 0 0 12px; text-align: left; }
+.total-table th:last-child { text-align: right; }
+.total-table td { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 700; }
+.total-table td:last-child { text-align: right; font-weight: 900; color: var(--yellow); }
+.total-table tr:last-child td { border-bottom: none; }
+.total-sum { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 0; margin-top: 4px; border-top: 2px solid rgba(233,158,34,.3); }
+.total-sum-label { font-size: 16px; font-weight: 900; }
+.total-sum-val { font-size: 32px; font-weight: 900; color: var(--green); }
+.total-right { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.total-context { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+.total-context-label { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.total-context-val { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+.total-context-desc { font-size: 12px; color: var(--muted); font-weight: 600; }
+.roi-box { background: rgba(233,158,34,.06); border: 1px solid rgba(233,158,34,.25); border-radius: 14px; padding: 22px; }
+.roi-box-text { font-size: clamp(15px, 2vw, 19px); font-weight: 900; line-height: 1.4; }
+.roi-box-text .hl { color: var(--yellow); }
+
+/* CLOSING */
+.closing { text-align: center; }
+.closing-big { font-size: clamp(36px, 6vw, 72px); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+.closing-big .hl { color: var(--yellow); }
+.closing-sub { font-size: 17px; color: var(--muted); font-weight: 600; max-width: 500px; margin: 0 auto 40px; line-height: 1.55; }
+.closing-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cpill { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 18px; font-size: 13px; font-weight: 700; }
+.cpill .dot2 { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="logomark">🚀 <span>Andarilho Digital</span> — Investment Stack</div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 — COVER -->
+  <div class="slide active" id="s0">
+    <div class="eyebrow">Tools & Infrastructure</div>
+    <div class="big-title">The tools that<br/>make it <span class="hl">work.</span></div>
+    <div class="big-sub">Every tool below is active, deployed, and directly tied to revenue. No bloat, no experiments — only what runs the machine.</div>
+    <div class="pill">💼 Presented to Junior — Angel Investor</div>
+  </div>
+
+  <!-- SLIDE 2 — CLAUDE MAX -->
+  <div class="slide" id="s1">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">🧠</div>
+        <div class="tool-name">Claude <span class="hl">Max</span></div>
+        <div class="tool-tagline">The AI that builds everything. Every system, every agent, every line of code in this stack was built with Claude Code.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">⚡</span>5× more usage than the current plan — no slowdowns, no hitting limits</div>
+          <div class="tool-bullet"><span class="ico">🏗️</span>Builds full systems in hours, not weeks — CRM, agents, APIs, dashboards</div>
+          <div class="tool-bullet"><span class="ico">📈</span>More usage = more clients delivered = more revenue</div>
+          <div class="tool-bullet"><span class="ico">🔑</span>Single highest-leverage investment in the entire stack</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">$100</div>
+          <div class="price-period">per month</div>
+          <div class="price-brl">~R$580/mês</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">Without this tool, none of what you've seen today gets built. It's the engine.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — RAILWAY -->
+  <div class="slide" id="s2">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">🖥️</div>
+        <div class="tool-name"><span class="hl">Railway</span></div>
+        <div class="tool-tagline">The server that keeps the Pets Go AI agents running 24/7. Without it, the agents only work when the laptop is open.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">🕐</span>Runs continuously — birthday messages sent at 9am even if Guilherme is asleep in Thailand</div>
+          <div class="tool-bullet"><span class="ico">🤖</span>Hosts all 5 Pets Go agents: reports, birthdays, stock alerts, reminders, reactivation</div>
+          <div class="tool-bullet"><span class="ico">🔗</span>Receives WhatsApp replies and updates the pipeline automatically</div>
+          <div class="tool-bullet"><span class="ico">🚀</span>Deploy in one command — updates go live instantly</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">$5</div>
+          <div class="price-period">per month</div>
+          <div class="price-brl">~R$29/mês</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">This is the difference between a demo and a live product. Pets Go runs on this.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — EVOLUTION API -->
+  <div class="slide" id="s3">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">📲</div>
+        <div class="tool-name">Evolution <span class="hl">API</span></div>
+        <div class="tool-tagline">Connects the AI directly to WhatsApp. The reactivation agent can identify inactive clients and write the perfect message — but this is what actually sends it.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">✉️</span>Sends personalised WhatsApp messages at scale — automatically</div>
+          <div class="tool-bullet"><span class="ico">👂</span>Listens for replies and updates the CRM pipeline in real time</div>
+          <div class="tool-bullet"><span class="ico">🎯</span>Makes the reactivation pipeline fully autonomous — zero manual work</div>
+          <div class="tool-bullet"><span class="ico">💬</span>Messages come from the pet shop's own WhatsApp number</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">$15</div>
+          <div class="price-period">per month</div>
+          <div class="price-brl">~R$87/mês</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">Without this, the R$4,800/month reactivation revenue stays theoretical. This makes it real.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — CLOUDFLARE -->
+  <div class="slide" id="s4">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">☁️</div>
+        <div class="tool-name">Cloudflare <span class="hl">Workers</span></div>
+        <div class="tool-tagline">Runs the prospecting automation — finding new clients for the agency, automatically, twice a week. Also hosts all the websites and dashboards you've seen.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">🔍</span>Searches Google Maps for businesses matching the agency's target niches</div>
+          <div class="tool-bullet"><span class="ico">📝</span>Generates a personalised first-contact message for each lead using AI</div>
+          <div class="tool-bullet"><span class="ico">🌐</span>Hosts all HTML systems — CRM, dashboards, presentations — worldwide</div>
+          <div class="tool-bullet"><span class="ico">⏰</span>Runs on schedule with zero server management — it just works</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">$5</div>
+          <div class="price-period">per month</div>
+          <div class="price-brl">~R$29/mês</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">This is what feeds new clients into the pipeline while Guilherme works on existing ones.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — GOOGLE PLACES -->
+  <div class="slide" id="s5">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">📍</div>
+        <div class="tool-name">Google <span class="hl">Places</span></div>
+        <div class="tool-tagline">Gives the prospecting agent access to Google Maps data — real businesses, real phone numbers, real ratings. Without it, the agent uses dummy data.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">🗺️</span>Searches by niche + city — "aesthetic clinic São Paulo", "pet shop Curitiba"</div>
+          <div class="tool-bullet"><span class="ico">📞</span>Returns real phone numbers, websites, ratings, and addresses</div>
+          <div class="tool-bullet"><span class="ico">🎯</span>Filters out franchises automatically — only targets independent businesses</div>
+          <div class="tool-bullet"><span class="ico">💰</span>Google gives $200/month free credit — actual cost at our volume is ~R$4/month</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">R$40</div>
+          <div class="price-period">one-time deposit</div>
+          <div class="price-brl">~R$4/mês real cost</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">Turns the prospecting machine from a demo into a real lead-generation engine.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 — ANTHROPIC API -->
+  <div class="slide" id="s6">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">✍️</div>
+        <div class="tool-name">Anthropic <span class="hl">API</span></div>
+        <div class="tool-tagline">The AI engine inside the production systems — separate from Claude Code. This is what generates every personalised message, report, and analysis automatically.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">📬</span>Writes every reactivation message — personalised per client, per pet, per service</div>
+          <div class="tool-bullet"><span class="ico">📊</span>Generates the weekly business report sent to Pets Go managers</div>
+          <div class="tool-bullet"><span class="ico">🔄</span>Powers follow-up messages for leads who didn't respond</div>
+          <div class="tool-bullet"><span class="ico">💡</span>Uses Claude Haiku — cheapest model, fastest speed, perfect for automation</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">~$5</div>
+          <div class="price-period">per month (usage)</div>
+          <div class="price-brl">~R$29/mês</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">Each message costs fractions of a cent. A single client reactivated pays for months of usage.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 — FIGMA -->
+  <div class="slide" id="s7">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">🎨</div>
+        <div class="tool-name">Figma <span class="hl">Pro</span></div>
+        <div class="tool-tagline">Professional design tool. Guilherme has 9 years of design experience — this is where client-facing work gets polished before it ships.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">🖼️</span>Designs UI mockups, brand assets, and client presentations</div>
+          <div class="tool-bullet"><span class="ico">🤝</span>Enables real-time collaboration with clients on designs</div>
+          <div class="tool-bullet"><span class="ico">📦</span>Unlimited projects and version history</div>
+          <div class="tool-bullet"><span class="ico">💼</span>Industry standard — every serious design client expects it</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">$15</div>
+          <div class="price-period">per month</div>
+          <div class="price-brl">~R$87/mês</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">9 years of design skill needs a professional tool. This is the paintbrush.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 — DOMAIN -->
+  <div class="slide" id="s8">
+    <div class="tool-layout">
+      <div class="tool-left">
+        <div class="tool-ico-wrap">🌐</div>
+        <div class="tool-name">Domain <span class="hl">Name</span></div>
+        <div class="tool-tagline">A professional URL for the agency. Right now everything runs on free subdomains — a real domain signals a real business.</div>
+        <div class="tool-bullets">
+          <div class="tool-bullet"><span class="ico">✅</span><strong>andarilhodigital.com</strong> — clean, memorable, brandable</div>
+          <div class="tool-bullet"><span class="ico">🔗</span>All tools connect — one URL for everything the agency delivers</div>
+          <div class="tool-bullet"><span class="ico">📧</span>Enables professional email: guilherme@andarilhodigital.com</div>
+          <div class="tool-bullet"><span class="ico">💪</span>Costs less than a coffee — sends the signal of a serious business</div>
+        </div>
+      </div>
+      <div class="tool-right">
+        <div class="price-card">
+          <div class="price-val">~$12</div>
+          <div class="price-period">per year</div>
+          <div class="price-brl">~R$70/ano</div>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-label">Why it matters</div>
+          <div class="verdict-text">R$70/year is the cheapest credibility signal available. Every client will see this.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 — TOTAL -->
+  <div class="slide" id="s9">
+    <div class="s-title">The full picture.</div>
+    <div class="s-sub">Every tool, every cost, every reason — transparent.</div>
+    <div class="total-layout">
+      <div class="total-left">
+        <table class="total-table">
+          <thead>
+            <tr><th>Tool</th><th>What it does</th><th>Monthly</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🧠 Claude Max</td><td style="color:var(--muted);font-weight:600">Builds everything</td><td>R$580</td></tr>
+            <tr><td>📲 Evolution API</td><td style="color:var(--muted);font-weight:600">WhatsApp automation</td><td>R$87</td></tr>
+            <tr><td>🎨 Figma Pro</td><td style="color:var(--muted);font-weight:600">Design work</td><td>R$87</td></tr>
+            <tr><td>✍️ Anthropic API</td><td style="color:var(--muted);font-weight:600">AI in production</td><td>R$29</td></tr>
+            <tr><td>☁️ Cloudflare</td><td style="color:var(--muted);font-weight:600">Hosting + prospecting</td><td>R$29</td></tr>
+            <tr><td>🖥️ Railway</td><td style="color:var(--muted);font-weight:600">Pets Go server</td><td>R$29</td></tr>
+            <tr><td>📍 Google Places</td><td style="color:var(--muted);font-weight:600">Real lead data</td><td>~R$4</td></tr>
+            <tr><td>🌐 Domain</td><td style="color:var(--muted);font-weight:600">Professional URL</td><td>R$6</td></tr>
+          </tbody>
+        </table>
+        <div class="total-sum">
+          <span class="total-sum-label">Total / month</span>
+          <span class="total-sum-val">~R$851</span>
+        </div>
+      </div>
+      <div class="total-right">
+        <div class="total-context">
+          <div class="total-context-label">Pets Go reactivation — conservative</div>
+          <div class="total-context-val" style="color:var(--green)">R$4,800</div>
+          <div class="total-context-desc">per month from inactive customers — 1 location, 10% return rate</div>
+        </div>
+        <div class="total-context">
+          <div class="total-context-label">Stack cost vs revenue generated</div>
+          <div class="total-context-val" style="color:var(--yellow)">5.6×</div>
+          <div class="total-context-desc">every R$1 invested returns R$5.60 in client revenue</div>
+        </div>
+        <div class="roi-box">
+          <div class="roi-box-text">This isn't an expense.<br/>It's a <span class="hl">multiplier.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 — CLOSING -->
+  <div class="slide" id="s10">
+    <div class="closing">
+      <div class="closing-big">R$851/mês.<br/><span class="hl">That's the bet.</span></div>
+      <div class="closing-sub">Every tool is already built, deployed, and tested. This isn't funding a dream — it's fuelling a machine that's already running.</div>
+      <div class="closing-pills">
+        <div class="cpill"><div class="dot2"></div>Worker live on Cloudflare</div>
+        <div class="cpill"><div class="dot2"></div>CRM built and deployed</div>
+        <div class="cpill"><div class="dot2"></div>5 AI agents ready</div>
+        <div class="cpill"><div class="dot2"></div>Claude generating real messages</div>
+        <div class="cpill"><div class="dot2"></div>GitHub repo public</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" onclick="navTo(cur-1)">←</button>
+  <div class="nav-dots" id="dots"></div>
+  <span class="slide-counter" id="counter"></span>
+  <button class="nav-btn" onclick="navTo(cur+1)">→</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0;
+const dotsEl = document.getElementById('dots');
+const counterEl = document.getElementById('counter');
+const progressEl = document.getElementById('progress');
+
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => navTo(i);
+  dotsEl.appendChild(d);
+});
+
+function navTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(() => slides[cur]?.classList.remove('out'), 380);
+  cur = n;
+  slides[cur].classList.add('active');
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  counterEl.textContent = `${cur + 1} / ${total}`;
+  progressEl.style.width = `${((cur + 1) / total) * 100}%`;
+}
+
+navTo(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navTo(cur + 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); navTo(cur - 1); }
+  if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
+});
+
+document.getElementById('deck').addEventListener('click', e => {
+  if (!e.target.closest('.nav')) navTo(cur + 1);
+});
+</script>
+</body>
+</html>
