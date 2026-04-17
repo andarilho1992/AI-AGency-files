@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book a Call — Andarilho Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --yellow: #E99E22; --bg: #0b0e18; --card: #131825; --card2: #1a2235;
+  --border: rgba(255,255,255,.08); --text: #f0f2f8; --muted: #6b7280;
+  --green: #22c55e; --red: #ef4444;
+}
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── LAYOUT ── */
+.page { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+.header { text-align: center; margin-bottom: 56px; }
+.header-tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(233,158,34,.1); border: 1px solid rgba(233,158,34,.2); border-radius: 30px; padding: 6px 16px; font-size: 12px; font-weight: 800; color: var(--yellow); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 20px; }
+.header h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 900; line-height: 1.1; margin-bottom: 12px; }
+.header h1 span { color: var(--yellow); }
+.header p { font-size: 16px; color: var(--muted); font-weight: 600; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+/* ── PANELS ── */
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px; }
+.panel-title { font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+
+/* ── TYPE SELECTOR ── */
+.type-options { display: flex; flex-direction: column; gap: 10px; }
+.type-opt { display: flex; align-items: center; gap: 14px; background: var(--card2); border: 2px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: border-color .15s, background .15s; }
+.type-opt:hover { border-color: rgba(233,158,34,.4); }
+.type-opt.selected { border-color: var(--yellow); background: rgba(233,158,34,.06); }
+.type-ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(233,158,34,.1); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.type-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.type-desc { font-size: 12px; color: var(--muted); font-weight: 600; }
+.type-dur { font-size: 11px; font-weight: 800; color: var(--yellow); margin-left: auto; white-space: nowrap; }
+
+/* ── CALENDAR ── */
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.cal-nav-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--card2); border: 1px solid var(--border); color: var(--text); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .15s; }
+.cal-nav-btn:hover { border-color: var(--yellow); }
+.cal-month { font-size: 14px; font-weight: 800; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-dow { font-size: 10px; font-weight: 800; color: var(--muted); text-align: center; padding: 4px 0; }
+.cal-day { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s; border: 1px solid transparent; }
+.cal-day:hover:not(.disabled):not(.empty) { border-color: rgba(233,158,34,.4); background: rgba(233,158,34,.06); }
+.cal-day.selected { background: var(--yellow); color: #111; border-color: var(--yellow); }
+.cal-day.disabled { color: var(--muted); opacity: .35; cursor: not-allowed; }
+.cal-day.empty { cursor: default; }
+.cal-day.today { border-color: rgba(233,158,34,.3); }
+
+/* ── TIME SLOTS ── */
+.slots-wrap { margin-top: 20px; }
+.slots-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.slot { background: var(--card2); border: 1px solid var(--border); border-radius: 9px; padding: 9px 6px; text-align: center; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .15s; }
+.slot:hover { border-color: rgba(233,158,34,.4); }
+.slot.selected { background: var(--yellow); color: #111; border-color: var(--yellow); }
+.slot.unavailable { opacity: .3; cursor: not-allowed; pointer-events: none; }
+.no-slots { font-size: 13px; color: var(--muted); font-weight: 600; padding: 12px 0; }
+
+/* ── FORM ── */
+.form-col { display: flex; flex-direction: column; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.form-group input, .form-group select, .form-group textarea {
+  background: var(--card2); border: 1px solid var(--border); border-radius: 10px;
+  color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 12px 14px; outline: none; transition: border-color .15s; width: 100%;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--yellow); }
+.form-group textarea { resize: none; height: 80px; }
+.form-group select option { background: var(--card); }
+
+/* ── SUMMARY ── */
+.summary { background: rgba(233,158,34,.05); border: 1px solid rgba(233,158,34,.2); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: none; }
+.summary.visible { display: block; }
+.sum-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; padding: 4px 0; }
+.sum-row .val { color: var(--yellow); }
+
+/* ── BTN ── */
+.btn-book { width: 100%; background: var(--yellow); color: #111; border: none; border-radius: 12px; padding: 16px; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900; cursor: pointer; transition: opacity .15s, transform .1s; }
+.btn-book:hover { opacity: .9; }
+.btn-book:active { transform: scale(.98); }
+.btn-book:disabled { opacity: .4; cursor: not-allowed; }
+.tz-note { font-size: 11px; color: var(--muted); font-weight: 600; text-align: center; margin-top: 10px; }
+
+/* ── SUCCESS ── */
+.success { display: none; text-align: center; padding: 40px 20px; }
+.success.visible { display: block; }
+.success-ico { font-size: 56px; margin-bottom: 20px; }
+.success-title { font-size: 28px; font-weight: 900; margin-bottom: 10px; }
+.success-title span { color: var(--yellow); }
+.success-sub { font-size: 15px; color: var(--muted); font-weight: 600; max-width: 400px; margin: 0 auto 32px; line-height: 1.6; }
+.success-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.success-pill { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 700; }
+.btn-gcal { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow); color: #111; border: none; border-radius: 12px; padding: 14px 28px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; text-decoration: none; }
+
+/* ── SIDEBAR INFO ── */
+.info-panel { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px; margin-bottom: 24px; }
+.info-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-ico { font-size: 20px; flex-shrink: 0; }
+.info-text { font-size: 14px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+.info-text strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-tag">🚀 Andarilho Digital</div>
+    <h1>Book a <span>free call.</span></h1>
+    <p>Let's talk about your business, what's slowing you down, and whether AI automation makes sense for you.</p>
+  </div>
+
+  <div id="main-content">
+    <div class="grid">
+
+      <!-- LEFT -->
+      <div>
+        <!-- Call type -->
+        <div class="panel" style="margin-bottom:20px">
+          <div class="panel-title">What do you need?</div>
+          <div class="type-options" id="types">
+            <div class="type-opt selected" data-type="discovery" data-dur="30" onclick="selectType(this)">
+              <div class="type-ico">🔍</div>
+              <div>
+                <div class="type-name">Discovery Call</div>
+                <div class="type-desc">First conversation — I learn about your business</div>
+              </div>
+              <div class="type-dur">30 min</div>
+            </div>
+            <div class="type-opt" data-type="strategy" data-dur="60" onclick="selectType(this)">
+              <div class="type-ico">🧠</div>
+              <div>
+                <div class="type-name">Strategy Session</div>
+                <div class="type-desc">Deep dive — map out the full automation system</div>
+              </div>
+              <div class="type-dur">60 min</div>
+            </div>
+            <div class="type-opt" data-type="demo" data-dur="30" onclick="selectType(this)">
+              <div class="type-ico">🎯</div>
+              <div>
+                <div class="type-name">Live Demo</div>
+                <div class="type-desc">See the CRM and AI agents running in real time</div>
+              </div>
+              <div class="type-dur">30 min</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="info-panel">
+          <div class="info-row">
+            <div class="info-ico">🌍</div>
+            <div class="info-text"><strong>Remote only</strong> — Google Meet link sent after booking</div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">💬</div>
+            <div class="info-text"><strong>No sales pressure</strong> — if it doesn't make sense for your business, I'll tell you</div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">⚡</div>
+            <div class="info-text"><strong>Fast answers</strong> — most clients leave knowing exactly what to build first</div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">🕐</div>
+            <div class="info-text">Times shown in <strong>Brazil time (BRT)</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <!-- Calendar -->
+        <div class="panel" style="margin-bottom:20px">
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="prevMonth()">←</button>
+            <div class="cal-month" id="cal-month"></div>
+            <button class="cal-nav-btn" onclick="nextMonth()">→</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+
+          <div class="slots-wrap" id="slots-wrap" style="display:none">
+            <div class="slots-label" id="slots-label"></div>
+            <div class="slots" id="slots"></div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="panel" id="form-panel">
+          <div class="panel-title">Your details</div>
+          <div class="form-col">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="f-name" placeholder="Maria Silva"/>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="f-email" placeholder="maria@empresa.com"/>
+            </div>
+            <div class="form-group">
+              <label>Business / Company</label>
+              <input type="text" id="f-company" placeholder="Clínica Bella, Pet Shop Central..."/>
+            </div>
+            <div class="form-group">
+              <label>What's your main challenge?</label>
+              <select id="f-niche">
+                <option value="">Select...</option>
+                <option value="agenda">Managing appointments manually</option>
+                <option value="clientes">Losing clients without knowing</option>
+                <option value="whatsapp">Drowning in WhatsApp messages</option>
+                <option value="relatorios">No visibility on business performance</option>
+                <option value="outro">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Anything else? (optional)</label>
+              <textarea id="f-notes" placeholder="Tell me a bit more about your situation..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary + CTA -->
+        <div class="summary" id="summary">
+          <div class="sum-row"><span>Type</span><span class="val" id="sum-type">—</span></div>
+          <div class="sum-row"><span>Date</span><span class="val" id="sum-date">—</span></div>
+          <div class="sum-row"><span>Time (BRT)</span><span class="val" id="sum-time">—</span></div>
+          <div class="sum-row"><span>Duration</span><span class="val" id="sum-dur">—</span></div>
+        </div>
+
+        <button class="btn-book" id="btn-book" onclick="book()">
+          Choose a date and time above →
+        </button>
+        <div class="tz-note">All times in Brazil Time (BRT / UTC-3). Google Meet link sent to your email.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="success">
+    <div class="success-ico">🎉</div>
+    <div class="success-title">You're <span>booked!</span></div>
+    <div class="success-sub" id="success-msg">Opening Google Calendar so you can save the event and get the Meet link...</div>
+    <div class="success-pills" id="success-pills"></div>
+    <a class="btn-gcal" id="gcal-link" href="#" target="_blank">
+      📅 Add to Google Calendar
+    </a>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG — edit these to change your availability
+// ─────────────────────────────────────────────
+const CONFIG = {
+  hostName:  'Guilherme Andrade',
+  hostEmail: 'andarilhodigital92@gmail.com',        // ← your Google Calendar email
+  meetLink:  'https://meet.google.com/new',         // ← replace with your fixed Meet link if you have one
+  timezone:  'America/Sao_Paulo',
+
+  // Available days: 0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
+  availableDays: [1, 2, 3, 4, 5],
+
+  // Available times in BRT — add or remove as needed
+  slots: ['09:00','10:00','11:00','14:00','15:00','16:00','17:00','18:00'],
+
+  // Block specific dates (YYYY-MM-DD)
+  blockedDates: [],
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let state = {
+  year:      new Date().getFullYear(),
+  month:     new Date().getMonth(),
+  selDate:   null,
+  selSlot:   null,
+  selType:   'discovery',
+  selDur:    30,
+};
+
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS   = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+const TYPE_LABELS = { discovery: 'Discovery Call', strategy: 'Strategy Session', demo: 'Live Demo' };
+
+// ─────────────────────────────────────────────
+// CALENDAR
+// ─────────────────────────────────────────────
+function renderCal() {
+  const { year, month } = state;
+  document.getElementById('cal-month').textContent = `${MONTHS[month]} ${year}`;
+  const grid  = document.getElementById('cal-grid');
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  grid.innerHTML = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+  const first   = new Date(year, month, 1).getDay();
+  const numDays = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 0; i < first; i++)
+    grid.innerHTML += `<div class="cal-day empty"></div>`;
+
+  for (let d = 1; d <= numDays; d++) {
+    const date   = new Date(year, month, d);
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isPast  = date < today;
+    const isBlocked = CONFIG.blockedDates.includes(dateStr);
+    const isAvail = CONFIG.availableDays.includes(date.getDay()) && !isPast && !isBlocked;
+    const isSel   = state.selDate === dateStr;
+    const isToday = date.getTime() === today.getTime();
+
+    let cls = 'cal-day';
+    if (!isAvail)  cls += ' disabled';
+    if (isSel)     cls += ' selected';
+    if (isToday)   cls += ' today';
+
+    grid.innerHTML += `<div class="${cls}" ${isAvail ? `onclick="selectDate('${dateStr}')"` : ''}>${d}</div>`;
+  }
+}
+
+function prevMonth() {
+  if (state.month === 0) { state.month = 11; state.year--; }
+  else state.month--;
+  state.selDate = null; state.selSlot = null;
+  renderCal(); renderSlots(); updateSummary();
+}
+
+function nextMonth() {
+  if (state.month === 11) { state.month = 0; state.year++; }
+  else state.month++;
+  state.selDate = null; state.selSlot = null;
+  renderCal(); renderSlots(); updateSummary();
+}
+
+function selectDate(dateStr) {
+  state.selDate = dateStr; state.selSlot = null;
+  renderCal(); renderSlots(); updateSummary();
+}
+
+// ─────────────────────────────────────────────
+// SLOTS
+// ─────────────────────────────────────────────
+function renderSlots() {
+  const wrap = document.getElementById('slots-wrap');
+  if (!state.selDate) { wrap.style.display = 'none'; return; }
+
+  wrap.style.display = 'block';
+  const d = new Date(state.selDate + 'T12:00:00');
+  document.getElementById('slots-label').textContent =
+    d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  document.getElementById('slots').innerHTML = CONFIG.slots.map(t =>
+    `<div class="slot${state.selSlot === t ? ' selected' : ''}" onclick="selectSlot('${t}')">${t}</div>`
+  ).join('');
+}
+
+function selectSlot(t) {
+  state.selSlot = t;
+  renderSlots(); updateSummary();
+}
+
+// ─────────────────────────────────────────────
+// TYPE
+// ─────────────────────────────────────────────
+function selectType(el) {
+  document.querySelectorAll('.type-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selType = el.dataset.type;
+  state.selDur  = parseInt(el.dataset.dur);
+  updateSummary();
+}
+
+// ─────────────────────────────────────────────
+// SUMMARY
+// ─────────────────────────────────────────────
+function updateSummary() {
+  const sum = document.getElementById('summary');
+  const btn = document.getElementById('btn-book');
+
+  if (!state.selDate || !state.selSlot) {
+    sum.classList.remove('visible');
+    btn.textContent  = 'Choose a date and time above →';
+    btn.disabled = true;
+    return;
+  }
+
+  const d = new Date(state.selDate + 'T12:00:00');
+  const dateLabel = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+  document.getElementById('sum-type').textContent = TYPE_LABELS[state.selType];
+  document.getElementById('sum-date').textContent = dateLabel;
+  document.getElementById('sum-time').textContent = state.selSlot + ' BRT';
+  document.getElementById('sum-dur').textContent  = state.selDur + ' minutes';
+
+  sum.classList.add('visible');
+  btn.textContent = `Book ${state.selDur}-min call →`;
+  btn.disabled = false;
+}
+
+// ─────────────────────────────────────────────
+// BOOK
+// ─────────────────────────────────────────────
+function book() {
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  const niche   = document.getElementById('f-niche').value;
+  const notes   = document.getElementById('f-notes').value.trim();
+
+  if (!name)  { alert('Please enter your name.'); return; }
+  if (!email) { alert('Please enter your email.'); return; }
+
+  // Build Google Calendar URL
+  const [h, m]   = state.selSlot.split(':').map(Number);
+  const startDt  = new Date(`${state.selDate}T${state.selSlot}:00-03:00`); // BRT = UTC-3
+  const endDt    = new Date(startDt.getTime() + state.selDur * 60000);
+
+  const fmt = dt => dt.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+
+  const title    = `${TYPE_LABELS[state.selType]} — ${name}${company ? ' ('+company+')' : ''}`;
+  const details  = [
+    `Call type: ${TYPE_LABELS[state.selType]}`,
+    `Duration: ${state.selDur} minutes`,
+    company ? `Company: ${company}` : '',
+    niche   ? `Challenge: ${document.getElementById('f-niche').options[document.getElementById('f-niche').selectedIndex].text}` : '',
+    notes   ? `Notes: ${notes}` : '',
+    '',
+    `Google Meet: ${CONFIG.meetLink}`,
+  ].filter(Boolean).join('\n');
+
+  const gcalUrl = `https://calendar.google.com/calendar/r/eventedit?` +
+    `text=${encodeURIComponent(title)}&` +
+    `dates=${fmt(startDt)}/${fmt(endDt)}&` +
+    `details=${encodeURIComponent(details)}&` +
+    `add=${encodeURIComponent(email)}&` +
+    `location=${encodeURIComponent(CONFIG.meetLink)}`;
+
+  // Show success
+  document.getElementById('main-content').style.display = 'none';
+  const success = document.getElementById('success');
+  success.classList.add('visible');
+
+  const d = new Date(state.selDate + 'T12:00:00');
+  const dateLabel = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  document.getElementById('success-msg').textContent =
+    `See you on ${dateLabel} at ${state.selSlot} BRT, ${name}. A Google Calendar invite is ready — click below to save it.`;
+
+  document.getElementById('success-pills').innerHTML = [
+    `📅 ${dateLabel}`,
+    `🕐 ${state.selSlot} BRT`,
+    `⏱ ${state.selDur} min`,
+    `🎯 ${TYPE_LABELS[state.selType]}`,
+  ].map(t => `<div class="success-pill">${t}</div>`).join('');
+
+  document.getElementById('gcal-link').href = gcalUrl;
+
+  // Auto-open calendar
+  setTimeout(() => window.open(gcalUrl, '_blank'), 800);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+renderCal();
+document.getElementById('btn-book').disabled = true;
+</script>
+</body>
+</html>
