@@ -3,759 +3,823 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pets Go — Roadmap & Próximos Passos</title>
+<title>Mapa de Funcionalidades — Sistema Petshop</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
 :root {
-  --bg:     #080c18;
-  --bg2:    #0f1628;
-  --bg3:    #17213a;
-  --bg4:    #1e2d4d;
-  --border: rgba(255,255,255,0.07);
-  --borderL:rgba(255,255,255,0.13);
-  --text:   #e8f0fe;
-  --muted:  rgba(232,240,254,0.42);
-  --blue:   #4f8ef7;
-  --blueG:  rgba(79,142,247,0.1);
-  --green:  #34d399;
-  --greenG: rgba(52,211,153,0.1);
-  --yellow: #fbbf24;
-  --yellowG:rgba(251,191,36,0.1);
-  --purple: #a78bfa;
-  --purpleG:rgba(167,139,250,0.1);
-  --orange: #fb923c;
-  --orangeG:rgba(251,146,60,0.1);
-  --red:    #f87171;
-  --mono:   'JetBrains Mono', monospace;
-  --sans:   'Inter', sans-serif;
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --border: #1e1e2e;
+  --accent: #7c6ff7;
+  --accent2: #f7a06f;
+  --accent3: #6ff7c0;
+  --accent4: #f76f9a;
+  --accent5: #f7e06f;
+  --text: #e8e8f0;
+  --muted: #6b6b80;
+  --tag-bg: #1a1a28;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: var(--sans);
-  background: #060810;
+  background: var(--bg);
   color: var(--text);
-  -webkit-font-smoothing: antialiased;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding: 40px 24px 80px;
 }
 
-.nav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(8,12,24,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 40px;
-  display: flex; align-items: center; justify-content: space-between;
-  height: 52px;
+header {
+  max-width: 960px;
+  margin: 0 auto 48px;
 }
-.nav-logo { font-size: 14px; font-weight: 800; color: var(--yellow); }
-.nav-links { display: flex; gap: 2px; }
-.nav-links a {
-  font-size: 11px; font-weight: 600; padding: 6px 12px;
-  border-radius: 6px; color: var(--muted);
-  text-decoration: none; transition: all 0.15s;
-}
-.nav-links a:hover { background: var(--bg3); color: var(--text); }
 
-.section { max-width: 1000px; margin: 0 auto; padding: 64px 40px; border-bottom: 1px solid var(--border); }
-.section:last-child { border-bottom: none; }
-.hero { padding: 80px 40px; max-width: 1000px; margin: 0 auto; position: relative; overflow: hidden; }
-
-.label {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-  text-transform: uppercase; font-family: var(--mono);
+.eyebrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
   margin-bottom: 12px;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 10px; border-radius: 20px;
 }
-.label-blue   { background: var(--blueG);   color: var(--blue);   border: 1px solid rgba(79,142,247,.2); }
-.label-green  { background: var(--greenG);  color: var(--green);  border: 1px solid rgba(52,211,153,.2); }
-.label-yellow { background: var(--yellowG); color: var(--yellow); border: 1px solid rgba(251,191,36,.2); }
-.label-purple { background: var(--purpleG); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
-.label-orange { background: var(--orangeG); color: var(--orange); border: 1px solid rgba(251,146,60,.2); }
-.label-red    { background: rgba(248,113,113,.1); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
 
-h1 { font-size: 48px; font-weight: 900; line-height: 1.08; letter-spacing: -1.2px; }
-h2 { font-size: 32px; font-weight: 800; line-height: 1.1; letter-spacing: -0.6px; margin-bottom: 8px; }
-h3 { font-size: 15px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
-p.lead { font-size: 16px; color: var(--muted); line-height: 1.65; }
-p.body { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-.divider { width: 36px; height: 3px; border-radius: 2px; margin: 14px 0 28px; }
-
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
-.card-blue   { border-color: rgba(79,142,247,.18);  background: linear-gradient(135deg,var(--bg2),rgba(79,142,247,.04)); }
-.card-green  { border-color: rgba(52,211,153,.18);  background: linear-gradient(135deg,var(--bg2),rgba(52,211,153,.04)); }
-.card-yellow { border-color: rgba(251,191,36,.18);  background: linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04)); }
-.card-purple { border-color: rgba(167,139,250,.18); background: linear-gradient(135deg,var(--bg2),rgba(167,139,250,.04)); }
-.card-orange { border-color: rgba(251,146,60,.18);  background: linear-gradient(135deg,var(--bg2),rgba(251,146,60,.04)); }
-.card-red    { border-color: rgba(248,113,113,.18); background: linear-gradient(135deg,var(--bg2),rgba(248,113,113,.04)); }
-
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-
-.ic { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; flex-shrink: 0; }
-.ic-blue   { background: var(--blueG); }
-.ic-green  { background: var(--greenG); }
-.ic-yellow { background: var(--yellowG); }
-.ic-purple { background: var(--purpleG); }
-.ic-orange { background: var(--orangeG); }
-
-.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-.dot-green  { background: var(--green);  box-shadow: 0 0 6px var(--green); }
-.dot-yellow { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
-.dot-red    { background: var(--red);    box-shadow: 0 0 6px var(--red); }
-.dot-muted  { background: var(--muted); }
-
-.checklist { display: flex; flex-direction: column; gap: 10px; }
-.check-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; }
-.check-ic { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 1px; }
-.ci-done   { background: var(--greenG);  color: var(--green);  border: 1px solid rgba(52,211,153,.3); }
-.ci-next   { background: var(--blueG);   color: var(--blue);   border: 1px solid rgba(79,142,247,.3); }
-
-.steps { display: flex; flex-direction: column; }
-.step { display: flex; gap: 18px; padding-bottom: 24px; }
-.step:last-child { padding-bottom: 0; }
-.step-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-.step-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; font-family: var(--mono); }
-.step-line { width: 2px; flex: 1; margin-top: 6px; background: linear-gradient(to bottom, var(--border), transparent); min-height: 16px; }
-.step-content { padding-top: 3px; flex: 1; }
-.step-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.step-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
-
-.code { font-family: var(--mono); font-size: 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--green); line-height: 1.6; }
-
-.table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.table th { text-align: left; padding: 8px 14px; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); font-family: var(--mono); border-bottom: 1px solid var(--border); }
-.table td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.table tr:last-child td { border-bottom: none; }
-
-.timeline-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border-radius: 14px; overflow: hidden; }
-.tl-col { background: var(--bg2); padding: 20px; }
-.tl-header { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; font-family: var(--mono); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.tl-items { display: flex; flex-direction: column; gap: 8px; }
-.tl-item { font-size: 12px; color: var(--text); line-height: 1.4; padding: 8px 10px; border-radius: 8px; background: var(--bg3); border-left: 2px solid transparent; }
-
-.cost-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
-.cost-row:last-child { border-bottom: none; }
-.cost-val { font-family: var(--mono); font-weight: 700; }
-
-.blob { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; opacity: 0.4; }
-
-@media (max-width: 700px) {
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
-  .timeline-grid { grid-template-columns: 1fr 1fr; }
-  h1 { font-size: 30px; }
-  .section, .hero { padding: 48px 20px; }
-  .nav { padding: 0 20px; }
-  .nav-links { display: none; }
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 16px;
 }
+
+h1 span { color: var(--accent); }
+
+.subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.filters {
+  max-width: 960px;
+  margin: 0 auto 32px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover { color: var(--text); border-color: var(--accent); }
+.filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.grid {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.module {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.module:hover { border-color: #2e2e48; }
+
+.module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  cursor: pointer;
+  user-select: none;
+  gap: 16px;
+}
+
+.module-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+}
+
+.module-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.module-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.module-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.module-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
+
+.badge-mvp { background: rgba(108, 255, 192, 0.12); color: var(--accent3); border: 1px solid rgba(108, 255, 192, 0.2); }
+.badge-later { background: rgba(247, 160, 111, 0.12); color: var(--accent2); border: 1px solid rgba(247, 160, 111, 0.2); }
+.badge-core { background: rgba(124, 111, 247, 0.12); color: var(--accent); border: 1px solid rgba(124, 111, 247, 0.2); }
+
+.chevron {
+  color: var(--muted);
+  font-size: 12px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.module.open .chevron { transform: rotate(180deg); }
+
+.module-body {
+  display: none;
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.module.open .module-body { display: block; }
+
+.submodules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.submodule {
+  background: var(--tag-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  position: relative;
+}
+
+.submodule-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submodule-title .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.features-list li {
+  font-size: 12px;
+  color: var(--muted);
+  padding-left: 12px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.features-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #333345;
+}
+
+.priority-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.p-mvp { background: rgba(108, 255, 192, 0.1); color: var(--accent3); }
+.p-later { background: rgba(247, 160, 111, 0.1); color: var(--accent2); }
+.p-core { background: rgba(124, 111, 247, 0.1); color: var(--accent); }
+
+.legend {
+  max-width: 960px;
+  margin: 32px auto 0;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  align-items: center;
+}
+
+.legend-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: 4px;
+}
+
+.legend-items {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <span class="nav-logo">🐾 Pets Go — Roadmap</span>
-  <div class="nav-links">
-    <a href="#status">Status</a>
-    <a href="#modulos">Módulos</a>
-    <a href="#urgente">Urgente</a>
-    <a href="#proximos">Próximos</a>
-    <a href="#timeline">Timeline</a>
-    <a href="#custos">Custos</a>
-    <a href="#como">Como Funciona</a>
+<header>
+  <p class="eyebrow">Product Mapping v1.0</p>
+  <h1>Mapa de <span>Funcionalidades</span><br>Sistema Petshop</h1>
+  <p class="subtitle">Baseado na análise do Petshop Control. Cada módulo indica o que é core do MVP e o que pode ser desenvolvido em fases posteriores.</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">Módulos</span></div>
+    <div class="stat"><span class="stat-num">32</span><span class="stat-label">Submodulos</span></div>
+    <div class="stat"><span class="stat-num">100+</span><span class="stat-label">Funcionalidades</span></div>
   </div>
-</nav>
+</header>
 
+<div class="filters">
+  <button class="filter-btn active" onclick="filterModules('all', this)">Todos</button>
+  <button class="filter-btn" onclick="filterModules('mvp', this)">MVP</button>
+  <button class="filter-btn" onclick="filterModules('core', this)">Core</button>
+  <button class="filter-btn" onclick="filterModules('later', this)">Fase 2+</button>
+</div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="blob" style="width:500px;height:500px;background:rgba(79,142,247,0.08);top:-100px;right:-100px;"></div>
-  <div class="blob" style="width:300px;height:300px;background:rgba(251,191,36,0.06);bottom:-60px;left:-60px;"></div>
+<div class="grid" id="grid">
 
-  <div class="label label-green" style="margin-bottom:20px;">🐾 Pets Go · Abril 2026</div>
-  <h1 style="margin-bottom:20px;">
-    O sistema está no ar.<br>
-    <span style="color:var(--yellow);">Agora vamos</span><br>
-    <span style="color:var(--blue);">completar a entrega.</span>
-  </h1>
-  <p class="lead" style="max-width:560px;margin-bottom:36px;">CRM funcionando, agentes de IA rodando 24/7, app mobile no ar. Product Mapping V1.0 definido — 6 módulos, 32 submódulos, 100+ funcionalidades mapeadas em 3 fases de entrega.</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <span class="label label-green">✓ CRM no Cloudflare</span>
-    <span class="label label-green">✓ Agentes no Railway</span>
-    <span class="label label-green">✓ App Mobile PWA</span>
-    <span class="label label-orange">⚡ Sync pendente</span>
-    <span class="label label-purple">🔮 WhatsApp em breve</span>
-    <span class="label label-blue">📋 Product Mapping V1.0</span>
+  <!-- CLIENTES & PETS -->
+  <div class="module" data-priority="mvp">
+    <div class="module-header" onclick="toggleModule(this)">
+      <div class="module-left">
+        <div class="module-icon" style="background: rgba(108,255,192,0.1);">🐾</div>
+        <div>
+          <div class="module-title">Clientes & Pets</div>
+          <div class="module-desc">Cadastro, histórico e perfil dos tutores e animais</div>
+        </div>
+      </div>
+      <div class="module-meta">
+        <span class="badge badge-mvp">MVP</span>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="submodules">
+        <div class="submodule">
+          <span class="priority-tag p-mvp">MVP</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent3)"></span>Cadastro de Clientes</div>
+          <ul class="features-list">
+            <li>Dados pessoais e contato</li>
+            <li>Múltiplos pets por cliente</li>
+            <li>Foto e documentos</li>
+            <li>Busca inteligente</li>
+            <li>Dependentes</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-mvp">MVP</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent3)"></span>Cadastro de Pets</div>
+          <ul class="features-list">
+            <li>Espécie, raça, porte, idade</li>
+            <li>Particularidades e observações</li>
+            <li>Fotos do animal</li>
+            <li>Histórico de serviços</li>
+            <li>Histórico de compras</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Fidelização</div>
+          <ul class="features-list">
+            <li>Programa de pontos/bônus</li>
+            <li>Extrato de bônus</li>
+            <li>Perfil de compra</li>
+            <li>Estimativa próxima compra</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Comunicação Automática</div>
+          <ul class="features-list">
+            <li>Lembrete aniversário pet/tutor</li>
+            <li>Confirmação de agendamento</li>
+            <li>Cobrança automática</li>
+            <li>Renovação de plano</li>
+            <li>Atalho WhatsApp</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENDA & SERVIÇOS -->
+  <div class="module" data-priority="mvp">
+    <div class="module-header" onclick="toggleModule(this)">
+      <div class="module-left">
+        <div class="module-icon" style="background: rgba(124,111,247,0.1);">📅</div>
+        <div>
+          <div class="module-title">Agenda & Serviços</div>
+          <div class="module-desc">Agendamentos, banho e tosa, hospedagem, taxi dog</div>
+        </div>
+      </div>
+      <div class="module-meta">
+        <span class="badge badge-mvp">MVP</span>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="submodules">
+        <div class="submodule">
+          <span class="priority-tag p-mvp">MVP</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent3)"></span>Agendamento</div>
+          <ul class="features-list">
+            <li>Criação e edição de agendamentos</li>
+            <li>Status (confirmado, em andamento, concluído)</li>
+            <li>Vincular ao cliente/pet</li>
+            <li>Controle de pagamento do serviço</li>
+            <li>Reagendamento</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-mvp">MVP</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent3)"></span>Catálogo de Serviços</div>
+          <ul class="features-list">
+            <li>Cadastro com preço por raça/porte</li>
+            <li>Tabelas de preço diferenciadas</li>
+            <li>Comissão por serviço</li>
+            <li>Duração estimada</li>
+            <li>Histórico de vendas</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Insumos por Serviço</div>
+          <ul class="features-list">
+            <li>Vincular insumo ao serviço</li>
+            <li>Dosagem por raça/porte</li>
+            <li>Baixa automática no estoque</li>
+            <li>Controle de gasto de insumos</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Hospedagem & Hotel</div>
+          <ul class="features-list">
+            <li>Check-in / Check-out</li>
+            <li>Diárias e controle de período</li>
+            <li>Histórico de hóspedes</li>
+            <li>Alimentação durante estadia</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Táxi Dog</div>
+          <ul class="features-list">
+            <li>Tele-busca e tele-entrega</li>
+            <li>Funcionário responsável</li>
+            <li>Controle de rotas</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Planos de Serviço</div>
+          <ul class="features-list">
+            <li>Cadastro de planos recorrentes</li>
+            <li>Controle de vencimento</li>
+            <li>Cobrança automática</li>
+            <li>Extrato e histórico</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VENDAS & PDV -->
+  <div class="module" data-priority="core">
+    <div class="module-header" onclick="toggleModule(this)">
+      <div class="module-left">
+        <div class="module-icon" style="background: rgba(247,160,111,0.1);">🛒</div>
+        <div>
+          <div class="module-title">Vendas & PDV</div>
+          <div class="module-desc">Frente de caixa, terminal de vendas, notas fiscais</div>
+        </div>
+      </div>
+      <div class="module-meta">
+        <span class="badge badge-core">Core</span>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="submodules">
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Terminal de Vendas</div>
+          <ul class="features-list">
+            <li>Lançamento produtos e serviços</li>
+            <li>Venda rápida</li>
+            <li>Leitura de código de barras</li>
+            <li>Tabelas de preço</li>
+            <li>Controle de descontos</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Frente de Caixa</div>
+          <ul class="features-list">
+            <li>Controle de caixa em tempo real</li>
+            <li>Suprimento e sangria</li>
+            <li>Fechamento diário</li>
+            <li>Relatório cartão crédito/débito</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Nota Fiscal</div>
+          <ul class="features-list">
+            <li>Emissão NF-e, NFC-e, NFS-e</li>
+            <li>Cancelamento de NF</li>
+            <li>Controle de CFOP</li>
+            <li>SAT (SP) / MF-e (CE)</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Pré-Vendas & Crediário</div>
+          <ul class="features-list">
+            <li>Cadastro de pré-vendas</li>
+            <li>Crediário por cliente</li>
+            <li>Extrato e controle de pagamentos</li>
+            <li>Bloqueio de crediário</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Integrações de Venda</div>
+          <ul class="features-list">
+            <li>iFood</li>
+            <li>WooCommerce</li>
+            <li>Catálogo online</li>
+            <li>Agenda delivery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTOQUE -->
+  <div class="module" data-priority="core">
+    <div class="module-header" onclick="toggleModule(this)">
+      <div class="module-left">
+        <div class="module-icon" style="background: rgba(247,224,111,0.1);">📦</div>
+        <div>
+          <div class="module-title">Estoque</div>
+          <div class="module-desc">Produtos, insumos, fornecedores e compras</div>
+        </div>
+      </div>
+      <div class="module-meta">
+        <span class="badge badge-core">Core</span>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="submodules">
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Produtos</div>
+          <ul class="features-list">
+            <li>Cadastro com tabelas de preço/lucro</li>
+            <li>Entrada e saída de estoque</li>
+            <li>Estoque mínimo e alertas</li>
+            <li>Produtos a vencer</li>
+            <li>Venda a granel</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Insumos</div>
+          <ul class="features-list">
+            <li>Cadastro com qtde por embalagem</li>
+            <li>Dosagem adequada por uso</li>
+            <li>Controle de vencimentos</li>
+            <li>Movimento e histórico</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Fornecedores</div>
+          <ul class="features-list">
+            <li>Cadastro de fornecedores</li>
+            <li>Histórico de preços</li>
+            <li>Orçamentos comparativos</li>
+            <li>Controle de pagamentos</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Estoque Projetado</div>
+          <ul class="features-list">
+            <li>Estimativa de venda futura</li>
+            <li>Data estimada de próxima compra</li>
+            <li>Faturamento projetado</li>
+            <li>Planejamento de compras</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Controle & Auditoria</div>
+          <ul class="features-list">
+            <li>Conferência de estoque</li>
+            <li>Auditoria simplificada/detalhada</li>
+            <li>Extrato de movimentações</li>
+            <li>Ficha técnica de produtos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCEIRO -->
+  <div class="module" data-priority="core">
+    <div class="module-header" onclick="toggleModule(this)">
+      <div class="module-left">
+        <div class="module-icon" style="background: rgba(247,111,154,0.1);">💰</div>
+        <div>
+          <div class="module-title">Financeiro</div>
+          <div class="module-desc">Fluxo de caixa, contas, DRE e relatórios</div>
+        </div>
+      </div>
+      <div class="module-meta">
+        <span class="badge badge-core">Core</span>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="submodules">
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Fluxo de Caixa</div>
+          <ul class="features-list">
+            <li>Entradas e saídas por período</li>
+            <li>Faturamento bruto e líquido</li>
+            <li>Totalizador por forma de pagamento</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Contas a Pagar/Receber</div>
+          <ul class="features-list">
+            <li>Lançamento e controle</li>
+            <li>Pagamentos agendados</li>
+            <li>Histórico de contas pagas</li>
+            <li>Rateio por centro de custo</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Centro de Custo</div>
+          <ul class="features-list">
+            <li>Cadastro por categoria</li>
+            <li>Distribuição de lançamentos</li>
+            <li>Despesas, receitas e lucro por CC</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>DRE & BI</div>
+          <ul class="features-list">
+            <li>DRE automático</li>
+            <li>Dashboard com indicadores</li>
+            <li>Relatórios financeiros</li>
+            <li>Controle de comissões</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Integração Bancária</div>
+          <ul class="features-list">
+            <li>Conciliação bancária</li>
+            <li>Cadastro de bancos e taxas</li>
+            <li>Controle de cartões</li>
+            <li>Integração Stone/outros</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMINISTRATIVO & CLÍNICA -->
+  <div class="module" data-priority="later">
+    <div class="module-header" onclick="toggleModule(this)">
+      <div class="module-left">
+        <div class="module-icon" style="background: rgba(111,247,192,0.08);">🏥</div>
+        <div>
+          <div class="module-title">Administrativo & Clínica Vet</div>
+          <div class="module-desc">Usuários, permissões, prontuário veterinário, multifilial</div>
+        </div>
+      </div>
+      <div class="module-meta">
+        <span class="badge badge-later">Fase 2+</span>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="submodules">
+        <div class="submodule">
+          <span class="priority-tag p-mvp">MVP</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent3)"></span>Usuários & Permissões</div>
+          <ul class="features-list">
+            <li>Cadastro de usuários</li>
+            <li>Perfis e grupos de acesso</li>
+            <li>Restrições por funcionalidade</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-core">Core</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent)"></span>Funcionários</div>
+          <ul class="features-list">
+            <li>Cadastro de funcionários</li>
+            <li>Comissões configuráveis</li>
+            <li>Controle de vendas por funcionário</li>
+            <li>Vales (dinheiro ou produto)</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Gestão Veterinária</div>
+          <ul class="features-list">
+            <li>Consultas e ficha clínica</li>
+            <li>Vacinas e vermífugos</li>
+            <li>Exames e resultados</li>
+            <li>Internações</li>
+            <li>Receituário</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Multifilial</div>
+          <ul class="features-list">
+            <li>Gestão centralizada de unidades</li>
+            <li>Estoque por filial</li>
+            <li>Relatórios consolidados</li>
+            <li>Transferência entre filiais</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Relatórios & Formulários</div>
+          <ul class="features-list">
+            <li>50+ relatórios gerenciais</li>
+            <li>Termos para exames/cirurgias</li>
+            <li>Atestados de vacinação</li>
+            <li>Gerador de código de barras</li>
+          </ul>
+        </div>
+        <div class="submodule">
+          <span class="priority-tag p-later">Fase 2</span>
+          <div class="submodule-title"><span class="dot" style="background:var(--accent2)"></span>Tela de Avisos</div>
+          <ul class="features-list">
+            <li>Aniversários do dia</li>
+            <li>Agendamentos a confirmar</li>
+            <li>Planos próximos do vencimento</li>
+            <li>Produtos com estoque baixo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <span class="legend-label">Prioridade:</span>
+  <div class="legend-items">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div> MVP — lançamento inicial</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Core — logo após MVP</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> Fase 2+ — iterações futuras</div>
   </div>
 </div>
 
+<script>
+  function toggleModule(header) {
+    const module = header.closest('.module');
+    module.classList.toggle('open');
+  }
 
-<!-- STATUS -->
-<div class="section" id="status">
-  <div class="label label-blue">Status atual</div>
-  <h2>O que está <span style="color:var(--green);">no ar</span> agora</h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--green),transparent);"></div>
+  function filterModules(priority, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
-    <table class="table">
-      <thead><tr><th>Sistema</th><th>Status</th><th>Endereço</th><th>Obs</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>CRM Pets Go</strong></td>
-          <td><span class="status-dot dot-green"></span>No ar</td>
-          <td style="font-family:var(--mono);font-size:11px;color:var(--blue)">icy-wave-ee65.braziliangui1992.workers.dev</td>
-          <td style="color:var(--muted);font-size:12px">Cloudflare — gratuito</td>
-        </tr>
-        <tr>
-          <td><strong>Agentes IA (4 robôs)</strong></td>
-          <td><span class="status-dot dot-green"></span>No ar</td>
-          <td style="font-family:var(--mono);font-size:11px;color:var(--blue)">petsgo-agents-production.up.railway.app</td>
-          <td style="color:var(--muted);font-size:12px">Railway — trial 30 dias</td>
-        </tr>
-        <tr>
-          <td><strong>App Mobile Gestores</strong></td>
-          <td><span class="status-dot dot-green"></span>No ar</td>
-          <td style="font-family:var(--mono);font-size:11px;color:var(--blue)">mesma URL dos agentes</td>
-          <td style="color:var(--muted);font-size:12px">Instala no celular</td>
-        </tr>
-        <tr>
-          <td><strong>Sync CRM → Servidor</strong></td>
-          <td><span class="status-dot dot-yellow"></span>Pendente</td>
-          <td style="color:var(--muted);font-size:12px">—</td>
-          <td style="color:var(--muted);font-size:12px">Debug em andamento</td>
-        </tr>
-        <tr>
-          <td><strong>Relatório IA (Claude)</strong></td>
-          <td><span class="status-dot dot-yellow"></span>Pendente</td>
-          <td style="color:var(--muted);font-size:12px">—</td>
-          <td style="color:var(--muted);font-size:12px">Verificar chave Anthropic</td>
-        </tr>
-        <tr>
-          <td><strong>WhatsApp</strong></td>
-          <td><span class="status-dot dot-muted"></span>Simulado</td>
-          <td style="color:var(--muted);font-size:12px">—</td>
-          <td style="color:var(--muted);font-size:12px">Ativa com Evolution API</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+    document.querySelectorAll('.module').forEach(m => {
+      if (priority === 'all') {
+        m.classList.remove('hidden');
+      } else {
+        const p = m.dataset.priority;
+        m.classList.toggle('hidden', p !== priority);
+      }
+    });
+  }
 
-
-<!-- MÓDULOS -->
-<div class="section" id="modulos">
-  <div class="label label-blue">Product Mapping V1.0</div>
-  <h2>6 módulos · <span style="color:var(--blue);">100+ funcionalidades</span></h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--blue),transparent);"></div>
-
-  <!-- counters -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:14px;overflow:hidden;margin-bottom:32px;">
-    <div style="background:var(--bg2);padding:24px;text-align:center;">
-      <div style="font-size:48px;font-weight:900;font-family:var(--mono);color:var(--blue);line-height:1;">6</div>
-      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:6px;">Módulos</div>
-    </div>
-    <div style="background:var(--bg2);padding:24px;text-align:center;">
-      <div style="font-size:48px;font-weight:900;font-family:var(--mono);color:var(--green);line-height:1;">32</div>
-      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:6px;">Submódulos</div>
-    </div>
-    <div style="background:var(--bg2);padding:24px;text-align:center;">
-      <div style="font-size:48px;font-weight:900;font-family:var(--mono);color:var(--yellow);line-height:1;">100+</div>
-      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:6px;">Funcionalidades</div>
-    </div>
-  </div>
-
-  <!-- legend -->
-  <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
-    <span class="label label-green">MVP — lançamento inicial</span>
-    <span class="label label-blue">Core — logo após MVP</span>
-    <span class="label label-purple">Fase 2+ — iterações futuras</span>
-  </div>
-
-  <!-- MODULE 1 — Clientes & Pets -->
-  <div style="border:1px solid rgba(52,211,153,.2);border-radius:14px;overflow:hidden;margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,var(--bg2),rgba(52,211,153,.05));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(52,211,153,.12);">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="font-size:22px;">🐾</div>
-        <div>
-          <div style="font-size:15px;font-weight:800;">Clientes & Pets</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Cadastro, histórico e perfil dos tutores e animais</div>
-        </div>
-      </div>
-      <span class="label label-green">MVP</span>
-    </div>
-    <div style="padding:18px 22px;">
-      <div class="grid-2">
-        <div>
-          <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Cadastro de Clientes — MVP</div>
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Dados pessoais e contato</span></div>
-            <div class="check-item"><div class="check-ic ci-next">→</div><span>Múltiplos pets por cliente</span></div>
-            <div class="check-item"><div class="check-ic ci-next">→</div><span>Foto e documentos</span></div>
-            <div class="check-item"><div class="check-ic ci-next">→</div><span>Busca inteligente</span></div>
-            <div class="check-item"><div class="check-ic ci-next">→</div><span>Dependentes</span></div>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Cadastro de Pets — MVP</div>
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Espécie, raça, porte, idade</span></div>
-            <div class="check-item"><div class="check-ic ci-next">→</div><span>Particularidades e observações</span></div>
-            <div class="check-item"><div class="check-ic ci-next">→</div><span>Fotos do animal</span></div>
-            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Histórico de serviços</span></div>
-            <div class="check-item"><div class="check-ic ci-done">✓</div><span>Histórico de compras</span></div>
-          </div>
-        </div>
-        <div style="margin-top:14px;">
-          <div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Fidelização — Fase 2+</div>
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Programa de pontos/bônus</span></div>
-            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Extrato de bônus</span></div>
-            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Estimativa próxima compra</span></div>
-          </div>
-        </div>
-        <div style="margin-top:14px;">
-          <div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:10px;">Comunicação Automática — Fase 2+</div>
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Lembrete aniversário pet/tutor</span></div>
-            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Confirmação de agendamento</span></div>
-            <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Cobrança automática · Atalho WhatsApp</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODULE 2 — Agenda & Serviços -->
-  <div style="border:1px solid rgba(79,142,247,.2);border-radius:14px;overflow:hidden;margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,var(--bg2),rgba(79,142,247,.05));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,142,247,.12);">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="font-size:22px;">📅</div>
-        <div>
-          <div style="font-size:15px;font-weight:800;">Agenda & Serviços</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Agendamentos, banho e tosa, hospedagem, taxi dog — 17 submódulos</div>
-        </div>
-      </div>
-      <span class="label label-green">MVP</span>
-    </div>
-    <div style="padding:18px 22px;">
-      <div class="grid-2">
-        <div class="checklist">
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Agendamentos online</span></div>
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Banho e tosa</span></div>
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Hospedagem</span></div>
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Taxi dog</span></div>
-        </div>
-        <div style="background:var(--bg3);border-radius:10px;padding:14px;">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px;">Status</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6;">Módulo não iniciado. Prioridade após estabilização do CRM atual. A agenda online é um dos principais pedidos do Junior.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODULE 3 — Vendas & PDV -->
-  <div style="border:1px solid rgba(251,191,36,.15);border-radius:14px;overflow:hidden;margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(251,191,36,.1);">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="font-size:22px;">🛒</div>
-        <div>
-          <div style="font-size:15px;font-weight:800;">Vendas & PDV</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Frente de caixa, terminal de vendas, notas fiscais</div>
-        </div>
-      </div>
-      <span class="label label-blue">Core</span>
-    </div>
-    <div style="padding:18px 22px;">
-      <div class="checklist">
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>Frente de caixa</span></div>
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>Terminal de vendas</span></div>
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>Notas fiscais</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODULE 4 — Estoque -->
-  <div style="border:1px solid rgba(251,191,36,.15);border-radius:14px;overflow:hidden;margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(251,191,36,.1);">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="font-size:22px;">📦</div>
-        <div>
-          <div style="font-size:15px;font-weight:800;">Estoque</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Produtos, insumos, fornecedores e compras</div>
-        </div>
-      </div>
-      <span class="label label-blue">Core</span>
-    </div>
-    <div style="padding:18px 22px;">
-      <div class="grid-2">
-        <div class="checklist">
-          <div class="check-item"><div class="check-ic ci-done">✓</div><span>Produtos e alertas de estoque baixo</span></div>
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Insumos</span></div>
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Fornecedores</span></div>
-          <div class="check-item"><div class="check-ic ci-next">→</div><span>Gestão de compras</span></div>
-        </div>
-        <div style="background:var(--greenG);border:1px solid rgba(52,211,153,.15);border-radius:10px;padding:14px;">
-          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">✓ Parcialmente entregue</div>
-          <div style="font-size:12px;color:var(--muted);">Módulo básico de produtos já está no CRM. Fornecedores e compras são Fase Core.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODULE 5 — Financeiro -->
-  <div style="border:1px solid rgba(251,191,36,.15);border-radius:14px;overflow:hidden;margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,var(--bg2),rgba(251,191,36,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(251,191,36,.1);">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="font-size:22px;">💰</div>
-        <div>
-          <div style="font-size:15px;font-weight:800;">Financeiro</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Fluxo de caixa, contas, DRE e relatórios</div>
-        </div>
-      </div>
-      <span class="label label-blue">Core</span>
-    </div>
-    <div style="padding:18px 22px;">
-      <div class="checklist">
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>Fluxo de caixa completo</span></div>
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>Contas a pagar / a receber</span></div>
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>DRE — Demonstrativo de Resultado</span></div>
-        <div class="check-item"><div class="check-ic ci-next">→</div><span>Relatórios gerenciais</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODULE 6 — Admin & Vet -->
-  <div style="border:1px solid rgba(167,139,250,.15);border-radius:14px;overflow:hidden;">
-    <div style="background:linear-gradient(135deg,var(--bg2),rgba(167,139,250,.04));padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(167,139,250,.1);">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="font-size:22px;">🏥</div>
-        <div>
-          <div style="font-size:15px;font-weight:800;">Administrativo & Clínica Vet</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Usuários, permissões, prontuário veterinário, multifilial</div>
-        </div>
-      </div>
-      <span class="label label-purple">Fase 2+</span>
-    </div>
-    <div style="padding:18px 22px;">
-      <div class="checklist">
-        <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Usuários e permissões por nível</span></div>
-        <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Prontuário veterinário completo</span></div>
-        <div class="check-item"><div class="check-ic" style="background:var(--purpleG);color:var(--purple);border:1px solid rgba(167,139,250,.3);">○</div><span>Multifilial — gestão de múltiplas unidades</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- URGENTE -->
-<div class="section" id="urgente">
-  <div class="label label-orange">⚡ Ação imediata</div>
-  <h2>3 coisas a resolver <span style="color:var(--orange);">esta semana</span></h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--orange),transparent);"></div>
-
-  <div style="display:flex;flex-direction:column;gap:14px;">
-
-    <div class="card card-orange" style="display:flex;gap:20px;">
-      <div style="background:var(--orangeG);border:1px solid rgba(251,146,60,.3);color:var(--orange);font-size:14px;font-weight:800;font-family:var(--mono);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">1</div>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <h3>Corrigir o sync CRM → Railway</h3>
-          <span class="label label-orange" style="font-size:9px;padding:2px 8px;">Crítico</span>
-        </div>
-        <p class="body" style="margin-bottom:14px;">O CRM tenta enviar os dados mas o servidor ainda não está aceitando. Sem isso, os agentes de IA não têm dados para trabalhar — nenhum dos 4 funciona de verdade.</p>
-        <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:10px;font-family:var(--mono);color:var(--muted);margin-bottom:8px;letter-spacing:0.5px;text-transform:uppercase;">Como resolver</div>
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic ci-next">1</div><span>Abrir o CRM pela URL do Cloudflare</span></div>
-            <div class="check-item"><div class="check-ic ci-next">2</div><span>F12 → aba Network → salvar um pet → verificar a requisição para <code style="font-family:var(--mono);font-size:11px;color:var(--blue)">/sync</code></span></div>
-            <div class="check-item"><div class="check-ic ci-next">3</div><span>Compartilhar o resultado — resolvo em minutos</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card card-yellow" style="display:flex;gap:20px;">
-      <div style="background:var(--yellowG);border:1px solid rgba(251,191,36,.3);color:var(--yellow);font-size:14px;font-weight:800;font-family:var(--mono);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">2</div>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <h3>Configurar a chave Anthropic real</h3>
-          <span class="label label-yellow" style="font-size:9px;padding:2px 8px;">Importante</span>
-        </div>
-        <p class="body" style="margin-bottom:14px;">Sem a chave real da Anthropic, o Agente de Relatório Semanal não consegue usar o Claude AI para gerar análises inteligentes toda segunda-feira.</p>
-        <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;">
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic ci-next">1</div><span>Acessar <span style="color:var(--blue)">console.anthropic.com</span> → API Keys → Create Key</span></div>
-            <div class="check-item"><div class="check-ic ci-next">2</div><span>Railway → petsgo-agents → Variables → editar <code style="font-family:var(--mono);font-size:11px">ANTHROPIC_API_KEY</code></span></div>
-            <div class="check-item"><div class="check-ic ci-next">3</div><span>Colar a chave real → Deploy</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card card-red" style="display:flex;gap:20px;">
-      <div style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red);font-size:14px;font-weight:800;font-family:var(--mono);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">3</div>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <h3>Upgradar o Railway antes do trial acabar</h3>
-          <span class="label label-red" style="font-size:9px;padding:2px 8px;">Prazo: 30 dias</span>
-        </div>
-        <p class="body" style="margin-bottom:14px;">O trial tem $5 de crédito. Quando acabar, o servidor para e leva todos os 4 agentes junto. O plano Hobby custa $5/mês (~R$28) e mantém tudo no ar.</p>
-        <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;">
-          <div class="checklist">
-            <div class="check-item"><div class="check-ic ci-next">1</div><span>Railway → Settings → Billing → Upgrade to Hobby ($5/mês)</span></div>
-            <div class="check-item"><div class="check-ic ci-next">2</div><span>Esse custo já está embutido na mensalidade do Junior</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-<!-- PRÓXIMOS -->
-<div class="section" id="proximos">
-  <div class="label label-blue">Próximos passos</div>
-  <h2>O que vem <span style="color:var(--blue);">depois</span></h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--blue),transparent);"></div>
-
-  <div class="grid-2" style="gap:28px;">
-    <div>
-      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:16px;">Técnico</div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--blueG);color:var(--blue);border:1px solid rgba(79,142,247,.3);">A</div><div class="step-line"></div></div>
-          <div class="step-content">
-            <div class="step-title">WhatsApp via Evolution API</div>
-            <div class="step-desc">Agentes passam a enviar mensagens reais para tutores e gestores. Estimativa: 2h de setup após Railway estar no plano pago.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--blueG);color:var(--blue);border:1px solid rgba(79,142,247,.3);">B</div><div class="step-line"></div></div>
-          <div class="step-content">
-            <div class="step-title">Domínio personalizado</div>
-            <div class="step-desc">Trocar a URL do Cloudflare para algo como <code style="font-family:var(--mono);font-size:11px;color:var(--blue)">app.petsgo.com.br</code>. Custo: ~R$40/ano.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--blueG);color:var(--blue);border:1px solid rgba(79,142,247,.3);">C</div><div class="step-line"></div></div>
-          <div class="step-content">
-            <div class="step-title">Agendamento online público</div>
-            <div class="step-desc">Link para tutores agendarem banho e tosa direto pelo celular. Confirmação automática no WhatsApp e integração com os atendimentos do CRM.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--blueG);color:var(--blue);border:1px solid rgba(79,142,247,.3);">D</div></div>
-          <div class="step-content">
-            <div class="step-title">Backup automático semanal</div>
-            <div class="step-desc">Agente salva snapshot dos dados no Google Drive do Junior toda semana. Proteção total contra perda de dados.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:16px;">Com o Junior</div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--greenG);color:var(--green);border:1px solid rgba(52,211,153,.3);">1</div><div class="step-line"></div></div>
-          <div class="step-content">
-            <div class="step-title">Preencher o formulário de configuração</div>
-            <div class="step-desc">Coletar os dados reais: nomes das filiais, serviços com preços, cores da marca, PIN do financeiro, telefone para alertas.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--greenG);color:var(--green);border:1px solid rgba(52,211,153,.3);">2</div><div class="step-line"></div></div>
-          <div class="step-content">
-            <div class="step-title">Configurar o CRM com dados reais</div>
-            <div class="step-desc">Aplicar as informações do Junior no sistema e atualizar o deploy no Cloudflare. O CRM passa a ter a cara da Pets Go de verdade.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--greenG);color:var(--green);border:1px solid rgba(52,211,153,.3);">3</div><div class="step-line"></div></div>
-          <div class="step-content">
-            <div class="step-title">Treinamento da equipe (1h)</div>
-            <div class="step-desc">Call com o Junior e equipe para demonstrar o CRM, o app mobile e explicar como os agentes funcionam no dia a dia.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-left"><div class="step-num" style="background:var(--greenG);color:var(--green);border:1px solid rgba(52,211,153,.3);">4</div></div>
-          <div class="step-content">
-            <div class="step-title">Revisão D+30</div>
-            <div class="step-desc">Um mês após go-live, apresentar o primeiro relatório mensal da IA e colher feedback para priorizar a Fase 3.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- TIMELINE -->
-<div class="section" id="timeline">
-  <div class="label label-purple">Linha do tempo</div>
-  <h2>Quando cada coisa <span style="color:var(--purple);">acontece</span></h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--purple),transparent);"></div>
-
-  <div class="timeline-grid" style="grid-template-columns:repeat(3,1fr);">
-    <div class="tl-col" style="border-top:3px solid var(--green);">
-      <div class="tl-header" style="color:var(--green);">🐾 FASE 1 — MVP</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Abril → Junho 2026</div>
-      <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--orange);">⚡ Sync CRM → Railway</div>
-        <div class="tl-item" style="border-left-color:var(--orange);">⚡ Upgrade Railway Hobby</div>
-        <div class="tl-item" style="border-left-color:var(--orange);">⚡ Evolution API + WhatsApp</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Clientes & Pets completo</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Busca inteligente + fotos</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Agenda & Serviços (17 mód.)</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Dados reais Pets Control 2.0</div>
-        <div class="tl-item" style="border-left-color:var(--green);">Domínio + go-live oficial</div>
-      </div>
-    </div>
-    <div class="tl-col" style="border-top:3px solid var(--blue);">
-      <div class="tl-header" style="color:var(--blue);">🛒 FASE 2 — Core</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Julho → Setembro 2026</div>
-      <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--blue);">Vendas & PDV</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Frente de caixa</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Notas fiscais</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Estoque avançado</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Fornecedores + compras</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Financeiro completo (DRE)</div>
-        <div class="tl-item" style="border-left-color:var(--blue);">Relatórios gerenciais</div>
-      </div>
-    </div>
-    <div class="tl-col" style="border-top:3px solid var(--purple);">
-      <div class="tl-header" style="color:var(--purple);">🤖 FASE 3 — Fase 2+</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Outubro 2026+</div>
-      <div class="tl-items">
-        <div class="tl-item" style="border-left-color:var(--purple);">Programa de fidelização</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Pontos e bônus</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Cobrança automática</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Prontuário veterinário</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Usuários & permissões</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Multifilial</div>
-        <div class="tl-item" style="border-left-color:var(--purple);">Case study + expansão</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- CUSTOS -->
-<div class="section" id="custos">
-  <div class="label label-green">💰 Estrutura de custos</div>
-  <h2>O que custa <span style="color:var(--green);">manter tudo no ar</span></h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--green),transparent);"></div>
-
-  <div class="grid-2" style="gap:24px;">
-    <div class="card">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:16px;">Infraestrutura mensal</div>
-      <div class="cost-row"><span>🌐 Cloudflare (CRM)</span><span class="cost-val" style="color:var(--green)">Grátis</span></div>
-      <div class="cost-row"><span>🚂 Railway Hobby (agentes)</span><span class="cost-val" style="color:var(--yellow)">~R$28/mês</span></div>
-      <div class="cost-row"><span>🤖 Claude API (relatório)</span><span class="cost-val" style="color:var(--yellow)">~R$10/mês</span></div>
-      <div class="cost-row"><span>📱 Evolution API (WhatsApp)</span><span class="cost-val" style="color:var(--purple)">Grátis (self-hosted)</span></div>
-      <div class="cost-row" style="border-top:1px solid var(--border);margin-top:8px;padding-top:14px;">
-        <span style="font-weight:700;">Total infraestrutura</span>
-        <span class="cost-val" style="color:var(--green);font-size:20px;">~R$38/mês</span>
-      </div>
-    </div>
-
-    <div class="card card-yellow">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:16px;">O que o Junior paga</div>
-      <div class="cost-row"><span>Setup (já cobrado)</span><span class="cost-val" style="color:var(--green)">✓ Pago</span></div>
-      <div class="cost-row"><span>Manutenção mensal</span><span class="cost-val" style="color:var(--yellow)">R$350/mês</span></div>
-      <div class="cost-row"><span>Infraestrutura (embutido)</span><span class="cost-val" style="color:var(--muted)">R$38/mês</span></div>
-      <div class="cost-row" style="border-top:1px solid var(--border);margin-top:8px;padding-top:14px;">
-        <span style="font-weight:700;">Margem líquida</span>
-        <span class="cost-val" style="color:var(--green);font-size:20px;">R$312/mês</span>
-      </div>
-      <div style="margin-top:14px;background:var(--bg3);border-radius:8px;padding:12px;font-size:12px;color:var(--muted);line-height:1.5;">
-        💡 Com 3 clientes como o Junior: <strong style="color:var(--text)">R$936/mês recorrente</strong> com infraestrutura compartilhada.
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- COMO FUNCIONA -->
-<div class="section" id="como">
-  <div class="label label-yellow">Como funciona</div>
-  <h2>Explicação <span style="color:var(--yellow);">de tudo</span></h2>
-  <div class="divider" style="background:linear-gradient(90deg,var(--yellow),transparent);"></div>
-
-  <div style="display:flex;flex-direction:column;gap:14px;">
-
-    <div class="card">
-      <div style="display:flex;gap:16px;">
-        <div class="ic ic-yellow">🔄</div>
-        <div>
-          <h3>O Sync — como o CRM conversa com os agentes</h3>
-          <p class="body" style="margin-bottom:12px;">Toda vez que alguém salva algo no CRM (pet, atendimento, estoque), o sistema envia automaticamente uma cópia dos dados para o servidor no Railway. É como um "salvar na nuvem" silencioso. O servidor recebe, armazena, e os agentes têm acesso a tudo em tempo real.</p>
-          <div class="code">CRM salva → POST /sync → Railway armazena → Agentes leem → Agem 24/7</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;gap:16px;">
-        <div class="ic ic-purple">🤖</div>
-        <div>
-          <h3 style="margin-bottom:12px;">Os 4 Agentes — o que cada um faz e quando</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div style="background:var(--bg3);border-radius:8px;padding:12px;">
-              <div style="font-size:12px;font-weight:700;margin-bottom:4px;">📊 Relatório Semanal</div>
-              <div style="font-size:11px;color:var(--muted)">Segunda 8h — lê todos os dados, manda pro Claude AI que escreve análise inteligente e envia para o Junior</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:8px;padding:12px;">
-              <div style="font-size:12px;font-weight:700;margin-bottom:4px;">🎂 Aniversário dos Pets</div>
-              <div style="font-size:11px;color:var(--muted)">Todo dia 9h — verifica aniversários e envia mensagem personalizada para o tutor no WhatsApp</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:8px;padding:12px;">
-              <div style="font-size:12px;font-weight:700;margin-bottom:4px;">📦 Alerta de Estoque</div>
-              <div style="font-size:11px;color:var(--muted)">Todo dia 9h — produtos zerados ou abaixo do mínimo geram alerta automático para o gestor</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:8px;padding:12px;">
-              <div style="font-size:12px;font-weight:700;margin-bottom:4px;">🔔 Lembrete de Agendamento</div>
-              <div style="font-size:11px;color:var(--muted)">A cada hora — verifica agendamentos de amanhã e avisa o tutor 24h antes</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;gap:16px;">
-        <div class="ic ic-blue">📱</div>
-        <div>
-          <h3>O App Mobile — por que não precisa de App Store</h3>
-          <p class="body">O app dos gestores é um PWA (Progressive Web App). O Junior abre a URL no celular, clica em "Adicionar à tela inicial" e aparece como qualquer app. Funciona offline, tem tela de PIN e se atualiza automaticamente. Zero custo de loja, zero instalação para o usuário.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;gap:16px;">
-        <div class="ic ic-green">💬</div>
-        <div>
-          <h3>O WhatsApp — por que Evolution API e não Z-API</h3>
-          <p class="body">Z-API custa R$99/mês por número. Evolution API é open-source — hospedada no Railway, custo zero de licença. Precisa de um número dedicado (chip pré-pago ~R$20 único) que escaneia o QR Code uma vez. Depois disso, todos os agentes enviam mensagens por esse número automaticamente.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-<!-- FOOTER -->
-<div style="text-align:center;padding:48px 40px;border-top:1px solid var(--border);">
-  <div style="font-size:32px;margin-bottom:12px;">🐾</div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Pets Go — Sistema de Gestão Inteligente</div>
-  <div style="font-size:12px;color:var(--muted);">Desenvolvido por Guilherme Andrade · Agência de Automação & IA · Abril 2026</div>
-</div>
+  document.querySelector('.module .module-header').click();
+</script>
 
 </body>
 </html>
