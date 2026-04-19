@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guilherme Andrade — Um Forasteiro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #e7c9a3;
+    --rust: #C13D14;
+    --dark: #0d0d0e;
+  }
+
+  body {
+    background: #1c1a18;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .spread {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 1120px;
+    align-items: flex-start;
+  }
+
+  /* ════════════════════════════════
+     CARD LEFT
+  ════════════════════════════════ */
+  .card-left {
+    background: var(--gold);
+    color: var(--dark);
+    width: 440px;
+    min-width: 440px;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* vertical name strip */
+  .cl-strip {
+    width: 54px;
+    min-width: 54px;
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .cl-strip span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 54px;
+    color: var(--gold);
+    letter-spacing: 6px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+
+  /* main content */
+  .cl-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* top: photo left + hello right */
+  .cl-top {
+    display: flex;
+    gap: 0;
+    padding: 22px 20px 18px 20px;
+    align-items: flex-start;
+  }
+
+  .cl-photo {
+    width: 140px;
+    min-width: 140px;
+    height: 170px;
+    object-fit: cover;
+    object-position: center 10%;
+    display: block;
+    filter: grayscale(15%);
+  }
+
+  .cl-top-right {
+    flex: 1;
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cl-presents {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cl-circle {
+    width: 58px;
+    height: 58px;
+  }
+
+  .cl-arrow {
+    font-size: 44px;
+    line-height: 1;
+    color: var(--dark);
+  }
+
+  .cl-hello {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 58px;
+    line-height: 0.88;
+    letter-spacing: 2px;
+    color: var(--dark);
+  }
+
+  .cl-sub {
+    font-size: 9.5px;
+    line-height: 1.6;
+    color: #3a3228;
+    font-weight: 400;
+  }
+
+  /* contact bar */
+  .cl-contact {
+    background: var(--dark);
+    color: var(--gold);
+    padding: 9px 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .cl-contact .lbl { color: var(--rust); }
+  .cl-contact .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--rust);
+    flex-shrink: 0;
+  }
+
+  /* two-column content */
+  .cl-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 18px 20px 22px;
+    flex: 1;
+  }
+
+  .cl-col { padding-right: 14px; }
+  .cl-col:last-child {
+    padding-right: 0;
+    padding-left: 14px;
+    border-left: 1px solid rgba(13,13,14,0.15);
+  }
+
+  .s-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+    color: var(--dark);
+  }
+
+  .s-body {
+    font-size: 8.5px;
+    line-height: 1.65;
+    color: #4a3e32;
+    margin-bottom: 16px;
+  }
+
+  .exp { margin-bottom: 9px; }
+  .exp-t {
+    font-size: 7.5px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--dark);
+  }
+  .exp-s {
+    font-size: 8px;
+    color: #6a5a48;
+    line-height: 1.5;
+  }
+
+  .sk-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .sk-name {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--dark);
+  }
+  .dots { display: flex; gap: 3px; }
+  .dots span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--dark);
+  }
+  .dots span.e {
+    background: transparent;
+    border: 1px solid var(--dark);
+  }
+
+  /* ════════════════════════════════
+     CARD RIGHT
+  ════════════════════════════════ */
+  .card-right {
+    flex: 1;
+    background: var(--dark);
+    color: var(--gold);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── TOP NAME ── */
+  .cr-top-name {
+    padding: 10px 20px 6px;
+    overflow: hidden;
+  }
+  .cr-top-name span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 110px;
+    line-height: 0.85;
+    letter-spacing: 6px;
+    color: var(--gold);
+    display: block;
+  }
+
+  /* ── PHOTO ZONE ── */
+  .cr-photo-zone {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    padding: 0 20px 12px;
+    gap: 12px;
+  }
+
+  /* left meta: pill + star */
+  .cr-meta-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .cr-pill {
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    border-radius: 100px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+
+  .cr-star {
+    font-size: 26px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  /* center photo */
+  .cr-photo-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .cr-photo {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    object-position: center 35%;
+    display: block;
+    filter: grayscale(10%) contrast(1.05);
+  }
+
+  /* right meta: circle + arrow */
+  .cr-meta-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 6px 0;
+    flex-shrink: 0;
+    gap: 10px;
+  }
+
+  .cr-circle {
+    width: 70px;
+    height: 70px;
+    opacity: 0.7;
+  }
+
+  .cr-arrow {
+    font-size: 48px;
+    color: var(--gold);
+    line-height: 1;
+    border: 2px solid rgba(231,201,163,0.4);
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── DIVIDER ── */
+  .cr-divider {
+    height: 1px;
+    background: rgba(231,201,163,0.15);
+    margin: 0 20px;
+  }
+
+  .cr-rust-bar {
+    height: 3px;
+    background: var(--rust);
+  }
+
+  /* ── CONCERN ── */
+  .cr-concern {
+    padding: 20px 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #0f0e0c;
+  }
+
+  .cr-concern-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .cr-concern-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    flex: 1;
+  }
+
+  .cr-concern-text {
+    font-size: 10px;
+    line-height: 1.85;
+    color: #7a6a52;
+  }
+
+  .cr-concern-text strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── BOTTOM NAME ── */
+  .cr-bottom-name {
+    background: var(--dark);
+    padding: 4px 20px 8px;
+    overflow: hidden;
+    border-top: 1px solid rgba(231,201,163,0.06);
+  }
+  .cr-bottom-name span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 110px;
+    line-height: 0.82;
+    letter-spacing: 6px;
+    color: var(--rust);
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<div class="spread">
+
+  <!-- ══════════ CARD LEFT ══════════ -->
+  <div class="card-left">
+
+    <div class="cl-strip">
+      <img src="boneco.png" style="width:36px;opacity:0.85;filter:brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(340deg);" alt="logo">
+    </div>
+
+    <div class="cl-main">
+
+      <!-- top: photo + hello -->
+      <div class="cl-top">
+        <img src="guilherme-photo.jpg" class="cl-photo" alt="Guilherme Andrade">
+        <div class="cl-top-right">
+          <div class="cl-presents">
+            <svg class="cl-circle" viewBox="0 0 100 100">
+              <defs><path id="c1" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs>
+              <text font-size="11" fill="#0d0d0e" font-family="Inter" font-weight="600" letter-spacing="2">
+                <textPath href="#c1">ANDARILHO DIGITAL • UM FORASTEIRO •</textPath>
+              </text>
+            </svg>
+            <span class="cl-arrow">↗</span>
+          </div>
+          <div class="cl-hello">HELLO!</div>
+          <p class="cl-sub">Designer turned systems builder.<br>Operating from anywhere in the world<br>since 2022.</p>
+        </div>
+      </div>
+
+      <!-- contact bar -->
+      <div class="cl-contact">
+        <img src="boneco.png" style="height:22px;opacity:0.9;filter:brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(340deg);" alt="logo">
+        <span class="lbl">CONTACT</span>
+        <span class="dot"></span>
+        <span>+55 51 9547-8349</span>
+        <span class="dot"></span>
+        <span>andarilhodigital.com</span>
+      </div>
+
+      <!-- two-column body -->
+      <div class="cl-body">
+
+        <div class="cl-col">
+          <div class="s-title">PROFILE</div>
+          <p class="s-body">Industrial Designer for 9 years. Digital nomad since 2022. Built survival systems across Switzerland, England and Thailand. Now building AI systems for businesses, from anywhere in the world.</p>
+
+          <div class="s-title">WORK EXPERIENCE</div>
+
+          <div class="exp">
+            <div class="exp-t">AI Systems Builder — 2026–Now</div>
+            <div class="exp-s">Andarilho Digital · Chiang Mai, Thailand<br>CRM, automations, WhatsApp bots with AI & n8n</div>
+          </div>
+          <div class="exp">
+            <div class="exp-t">Hostel Submanager — 2023–2024</div>
+            <div class="exp-s">Swiss Alps, Switzerland<br>Promoted from volunteer in 3 months</div>
+          </div>
+          <div class="exp">
+            <div class="exp-t">Residential Painter — 2022–2023</div>
+            <div class="exp-s">London, England · Spray machine technique</div>
+          </div>
+          <div class="exp">
+            <div class="exp-t">Industrial Designer — 2013–2022</div>
+            <div class="exp-s">Brazil + Switzerland · 9 years<br>National & international projects</div>
+          </div>
+        </div>
+
+        <div class="cl-col">
+          <div class="s-title">SKILLS</div>
+          <div class="sk-row"><span class="sk-name">Figma</span><div class="dots"><span></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="sk-row"><span class="sk-name">Photoshop</span><div class="dots"><span></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="sk-row"><span class="sk-name">ChatGPT</span><div class="dots"><span></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="sk-row"><span class="sk-name">Claude Code</span><div class="dots"><span></span><span></span><span></span><span></span><span class="e"></span></div></div>
+          <div class="sk-row"><span class="sk-name">Illustrator</span><div class="dots"><span></span><span></span><span></span><span></span><span class="e"></span></div></div>
+          <div class="sk-row"><span class="sk-name">Gemini</span><div class="dots"><span></span><span></span><span></span><span></span><span class="e"></span></div></div>
+          <div class="sk-row"><span class="sk-name">n8n / Make</span><div class="dots"><span></span><span></span><span></span><span></span><span class="e"></span></div></div>
+          <div class="sk-row"><span class="sk-name">CapCut</span><div class="dots"><span></span><span></span><span></span><span></span><span class="e"></span></div></div>
+
+          <div class="s-title" style="margin-top:14px;">LANGUAGES</div>
+          <div class="sk-row"><span class="sk-name">Portuguese</span><div class="dots"><span></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="sk-row"><span class="sk-name">English</span><div class="dots"><span></span><span></span><span></span><span></span><span class="e"></span></div></div>
+          <div class="sk-row"><span class="sk-name">Spanish</span><div class="dots"><span></span><span></span><span></span><span class="e"></span><span class="e"></span></div></div>
+
+          <div class="s-title" style="margin-top:14px;">LOCATION</div>
+          <p class="s-body">Chiang Mai, Thailand<br>Available remotely — worldwide.</p>
+
+          <div class="s-title">CURRENTLY</div>
+          <p class="s-body">Building Pets Go CRM<br>AI automations · B2B systems<br>Andarilho Digital agency</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ CARD RIGHT ══════════ -->
+  <div class="card-right">
+
+    <!-- top huge name -->
+    <div class="cr-top-name"><span>GUILHERME</span></div>
+
+    <!-- photo zone -->
+    <div class="cr-photo-zone">
+
+      <!-- left: pill + star -->
+      <div class="cr-meta-left">
+        <span class="cr-pill">AI SYSTEMS & AUTOMATION</span>
+        <span class="cr-star">✳</span>
+      </div>
+
+      <!-- center: photo -->
+      <div class="cr-photo-wrap">
+        <img src="guilherme-photo2.jpg" class="cr-photo" alt="Guilherme Andrade">
+      </div>
+
+      <!-- right: circle + arrow -->
+      <div class="cr-meta-right">
+        <svg class="cr-circle" viewBox="0 0 100 100">
+          <defs><path id="c2" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#e7c9a3" stroke-width="0.7"/>
+          <text font-size="10.5" fill="#e7c9a3" font-family="Inter" font-weight="500" letter-spacing="1.5">
+            <textPath href="#c2">UM FORASTEIRO • ANDARILHO •</textPath>
+          </text>
+        </svg>
+        <div class="cr-arrow">↗</div>
+      </div>
+
+    </div>
+
+    <!-- divider -->
+    <div class="cr-rust-bar"></div>
+
+    <!-- concern -->
+    <div class="cr-concern">
+      <div class="cr-concern-title">TO WHOM IT MAY CONCERN</div>
+      <div class="cr-concern-cols">
+        <p class="cr-concern-text">
+          I worked as a painter in London and a gardener in Switzerland to keep existing in Thailand. I did that cycle twice. <strong>I'm not doing it a third time.</strong>
+          <br><br>
+          For 9 years I designed products and systems in Brazil. Then I left — not for adventure, but because the ground disappeared and I decided to build a new one in motion.
+        </p>
+        <p class="cr-concern-text">
+          Today I build AI management systems for businesses — CRMs, automation agents, WhatsApp bots with n8n — from anywhere in the world. The tools changed. The logic is the same: <strong>design a system, enter it, make it work.</strong>
+          <br><br>
+          If your business still depends on you to function, we should talk.
+        </p>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+</body>
+</html>
