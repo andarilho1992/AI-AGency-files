@@ -1,0 +1,32 @@
+/* Andarilho Digital — global tokens */
+:root {
+  --rust: #ae330a;
+  --rust-light: #c94010;
+  --gold: #e7c9a3;
+  --gold-dim: #c4a07a;
+  --bg: #0d0d0e;
+  --bg-card: #141416;
+  --bg-border: #1e1e22;
+  --text: #f0ece4;
+  --text-muted: #9a9488;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--rust-light); text-decoration: none; }
+a:hover { color: var(--gold); }

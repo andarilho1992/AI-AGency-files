@@ -38,6 +38,11 @@ destaques-exportados/
 export-destaques.js
 export-slides.js
 
+# Astro build output
+astro-sites/node_modules/
+astro-sites/dist/
+astro-sites/.astro/
+
 # Sistema
 .DS_Store
 Thumbs.db
