@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andarilho Digital — Setup Progress Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0e;
+    --surface: #131211;
+    --surface2: #1a1816;
+    --gold: #e7c9a3;
+    --gold-dim: rgba(231,201,163,0.12);
+    --gold-line: rgba(231,201,163,0.08);
+    --rust: #C13D14;
+    --rust-dim: rgba(193,61,20,0.15);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.1);
+    --yellow: #fbbf24;
+    --yellow-dim: rgba(251,191,36,0.1);
+    --red-dim: rgba(239,68,68,0.1);
+    --red: #ef4444;
+    --muted: #6b5e4e;
+    --text: #c9b89a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--gold-line);
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo img {
+    height: 32px;
+    filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(340deg);
+    opacity: 0.9;
+  }
+
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--gold);
+  }
+
+  .header-meta {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 48px 60px;
+    border-bottom: 1px solid var(--gold-line);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .hero p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 600px;
+    margin-bottom: 36px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+
+  .section-header .num {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    border: 1px solid var(--rust);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--gold-line);
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+  }
+
+  .check-item.done {
+    background: var(--green-dim);
+    border-color: rgba(74,222,128,0.15);
+  }
+
+  .check-item.warn {
+    background: var(--yellow-dim);
+    border-color: rgba(251,191,36,0.15);
+  }
+
+  .check-item.blocked {
+    background: var(--red-dim);
+    border-color: rgba(239,68,68,0.15);
+  }
+
+  .check-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .check-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 2px;
+  }
+
+  .check-text span {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── MODULE GRID ── */
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .module-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .module-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .badge.done { background: var(--green-dim); color: var(--green); }
+  .badge.warn { background: var(--yellow-dim); color: var(--yellow); }
+  .badge.blocked { background: var(--red-dim); color: var(--red); }
+  .badge.pending { background: var(--gold-dim); color: var(--gold); }
+
+  .module-desc {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .module-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .module-items li {
+    font-size: 12px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .module-items li::before {
+    content: '—';
+    color: var(--rust);
+    flex-shrink: 0;
+  }
+
+  /* ── LIVE LINKS TABLE ── */
+  .links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--gold-line);
+    border-radius: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .link-row:hover { border-color: rgba(231,201,163,0.2); }
+
+  .link-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  .link-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 200px;
+  }
+
+  .link-url {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: monospace;
+    flex: 1;
+  }
+
+  .link-btn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rust);
+    text-decoration: none;
+    border: 1px solid var(--rust);
+    padding: 4px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .link-btn:hover { background: var(--rust); color: var(--gold); }
+
+  /* ── API TABLE ── */
+  .api-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+  }
+
+  .api-card {
+    background: var(--surface);
+    border: 1px solid var(--gold-line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .api-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .api-note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── NEXT STEPS ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    counter-reset: steps;
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+    counter-increment: steps;
+  }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--rust);
+    opacity: 0.5;
+    flex-shrink: 0;
+    width: 32px;
+  }
+
+  .step-content strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .step-time {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  /* ── MEMORY SECTION ── */
+  .memory-layers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .memory-card {
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid transparent;
+  }
+
+  .memory-card.active {
+    background: var(--green-dim);
+    border-color: rgba(74,222,128,0.15);
+  }
+
+  .memory-card.inactive {
+    background: var(--red-dim);
+    border-color: rgba(239,68,68,0.15);
+  }
+
+  .memory-card .m-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .memory-card .m-loc {
+    font-size: 10px;
+    font-family: monospace;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .memory-card .m-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .memory-card .m-status {
+    margin-top: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .memory-card.active .m-status { color: var(--green); }
+  .memory-card.inactive .m-status { color: var(--red); }
+
+  /* ── PROFILE SECTION ── */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+    padding: 28px;
+  }
+
+  .profile-card.accent {
+    background: var(--gold-dim);
+    border-color: rgba(231,201,163,0.2);
+  }
+
+  .profile-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .profile-bio {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text);
+  }
+
+  .profile-bio strong {
+    color: var(--gold);
+  }
+
+  .profile-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gold-line);
+    font-size: 12px;
+  }
+
+  .fact-row:last-child { border-bottom: none; }
+
+  .fact-label {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 10px;
+  }
+
+  .fact-value {
+    color: var(--gold);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .business-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 0;
+  }
+
+  .biz-card {
+    background: var(--surface);
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+    padding: 22px;
+  }
+
+  .biz-tag {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .biz-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+
+  .biz-desc {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .biz-highlight {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--rust-dim);
+    border-left: 2px solid var(--rust);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  @media (max-width: 900px) {
+    .profile-grid, .business-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--gold-line);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  footer p {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  footer a {
+    color: var(--rust);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 768px) {
+    header, main, .hero, footer { padding-left: 24px; padding-right: 24px; }
+    .memory-layers { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <img src="boneco.png" alt="Andarilho Digital">
+    <span class="logo-text">Andarilho Digital</span>
+  </div>
+  <span class="header-meta">Setup Progress Report · April 2026</span>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-label">Claude Code Startup Guide v6 — Status Report</p>
+  <h1>WHAT'S BEEN<br>BUILT SO FAR</h1>
+  <p>Complete overview of the AI operating system set up for Andarilho Digital — tools, memory, live deployments, APIs and what's still pending.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-value">95%</span>
+      <span class="stat-label">Guide Complete</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">6</span>
+      <span class="stat-label">Live URLs</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">7</span>
+      <span class="stat-label">Memory Files</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">2</span>
+      <span class="stat-label">GitHub Repos</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">30</span>
+      <span class="stat-label">Agent Skills</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- WHO IS GUILHERME -->
+  <section>
+    <div class="section-header">
+      <span class="num">01</span>
+      <h2>Who Is Guilherme</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-card accent">
+        <h3>The Story</h3>
+        <p class="profile-bio">
+          Guilherme Andrade is a <strong>33-year-old Brazilian</strong> from Rio Grande do Sul.
+          He spent 9 years as an <strong>Industrial Designer</strong> — until he realised his real skill was
+          designing systems, not objects.<br><br>
+          He's traveled through multiple countries working odd jobs: painting houses in London,
+          gardening in Switzerland, surviving on tight margins. Now he's in
+          <strong>Chiang Mai, Thailand</strong> with his partner, rebuilding income from scratch —
+          this time using AI.<br><br>
+          The goal: <strong>never need a traditional job again.</strong> Fund travel and life through
+          B2B automation and content. He's done the cycle twice. Thailand 2 is where it becomes permanent.
+        </p>
+      </div>
+      <div class="profile-card">
+        <h3>Key Facts</h3>
+        <div class="profile-facts">
+          <div class="fact-row">
+            <span class="fact-label">Age</span>
+            <span class="fact-value">33</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Base</span>
+            <span class="fact-value">Chiang Mai, Thailand (UTC+7)</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Monthly Cost</span>
+            <span class="fact-value">R$5.650 (~$1.050 USD)</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Current Reserve</span>
+            <span class="fact-value">~R$5k — real urgency</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Languages</span>
+            <span class="fact-value">Portuguese, English, Spanish</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Background</span>
+            <span class="fact-value">9 yrs Industrial Design → AI builder</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Mentor</span>
+            <span class="fact-value">Donald (EN) — Claude Code guide</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Partner</span>
+            <span class="fact-value">Traveling together, solo brand narrative</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE BUSINESS -->
+  <section>
+    <div class="section-header">
+      <span class="num">02</span>
+      <h2>The Business</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="business-grid">
+      <div class="biz-card">
+        <div class="biz-tag">Agency</div>
+        <div class="biz-title">Andarilho Digital</div>
+        <p class="biz-desc">
+          B2B automation agency for small Brazilian businesses. Builds CRMs, WhatsApp bots,
+          n8n automation flows, and digital infrastructure. Solo operator. Recurring monthly model.
+        </p>
+        <div class="biz-highlight">
+          Target: R$5.650/mo (break-even) → 2–3 recurring clients at R$800–R$2.500/mo
+        </div>
+      </div>
+      <div class="biz-card">
+        <div class="biz-tag">First Client · Active</div>
+        <div class="biz-title">Pets Go</div>
+        <p class="biz-desc">
+          Pet shop management system. Client: Junior (owner/investor). Building full CRM:
+          Clients, Scheduling, POS, Inventory, Financial, Loyalty + Vet module.
+          Weekly payments. AI costs covered by client.
+        </p>
+        <div class="biz-highlight">
+          MVP in progress: Clients module + Scheduling — top priority this month
+        </div>
+      </div>
+      <div class="biz-card">
+        <div class="biz-tag">Content · Brand</div>
+        <div class="biz-title">Um Forasteiro</div>
+        <p class="biz-desc">
+          YouTube + Instagram channel. Narrative: solo digital nomad who designs systems for survival
+          in each country. Reels 5×/week + weekly long video. Currently paused — restart imminent.
+        </p>
+        <div class="biz-highlight">
+          Goal: 1k+ qualified followers → feeds agency authority and inbound leads
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section>
+    <div class="section-header">
+      <span class="num">03</span>
+      <h2>Graduation Checklist</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="checklist">
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>VS Code + Claude Code</strong><span>Running, active, Accept Edits mode</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>GitHub Repos (×2)</strong><span>AI-AGency-files + my-workspace</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>Handover Document</strong><span>3 outputs: CLAUDE.md, 10 seeds, quick memory</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>CLAUDE.md Written</strong><span>my-workspace/CLAUDE.md — pushed to GitHub</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>Claude Code Memory</strong><span>5 active memory files in ~/.claude/projects/</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>Cloudflare Pages</strong><span>6 live URLs, deploy script active</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>Workspace Structure</strong><span>All folders per guide spec</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>Deploy Verified (HTTP 200)</strong><span>main.andarilho-digital.pages.dev</span></div>
+      </div>
+      <div class="check-item done">
+        <span class="check-icon">✅</span>
+        <div class="check-text"><strong>15 Agent Skills</strong><span>All translated to English, structured</span></div>
+      </div>
+      <div class="check-item warn">
+        <span class="check-icon">⚠️</span>
+        <div class="check-text"><strong>Google Workspace MCP</strong><span>Fix: share Drive folder between emails</span></div>
+      </div>
+      <div class="check-item blocked">
+        <span class="check-icon">❌</span>
+        <div class="check-text"><strong>Claude.ai Memory</strong><span>Requires Pro/Max plan upgrade</span></div>
+      </div>
+      <div class="check-item warn">
+        <span class="check-icon">⏳</span>
+        <div class="check-text"><strong>Daily 15-min Habit</strong><span>Not started yet</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMORY LAYERS -->
+  <section>
+    <div class="section-header">
+      <span class="num">04</span>
+      <h2>4-Layer Memory Hierarchy</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="memory-layers">
+      <div class="memory-card active">
+        <div class="m-title">CLAUDE.md</div>
+        <div class="m-loc">my-workspace/CLAUDE.md</div>
+        <div class="m-desc">Permanent operating manual. Who I am, the business, goals, working style, constraints.</div>
+        <div class="m-status">✓ Active</div>
+      </div>
+      <div class="memory-card active">
+        <div class="m-title">Memory Files</div>
+        <div class="m-loc">~/.claude/projects/memory/</div>
+        <div class="m-desc">5 files: user profile, Andarilho project, Pets Go status, roadmap, working rules.</div>
+        <div class="m-status">✓ Active — 5 files</div>
+      </div>
+      <div class="memory-card inactive">
+        <div class="m-title">Claude.ai Memory</div>
+        <div class="m-loc">Settings → Memory (claude.ai)</div>
+        <div class="m-desc">Browser quick-hit context. Requires Pro/Max plan. Content ready to paste when upgraded.</div>
+        <div class="m-status">✗ Requires upgrade</div>
+      </div>
+      <div class="memory-card active">
+        <div class="m-title">Conversation Context</div>
+        <div class="m-loc">Current session</div>
+        <div class="m-desc">Everything said this session. Temporary. Compresses over time. CLAUDE.md carries over.</div>
+        <div class="m-status">✓ Active</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section>
+    <div class="section-header">
+      <span class="num">05</span>
+      <h2>Module-by-Module</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="module-grid">
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Foundation Week</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">ChatGPT handover extracted, restructured and fed into Claude.</div>
+        <ul class="module-items">
+          <li>3-output handover document created</li>
+          <li>CLAUDE.md written and tested</li>
+          <li>Memory primed with real tasks</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 1 — What You're Building</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">AI operating system configured for Andarilho Digital.</div>
+        <ul class="module-items">
+          <li>Stack defined: Claude Code + n8n + Evolution API</li>
+          <li>Business context loaded</li>
+          <li>Pets Go as first active client</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 2 — VS Code Setup</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">VS Code running with Claude Code extension and workspace.</div>
+        <ul class="module-items">
+          <li>Claude Code extension installed</li>
+          <li>my-workspace folder open</li>
+          <li>Full folder structure created</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 3 — Git + GitHub</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">Version control active on both repos.</div>
+        <ul class="module-items">
+          <li>andarilho1992/AI-AGency-files (public)</li>
+          <li>andarilho1992/my-workspace (private)</li>
+          <li>save.sh one-command push script</li>
+          <li>.gitignore protects .env</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 4 — Claude Code Config</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">Installed, configured, running in Accept Edits mode.</div>
+        <ul class="module-items">
+          <li>Accept Edits mode (correct for week 1)</li>
+          <li>Memory system active</li>
+          <li>Real tasks validated</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 5 — Identity Layer</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">CLAUDE.md + 5 memory files active. 3 of 4 memory layers working.</div>
+        <ul class="module-items">
+          <li>CLAUDE.md in workspace root</li>
+          <li>5 memory files structured</li>
+          <li>Claude.ai memory blocked (plan)</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 6 — API Connections</span>
+          <span class="badge warn">Partial</span>
+        </div>
+        <div class="module-desc">Infrastructure APIs working. Google Workspace blocked by email mismatch.</div>
+        <ul class="module-items">
+          <li>✅ GitHub + Cloudflare Pages</li>
+          <li>✅ n8n + Evolution API (WhatsApp)</li>
+          <li>⚠️ Google Drive/Sheets/Gmail pending</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Module 7 — Prompting</span>
+          <span class="badge warn">Partial</span>
+        </div>
+        <div class="module-desc">Prompting in practice. Skills folder and prompt templates not yet filled.</div>
+        <ul class="module-items">
+          <li>✅ 15 agent skills translated to English</li>
+          <li>⏳ .claude/skills/ workflow files pending</li>
+          <li>⏳ prompts/ folder templates pending</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LIVE LINKS -->
+  <section>
+    <div class="section-header">
+      <span class="num">06</span>
+      <h2>Live Deployments</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="links-grid">
+      <div class="link-row">
+        <div class="link-dot"></div>
+        <span class="link-name">Guilherme CV</span>
+        <span class="link-url">main.andarilho-digital.pages.dev/guilherme-cv.html</span>
+        <a href="https://main.andarilho-digital.pages.dev/guilherme-cv.html" target="_blank" class="link-btn">Open ↗</a>
+      </div>
+      <div class="link-row">
+        <div class="link-dot"></div>
+        <span class="link-name">Pets Go Pitch (PT)</span>
+        <span class="link-url">main.andarilho-digital.pages.dev/petsgo-pitch-pt.html</span>
+        <a href="https://main.andarilho-digital.pages.dev/petsgo-pitch-pt.html" target="_blank" class="link-btn">Open ↗</a>
+      </div>
+      <div class="link-row">
+        <div class="link-dot"></div>
+        <span class="link-name">Pets Go Roadmap</span>
+        <span class="link-url">main.andarilho-digital.pages.dev/petsgo-roadmap.html</span>
+        <a href="https://main.andarilho-digital.pages.dev/petsgo-roadmap.html" target="_blank" class="link-btn">Open ↗</a>
+      </div>
+      <div class="link-row">
+        <div class="link-dot"></div>
+        <span class="link-name">Investor Tools Deck</span>
+        <span class="link-url">main.andarilho-digital.pages.dev/investor-tools-deck.html</span>
+        <a href="https://main.andarilho-digital.pages.dev/investor-tools-deck.html" target="_blank" class="link-btn">Open ↗</a>
+      </div>
+      <div class="link-row">
+        <div class="link-dot"></div>
+        <span class="link-name">Agency Landing</span>
+        <span class="link-url">main.andarilho-digital.pages.dev/agency-landing.html</span>
+        <a href="https://main.andarilho-digital.pages.dev/agency-landing.html" target="_blank" class="link-btn">Open ↗</a>
+      </div>
+      <div class="link-row">
+        <div class="link-dot"></div>
+        <span class="link-name">Clinics Solution</span>
+        <span class="link-url">main.andarilho-digital.pages.dev/clinics-solution.html</span>
+        <a href="https://main.andarilho-digital.pages.dev/clinics-solution.html" target="_blank" class="link-btn">Open ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADVANCED GUIDE -->
+  <section>
+    <div class="section-header">
+      <span class="num">07</span>
+      <h2>Advanced Guide — Session 2</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="module-grid">
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Hooks</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">PostToolUse auto git-add after every Write/Edit. Work is auto-staged on every file change.</div>
+        <ul class="module-items">
+          <li>.claude/settings.json configured</li>
+          <li>Write + Edit triggers git add -A</li>
+          <li>No more lost work between commits</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">MCP Stubs</span>
+          <span class="badge warn">Ready — Keys Needed</span>
+        </div>
+        <div class="module-desc">MCP server config stubs added to settings.json. Ready to activate when credentials exist.</div>
+        <ul class="module-items">
+          <li>✅ Google Drive MCP stub</li>
+          <li>✅ Google Sheets MCP stub</li>
+          <li>✅ Firecrawl MCP stub</li>
+          <li>✅ Slack MCP stub</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Workflow Skills (4)</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">One-command workflows for daily operations.</div>
+        <ul class="module-items">
+          <li>/daily-brief → morning triage (Haiku)</li>
+          <li>/weekly-report → Friday KPIs (Haiku)</li>
+          <li>/reflect → session close capture (Haiku)</li>
+          <li>/petsgo-report → client update for Junior (Sonnet)</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Persona Skills (4)</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">"Switch to X mode" activates specialist persona mid-session.</div>
+        <ul class="module-items">
+          <li>research-analyst → data, confidence levels</li>
+          <li>copywriter → punchy, self-critique loop</li>
+          <li>technical-architect → failure modes, model routing</li>
+          <li>sales-strategist → pain→proof→outcome, objection presets</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Orchestrator + Skill Chaining</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">Multi-agent coordination and chained persona workflows.</div>
+        <ul class="module-items">
+          <li>/orchestrate → plans parallel agents, assigns unique paths</li>
+          <li>/compound-research → Research → Sales → Copy in sequence</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Showcase Templates (5)</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">Real production patterns from Module 09, adapted for Andarilho Digital.</div>
+        <ul class="module-items">
+          <li>/multi-client-audit → fan-out per client</li>
+          <li>/brief-to-website → paragraph → live URL</li>
+          <li>/content-pipeline → weekly Reels machine</li>
+          <li>/outreach-engine → B2B lead pipeline</li>
+          <li>/knowledge-ingestion → books/courses → searchable base</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Deploy Pipeline</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">One-command: commit → push → deploy → verify 200 → live URL.</div>
+        <ul class="module-items">
+          <li>deploy.sh updated (project: andarilho-digital)</li>
+          <li>Cloudflare Worker template (webhook receiver)</li>
+          <li>Rule: not done until curl returns 200</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <span class="module-title">Agent SDK Template</span>
+          <span class="badge done">Done</span>
+        </div>
+        <div class="module-desc">3-agent Python pipeline ready to run. Scraper → Analysis → Pitch Builder.</div>
+        <ul class="module-items">
+          <li>agents/pipeline-template.py created</li>
+          <li>Run: python agents/pipeline-template.py --target "business.com"</li>
+          <li>Output: full pitch saved to output/pipeline/</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section>
+    <div class="section-header">
+      <span class="num">08</span>
+      <h2>Next Steps — Priority Order</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-content">
+          <strong>Fix Google Workspace MCP</strong>
+          <p>Share Google Drive folders from andarilhodigital92@gmail.com to braziliangui1992@gmail.com. Unlocks Drive, Sheets, Gmail and Calendar MCP — Claude reads real business data directly.</p>
+          <div class="step-time">⏱ 15 minutes</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-content">
+          <strong>Build First Skill File</strong>
+          <p>Create .claude/skills/weekly-update.md so the command /weekly-update auto-generates a status report. First reusable workflow — the model for all future skills.</p>
+          <div class="step-time">⏱ 30 minutes</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-content">
+          <strong>Fill Prompt Templates</strong>
+          <p>Save reusable prompts to prompts/ folder: cold outreach, Reel scripts, Pets Go feature requests, client audit. Stops repeating the same context every session.</p>
+          <div class="step-time">⏱ 1 hour</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <div class="step-content">
+          <strong>Start Daily 15-Min Habit</strong>
+          <p>Morning: "What were we working on? What's next?" — End of day: ./save.sh "what changed". Compound effect: 15 min/day × 30 days = fully configured AI business system.</p>
+          <div class="step-time">⏱ 15 min/day</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">5</span>
+        <div class="step-content">
+          <strong>Upgrade Claude Plan (optional)</strong>
+          <p>Pro → Max 5x ($100/mo) unlocks Claude.ai Memory — the 3rd layer of the memory hierarchy. Not blocking anything now, but activates full setup when ready.</p>
+          <div class="step-time">⏱ 5 minutes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Andarilho Digital · Guilherme Andrade · Chiang Mai, Thailand · 2026</p>
+  <a href="https://main.andarilho-digital.pages.dev" target="_blank">main.andarilho-digital.pages.dev ↗</a>
+</footer>
+
+</body>
+</html>

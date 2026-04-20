@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pets Go — Por que é diferente do mercado</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    .cover {
+      background: #1a1a2e;
+      color: white;
+      padding: 64px 24px;
+      text-align: center;
+    }
+
+    .cover .label {
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    .cover h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .cover h1 span { color: #f0a500; }
+
+    .cover p {
+      font-size: 18px;
+      color: #bbb;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 24px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    p {
+      font-size: 17px;
+      color: #333;
+      margin-bottom: 16px;
+    }
+
+    /* Comparação visual */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    @media (max-width: 560px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+
+    .compare-card {
+      border-radius: 16px;
+      padding: 28px;
+    }
+
+    .compare-card.them {
+      background: #fff;
+      border: 2px solid #e5e5e5;
+    }
+
+    .compare-card.us {
+      background: #1a1a2e;
+      color: white;
+      border: 2px solid #1a1a2e;
+    }
+
+    .compare-card .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+
+    .compare-card h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .compare-card p {
+      font-size: 15px;
+      margin-bottom: 0;
+    }
+
+    .compare-card.them p { color: #555; }
+    .compare-card.us p { color: #ccc; }
+
+    /* Diferenças */
+    .diff-block {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 16px;
+      border-left: 4px solid #ccc;
+    }
+
+    .diff-block.good { border-left-color: #22c55e; }
+    .diff-block.bad  { border-left-color: #f59e0b; }
+
+    .diff-block .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-bottom: 12px;
+    }
+
+    .diff-block.good .tag { background: #dcfce7; color: #16a34a; }
+    .diff-block.bad .tag  { background: #fef3c7; color: #b45309; }
+
+    .diff-block h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .diff-block p {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 0;
+    }
+
+    /* Seção dark */
+    .dark-section {
+      background: #1a1a2e;
+      color: white;
+      padding: 64px 24px;
+    }
+
+    .dark-section .inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .dark-section .section-label { color: #666; }
+    .dark-section h2 { color: white; }
+    .dark-section p { color: #bbb; }
+
+    /* Razões numeradas */
+    .reason {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 32px;
+      align-items: flex-start;
+    }
+
+    .reason-number {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      background: #f0a500;
+      color: #1a1a2e;
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reason-text h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .reason-text p {
+      font-size: 15px;
+      color: #aaa;
+      margin-bottom: 0;
+    }
+
+    /* Quote */
+    .quote-block {
+      background: #f0a500;
+      color: #1a1a2e;
+      border-radius: 16px;
+      padding: 32px;
+      margin: 40px 0;
+    }
+
+    .quote-block p {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a2e;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Modelo de cobrança */
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    @media (max-width: 500px) {
+      .pricing-cards { grid-template-columns: 1fr; }
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .pricing-card .price-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card .price-type {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card .price-desc {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      margin: 48px 0;
+    }
+
+    /* Rodapé */
+    footer {
+      background: #111;
+      color: #666;
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+
+    footer strong { color: #999; }
+  </style>
+</head>
+<body>
+
+  <!-- CAPA -->
+  <div class="cover">
+    <div class="label">Documento para o Junior — Pets Go</div>
+    <h1>Por que o <span>Pets Go</span><br>é diferente do mercado</h1>
+    <p>Uma comparação honesta entre o que existe por aí e o que estamos construindo juntos.</p>
+  </div>
+
+  <!-- SEÇÃO 1: O QUE É O MERCADO -->
+  <div class="section">
+    <div class="section-label">Contexto</div>
+    <h2>Existe software pronto para pet shop. Por que não usar um deles?</h2>
+    <p>
+      Há sistemas no mercado — como SimplesVet, Petshop Control, VetSmart — que oferecem funcionalidades prontas para pet shops e clínicas. São bons produtos, usados por milhares de empresas no Brasil.
+    </p>
+    <p>
+      Antes de continuar investindo no Pets Go, você merece entender com clareza o que esses sistemas fazem, o que eles não fazem, e por que o que estamos construindo é diferente — para o bem e para o mal.
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-card them">
+        <div class="card-label">Mercado (ex: SimplesVet)</div>
+        <h3>Sistema pronto</h3>
+        <p>Produto já construído, usado por milhares de clientes. Você assina e começa a usar.</p>
+      </div>
+      <div class="compare-card us">
+        <div class="card-label">Pets Go</div>
+        <h3>Sistema feito pra você</h3>
+        <p>Construído do zero em cima do seu fluxo, do jeito que o seu negócio funciona.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 2: DIFERENÇAS BOAS -->
+  <div style="background: #f0f0eb; padding: 8px 0;">
+    <div class="section">
+      <div class="section-label">Vantagens do Pets Go</div>
+      <h2>O que temos que eles não têm</h2>
+
+      <div class="diff-block good">
+        <div class="tag">Vantagem</div>
+        <h3>Bot de WhatsApp de verdade</h3>
+        <p>
+          SimplesVet tem "integração com WhatsApp Web" — o que significa que um funcionário ainda precisa estar no computador para mandar a mensagem. <strong>Não é automático.</strong>
+          <br><br>
+          Pets Go está sendo construído com um bot que responde sozinho: confirma agendamento, avisa quando o banho acabou, manda lembrete de vacina — sem ninguém precisar digitar nada. Isso reduz trabalho operacional do dia a dia.
+        </p>
+      </div>
+
+      <div class="diff-block good">
+        <div class="tag">Vantagem</div>
+        <h3>Feito no seu fluxo, não no fluxo deles</h3>
+        <p>
+          Um sistema de mercado foi construído para servir mil pet shops diferentes. Você se adapta ao sistema.
+          <br><br>
+          Pets Go foi construído em cima do mapeamento que você entregou — os seus módulos, as suas prioridades, o jeito que você opera. O sistema se adapta a você.
+        </p>
+      </div>
+
+      <div class="diff-block good">
+        <div class="tag">Vantagem</div>
+        <h3>Inteligência artificial no atendimento ao cliente</h3>
+        <p>
+          Nenhum sistema de mercado tem IA conversacional para pet shop pequeno. O que estamos desenvolvendo permite que um cliente mande mensagem no WhatsApp perguntando "quando é o próximo banho do Thor?" e receba uma resposta automática, correta, sem humano no meio.
+          <br><br>
+          Isso não existe no mercado hoje. É o diferencial técnico real do projeto.
+        </p>
+      </div>
+
+      <div class="diff-block good">
+        <div class="tag">Vantagem</div>
+        <h3>Você não paga mensalidade para uma empresa terceira</h3>
+        <p>
+          SimplesVet cobra entre R$150 e R$400/mês dependendo do plano. Todo mês, para sempre. O dinheiro vai para outra empresa.
+          <br><br>
+          Com Pets Go, o investimento é no desenvolvimento. Quando estiver pronto, o sistema é seu.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 3: DIFERENÇAS RUINS (HONESTO) -->
+  <div class="section">
+    <div class="section-label">Honestidade acima de tudo</div>
+    <h2>O que eles têm que nós ainda não temos</h2>
+    <p>Seria desonesto da minha parte não mostrar isso. Você está investindo e merece a verdade completa.</p>
+
+    <div class="diff-block bad">
+      <div class="tag">Diferença a fechar</div>
+      <h3>Eles têm anos de desenvolvimento, nós temos meses</h3>
+      <p>
+        SimplesVet existe há anos e tem módulos muito completos: nota fiscal eletrônica, controle financeiro com DRE, prontuário veterinário completo, suporte a múltiplas filiais.
+        <br><br>
+        O Pets Go tem hoje: cadastro de clientes e pets, estoque básico e pipeline de reativação. O resto do roadmap — PDV, financeiro completo, fidelização — está sendo construído em fases. Isso é real e não tem como acelerar além de um certo ponto.
+      </p>
+    </div>
+
+    <div class="diff-block bad">
+      <div class="tag">Diferença a fechar</div>
+      <h3>Estabilidade e suporte</h3>
+      <p>
+        SimplesVet tem equipe, servidor dedicado, backup automático, atendimento via chat. Se cair, tem alguém pra resolver.
+        <br><br>
+        Pets Go hoje sou eu — desenvolvendo remotamente. Quando algo quebra, resolvo, mas não tenho uma equipe de suporte. Isso muda conforme o projeto cresce, mas hoje é assim.
+      </p>
+    </div>
+
+    <div class="diff-block bad">
+      <div class="tag">Diferença a fechar</div>
+      <h3>Financeiro e fiscal completo ainda não existe</h3>
+      <p>
+        Emissão de nota fiscal, boleto, Pix integrado, fluxo de caixa com DRE — tudo isso está no roadmap do Pets Go mas ainda não foi construído. Para operação financeira completa, ainda falta.
+      </p>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 4: POR QUE COBRO IMPLEMENTAÇÃO -->
+  <div class="dark-section">
+    <div class="inner">
+      <div class="section-label">A pergunta mais importante</div>
+      <h2>Por que SimplesVet não cobra implementação e eu cobro?</h2>
+      <p>
+        Essa é uma pergunta justa. A resposta está no modelo de negócio de cada um.
+      </p>
+
+      <div class="reason">
+        <div class="reason-number">1</div>
+        <div class="reason-text">
+          <h3>Eles vendem o mesmo produto para 10.000 clientes</h3>
+          <p>
+            SimplesVet construiu um produto uma vez e replica para todos. Criar uma conta no sistema deles custa zero. O lucro vem da mensalidade de milhares de clientes pagando todo mês. Eles podem dar o onboarding de graça porque recuperam o investimento em 12, 24, 36 meses de assinatura.
+          </p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="reason-number">2</div>
+        <div class="reason-text">
+          <h3>Eu construo um produto diferente para cada cliente</h3>
+          <p>
+            Cada feature do Pets Go foi codada do zero pensando no seu negócio. A tela de reativação de clientes inativos não existe em nenhum sistema pronto — foi construída porque você pediu. Isso tem custo real de horas de trabalho. Não tem como dar isso de graça.
+          </p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="reason-number">3</div>
+        <div class="reason-text">
+          <h3>A implementação é onde está o maior valor</h3>
+          <p>
+            SimplesVet entrega o software. Você se vira para importar seus clientes, configurar, treinar a equipe, e se adaptar ao sistema deles.
+            <br><br>
+            Eu entrego o sistema funcionando no seu fluxo — com os dados dos seus clientes importados, o bot configurado no seu WhatsApp, e ajustes feitos até funcionar do jeito que você precisa. Esse trabalho de entrega é o serviço. E serviço tem preço.
+          </p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <div class="reason-number">4</div>
+        <div class="reason-text">
+          <h3>Você não paga mensalidade para terceiros</h3>
+          <p>
+            Com SimplesVet, você pagaria R$150–R$400 todo mês, para sempre, para uma empresa que não te conhece e não personaliza nada.
+            <br><br>
+            Com Pets Go, o investimento na implementação é feito uma vez. O que vem depois é manutenção e evolução — que é muito menor do que uma assinatura recorrente de SaaS. No longo prazo, sai mais barato.
+          </p>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        <p>
+          "SimplesVet te dá o sistema. Você se vira para fazer funcionar.<br>
+          Eu entrego o sistema funcionando no seu negócio, do jeito que você opera, com seu histórico de clientes e seu WhatsApp conectado.<br><br>
+          São dois produtos completamente diferentes. Um é ferramenta. O outro é resultado."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 5: MODELO DE COBRANÇA -->
+  <div class="section">
+    <div class="section-label">Como funciona na prática</div>
+    <h2>Como o modelo de cobrança funciona</h2>
+    <p>
+      O Pets Go opera em duas camadas simples:
+    </p>
+
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div class="price-label">Fase de construção</div>
+        <div class="price-type">Implementação</div>
+        <div class="price-desc">Pago uma vez. Cobre o desenvolvimento de cada módulo entregue — agenda, PDV, financeiro, bot de WhatsApp.</div>
+      </div>
+      <div class="pricing-card">
+        <div class="price-label">Fase operacional</div>
+        <div class="price-type">Manutenção mensal</div>
+        <div class="price-desc">Valor fixo por mês. Cobre ajustes, melhorias contínuas, suporte e evolução do sistema conforme o negócio cresce.</div>
+      </div>
+    </div>
+
+    <p>
+      Isso é diferente de SimplesVet, onde você paga mensalidade independente de ter recebido algo novo ou não. Aqui, cada fase entregue tem um valor claro — você sabe o que está pagando e o que está recebendo.
+    </p>
+
+    <hr class="divider" />
+
+    <div class="section-label">Resumo final</div>
+    <h2>O que estamos construindo juntos</h2>
+    <p>
+      Um sistema feito especificamente para o seu pet shop. Não é um produto genérico vendido para mil clientes — é o sistema do Junior, construído nos detalhes do seu negócio, com bot de WhatsApp que nenhum software do mercado oferece de verdade.
+    </p>
+    <p>
+      Os sistemas prontos do mercado têm anos de vantagem em funcionalidades como nota fiscal e fluxo de caixa completo. Isso é verdade. Mas nenhum deles vai construir pra você um bot que responde cliente às 2 da manhã e manda a foto do pet pronto quando o banho termina.
+    </p>
+    <p>
+      <strong>É por isso que estamos construindo — e por isso faz sentido cobrar pelo trabalho.</strong>
+    </p>
+  </div>
+
+  <footer>
+    <strong>Pets Go</strong> — desenvolvido por Guilherme Andrade / Andarilho Digital<br>
+    Documento gerado em abril de 2026
+  </footer>
+
+</body>
+</html>
