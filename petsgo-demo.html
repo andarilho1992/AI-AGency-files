@@ -238,7 +238,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
     </div>
     <div class="nav-item" onclick="switchPage('reativacao',this)" style="background:rgba(233,158,34,.07);border:1px solid rgba(233,158,34,.2)">
       <span class="ico"><i class="ph ph-rocket-launch"></i></span>Reativação
-      <span class="nav-badge" style="background:var(--yellow);color:#111;animation:pulse 2s infinite">366</span>
+      <span class="nav-badge" style="background:var(--yellow);color:#111;animation:pulse 2s infinite">555</span>
     </div>
     <div class="nav-label">Operação</div>
     <div class="nav-item" onclick="switchPage('banho',this)">
@@ -690,6 +690,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
           <option value="todas">Todas as Filiais</option>
           <option value="Filial Central">Filial Central</option>
           <option value="Filial Rio Branco">Filial Rio Branco</option>
+          <option value="Cachorródromo">Cachorródromo</option>
         </select>
         <select id="r-status" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
           <option value="todos">Todos os Status</option>
@@ -1069,6 +1070,30 @@ const contatosReais = [
   {nome:"Amanda Oliveira Scherer",cel:"(51) 9 9586-8009",animal:"Gaia",data:"25/02/2025",filial:"Filial Central",status:"a_enviar"},
   {nome:"Larissa Batista",cel:"(51) 9708-1985",animal:"Tutti",data:"26/02/2025",filial:"Filial Central",status:"a_enviar"},
   {nome:"Amira Salim",cel:"(53) 9 8105-4987",animal:"Ohana",data:"28/02/2025",filial:"Filial Central",status:"a_enviar"},
+  // Cachorródromo
+  {nome:"Andressa Correa",cel:"(51) 8187-6005",animal:"Marie",data:"02/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Ana Júlia",cel:"(51) 9 9148-5265",animal:"Tina",data:"02/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Amanda Ribeiro Viegas",cel:"(51) 9 9578-5073",animal:"Pantera",data:"03/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Gabriela Souza",cel:"(51) 9 8143-4654",animal:"Madalena",data:"03/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Andrei Viesseri Lorenzini",cel:"(51) 9 9352-4204",animal:"Nick",data:"04/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Diego",cel:"(51) 9 9263-6378",animal:"Maria Paçoca",data:"06/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Tamara Neves Elias",cel:"(51) 9 8331-3917",animal:"Aretta",data:"09/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Katiane Passos",cel:"(51) 9 8403-2905",animal:"Mimo",data:"14/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Maria Fernanda Jimenez",cel:"(51) 9 8348-3726",animal:"Boby",data:"30/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Darlei Costa de Souza",cel:"(51) 9 8137-0757",animal:"Pingo",data:"31/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Sonia Elisa Caregnato",cel:"(51) 9 9117-3634",animal:"Feijão",data:"31/01/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Renato Moura",cel:"(51) 8907-0989",animal:"Sheldon",data:"01/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Marcelo Pallamolla",cel:"(51) 9 9306-1377",animal:"Oreo",data:"04/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Darlan Tomazini",cel:"(51) 9 9249-0880",animal:"Pipa",data:"05/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Paula Gonzalez",cel:"(51) 9 9255-4279",animal:"Elis",data:"10/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Êmille Prates Gonçalves",cel:"(51) 9 9751-1717",animal:"Liz",data:"10/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Roberta Baechtold",cel:"(51) 9 9669-9494",animal:"Haru",data:"11/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Isadora Serra Brehm",cel:"(51) 9 9598-9064",animal:"Joy",data:"12/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Guilherme Winter da Silva",cel:"(51) 9 9361-8824",animal:"Lobinho",data:"13/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Evelina Cardoso",cel:"(51) 9 8468-4790",animal:"Arthur",data:"18/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Giovana Zerbielli da Silva",cel:"(51) 9 9422-9709",animal:"Bob",data:"21/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Karolina Ruas Pedrozo",cel:"(55) 9 9621-9638",animal:"Toninho",data:"22/02/2025",filial:"Cachorródromo",status:"a_enviar"},
+  {nome:"Vanessa Favero",cel:"(51) 9 9840-4445",animal:"Jasmin",data:"25/02/2025",filial:"Cachorródromo",status:"a_enviar"},
   // Rio Branco — simulando alguns já em progresso para o demo
   {nome:"Vera",cel:"(51) 9 8406-8233",animal:"Filipa",data:"17/07/2025",filial:"Filial Rio Branco",status:"enviado"},
   {nome:"Isabela Sirtoli",cel:"(51) 9242-7642",animal:"Nicolau",data:"24/07/2025",filial:"Filial Rio Branco",status:"respondeu"},
