@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pets Go — The Product Vision</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    .cover {
+      background: #0d0d1a;
+      color: white;
+      padding: 72px 24px 64px;
+      text-align: center;
+    }
+
+    .cover .eyebrow {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .cover h1 {
+      font-size: clamp(30px, 6vw, 56px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .cover h1 em {
+      color: #f0a500;
+      font-style: normal;
+    }
+
+    .cover .subtitle {
+      font-size: 18px;
+      color: #888;
+      max-width: 580px;
+      margin: 0 auto 40px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(240,165,0,0.15);
+      border: 1px solid rgba(240,165,0,0.3);
+      color: #f0a500;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+    }
+
+    .section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+
+    .section-alt { background: #eeeee9; }
+
+    .eyebrow-small {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 17px;
+      color: #3a3a3a;
+      margin-bottom: 18px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+    strong { color: #1a1a1a; }
+
+    /* MARKET SIZE */
+    .market-strip {
+      background: #0d0d1a;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .market-strip .inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 520px) {
+      .market-strip .inner { grid-template-columns: 1fr; }
+    }
+
+    .market-stat .num {
+      font-size: 38px;
+      font-weight: 900;
+      color: #f0a500;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .market-stat .label {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ROLES */
+    .roles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 36px 0;
+    }
+
+    @media (max-width: 520px) { .roles { grid-template-columns: 1fr; } }
+
+    .role-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      border-top: 4px solid #f0a500;
+    }
+
+    .role-card .who {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #f0a500;
+      margin-bottom: 10px;
+    }
+
+    .role-card h3 {
+      font-size: 19px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .role-card p { font-size: 15px; color: #555; margin: 0; }
+
+    /* MODEL */
+    .model-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 36px 0;
+    }
+
+    @media (max-width: 520px) { .model-grid { grid-template-columns: 1fr; } }
+
+    .model-card { border-radius: 16px; padding: 28px; }
+
+    .model-card.old {
+      background: white;
+      border: 2px solid #e5e5e5;
+      opacity: 0.7;
+    }
+
+    .model-card.new {
+      background: #0d0d1a;
+      color: white;
+    }
+
+    .model-card .model-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .model-card.old .model-label { color: #999; }
+    .model-card.new .model-label { color: #f0a500; }
+
+    .model-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .model-card.old h3 { color: #1a1a1a; }
+    .model-card.new h3 { color: white; }
+    .model-card p { font-size: 15px; margin: 0; }
+    .model-card.old p { color: #666; }
+    .model-card.new p { color: #aaa; }
+
+    /* ADVANTAGES */
+    .advantage {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .advantage .icon { font-size: 24px; min-width: 36px; margin-top: 2px; }
+
+    .advantage h3 { font-size: 17px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+
+    .advantage p { font-size: 15px; color: #555; margin: 0; }
+
+    /* DARK SECTION */
+    .dark-section { background: #0d0d1a; padding: 72px 24px; }
+    .dark-section .inner { max-width: 780px; margin: 0 auto; }
+    .dark-section .eyebrow-small { color: #555; }
+    .dark-section h2 { color: white; }
+    .dark-section p { color: #aaa; }
+    .dark-section strong { color: white; }
+
+    /* OPPORTUNITY */
+    .opp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 40px 0;
+    }
+
+    @media (max-width: 520px) { .opp-grid { grid-template-columns: 1fr; } }
+
+    .opp-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .opp-card .num {
+      font-size: 36px;
+      font-weight: 900;
+      color: #f0a500;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .opp-card .num-label { font-size: 14px; color: #777; }
+
+    /* QUOTE */
+    .quote {
+      background: #f0a500;
+      border-radius: 16px;
+      padding: 36px;
+      margin: 40px 0;
+    }
+
+    .quote p {
+      font-size: 19px;
+      font-weight: 700;
+      color: #0d0d1a;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* PHASES */
+    .phase {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 14px;
+    }
+
+    .phase .phase-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #f0a500;
+      margin-bottom: 8px;
+    }
+
+    .phase h3 { font-size: 18px; font-weight: 700; color: white; margin-bottom: 8px; }
+    .phase p { font-size: 15px; color: #888; margin: 0; }
+
+    /* WHAT WE NEED */
+    .need-block {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 14px;
+      border-left: 4px solid #f0a500;
+    }
+
+    .need-block h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .need-block p { font-size: 15px; color: #555; margin: 0; }
+
+    /* HONEST */
+    .honest-block {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 14px;
+      border-left: 4px solid #94a3b8;
+    }
+
+    .honest-block h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .honest-block p { font-size: 15px; color: #555; margin: 0; }
+
+    footer {
+      background: #070710;
+      color: #444;
+      text-align: center;
+      padding: 36px 24px;
+      font-size: 13px;
+    }
+
+    footer strong { color: #666; }
+
+    hr.div { border: none; border-top: 1px solid #e5e5e5; margin: 48px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="eyebrow">Pets Go — Strategic Overview</div>
+    <h1>We're not building<br>a tool. We're building<br>a <em>product.</em></h1>
+    <p class="subtitle">
+      What Pets Go actually is, where it's going, and why the timing is right.
+    </p>
+    <span class="badge">April 2026 — Confidential</span>
+  </div>
+
+  <!-- MARKET SIZE STRIP -->
+  <div class="market-strip">
+    <div class="inner">
+      <div class="market-stat">
+        <div class="num">80k+</div>
+        <div class="label">pet shops in Brazil</div>
+      </div>
+      <div class="market-stat">
+        <div class="num">R$68B</div>
+        <div class="label">Brazilian pet market (2024)</div>
+      </div>
+      <div class="market-stat">
+        <div class="num">2nd</div>
+        <div class="label">largest pet market in the world</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: THE REAL PICTURE -->
+  <div class="section">
+    <div class="eyebrow-small">What we're building</div>
+    <h2>Pets Go is not internal software. It's a market product.</h2>
+
+    <p>
+      The Brazilian pet industry is massive, growing, and overwhelmingly underserved by technology. The existing software options were built for veterinary clinics — not for pet shops. They're expensive, generic, and require the business to adapt to the software rather than the other way around.
+    </p>
+    <p>
+      Pets Go is being built specifically for pet shop operations: grooming schedules, WhatsApp automation, loyalty programs, multi-location management. And it's being validated in real conditions — inside a running business with 4 active locations.
+    </p>
+
+    <div class="model-grid">
+      <div class="model-card old">
+        <div class="model-label">What it looks like</div>
+        <h3>Custom software for one client</h3>
+        <p>A tool built for Junior's pet shop, paid for as a service engagement.</p>
+      </div>
+      <div class="model-card new">
+        <div class="model-label">What it actually is</div>
+        <h3>A SaaS being co-founded</h3>
+        <p>A product being built and validated in real conditions, designed to serve the entire pet shop market.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: THE PEOPLE -->
+  <div class="section-alt">
+    <div class="section">
+      <div class="eyebrow-small">The team</div>
+      <h2>Each person brings what the other doesn't have</h2>
+
+      <div class="roles">
+        <div class="role-card">
+          <div class="who">Junior — Pets Go Owner</div>
+          <h3>The market and the validation</h3>
+          <p>
+            4 operating locations as a live testing environment. Deep operational knowledge of the pet shop business. Direct access to other pet shop owners for expansion. The real-world volume that turns software into a proven product.
+          </p>
+        </div>
+        <div class="role-card">
+          <div class="who">Guilherme — Andarilho Digital</div>
+          <h3>The product and the technology</h3>
+          <p>
+            Full-stack development with AI integration. WhatsApp automation bots. Scheduling, inventory, financials, loyalty systems. The technical layer that turns Junior's operational chaos into a competitive advantage — and then into a scalable product.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        Neither can do this alone. Junior has the market but not the product. Guilherme has the product but not the market. Together, they have both.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 3: THE PROBLEM WE SOLVE -->
+  <div class="section">
+    <div class="eyebrow-small">The core insight</div>
+    <h2>Junior's business is already big. It's just disorganized.</h2>
+
+    <p>
+      This is the key insight behind Pets Go: the target customer isn't a struggling startup. It's an established pet shop — already profitable, already busy — that's running on WhatsApp messages, paper notebooks, and gut feel.
+    </p>
+    <p>
+      Junior's business is the perfect example. Stable revenue, 4 locations, loyal customers. But no visibility into which clients are about to leave, no automated scheduling, no way to see the full picture across locations. <strong>The chaos isn't a sign of failure — it's an opportunity.</strong>
+    </p>
+
+    <div class="advantage">
+      <div class="icon">📋</div>
+      <div>
+        <h3>No customer visibility</h3>
+        <p>Pet shop owners don't know which clients haven't come back in 60 days, which pets are due for grooming, or which customers are their highest-value regulars. Pets Go surfaces all of this automatically.</p>
+      </div>
+    </div>
+
+    <div class="advantage">
+      <div class="icon">📱</div>
+      <div>
+        <h3>WhatsApp is the entire operation — and it's unmanageable</h3>
+        <p>Every appointment, every confirmation, every reminder is done manually on WhatsApp by a person. As the business grows, this doesn't scale. Pets Go replaces the manual work with bots that handle it automatically.</p>
+      </div>
+    </div>
+
+    <div class="advantage">
+      <div class="icon">🏪</div>
+      <div>
+        <h3>Multi-location with zero central visibility</h3>
+        <p>4 locations, 4 separate operations, no unified view. The owner can't see performance across locations without calling each one. Pets Go gives a single dashboard for the entire network.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: TECH ADVANTAGES -->
+  <div class="section-alt">
+    <div class="section">
+      <div class="eyebrow-small">Why Pets Go wins</div>
+      <h2>What the existing market doesn't offer</h2>
+
+      <div class="advantage">
+        <div class="icon">🤖</div>
+        <div>
+          <h3>Real WhatsApp automation — not a workaround</h3>
+          <p>The market leader (SimplesVet) integrates with WhatsApp Web, meaning a human still needs to be at the computer to send messages. Pets Go uses an actual bot: it confirms appointments, notifies owners when their pet is ready, sends vaccine reminders — with zero human involvement. This doesn't exist in the pet shop software market.</p>
+        </div>
+      </div>
+
+      <div class="advantage">
+        <div class="icon">🧠</div>
+        <div>
+          <h3>AI-powered customer intelligence</h3>
+          <p>The system identifies inactive customers and triggers re-engagement automatically. It can predict which customers are likely to churn based on visit patterns and prompt action before they're lost. No pet shop software in Brazil does this today.</p>
+        </div>
+      </div>
+
+      <div class="advantage">
+        <div class="icon">🔄</div>
+        <div>
+          <h3>Built for multi-location from day one</h3>
+          <p>Most systems treat multi-location as an add-on. Pets Go is being architected for it from the start — separate data per location, consolidated owner view, one login for everything. This is exactly what franchise networks need.</p>
+        </div>
+      </div>
+
+      <div class="advantage">
+        <div class="icon">🏗️</div>
+        <div>
+          <h3>Built on the actual operational flow, not a generic template</h3>
+          <p>Pets Go was designed using a detailed product mapping document from Junior — based on how his business actually runs. Every feature solves a real problem in a real pet shop. That's why adoption is high: it fits the workflow instead of fighting it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: THE OPPORTUNITY -->
+  <div class="dark-section">
+    <div class="inner">
+      <div class="eyebrow-small">The market opportunity</div>
+      <h2>Why the timing is right and why Junior's role matters</h2>
+
+      <p>
+        Brazil has the second largest pet market in the world. Over 80,000 pet shops operate across the country. The vast majority are running on manual processes, spreadsheets, or outdated software built for a different type of business.
+      </p>
+      <p>
+        The pet software market in Brazil is early. The dominant players were built for veterinary clinics and retrofitted for pet shops. <strong>There is no product built specifically for pet shop operations with modern automation.</strong> That's the gap Pets Go fills.
+      </p>
+
+      <div class="opp-grid">
+        <div class="opp-card">
+          <div class="num">4</div>
+          <div class="num-label">live locations validating the product right now</div>
+        </div>
+        <div class="opp-card">
+          <div class="num">0.5%</div>
+          <div class="num-label">market capture = 400 paying clients</div>
+        </div>
+        <div class="opp-card">
+          <div class="num">1st</div>
+          <div class="num-label">mover in AI-powered pet shop management</div>
+        </div>
+      </div>
+
+      <p>
+        Junior's network isn't just a customer — it's the proof of concept that opens every door. When another pet shop owner asks "does this work?", the answer is: <strong>"Yes. A 4-location operation has been running on it. Here's the data."</strong>
+      </p>
+
+      <div class="quote">
+        <p>
+          "The person who funds the MVP and appears as the success story isn't a customer.<br>They're a co-founder — and should be treated as one."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: ROADMAP -->
+  <div class="section">
+    <div class="eyebrow-small">How we get there</div>
+    <h2>Three phases from validation to market</h2>
+
+    <div class="phase" style="background:#fff; border: 2px solid #f0a500;">
+      <div class="phase-label" style="color:#b45309;">Now — Phase 1: Validation</div>
+      <h3 style="color:#1a1a1a;">Fix the chaos in Junior's operation</h3>
+      <p style="color:#555;">Deploy core modules across the 4 locations. Automate scheduling, WhatsApp communication, and customer tracking. Every problem that surfaces becomes a product improvement. Every workflow that succeeds becomes a confirmed feature.</p>
+    </div>
+
+    <div class="phase" style="background:#fff; border: 2px solid #e5e5e5;">
+      <div class="phase-label" style="color:#999;">Next — Phase 2: Complete Product</div>
+      <h3 style="color:#1a1a1a;">Full POS, financials, and live WhatsApp bot</h3>
+      <p style="color:#555;">With the automation layer running and the financial module complete, Pets Go becomes a full replacement for existing solutions — with automation features the market doesn't have. This is when the product is ready to sell.</p>
+    </div>
+
+    <div class="phase" style="background:#fff; border: 2px solid #e5e5e5;">
+      <div class="phase-label" style="color:#999;">Future — Phase 3: Market Expansion</div>
+      <h3 style="color:#1a1a1a;">Roll out to the pet shop market</h3>
+      <p style="color:#555;">With Junior's operation as the proven case study, the product goes to market. Junior's network becomes the distribution channel — he knows the market, has the credibility, and has a direct interest in the product's success.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7: HONEST -->
+  <div class="section-alt">
+    <div class="section">
+      <div class="eyebrow-small">Full transparency</div>
+      <h2>Where we are today — honest</h2>
+      <p>A real partnership is built on honesty. Here's the current state:</p>
+
+      <div class="honest-block">
+        <h3>Core CRM is live. Full product is in progress.</h3>
+        <p>Customer management, pet profiles, basic inventory, and a re-engagement pipeline are already deployed and running. Scheduling, POS, full financials, and the WhatsApp bot are in active development — following the agreed roadmap.</p>
+      </div>
+
+      <div class="honest-block">
+        <h3>WhatsApp automation requires infrastructure investment</h3>
+        <p>A dedicated server (~$25/month) and Evolution API connection are needed to activate the bot. This is the next technical milestone once the current CRM sync is resolved.</p>
+      </div>
+
+      <div class="honest-block">
+        <h3>Small team, high velocity</h3>
+        <p>Guilherme is building this with advanced AI tools (Claude Code), which means development speed is significantly above what a traditional small team would produce. That said, this is not a 50-person company with round-the-clock support — and it won't be until the product reaches that stage.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: WHAT'S NEEDED -->
+  <div class="dark-section">
+    <div class="inner">
+      <div class="eyebrow-small">Next steps</div>
+      <h2>What needs to happen to get to Phase 2</h2>
+
+      <div class="phase">
+        <div class="phase-label">Technical — This week</div>
+        <h3>Resolve CRM-to-AI sync</h3>
+        <p>A pending integration issue (since April 16) is blocking the AI agents from connecting to the CRM. Fixing this unlocks the automation layer.</p>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Data — When available</div>
+        <h3>Import real customer data from the 4 locations</h3>
+        <p>Migrating existing customer records from the current system (Petshop Control) turns the system from a demo into a live operational tool.</p>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Infrastructure — Next month</div>
+        <h3>Activate the WhatsApp bot</h3>
+        <p>With the server upgraded and Evolution API connected, the automation goes live. From that point, the system handles appointment confirmations and customer re-engagement without human involvement.</p>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Strategy — In parallel</div>
+        <h3>Define the long-term structure</h3>
+        <p>If Junior is going to be the distribution channel for the broader market, we need to define how that works — referral model, revenue participation, terms for new locations that come through his network.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Pets Go</strong> — developed by Guilherme Andrade / Andarilho Digital<br>
+    Strategic overview — April 2026 — Confidential
+  </footer>
+
+</body>
+</html>
