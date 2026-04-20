@@ -1,4 +1,4 @@
-# All Skills — Andarilho Digital
+whats # All Skills — Andarilho Digital
 **Total: 34 skills** | Updated: April 2026
 
 ---
