@@ -177,6 +177,8 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
 .toast{position:fixed;bottom:24px;right:24px;background:#1f5c43;border:1px solid var(--green);border-radius:12px;padding:14px 20px;font-size:14px;font-weight:700;color:#d1fae5;display:flex;align-items:center;gap:10px;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
 /* ── RESPONSIVE UTILS ── */
 .flex-between{display:flex;align-items:center;justify-content:space-between}
 .gap-2{gap:8px}
@@ -233,6 +235,10 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
     <div class="nav-item" onclick="switchPage('inativos',this)">
       <span class="ico"><i class="ph ph-user-minus"></i></span>Inativos
       <span class="nav-badge red">23</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('reativacao',this)" style="background:rgba(233,158,34,.07);border:1px solid rgba(233,158,34,.2)">
+      <span class="ico"><i class="ph ph-rocket-launch"></i></span>Reativação
+      <span class="nav-badge" style="background:var(--yellow);color:#111;animation:pulse 2s infinite">366</span>
     </div>
     <div class="nav-label">Operação</div>
     <div class="nav-item" onclick="switchPage('banho',this)">
@@ -612,6 +618,114 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
     </div>
 
     <!-- ── CLIENTES ── -->
+    <!-- ── REATIVAÇÃO ── -->
+    <div class="page" id="page-reativacao">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Campanha de Reativação 🚀</h1>
+          <p>Clientes inativos identificados · Filial Central + Rio Branco · Comissão: <strong style="color:var(--yellow)">R$70 por cliente que comparecer</strong></p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" onclick="exportarCSV()"><i class="ph ph-download-simple"></i> Exportar</button>
+          <button class="btn btn-primary" onclick="enviarTodos()"><i class="ph ph-rocket-launch"></i> Enviar Todos (A Enviar)</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label"><i class="ph ph-users"></i> Total Inativos</div>
+          <div class="kpi-val" id="r-kpi-total">0</div>
+          <div class="kpi-sub kpi-neutral">2 filiais</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><i class="ph ph-paper-plane-tilt"></i> Mensagens Enviadas</div>
+          <div class="kpi-val" style="color:#a89bff" id="r-kpi-enviados">0</div>
+          <div class="kpi-sub kpi-neutral">aguardando resposta</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><i class="ph ph-calendar-check"></i> Agendados</div>
+          <div class="kpi-val" style="color:var(--green)" id="r-kpi-agendados">0</div>
+          <div class="kpi-sub kpi-up">prontos pra voltar</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><i class="ph ph-trophy"></i> Comissão Gerada</div>
+          <div class="kpi-val" style="color:var(--yellow)" id="r-kpi-comissao">R$0</div>
+          <div class="kpi-sub kpi-up">R$70 × comparecimentos</div>
+        </div>
+      </div>
+
+      <!-- Pipeline visual -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px">
+        <div class="card" style="text-align:center;padding:16px 12px">
+          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-paper-plane-tilt" style="color:var(--muted2)"></i></div>
+          <div style="font-size:22px;font-weight:900" id="pipe-count-a_enviar">-</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">A Enviar</div>
+        </div>
+        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(168,155,255,.3)">
+          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-check" style="color:#a89bff"></i></div>
+          <div style="font-size:22px;font-weight:900;color:#a89bff" id="pipe-count-enviado">-</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Enviado</div>
+        </div>
+        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(233,158,34,.3)">
+          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-chat-circle-dots" style="color:var(--yellow)"></i></div>
+          <div style="font-size:22px;font-weight:900;color:var(--yellow)" id="pipe-count-respondeu">-</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Respondeu</div>
+        </div>
+        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(0,193,129,.3)">
+          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-calendar-check" style="color:var(--green)"></i></div>
+          <div style="font-size:22px;font-weight:900;color:var(--green)" id="pipe-count-agendado">-</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Agendado</div>
+        </div>
+        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(0,193,129,.5);background:var(--green-dim)">
+          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-trophy" style="color:var(--green)"></i></div>
+          <div style="font-size:22px;font-weight:900;color:var(--green)" id="pipe-count-compareceu">-</div>
+          <div style="font-size:11px;font-weight:700;color:var(--green);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Compareceu ✓</div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">
+        <select id="r-filial" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
+          <option value="todas">Todas as Filiais</option>
+          <option value="Filial Central">Filial Central</option>
+          <option value="Filial Rio Branco">Filial Rio Branco</option>
+        </select>
+        <select id="r-status" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
+          <option value="todos">Todos os Status</option>
+          <option value="a_enviar">A Enviar</option>
+          <option value="enviado">Enviado</option>
+          <option value="respondeu">Respondeu</option>
+          <option value="agendado">Agendado</option>
+          <option value="compareceu">Compareceu</option>
+        </select>
+        <div style="font-size:13px;color:var(--muted2);margin-left:auto;font-weight:600" id="r-count-label"></div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="tbl">
+          <thead><tr>
+            <th>Cliente</th><th>Pet</th><th>Filial</th><th>Inativo há</th><th>Status</th><th>Mensagem</th><th>Ação</th>
+          </tr></thead>
+          <tbody id="r-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal preview mensagem -->
+    <div class="modal-overlay" id="msg-modal" onclick="if(event.target===this)this.classList.remove('open')">
+      <div class="modal" style="max-width:540px">
+        <div class="modal-title">📱 Mensagem WhatsApp</div>
+        <div class="modal-sub">Prévia do que o cliente vai receber</div>
+        <div class="msg-preview" id="msg-preview-text" style="white-space:pre-wrap;line-height:1.7"></div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="document.getElementById('msg-modal').classList.remove('open')">Fechar</button>
+          <button class="btn btn-primary"><i class="ph ph-whatsapp-logo"></i> Enviar Agora</button>
+        </div>
+      </div>
+    </div>
+
     <div class="page" id="page-clientes">
       <div class="page-header flex-between">
         <div>
@@ -925,6 +1039,159 @@ function selectAll() {
   updateCount();
 }
 
+// ── REATIVAÇÃO DATA (real contacts) ──
+const contatosReais = [
+  {nome:"Ayrton",cel:"(51) 9 9343-1639",animal:"Duna",data:"02/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Mariana Lima Scortegagna",cel:"(51) 9 9992-8199",animal:"Filomena Amélia",data:"03/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Andrea",cel:"(51) 9979-2204",animal:"Billy",data:"03/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Laura Raguzzoni Sussela",cel:"(51) 9 9328-6452",animal:"Theobaldo",data:"06/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Ellen Terezinha Silva Queiroz",cel:"(51) 9 9157-2131",animal:"Cuba",data:"06/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Marta Severo",cel:"(51) 9 9112-1691",animal:"Zen",data:"08/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Barbara Leal",cel:"(51) 9 2003-2769",animal:"Dogo",data:"10/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Núbia Regina Coelho de Sousa",cel:"(51) 9 9921-9840",animal:"Lola",data:"10/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Rosana Alves Silva de Oliveira",cel:"(51) 9 9242-0271",animal:"Thor",data:"13/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Amanda Pezzi",cel:"(51) 9 9982-0435",animal:"Caetano",data:"14/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Renata Dias",cel:"(51) 9 9200-4717",animal:"Pipa",data:"14/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Niara",cel:"(51) 9 9348-1211",animal:"Drake",data:"16/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Marina",cel:"(51) 9 9274-8461",animal:"Koda",data:"16/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Natasha Rodrigues Fernandes",cel:"(51) 9523-5010",animal:"Kiara",data:"17/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Bruna Oliveira",cel:"(51) 9 9328-1730",animal:"Floquinho",data:"21/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Lucas Faviero de Vasconcellos",cel:"(51) 9 8040-214",animal:"Lupita",data:"24/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Fabiane Cid",cel:"(51) 9 9746-4467",animal:"Flora",data:"27/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Daniela",cel:"(51) 9 8184-4413",animal:"Cléo",data:"28/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Julio Machado",cel:"(51) 9 9396-7979",animal:"Oliver",data:"30/01/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Lizie Gomes",cel:"(51) 9 8537-9981",animal:"Chewie",data:"01/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Adriana",cel:"(51) 9 9548-6565",animal:"Meg",data:"05/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Josiane Brauveres",cel:"(51) 9 9795-6976",animal:"Ravi",data:"14/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Katia Barreto Marciniak",cel:"(51) 9 9301-6992",animal:"Calvin",data:"17/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Ana Paula Motta Pinheiro",cel:"(51) 9 8913-8141",animal:"Zora",data:"19/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Patrícia Timm",cel:"(51) 9 9176-2729",animal:"Bolt",data:"22/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Amanda Oliveira Scherer",cel:"(51) 9 9586-8009",animal:"Gaia",data:"25/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Larissa Batista",cel:"(51) 9708-1985",animal:"Tutti",data:"26/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Amira Salim",cel:"(53) 9 8105-4987",animal:"Ohana",data:"28/02/2025",filial:"Filial Central",status:"a_enviar"},
+  // Rio Branco — simulando alguns já em progresso para o demo
+  {nome:"Vera",cel:"(51) 9 8406-8233",animal:"Filipa",data:"17/07/2025",filial:"Filial Rio Branco",status:"enviado"},
+  {nome:"Isabela Sirtoli",cel:"(51) 9242-7642",animal:"Nicolau",data:"24/07/2025",filial:"Filial Rio Branco",status:"respondeu"},
+  {nome:"Dalvenir Flores",cel:"(51) 9 9515-9970",animal:"Duff",data:"15/08/2025",filial:"Filial Rio Branco",status:"agendado"},
+  {nome:"Carlos (Estela)",cel:"(51) 9 9981-2859",animal:"Estela",data:"19/08/2025",filial:"Filial Rio Branco",status:"compareceu"},
+  {nome:"Simone Machado Domingos",cel:"(51) 9 9988-4878",animal:"Amora",data:"21/08/2025",filial:"Filial Rio Branco",status:"enviado"},
+  {nome:"William Flaiban",cel:"(51) 9 9544-0078",animal:"Cadu",data:"25/08/2025",filial:"Filial Rio Branco",status:"respondeu"},
+  {nome:"Carolina Sartori",cel:"(51) 9558-9362",animal:"Brooklyn",data:"15/09/2025",filial:"Filial Rio Branco",status:"agendado"},
+  {nome:"Chiane Nepomuceno",cel:"(51) 9 9612-0262",animal:"Amora",data:"19/09/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Érica",cel:"(51) 9 8947-7371",animal:"Chandler",data:"01/10/2025",filial:"Filial Rio Branco",status:"compareceu"},
+  {nome:"Claudia Manfrão",cel:"(51) 9913-8147",animal:"Channel",data:"02/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Natália Marques",cel:"(54) 9 9923-2980",animal:"Bella",data:"03/10/2025",filial:"Filial Rio Branco",status:"enviado"},
+  {nome:"Melize",cel:"(51) 9 9894-0662",animal:"Frida",data:"04/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Andryelle Brum Paz",cel:"(51) 9 9372-9287",animal:"Antônio",data:"06/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Vitória Minetto Brondani",cel:"(54) 9 9443-289",animal:"Cookie",data:"06/10/2025",filial:"Filial Rio Branco",status:"respondeu"},
+  {nome:"Otávio Al-Alam",cel:"(51) 9992-0809",animal:"Tostão",data:"06/10/2025",filial:"Filial Rio Branco",status:"agendado"},
+  {nome:"Isabelle",cel:"(51) 9 9455-5360",animal:"Flora",data:"10/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Sabrina Ruver",cel:"(51) 9 8438-6297",animal:"Cacau",data:"14/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Elizandra",cel:"(51) 9 8328-1365",animal:"Tobi",data:"15/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Fernanda Conceição",cel:"(51) 9 9944-9993",animal:"Benjamin",data:"18/10/2025",filial:"Filial Rio Branco",status:"compareceu"},
+  {nome:"Camila Trindade Muza",cel:"(51) 9 9603-0022",animal:"Tifi",data:"22/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Ricardo Bello",cel:"(51) 9 9829-3913",animal:"Theo Bello",data:"08/11/2025",filial:"Filial Rio Branco",status:"enviado"},
+  {nome:"Juliana Beck",cel:"(51) 9 9222-7358",animal:"Paçoca",data:"10/11/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+];
+
+const STATUS_CONFIG = {
+  a_enviar:  {label:'A Enviar',  color:'var(--muted2)',  bg:'var(--bg3)',           icon:'ph-paper-plane-tilt'},
+  enviado:   {label:'Enviado',   color:'#a89bff',        bg:'var(--navy-dim)',      icon:'ph-check'},
+  respondeu: {label:'Respondeu', color:'var(--yellow)',  bg:'var(--yellow-dim)',    icon:'ph-chat-circle-dots'},
+  agendado:  {label:'Agendado',  color:'var(--green)',   bg:'var(--green-dim)',     icon:'ph-calendar-check'},
+  compareceu:{label:'Compareceu',color:'#fff',           bg:'linear-gradient(135deg,#00C181,#1a8f62)', icon:'ph-trophy'},
+};
+
+const COMISSAO = 70;
+
+function calcDias(dataStr) {
+  const [d,m,y] = dataStr.split('/');
+  const diff = (new Date() - new Date(y,m-1,d)) / (1000*60*60*24);
+  return Math.floor(diff);
+}
+
+function primeiroNome(nome) {
+  return nome.split(' ')[0].replace(/[^a-zA-ZÀ-ú]/g,'').trim() || nome.split(' ')[0];
+}
+
+function renderReativacao() {
+  const filialFiltro = document.getElementById('r-filial')?.value || 'todas';
+  const statusFiltro = document.getElementById('r-status')?.value || 'todos';
+  const data = contatosReais.filter(c =>
+    (filialFiltro==='todas' || c.filial===filialFiltro) &&
+    (statusFiltro==='todos' || c.status===statusFiltro)
+  );
+
+  // KPIs
+  const total = contatosReais.length;
+  const enviados = contatosReais.filter(c=>['enviado','respondeu','agendado','compareceu'].includes(c.status)).length;
+  const agendados = contatosReais.filter(c=>['agendado','compareceu'].includes(c.status)).length;
+  const compareceu = contatosReais.filter(c=>c.status==='compareceu').length;
+  const comissaoTotal = compareceu * COMISSAO;
+
+  document.getElementById('r-kpi-total').textContent = total;
+  document.getElementById('r-kpi-enviados').textContent = enviados;
+  document.getElementById('r-kpi-agendados').textContent = agendados;
+  document.getElementById('r-kpi-comissao').textContent = 'R$'+comissaoTotal;
+
+  // Pipeline counts
+  Object.keys(STATUS_CONFIG).forEach(s => {
+    const el = document.getElementById('pipe-count-'+s);
+    if(el) el.textContent = contatosReais.filter(c=>c.status===s).length;
+  });
+
+  // Table
+  const tbody = document.getElementById('r-table');
+  tbody.innerHTML = data.map((c,i) => {
+    const sc = STATUS_CONFIG[c.status];
+    const dias = calcDias(c.data);
+    const msg = `Oi ${primeiroNome(c.nome)}! Aqui é o PetShop ${c.filial} 🐾 Mudamos de número e melhoramos toda a operação — agendamento pelo WhatsApp, lembretes automáticos e sem fila. O ${c.animal} tá na nossa lista de saudades 😄 Faz ${dias} dias que ele não aparece! Tem horário essa semana. Quer ver as opções?`;
+    return `<tr>
+      <td><div class="avatar-cell"><div class="av ${['y','n','g','r'][i%4]}">${c.nome.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+        <div><div class="av-name">${c.nome}</div><div class="av-sub">${c.cel}</div></div></div></td>
+      <td><span style="font-weight:700">🐾 ${c.animal}</span></td>
+      <td><span style="font-size:11px;color:var(--muted2)">${c.filial}</span></td>
+      <td><span style="color:${dias>300?'var(--red)':dias>180?'var(--yellow)':'var(--muted2)'};font-weight:800">${dias}d atrás</span></td>
+      <td><span class="tag" style="background:${sc.bg};color:${sc.color}"><i class="ph ${sc.icon}"></i> ${sc.label}</span></td>
+      <td style="max-width:200px">
+        <div style="font-size:11px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer" onclick="previewMsg(${JSON.stringify(msg).replace(/'/g,"\\'")})">${msg.substring(0,60)}…</div>
+      </td>
+      <td>
+        <div style="display:flex;gap:6px">
+          ${c.status==='a_enviar'?`<button class="btn btn-primary btn-sm" onclick="avancarStatus(${i},'enviado')"><i class="ph ph-paper-plane-tilt"></i> Enviar</button>`:''}
+          ${c.status==='enviado'?`<button class="btn btn-ghost btn-sm" onclick="avancarStatus(${i},'respondeu')"><i class="ph ph-chat-circle-dots"></i> Respondeu</button>`:''}
+          ${c.status==='respondeu'?`<button class="btn btn-primary btn-sm" onclick="avancarStatus(${i},'agendado')"><i class="ph ph-calendar-check"></i> Agendar</button>`:''}
+          ${c.status==='agendado'?`<button class="btn btn-primary btn-sm" onclick="avancarStatus(${i},'compareceu')" style="background:var(--green)"><i class="ph ph-trophy"></i> Compareceu</button>`:''}
+          ${c.status==='compareceu'?`<span style="color:var(--green);font-weight:800;font-size:12px">✅ +R$${COMISSAO}</span>`:''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function avancarStatus(idx, novoStatus) {
+  // find real index in contatosReais based on current filter view
+  const filialFiltro = document.getElementById('r-filial')?.value || 'todas';
+  const statusFiltro = document.getElementById('r-status')?.value || 'todos';
+  const filtered = contatosReais.filter(c =>
+    (filialFiltro==='todas' || c.filial===filialFiltro) &&
+    (statusFiltro==='todos' || c.status===statusFiltro)
+  );
+  const contato = filtered[idx];
+  const realIdx = contatosReais.indexOf(contato);
+  if(realIdx>-1){
+    contatosReais[realIdx].status = novoStatus;
+    renderReativacao();
+    const labels = {enviado:'✅ Mensagem marcada como enviada!', respondeu:'💬 Cliente marcado como respondeu!', agendado:'📅 Agendamento confirmado!', compareceu:`🏆 R$${COMISSAO} de comissão registrado!`};
+    showToast(labels[novoStatus]||'Atualizado!');
+  }
+}
+
+function previewMsg(msg) {
+  document.getElementById('msg-preview-text').textContent = msg;
+  document.getElementById('msg-modal').classList.add('open');
+}
+
 // ── NAVIGATION ──
 function switchPage(page, el) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -994,8 +1261,24 @@ function showToast(msg) {
   setTimeout(()=>toast.classList.remove('show'), 3500);
 }
 
+function enviarTodos() {
+  let count=0;
+  contatosReais.forEach(c=>{ if(c.status==='a_enviar'){ c.status='enviado'; count++; } });
+  renderReativacao();
+  showToast(`✅ ${count} mensagens marcadas como enviadas!`);
+}
+
+function exportarCSV() {
+  const rows = [['Nome','Celular','Pet','Filial','Última Visita','Status']];
+  contatosReais.forEach(c=>rows.push([c.nome,c.cel,c.animal,c.filial,c.data,STATUS_CONFIG[c.status].label]));
+  const csv = rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='reativacao-pipeline.csv'; a.click();
+}
+
 // Init
 renderInactivos();
+renderReativacao();
 renderMessages(chats.mariana.messages);
 </script>
 </body>
