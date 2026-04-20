@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa de Parceiros — Andarilho Digital</title>
+<meta name="description" content="Venda automação via WhatsApp para clínicas estéticas e pet shops. Comissão no setup + recorrente todo mês. Sem precisar saber programar.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b0f;
+  --bg2:#0d1117;
+  --bg3:#131920;
+  --bg4:#1a2230;
+  --border:rgba(255,255,255,.06);
+  --border2:rgba(255,255,255,.12);
+  --text:#eef2f7;
+  --muted:#6b7a8d;
+  --muted2:#9aa5b4;
+  --accent:#d4488a;
+  --accent2:rgba(212,72,138,.12);
+  --accent3:rgba(212,72,138,.28);
+  --gold:#e8a045;
+  --gold2:rgba(232,160,69,.12);
+  --green:#22c55e;
+  --green2:rgba(34,197,94,.12);
+  --blue:#3b82f6;
+  --blue2:rgba(59,130,246,.1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;overflow-x:hidden}
+
+header{
+  padding:18px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(8,11,15,.92);
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(16px);
+}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--accent),#a855f7);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.logo-name{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.2px}
+.logo-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-tag{
+  font-size:11px;font-weight:600;padding:5px 12px;
+  background:var(--green2);color:#86efac;
+  border:1px solid rgba(34,197,94,.25);border-radius:20px;
+}
+.header-cta{
+  background:var(--accent);color:#fff;border:none;
+  padding:8px 18px;border-radius:8px;font-size:12px;
+  font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:inherit;text-decoration:none;display:inline-block;
+}
+.header-cta:hover{opacity:.85}
+
+.hero{
+  padding:96px 40px 72px;
+  max-width:940px;margin:0 auto;text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:600;padding:6px 16px;
+  background:var(--gold2);color:var(--gold);
+  border:1px solid rgba(232,160,69,.25);border-radius:20px;
+  margin-bottom:32px;
+}
+.hero h1{
+  font-size:clamp(30px,5.5vw,58px);font-weight:900;
+  line-height:1.08;letter-spacing:-.03em;
+  margin-bottom:24px;
+}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero p{
+  font-size:18px;color:var(--muted2);max-width:580px;
+  margin:0 auto 44px;line-height:1.75;font-weight:400;
+}
+.hero-cta{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:56px;
+}
+.btn-primary{
+  background:var(--accent);color:#fff;border:none;
+  padding:14px 30px;border-radius:10px;font-size:14px;
+  font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:inherit;text-decoration:none;display:inline-block;
+  letter-spacing:-.1px;
+}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,72,138,.3)}
+.btn-ghost{
+  background:transparent;color:var(--muted2);
+  border:1px solid var(--border2);
+  padding:14px 28px;border-radius:10px;font-size:14px;
+  font-weight:600;cursor:pointer;transition:all .2s;
+  font-family:inherit;text-decoration:none;display:inline-block;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+
+.hero-stats{
+  display:flex;justify-content:center;gap:48px;flex-wrap:wrap;
+  padding:28px 32px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;
+}
+.stat{text-align:center}
+.stat-num{font-size:28px;font-weight:900;color:var(--text);letter-spacing:-.04em;line-height:1}
+.stat-num span{color:var(--accent)}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px}
+
+.section{padding:72px 40px;max-width:1020px;margin:0 auto}
+.section-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);margin-bottom:12px;
+}
+.section h2{
+  font-size:clamp(24px,3.5vw,38px);font-weight:800;
+  line-height:1.15;margin-bottom:16px;letter-spacing:-.02em;
+}
+.section p.sub{font-size:16px;color:var(--muted2);max-width:580px;margin-bottom:52px;line-height:1.75}
+
+.dores-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;
+}
+.dor-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  transition:border-color .2s,transform .2s;
+}
+.dor-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.dor-icon{font-size:26px;margin-bottom:14px}
+.dor-titulo{font-size:15px;font-weight:700;margin-bottom:8px}
+.dor-desc{font-size:13px;color:var(--muted2);line-height:1.65}
+.dor-stat{
+  margin-top:14px;font-size:11px;font-weight:700;
+  color:var(--green);background:var(--green2);
+  padding:4px 10px;border-radius:20px;display:inline-block;
+}
+
+.divisor{
+  height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);
+  margin:0 40px;
+}
+
+/* COMMISSION TABLE */
+.comissoes{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;
+  margin-bottom:40px;
+}
+.comissao-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:28px;position:relative;
+  transition:all .2s;
+}
+.comissao-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.comissao-card.destaque{
+  border-color:var(--accent);
+  background:linear-gradient(160deg,var(--bg2),rgba(212,72,138,.06));
+}
+.comissao-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;font-size:11px;font-weight:700;
+  padding:3px 16px;border-radius:20px;white-space:nowrap;
+}
+.comissao-pacote{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.comissao-setup{
+  font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;
+}
+.comissao-valor{
+  font-size:34px;font-weight:900;line-height:1;margin-bottom:4px;letter-spacing:-.04em;color:var(--text);
+}
+.comissao-valor span{font-size:14px;font-weight:500;color:var(--muted2)}
+.comissao-recorrente{
+  font-size:13px;color:var(--muted);margin-bottom:22px;
+}
+.comissao-recorrente b{color:var(--green)}
+.comissao-sep{height:1px;background:var(--border);margin-bottom:22px}
+.comissao-anual{
+  background:var(--green2);border:1px solid rgba(34,197,94,.2);
+  border-radius:10px;padding:14px 16px;text-align:center;
+}
+.comissao-anual-label{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.comissao-anual-val{font-size:22px;font-weight:900;color:var(--green);letter-spacing:-.03em}
+.comissao-anual-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* MODULES - what they sell */
+.modulos{display:flex;flex-direction:column;gap:0}
+.modulo{
+  display:grid;grid-template-columns:64px 1fr;gap:24px;
+  padding:36px 0;border-bottom:1px solid var(--border);
+  align-items:start;
+}
+.modulo:last-child{border-bottom:none}
+.modulo-num{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;flex-shrink:0;margin-top:4px;
+}
+.m1{background:rgba(59,130,246,.15);color:#60a5fa;}
+.m2{background:rgba(34,197,94,.15);color:#4ade80;}
+.m3{background:rgba(232,160,69,.15);color:var(--gold);}
+.m4{background:rgba(168,85,247,.15);color:#c084fc;}
+.m5{background:var(--accent2);color:#f9a8d4;}
+.modulo-titulo{font-size:18px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.modulo-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.modulo-items{display:flex;flex-direction:column;gap:7px}
+.modulo-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;color:var(--muted2);line-height:1.55;
+}
+.modulo-item::before{content:'→';color:var(--accent);flex-shrink:0;margin-top:1px;font-weight:600}
+.modulo-resultado{
+  margin-top:18px;padding:12px 16px;
+  background:var(--green2);border:1px solid rgba(34,197,94,.2);
+  border-radius:8px;font-size:13px;color:var(--green);font-weight:600;
+}
+.modulo-resultado span{color:var(--muted2);font-weight:400}
+
+/* ROI SIMULATOR */
+.roi-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:40px;
+}
+.roi-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px;
+}
+@media(max-width:600px){.roi-grid{grid-template-columns:1fr}}
+.roi-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;color:var(--muted2)}
+.roi-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:14px;color:var(--muted2)}
+.roi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px;background:var(--accent)}
+.roi-dot.green{background:var(--green)}
+.roi-total{
+  border-top:1px solid var(--border);padding-top:28px;
+  text-align:center;
+}
+.roi-total-num{font-size:48px;font-weight:900;color:var(--green);line-height:1;letter-spacing:-.04em}
+.roi-total-label{font-size:14px;color:var(--muted2);margin-top:8px}
+
+/* PROCESS */
+.etapas{display:flex;flex-direction:column;gap:0}
+.etapa{
+  display:grid;grid-template-columns:52px 1fr;gap:20px;
+  padding:24px 0;border-bottom:1px solid var(--border);
+  align-items:start;
+}
+.etapa:last-child{border-bottom:none}
+.etapa-num{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--muted2);flex-shrink:0;
+}
+.etapa-title{font-size:15px;font-weight:700;margin-bottom:5px}
+.etapa-desc{font-size:13px;color:var(--muted2);line-height:1.65}
+.etapa-prazo{
+  margin-top:7px;font-size:11px;font-weight:700;
+  color:var(--gold);background:var(--gold2);
+  padding:2px 10px;border-radius:10px;display:inline-block;
+}
+
+/* STACK CALLOUT */
+.stack-box{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border:1px solid var(--border2);
+  border-radius:16px;padding:36px 40px;
+  display:flex;gap:40px;align-items:center;flex-wrap:wrap;
+}
+.stack-text h3{font-size:18px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.stack-text p{font-size:14px;color:var(--muted2);line-height:1.65;max-width:480px}
+.stack-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stack-tag{
+  font-size:11px;font-weight:600;
+  padding:4px 12px;border-radius:20px;
+  background:var(--bg4);border:1px solid var(--border);
+  color:var(--muted2);
+}
+
+.cta-final{
+  padding:96px 40px;text-align:center;
+  background:linear-gradient(180deg,var(--bg),var(--bg3));
+  position:relative;overflow:hidden;
+}
+.cta-final::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:600px;height:300px;
+  background:radial-gradient(ellipse,rgba(212,72,138,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-final h2{font-size:clamp(26px,4vw,44px);font-weight:900;margin-bottom:16px;letter-spacing:-.03em;position:relative}
+.cta-final p{font-size:16px;color:var(--muted2);margin-bottom:36px;position:relative}
+
+footer{
+  padding:24px 40px;border-top:1px solid var(--border);
+  background:var(--bg2);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--muted);flex-wrap:wrap;gap:8px;
+}
+
+@media(max-width:640px){
+  header{padding:16px 20px}
+  .header-right .header-cta{display:none}
+  .hero{padding:56px 20px 48px}
+  .hero-stats{gap:28px;padding:20px}
+  .section{padding:56px 20px}
+  .modulo{grid-template-columns:1fr;gap:12px}
+  .modulo-num{display:none}
+  .stack-box{flex-direction:column;padding:24px}
+  .cta-final{padding:56px 20px}
+  footer{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">⚡</div>
+    <div>
+      <div class="logo-name">Andarilho Digital</div>
+      <div class="logo-sub">Automação & IA</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-tag">Programa de Parceiros</div>
+    <a href="https://wa.me/555195478349" class="header-cta">Quero ser parceiro →</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ Comissão recorrente · Produto validado · Suporte total</div>
+  <h1>Venda automação.<br><em>Ganhe todo mês.</em></h1>
+  <p>Represente a Andarilho Digital e venda sistemas de automação via WhatsApp para clínicas estéticas e pet shops. Você fecha. A gente entrega. Você recebe comissão no setup e todo mês enquanto o cliente ficar ativo.</p>
+  <div class="hero-cta">
+    <a href="#comissoes" class="btn-primary">Ver comissões</a>
+    <a href="#o-produto" class="btn-ghost">O que você vende →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num"><span>30%</span></div>
+      <div class="stat-label">de comissão no setup</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span>20%</span></div>
+      <div class="stat-label">recorrente todo mês</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span>R$5k+</span></div>
+      <div class="stat-label">potencial com 5 clientes ativos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span>0</span></div>
+      <div class="stat-label">necessidade de saber programar</div>
+    </div>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- POR QUE É FÁCIL VENDER -->
+<section class="section">
+  <div class="section-label">A oportunidade</div>
+  <h2>Por que esse produto<br>é fácil de vender</h2>
+  <p class="sub">Você não precisa convencer ninguém de que tem um problema. Eles já sabem. Você só precisa mostrar que existe solução.</p>
+
+  <div class="dores-grid">
+    <div class="dor-card">
+      <div class="dor-icon">📱</div>
+      <div class="dor-titulo">Mercado enorme e não atendido</div>
+      <div class="dor-desc">Cada cidade tem dezenas de clínicas estéticas, pet shops, barbearias e salões. Quase nenhum tem automação. Você entra num mercado virgem.</div>
+      <div class="dor-stat">Só em POA: +800 clínicas estéticas ativas</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">🤕</div>
+      <div class="dor-titulo">A dor já existe — você não cria</div>
+      <div class="dor-desc">Toda clínica perde paciente por mensagem sem resposta. Todo pet shop tem clientes inativos. Você não precisa convencer. Só precisa aparecer com a solução.</div>
+      <div class="dor-stat">40% das mensagens chegam fora do expediente</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">💰</div>
+      <div class="dor-titulo">ROI óbvio para o cliente</div>
+      <div class="dor-desc">O sistema paga a mensalidade com 2 agendamentos extras por mês. Qualquer dono de clínica consegue fazer essa conta na cabeça em 30 segundos.</div>
+      <div class="dor-stat">ROI em menos de 7 dias para o cliente</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">🔁</div>
+      <div class="dor-titulo">Receita recorrente para você</div>
+      <div class="dor-desc">Você fecha uma vez e ganha todo mês enquanto o cliente estiver ativo. Um cliente fechado hoje vale R$2.000–4.000+ ao longo do primeiro ano.</div>
+      <div class="dor-stat">LTV médio por cliente: R$3.500+ no primeiro ano</div>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">🛠️</div>
+      <div class="dor-titulo">Você não entrega nada técnico</div>
+      <div class="dor-desc">Sua função é só vender. Briefing, construção, onboarding, suporte — tudo fica com a Andarilho Digital. Você apresenta, fecha e passa o contato.</div>
+      <div class="dor-stat">Entrega 100% feita por nós</div>
+    </div>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- COMISSÕES -->
+<section class="section" id="comissoes">
+  <div class="section-label">Quanto você ganha</div>
+  <h2>Comissão por pacote fechado</h2>
+  <p class="sub">30% do setup na hora do fechamento. 20% da mensalidade todo mês enquanto o cliente estiver ativo. Sem teto.</p>
+
+  <div class="comissoes">
+
+    <div class="comissao-card">
+      <div class="comissao-pacote">Essential</div>
+      <div class="comissao-setup">Comissão no setup</div>
+      <div class="comissao-valor">R$660 <span>na hora</span></div>
+      <div class="comissao-recorrente">+ <b>R$140/mês</b> enquanto ativo</div>
+      <div class="comissao-sep"></div>
+      <div class="comissao-anual">
+        <div class="comissao-anual-label">Valor total em 12 meses</div>
+        <div class="comissao-anual-val">R$2.340</div>
+        <div class="comissao-anual-sub">por 1 cliente nesse pacote</div>
+      </div>
+    </div>
+
+    <div class="comissao-card destaque">
+      <div class="comissao-badge">Mais vendido</div>
+      <div class="comissao-pacote">Completo</div>
+      <div class="comissao-setup">Comissão no setup</div>
+      <div class="comissao-valor">R$1.050 <span>na hora</span></div>
+      <div class="comissao-recorrente">+ <b>R$220/mês</b> enquanto ativo</div>
+      <div class="comissao-sep"></div>
+      <div class="comissao-anual">
+        <div class="comissao-anual-label">Valor total em 12 meses</div>
+        <div class="comissao-anual-val">R$3.690</div>
+        <div class="comissao-anual-sub">por 1 cliente nesse pacote</div>
+      </div>
+    </div>
+
+    <div class="comissao-card">
+      <div class="comissao-pacote">Smart Clinic</div>
+      <div class="comissao-setup">Comissão no setup</div>
+      <div class="comissao-valor">R$1.440 <span>na hora</span></div>
+      <div class="comissao-recorrente">+ <b>R$300/mês</b> enquanto ativo</div>
+      <div class="comissao-sep"></div>
+      <div class="comissao-anual">
+        <div class="comissao-anual-label">Valor total em 12 meses</div>
+        <div class="comissao-anual-val">R$5.040</div>
+        <div class="comissao-anual-sub">por 1 cliente nesse pacote</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- ROI DO PARCEIRO -->
+<section class="section">
+  <div class="section-label">Simulação de ganhos</div>
+  <h2>O que 5 clientes fechados<br>fazem com sua renda</h2>
+  <p class="sub">Considerando mix realista: 2 Essential + 2 Completo + 1 Smart Clinic fechados em 60 dias.</p>
+
+  <div class="roi-box">
+    <div class="roi-grid">
+      <div>
+        <div class="roi-col-title">Comissão de setup (mês 1–2)</div>
+        <div class="roi-item"><div class="roi-dot"></div>2x Essential: R$1.320</div>
+        <div class="roi-item"><div class="roi-dot"></div>2x Completo: R$2.100</div>
+        <div class="roi-item"><div class="roi-dot"></div>1x Smart Clinic: R$1.440</div>
+        <div class="roi-item" style="margin-top:8px;font-weight:700;color:var(--text)"><div class="roi-dot" style="background:var(--text)"></div>Total setup: R$4.860 nos primeiros 60 dias</div>
+      </div>
+      <div>
+        <div class="roi-col-title">Recorrente mensal (a partir do mês 2)</div>
+        <div class="roi-item"><div class="roi-dot green"></div>2x Essential: R$280/mês</div>
+        <div class="roi-item"><div class="roi-dot green"></div>2x Completo: R$440/mês</div>
+        <div class="roi-item"><div class="roi-dot green"></div>1x Smart Clinic: R$300/mês</div>
+        <div class="roi-item" style="margin-top:8px;font-weight:700;color:var(--green)"><div class="roi-dot green"></div>Total recorrente: R$1.020/mês todo mês</div>
+      </div>
+    </div>
+    <div class="roi-total">
+      <div class="roi-total-num">R$17.100</div>
+      <div class="roi-total-label">ganho total no primeiro ano com 5 clientes ativos<br><small style="color:var(--muted)">R$4.860 setup + R$1.020/mês × 12. Cada novo cliente soma mais.</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- O QUE VOCÊ VENDE -->
+<section class="section" id="o-produto">
+  <div class="section-label">O produto</div>
+  <h2>O que você está vendendo<br>na prática</h2>
+  <p class="sub">Um sistema de automação via WhatsApp com 5 módulos. Você não precisa entender cada detalhe técnico — mas precisa saber o que resolve para o cliente.</p>
+
+  <div class="modulos">
+
+    <div class="modulo">
+      <div class="modulo-num m1">1</div>
+      <div>
+        <div class="modulo-titulo">Recepcionista WhatsApp 24/7</div>
+        <div class="modulo-sub">Responde clientes a qualquer hora sem precisar de humano</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Responde dúvidas, preços e disponibilidade automaticamente</div>
+          <div class="modulo-item">Qualifica o lead e avisa o dono quando está pronto para agendar</div>
+          <div class="modulo-item">Funciona de madrugada, fim de semana e feriado</div>
+        </div>
+        <div class="modulo-resultado">✓ Argumento de venda: <span>"zero cliente perdido por mensagem sem resposta"</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m2">2</div>
+      <div>
+        <div class="modulo-titulo">Agendamento Automático + Prevenção de Faltas</div>
+        <div class="modulo-sub">Sequência de lembretes que reduz faltas em até 80%</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Confirmação 7 dias antes, lembrete 24h antes, alerta 4h antes</div>
+          <div class="modulo-item">Se não confirmar: avisa o dono para reagendar ou liberar o horário</div>
+          <div class="modulo-item">Elimina o custo oculto das faltas (20–30% dos agendamentos sem automação)</div>
+        </div>
+        <div class="modulo-resultado">✓ Argumento de venda: <span>"cada falta que a clínica tem hoje vale R$350+ perdidos"</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m3">3</div>
+      <div>
+        <div class="modulo-titulo">Reativação de Pacientes Inativos</div>
+        <div class="modulo-sub">Traz de volta quem parou de aparecer — automaticamente</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Detecta quem está inativo há 60, 90, 120 dias e envia mensagem personalizada</div>
+          <div class="modulo-item">Para clínicas: lembretes por tipo de procedimento (botox, preenchimento etc.)</div>
+          <div class="modulo-item">Para pet shops: reativação por serviço (banho, consulta, vacina)</div>
+        </div>
+        <div class="modulo-resultado">✓ Argumento de venda: <span>"35% dos clientes somem só porque ninguém lembrou eles"</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m4">4</div>
+      <div>
+        <div class="modulo-titulo">Construção de Reputação no Google</div>
+        <div class="modulo-sub">Avaliações 5 estrelas sem pedir na cara dura</div>
+        <div class="modulo-items">
+          <div class="modulo-item">48h após atendimento: mensagem automática de follow-up</div>
+          <div class="modulo-item">Satisfeito: recebe link direto para avaliar no Google</div>
+          <div class="modulo-item">Insatisfeito: alerta privado — problema resolvido antes de virar review negativa</div>
+        </div>
+        <div class="modulo-resultado">✓ Argumento de venda: <span>"concorrente com mais avaliações no Google ganha o cliente novo"</span></div>
+      </div>
+    </div>
+
+    <div class="modulo">
+      <div class="modulo-num m5">5</div>
+      <div>
+        <div class="modulo-titulo">Painel de Gestão de Clientes</div>
+        <div class="modulo-sub">Visão completa do negócio em uma tela só</div>
+        <div class="modulo-items">
+          <div class="modulo-item">Quem confirmou, quem não respondeu, quem está inativo</div>
+          <div class="modulo-item">Histórico de atendimentos e origem de cada agendamento</div>
+          <div class="modulo-item">Dashboard web — acessa do celular, sem instalar nada</div>
+        </div>
+        <div class="modulo-resultado">✓ Argumento de venda: <span>"dono de negócio que não enxerga os números toma decisão no escuro"</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- COMO FUNCIONA PARA O PARCEIRO -->
+<section class="section">
+  <div class="section-label">Como funciona</div>
+  <h2>Do primeiro contato<br>à comissão na conta</h2>
+  <p class="sub">Processo claro. Sem ambiguidade sobre o que é seu e o que é nosso.</p>
+
+  <div class="etapas">
+    <div class="etapa">
+      <div class="etapa-num">1</div>
+      <div>
+        <div class="etapa-title">Você entra no programa</div>
+        <div class="etapa-desc">Call de 30 minutos com a gente. Você entende o produto, os argumentos de venda, os materiais disponíveis e as regras da parceria. Sem taxa de entrada.</div>
+        <div class="etapa-prazo">Dia 0 — call de onboarding</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">2</div>
+      <div>
+        <div class="etapa-title">Você prospecta e apresenta</div>
+        <div class="etapa-desc">Você usa os materiais prontos (essa página, vídeos, deck) para abordar clínicas, pet shops ou outros negócios locais. A gente te apoia em objeções e dúvidas técnicas pelo WhatsApp.</div>
+        <div class="etapa-prazo">Seu trabalho — a qualquer hora</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">3</div>
+      <div>
+        <div class="etapa-title">Cliente interessado: você passa pra gente</div>
+        <div class="etapa-desc">Quando o cliente quer avançar, você nos apresenta via WhatsApp. A gente faz a call de fechamento com você presente (ou não). Contrato assinado digitalmente.</div>
+        <div class="etapa-prazo">Fechamento em até 48h</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">4</div>
+      <div>
+        <div class="etapa-title">A gente entrega tudo</div>
+        <div class="etapa-desc">Briefing, construção, testes, onboarding e suporte. Você não precisa fazer nada técnico. Seu cliente fica bem atendido — o que protege sua reputação local.</div>
+        <div class="etapa-prazo">Entrega em 15 dias úteis</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num">5</div>
+      <div>
+        <div class="etapa-title">Comissão direto na sua conta</div>
+        <div class="etapa-desc">30% do setup cai na sua conta em até 5 dias úteis após o cliente pagar a primeira parcela. O recorrente entra todo mês até o cliente cancelar.</div>
+        <div class="etapa-prazo">PIX ou transferência — sem burocracia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divisor"></div>
+
+<!-- PROVA -->
+<section class="section">
+  <div class="stack-box">
+    <div style="flex:1">
+      <div class="section-label" style="margin-bottom:8px">Produto já funcionando</div>
+      <div class="stack-text">
+        <h3>Você vende algo que já existe.</h3>
+        <p>O sistema que você vai representar já está rodando ao vivo no <strong style="color:var(--text)">Pets Go</strong> — 4 unidades de pet shop em Porto Alegre. Agendamento, reativação, CRM e dashboard funcionando em produção. Não é promessa. É produto entregue.</p>
+        <div class="stack-tags">
+          <span class="stack-tag">Produto validado</span>
+          <span class="stack-tag">Clientes reais ativos</span>
+          <span class="stack-tag">Entrega comprovada</span>
+          <span class="stack-tag">Suporte contínuo</span>
+          <span class="stack-tag">Materiais prontos</span>
+          <span class="stack-tag">Sem taxa de entrada</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>Pronto para ter uma renda<br>recorrente vendendo tecnologia?</h2>
+  <p>Conversa de 30 minutos. Sem compromisso. Você sai sabendo exatamente como funciona.</p>
+  <a href="https://wa.me/555195478349" class="btn-primary" style="font-size:15px;padding:16px 36px;">
+    Quero ser parceiro →
+  </a>
+</section>
+
+<footer>
+  <span>Andarilho Digital · Automação & IA</span>
+  <span>andarilhodigital.com</span>
+</footer>
+
+</body>
+</html>
