@@ -235,13 +235,13 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
       <span class="nav-badge red">23</span>
     </div>
     <div class="nav-label">Operação</div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="switchPage('banho',this)">
       <span class="ico"><i class="ph ph-scissors"></i></span>Banho &amp; Tosa
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="switchPage('produtos',this)">
       <span class="ico"><i class="ph ph-storefront"></i></span>Produtos
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="switchPage('financeiro',this)">
       <span class="ico"><i class="ph ph-chart-line-up"></i></span>Financeiro
     </div>
     <div class="sidebar-bottom">
@@ -630,6 +630,159 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
             <tr><td><div class="avatar-cell"><div class="av r">CM</div><div><div class="av-name">Carlos Mendes</div><div class="av-sub">(51) 96543-2109</div></div></div></td><td>🐕 Bolão</td><td>—</td><td>0x</td><td style="font-weight:800">R$420</td><td><span class="tag inactive">Inativo 68d</span></td></tr>
             <tr><td><div class="avatar-cell"><div class="av y">JL</div><div><div class="av-name">Joana Lima</div><div class="av-sub">(51) 95432-1098</div></div></div></td><td>🐕 Bolinha</td><td>Dom 20/04</td><td>2x</td><td style="color:var(--green);font-weight:800">R$1.020</td><td><span class="tag active">Regular</span></td></tr>
             <tr><td><div class="avatar-cell"><div class="av n">PC</div><div><div class="av-name">Paulo Costa</div><div class="av-sub">(51) 94321-0987</div></div></div></td><td>🐕 Rex</td><td>Dom 20/04</td><td>1x</td><td style="font-weight:800">R$1.320</td><td><span class="tag active">Regular</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── BANHO & TOSA ── -->
+    <div class="page" id="page-banho">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Banho &amp; Tosa</h1>
+          <p>Gestão de serviços · 3 tosadores ativos</p>
+        </div>
+        <button class="btn btn-primary"><i class="ph ph-plus"></i> Novo Serviço</button>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-scissors"></i> Hoje</div><div class="kpi-val">8</div><div class="kpi-sub kpi-up">R$380 em serviços</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-calendar"></i> Esta Semana</div><div class="kpi-val">34</div><div class="kpi-sub kpi-up">R$2.890 projetado</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-star"></i> Avaliação Média</div><div class="kpi-val" style="color:var(--yellow)">4.8</div><div class="kpi-sub kpi-neutral">⭐ 47 avaliações</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-clock"></i> Tempo Médio</div><div class="kpi-val">52<span style="font-size:16px">min</span></div><div class="kpi-sub kpi-neutral">Por atendimento</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ph ph-scissors" style="color:var(--yellow)"></i>Serviços Cadastrados</div>
+        <table class="tbl">
+          <thead><tr><th>Serviço</th><th>Porte</th><th>Duração</th><th>Preço</th><th>Realizados (mês)</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Banho Completo</strong></td><td>Pequeno</td><td>45 min</td><td style="color:var(--green);font-weight:800">R$50</td><td>28x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Banho Completo</strong></td><td>Médio</td><td>60 min</td><td style="color:var(--green);font-weight:800">R$65</td><td>19x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Banho Completo</strong></td><td>Grande</td><td>90 min</td><td style="color:var(--green);font-weight:800">R$85</td><td>11x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Banho + Tosa</strong></td><td>Pequeno</td><td>60 min</td><td style="color:var(--green);font-weight:800">R$85</td><td>24x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Banho + Tosa</strong></td><td>Médio</td><td>90 min</td><td style="color:var(--green);font-weight:800">R$110</td><td>16x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Banho + Tosa</strong></td><td>Grande</td><td>120 min</td><td style="color:var(--green);font-weight:800">R$145</td><td>8x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Tosa Higiênica</strong></td><td>Todos</td><td>30 min</td><td style="color:var(--green);font-weight:800">R$45</td><td>22x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+            <tr><td><strong>Tosa na Tesoura</strong></td><td>Pequeno</td><td>75 min</td><td style="color:var(--green);font-weight:800">R$120</td><td>7x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title"><i class="ph ph-users" style="color:#a89bff"></i>Tosadores</div>
+        <table class="tbl">
+          <thead><tr><th>Nome</th><th>Especialidade</th><th>Agendamentos Hoje</th><th>Taxa de Retorno</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div class="avatar-cell"><div class="av y">SM</div><div><div class="av-name">Sandra Melo</div><div class="av-sub">5 anos de experiência</div></div></div></td><td>Tosa de Raça</td><td><strong>4</strong> atendimentos</td><td style="color:var(--green);font-weight:800">89%</td><td><span class="tag active">Ativo</span></td></tr>
+            <tr><td><div class="avatar-cell"><div class="av n">CF</div><div><div class="av-name">Carlos Figueiredo</div><div class="av-sub">3 anos de experiência</div></div></div></td><td>Banho Especial</td><td><strong>3</strong> atendimentos</td><td style="color:var(--green);font-weight:800">82%</td><td><span class="tag active">Ativo</span></td></tr>
+            <tr><td><div class="avatar-cell"><div class="av g">LP</div><div><div class="av-name">Larissa Pereira</div><div class="av-sub">2 anos de experiência</div></div></div></td><td>Banho &amp; Tosa Geral</td><td><strong>1</strong> atendimento</td><td style="font-weight:800">74%</td><td><span class="tag warn">Meio período</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PRODUTOS ── -->
+    <div class="page" id="page-produtos">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Produtos</h1>
+          <p>Estoque atual · 68 SKUs cadastrados</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost"><i class="ph ph-download-simple"></i> Exportar</button>
+          <button class="btn btn-primary"><i class="ph ph-plus"></i> Novo Produto</button>
+        </div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-package"></i> Em Estoque</div><div class="kpi-val">68</div><div class="kpi-sub kpi-neutral">SKUs ativos</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-warning"></i> Estoque Baixo</div><div class="kpi-val" style="color:var(--yellow)">7</div><div class="kpi-sub kpi-down">Repor em breve</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-x-circle"></i> Sem Estoque</div><div class="kpi-val" style="color:var(--red)">2</div><div class="kpi-sub kpi-down">Pedido pendente</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-currency-dollar"></i> Vendas Hoje</div><div class="kpi-val">R$<span style="font-size:22px">145</span></div><div class="kpi-sub kpi-up">▲ 4 vendas</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ph ph-package" style="color:var(--yellow)"></i>Produtos em Destaque <span class="badge">7 com estoque baixo</span></div>
+        <table class="tbl">
+          <thead><tr><th>Produto</th><th>Categoria</th><th>Preço Venda</th><th>Estoque</th><th>Mín.</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Shampoo Pet Clean Pro 500ml</strong></td><td>Higiene</td><td style="font-weight:800">R$38</td><td><strong>24</strong> un</td><td>10</td><td><span class="tag active">Ok</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
+            <tr><td><strong>Condicionador Pelo Macio 500ml</strong></td><td>Higiene</td><td style="font-weight:800">R$32</td><td><strong style="color:var(--yellow)">6</strong> un</td><td>10</td><td><span class="tag warn">Baixo</span></td><td><button class="btn btn-ghost btn-sm">Repor</button></td></tr>
+            <tr><td><strong>Ração Premium Adulto 15kg</strong></td><td>Alimentação</td><td style="font-weight:800">R$185</td><td><strong style="color:var(--yellow)">3</strong> un</td><td>5</td><td><span class="tag warn">Baixo</span></td><td><button class="btn btn-ghost btn-sm">Repor</button></td></tr>
+            <tr><td><strong>Coleira Anti-pulgas P</strong></td><td>Saúde</td><td style="font-weight:800">R$29</td><td><strong>18</strong> un</td><td>8</td><td><span class="tag active">Ok</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
+            <tr><td><strong>Petisco Snack Frango 200g</strong></td><td>Alimentação</td><td style="font-weight:800">R$18</td><td><strong style="color:var(--red)">0</strong> un</td><td>15</td><td><span class="tag inactive">Zerado</span></td><td><button class="btn btn-primary btn-sm">Pedir</button></td></tr>
+            <tr><td><strong>Escova Profissional Dupla Face</strong></td><td>Acessórios</td><td style="font-weight:800">R$45</td><td><strong>11</strong> un</td><td>5</td><td><span class="tag active">Ok</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
+            <tr><td><strong>Perfume Pet Lavanda 100ml</strong></td><td>Higiene</td><td style="font-weight:800">R$24</td><td><strong style="color:var(--yellow)">4</strong> un</td><td>8</td><td><span class="tag warn">Baixo</span></td><td><button class="btn btn-ghost btn-sm">Repor</button></td></tr>
+            <tr><td><strong>Tapete Higiênico 30un</strong></td><td>Higiene</td><td style="font-weight:800">R$32</td><td><strong style="color:var(--red)">0</strong> un</td><td>10</td><td><span class="tag inactive">Zerado</span></td><td><button class="btn btn-primary btn-sm">Pedir</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── FINANCEIRO ── -->
+    <div class="page" id="page-financeiro">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Financeiro</h1>
+          <p>Abril 2025 · Semana 3 de 4</p>
+        </div>
+        <button class="btn btn-primary"><i class="ph ph-download-simple"></i> Exportar Relatório</button>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-trend-up"></i> Receita Abril</div><div class="kpi-val" style="color:var(--green)">R$<span style="font-size:22px">6.840</span></div><div class="kpi-sub kpi-up">▲ 18% vs março</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-receipt"></i> Ticket Médio</div><div class="kpi-val">R$<span style="font-size:22px">82</span></div><div class="kpi-sub kpi-up">▲ R$9 vs março</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-repeat"></i> Retorno (30d)</div><div class="kpi-val" style="color:var(--yellow)">68%</div><div class="kpi-sub kpi-up">▲ 5% vs março</div></div>
+        <div class="kpi"><div class="kpi-label"><i class="ph ph-robot"></i> Gerado pelo Bot</div><div class="kpi-val" style="color:#a89bff)">R$<span style="font-size:22px">1.240</span></div><div class="kpi-sub kpi-neutral">18% da receita</div></div>
+      </div>
+      <div class="section-2col">
+        <div class="card">
+          <div class="card-title"><i class="ph ph-chart-bar" style="color:var(--yellow)"></i>Receita por Semana — Abril</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 1 (01-07)</span><span style="color:var(--green)">R$1.560</span></div>
+              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--green);border-radius:6px;height:10px;width:55%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 2 (08-14)</span><span style="color:var(--green)">R$1.780</span></div>
+              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--green);border-radius:6px;height:10px;width:63%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 3 (15-21)</span><span style="color:var(--yellow)">R$2.120 (em andamento)</span></div>
+              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--yellow);border-radius:6px;height:10px;width:75%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 4 (22-30)</span><span style="color:var(--muted2)">Projetado R$2.400</span></div>
+              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--border2);border-radius:6px;height:10px;width:85%;opacity:.4"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="ph ph-robot" style="color:#a89bff"></i>Impacto do Bot</div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px">
+            <div style="background:var(--bg3);border-radius:10px;padding:14px">
+              <div style="font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:6px">Confirmações automáticas</div>
+              <div style="font-size:22px;font-weight:900;color:var(--green)">-34%</div>
+              <div style="font-size:12px;color:var(--muted2)">de no-shows em abril</div>
+            </div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px">
+              <div style="font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:6px">Clientes reativados (abril)</div>
+              <div style="font-size:22px;font-weight:900;color:var(--yellow)">R$1.240</div>
+              <div style="font-size:12px;color:var(--muted2)">de 9 clientes que voltaram via bot</div>
+            </div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px">
+              <div style="font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:6px">Reagendamentos automáticos</div>
+              <div style="font-size:22px;font-weight:900;color:#a89bff">12</div>
+              <div style="font-size:12px;color:var(--muted2)">sem precisar ligar para o cliente</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ph ph-receipt" style="color:var(--yellow)"></i>Últimas Transações</div>
+        <table class="tbl">
+          <thead><tr><th>Data/Hora</th><th>Cliente</th><th>Serviço/Produto</th><th>Forma Pag.</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--muted2);font-size:12px">Hoje 09:45</td><td><strong>Ricardo Oliveira</strong></td><td>Banho · Thor</td><td><span class="tag new">Pix</span></td><td style="color:var(--green);font-weight:800">+R$60</td></tr>
+            <tr><td style="color:var(--muted2);font-size:12px">Hoje 08:30</td><td><strong>Mariana Ferreira</strong></td><td>Banho + Tosa · Lola</td><td><span class="tag active">Cartão</span></td><td style="color:var(--green);font-weight:800">+R$95</td></tr>
+            <tr><td style="color:var(--muted2);font-size:12px">Ontem 17:20</td><td><strong>Ana Santos</strong></td><td>Ração Premium 15kg</td><td><span class="tag new">Pix</span></td><td style="color:var(--green);font-weight:800">+R$185</td></tr>
+            <tr><td style="color:var(--muted2);font-size:12px">Ontem 15:45</td><td><strong>Joana Lima</strong></td><td>Shampoo Pet Clean + Escova</td><td><span class="tag active">Cartão</span></td><td style="color:var(--green);font-weight:800">+R$83</td></tr>
+            <tr><td style="color:var(--muted2);font-size:12px">Ontem 14:00</td><td><strong>Paulo Costa</strong></td><td>Banho + Tosa · Rex</td><td><span class="tag">Dinheiro</span></td><td style="color:var(--green);font-weight:800">+R$110</td></tr>
           </tbody>
         </table>
       </div>
