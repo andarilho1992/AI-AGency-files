@@ -623,7 +623,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
       <div class="page-header flex-between">
         <div>
           <h1>Campanha de Reativação 🚀</h1>
-          <p>Clientes inativos identificados · Filial Central + Rio Branco · Comissão: <strong style="color:var(--yellow)">R$70 por cliente que comparecer</strong></p>
+          <p>Clientes inativos identificados · Rio Branco · Cachorródromo · Petrópolis · Comissão: <strong style="color:var(--yellow)">R$70 por cliente que comparecer</strong></p>
         </div>
         <div style="display:flex;gap:10px">
           <button class="btn btn-ghost" onclick="exportarCSV()"><i class="ph ph-download-simple"></i> Exportar</button>
@@ -688,8 +688,8 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
       <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">
         <select id="r-filial" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
           <option value="todas">Todas as Filiais</option>
-          <option value="Filial Central">Filial Central</option>
-          <option value="Filial Rio Branco">Filial Rio Branco</option>
+          <option value="Rio Branco">Rio Branco</option>
+          <option value="Petrópolis">Petrópolis</option>
           <option value="Cachorródromo">Cachorródromo</option>
         </select>
         <select id="r-status" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
@@ -1042,34 +1042,34 @@ function selectAll() {
 
 // ── REATIVAÇÃO DATA (real contacts) ──
 const contatosReais = [
-  {nome:"Ayrton",cel:"(51) 9 9343-1639",animal:"Duna",data:"02/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Mariana Lima Scortegagna",cel:"(51) 9 9992-8199",animal:"Filomena Amélia",data:"03/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Andrea",cel:"(51) 9979-2204",animal:"Billy",data:"03/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Laura Raguzzoni Sussela",cel:"(51) 9 9328-6452",animal:"Theobaldo",data:"06/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Ellen Terezinha Silva Queiroz",cel:"(51) 9 9157-2131",animal:"Cuba",data:"06/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Marta Severo",cel:"(51) 9 9112-1691",animal:"Zen",data:"08/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Barbara Leal",cel:"(51) 9 2003-2769",animal:"Dogo",data:"10/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Núbia Regina Coelho de Sousa",cel:"(51) 9 9921-9840",animal:"Lola",data:"10/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Rosana Alves Silva de Oliveira",cel:"(51) 9 9242-0271",animal:"Thor",data:"13/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Amanda Pezzi",cel:"(51) 9 9982-0435",animal:"Caetano",data:"14/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Renata Dias",cel:"(51) 9 9200-4717",animal:"Pipa",data:"14/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Niara",cel:"(51) 9 9348-1211",animal:"Drake",data:"16/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Marina",cel:"(51) 9 9274-8461",animal:"Koda",data:"16/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Natasha Rodrigues Fernandes",cel:"(51) 9523-5010",animal:"Kiara",data:"17/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Bruna Oliveira",cel:"(51) 9 9328-1730",animal:"Floquinho",data:"21/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Lucas Faviero de Vasconcellos",cel:"(51) 9 8040-214",animal:"Lupita",data:"24/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Fabiane Cid",cel:"(51) 9 9746-4467",animal:"Flora",data:"27/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Daniela",cel:"(51) 9 8184-4413",animal:"Cléo",data:"28/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Julio Machado",cel:"(51) 9 9396-7979",animal:"Oliver",data:"30/01/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Lizie Gomes",cel:"(51) 9 8537-9981",animal:"Chewie",data:"01/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Adriana",cel:"(51) 9 9548-6565",animal:"Meg",data:"05/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Josiane Brauveres",cel:"(51) 9 9795-6976",animal:"Ravi",data:"14/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Katia Barreto Marciniak",cel:"(51) 9 9301-6992",animal:"Calvin",data:"17/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Ana Paula Motta Pinheiro",cel:"(51) 9 8913-8141",animal:"Zora",data:"19/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Patrícia Timm",cel:"(51) 9 9176-2729",animal:"Bolt",data:"22/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Amanda Oliveira Scherer",cel:"(51) 9 9586-8009",animal:"Gaia",data:"25/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Larissa Batista",cel:"(51) 9708-1985",animal:"Tutti",data:"26/02/2025",filial:"Filial Central",status:"a_enviar"},
-  {nome:"Amira Salim",cel:"(53) 9 8105-4987",animal:"Ohana",data:"28/02/2025",filial:"Filial Central",status:"a_enviar"},
+  {nome:"Ayrton",cel:"(51) 9 9343-1639",animal:"Duna",data:"02/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Mariana Lima Scortegagna",cel:"(51) 9 9992-8199",animal:"Filomena Amélia",data:"03/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Andrea",cel:"(51) 9979-2204",animal:"Billy",data:"03/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Laura Raguzzoni Sussela",cel:"(51) 9 9328-6452",animal:"Theobaldo",data:"06/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Ellen Terezinha Silva Queiroz",cel:"(51) 9 9157-2131",animal:"Cuba",data:"06/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Marta Severo",cel:"(51) 9 9112-1691",animal:"Zen",data:"08/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Barbara Leal",cel:"(51) 9 2003-2769",animal:"Dogo",data:"10/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Núbia Regina Coelho de Sousa",cel:"(51) 9 9921-9840",animal:"Lola",data:"10/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Rosana Alves Silva de Oliveira",cel:"(51) 9 9242-0271",animal:"Thor",data:"13/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Amanda Pezzi",cel:"(51) 9 9982-0435",animal:"Caetano",data:"14/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Renata Dias",cel:"(51) 9 9200-4717",animal:"Pipa",data:"14/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Niara",cel:"(51) 9 9348-1211",animal:"Drake",data:"16/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Marina",cel:"(51) 9 9274-8461",animal:"Koda",data:"16/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Natasha Rodrigues Fernandes",cel:"(51) 9523-5010",animal:"Kiara",data:"17/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Bruna Oliveira",cel:"(51) 9 9328-1730",animal:"Floquinho",data:"21/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Lucas Faviero de Vasconcellos",cel:"(51) 9 8040-214",animal:"Lupita",data:"24/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Fabiane Cid",cel:"(51) 9 9746-4467",animal:"Flora",data:"27/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Daniela",cel:"(51) 9 8184-4413",animal:"Cléo",data:"28/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Julio Machado",cel:"(51) 9 9396-7979",animal:"Oliver",data:"30/01/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Lizie Gomes",cel:"(51) 9 8537-9981",animal:"Chewie",data:"01/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Adriana",cel:"(51) 9 9548-6565",animal:"Meg",data:"05/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Josiane Brauveres",cel:"(51) 9 9795-6976",animal:"Ravi",data:"14/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Katia Barreto Marciniak",cel:"(51) 9 9301-6992",animal:"Calvin",data:"17/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Ana Paula Motta Pinheiro",cel:"(51) 9 8913-8141",animal:"Zora",data:"19/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Patrícia Timm",cel:"(51) 9 9176-2729",animal:"Bolt",data:"22/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Amanda Oliveira Scherer",cel:"(51) 9 9586-8009",animal:"Gaia",data:"25/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Larissa Batista",cel:"(51) 9708-1985",animal:"Tutti",data:"26/02/2025",filial:"Rio Branco",status:"a_enviar"},
+  {nome:"Amira Salim",cel:"(53) 9 8105-4987",animal:"Ohana",data:"28/02/2025",filial:"Rio Branco",status:"a_enviar"},
   // Cachorródromo
   {nome:"Andressa Correa",cel:"(51) 8187-6005",animal:"Marie",data:"02/01/2025",filial:"Cachorródromo",status:"a_enviar"},
   {nome:"Ana Júlia",cel:"(51) 9 9148-5265",animal:"Tina",data:"02/01/2025",filial:"Cachorródromo",status:"a_enviar"},
@@ -1095,28 +1095,28 @@ const contatosReais = [
   {nome:"Karolina Ruas Pedrozo",cel:"(55) 9 9621-9638",animal:"Toninho",data:"22/02/2025",filial:"Cachorródromo",status:"a_enviar"},
   {nome:"Vanessa Favero",cel:"(51) 9 9840-4445",animal:"Jasmin",data:"25/02/2025",filial:"Cachorródromo",status:"a_enviar"},
   // Rio Branco — simulando alguns já em progresso para o demo
-  {nome:"Vera",cel:"(51) 9 8406-8233",animal:"Filipa",data:"17/07/2025",filial:"Filial Rio Branco",status:"enviado"},
-  {nome:"Isabela Sirtoli",cel:"(51) 9242-7642",animal:"Nicolau",data:"24/07/2025",filial:"Filial Rio Branco",status:"respondeu"},
-  {nome:"Dalvenir Flores",cel:"(51) 9 9515-9970",animal:"Duff",data:"15/08/2025",filial:"Filial Rio Branco",status:"agendado"},
-  {nome:"Carlos (Estela)",cel:"(51) 9 9981-2859",animal:"Estela",data:"19/08/2025",filial:"Filial Rio Branco",status:"compareceu"},
-  {nome:"Simone Machado Domingos",cel:"(51) 9 9988-4878",animal:"Amora",data:"21/08/2025",filial:"Filial Rio Branco",status:"enviado"},
-  {nome:"William Flaiban",cel:"(51) 9 9544-0078",animal:"Cadu",data:"25/08/2025",filial:"Filial Rio Branco",status:"respondeu"},
-  {nome:"Carolina Sartori",cel:"(51) 9558-9362",animal:"Brooklyn",data:"15/09/2025",filial:"Filial Rio Branco",status:"agendado"},
-  {nome:"Chiane Nepomuceno",cel:"(51) 9 9612-0262",animal:"Amora",data:"19/09/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Érica",cel:"(51) 9 8947-7371",animal:"Chandler",data:"01/10/2025",filial:"Filial Rio Branco",status:"compareceu"},
-  {nome:"Claudia Manfrão",cel:"(51) 9913-8147",animal:"Channel",data:"02/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Natália Marques",cel:"(54) 9 9923-2980",animal:"Bella",data:"03/10/2025",filial:"Filial Rio Branco",status:"enviado"},
-  {nome:"Melize",cel:"(51) 9 9894-0662",animal:"Frida",data:"04/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Andryelle Brum Paz",cel:"(51) 9 9372-9287",animal:"Antônio",data:"06/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Vitória Minetto Brondani",cel:"(54) 9 9443-289",animal:"Cookie",data:"06/10/2025",filial:"Filial Rio Branco",status:"respondeu"},
-  {nome:"Otávio Al-Alam",cel:"(51) 9992-0809",animal:"Tostão",data:"06/10/2025",filial:"Filial Rio Branco",status:"agendado"},
-  {nome:"Isabelle",cel:"(51) 9 9455-5360",animal:"Flora",data:"10/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Sabrina Ruver",cel:"(51) 9 8438-6297",animal:"Cacau",data:"14/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Elizandra",cel:"(51) 9 8328-1365",animal:"Tobi",data:"15/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Fernanda Conceição",cel:"(51) 9 9944-9993",animal:"Benjamin",data:"18/10/2025",filial:"Filial Rio Branco",status:"compareceu"},
-  {nome:"Camila Trindade Muza",cel:"(51) 9 9603-0022",animal:"Tifi",data:"22/10/2025",filial:"Filial Rio Branco",status:"a_enviar"},
-  {nome:"Ricardo Bello",cel:"(51) 9 9829-3913",animal:"Theo Bello",data:"08/11/2025",filial:"Filial Rio Branco",status:"enviado"},
-  {nome:"Juliana Beck",cel:"(51) 9 9222-7358",animal:"Paçoca",data:"10/11/2025",filial:"Filial Rio Branco",status:"a_enviar"},
+  {nome:"Vera",cel:"(51) 9 8406-8233",animal:"Filipa",data:"17/07/2025",filial:"Petrópolis",status:"enviado"},
+  {nome:"Isabela Sirtoli",cel:"(51) 9242-7642",animal:"Nicolau",data:"24/07/2025",filial:"Petrópolis",status:"respondeu"},
+  {nome:"Dalvenir Flores",cel:"(51) 9 9515-9970",animal:"Duff",data:"15/08/2025",filial:"Petrópolis",status:"agendado"},
+  {nome:"Carlos (Estela)",cel:"(51) 9 9981-2859",animal:"Estela",data:"19/08/2025",filial:"Petrópolis",status:"compareceu"},
+  {nome:"Simone Machado Domingos",cel:"(51) 9 9988-4878",animal:"Amora",data:"21/08/2025",filial:"Petrópolis",status:"enviado"},
+  {nome:"William Flaiban",cel:"(51) 9 9544-0078",animal:"Cadu",data:"25/08/2025",filial:"Petrópolis",status:"respondeu"},
+  {nome:"Carolina Sartori",cel:"(51) 9558-9362",animal:"Brooklyn",data:"15/09/2025",filial:"Petrópolis",status:"agendado"},
+  {nome:"Chiane Nepomuceno",cel:"(51) 9 9612-0262",animal:"Amora",data:"19/09/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Érica",cel:"(51) 9 8947-7371",animal:"Chandler",data:"01/10/2025",filial:"Petrópolis",status:"compareceu"},
+  {nome:"Claudia Manfrão",cel:"(51) 9913-8147",animal:"Channel",data:"02/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Natália Marques",cel:"(54) 9 9923-2980",animal:"Bella",data:"03/10/2025",filial:"Petrópolis",status:"enviado"},
+  {nome:"Melize",cel:"(51) 9 9894-0662",animal:"Frida",data:"04/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Andryelle Brum Paz",cel:"(51) 9 9372-9287",animal:"Antônio",data:"06/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Vitória Minetto Brondani",cel:"(54) 9 9443-289",animal:"Cookie",data:"06/10/2025",filial:"Petrópolis",status:"respondeu"},
+  {nome:"Otávio Al-Alam",cel:"(51) 9992-0809",animal:"Tostão",data:"06/10/2025",filial:"Petrópolis",status:"agendado"},
+  {nome:"Isabelle",cel:"(51) 9 9455-5360",animal:"Flora",data:"10/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Sabrina Ruver",cel:"(51) 9 8438-6297",animal:"Cacau",data:"14/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Elizandra",cel:"(51) 9 8328-1365",animal:"Tobi",data:"15/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Fernanda Conceição",cel:"(51) 9 9944-9993",animal:"Benjamin",data:"18/10/2025",filial:"Petrópolis",status:"compareceu"},
+  {nome:"Camila Trindade Muza",cel:"(51) 9 9603-0022",animal:"Tifi",data:"22/10/2025",filial:"Petrópolis",status:"a_enviar"},
+  {nome:"Ricardo Bello",cel:"(51) 9 9829-3913",animal:"Theo Bello",data:"08/11/2025",filial:"Petrópolis",status:"enviado"},
+  {nome:"Juliana Beck",cel:"(51) 9 9222-7358",animal:"Paçoca",data:"10/11/2025",filial:"Petrópolis",status:"a_enviar"},
 ];
 
 const STATUS_CONFIG = {
