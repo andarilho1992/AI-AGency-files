@@ -184,6 +184,38 @@ header{
   padding:2px 8px;border-radius:8px;display:inline-block;
 }
 
+/* CLAUDE PLANS */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:0}
+.plan-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:28px;position:relative;transition:all .2s;
+}
+.plan-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.plan-card.recommended{
+  border-color:var(--yellow);
+  background:linear-gradient(160deg,var(--bg2),rgba(233,158,34,.05));
+}
+.plan-rec-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--yellow);color:#000;font-size:11px;font-weight:800;
+  padding:3px 16px;border-radius:20px;white-space:nowrap;
+}
+.plan-name{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.plan-price{font-size:36px;font-weight:900;line-height:1;letter-spacing:-.04em;margin-bottom:4px}
+.plan-price span{font-size:14px;font-weight:500;color:var(--muted2)}
+.plan-price-brl{font-size:13px;color:var(--muted);margin-bottom:20px}
+.plan-sep{height:1px;background:var(--border);margin-bottom:20px}
+.plan-items{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.plan-item{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--muted2)}
+.plan-item .ck{color:var(--green);flex-shrink:0;font-weight:700}
+.plan-item .xx{color:var(--muted);flex-shrink:0}
+.plan-item .mm{color:var(--muted)}
+.plan-why{
+  background:var(--yellow2);border:1px solid var(--yellow3);
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:var(--yellow);font-weight:600;line-height:1.5;
+}
+
 /* CTA */
 .cta-box{
   margin:0 40px 64px;padding:48px 40px;text-align:center;
@@ -501,12 +533,88 @@ footer{
   </div>
 </section>
 
+<div class="divisor"></div>
+
+<!-- CLAUDE CODE PLANS -->
+<section class="section">
+  <div class="section-label">Ferramenta de desenvolvimento</div>
+  <h2>Claude Code — o que constrói<br>e mantém o sistema</h2>
+  <p class="sub">Claude Code é a ferramenta que construiu todo o Pets Go: CRM, agentes, automações, dashboards. Sem ela, o desenvolvimento para. É o equivalente ao salário do dev — pago mensalmente enquanto o sistema cresce.</p>
+
+  <div class="plans-grid">
+
+    <div class="plan-card">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$20 <span>/mês</span></div>
+      <div class="plan-price-brl">~R$100/mês</div>
+      <div class="plan-sep"></div>
+      <div class="plan-items">
+        <div class="plan-item"><span class="ck">✓</span><span>Claude Code CLI completo</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Acesso ao Claude Sonnet (modelo principal)</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Uso moderado — suficiente para manutenção</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Sessões de trabalho de até ~2h contínuas</span></div>
+        <div class="plan-item"><span class="xx">—</span><span class="mm">Sem acesso ao Claude Opus (modelo mais poderoso)</span></div>
+        <div class="plan-item"><span class="xx">—</span><span class="mm">Limite de uso mensal mais restrito</span></div>
+        <div class="plan-item"><span class="xx">—</span><span class="mm">Sem agentes paralelos em background</span></div>
+      </div>
+      <div class="plan-why">Para manutenção do sistema já entregue. Não cobre desenvolvimento ativo de novos módulos.</div>
+    </div>
+
+    <div class="plan-card recommended">
+      <div class="plan-rec-badge">Necessário para o projeto</div>
+      <div class="plan-name">Max</div>
+      <div class="plan-price">$100 <span>/mês</span></div>
+      <div class="plan-price-brl">~R$500/mês</div>
+      <div class="plan-sep"></div>
+      <div class="plan-items">
+        <div class="plan-item"><span class="ck">✓</span><span>Claude Code CLI completo</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Claude Sonnet + Opus (máxima capacidade)</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>5× mais uso mensal que o Pro</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Agentes paralelos em background</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Sessões longas sem interrupção</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Múltiplos módulos em desenvolvimento simultâneo</span></div>
+        <div class="plan-item"><span class="ck">✓</span><span>Automações e crons rodando sem supervisão</span></div>
+      </div>
+      <div class="plan-why">✦ É o que usamos agora. Permite desenvolver Agenda, PDV, Estoque e Financeiro em paralelo — cada módulo em uma janela separada.</div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:20px;padding:20px 24px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Por que o Max e não o Pro?</div>
+      <div style="font-size:12px;color:var(--muted2);line-height:1.7">
+        O Pets Go tem 6 módulos no roadmap: Clientes, Agenda, PDV, Estoque, Financeiro e Fidelização. Com o Pro, cada módulo leva o dobro do tempo — o limite de uso força pausas. Com o Max, rodamos múltiplos agentes ao mesmo tempo: um constrói a Agenda enquanto outro testa o PDV. É a diferença entre 1 dev lento e uma equipe.
+      </div>
+    </div>
+    <div style="text-align:center;flex-shrink:0">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Comparação de planos</div>
+      <a href="https://claude.ai/upgrade" target="_blank" style="display:inline-block;background:var(--yellow);color:#000;font-weight:800;font-size:12px;padding:10px 20px;border-radius:8px;text-decoration:none">Ver planos oficiais →</a>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <div class="cta-box">
   <h2>Custo total para ter tudo funcionando</h2>
-  <p>Uma decisão. Hoje. Para as 4 filiais entrarem no piloto automático.</p>
-  <div class="cta-total">~R$100/mês</div>
-  <div class="cta-sub">Railway $5 + Anthropic API ~$15 · Restante gratuito · Sem contrato de fidelidade</div>
+  <p>Uma decisão. Hoje. Para as 4 filiais no piloto automático e desenvolvimento contínuo.</p>
+  <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+    <div style="text-align:center">
+      <div style="font-size:11px;color:rgba(0,0,0,.5);margin-bottom:2px">Infraestrutura</div>
+      <div style="font-size:22px;font-weight:900;color:#000">~R$100/mês</div>
+    </div>
+    <div style="font-size:28px;font-weight:900;color:rgba(0,0,0,.3);align-self:center">+</div>
+    <div style="text-align:center">
+      <div style="font-size:11px;color:rgba(0,0,0,.5);margin-bottom:2px">Claude Code Max</div>
+      <div style="font-size:22px;font-weight:900;color:#000">R$500/mês</div>
+    </div>
+    <div style="font-size:28px;font-weight:900;color:rgba(0,0,0,.3);align-self:center">=</div>
+    <div style="text-align:center">
+      <div style="font-size:11px;color:rgba(0,0,0,.5);margin-bottom:2px">Total</div>
+      <div class="cta-total" style="font-size:26px;padding:10px 24px">~R$600/mês</div>
+    </div>
+  </div>
+  <div class="cta-sub">Railway $5 + Anthropic API ~$15 + Claude Max $100 · Sem contrato · Cancela quando quiser</div>
 </div>
 
 <footer>
