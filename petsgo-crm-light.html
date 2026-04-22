@@ -11,9 +11,9 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   /* ── Pets Go Brand Palette ── */
-  --brand:#3B3D9B;
-  --brand-dark:#2D2F7E;
-  --brand-light:#EAEBF8;
+  --brand:#4047C8;
+  --brand-dark:#2D33A8;
+  --brand-light:#ECEEFF;
   --pink:#E8187B;
   --pink-light:#FFF0F8;
   --teal:#00C896;
@@ -21,8 +21,8 @@
   --yellow:#F5C218;
   --yellow-light:#FFFDE6;
   /* ── Extended Palette ── */
-  --blue:#3B3D9B;
-  --blue-light:#EAEBF8;
+  --blue:#4047C8;
+  --blue-light:#ECEEFF;
   --green:#00C896;
   --green-light:#E5FFF8;
   --red:#DC2626;
@@ -116,7 +116,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .stat-value{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1}
 .stat-label{font-size:12px;font-weight:500;margin-top:3px;opacity:.75}
 .stat-trend{font-size:11px;font-weight:600;margin-top:4px;display:flex;align-items:center;gap:3px}
-.stat-c1{background:var(--brand-light);color:var(--brand-dark)}.stat-c1 .stat-icon{background:#D3D4F0}
+.stat-c1{background:var(--brand-light);color:var(--brand-dark)}.stat-c1 .stat-icon{background:#C8CAEF}
 .stat-c2{background:var(--teal-light);color:#006B4F}.stat-c2 .stat-icon{background:#B3F5E4}
 .stat-c3{background:var(--pink-light);color:#9A0050}.stat-c3 .stat-icon{background:#FFC0DF}
 .stat-c4{background:var(--yellow-light);color:#856400}.stat-c4 .stat-icon{background:#FDEEA0}
@@ -149,7 +149,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 /* ── CHECKINS ── */
 .checkin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .checkin-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:all .15s}
-.checkin-card:hover{border-color:var(--brand);box-shadow:0 0 0 2px rgba(59,61,155,.15)}
+.checkin-card:hover{border-color:var(--brand);box-shadow:0 0 0 2px rgba(64,71,200,.15)}
 .checkin-avatar{width:44px;height:44px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800}
 .checkin-name{font-size:12px;font-weight:700}
 .checkin-type{font-size:10px;font-weight:600;margin-top:3px}
@@ -180,7 +180,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 /* ── QUICK ACTIONS ── */
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
 .quick-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
-.quick-btn:hover{border-color:var(--brand);box-shadow:0 0 0 2px rgba(59,61,155,.15);background:var(--brand-light)}
+.quick-btn:hover{border-color:var(--brand);box-shadow:0 0 0 2px rgba(64,71,200,.15);background:var(--brand-light)}
 .quick-icon{font-size:22px;margin-bottom:6px}
 .quick-label{font-size:12px;font-weight:600;color:var(--text2)}
 
@@ -215,7 +215,7 @@ tr:hover td{background:var(--surface2)}
 /* ── PETS PAGE ── */
 .pet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
 .pet-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
-.pet-card:hover{border-color:var(--brand);box-shadow:0 0 0 2px rgba(59,61,155,.15),var(--shadow-md)}
+.pet-card:hover{border-color:var(--brand);box-shadow:0 0 0 2px rgba(64,71,200,.15),var(--shadow-md)}
 .pet-avatar{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px}
 .pet-name{font-size:14px;font-weight:700}
 .pet-breed{font-size:12px;color:var(--muted);margin-top:2px}
@@ -238,7 +238,7 @@ tr:hover td{background:var(--surface2)}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;font-weight:600;color:var(--text2)}
 .field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .12s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(59,61,155,.15)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(64,71,200,.15)}
 .field input::placeholder,.field textarea::placeholder{color:var(--muted2)}
 
 /* TOAST */
@@ -404,7 +404,7 @@ tr:hover td{background:var(--surface2)}
             <div class="agenda-list">
               <div class="agenda-item">
                 <div class="agenda-time">08:00</div>
-                <div class="agenda-dot" style="background:#3B3D9B"></div>
+                <div class="agenda-dot" style="background:#4047C8"></div>
                 <div style="flex:1">
                   <div class="agenda-name">Thor — Golden Retriever</div>
                   <div class="agenda-pet">Ana Souza · (51) 99999-0001</div>
@@ -449,7 +449,7 @@ tr:hover td{background:var(--surface2)}
               </div>
               <div class="agenda-item">
                 <div class="agenda-time">15:30</div>
-                <div class="agenda-dot" style="background:#3B3D9B"></div>
+                <div class="agenda-dot" style="background:#4047C8"></div>
                 <div style="flex:1">
                   <div class="agenda-name">Fred — Border Collie</div>
                   <div class="agenda-pet">Ricardo Mota · (51) 95555-0006</div>
@@ -465,7 +465,7 @@ tr:hover td{background:var(--surface2)}
             <div class="card-title">Pets no Local Agora <span>6 pets</span></div>
             <div class="checkin-grid">
               <div class="checkin-card">
-                <div class="checkin-avatar" style="background:#EAEBF8;color:#3B3D9B">🐕</div>
+                <div class="checkin-avatar" style="background:#ECEEFF;color:#4047C8">🐕</div>
                 <div class="checkin-name">Thor</div>
                 <div class="checkin-type" style="color:#2563EB">Banho</div>
                 <div class="checkin-time">desde 08:00</div>
@@ -489,7 +489,7 @@ tr:hover td{background:var(--surface2)}
                 <div class="checkin-time">2ª noite</div>
               </div>
               <div class="checkin-card">
-                <div class="checkin-avatar" style="background:#EAEBF8;color:#3B3D9B">🐈</div>
+                <div class="checkin-avatar" style="background:#ECEEFF;color:#4047C8">🐈</div>
                 <div class="checkin-name">Nina</div>
                 <div class="checkin-type" style="color:#9333EA">Hotel</div>
                 <div class="checkin-time">1ª noite</div>
@@ -513,7 +513,7 @@ tr:hover td{background:var(--surface2)}
               <div style="font-size:12px;color:var(--muted);margin-top:2px">+8% vs semana anterior</div>
             </div>
             <div class="mini-bars">
-              ${[55,70,45,85,60,90,75].map((h,i)=>`<div class="bar" style="height:${h}%;background:${i===6?'#3B3D9B':'#D3D4F0'};"></div>`).join('')}
+              ${[55,70,45,85,60,90,75].map((h,i)=>`<div class="bar" style="height:${h}%;background:${i===6?'#4047C8':'#C8CAEF'};"></div>`).join('')}
             </div>
             <div style="display:flex;justify-content:space-between;margin-top:4px">
               ${['Qua','Qui','Sex','Sab','Dom','Seg','Ter'].map(d=>`<div style="font-size:10px;color:var(--muted2);flex:1;text-align:center">${d}</div>`).join('')}
@@ -572,7 +572,7 @@ tr:hover td{background:var(--surface2)}
                 </div>
               </div>
               <div class="activity-item">
-                <div class="activity-icon" style="background:#EAEBF8;color:#3B3D9B"><i class="ph ph-calendar-plus"></i></div>
+                <div class="activity-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-calendar-plus"></i></div>
                 <div>
                   <div class="activity-text"><strong>Novo agendamento</strong> — Banho Fred para hoje 15h30</div>
                   <div class="activity-time">há 28 min</div>
@@ -620,25 +620,7 @@ tr:hover td{background:var(--surface2)}
         <div class="svc-tab">Banho (24)</div>
         <div class="svc-tab">Inativos (5)</div>
       </div>
-      <div class="pet-grid">
-        ${[
-          {name:'Thor',breed:'Golden Retriever',owner:'Ana Souza',emoji:'🐕',status:'Creche 4x/sem',sc:'at-creche'},
-          {name:'Mel',breed:'Shih Tzu',owner:'Carlos Lima',emoji:'🐩',status:'Creche 3x/sem',sc:'at-creche'},
-          {name:'Bolinha',breed:'Poodle',owner:'Mariana Costa',emoji:'🐾',status:'Banho mensal',sc:'at-banho'},
-          {name:'Rex',breed:'Labrador Retriever',owner:'Pedro Alves',emoji:'🦮',status:'Hotel 20 noites',sc:'at-hotel'},
-          {name:'Lola',breed:'Maltês',owner:'Fernanda Ramos',emoji:'🐈',status:'Creche 5x/sem',sc:'at-creche'},
-          {name:'Fred',breed:'Border Collie',owner:'Ricardo Mota',emoji:'🐕‍🦺',status:'Banho 10x',sc:'at-banho'},
-          {name:'Nina',breed:'Yorkshire',owner:'Juliana Félix',emoji:'🐩',status:'Hotel avulso',sc:'at-hotel'},
-          {name:'Pipoca',breed:'Pug',owner:'Bruno Santos',emoji:'🐾',status:'Banho unitário',sc:'at-banho'},
-        ].map(p=>`
-          <div class="pet-card">
-            <div class="pet-avatar" style="background:var(--surface2)">${p.emoji}</div>
-            <div class="pet-name">${p.name}</div>
-            <div class="pet-breed">${p.breed}</div>
-            <div class="pet-owner"><i class="ph ph-user" style="color:var(--muted2)"></i> ${p.owner}</div>
-            <div class="pet-status"><span class="tag ${p.sc}">${p.status}</span></div>
-          </div>
-        `).join('')}
+      <div class="pet-grid" id="pets-grid">
         <div class="pet-card" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;min-height:160px" onclick="openModal('modal-new-client')">
           <div style="font-size:28px;color:var(--muted2)"><i class="ph ph-plus-circle"></i></div>
           <div style="font-size:13px;font-weight:600;color:var(--muted2)">Novo cliente</div>
@@ -681,21 +663,7 @@ tr:hover td{background:var(--surface2)}
           <div style="flex:1;text-align:center;font-size:15px;font-weight:700;padding:8px">Semana de 20–26 de Abril</div>
           <button class="btn btn-ghost" style="font-size:12px">Próxima →</button>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
-          ${['Seg 20','Ter 21','Qua 22','Qui 23','Sex 24','Sáb 25'].map((d,i)=>`
-            <div style="background:${i===2?'#EAEBF8':'var(--surface2)'};border:1px solid ${i===2?'#B8BAE8':'var(--border)'};border-radius:8px;padding:10px;min-height:120px">
-              <div style="font-size:12px;font-weight:700;color:${i===2?'#3B3D9B':'var(--muted)'};margin-bottom:8px">${d}</div>
-              ${i===2?`
-                <div style="background:#3B3D9B;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600;margin-bottom:4px">08:00 Thor — Banho</div>
-                <div style="background:#00C896;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600;margin-bottom:4px">08:30 Mel — Creche</div>
-                <div style="background:#E8187B;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600">09:00 Bolinha — Tosa</div>
-              `:i===1?`
-                <div style="background:#E8187B;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600;margin-bottom:4px">10:00 Rex — Hotel</div>
-                <div style="background:#3B3D9B;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600">14:00 Fred — Banho</div>
-              `:''}
-            </div>
-          `).join('')}
-        </div>
+        <div id="agenda-week-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px"></div>
       </div>
     </div>
 
@@ -705,23 +673,7 @@ tr:hover td{background:var(--surface2)}
         <div class="page-title">Check-in / Check-out</div>
         <button class="btn btn-primary" onclick="openModal('modal-checkin')"><i class="ph ph-sign-in"></i> Registrar check-in</button>
       </div>
-      <div class="checkin-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
-        ${[
-          {n:'Thor',e:'🐕',t:'Banho',h:'08:00',c:'#EAEBF8',tc:'#3B3D9B'},
-          {n:'Mel',e:'🐩',t:'Creche',h:'08:30',c:'#E5FFF8',tc:'#006B4F'},
-          {n:'Bolinha',e:'🐾',t:'Tosa',h:'09:00',c:'#FFF0F8',tc:'#E8187B'},
-          {n:'Rex',e:'🦮',t:'Hotel',h:'2ª noite',c:'#FFF0F8',tc:'#E8187B'},
-          {n:'Nina',e:'🐈',t:'Hotel',h:'1ª noite',c:'#FFFDE6',tc:'#856400'},
-        ].map(p=>`
-          <div class="checkin-card">
-            <div class="checkin-avatar" style="background:${p.c};color:${p.tc}">${p.e}</div>
-            <div class="checkin-name">${p.n}</div>
-            <div class="checkin-type" style="color:${p.tc}">${p.t}</div>
-            <div class="checkin-time">${p.h}</div>
-            <button class="btn btn-danger" style="width:100%;margin-top:8px;padding:5px;font-size:11px"><i class="ph ph-sign-out"></i> Check-out</button>
-          </div>
-        `).join('')}
-      </div>
+      <div id="checkin-grid" class="checkin-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
     </div>
 
   </div>
@@ -844,6 +796,67 @@ function toast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+// ── Pets Grid ──
+(function() {
+  const pets = [
+    {name:'Thor',breed:'Golden Retriever',owner:'Ana Souza',emoji:'🐕',status:'Creche 4x/sem',sc:'at-creche'},
+    {name:'Mel',breed:'Shih Tzu',owner:'Carlos Lima',emoji:'🐩',status:'Creche 3x/sem',sc:'at-creche'},
+    {name:'Bolinha',breed:'Poodle',owner:'Mariana Costa',emoji:'🐾',status:'Banho mensal',sc:'at-banho'},
+    {name:'Rex',breed:'Labrador Retriever',owner:'Pedro Alves',emoji:'🦮',status:'Hotel 20 noites',sc:'at-hotel'},
+    {name:'Lola',breed:'Maltês',owner:'Fernanda Ramos',emoji:'🐈',status:'Creche 5x/sem',sc:'at-creche'},
+    {name:'Fred',breed:'Border Collie',owner:'Ricardo Mota',emoji:'🐕‍🦺',status:'Banho 10x',sc:'at-banho'},
+    {name:'Nina',breed:'Yorkshire',owner:'Juliana Félix',emoji:'🐩',status:'Hotel avulso',sc:'at-hotel'},
+    {name:'Pipoca',breed:'Pug',owner:'Bruno Santos',emoji:'🐾',status:'Banho unitário',sc:'at-banho'},
+  ];
+  const grid = document.getElementById('pets-grid');
+  const cards = pets.map(p => `
+    <div class="pet-card">
+      <div class="pet-avatar" style="background:var(--surface2)">${p.emoji}</div>
+      <div class="pet-name">${p.name}</div>
+      <div class="pet-breed">${p.breed}</div>
+      <div class="pet-owner"><i class="ph ph-user" style="color:var(--muted2)"></i> ${p.owner}</div>
+      <div class="pet-status"><span class="tag ${p.sc}">${p.status}</span></div>
+    </div>`).join('');
+  grid.insertAdjacentHTML('afterbegin', cards);
+})();
+
+// ── Agenda Weekly Grid ──
+(function() {
+  const days = ['Seg 20','Ter 21','Qua 22','Qui 23','Sex 24','Sáb 25'];
+  const grid = document.getElementById('agenda-week-grid');
+  grid.innerHTML = days.map((d,i) => `
+    <div style="background:${i===2?'#ECEEFF':'#F8FAFC'};border:1px solid ${i===2?'#B0B5EE':'#E2E8F0'};border-radius:8px;padding:10px;min-height:120px">
+      <div style="font-size:12px;font-weight:700;color:${i===2?'#4047C8':'#64748B'};margin-bottom:8px">${d}</div>
+      ${i===2?`
+        <div style="background:#4047C8;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600;margin-bottom:4px">08:00 Thor — Banho</div>
+        <div style="background:#00C896;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600;margin-bottom:4px">08:30 Mel — Creche</div>
+        <div style="background:#E8187B;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600">09:00 Bolinha — Tosa</div>
+      `:i===1?`
+        <div style="background:#E8187B;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600;margin-bottom:4px">10:00 Rex — Hotel</div>
+        <div style="background:#4047C8;color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:600">14:00 Fred — Banho</div>
+      `:''}
+    </div>`).join('');
+})();
+
+// ── Checkin Grid ──
+(function() {
+  const pets = [
+    {n:'Thor',e:'🐕',t:'Banho',h:'08:00',c:'#ECEEFF',tc:'#4047C8'},
+    {n:'Mel',e:'🐩',t:'Creche',h:'08:30',c:'#E5FFF8',tc:'#006B4F'},
+    {n:'Bolinha',e:'🐾',t:'Tosa',h:'09:00',c:'#FFF0F8',tc:'#E8187B'},
+    {n:'Rex',e:'🦮',t:'Hotel',h:'2ª noite',c:'#FFF0F8',tc:'#E8187B'},
+    {n:'Nina',e:'🐈',t:'Hotel',h:'1ª noite',c:'#FFFDE6',tc:'#856400'},
+  ];
+  document.getElementById('checkin-grid').innerHTML = pets.map(p => `
+    <div class="checkin-card">
+      <div class="checkin-avatar" style="background:${p.c};color:${p.tc}">${p.e}</div>
+      <div class="checkin-name">${p.n}</div>
+      <div class="checkin-type" style="color:${p.tc}">${p.t}</div>
+      <div class="checkin-time">${p.h}</div>
+      <button class="btn btn-danger" style="width:100%;margin-top:8px;padding:5px;font-size:11px"><i class="ph ph-sign-out"></i> Check-out</button>
+    </div>`).join('');
+})();
 </script>
 </body>
 </html>
