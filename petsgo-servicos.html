@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go — Criação Universal de Serviços</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --yellow:#E99E22;--yellow-dim:rgba(233,158,34,.12);--yellow-mid:rgba(233,158,34,.3);
+  --navy:#4130B4;--navy-dim:rgba(65,48,180,.3);
+  --bg:#0f1117;--bg2:#171b24;--bg3:#1e2330;--card:#1a1f2e;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#f0f0f0;--muted:#6b7280;--muted2:#9ca3af;
+  --green:#00C181;--green-dim:rgba(0,193,129,.12);
+  --red:#FF146D;--red-dim:rgba(255,20,109,.12);
+  --blue:#4A90E2;--blue-dim:rgba(74,144,226,.12);
+  --purple:#8B5CF6;--purple-dim:rgba(139,92,246,.12);
+}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:240px 1fr;grid-template-rows:60px 1fr;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
+.tb-brand{display:flex;align-items:center;gap:10px}
+.tb-logo{width:36px;height:36px;border-radius:10px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:18px}
+.tb-name{font-size:16px;font-weight:900;letter-spacing:-.02em}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-badge{background:var(--green-dim);color:var(--green);border:1px solid var(--green);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
+.tb-avatar{width:34px;height:34px;border-radius:50%;background:var(--navy);border:2px solid var(--yellow);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--yellow)}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:12px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;font-size:14px;font-weight:600;color:var(--muted2)}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-mid)}
+.nav-item .ico{font-size:16px;width:20px;text-align:center}
+.sidebar-bottom{margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
+
+/* MAIN */
+.main{overflow-y:auto;padding:28px 32px;background:var(--bg)}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
+.page-title{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted2);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--yellow);color:#111}
+.btn-primary:hover{background:#f0a820}
+.btn-ghost{background:transparent;color:var(--muted2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--bg3);color:var(--text)}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,20,109,.2)}
+
+/* SERVICE TYPE CARDS */
+.type-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.type-card{background:var(--bg2);border:2px solid var(--border);border-radius:14px;padding:18px 16px;cursor:pointer;transition:all .2s;text-align:center}
+.type-card:hover{border-color:var(--border2);background:var(--bg3)}
+.type-card.selected{border-color:var(--yellow);background:var(--yellow-dim)}
+.type-card.selected .type-icon{color:var(--yellow)}
+.type-card.selected .type-name{color:var(--yellow)}
+.type-icon{font-size:28px;margin-bottom:10px;color:var(--muted2);transition:color .15s}
+.type-name{font-size:14px;font-weight:800;color:var(--muted2);transition:color .15s}
+.type-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+/* FORM */
+.form-grid{display:grid;gap:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row.three{grid-template-columns:1fr 1fr 1fr}
+.form-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;font-weight:700;color:var(--muted2);letter-spacing:.04em;text-transform:uppercase}
+.field input,.field select,.field textarea{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
+  padding:11px 14px;font-family:'Nunito',sans-serif;font-size:14px;
+  color:var(--text);outline:none;transition:border-color .15s;width:100%
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--yellow)}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field textarea{resize:vertical;min-height:80px}
+
+/* SECTION CARD */
+.section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.section-title{font-size:15px;font-weight:800}
+.section-sub{font-size:12px;color:var(--muted2);margin-top:2px}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none;padding-bottom:0}
+.toggle-info .toggle-label{font-size:14px;font-weight:700}
+.toggle-info .toggle-desc{font-size:12px;color:var(--muted2);margin-top:2px}
+.toggle{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;transition:all .2s}
+.toggle input:checked + .toggle-track{background:var(--yellow);border-color:var(--yellow)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(20px)}
+
+/* PRICING TABLE */
+.price-table{width:100%;border-collapse:collapse}
+.price-table th{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;background:var(--bg3);border-radius:8px}
+.price-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600}
+.price-table tr:last-child td{border-bottom:none}
+.size-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:12px;font-weight:800}
+.size-p{background:var(--green-dim);color:var(--green)}
+.size-m{background:var(--blue-dim);color:var(--blue)}
+.size-g{background:var(--purple-dim);color:var(--purple)}
+.size-gg{background:var(--red-dim);color:var(--red)}
+.price-input{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);width:100px;outline:none}
+.price-input:focus{border-color:var(--yellow)}
+
+/* EXTRAS */
+.extras-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.extra-item{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+.extra-item input{background:transparent;border:none;outline:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;color:var(--text);flex:1}
+.extra-remove{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;transition:color .15s}
+.extra-remove:hover{color:var(--red)}
+.add-extra{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px dashed var(--border2);border-radius:10px;cursor:pointer;color:var(--muted2);font-size:13px;font-weight:700;transition:all .15s;background:none;width:100%;font-family:'Nunito',sans-serif}
+.add-extra:hover{border-color:var(--yellow);color:var(--yellow)}
+
+/* PREVIEW */
+.preview-card{background:var(--bg2);border:1px solid var(--yellow-mid);border-radius:14px;padding:22px}
+.preview-title{font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.preview-name{font-size:20px;font-weight:900;margin-bottom:4px}
+.preview-type{display:inline-flex;align-items:center;gap:6px;background:var(--yellow-dim);color:var(--yellow);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;margin-bottom:16px}
+.preview-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.preview-row:last-child{border-bottom:none}
+.preview-row .label{color:var(--muted2);font-weight:600}
+.preview-row .value{font-weight:800;color:var(--text)}
+.preview-row .value.price{color:var(--green)}
+.preview-extras{margin-top:12px}
+.preview-extras-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.preview-extra-chip{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700;margin:3px}
+
+/* SERVICES LIST */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.service-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s;position:relative}
+.service-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.sc-type{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
+.sc-type.creche{background:var(--green-dim);color:var(--green)}
+.sc-type.hotel{background:var(--blue-dim);color:var(--blue)}
+.sc-type.banho{background:var(--purple-dim);color:var(--purple)}
+.sc-type.avulso{background:var(--yellow-dim);color:var(--yellow)}
+.sc-name{font-size:16px;font-weight:900;margin-bottom:6px}
+.sc-desc{font-size:12px;color:var(--muted2);margin-bottom:14px;line-height:1.5}
+.sc-footer{display:flex;align-items:center;justify-content:space-between}
+.sc-price{font-size:18px;font-weight:900;color:var(--green)}
+.sc-meta{font-size:11px;color:var(--muted2);font-weight:600}
+.sc-actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.sc-actions button{flex:1;padding:8px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.edit-btn{background:var(--bg3);color:var(--muted2)}
+.edit-btn:hover{background:var(--yellow-dim);color:var(--yellow)}
+.del-btn{background:var(--red-dim);color:var(--red)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:18px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;padding:28px;position:relative;transform:translateY(20px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.modal-title{font-size:18px;font-weight:900}
+.modal-close{background:var(--bg3);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted2);font-size:18px;transition:all .15s}
+.modal-close:hover{background:var(--red-dim);color:var(--red);border-color:rgba(255,20,109,.3)}
+
+/* STEPS */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:28px}
+.step{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;color:var(--muted);transition:all .2s;flex:1;justify-content:center}
+.step.active{background:var(--yellow-dim);color:var(--yellow)}
+.step.done{color:var(--green)}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.step.active .step-num{background:var(--yellow);color:#111}
+.step.done .step-num{background:var(--green);color:#111}
+.step-divider{height:1px;width:20px;background:var(--border);flex-shrink:0}
+
+/* EMPTY STATE */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+.empty-icon{font-size:48px;color:var(--muted);margin-bottom:16px}
+.empty-title{font-size:18px;font-weight:800;margin-bottom:8px}
+.empty-sub{font-size:14px;color:var(--muted2);max-width:300px;line-height:1.6;margin-bottom:24px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:24px}
+.tab{flex:1;padding:8px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted2);transition:all .15s;text-align:center}
+.tab.active{background:var(--bg2);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+/* TAG */
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--muted2)}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="tb-logo">🐾</div>
+      <div>
+        <div class="tb-name">Pets Go</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <span class="tb-badge"><i class="ph ph-circle-wavy-check"></i> Demo</span>
+      <div class="tb-avatar">JR</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav-label">Principal</div>
+    <div class="nav-item"><span class="ico"><i class="ph ph-squares-four"></i></span> Dashboard</div>
+    <div class="nav-item"><span class="ico"><i class="ph ph-users"></i></span> Clientes & Pets</div>
+    <div class="nav-item"><span class="ico"><i class="ph ph-calendar-check"></i></span> Agenda</div>
+    <div class="nav-label">Configuração</div>
+    <div class="nav-item active"><span class="ico"><i class="ph ph-package"></i></span> Serviços</div>
+    <div class="nav-item"><span class="ico"><i class="ph ph-chart-bar"></i></span> Financeiro</div>
+    <div class="nav-item"><span class="ico"><i class="ph ph-storefront"></i></span> Estoque</div>
+    <div class="sidebar-bottom">
+      <div class="nav-item"><span class="ico"><i class="ph ph-gear"></i></span> Configurações</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainView">
+    <!-- Injected by JS -->
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Novo Serviço</div>
+      <button class="modal-close" onclick="closeModal()"><i class="ph ph-x"></i></button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let services = [
+  // CRECHE — Pequenos e Médios
+  {id:1, type:'creche', name:'Creche Mensal — Peq. e Médios', desc:'Até 20kg. Frequência 2x a 6x/semana. Matrícula R$80. Abatimento diário automático.', price:496, unit:'mês', validity:30, deduction:'diário', autoRenew:true,
+   extras:['3x/sem: R$696','4x/sem: R$848','5x/sem: R$960','6x/sem: R$1.056']},
+  {id:2, type:'creche', name:'Creche Trimestral — Peq. e Médios', desc:'Até 20kg. 7% OFF. 3 meses de validade. Frequência 2x a 6x/semana.', price:1384, unit:'trimestre', validity:90, deduction:'diário', autoRenew:false,
+   extras:['3x/sem: R$1.941','4x/sem: R$2.365','5x/sem: R$2.679','6x/sem: R$2.947']},
+  {id:3, type:'creche', name:'Creche Semestral — Peq. e Médios', desc:'Até 20kg. 17% OFF. 6 meses de validade.', price:2560, unit:'semestre', validity:180, deduction:'diário', autoRenew:false,
+   extras:['3x/sem: R$3.592','4x/sem: R$4.459','5x/sem: R$4.954','6x/sem: R$5.258']},
+  {id:4, type:'creche', name:'Creche Anual — Peq. e Médios', desc:'Até 20kg. 22% OFF. 12 meses. Pode ser congelado por 30d.', price:4645, unit:'ano', validity:365, deduction:'diário', autoRenew:false,
+   extras:['3x/sem: R$6.515','4x/sem: R$7.938','5x/sem: R$8.985','6x/sem: R$9.884']},
+  // CRECHE — Grandes e Extra G
+  {id:5, type:'creche', name:'Creche Mensal — Grandes e Extra G', desc:'Mais de 20kg. Frequência 2x a 6x/semana. Matrícula R$100.', price:544, unit:'mês', validity:30, deduction:'diário', autoRenew:true,
+   extras:['3x/sem: R$768','4x/sem: R$960','5x/sem: R$1.120','6x/sem: R$1.248']},
+  {id:6, type:'creche', name:'Creche Anual — Grandes e Extra G', desc:'Mais de 20kg. 22% OFF. 12 meses. Pode ser congelado por 30d.', price:5091, unit:'ano', validity:365, deduction:'diário', autoRenew:false,
+   extras:['3x/sem: R$7.188','4x/sem: R$8.985','5x/sem: R$10.483','6x/sem: R$11.681']},
+  // HOTEL
+  {id:7, type:'hotel', name:'Hotel — Pernoite Avulso Peq./Méd.', desc:'Até 20kg. Pernoite individual com acompanhamento.', price:125, unit:'pernoite', extras:['Banho final (+R$60)','Ração premium (+R$25/dia)']},
+  {id:8, type:'hotel', name:'Hotel — Pacote 10 Pernoites Peq./Méd.', desc:'Até 20kg. 12% OFF. Validade 12 meses.', price:1100, unit:'pacote', extras:['Banho final (+R$60)','Ração premium (+R$25/dia)']},
+  {id:9, type:'hotel', name:'Hotel — Pacote 20 Pernoites Peq./Méd.', desc:'Até 20kg. 25% OFF. Validade 12 meses.', price:1875, unit:'pacote', extras:['Banho final (+R$60)']},
+  {id:10, type:'hotel', name:'Hotel — Pernoite Avulso Grandes/Extra G', desc:'Mais de 20kg. Pernoite individual.', price:156, unit:'pernoite', extras:['Banho final (+R$90)','Ração premium (+R$30/dia)']},
+  {id:11, type:'hotel', name:'Hotel — Pacote 20 Pernoites Grandes/Extra G', desc:'Mais de 20kg. 25% OFF. Validade 12 meses.', price:2340, unit:'pacote', extras:['Banho final (+R$90)']},
+  // DAY CARE
+  {id:12, type:'avulso', name:'Day Care Avulso — Peq./Méd.', desc:'Até 20kg. Não aluno. Diária com supervisão.', price:80, unit:'dia', extras:[]},
+  {id:13, type:'avulso', name:'Day Care 10 Diárias — Peq./Méd.', desc:'Até 20kg. Pacote 10 diárias com desconto.', price:700, unit:'pacote', extras:[]},
+  {id:14, type:'avulso', name:'Day Care 20 Diárias — Peq./Méd.', desc:'Até 20kg. Pacote 20 diárias com desconto.', price:1200, unit:'pacote', extras:[]},
+  {id:15, type:'avulso', name:'Day Care Avulso — Grandes/Extra G', desc:'Mais de 20kg. Não aluno. Diária com supervisão.', price:100, unit:'dia', extras:[]},
+  // BANHO — Pequenos (até 10kg)
+  {id:16, type:'banho', name:'Banho Unitário — Pequenos', desc:'Até 10kg. Inclui secagem, perfume e laço.', prices:{P:60,M:null,G:null,GG:null},
+   extras:['Tosa completa: R$100','Tosa higiênica: R$30','Hidratação: R$25','Remoção subpelo: R$35','Retoque patas: R$15','Retoque cabeça: R$25','Escovação dentes: R$10','Desembolo 1: R$30','Desembolo 2: R$50']},
+  {id:17, type:'banho', name:'Pacote 10 Banhos — Pequenos', desc:'Até 10kg. Pacote 10 sessões. Validade 12 meses.', prices:{P:540,M:null,G:null,GG:null},
+   extras:['Tosa completa: R$100','Hidratação: R$25','Desembolo 1: R$30']},
+  {id:18, type:'banho', name:'Pacote 20 Banhos — Pequenos', desc:'Até 10kg. Pacote 20 sessões. Validade 12 meses.', prices:{P:996,M:null,G:null,GG:null}, extras:[]},
+  // BANHO — Médios (11-20kg)
+  {id:19, type:'banho', name:'Banho Unitário — Médios', desc:'11 a 20kg. Inclui secagem, perfume e laço.', prices:{P:null,M:75,G:null,GG:null},
+   extras:['Tosa completa: R$120','Tosa higiênica: R$35','Hidratação: R$30','Remoção subpelo: R$40','Desembolo 1: R$30','Desembolo 2: R$50']},
+  {id:20, type:'banho', name:'Pacote 10 Banhos — Médios', desc:'11 a 20kg. Pacote 10 sessões. Validade 12 meses.', prices:{P:null,M:675,G:null,GG:null}, extras:[]},
+  // BANHO — Extra G (mais de 30kg)
+  {id:21, type:'banho', name:'Banho Unitário — Extra G', desc:'Mais de 30kg. Inclui secagem e perfume.', prices:{P:null,M:null,G:null,GG:135},
+   extras:['Tosa completa: R$200','Tosa higiênica: R$50','Hidratação: R$60','Remoção subpelo: R$75','Desembolo 1: R$40','Desembolo 2: R$60']},
+  // ESPECIAL ALUNOS
+  {id:22, type:'creche', name:'Creche + Banho Livre Trim. — Peq./Méd.', desc:'Especial alunos até 20kg. Trimestral com banhos ilimitados incluídos.', price:1800, unit:'trimestre', validity:90, deduction:'diário', autoRenew:false,
+   extras:['3x/sem: R$2.358','4x/sem: R$2.828','5x/sem: R$3.096','6x/sem: R$3.364','Banho livre incluído']},
+  // VETERINÁRIO
+  {id:23, type:'avulso', name:'Consulta Médica', desc:'Atendimento veterinário de rotina.', price:160, unit:'consulta', extras:['Vacina giárdia: R$150','Vacina polivalente: R$135','Vacina antirrábica: R$120','Aplicação medicação: R$40']},
+  {id:24, type:'avulso', name:'Especialidades Veterinárias', desc:'Oftalmologia, Dermatologia, Oncologia, Cardiologia.', price:300, unit:'consulta', extras:['Ecocardio: R$350','Ecografia abdominal: R$250','Raio X: R$300']},
+];
+let nextId = 25;
+let currentStep = 1;
+let currentType = null;
+let editingId = null;
+let extras = [];
+let sizePrices = {P:'',M:'',G:'',GG:''};
+
+const typeConfig = {
+  creche: {icon:'🏠', label:'Creche / Plano', color:'creche', desc:'Planos com validade e uso diário'},
+  hotel: {icon:'🌙', label:'Hotel', color:'hotel', desc:'Hospedagem por pernoite'},
+  banho: {icon:'🛁', label:'Banho & Tosa', color:'banho', desc:'Serviço por porte do pet'},
+  avulso: {icon:'⚡', label:'Serviço Avulso', color:'avulso', desc:'Consulta, vacina, outros'},
+};
+
+// ── RENDER MAIN ──
+function renderMain() {
+  const main = document.getElementById('mainView');
+  main.innerHTML = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Serviços</div>
+        <div class="page-sub">Crie e gerencie qualquer tipo de serviço — planos, pacotes ou avulsos</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal()">
+        <i class="ph ph-plus"></i> Novo Serviço
+      </button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active">Todos (${services.length})</button>
+      <button class="tab">Planos / Creche (${services.filter(s=>s.type==='creche').length})</button>
+      <button class="tab">Hotel (${services.filter(s=>s.type==='hotel').length})</button>
+      <button class="tab">Banho & Tosa (${services.filter(s=>s.type==='banho').length})</button>
+    </div>
+
+    ${services.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon"><i class="ph ph-package"></i></div>
+        <div class="empty-title">Nenhum serviço criado</div>
+        <div class="empty-sub">Crie seu primeiro serviço — plano de creche, hospedagem, banho ou avulso.</div>
+        <button class="btn btn-primary" onclick="openModal()"><i class="ph ph-plus"></i> Criar Primeiro Serviço</button>
+      </div>
+    ` : `
+      <div class="services-grid">
+        ${services.map(renderServiceCard).join('')}
+        <div class="service-card" style="border:2px dashed var(--border);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;gap:12px" onclick="openModal()">
+          <div style="font-size:32px;color:var(--muted)"><i class="ph ph-plus-circle"></i></div>
+          <div style="font-size:14px;font-weight:700;color:var(--muted2)">Novo Serviço</div>
+        </div>
+      </div>
+    `}
+  `;
+}
+
+function renderServiceCard(s) {
+  const t = typeConfig[s.type];
+  let priceHTML = '';
+  if (s.type === 'banho') {
+    priceHTML = `<div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${Object.entries(s.prices).map(([size,val])=>`<span class="size-badge size-${size.toLowerCase()}">${size}</span> <span style="font-size:13px;font-weight:700">R$${val}</span>`).join(' ')}
+    </div>`;
+  } else {
+    priceHTML = `<span class="sc-price">R$${s.price}<small style="font-size:12px;font-weight:600;color:var(--muted2)">/${s.unit}</small></span>`;
+  }
+
+  return `
+    <div class="service-card">
+      <span class="sc-type ${t.color}"><i class="ph ph-${s.type==='creche'?'house':s.type==='hotel'?'moon':s.type==='banho'?'shower':'lightning'}"></i> ${t.label}</span>
+      <div class="sc-name">${s.name}</div>
+      <div class="sc-desc">${s.desc}</div>
+      ${s.type==='banho' ? priceHTML : `<div class="sc-footer">${priceHTML}<span class="sc-meta">${s.validity ? s.validity+' dias' : ''} ${s.autoRenew?'· Renovação auto':''}</span></div>`}
+      ${s.extras?.length ? `<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px">${s.extras.map(e=>`<span class="tag"><i class="ph ph-plus-circle"></i>${e}</span>`).join('')}</div>` : ''}
+      <div class="sc-actions">
+        <button class="edit-btn" onclick="editService(${s.id})"><i class="ph ph-pencil"></i> Editar</button>
+        <button class="del-btn" onclick="deleteService(${s.id})"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>
+  `;
+}
+
+// ── MODAL ──
+function openModal(id = null) {
+  editingId = id;
+  currentStep = 1;
+  currentType = null;
+  extras = [];
+  sizePrices = {P:'',M:'',G:'',GG:''};
+
+  if (id) {
+    const s = services.find(x => x.id === id);
+    currentType = s.type;
+    extras = [...(s.extras || [])];
+    if (s.prices) sizePrices = {...s.prices};
+    document.getElementById('modalTitle').textContent = 'Editar Serviço';
+    currentStep = 2;
+  } else {
+    document.getElementById('modalTitle').textContent = 'Novo Serviço';
+  }
+
+  document.getElementById('modalOverlay').classList.add('open');
+  renderModalStep();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function editService(id) { openModal(id); }
+
+function deleteService(id) {
+  if (confirm('Remover este serviço?')) {
+    services = services.filter(s => s.id !== id);
+    renderMain();
+  }
+}
+
+function renderModalStep() {
+  const body = document.getElementById('modalBody');
+
+  // Steps indicator
+  const stepsHTML = `
+    <div class="steps">
+      <div class="step ${currentStep >= 1 ? (currentStep > 1 ? 'done':'active') : ''}">
+        <div class="step-num">${currentStep > 1 ? '<i class="ph ph-check"></i>' : '1'}</div> Tipo
+      </div>
+      <div class="step-divider"></div>
+      <div class="step ${currentStep >= 2 ? (currentStep > 2 ? 'done':'active') : ''}">
+        <div class="step-num">${currentStep > 2 ? '<i class="ph ph-check"></i>' : '2'}</div> Configuração
+      </div>
+      <div class="step-divider"></div>
+      <div class="step ${currentStep >= 3 ? 'active' : ''}">
+        <div class="step-num">3</div> Revisão
+      </div>
+    </div>
+  `;
+
+  if (currentStep === 1) {
+    body.innerHTML = stepsHTML + `
+      <div style="margin-bottom:16px;font-size:14px;color:var(--muted2)">Qual tipo de serviço você quer criar?</div>
+      <div class="type-grid">
+        ${Object.entries(typeConfig).map(([key, t]) => `
+          <div class="type-card ${currentType === key ? 'selected' : ''}" onclick="selectType('${key}')">
+            <div class="type-icon">${t.icon}</div>
+            <div class="type-name">${t.label}</div>
+            <div class="type-desc">${t.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="nextStep()" ${!currentType ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''}>
+          Próximo <i class="ph ph-arrow-right"></i>
+        </button>
+      </div>
+    `;
+  } else if (currentStep === 2) {
+    const s = editingId ? services.find(x => x.id === editingId) : {};
+    body.innerHTML = stepsHTML + buildConfigForm(s);
+  } else if (currentStep === 3) {
+    body.innerHTML = stepsHTML + buildPreview();
+  }
+}
+
+function selectType(type) {
+  currentType = type;
+  renderModalStep();
+}
+
+function nextStep() {
+  if (currentStep === 2) {
+    // Validate
+    const name = document.getElementById('f-name')?.value;
+    if (!name) { alert('Nome do serviço é obrigatório'); return; }
+  }
+  currentStep++;
+  renderModalStep();
+}
+
+function prevStep() {
+  currentStep--;
+  renderModalStep();
+}
+
+function buildConfigForm(s = {}) {
+  const isCreche = currentType === 'creche';
+  const isHotel = currentType === 'hotel';
+  const isBanho = currentType === 'banho';
+  const isAvulso = currentType === 'avulso';
+
+  return `
+    <div class="form-grid">
+      <!-- Info básica -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background:var(--yellow-dim);color:var(--yellow)"><i class="ph ph-info"></i></div>
+          <div><div class="section-title">Informações Básicas</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Nome do Serviço</label>
+            <input id="f-name" type="text" placeholder="Ex: Plano Creche Mensal" value="${s.name || ''}"/>
+          </div>
+          <div class="field">
+            <label>Tipo</label>
+            <input type="text" value="${typeConfig[currentType].label}" disabled style="opacity:.6"/>
+          </div>
+        </div>
+        <div class="form-row full" style="margin-top:12px">
+          <div class="field">
+            <label>Descrição curta</label>
+            <input id="f-desc" type="text" placeholder="Aparece no cadastro do cliente" value="${s.desc || ''}"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cobrança -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background:var(--green-dim);color:var(--green)"><i class="ph ph-currency-dollar"></i></div>
+          <div><div class="section-title">Cobrança</div></div>
+        </div>
+
+        ${isBanho ? `
+          <div style="margin-bottom:14px;font-size:13px;color:var(--muted2)">Defina o preço por porte do pet:</div>
+          <table class="price-table">
+            <thead><tr>
+              <th>Porte</th><th>Tamanho</th><th>Preço</th>
+            </tr></thead>
+            <tbody>
+              ${[['P','Pequeno (até 10kg)','size-p'],['M','Médio (10–20kg)','size-m'],['G','Grande (20–35kg)','size-g'],['GG','Gigante (35kg+)','size-gg']].map(([size, label, cls]) => `
+                <tr>
+                  <td><span class="size-badge ${cls}">${size}</span></td>
+                  <td style="color:var(--muted2)">${label}</td>
+                  <td><div style="display:flex;align-items:center;gap:6px"><span style="color:var(--muted2);font-size:13px">R$</span><input class="price-input" id="price-${size}" type="number" placeholder="0" value="${sizePrices[size] || ''}" oninput="sizePrices['${size}']=this.value"/></div></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        ` : `
+          <div class="form-row three">
+            <div class="field">
+              <label>Valor (R$)</label>
+              <input id="f-price" type="number" placeholder="0,00" value="${s.price || ''}"/>
+            </div>
+            <div class="field">
+              <label>Cobrado por</label>
+              <select id="f-unit">
+                <option value="mês" ${s.unit==='mês'?'selected':''}>Mês</option>
+                <option value="semana" ${s.unit==='semana'?'selected':''}>Semana</option>
+                <option value="pernoite" ${s.unit==='pernoite'?'selected':''}>Pernoite</option>
+                <option value="sessão" ${s.unit==='sessão'?'selected':''}>Sessão</option>
+                <option value="avulso" ${s.unit==='avulso'?'selected':''}>Avulso (único)</option>
+              </select>
+            </div>
+            ${isCreche ? `
+            <div class="field">
+              <label>Abatimento</label>
+              <select id="f-deduction">
+                <option value="diário">Por dia de uso</option>
+                <option value="semanal">Por semana</option>
+                <option value="fixo">Sem abatimento</option>
+              </select>
+            </div>
+            ` : '<div></div>'}
+          </div>
+        `}
+      </div>
+
+      <!-- Validade e regras -->
+      ${isCreche || isHotel ? `
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background:var(--blue-dim);color:var(--blue)"><i class="ph ph-clock"></i></div>
+          <div><div class="section-title">Validade e Regras</div></div>
+        </div>
+        ${isCreche ? `
+        <div class="form-row">
+          <div class="field">
+            <label>Validade (dias)</label>
+            <input id="f-validity" type="number" placeholder="Ex: 30" value="${s.validity || 30}"/>
+          </div>
+          <div class="field">
+            <label>Período de tolerância</label>
+            <select id="f-grace">
+              <option>Sem tolerância</option>
+              <option>3 dias</option>
+              <option>5 dias</option>
+              <option>7 dias</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Renovação automática</div>
+              <div class="toggle-desc">Gera nova cobrança quando o plano vence</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="f-autorenew" ${s.autoRenew !== false ? 'checked' : ''}>
+              <div class="toggle-track"></div>
+              <div class="toggle-thumb"></div>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Alerta de vencimento</div>
+              <div class="toggle-desc">Notifica tutor 3 dias antes do vencimento via WhatsApp</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked>
+              <div class="toggle-track"></div>
+              <div class="toggle-thumb"></div>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Controle de saldo de dias</div>
+              <div class="toggle-desc">Exibe no CRM quantos dias restam no plano ativo</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked>
+              <div class="toggle-track"></div>
+              <div class="toggle-thumb"></div>
+            </label>
+          </div>
+        </div>
+        ` : `
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-label">Controle de pernoites</div>
+            <div class="toggle-desc">Registra e cobra por cada noite de hospedagem</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-label">Check-in / Check-out manual</div>
+            <div class="toggle-desc">Funcionário confirma entrada e saída do pet</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        `}
+      </div>
+      ` : ''}
+
+      <!-- Extras -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background:var(--purple-dim);color:var(--purple)"><i class="ph ph-plus-circle"></i></div>
+          <div>
+            <div class="section-title">Extras opcionais</div>
+            <div class="section-sub">Adicionais que o funcionário pode incluir na contratação</div>
+          </div>
+        </div>
+        <div class="extras-list" id="extrasList">
+          ${extras.map((e, i) => `
+            <div class="extra-item" id="extra-${i}">
+              <i class="ph ph-dots-six" style="color:var(--muted);font-size:16px"></i>
+              <input value="${e}" placeholder="Ex: Desembolado (+R$25)" oninput="extras[${i}]=this.value"/>
+              <button class="extra-remove" onclick="removeExtra(${i})"><i class="ph ph-x"></i></button>
+            </div>
+          `).join('')}
+        </div>
+        <button class="add-extra" onclick="addExtra()" style="margin-top:8px">
+          <i class="ph ph-plus"></i> Adicionar extra
+        </button>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;gap:10px;margin-top:20px">
+      <button class="btn btn-ghost" onclick="prevStep()"><i class="ph ph-arrow-left"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="nextStep()">Revisar <i class="ph ph-arrow-right"></i></button>
+    </div>
+  `;
+}
+
+function buildPreview() {
+  const name = document.getElementById('f-name')?.value || 'Sem nome';
+  const desc = document.getElementById('f-desc')?.value || '';
+  const price = document.getElementById('f-price')?.value;
+  const unit = document.getElementById('f-unit')?.value;
+  const validity = document.getElementById('f-validity')?.value;
+  const autoRenew = document.getElementById('f-autorenew')?.checked;
+  const t = typeConfig[currentType];
+  const isBanho = currentType === 'banho';
+
+  return `
+    <div style="margin-bottom:20px;font-size:14px;color:var(--muted2)">Confirme as informações antes de salvar:</div>
+    <div class="preview-card">
+      <div class="preview-title"><i class="ph ph-eye"></i> Pré-visualização</div>
+      <div class="preview-name">${name}</div>
+      <div class="preview-type">${t.icon} ${t.label}</div>
+      ${desc ? `<div style="font-size:13px;color:var(--muted2);margin-bottom:16px">${desc}</div>` : ''}
+
+      ${isBanho ? `
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+          ${Object.entries(sizePrices).filter(([,v])=>v).map(([size,val])=>`
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center">
+              <div class="size-badge size-${size.toLowerCase()}" style="margin:0 auto 6px">${size}</div>
+              <div style="font-size:16px;font-weight:900;color:var(--green)">R$${val}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="preview-row">
+          <span class="label">Valor</span>
+          <span class="value price">R$${price || '--'} <small style="color:var(--muted2);font-size:12px">/ ${unit}</small></span>
+        </div>
+        ${validity ? `<div class="preview-row"><span class="label">Validade</span><span class="value">${validity} dias</span></div>` : ''}
+        ${autoRenew !== undefined ? `<div class="preview-row"><span class="label">Renovação auto</span><span class="value" style="color:${autoRenew?'var(--green)':'var(--muted2)'}">${autoRenew ? 'Ativada' : 'Desativada'}</span></div>` : ''}
+      `}
+
+      ${extras.filter(Boolean).length ? `
+        <div class="preview-extras">
+          <div class="preview-extras-title">Extras disponíveis</div>
+          ${extras.filter(Boolean).map(e=>`<span class="preview-extra-chip"><i class="ph ph-plus"></i>${e}</span>`).join('')}
+        </div>
+      ` : ''}
+    </div>
+
+    <div style="display:flex;justify-content:space-between;gap:10px;margin-top:20px">
+      <button class="btn btn-ghost" onclick="prevStep()"><i class="ph ph-arrow-left"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="saveService()" style="min-width:140px">
+        <i class="ph ph-floppy-disk"></i> Salvar Serviço
+      </button>
+    </div>
+  `;
+}
+
+function addExtra() {
+  extras.push('');
+  renderModalStep();
+}
+
+function removeExtra(i) {
+  extras.splice(i, 1);
+  renderModalStep();
+}
+
+function saveService() {
+  const name = document.getElementById('f-name')?.value;
+  const desc = document.getElementById('f-desc')?.value || '';
+  const price = parseFloat(document.getElementById('f-price')?.value) || 0;
+  const unit = document.getElementById('f-unit')?.value || 'mês';
+  const validity = parseInt(document.getElementById('f-validity')?.value) || null;
+  const autoRenew = document.getElementById('f-autorenew')?.checked;
+  const isBanho = currentType === 'banho';
+
+  const svc = {
+    type: currentType,
+    name,
+    desc,
+    extras: extras.filter(Boolean),
+    ...(isBanho ? {prices: {...sizePrices}} : {price, unit, validity, autoRenew}),
+  };
+
+  if (editingId) {
+    const idx = services.findIndex(s => s.id === editingId);
+    services[idx] = {...svc, id: editingId};
+  } else {
+    services.push({...svc, id: nextId++});
+  }
+
+  closeModal();
+  renderMain();
+
+  // Flash success
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.service-card');
+    const last = cards[cards.length - 2];
+    if (last) { last.style.border = '1px solid var(--green)'; setTimeout(() => last.style.border = '', 1500); }
+  }, 100);
+}
+
+// Close on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Boot
+renderMain();
+</script>
+</body>
+</html>

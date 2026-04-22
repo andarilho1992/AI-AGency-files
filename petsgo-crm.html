@@ -513,6 +513,9 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
       <span class="ico"><i class="ph ph-arrows-clockwise"></i></span> Reativação
       <span class="nav-badge" id="badge-reativacao">0</span>
     </div>
+    <div class="nav-item" data-page="servicos" onclick="nav('servicos')">
+      <span class="ico"><i class="ph ph-tag"></i></span> Serviços
+    </div>
 
     <div class="sidebar-bottom">
       <div class="nav-item" data-page="config" onclick="nav('config')">
@@ -735,6 +738,29 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color
           <div id="fat-rows"></div>
         </div>
       </div>
+    </div>
+
+    <!-- ══ SERVIÇOS ══ -->
+    <div class="page" id="page-servicos">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+        <div>
+          <div class="page-title">Serviços & Planos</div>
+          <div class="page-sub">Tabela de preços completa — Pets Go Club 2025</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <select id="svc-filter" onchange="renderServicos()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);outline:none;cursor:pointer">
+            <option value="todos">Todos os serviços</option>
+            <option value="creche">Creche</option>
+            <option value="hotel">Hotel</option>
+            <option value="daycare">Day Care</option>
+            <option value="banho">Banho & Estética</option>
+            <option value="combo">Especial Alunos</option>
+            <option value="vet">Veterinário</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="servicos-container"></div>
     </div>
 
     <!-- ══ CONFIGURAÇÕES ══ -->
@@ -1645,6 +1671,7 @@ function nav(page) {
     filiais: renderFiliais,
     atendimentos: renderAtendimentos,
     estoque: renderEstoque,
+    servicos: renderServicos,
     faturamentos: () => {
       if (!fatAutenticado) bloquearFaturamentos();
       else renderFaturamentos();
@@ -3174,6 +3201,294 @@ atualizarData();
 applyConfig();
 atualizarBadges();
 renderDashboard();
+
+// ══════════════════════════════════════════════════════
+// SERVIÇOS — Tabela completa do cardápio Pets Go 2025
+// ══════════════════════════════════════════════════════
+const SERVICOS = {
+  creche: {
+    label: 'Creche', icon: 'ph-house', color: '#E99E22', bg: 'rgba(233,158,34,.12)',
+    grupos: [
+      {
+        nome: 'Pequenos e Médios', sub: 'até 20kg · Matrícula R$80',
+        colunas: ['2x/sem','3x/sem','4x/sem','5x/sem','6x/sem'],
+        linhas: [
+          {periodo:'Mensal', precos:[496,696,848,960,1056], desc:''},
+          {periodo:'Trimestral', precos:[1384,1941,2365,2679,2947], desc:'7% OFF'},
+          {periodo:'Semestral', precos:[2560,3592,4459,4954,5258], desc:'17% OFF'},
+          {periodo:'Anual', precos:[4645,6515,7938,8985,9884], desc:'22% OFF'},
+          {periodo:'18 Meses', precos:[6607,9270,11295,12787,14065], desc:'26% OFF'},
+        ]
+      },
+      {
+        nome: 'Grandes e Extra G', sub: 'mais de 20kg · Matrícula R$100',
+        colunas: ['2x/sem','3x/sem','4x/sem','5x/sem','6x/sem'],
+        linhas: [
+          {periodo:'Mensal', precos:[544,768,960,1120,1248], desc:''},
+          {periodo:'Trimestral', precos:[1518,2143,2679,3125,3482], desc:'7% OFF'},
+          {periodo:'Semestral', precos:[2808,3963,4954,5780,6440], desc:'17% OFF'},
+          {periodo:'Anual', precos:[5091,7188,8985,10483,11681], desc:'22% OFF'},
+          {periodo:'18 Meses', precos:[7246,10229,12787,14918,16623], desc:'26% OFF'},
+        ]
+      }
+    ]
+  },
+  hotel: {
+    label: 'Hotel', icon: 'ph-moon', color: '#4A90E2', bg: 'rgba(74,144,226,.12)',
+    grupos: [
+      {
+        nome: 'Pequenos e Médios', sub: 'até 20kg',
+        lista: [
+          {nome:'Pernoite Avulso', preco:125, desc:''},
+          {nome:'10 Pernoites', preco:1100, desc:'12% OFF'},
+          {nome:'20 Pernoites', preco:1875, desc:'25% OFF'},
+          {nome:'30 Pernoites', preco:2625, desc:'30% OFF'},
+        ]
+      },
+      {
+        nome: 'Grandes e Extra G', sub: 'mais de 20kg',
+        lista: [
+          {nome:'Pernoite Avulso', preco:156, desc:''},
+          {nome:'10 Pernoites', preco:1372, desc:'12% OFF'},
+          {nome:'20 Pernoites', preco:2340, desc:'25% OFF'},
+          {nome:'30 Pernoites', preco:3276, desc:'30% OFF'},
+        ]
+      }
+    ]
+  },
+  daycare: {
+    label: 'Day Care', icon: 'ph-sun', color: '#00C181', bg: 'rgba(0,193,129,.12)',
+    grupos: [
+      {
+        nome: 'Pequenos e Médios', sub: 'até 20kg',
+        lista: [
+          {nome:'Avulso (não aluno)', preco:80, desc:''},
+          {nome:'10 Diárias', preco:700, desc:''},
+          {nome:'20 Diárias', preco:1200, desc:''},
+        ]
+      },
+      {
+        nome: 'Grandes e Extra G', sub: 'mais de 20kg',
+        lista: [
+          {nome:'Avulso (não aluno)', preco:100, desc:''},
+          {nome:'10 Diárias', preco:900, desc:''},
+          {nome:'20 Diárias', preco:1600, desc:''},
+        ]
+      }
+    ]
+  },
+  banho: {
+    label: 'Banho & Estética', icon: 'ph-shower', color: '#8B5CF6', bg: 'rgba(139,92,246,.12)',
+    grupos: [
+      {
+        nome: 'Pequenos', sub: 'até 10kg',
+        lista: [
+          {nome:'Banho Unitário', preco:60, desc:''},
+          {nome:'Pacote 10 Banhos', preco:540, desc:''},
+          {nome:'Pacote 20 Banhos', preco:996, desc:''},
+          {nome:'Pacote 30 Banhos', preco:1350, desc:''},
+          {nome:'Pacote 40 Banhos', preco:1560, desc:''},
+        ],
+        extras: [
+          {nome:'Tosa Completa', preco:100},{nome:'Tosa Higiênica', preco:30},
+          {nome:'Hidratação', preco:25},{nome:'Remoção Subpelo', preco:35},
+          {nome:'Retoque Patas', preco:15},{nome:'Retoque Cabeça', preco:25},
+          {nome:'Escovação Dentes', preco:10},{nome:'Desembolo 1', preco:30},{nome:'Desembolo 2', preco:50},
+        ]
+      },
+      {
+        nome: 'Médios', sub: '11 a 20kg',
+        lista: [
+          {nome:'Banho Unitário', preco:75, desc:''},
+          {nome:'Pacote 10 Banhos', preco:675, desc:''},
+          {nome:'Pacote 20 Banhos', preco:1245, desc:''},
+          {nome:'Pacote 30 Banhos', preco:1687, desc:''},
+          {nome:'Pacote 40 Banhos', preco:1950, desc:''},
+        ],
+        extras: [
+          {nome:'Tosa Completa', preco:120},{nome:'Tosa Higiênica', preco:35},
+          {nome:'Hidratação', preco:30},{nome:'Remoção Subpelo', preco:40},
+          {nome:'Retoque Patas', preco:20},{nome:'Retoque Cabeça', preco:30},
+          {nome:'Escovação Dentes', preco:10},{nome:'Desembolo 1', preco:30},{nome:'Desembolo 2', preco:50},
+        ]
+      },
+      {
+        nome: 'Extra G', sub: 'mais de 30kg',
+        lista: [
+          {nome:'Banho Unitário', preco:135, desc:''},
+          {nome:'Pacote 10 Banhos', preco:1215, desc:''},
+          {nome:'Pacote 20 Banhos', preco:2241, desc:''},
+          {nome:'Pacote 30 Banhos', preco:3037, desc:''},
+          {nome:'Pacote 40 Banhos', preco:3510, desc:''},
+        ],
+        extras: [
+          {nome:'Tosa Completa', preco:200},{nome:'Tosa Higiênica', preco:50},
+          {nome:'Hidratação', preco:60},{nome:'Remoção Subpelo', preco:75},
+          {nome:'Retoque Patas', preco:20},{nome:'Retoque Cabeça', preco:30},
+          {nome:'Escovação Dentes', preco:10},{nome:'Desembolo 1', preco:40},{nome:'Desembolo 2', preco:60},
+        ]
+      }
+    ]
+  },
+  combo: {
+    label: 'Especial Alunos', icon: 'ph-star', color: '#FF146D', bg: 'rgba(255,20,109,.12)',
+    grupos: [
+      {
+        nome: 'Creche + Banho Livre — Peq. e Médios', sub: 'até 20kg',
+        colunas: ['2x/sem','3x/sem','4x/sem','5x/sem','6x/sem'],
+        linhas: [
+          {periodo:'Trimestral', precos:[1800,2358,2828,3096,3364], desc:''},
+          {periodo:'Semestral', precos:[3240,4272,5099,5594,6089], desc:''},
+        ]
+      },
+      {
+        nome: 'Creche + Banho Livre — Grandes e Extra G', sub: 'mais de 20kg',
+        colunas: ['2x/sem','3x/sem','4x/sem','5x/sem','6x/sem'],
+        linhas: [
+          {periodo:'Trimestral', precos:[2238,2863,3399,3845,4202], desc:''},
+          {periodo:'Semestral', precos:[3960,5115,6106,6932,7592], desc:''},
+        ]
+      },
+      {
+        nome: 'Hotel Especial Alunos — Peq. e Médios', sub: 'até 20kg',
+        lista: [
+          {nome:'Pernoite Avulso', preco:80, desc:''},
+          {nome:'20 Pernoites', preco:1440, desc:''},
+          {nome:'40 Pernoites', preco:2600, desc:''},
+        ]
+      },
+      {
+        nome: 'Hotel Especial Alunos — Grandes e Extra G', sub: 'mais de 20kg',
+        lista: [
+          {nome:'Pernoite Avulso', preco:100, desc:''},
+          {nome:'20 Pernoites', preco:1680, desc:''},
+          {nome:'40 Pernoites', preco:3040, desc:''},
+        ]
+      }
+    ]
+  },
+  vet: {
+    label: 'Veterinário', icon: 'ph-first-aid-kit', color: '#00C181', bg: 'rgba(0,193,129,.12)',
+    grupos: [
+      {
+        nome: 'Rotina', sub: '',
+        lista: [
+          {nome:'Consulta Médica', preco:160},{nome:'Acompanhamento', preco:60},
+          {nome:'Vacina Giárdia', preco:150},{nome:'Vacina Polivalente', preco:135},
+          {nome:'Vacina Antirrábica', preco:120},{nome:'Vacina Bronqui Intranasal', preco:150},
+          {nome:'Aplicação de Medicação', preco:40},
+        ]
+      },
+      {
+        nome: 'Especialidades', sub: '',
+        lista: [
+          {nome:'Oftalmologista', preco:300},{nome:'Dermatologista', preco:300},
+          {nome:'Oncologista', preco:350},{nome:'Cardiologista', preco:350},
+          {nome:'Ecocardio', preco:350},{nome:'Ecografia Abdominal', preco:250},{nome:'Raio X', preco:300},
+        ]
+      }
+    ]
+  }
+};
+
+function fmtR(v) { return 'R$ ' + Number(v).toLocaleString('pt-BR'); }
+
+function renderServicos() {
+  const filtro = document.getElementById('svc-filter')?.value || 'todos';
+  const container = document.getElementById('servicos-container');
+  if (!container) return;
+
+  const cats = filtro === 'todos' ? Object.entries(SERVICOS) : [[filtro, SERVICOS[filtro]]].filter(([k]) => SERVICOS[k]);
+  let html = '';
+
+  for (const [key, cat] of cats) {
+    html += `
+      <div style="margin-bottom:28px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <div style="width:34px;height:34px;border-radius:10px;background:${cat.bg};color:${cat.color};display:flex;align-items:center;justify-content:center;font-size:17px">
+            <i class="ph ${cat.icon}"></i>
+          </div>
+          <div style="font-size:17px;font-weight:900;color:${cat.color}">${cat.label}</div>
+        </div>
+        <div style="display:grid;gap:12px">
+    `;
+
+    for (const grupo of cat.grupos) {
+      html += `
+        <div class="card" style="border-color:${cat.bg}">
+          <div style="margin-bottom:14px">
+            <div style="font-size:14px;font-weight:800">${grupo.nome}</div>
+            ${grupo.sub ? `<div style="font-size:12px;color:var(--muted2);margin-top:2px">${grupo.sub}</div>` : ''}
+          </div>
+      `;
+
+      if (grupo.linhas) {
+        // Tabela de frequências (creche / combo)
+        html += `
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;min-width:500px">
+              <thead>
+                <tr>
+                  <th style="text-align:left;font-size:11px;font-weight:700;color:var(--muted);padding:8px 10px;background:var(--bg3);border-radius:6px 0 0 6px">Período</th>
+                  ${grupo.colunas.map((c,i)=>`<th style="text-align:right;font-size:11px;font-weight:700;color:var(--muted);padding:8px 10px;background:var(--bg3)${i===grupo.colunas.length-1?';border-radius:0 6px 6px 0':''}">${c}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                ${grupo.linhas.map(l=>`
+                  <tr>
+                    <td style="padding:10px;border-bottom:1px solid var(--border);font-weight:700">
+                      ${l.periodo}
+                      ${l.desc ? `<span style="font-size:10px;font-weight:800;background:${cat.bg};color:${cat.color};border-radius:20px;padding:2px 8px;margin-left:6px">${l.desc}</span>` : ''}
+                    </td>
+                    ${l.precos.map(p=>`<td style="padding:10px;border-bottom:1px solid var(--border);text-align:right;font-weight:800;color:var(--green)">${fmtR(p)}</td>`).join('')}
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (grupo.lista) {
+        // Lista simples (hotel, daycare, vet, combos)
+        html += `
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
+            ${grupo.lista.map(item=>`
+              <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div style="font-size:13px;font-weight:700">${item.nome}</div>
+                  ${item.desc ? `<div style="font-size:11px;font-weight:800;color:${cat.color};margin-top:2px">${item.desc}</div>` : ''}
+                </div>
+                <div style="font-size:15px;font-weight:900;color:var(--green);white-space:nowrap">${fmtR(item.preco)}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // Extras (banho)
+      if (grupo.extras?.length) {
+        html += `
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Extras disponíveis</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${grupo.extras.map(e=>`
+                <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:8px">
+                  <span style="font-size:12px;font-weight:700">${e.nome}</span>
+                  <span style="font-size:13px;font-weight:900;color:var(--green)">${fmtR(e.preco)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  container.innerHTML = html;
+}
 </script>
 </body>
 </html>
