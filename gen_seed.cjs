@@ -1,12 +1,67 @@
-const fs = require('fs');
+const fs   = require('fs');
 const path = require('path');
 
-const clients = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes_parsed.json'), 'utf8'));
-const totalPets = clients.reduce((s,c) => s + c.pets.length, 0);
-const ativos = clients.filter(c => c.statusCliente === 'ativo').length;
-const inativos = clients.filter(c => c.statusCliente === 'inativo').length;
+const raw = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes_parsed.json'), 'utf8'));
 
-const clientsJSON = JSON.stringify(clients);
+// Convert to CRM format: tutores[] + pets[] separados
+const tutores = [];
+const allPets = [];
+raw.forEach(c => {
+  const tid = c.id;
+  tutores.push({
+    id:          tid,
+    nome:        c.nome,
+    tel:         c.telefone,
+    email:       c.email,
+    unidade:     c.filial,
+    status:      c.statusCliente,
+    ultimaCompra: c.ultimaCompra,
+    criadoEm:   c.criadoEm
+  });
+  (c.pets || []).forEach(p => {
+    allPets.push({
+      id:       p.id,
+      nome:     p.nome,
+      tutorId:  tid,
+      raca:     p.raca || '',
+      porte:    p.porte || '',
+      criadoEm: p.criadoEm
+    });
+  });
+});
+
+const totalPets  = allPets.length;
+const ativos     = tutores.filter(t => t.status === 'ativo').length;
+const inativos   = tutores.filter(t => t.status === 'inativo').length;
+
+// Read logo base64 from CRM to embed in seed
+const crmHtml = fs.readFileSync(path.join(__dirname, 'petsgo-crm-light.html'), 'utf8');
+const logoMatch = crmHtml.match(/src="(data:image\/png;base64,[^"]+)"/);
+const logoSrc = logoMatch ? logoMatch[1] : '';
+
+const tutoresJSON = JSON.stringify(tutores);
+const petsJSON    = JSON.stringify(allPets);
+
+// Build preview data (first 30) for template literal
+const previewRows = tutores.slice(0, 30).map((t, i) => {
+  const tPets = allPets.filter(p => p.tutorId === t.id);
+  const petsStr = tPets.map(p => p.nome).join(', ');
+  return `
+  {
+    const row = document.createElement('div');
+    row.className = 'preview-row';
+    row.innerHTML = \\\`<div class="preview-num">${i+1}</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span class="preview-nome">${t.nome.replace(/`/g,"'")}</span>
+          <span class="preview-filial">${t.unidade}</span>
+          <span class="preview-status ${t.status}">${t.status}</span>
+        </div>
+        ${petsStr ? `<div class="preview-pets">🐾 ${petsStr.replace(/`/g,"'")}</div>` : ''}
+      </div>\\\`;
+    preview.appendChild(row);
+  }`;
+}).join('\n');
 
 const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -55,14 +110,14 @@ progress{width:100%;height:8px;border-radius:4px;margin-bottom:8px;accent-color:
 <body>
 <div class="card">
   <div class="logo-wrap">
-    <img class="logo-img" src="logo-petsgo.png" alt="Pets Go"/>
+    <img class="logo-img" src="${logoSrc}" alt="Pets Go"/>
     <div class="brand">Pets Go Control</div>
   </div>
   <h1>Importar Dados — Todas as Filiais</h1>
   <p class="sub">Clientes e pets exportados do Pet Shop Control<br>3 filiais · Ativos e inativos · Exportado em 22/04/2026</p>
 
   <div class="stats-grid">
-    <div class="stat"><div class="stat-val">${clients.length}</div><div class="stat-lbl">Clientes</div></div>
+    <div class="stat"><div class="stat-val">${tutores.length}</div><div class="stat-lbl">Tutores</div></div>
     <div class="stat"><div class="stat-val">${totalPets}</div><div class="stat-lbl">Pets</div></div>
     <div class="stat"><div class="stat-val">${ativos}</div><div class="stat-lbl">Ativos</div></div>
     <div class="stat"><div class="stat-val">${inativos}</div><div class="stat-lbl">Inativos</div></div>
@@ -86,7 +141,7 @@ progress{width:100%;height:8px;border-radius:4px;margin-bottom:8px;accent-color:
     </div>
   </div>
 
-  <div class="warning">⚠️ <strong>Atenção:</strong> Use <strong>"Substituir tudo"</strong> para apagar dados existentes e importar tudo do zero. Use <strong>"Adicionar"</strong> para somar aos dados já no sistema sem apagar.</div>
+  <div class="warning">⚠️ <strong>Atenção:</strong> Use <strong>"Substituir tudo"</strong> para apagar dados existentes e importar tudo do zero. Use <strong>"Adicionar"</strong> para somar sem apagar o que já existe.</div>
 
   <div class="preview" id="preview"></div>
   <div id="progress-wrap" style="display:none">
@@ -101,64 +156,80 @@ progress{width:100%;height:8px;border-radius:4px;margin-bottom:8px;accent-color:
 </div>
 
 <script>
-const CLIENTES = ${clientsJSON};
-const DB_KEY = 'petsgo_crm';
+const TUTORES = ${tutoresJSON};
+const PETS    = ${petsJSON};
+const DB_KEY  = 'petsgo_crm';
 
 function loadDB() {
-  try { return JSON.parse(localStorage.getItem(DB_KEY)) || emptyDB(); } catch { return emptyDB(); }
-}
-function emptyDB() {
-  return { clientes:[], agendamentos:[], financeiro:[], estoque:[], servicos:[] };
+  try {
+    const d = JSON.parse(localStorage.getItem(DB_KEY)) || {};
+    d.tutores      = d.tutores      || [];
+    d.pets         = d.pets         || [];
+    d.agendamentos = d.agendamentos || [];
+    d.financeiro   = d.financeiro   || [];
+    d.estoque      = d.estoque      || [];
+    d.servicos     = d.servicos     || [];
+    return d;
+  } catch { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[]}; }
 }
 function saveDB(d) { localStorage.setItem(DB_KEY, JSON.stringify(d)); }
 
-// Preview
+// Preview (first 30 tutores)
 const preview = document.getElementById('preview');
-CLIENTES.slice(0, 30).forEach((c, i) => {
+TUTORES.slice(0, 30).forEach((t, i) => {
+  const tPets = PETS.filter(p => p.tutorId === t.id);
   const row = document.createElement('div');
   row.className = 'preview-row';
-  row.innerHTML = \`<div class="preview-num">\${i+1}</div>
-    <div style="flex:1">
-      <div style="display:flex;align-items:center;gap:6px">
-        <span class="preview-nome">\${c.nome}</span>
-        <span class="preview-filial">\${c.filial}</span>
-        <span class="preview-status \${c.statusCliente}">\${c.statusCliente}</span>
-      </div>
-      \${c.pets.length ? \`<div class="preview-pets">🐾 \${c.pets.map(p=>p.nome).join(', ')}</div>\` : ''}
-    </div>\`;
+  row.innerHTML = '<div class="preview-num">' + (i+1) + '</div>' +
+    '<div style="flex:1">' +
+      '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
+        '<span class="preview-nome">' + t.nome + '</span>' +
+        '<span class="preview-filial">' + t.unidade + '</span>' +
+        '<span class="preview-status ' + t.status + '">' + t.status + '</span>' +
+      '</div>' +
+      (tPets.length ? '<div class="preview-pets">🐾 ' + tPets.map(p=>p.nome).join(', ') + '</div>' : '') +
+    '</div>';
   preview.appendChild(row);
 });
-if (CLIENTES.length > 30) {
+if (TUTORES.length > 30) {
   const more = document.createElement('div');
   more.className = 'preview-row';
-  more.style.color = '#94A3B8';
-  more.style.fontStyle = 'italic';
-  more.style.justifyContent = 'center';
-  more.textContent = \`+ \${CLIENTES.length - 30} clientes adicionais...\`;
+  more.style.cssText = 'color:#94A3B8;font-style:italic;justify-content:center';
+  more.textContent = '+ ' + (TUTORES.length - 30) + ' tutores adicionais...';
   preview.appendChild(more);
 }
 
 async function importar(substituir) {
-  const btn1 = document.querySelectorAll('.btn');
-  btn1.forEach(b => b.disabled = true);
-
+  document.querySelectorAll('.btn').forEach(b => b.disabled = true);
   const D = loadDB();
+
   if (substituir) {
-    D.clientes = [];
+    D.tutores = [];
+    D.pets    = [];
   }
 
-  const progWrap = document.getElementById('progress-wrap');
-  const prog = document.getElementById('prog');
+  const progWrap  = document.getElementById('progress-wrap');
+  const prog      = document.getElementById('prog');
   const progLabel = document.getElementById('prog-label');
   progWrap.style.display = 'block';
 
+  const total = TUTORES.length + PETS.length;
+  let done = 0;
+
   const BATCH = 50;
-  for (let i = 0; i < CLIENTES.length; i += BATCH) {
-    const batch = CLIENTES.slice(i, i + BATCH);
-    batch.forEach(c => D.clientes.push(c));
-    const pct = Math.round((i + batch.length) / CLIENTES.length * 100);
-    prog.value = pct;
-    progLabel.textContent = \`Importando \${Math.min(i + BATCH, CLIENTES.length)} de \${CLIENTES.length}...\`;
+  for (let i = 0; i < TUTORES.length; i += BATCH) {
+    TUTORES.slice(i, i + BATCH).forEach(t => D.tutores.push(t));
+    done += Math.min(BATCH, TUTORES.length - i);
+    prog.value = Math.round(done / total * 100);
+    progLabel.textContent = 'Importando tutores ' + Math.min(i + BATCH, TUTORES.length) + ' de ' + TUTORES.length + '...';
+    await new Promise(r => setTimeout(r, 0));
+  }
+
+  for (let i = 0; i < PETS.length; i += BATCH) {
+    PETS.slice(i, i + BATCH).forEach(p => D.pets.push(p));
+    done += Math.min(BATCH, PETS.length - i);
+    prog.value = Math.round(done / total * 100);
+    progLabel.textContent = 'Importando pets ' + Math.min(i + BATCH, PETS.length) + ' de ' + PETS.length + '...';
     await new Promise(r => setTimeout(r, 0));
   }
 
@@ -167,9 +238,9 @@ async function importar(substituir) {
 
   const ok = document.getElementById('msg-ok');
   ok.style.display = 'block';
-  ok.innerHTML = \`✅ <strong>\${CLIENTES.length} clientes importados com sucesso!</strong><br>
-    Total no sistema: \${D.clientes.length} clientes · \${D.clientes.reduce((s,c)=>s+c.pets.length,0)} pets<br>
-    <a class="link" href="petsgo-crm-light.html">→ Abrir o CRM</a>\`;
+  ok.innerHTML = '✅ <strong>' + TUTORES.length + ' tutores e ' + PETS.length + ' pets importados!</strong><br>' +
+    'Total no sistema: ' + D.tutores.length + ' tutores · ' + D.pets.length + ' pets<br>' +
+    '<a class="link" href="petsgo-crm-light.html">→ Abrir o CRM</a>';
 }
 </script>
 </body>
@@ -177,4 +248,4 @@ async function importar(substituir) {
 
 fs.writeFileSync(path.join(__dirname, 'petsgo-seed-todas-filiais.html'), html);
 console.log('Seed gerado: petsgo-seed-todas-filiais.html');
-console.log('Clientes:', clients.length, '| Pets:', totalPets);
+console.log('Tutores:', tutores.length, '| Pets:', totalPets);
