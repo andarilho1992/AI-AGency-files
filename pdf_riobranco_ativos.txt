@@ -1,0 +1,639 @@
+﻿PAGES: 6
+Clientes ativos 
+OBS: Clientes ativos são aqueles que realizaram compras nos últimos 3 meses. 
+22/04/2026 12:48 
+De: 01/01/2026 Até: 22/04/2026 
+Total de clientes ativos 
+: 229 
+NOME 
+E-MAIL 
+TELEFONE 
+CELULAR 
+D 
+ATA ÚLTIMA 
+COMPRA 
+ANIMAL 
+Simone Matiotti 
+(  )       - 
+03/01/2026 
+Cookie, May May 
+Carol  
+Vence 
+(51)   9646-1999 
+03/01/2026 
+Ceci, Catarina 
+larissapilarprado@gmail.com 
+Larissa Pilar Prado 
+(51) 9 9650-106 
+05/01/2026 
+Blanco , Bionda 
+Júlia Ribeiro 
+(51)   9934-9391 
+05/01/2026 
+Chica 
+nickolas_camargo@hotmail.com 
+Nickolas Paes 
+(  )       - 
+05/01/2026 
+Pope 
+Denise Friedmann 
+(51) 9 9932-15 
+11 
+06/01/2026 
+Jorge 
+samanthaalmeida.rs@gmail.com 
+Samantha Gonçalves 
+ Almeida 
+(51) 9 9812-1701 
+06/01/2026 
+Pandorga 
+claudiaz.fabris@gmail.com 
+ CLAUDI 
+A FABRIS 
+(51) 9814-23986 
+(51) 9 8142-3986 
+07/01/2026 
+Amora 
+Julia Bischo 
+ff Lonzetti 
+(51) 9 8153-272 
+08/01/2026 
+Pancho, Romeu 
+mari.silveira1812@gmail.com 
+Mariana  Jacques e Cesar Unamuno 
+(51) 9 9948-9395 
+09/01/2026 
+Cher 
+giancarlosmsoares@gmail.com 
+Giancarlos Sores 
+(51) 9 9215-0327 
+12/01/2026 
+Luke 
+elisa.pseminotti@gmail.com 
+Elisa Pinto Seminotti e 
+ André Petraglia Sassi 
+(51) 9 9607-6685 
+13/01/2026 
+Leia, 
+ Amélie 
+Hector Kafer 
+(51) 9 9510-4141 
+13/01/2026 
+Rita 
+nathicosta25@hotmail.com 
+ Nathalia 
+ Aguiar da Costa 
+(51) 9928-59998 
+(51) 9 9285-9998 
+14/01/2026 
+Charlie, Max, Zoe, Dais 
+y, Moana, Peaches 
+ camilarapaki@hotmail.com 
+Camila Rapach Xavier 
+(51) 9 9534-4726 
+17/01/2026 
+Rocky 
+marcello.jaques@hotmail.com 
+Marcelo Kuhn Jaques 
+(51) 9 9959-2818 
+17/01/2026 
+Aranha 
+bruna.santos.1205@gmail.com 
+Bruna Rosa dos Santos 
+(51) 9 9568-4773 
+20/01/2026 
+Bartolomeu (Bart) 
+felixclarissa@gmail.com 
+ Clarissa Félix de Oliveira 
+(51)   9733-2090 
+20/01/2026 
+Layla 
+Elisângela Piccoli De Bastiani 
+(  )       - 
+21/01/2026 
+Melo CaraMelo 
+ gb.diasdeoliveira@gmail.com 
+Gabriel Dias de Oliveira 
+(  )       - 
+23/01/2026 
+Kiara 
+julianaobertb@gmail.com 
+ Juliana Obert 
+(51) 9 9313-6 
+111 
+26/01/2026 
+Filomena Obert 
+ Alencar 
+marifseibel@gmail.com 
+Mariana Fauth Seibel 
+(51) 9 8144-8707 
+26/01/2026 
+Julio, Ivy 
+Andréa Kramer 
+(51) 9 9843-2362 
+26/01/2026 
+Chiara, Sophie 
+ gabigbragaa62@gmail.com 
+Gabriela Godoy Braga 
+(48) 9919-47082 
+(48) 9 9194-7082 
+26/01/2026 
+Joana 
+ Laura 
+ Alice Martins Vicenzi 
+(51)   9939-1545 
+26/01/2026 
+Pinha 
+Rafaella  Corletto 
+(51) 9 9488-004 
+27/01/2026 
+Griezmann, Maze 
+Patricia Santos 
+(21)   9918-9978 
+27/01/2026 
+Balmain 
+bharbarasenne@gmail.com 
+Bhárbara da Rosa de Senne 
+(55) 9 9648-7490 
+28/01/2026 
+Júpiter 
+gabicorrea.s@hotmail.com 
+Gabriela Correa da Silva Goettems 
+(  )       - 
+28/01/2026 
+Scooby 
+ Fabiane Elizabetha de Moraes Ribeiro 
+(51) 9 9851-7733 
+29/01/2026 
+Pim 
+Tânia Ozuna 
+(51) 9 9624-9152 
+29/01/2026 
+Anne 
+anap.tw@gmail.com 
+Ana Paula 
+ Tamiozzo Wagner 
+(51)   8477-6886 
+29/01/2026 
+Babi, Bobi 
+Pet Shop Control 
+22/04/2026 12:48 
+Página 1 de 6 
+NOME 
+E-MAIL 
+TELEFONE 
+CELULAR 
+D 
+ATA ÚLTIMA 
+COMPRA 
+ANIMAL 
+Adriane 
+ Arnt Herbst 
+(  )       - 
+29/01/2026 
+Elvis, Dara, Jade 
+victoriaroosa@gmail.com 
+Victória Rosa 
+(51) 9 9910-9213 
+29/01/2026 
+Luna, Liebe 
+patricia.weidlich@ufrgs.br 
+Patrícia  
+Weidlich 
+(  )       - 
+30/01/2026 
+Mika 
+51 999201029 
+Fernando 
+(51)   9992-0102 
+31/01/2026 
+Ozzy 
+gua.oliveira@yahoo.com.br 
+Guacira de Souza Oliveira 
+(51) 9 8188-7588 
+31/01/2026 
+Bamboo 
+marinagiugliani@gmail.com 
+Marina Giugliani 
+(51)   9857-4947 
+03/02/2026 
+Theodore (Theo), Linus , Frederico, 
+ Amora, Chica 
+fadsnogueira@gmail.com 
+Felipe Nogueira 
+(51) 9 9833-2540 
+03/02/2026 
+Tito 
+cristinadecarli@gmail.com 
+Cristina de Carli 
+(51) 9 17 
+11-025 
+05/02/2026 
+Condessa 
+michellehtramos@hotmail.com 
+Michelle Hilgert 
+(51) 9 9950-7343 
+05/02/2026 
+Baco 
+marasmk@terra.com.br 
+Mara Sylvia Krieger 
+(51) 9 9549-3006 
+05/02/2026 
+Edgar Krieger 
+Ana Rosa 
+ Trachtenberg 
+(51) 9 9188-0030 
+05/02/2026 
+Laila 
+nathaliade.neves@hotmale.com 
+Nathalia Borges das Neves 
+(51) 9 9732-2810 
+05/02/2026 
+Boss 
+silvanecousseau973@gmail.com 
+Silvane 
+ Anselmini Cousseau 
+(  )       - 
+06/02/2026 
+Phoebe 
+raposocaio@gmail.com 
+Caio Raposo 
+( 
+11) 9 9657-2255 
+06/02/2026 
+Mano 
+camicortiz@gmail.com 
+Camila Ortíz 
+(51) 9 9924-1090 
+06/02/2026 
+Poncho, 
+ Alfredo 
+Ines 
+(51)   8263-4049 
+07/02/2026 
+Maggie 
+daniela.vrs@icloud.com 
+Daniela Crusius 
+(51)   9137-5476 
+07/02/2026 
+Bela 
+maduscruz88@gmail.com 
+Gabriel Nunes de 
+ Abreu 
+(51) 9 9640-5424 
+07/02/2026 
+Marcos, Maia 
+adrianamedeiroslemos@gmail.com 
+Adriana Medeiros de Lemos 
+(51) 9 9555-0588 
+07/02/2026 
+Scooby 
+carolcosti@gmail.com 
+Caroline Costi Pardini 
+(51) 9 9332-5683 
+09/02/2026 
+Alegra 
+Mauren.z@hotmail.com 
+Mauren Zselinszky 
+(47) 9 9107-2402 
+09/02/2026 
+Aurora 
+Suzana 
+(  )       - 
+09/02/2026 
+Bilu, 
+ Théo 
+micaela.lechmann@gmail.com 
+Micaela Lechmann 
+(54) 9 9944-8257 
+09/02/2026 
+Taylor Swift, Grustoli 
+Maria  
+Virginia Garcia 
+(51) 9 9327-2706 
+09/02/2026 
+Mel 
+silvestreb@gmail.com 
+Silvestre Santos Boeira 
+(51) 9 1916-472 
+09/02/2026 
+Lucky 
+Tiago Behenck dos Santos 
+(48) 9 9128-1419 
+10/02/2026 
+Darth 
+tatianechlaem@gmail.com 
+Tatiane Chlaem 
+(51) 9 9682-8488 
+10/02/2026 
+Janeth, 
+ Thereza 
+cruzzrafaela@gmail.com 
+Rafaela Cruz 
+(51) 9 9444-4100 
+10/02/2026 
+Parrilla 
+laurascesa@gmail.com 
+Laura 
+(51) 9141-4941 
+(  )       - 
+10/02/2026 
+Bartolomeu 
+licaladwig@hotmail.com 
+Liliane Muller 
+(51) 9 9733-6500 
+11/02/2026 
+Charlotte 
+rodrigosanri@gmail.com 
+Rodrigo dos Santos Ribeiro 
+(34) 9 9941-4815 
+11/02/2026 
+Acerola 
+manuellahaygertt@gmail.com 
+ Manuella Oliveira Haygertt e Benjamim Pessoa Gomes 
+(  )       - 
+12/02/2026 
+Helena 
+Raissa Endring 
+(27) 9 9600-0637 
+12/02/2026 
+Nutella 
+gustavohamdan@hotmail.com 
+Gustavo Hamdan de 
+ Andrade 
+(31) 9 8634-7775 
+12/02/2026 
+Kiwi, Mel 
+claricemartinsg@gmail.com 
+Clarice de Oliveira Martins 
+(51) 9 9179-3373 
+12/02/2026 
+Zoe 
+Patricia 
+(  )       - 
+13/02/2026 
+Bino, Maya 
+veraholiveira62@gmail.com 
+Vera Regina de Oliveira 
+(51) 9 8444-2678 
+13/02/2026 
+Freddy Mercury 
+Zilda 
+(  )       - 
+13/02/2026 
+Ritinha 
+jussaraines03@gmail.com 
+Jussara  
+Wong 
+(51) 9 9773-5543 
+18/02/2026 
+Marle 
+y, Lucky 
+dudalargura@hotmail.com 
+Maria Eduarda Largura 
+(51) 9 9923-2362 
+18/02/2026 
+Maya 
+gabrielacavalcanti6@gmail.com 
+Gabriela Lemos Cavalcanti 
+(51) 8  
+1178-820 
+19/02/2026 
+Cora 
+luise.gouvea@hotmail.com 
+Luíse Perini 
+(51) 9 9396-6861 
+19/02/2026 
+Aurora 
+jujuscholl@hotmail.com 
+Juliane Colombo Scholl 
+(  )       - 
+20/02/2026 
+Akito 
+Stephanie 
+(51) 9 9106-9603 
+20/02/2026 
+Luna 
+karinambenetti@hotmail.com 
+Karina Moraes Benetti 
+(51) 9 9998-6274 
+20/02/2026 
+Maria Flor 
+Pet Shop Control 
+22/04/2026 12:48 
+Página 2 de 6 
+NOME 
+E-MAIL 
+TELEFONE 
+CELULAR 
+D 
+ATA ÚLTIMA 
+COMPRA 
+ANIMAL 
+Patrícia Correa Padilha 
+(51)   9774-1763 
+23/02/2026 
+Miah 
+Johansen@terra.com.br 
+Wilson Luis Johansen 
+(51) 9 9 
+116-1122 
+23/02/2026 
+Beta 
+lub002@hotmail.com 
+Luisa Backes 
+(51) 9951-73474 
+(51) 9 9517-3474 
+23/02/2026 
+Judite 
+Luiza Muller 
+(51) 9 9399-5955 
+24/02/2026 
+Helena 
+Carol e Daiana 
+(51) 9 9252-8627 
+25/02/2026 
+Toscana, Havana 
+Reni Mayer 
+(51) 9 3097-965 
+25/02/2026 
+Willy 
+luis.lopezgranados@gmail.com 
+Luis Manuel Lopez 
+(15) 7 1497-8458 
+26/02/2026 
+Maya 
+alexandrefreire40@gmail.com 
+Alexandre freire 
+(51)   8498-0375 
+26/02/2026 
+Bonder 
+ camila.simonetti.villa@gmail.com 
+Camila  
+Villa 
+(51) 9 1938-737 
+26/02/2026 
+Luigi 
+Otavio 
+ Al-Alam 
+(51)   9992-0809 
+27/02/2026 
+Tostão 
+michellebrys@gmail.com 
+Michelle brys 
+(51) 9 8412-3800 
+28/02/2026 
+Dora, 
+ Apple 
+Victória e Tomás Pinkoski 
+(51) 9910-9213 
+(  )       - 
+28/02/2026 
+Luna, Liby 
+gpetersen.poa@gmail.com 
+Maria das graças Rocha Petersen 
+(51) 9 9971-6638 
+03/03/2026 
+Filó Rocha Petersen 
+ carolinecostamartins27@gmail.com 
+Caroline Costa Martins 
+(51) 9 9515-2030 
+03/03/2026 
+Pingo 
+marinacatappan@gmail.com 
+Marina Catappan Barbosa e 
+ Thales Botome Cousen 
+(51) 9 9414-8126 
+04/03/2026 
+Olivia 
+rtadeuan@outlook.com 
+Renato 
+ Tadeus Almada 
+(51) 9 8927-6773 
+05/03/2026 
+Hati 
+ Almada, Skol, Mila 
+drisakern@gmail.com 
+ Drisa Kern 
+(49) 9 9143-6563 
+05/03/2026 
+Betina 
+priscila.carniel@gmail.com 
+Priscila Carniel 
+(51) 9 5363-440 
+06/03/2026 
+Nico 
+marianakramer@gmail.com 
+Mariana Sebben Kramer 
+(51) 9 8134-2778 
+06/03/2026 
+Magda , Otto 
+Maira Caroline 
+(81) 8 6508-300 
+07/03/2026 
+Mailon , Nala 
+Luana Morozoli 
+(51) 9 8571-6447 
+07/03/2026 
+Maria Julia 
+ dortenzi@gmail.com 
+ David Medeiros Ortenzi 
+(51) 9 9332-022 
+09/03/2026 
+Joaquim Ortenzi (Joca) 
+ luiza.maragno@gmail.com 
+Luíza Soares Maragno 
+(51)   9853-9510 
+10/03/2026 
+Jorge, Bebela 
+ locatellipedro1@gmail.com 
+Pedro Henrique Locatelli 
+(54) 9 9655-5487 
+11/03/2026 
+Meg 
+Renato 
+(51)   9999-6890 
+12/03/2026 
+Max 
+eduardoelsner@77representa.com.br 
+Eduardo Elsner 
+(51) 9 9151-4922 
+12/03/2026 
+Nala 
+Mar 
+y.hoffmann@gmail.com 
+Mariana letícia Ho 
+ffmann ewerling 
+(51)   9930-6284 
+12/03/2026 
+Donna, 
+ Toddy 
+Fernanda 
+(52) 6 5296-566 
+12/03/2026 
+Arya, Simba, Nala, Ned 
+renata.hauschild@gmail..com 
+Renata Hauschild 
+(51) 9 9533-5905 
+14/03/2026 
+Jackie, Chanel, George 
+brunakennee@gmail.com 
+ Bruna kenne 
+(51)   9979-1852 
+14/03/2026 
+Lolita 
+Nicolle Umann 
+(  )       - 
+14/03/2026 
+Feijão, 
+ Tupã 
+Marilía Paz 
+(51) 9 9677-8151 
+16/03/2026 
+Luna , Brownie, Sem nome 
+Caroline 
+ Tourrucôo de Ermida Frias 
+(51)   8053-2289 
+16/03/2026 
+Tobias, Dom 
+Priscila Bohn * 
+VAI PREENCHER O CADASTRO AINDA* 
+(  )       - 
+16/03/2026 
+Mocca 
+marinunes@yahoo.com.br 
+Marianne Brochado Nunes 
+(51) 9 9326-2258 
+16/03/2026 
+Luna 
+Juliane Miranda Cruz e Leonardo Machado 
+(51) 9 9221-2621 
+17/03/2026 
+Torradinha, Toddy 
+Denise Leite 
+(51)   8107-8466 
+18/03/2026 
+Paçoca , 
+ Tchê 
+Gianella 
+(51) 9 2204-1375 
+18/03/2026 
+Branco, Golden, Oreo 
+Liana 
+(  )       - 
+18/03/2026 
+Chica 
+Maurien Rose Cramer 
+ Aguiar 
+(51) 9 9909-4885 
+19/03/2026 
+Lilose 
+Livia Ribeiro Mirandola 
+(51)   9183-2133 
+19/03/2026 
+Luli 
+Lara Girotto 
+(51) 9 9667-5899 
+19/03/2026 
+Maya , Mel , Pandora 
+ laurasilverio10@gmail.com 

@@ -1,0 +1,441 @@
+﻿PAGES: 3
+Clientes ativos 
+OBS: Clientes ativos são aqueles que realizaram compras nos últimos 3 meses. 
+22/04/2026 12:50 
+De: 01/01/2026 Até: 22/04/2026 
+Total de clientes ativos 
+: 85 
+NOME 
+E-MAIL 
+TELEFONE 
+CELULAR 
+D 
+ATA ÚLTIMA 
+COMPRA 
+ANIMAL 
+Ana Se 
+ffner 
+(51)   9179-8799 
+02/01/2026 
+Zeus 
+Keslei Zen 
+(51) 9 9172-3773 
+03/01/2026 
+Meg 
+marianemmadruga@icloud 
+Mariane Menegat Madruga 
+(51) 9 3592-840 
+03/01/2026 
+Ollie 
+paula.barcellos@acad.pucrs.br 
+Paula Barcellos 
+(51) 9950-19525 
+(51) 9 9501-9525 
+03/01/2026 
+Biscoito, Paçoca 
+Rafaella  Corletto 
+(51) 9 9488-004 
+05/01/2026 
+Griezmann, Maze 
+Carol e Daiana 
+(51) 9 9252-8627 
+05/01/2026 
+Havana, 
+ Toscana 
+Rodrigo 
+(34) 9 9941-4815 
+06/01/2026 
+Acerola 
+Mylena e Robson 
+(51) 9 9930-1002 
+07/01/2026 
+Maya 
+dani.brasbie@gmail.com 
+Daniele Di Giorgio Brasbie 
+(51) 9 9389-1207 
+12/01/2026 
+Luna 
+vitorcancelier@gmail.com 
+Vitor Cancelier 
+(48) 9 9925-4793 
+20/01/2026 
+Betina 
+gabicorrea.s@hotmail.com 
+Gabriela Correa da Silva Goettems 
+(  )       - 
+21/01/2026 
+Scooby 
+Marcos William 
+(  )       - 
+22/01/2026 
+Juju 
+Lucca Moschem 
+(51) 9 9322-9005 
+24/01/2026 
+Whisky 
+Ana Choon Bok Jo 
+(51) 9 1812-313 
+28/01/2026 
+Lulu 
+carloshumberto13@gmail.com 
+Patricia de  
+Vasconcellos Rigon 
+(51) 9 9808-3643 
+29/01/2026 
+Nica 
+Caio 
+(65) 9 9635-6029 
+29/01/2026 
+Pu 
+ff 
+mari.silveira1812@gmail.com 
+Mariana  Jacques e Cesar Unamuno 
+(51) 9 9948-9395 
+30/01/2026 
+Cher 
+ locatellipedro1@gmail.com 
+Pedro Henrique Locatelli 
+(54) 9 9655-5487 
+31/01/2026 
+Meg 
+brunakennee@gmail.com 
+Bruna Kenne 
+(51) 9 9791-8528 
+31/01/2026 
+Lolita 
+Mateus Camargo & Muriel Sarmento 
+(  )       - 
+03/02/2026 
+Cecília 
+Angêla Cantergiani 
+(54) 9 8148-0173 
+04/02/2026 
+Maya 
+michelepavan@yahoo.com 
+Michele Pavan 
+(51) 9 9347-3582 
+04/02/2026 
+Nina 
+Sigrid Mugge 
+(51) 9 9771-915 
+04/02/2026 
+Felpudos Don Diego 
+Jose Laureano 
+(51) 9966-34706 
+(51) 9 9663-4706 
+05/02/2026 
+Tobi 
+Victória Zanoni 
+(  )       - 
+07/02/2026 
+Olaf 
+José 
+(51) 9 9973-771 
+07/02/2026 
+Chili 
+Simone Matiotti 
+(  )       - 
+07/02/2026 
+Cookie, May May 
+Joana@drengenharia.com.br 
+Joana 
+ Avila 
+(51) 9 9317-7670 
+11/02/2026 
+Olivia 
+Luiza 
+(  )       - 
+12/02/2026 
+Olga 
+Fatima Louizette 
+(61) 9 9630-1914 
+13/02/2026 
+LIZ 
+laurascesa@gmail.com 
+Laura 
+(51) 9141-4941 
+(  )       - 
+13/02/2026 
+Bartolomeu 
+Lívia Mirandola 
+(51) 9 9183-2133 
+19/02/2026 
+Luli 
+Pet Shop Control 
+22/04/2026 12:50 
+Página 1 de 3 
+NOME 
+E-MAIL 
+TELEFONE 
+CELULAR 
+D 
+ATA ÚLTIMA 
+COMPRA 
+ANIMAL 
+Tanise Cursino 
+(  )       - 
+20/02/2026 
+Tesla 
+Inês 
+(51) 9 9253-0629 
+21/02/2026 
+Lobinho 
+micaela.lechmann@gmail.com 
+Micaela Lechmann 
+(54) 9 9944-8257 
+24/02/2026 
+Taylor Swift, Grustoli 
+Liane 
+(51) 9 1236-448 
+28/02/2026 
+Lolly 
+Klenio ramos moura 
+(51) 9 9990-2601 
+04/03/2026 
+Mel, Luli 
+Rafaella Godinho 
+(51) 9 8950-5005 
+04/03/2026 
+Holly 
+samanthaalmeida.rs@gmail.com 
+Samantha Gonçalves 
+ Almeida 
+(51) 9 9812-1701 
+05/03/2026 
+Pandorga 
+Mariana Godoy 
+(  )       - 
+05/03/2026 
+Kali 
+brendalobler@gmail.com 
+Brenda Lobler  
+Vestena 
+(  )       - 
+07/03/2026 
+Pantufa , Luke 
+51 999201029 
+Fernando 
+(51)   9992-0102 
+14/03/2026 
+Ozzy 
+Daniel 
+ Trevisan Jost 
+(51) 9 96 
+11-9822 
+16/03/2026 
+Amelie, 
+ Aroldo 
+Isabela 
+(84) 9 9414-5316 
+20/03/2026 
+Oreo, Cacau 
+ vi.utzig@gmail.com 
+  
+Vitória Utzig 
+(55) 9 9683-663 
+21/03/2026 
+Piti 
+Débora 
+(51) 9 9359-1761 
+23/03/2026 
+Pipa 
+Marina 
+ Audi 
+( 
+11) 9 8181-8148 
+23/03/2026 
+Chico 
+marianakramer@gmail.com 
+Mariana Sebben Kramer 
+(51) 9 8134-2778 
+23/03/2026 
+Magda 
+Flávia 
+(51) 9927-79746 
+(51) 9 9277-9746 
+25/03/2026 
+Jack, Mel 
+karinambenetti@hotmail.com 
+Karina Moraes Benetti 
+(51) 9 9998-6274 
+27/03/2026 
+Maria Flor 
+Matheus Camargo 
+(  )       - 
+28/03/2026 
+Boris 
+cbarbieridesouza@gmail.com 
+Camila Maria Barbieri de Souza 
+(51) 9 9687-3009 
+28/03/2026 
+Ana Catarina, Maria  
+Vitoria 
+Sérgio Keller 
+(51)   9971-6490 
+28/03/2026 
+Scooby 
+Antonio 
+(51) 9 9853-4333 
+28/03/2026 
+Ulisses 
+ larson.ruschel@gmail.com 
+Larson Ruschel 
+(51) 9 9557-2298 
+30/03/2026 
+Pitanga 
+fernandsaouz12@gmail.com 
+Fernanda 
+(51) 9 9841-4124 
+02/04/2026 
+Bento, 
+ Alfredo 
+Isadora Cardoso 
+(51) 9 9977-6770 
+07/04/2026 
+Nutella, Chica 
+marcos@grupoflex.com.br 
+Marcos Bersagui 
+(51) 9 9988-8464 
+07/04/2026 
+Tommy 
+claricemartinsg@gmail.com 
+Clarice de Oliveira Martins 
+(51) 9 9179-3373 
+09/04/2026 
+Zoe 
+Eleandro Dos Reis e Lizi 
+(51)   8234-3457 
+09/04/2026 
+Lia 
+Mally Marlize 
+(51) 9 9285-5312 
+10/04/2026 
+Nico 
+Reni Mayer 
+(51) 9 3097-965 
+11/04/2026 
+Willy 
+brechódaluciapoa@gmail.com 
+Lúcia Helena Peixoto da Silva 
+(51) 9 9253-0629 
+11/04/2026 
+Lobinho 
+dallalba.anderson@gmail.com 
+Anderson Dall 
+ Alba 
+(51) 9 8050-7989 
+13/04/2026 
+Dante 
+Eduarda 
+(51) 9 9891-9221 
+13/04/2026 
+Nyra 
+bruna rebechi 
+(51) 9 9461-2628 
+14/04/2026 
+Mel 
+Camila Sousa 
+(54) 9 9216-2 
+112 
+14/04/2026 
+Teresa, Bartolomeu 
+Bernardo 
+(54) 9 8102-9520 
+14/04/2026 
+Margot 
+94lucaslima@gmail.com 
+Lucas Sousa de Lima 
+(98) 9 9195-0394 
+15/04/2026 
+Pipoca 
+renatabreu@gmail.com 
+Renata de 
+ Abreu Godinho 
+(51) 9 8089-8928 
+16/04/2026 
+Lord, Cacau, Malbec 
+angelicanato.bbasto@gmail.com 
+Angélica Canato Barcellos Basto 
+(61) 9157-9629 
+(  )       - 
+16/04/2026 
+Cadu Joca , Joey 
+Clarice 
+(51) 9 9179-3373 
+16/04/2026 
+Zoe 
+Ana Beatriz 
+(53) 9 9970-9050 
+16/04/2026 
+Gambita 
+Geraldo Ribeiro 
+(51) 9 8581-817 
+17/04/2026 
+Nala 
+Victor Costa 
+(53) 9 9956-9096 
+17/04/2026 
+Beatrice 
+Marcelo 
+ Amarante 
+(51) 9 8053-6654 
+17/04/2026 
+Peaches 
+Maurien 
+(51) 9 9909-4885 
+18/04/2026 
+Lilose 
+Pet Shop Control 
+22/04/2026 12:50 
+Página 2 de 3 
+NOME 
+E-MAIL 
+TELEFONE 
+CELULAR 
+D 
+ATA ÚLTIMA 
+COMPRA 
+ANIMAL 
+Ines 
+(51)   8263-4049 
+18/04/2026 
+Maggie 
+isadorahallal@hotmail.com 
+Isadora Hallal e Mathias Pinto 
+(51) 9 9977-1230 
+18/04/2026 
+Rivotril 
+Josué 
+(51) 9 9687-4435 
+18/04/2026 
+Scooby 
+michellehtramos@hotmail.com 
+Michelle Hilgert 
+(51) 9 9950-7343 
+18/04/2026 
+Baco 
+fstigger@hotmail.com 
+Felipe de Souza Stigger 
+(51) 9 9990-3021 
+20/04/2026 
+Luna, Michaela 
+Fernando 
+(51) 9 9994-9799 
+20/04/2026 
+Rock 
+Joice Bittencourt 
+(34) 6 2302-1952 
+20/04/2026 
+Ottinho 
+venanciosala10@hotmail.com 
+Venâncio Sala Hércules 
+(51) 9939-33255 
+(51) 9 9393-3255 
+20/04/2026 
+Hércules 
+Total de clientes ativos 
+: 85 
+Pet Shop Control 
+22/04/2026 12:50 
+Página 3 de 3 
+
