@@ -536,25 +536,25 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div class="page-sub" id="dash-sub">Carregando resumo do dia...</div>
 
       <div class="dash-stats">
-        <div class="stat-card hl">
-          <div class="sc-icon"><i class="ph ph-paw-print"></i></div>
-          <div class="sc-val yellow" id="d-na-creche">0</div>
-          <div class="sc-lbl">Pets na creche agora</div>
+        <div class="stat-card" style="background:#ECEEFF;border-color:#C8CAEF;color:#2D33A8">
+          <div class="sc-icon" style="color:#4047C8"><i class="ph ph-paw-print"></i></div>
+          <div class="sc-val" style="color:#4047C8" id="d-na-creche">0</div>
+          <div class="sc-lbl" style="color:#4047C8;opacity:.75">Pets na creche agora</div>
         </div>
-        <div class="stat-card">
-          <div class="sc-icon"><i class="ph ph-sign-in"></i></div>
-          <div class="sc-val green" id="d-checkins">0</div>
-          <div class="sc-lbl">Check-ins hoje</div>
+        <div class="stat-card" style="background:#E5FFF8;border-color:#B3F5E4;color:#006B4F">
+          <div class="sc-icon" style="color:#00C896"><i class="ph ph-check-circle"></i></div>
+          <div class="sc-val" style="color:#006B4F" id="d-checkins">0</div>
+          <div class="sc-lbl" style="color:#006B4F;opacity:.75">Check-ins hoje</div>
         </div>
-        <div class="stat-card">
-          <div class="sc-icon"><i class="ph ph-car"></i></div>
-          <div class="sc-val teal" id="d-telebusca">0</div>
-          <div class="sc-lbl">Tele-buscas hoje</div>
+        <div class="stat-card" style="background:#FFF0F8;border-color:#FFC0DF;color:#9A0050">
+          <div class="sc-icon" style="color:#E8187B"><i class="ph ph-car"></i></div>
+          <div class="sc-val" style="color:#E8187B" id="d-telebusca">0</div>
+          <div class="sc-lbl" style="color:#9A0050;opacity:.75">Tele-buscas hoje</div>
         </div>
-        <div class="stat-card">
-          <div class="sc-icon"><i class="ph ph-users"></i></div>
-          <div class="sc-val pink" id="d-tutores">0</div>
-          <div class="sc-lbl">Tutores cadastrados</div>
+        <div class="stat-card" style="background:#FFFDE6;border-color:#FDEEA0;color:#856400">
+          <div class="sc-icon" style="color:#F5C218"><i class="ph ph-users"></i></div>
+          <div class="sc-val" style="color:#856400" id="d-tutores">0</div>
+          <div class="sc-lbl" style="color:#856400;opacity:.75">Tutores cadastrados</div>
         </div>
       </div>
 
@@ -1596,6 +1596,10 @@ function carregar() {
     if (!parsed.prontuario) parsed.prontuario = [];
     if (!parsed.lancamentos) parsed.lancamentos = [];
     if (!parsed.config.pinFaturamento) parsed.config.pinFaturamento = '1234';
+    // Migrar cores escuras → tema claro
+    const _isDark = hex => hex && parseInt((hex.replace('#','')).slice(0,2), 16) < 60;
+    if (_isDark(parsed.config.corBg))   parsed.config.corBg   = '#F1F5F9';
+    if (_isDark(parsed.config.corCard)) parsed.config.corCard = '#FFFFFF';
     if (!parsed.reativacao) parsed.reativacao = [];
     return parsed;
   }
@@ -1630,13 +1634,10 @@ function applyConfig() {
   root.style.setProperty('--navy', c.corSecundaria);
   root.style.setProperty('--navy-dim', `rgba(${r2},${g2},${b2},.3)`);
   // Fundos & Font
-  root.style.setProperty('--bg', c.corBg || '#0f1117');
-  root.style.setProperty('--card', c.corCard || '#1a1f2e');
-  
-  // Apenas gera bg2 e bg3 se for parecido com dark; caso contrário, será útil o card.
-  // Como são cores próximas, vamos derivar se houver bg, ou fixar o base.
-  root.style.setProperty('--bg2', c.corCard || '#171b24');
-  root.style.setProperty('--bg3', c.corBg || '#1e2330');
+  root.style.setProperty('--bg', c.corBg || '#F1F5F9');
+  root.style.setProperty('--card', c.corCard || '#FFFFFF');
+  root.style.setProperty('--bg2', c.corCard || '#FFFFFF');
+  root.style.setProperty('--bg3', '#F8FAFC');
 
   document.body.style.fontFamily = c.fontFamily || "'Inter', sans-serif";
   const inputsEtc = document.querySelectorAll('input, button, select, textarea');
