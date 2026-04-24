@@ -329,6 +329,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div class="svc-tab" id="tab-ativos" onclick="setFilter('ativos')">Ativos (0)</div>
       <div class="svc-tab" id="tab-inativos" onclick="setFilter('inativos')">Inativos (0)</div>
     </div>
+    <div class="filter-row" id="filial-tabs" style="margin-top:-6px"></div>
     <div class="clientes-grid" id="clientes-grid"></div>
   </div>
 
@@ -750,7 +751,7 @@ function navTo(page) {
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────────
-let curFilter = 'todos', curSearch = '', searchTmr;
+let curFilter = 'todos', curFilial = 'todas', curSearch = '', searchTmr;
 
 function onSearch(val) {
   clearTimeout(searchTmr);
@@ -769,6 +770,12 @@ function setFilter(f) {
   renderClientes();
 }
 
+function setFilial(f) {
+  curFilial = f;
+  document.querySelectorAll('#filial-tabs .svc-tab').forEach(el => el.classList.toggle('active', el.dataset.filial===f));
+  renderClientes();
+}
+
 // ── CLIENTES ──────────────────────────────────────────────────────────────────
 function renderClientes() {
   const D = loadDB();
@@ -784,9 +791,24 @@ function renderClientes() {
   document.getElementById('clientes-sub').textContent = `${all.length} tutores · ${D.pets.length} pets`;
   document.getElementById('badge-clientes').textContent = nAt;
 
+  // Build dynamic filial tabs
+  const filiais = [...new Set(all.map(t=>t.unidade||'').filter(Boolean))].sort();
+  const filialBar = document.getElementById('filial-tabs');
+  if (filiais.length > 1) {
+    const tabs = ['todas', ...filiais];
+    filialBar.innerHTML = tabs.map(f => {
+      const label = f==='todas' ? `Todas (${all.length})` : `${f} (${all.filter(t=>t.unidade===f).length})`;
+      return `<div class="svc-tab${curFilial===f?' active':''}" data-filial="${f}" onclick="setFilial('${f}')">${label}</div>`;
+    }).join('');
+    filialBar.style.display = '';
+  } else {
+    filialBar.style.display = 'none';
+  }
+
   let list = [...all];
   if (curFilter==='ativos')   list = list.filter(t=>t.status!=='inativo');
   if (curFilter==='inativos') list = list.filter(t=>t.status==='inativo');
+  if (curFilial!=='todas')    list = list.filter(t=>t.unidade===curFilial);
   if (curSearch) {
     const q = curSearch;
     list = list.filter(t =>
