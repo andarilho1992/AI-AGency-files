@@ -2,1309 +2,173 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Pets Go — Demo ao Vivo | PetShop São Francisco</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<title>Pets Go Control — Carregar Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --yellow:#E99E22;--yellow-dim:rgba(233,158,34,.12);--yellow-mid:rgba(233,158,34,.3);
-  --navy:#4130B4;--navy-dim:rgba(65,48,180,.3);
-  --bg:#0f1117;--bg2:#171b24;--bg3:#1e2330;--card:#1a1f2e;
-  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
-  --text:#f0f0f0;--muted:#6b7280;--muted2:#9ca3af;
-  --green:#00C181;--green-dim:rgba(0,193,129,.12);
-  --red:#FF146D;--red-dim:rgba(255,20,109,.12);
-}
-html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-
-/* ── DEMO BANNER ── */
-.demo-banner{
-  background:linear-gradient(90deg,#4130B4,#6c5ce7);
-  padding:10px 24px;display:flex;align-items:center;justify-content:space-between;
-  font-size:13px;font-weight:700;color:#fff;letter-spacing:.02em;
-}
-.demo-banner span{opacity:.8;font-weight:500}
-.demo-pill{background:rgba(255,255,255,.15);border-radius:20px;padding:4px 12px;font-size:11px;letter-spacing:.05em}
-
-/* ── LAYOUT ── */
-.app{display:grid;grid-template-columns:240px 1fr;grid-template-rows:60px 1fr;height:calc(100vh - 44px);overflow:hidden}
-
-/* ── TOPBAR ── */
-.topbar{
-  grid-column:1/-1;
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;gap:16px;
-}
-.tb-brand{display:flex;align-items:center;gap:10px}
-.tb-logo{width:36px;height:36px;border-radius:10px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:18px}
-.tb-name{font-size:16px;font-weight:900;letter-spacing:-.02em}
-.tb-sub{font-size:11px;color:var(--muted2);font-weight:600;margin-left:4px;padding:2px 8px;background:var(--yellow-dim);border-radius:6px;color:var(--yellow)}
-.tb-center{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;flex:1;max-width:340px}
-.tb-center input{background:none;border:none;outline:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;width:100%}
-.tb-center input::placeholder{color:var(--muted)}
-.tb-right{display:flex;align-items:center;gap:12px}
-.notif-btn{position:relative;width:34px;height:34px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted2);font-size:18px}
-.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1px solid var(--bg2)}
-.tb-avatar{width:34px;height:34px;border-radius:50%;background:var(--navy);border:2px solid var(--yellow);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--yellow)}
-
-/* ── SIDEBAR ── */
-.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
-.nav-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:12px 10px 6px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;font-size:14px;font-weight:600;color:var(--muted2);position:relative}
-.nav-item:hover{background:var(--bg3);color:var(--text)}
-.nav-item.active{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-mid)}
-.nav-item .ico{font-size:16px;width:20px;text-align:center}
-.nav-badge{margin-left:auto;background:var(--yellow);color:#111;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center}
-.nav-badge.red{background:var(--red);color:#fff}
-.sidebar-bottom{margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
-
-/* ── MAIN ── */
-.main{overflow-y:auto;padding:24px}
-.page{display:none}
-.page.active{display:block}
-
-/* ── DASHBOARD ── */
-.page-header{margin-bottom:24px}
-.page-header h1{font-size:22px;font-weight:900;letter-spacing:-.02em}
-.page-header p{font-size:13px;color:var(--muted2);margin-top:4px}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px}
-.kpi-label{font-size:12px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.kpi-val{font-size:28px;font-weight:900;letter-spacing:-.03em}
-.kpi-sub{font-size:12px;margin-top:4px;font-weight:600}
-.kpi-up{color:var(--green)}.kpi-down{color:var(--red)}.kpi-neutral{color:var(--muted2)}
-.section-2col{display:grid;grid-template-columns:1fr 380px;gap:16px;margin-bottom:16px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
-.card-title{font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-title .badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--red-dim);color:var(--red)}
-.card-title .badge.green{background:var(--green-dim);color:var(--green)}
-
-/* ── TABLE ── */
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:0 12px 10px;text-align:left}
-.tbl td{padding:12px;font-size:13px;font-weight:600;border-top:1px solid var(--border);vertical-align:middle}
-.tbl tr:hover td{background:rgba(255,255,255,.02)}
-.avatar-cell{display:flex;align-items:center;gap:10px}
-.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
-.av.y{background:var(--yellow-dim);color:var(--yellow)}
-.av.n{background:var(--navy-dim);color:#a89bff}
-.av.g{background:var(--green-dim);color:var(--green)}
-.av.r{background:var(--red-dim);color:var(--red)}
-.av-name{font-weight:700;font-size:13px}
-.av-sub{font-size:11px;color:var(--muted2);font-weight:500}
-.tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.03em}
-.tag.inactive{background:var(--red-dim);color:var(--red)}
-.tag.active{background:var(--green-dim);color:var(--green)}
-.tag.warn{background:rgba(233,158,34,.12);color:var(--yellow)}
-.tag.new{background:var(--navy-dim);color:#a89bff}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .15s;font-family:'Nunito',sans-serif}
-.btn-primary{background:var(--yellow);color:#111}
-.btn-primary:hover{background:#f5a825}
-.btn-ghost{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
-.btn-ghost:hover{border-color:var(--border2)}
-.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,20,109,.2)}
-.btn-sm{padding:5px 12px;font-size:12px;border-radius:6px}
-
-/* ── WHATSAPP PANEL ── */
-.wa-container{display:grid;grid-template-columns:320px 1fr;gap:0;height:calc(100vh - 44px - 60px - 48px);overflow:hidden}
-.wa-list{border-right:1px solid var(--border);overflow-y:auto;background:var(--bg2)}
-.wa-search{padding:12px;border-bottom:1px solid var(--border)}
-.wa-search input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;outline:none}
-.wa-item{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;transition:background .1s;border-bottom:1px solid var(--border)}
-.wa-item:hover{background:var(--bg3)}
-.wa-item.active{background:var(--yellow-dim);border-left:3px solid var(--yellow)}
-.wa-item-info{flex:1;min-width:0}
-.wa-item-top{display:flex;justify-content:space-between;align-items:center}
-.wa-item-name{font-size:13px;font-weight:700}
-.wa-item-time{font-size:11px;color:var(--muted)}
-.wa-item-preview{font-size:12px;color:var(--muted2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wa-item-unread{background:var(--green);color:#111;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
-.wa-chat{display:flex;flex-direction:column;background:var(--bg)}
-.wa-chat-header{padding:16px 20px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.wa-chat-info{display:flex;align-items:center;gap:12px}
-.wa-chat-pet{font-size:11px;color:var(--muted2);margin-top:2px}
-.wa-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:72%;display:flex;flex-direction:column;gap:4px}
-.msg.in{align-self:flex-start}
-.msg.out{align-self:flex-end}
-.msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;font-weight:600}
-.msg.in .msg-bubble{background:var(--bg3);border-radius:12px 12px 12px 2px}
-.msg.out .msg-bubble{background:#1f5c43;color:#d1fae5;border-radius:12px 12px 2px 12px}
-.msg.bot .msg-bubble{background:linear-gradient(135deg,#1e2b5a,#252f66);border:1px solid var(--navy-dim);color:#c7d2fe;border-radius:12px 12px 12px 2px}
-.msg-time{font-size:10px;color:var(--muted);font-weight:500}
-.msg.out .msg-time{text-align:right}
-.msg-status{color:var(--green);font-size:11px}
-.wa-compose{padding:14px 16px;background:var(--bg2);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center}
-.wa-compose input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;outline:none}
-.wa-send{width:40px;height:40px;border-radius:10px;background:var(--green);border:none;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.bot-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;background:var(--navy-dim);color:#a89bff;border-radius:6px;padding:2px 8px;margin-bottom:4px}
-
-/* ── AGENDA ── */
-.agenda-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:14px;overflow:hidden}
-.agenda-header{background:var(--bg2);padding:12px 8px;text-align:center;font-size:11px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.05em}
-.agenda-day{background:var(--card);min-height:120px;padding:8px}
-.agenda-day.today{background:#1a1f2e;outline:2px solid var(--yellow);outline-offset:-2px}
-.agenda-day.other{opacity:.4}
-.agenda-date{font-size:11px;font-weight:700;color:var(--muted2);margin-bottom:6px}
-.agenda-date.today-num{color:var(--yellow)}
-.appt{background:var(--yellow-dim);border-left:3px solid var(--yellow);border-radius:4px;padding:4px 6px;font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:4px;cursor:pointer;transition:background .1s}
-.appt:hover{background:rgba(233,158,34,.2)}
-.appt.navy{background:var(--navy-dim);border-color:#a89bff;color:#a89bff}
-.appt.green{background:var(--green-dim);border-color:var(--green);color:var(--green)}
-.appt.red{background:var(--red-dim);border-color:var(--red);color:var(--red)}
-.appt-time{font-size:10px;font-weight:600;opacity:.8}
-
-/* ── INATIVOS ── */
-.inactive-filters{display:flex;gap:10px;margin-bottom:20px}
-.filter-btn{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--muted2);transition:all .15s;font-family:'Nunito',sans-serif}
-.filter-btn.active{background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-mid)}
-.inactive-actions{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px}
-.selected-count{font-size:13px;font-weight:700;color:var(--text)}
-.selected-count span{color:var(--yellow)}
-
-/* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:28px;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.modal-title{font-size:18px;font-weight:900;margin-bottom:6px}
-.modal-sub{font-size:13px;color:var(--muted2);margin-bottom:20px}
-.msg-preview{background:var(--bg3);border-radius:10px;padding:16px;font-size:13px;line-height:1.6;color:var(--text);border-left:3px solid var(--yellow);margin-bottom:20px;font-weight:600}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end}
-.toast{position:fixed;bottom:24px;right:24px;background:#1f5c43;border:1px solid var(--green);border-radius:12px;padding:14px 20px;font-size:14px;font-weight:700;color:#d1fae5;display:flex;align-items:center;gap:10px;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
-.toast.show{opacity:1;transform:translateY(0)}
-
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* ── RESPONSIVE UTILS ── */
-.flex-between{display:flex;align-items:center;justify-content:space-between}
-.gap-2{gap:8px}
-.mt-4{margin-top:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F1F5F9;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.box{background:#fff;border-radius:16px;padding:40px;max-width:420px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center}
+h1{font-size:20px;font-weight:800;color:#0F172A;margin-bottom:8px}
+p{font-size:13px;color:#64748B;line-height:1.6;margin-bottom:24px}
+.warn{background:#FFFDE6;border:1px solid #FDE68A;border-radius:8px;padding:12px;font-size:12px;color:#856400;margin-bottom:20px;text-align:left}
+.btn{display:block;background:#4047C8;color:#fff;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;width:100%;transition:background .15s;margin-bottom:10px}
+.btn:hover{background:#2D33A8}
+.btn-ghost{background:#F1F5F9;color:#334155}
+.btn-ghost:hover{background:#E2E8F0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px}
+.chip{background:#ECEEFF;color:#4047C8;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.chip-warn{background:#FEF2F2;color:#DC2626}
+.chip-yellow{background:#FFFDE6;color:#856400}
 </style>
 </head>
 <body>
-
-<!-- Demo Banner -->
-<div class="demo-banner">
-  <div style="display:flex;align-items:center;gap:10px">
-    <i class="ph ph-circles-three-plus" style="font-size:16px"></i>
-    <strong>PETS GO — DEMO AO VIVO</strong>
-    <span>Pet Shop São Francisco · Porto Alegre, RS</span>
+<div class="box">
+  <div style="font-size:44px;margin-bottom:14px">🐾</div>
+  <h1>Pets Go Control — Demo</h1>
+  <p>Carrega dados fictícios para demonstração completa do sistema.</p>
+  <div class="chips">
+    <span class="chip">15 tutores</span>
+    <span class="chip">22 pets</span>
+    <span class="chip">3 filiais</span>
+    <span class="chip">12 agendamentos</span>
+    <span class="chip-warn">⚠️ 2 estoque baixo</span>
+    <span class="chip-yellow">⏰ 2 planos críticos</span>
+    <span class="chip-warn">1 plano vencido</span>
   </div>
-  <span class="demo-pill">📍 Dados de demonstração</span>
-</div>
-
-<div class="app">
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="tb-brand">
-      <div class="tb-logo">🐾</div>
-      <span class="tb-name">Pets Go</span>
-      <span class="tb-sub">São Francisco</span>
-    </div>
-    <div class="tb-center">
-      <i class="ph ph-magnifying-glass" style="color:var(--muted);font-size:16px"></i>
-      <input placeholder="Buscar clientes, pets, agendamentos..."/>
-    </div>
-    <div class="tb-right">
-      <div class="notif-btn"><i class="ph ph-bell"></i><div class="notif-dot"></div></div>
-      <div class="tb-avatar">JS</div>
-    </div>
-  </header>
-
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <div class="nav-label">Principal</div>
-    <div class="nav-item active" onclick="switchPage('dashboard',this)">
-      <span class="ico"><i class="ph ph-squares-four"></i></span>Dashboard
-    </div>
-    <div class="nav-item" onclick="switchPage('agenda',this)">
-      <span class="ico"><i class="ph ph-calendar-check"></i></span>Agenda
-      <span class="nav-badge">8</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('whatsapp',this)">
-      <span class="ico"><i class="ph ph-chat-circle-dots"></i></span>WhatsApp
-      <span class="nav-badge red">3</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('clientes',this)">
-      <span class="ico"><i class="ph ph-users"></i></span>Clientes
-    </div>
-    <div class="nav-item" onclick="switchPage('inativos',this)">
-      <span class="ico"><i class="ph ph-user-minus"></i></span>Inativos
-      <span class="nav-badge red">23</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('reativacao',this)" style="background:rgba(233,158,34,.07);border:1px solid rgba(233,158,34,.2)">
-      <span class="ico"><i class="ph ph-rocket-launch"></i></span>Reativação
-      <span class="nav-badge" style="background:var(--yellow);color:#111;animation:pulse 2s infinite">555</span>
-    </div>
-    <div class="nav-label">Operação</div>
-    <div class="nav-item" onclick="switchPage('banho',this)">
-      <span class="ico"><i class="ph ph-scissors"></i></span>Banho &amp; Tosa
-    </div>
-    <div class="nav-item" onclick="switchPage('produtos',this)">
-      <span class="ico"><i class="ph ph-storefront"></i></span>Produtos
-    </div>
-    <div class="nav-item" onclick="switchPage('financeiro',this)">
-      <span class="ico"><i class="ph ph-chart-line-up"></i></span>Financeiro
-    </div>
-    <div class="sidebar-bottom">
-      <div class="nav-item">
-        <span class="ico"><i class="ph ph-gear"></i></span>Configurações
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main -->
-  <main class="main">
-
-    <!-- ── DASHBOARD ── -->
-    <div class="page active" id="page-dashboard">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Bom dia, Jorge! 👋</h1>
-          <p>Domingo, 20 de Abril · Aqui está o resumo do seu pet shop hoje</p>
-        </div>
-        <button class="btn btn-primary" onclick="switchPage('whatsapp',null)">
-          <i class="ph ph-whatsapp-logo"></i> Ver WhatsApp
-        </button>
-      </div>
-
-      <div class="kpi-row">
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-calendar"></i> Hoje</div>
-          <div class="kpi-val">8</div>
-          <div class="kpi-sub kpi-up">▲ 2 vs semana passada</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-currency-dollar"></i> Receita Hoje</div>
-          <div class="kpi-val">R$<span style="font-size:22px">380</span></div>
-          <div class="kpi-sub kpi-up">▲ 12% vs dom. passado</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-user-minus"></i> Inativos +60d</div>
-          <div class="kpi-val" style="color:var(--red)">23</div>
-          <div class="kpi-sub kpi-neutral">↗ R$3.450 potencial</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-robot"></i> Bot Ativo</div>
-          <div class="kpi-val" style="color:var(--green)">24/7</div>
-          <div class="kpi-sub kpi-up">14 mensagens hoje</div>
-        </div>
-      </div>
-
-      <div class="section-2col">
-        <!-- Agenda do dia -->
-        <div class="card">
-          <div class="card-title"><i class="ph ph-calendar-check" style="color:var(--yellow)"></i>Agenda de Hoje <span class="badge green">8 agendados</span></div>
-          <table class="tbl">
-            <thead><tr>
-              <th>Horário</th><th>Cliente / Pet</th><th>Serviço</th><th>Valor</th><th></th>
-            </tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>08:00</strong></td>
-                <td><div class="avatar-cell"><div class="av y">MF</div><div><div class="av-name">Mariana Ferreira</div><div class="av-sub">🐩 Lola · Poodle</div></div></div></td>
-                <td>Banho + Tosa</td><td style="color:var(--green);font-weight:800">R$95</td>
-                <td><span class="tag active">Concluído</span></td>
-              </tr>
-              <tr>
-                <td><strong>09:30</strong></td>
-                <td><div class="avatar-cell"><div class="av n">RO</div><div><div class="av-name">Ricardo Oliveira</div><div class="av-sub">🐕 Thor · Labrador</div></div></div></td>
-                <td>Banho</td><td style="color:var(--green);font-weight:800">R$60</td>
-                <td><span class="tag active">Concluído</span></td>
-              </tr>
-              <tr>
-                <td><strong>10:30</strong></td>
-                <td><div class="avatar-cell"><div class="av g">AS</div><div><div class="av-name">Ana Santos</div><div class="av-sub">🐈 Mimi · Persa</div></div></div></td>
-                <td>Tosa Higiênica</td><td style="font-weight:800">R$55</td>
-                <td><span class="tag warn">Agora</span></td>
-              </tr>
-              <tr>
-                <td><strong>13:00</strong></td>
-                <td><div class="avatar-cell"><div class="av r">PC</div><div><div class="av-name">Paulo Costa</div><div class="av-sub">🐕 Rex · Pastor</div></div></div></td>
-                <td>Banho + Tosa</td><td style="font-weight:800">R$110</td>
-                <td><span class="tag new">Confirmado</span></td>
-              </tr>
-              <tr>
-                <td><strong>14:30</strong></td>
-                <td><div class="avatar-cell"><div class="av y">JL</div><div><div class="av-name">Joana Lima</div><div class="av-sub">🐕 Bolinha · Shih-tzu</div></div></div></td>
-                <td>Banho + Tosa</td><td style="font-weight:800">R$85</td>
-                <td><span class="tag new">Confirmado</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="mt-4" style="display:flex;gap:8px">
-            <button class="btn btn-ghost btn-sm" onclick="switchPage('agenda',null)"><i class="ph ph-calendar"></i> Ver semana completa</button>
-          </div>
-        </div>
-
-        <!-- Atividade do Bot -->
-        <div class="card">
-          <div class="card-title"><i class="ph ph-robot" style="color:#a89bff"></i>Bot WhatsApp — Hoje</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div style="background:var(--bg3);border-radius:10px;padding:12px 14px;border-left:3px solid var(--green)">
-              <div style="font-size:11px;color:var(--muted2);font-weight:600;margin-bottom:4px">09:12 · Confirmação automática</div>
-              <div style="font-size:13px;font-weight:600;line-height:1.4">✅ <strong>Ricardo Oliveira</strong> confirmou o banho do Thor às 09:30</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:10px;padding:12px 14px;border-left:3px solid var(--yellow)">
-              <div style="font-size:11px;color:var(--muted2);font-weight:600;margin-bottom:4px">08:45 · Lembrete enviado</div>
-              <div style="font-size:13px;font-weight:600;line-height:1.4">📅 Lembrete enviado para <strong>3 clientes</strong> do agendamento de hoje</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:10px;padding:12px 14px;border-left:3px solid #a89bff">
-              <div style="font-size:11px;color:var(--muted2);font-weight:600;margin-bottom:4px">07:30 · Reagendamento</div>
-              <div style="font-size:13px;font-weight:600;line-height:1.4">🔄 <strong>Fernanda Melo</strong> reagendou o Bolinha para quinta via bot</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:10px;padding:12px 14px;border-left:3px solid var(--red)">
-              <div style="font-size:11px;color:var(--muted2);font-weight:600;margin-bottom:4px">Ontem 20:15 · Reativação</div>
-              <div style="font-size:13px;font-weight:600;line-height:1.4">💰 <strong>Carlos Mendes</strong> voltou após 68 dias! Agendou pelo bot</div>
-            </div>
-          </div>
-          <div class="mt-4">
-            <button class="btn btn-ghost btn-sm" style="width:100%" onclick="switchPage('inativos',null)">
-              <i class="ph ph-user-minus"></i> Ver 23 clientes inativos
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── WHATSAPP ── -->
-    <div class="page" id="page-whatsapp">
-      <div class="wa-container">
-        <!-- Lista de conversas -->
-        <div class="wa-list">
-          <div class="wa-search"><input placeholder="Buscar conversa..."/></div>
-          <div class="wa-item active" onclick="selectChat('mariana')">
-            <div class="av y">MF</div>
-            <div class="wa-item-info">
-              <div class="wa-item-top"><span class="wa-item-name">Mariana Ferreira</span><span class="wa-item-time">10:34</span></div>
-              <div class="wa-item-preview">✅ Confirmado! Às 08:00 fica ótimo</div>
-            </div>
-          </div>
-          <div class="wa-item" onclick="selectChat('carlos')">
-            <div class="av r">CM</div>
-            <div class="wa-item-info">
-              <div class="wa-item-top"><span class="wa-item-name">Carlos Mendes</span><span class="wa-item-time">09:58</span></div>
-              <div class="wa-item-preview">Bot: Olá Carlos! Faz 68 dias que o...</div>
-            </div>
-            <div class="wa-item-unread">1</div>
-          </div>
-          <div class="wa-item" onclick="selectChat('joana')">
-            <div class="av y">JL</div>
-            <div class="wa-item-info">
-              <div class="wa-item-top"><span class="wa-item-name">Joana Lima</span><span class="wa-item-time">09:15</span></div>
-              <div class="wa-item-preview">Que horas pode ser? 14h tá bom?</div>
-            </div>
-            <div class="wa-item-unread">2</div>
-          </div>
-          <div class="wa-item" onclick="selectChat('ricardo')">
-            <div class="av n">RO</div>
-            <div class="wa-item-info">
-              <div class="wa-item-top"><span class="wa-item-name">Ricardo Oliveira</span><span class="wa-item-time">08:47</span></div>
-              <div class="wa-item-preview">👍 Confirmado para as 9:30</div>
-            </div>
-          </div>
-          <div class="wa-item" onclick="selectChat('fernanda')">
-            <div class="av g">FM</div>
-            <div class="wa-item-info">
-              <div class="wa-item-top"><span class="wa-item-name">Fernanda Melo</span><span class="wa-item-time">07:32</span></div>
-              <div class="wa-item-preview">Bot: Prontinho! Reagendado para qui...</div>
-            </div>
-          </div>
-          <div class="wa-item" onclick="selectChat('paulo')">
-            <div class="av r">PC</div>
-            <div class="wa-item-info">
-              <div class="wa-item-top"><span class="wa-item-name">Paulo Costa</span><span class="wa-item-time">Ontem</span></div>
-              <div class="wa-item-preview">Tá bom, às 13h então</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chat ativo -->
-        <div class="wa-chat">
-          <div class="wa-chat-header">
-            <div class="wa-chat-info">
-              <div class="av y" id="chat-avatar">MF</div>
-              <div>
-                <div style="font-size:14px;font-weight:800" id="chat-name">Mariana Ferreira</div>
-                <div class="wa-chat-pet" id="chat-pet">🐩 Lola · Poodle · Última visita: 20/04/2025</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-ghost btn-sm"><i class="ph ph-calendar"></i> Agendar</button>
-              <button class="btn btn-ghost btn-sm"><i class="ph ph-user"></i> Perfil</button>
-            </div>
-          </div>
-
-          <div class="wa-messages" id="chat-messages">
-            <!-- Messages populated by JS -->
-          </div>
-
-          <div class="wa-compose">
-            <button class="btn btn-ghost btn-sm"><i class="ph ph-robot"></i></button>
-            <input placeholder="Digite uma mensagem..." id="compose-input"/>
-            <button class="wa-send"><i class="ph ph-paper-plane-tilt"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── AGENDA ── -->
-    <div class="page" id="page-agenda">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Agenda</h1>
-          <p>Semana de 20 a 26 de Abril, 2025</p>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost"><i class="ph ph-caret-left"></i></button>
-          <button class="btn btn-ghost"><i class="ph ph-caret-right"></i></button>
-          <button class="btn btn-primary"><i class="ph ph-plus"></i> Novo Agendamento</button>
-        </div>
-      </div>
-
-      <div class="agenda-grid" style="margin-bottom:16px">
-        <div class="agenda-header">Dom</div>
-        <div class="agenda-header">Seg</div>
-        <div class="agenda-header">Ter</div>
-        <div class="agenda-header">Qua</div>
-        <div class="agenda-header">Qui</div>
-        <div class="agenda-header">Sex</div>
-        <div class="agenda-header">Sáb</div>
-
-        <!-- Domingo 20 (hoje) -->
-        <div class="agenda-day today">
-          <div class="agenda-date today-num">20 · Hoje</div>
-          <div class="appt">08:00 <div class="appt-time">Lola · Banho+Tosa</div></div>
-          <div class="appt">09:30 <div class="appt-time">Thor · Banho</div></div>
-          <div class="appt navy">10:30 <div class="appt-time">Mimi · Higiênica</div></div>
-          <div class="appt">13:00 <div class="appt-time">Rex · Banho+Tosa</div></div>
-          <div class="appt">14:30 <div class="appt-time">Bolinha · Tosa</div></div>
-          <div class="appt green">16:00 <div class="appt-time">Mel · Banho</div></div>
-        </div>
-
-        <!-- Segunda 21 -->
-        <div class="agenda-day">
-          <div class="agenda-date">21</div>
-          <div class="appt">09:00 <div class="appt-time">Max · Banho+Tosa</div></div>
-          <div class="appt">10:30 <div class="appt-time">Nina · Tosa</div></div>
-          <div class="appt navy">14:00 <div class="appt-time">Pipoca · Higiênica</div></div>
-          <div class="appt">16:00 <div class="appt-time">Bob · Banho</div></div>
-        </div>
-
-        <!-- Terça 22 -->
-        <div class="agenda-day">
-          <div class="agenda-date">22</div>
-          <div class="appt">08:30 <div class="appt-time">Luna · Banho+Tosa</div></div>
-          <div class="appt">11:00 <div class="appt-time">Bidu · Banho</div></div>
-          <div class="appt red">13:30 <div class="appt-time">Fofinha · Tosa</div></div>
-        </div>
-
-        <!-- Quarta 23 -->
-        <div class="agenda-day">
-          <div class="agenda-date">23</div>
-          <div class="appt">09:00 <div class="appt-time">Zeus · Banho</div></div>
-          <div class="appt green">10:00 <div class="appt-time">Bolinha · Reagend.</div></div>
-          <div class="appt">14:00 <div class="appt-time">Lily · Tosa Comp.</div></div>
-          <div class="appt">15:30 <div class="appt-time">Rocky · Banho+Tosa</div></div>
-        </div>
-
-        <!-- Quinta 24 -->
-        <div class="agenda-day">
-          <div class="agenda-date">24</div>
-          <div class="appt">08:00 <div class="appt-time">Thor · Tosa</div></div>
-          <div class="appt navy">10:30 <div class="appt-time">Mel · Higiênica</div></div>
-          <div class="appt">13:00 <div class="appt-time">Max · Banho</div></div>
-        </div>
-
-        <!-- Sexta 25 -->
-        <div class="agenda-day">
-          <div class="agenda-date">25</div>
-          <div class="appt">09:00 <div class="appt-time">Lola · Banho</div></div>
-          <div class="appt">10:30 <div class="appt-time">Nina · Banho+Tosa</div></div>
-          <div class="appt green">14:00 <div class="appt-time">Rex · Banho</div></div>
-          <div class="appt">15:00 <div class="appt-time">Pipoca · Tosa</div></div>
-          <div class="appt">16:30 <div class="appt-time">Luna · Banho</div></div>
-        </div>
-
-        <!-- Sábado 26 -->
-        <div class="agenda-day">
-          <div class="agenda-date">26</div>
-          <div class="appt">08:30 <div class="appt-time">Bob · Banho+Tosa</div></div>
-          <div class="appt">10:00 <div class="appt-time">Zeus · Banho</div></div>
-          <div class="appt navy">11:30 <div class="appt-time">Fofinha · Higiênica</div></div>
-          <div class="appt">13:00 <div class="appt-time">Rocky · Banho</div></div>
-          <div class="appt">14:30 <div class="appt-time">Bidu · Banho+Tosa</div></div>
-          <div class="appt green">16:00 <div class="appt-time">Lily · Banho</div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><i class="ph ph-robot" style="color:#a89bff"></i>Confirmações Automáticas do Bot</div>
-        <table class="tbl">
-          <thead><tr><th>Cliente</th><th>Pet</th><th>Agendamento</th><th>Bot Enviou</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><strong>Mariana Ferreira</strong></td><td>🐩 Lola</td>
-              <td>Dom 20/04 · 08:00</td>
-              <td style="font-size:12px;color:var(--muted2)">Ontem às 18:00</td>
-              <td><span class="tag active">Confirmado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Ricardo Oliveira</strong></td><td>🐕 Thor</td>
-              <td>Dom 20/04 · 09:30</td>
-              <td style="font-size:12px;color:var(--muted2)">Ontem às 18:00</td>
-              <td><span class="tag active">Confirmado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Ana Santos</strong></td><td>🐈 Mimi</td>
-              <td>Dom 20/04 · 10:30</td>
-              <td style="font-size:12px;color:var(--muted2)">Ontem às 18:01</td>
-              <td><span class="tag warn">Sem resposta</span></td>
-            </tr>
-            <tr>
-              <td><strong>Paulo Costa</strong></td><td>🐕 Rex</td>
-              <td>Dom 20/04 · 13:00</td>
-              <td style="font-size:12px;color:var(--muted2)">Ontem às 18:01</td>
-              <td><span class="tag active">Confirmado</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── INATIVOS ── -->
-    <div class="page" id="page-inativos">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Clientes Inativos</h1>
-          <p>23 clientes sem visita há mais de 60 dias · Potencial de recuperação: <strong style="color:var(--yellow)">R$3.450</strong></p>
-        </div>
-        <button class="btn btn-primary" onclick="openModal()">
-          <i class="ph ph-whatsapp-logo"></i> Enviar Reativação em Massa
-        </button>
-      </div>
-
-      <div class="inactive-filters">
-        <button class="filter-btn active">Todos (23)</button>
-        <button class="filter-btn">+60 dias (23)</button>
-        <button class="filter-btn">+90 dias (11)</button>
-        <button class="filter-btn">+120 dias (4)</button>
-        <button class="filter-btn">Nunca voltaram (2)</button>
-      </div>
-
-      <div class="inactive-actions">
-        <div class="selected-count"><span id="sel-count">0</span> clientes selecionados</div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost btn-sm" onclick="selectAll()"><i class="ph ph-check-square"></i> Selecionar Todos</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal()"><i class="ph ph-paper-plane-tilt"></i> Enviar para Selecionados</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <table class="tbl">
-          <thead><tr>
-            <th><input type="checkbox" onchange="selectAll()" id="check-all"/></th>
-            <th>Cliente / Pet</th><th>Último Serviço</th><th>Dias Inativo</th><th>Ticket Médio</th><th>Motivo</th><th></th>
-          </tr></thead>
-          <tbody id="inactive-table">
-            <!-- JS popula -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── CLIENTES ── -->
-    <!-- ── REATIVAÇÃO ── -->
-    <div class="page" id="page-reativacao">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Campanha de Reativação 🚀</h1>
-          <p>Clientes inativos identificados · Rio Branco · Cachorródromo · Petrópolis · Comissão: <strong style="color:var(--yellow)">R$70 por cliente que comparecer</strong></p>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost" onclick="exportarCSV()"><i class="ph ph-download-simple"></i> Exportar</button>
-          <button class="btn btn-primary" onclick="enviarTodos()"><i class="ph ph-rocket-launch"></i> Enviar Todos (A Enviar)</button>
-        </div>
-      </div>
-
-      <!-- KPIs -->
-      <div class="kpi-row">
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-users"></i> Total Inativos</div>
-          <div class="kpi-val" id="r-kpi-total">0</div>
-          <div class="kpi-sub kpi-neutral">2 filiais</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-paper-plane-tilt"></i> Mensagens Enviadas</div>
-          <div class="kpi-val" style="color:#a89bff" id="r-kpi-enviados">0</div>
-          <div class="kpi-sub kpi-neutral">aguardando resposta</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-calendar-check"></i> Agendados</div>
-          <div class="kpi-val" style="color:var(--green)" id="r-kpi-agendados">0</div>
-          <div class="kpi-sub kpi-up">prontos pra voltar</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label"><i class="ph ph-trophy"></i> Comissão Gerada</div>
-          <div class="kpi-val" style="color:var(--yellow)" id="r-kpi-comissao">R$0</div>
-          <div class="kpi-sub kpi-up">R$70 × comparecimentos</div>
-        </div>
-      </div>
-
-      <!-- Pipeline visual -->
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px">
-        <div class="card" style="text-align:center;padding:16px 12px">
-          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-paper-plane-tilt" style="color:var(--muted2)"></i></div>
-          <div style="font-size:22px;font-weight:900" id="pipe-count-a_enviar">-</div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">A Enviar</div>
-        </div>
-        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(168,155,255,.3)">
-          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-check" style="color:#a89bff"></i></div>
-          <div style="font-size:22px;font-weight:900;color:#a89bff" id="pipe-count-enviado">-</div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Enviado</div>
-        </div>
-        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(233,158,34,.3)">
-          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-chat-circle-dots" style="color:var(--yellow)"></i></div>
-          <div style="font-size:22px;font-weight:900;color:var(--yellow)" id="pipe-count-respondeu">-</div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Respondeu</div>
-        </div>
-        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(0,193,129,.3)">
-          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-calendar-check" style="color:var(--green)"></i></div>
-          <div style="font-size:22px;font-weight:900;color:var(--green)" id="pipe-count-agendado">-</div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Agendado</div>
-        </div>
-        <div class="card" style="text-align:center;padding:16px 12px;border-color:rgba(0,193,129,.5);background:var(--green-dim)">
-          <div style="font-size:24px;margin-bottom:6px"><i class="ph ph-trophy" style="color:var(--green)"></i></div>
-          <div style="font-size:22px;font-weight:900;color:var(--green)" id="pipe-count-compareceu">-</div>
-          <div style="font-size:11px;font-weight:700;color:var(--green);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Compareceu ✓</div>
-        </div>
-      </div>
-
-      <!-- Filtros -->
-      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">
-        <select id="r-filial" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
-          <option value="todas">Todas as Filiais</option>
-          <option value="Rio Branco">Rio Branco</option>
-          <option value="Petrópolis">Petrópolis</option>
-          <option value="Cachorródromo">Cachorródromo</option>
-        </select>
-        <select id="r-status" onchange="renderReativacao()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;outline:none">
-          <option value="todos">Todos os Status</option>
-          <option value="a_enviar">A Enviar</option>
-          <option value="enviado">Enviado</option>
-          <option value="respondeu">Respondeu</option>
-          <option value="agendado">Agendado</option>
-          <option value="compareceu">Compareceu</option>
-        </select>
-        <div style="font-size:13px;color:var(--muted2);margin-left:auto;font-weight:600" id="r-count-label"></div>
-      </div>
-
-      <!-- Tabela -->
-      <div class="card" style="padding:0;overflow:hidden">
-        <table class="tbl">
-          <thead><tr>
-            <th>Cliente</th><th>Pet</th><th>Filial</th><th>Inativo há</th><th>Status</th><th>Mensagem</th><th>Ação</th>
-          </tr></thead>
-          <tbody id="r-table"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Modal preview mensagem -->
-    <div class="modal-overlay" id="msg-modal" onclick="if(event.target===this)this.classList.remove('open')">
-      <div class="modal" style="max-width:540px">
-        <div class="modal-title">📱 Mensagem WhatsApp</div>
-        <div class="modal-sub">Prévia do que o cliente vai receber</div>
-        <div class="msg-preview" id="msg-preview-text" style="white-space:pre-wrap;line-height:1.7"></div>
-        <div class="modal-actions">
-          <button class="btn btn-ghost" onclick="document.getElementById('msg-modal').classList.remove('open')">Fechar</button>
-          <button class="btn btn-primary"><i class="ph ph-whatsapp-logo"></i> Enviar Agora</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="page" id="page-clientes">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Clientes</h1>
-          <p>142 clientes cadastrados · 119 ativos · 23 inativos</p>
-        </div>
-        <button class="btn btn-primary"><i class="ph ph-plus"></i> Novo Cliente</button>
-      </div>
-      <div class="card">
-        <table class="tbl">
-          <thead><tr><th>Cliente</th><th>Pet(s)</th><th>Próximo Agend.</th><th>Visitas/Mês</th><th>LTV</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td><div class="avatar-cell"><div class="av y">MF</div><div><div class="av-name">Mariana Ferreira</div><div class="av-sub">(51) 99142-8834</div></div></div></td><td>🐩 Lola</td><td>Dom 20/04</td><td>2-3x</td><td style="color:var(--green);font-weight:800">R$2.280</td><td><span class="tag active">VIP</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av n">RO</div><div><div class="av-name">Ricardo Oliveira</div><div class="av-sub">(51) 98765-4321</div></div></div></td><td>🐕 Thor</td><td>Dom 20/04</td><td>1-2x</td><td style="color:var(--green);font-weight:800">R$1.440</td><td><span class="tag active">Regular</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av g">AS</div><div><div class="av-name">Ana Santos</div><div class="av-sub">(51) 97654-3210</div></div></div></td><td>🐈 Mimi</td><td>Dom 20/04</td><td>1x</td><td style="font-weight:800">R$660</td><td><span class="tag active">Regular</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av r">CM</div><div><div class="av-name">Carlos Mendes</div><div class="av-sub">(51) 96543-2109</div></div></div></td><td>🐕 Bolão</td><td>—</td><td>0x</td><td style="font-weight:800">R$420</td><td><span class="tag inactive">Inativo 68d</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av y">JL</div><div><div class="av-name">Joana Lima</div><div class="av-sub">(51) 95432-1098</div></div></div></td><td>🐕 Bolinha</td><td>Dom 20/04</td><td>2x</td><td style="color:var(--green);font-weight:800">R$1.020</td><td><span class="tag active">Regular</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av n">PC</div><div><div class="av-name">Paulo Costa</div><div class="av-sub">(51) 94321-0987</div></div></div></td><td>🐕 Rex</td><td>Dom 20/04</td><td>1x</td><td style="font-weight:800">R$1.320</td><td><span class="tag active">Regular</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── BANHO & TOSA ── -->
-    <div class="page" id="page-banho">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Banho &amp; Tosa</h1>
-          <p>Gestão de serviços · 3 tosadores ativos</p>
-        </div>
-        <button class="btn btn-primary"><i class="ph ph-plus"></i> Novo Serviço</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-scissors"></i> Hoje</div><div class="kpi-val">8</div><div class="kpi-sub kpi-up">R$380 em serviços</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-calendar"></i> Esta Semana</div><div class="kpi-val">34</div><div class="kpi-sub kpi-up">R$2.890 projetado</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-star"></i> Avaliação Média</div><div class="kpi-val" style="color:var(--yellow)">4.8</div><div class="kpi-sub kpi-neutral">⭐ 47 avaliações</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-clock"></i> Tempo Médio</div><div class="kpi-val">52<span style="font-size:16px">min</span></div><div class="kpi-sub kpi-neutral">Por atendimento</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="ph ph-scissors" style="color:var(--yellow)"></i>Serviços Cadastrados</div>
-        <table class="tbl">
-          <thead><tr><th>Serviço</th><th>Porte</th><th>Duração</th><th>Preço</th><th>Realizados (mês)</th><th></th></tr></thead>
-          <tbody>
-            <tr><td><strong>Banho Completo</strong></td><td>Pequeno</td><td>45 min</td><td style="color:var(--green);font-weight:800">R$50</td><td>28x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Banho Completo</strong></td><td>Médio</td><td>60 min</td><td style="color:var(--green);font-weight:800">R$65</td><td>19x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Banho Completo</strong></td><td>Grande</td><td>90 min</td><td style="color:var(--green);font-weight:800">R$85</td><td>11x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Banho + Tosa</strong></td><td>Pequeno</td><td>60 min</td><td style="color:var(--green);font-weight:800">R$85</td><td>24x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Banho + Tosa</strong></td><td>Médio</td><td>90 min</td><td style="color:var(--green);font-weight:800">R$110</td><td>16x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Banho + Tosa</strong></td><td>Grande</td><td>120 min</td><td style="color:var(--green);font-weight:800">R$145</td><td>8x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Tosa Higiênica</strong></td><td>Todos</td><td>30 min</td><td style="color:var(--green);font-weight:800">R$45</td><td>22x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-            <tr><td><strong>Tosa na Tesoura</strong></td><td>Pequeno</td><td>75 min</td><td style="color:var(--green);font-weight:800">R$120</td><td>7x</td><td><button class="btn btn-ghost btn-sm">Editar</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card" style="margin-top:16px">
-        <div class="card-title"><i class="ph ph-users" style="color:#a89bff"></i>Tosadores</div>
-        <table class="tbl">
-          <thead><tr><th>Nome</th><th>Especialidade</th><th>Agendamentos Hoje</th><th>Taxa de Retorno</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td><div class="avatar-cell"><div class="av y">SM</div><div><div class="av-name">Sandra Melo</div><div class="av-sub">5 anos de experiência</div></div></div></td><td>Tosa de Raça</td><td><strong>4</strong> atendimentos</td><td style="color:var(--green);font-weight:800">89%</td><td><span class="tag active">Ativo</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av n">CF</div><div><div class="av-name">Carlos Figueiredo</div><div class="av-sub">3 anos de experiência</div></div></div></td><td>Banho Especial</td><td><strong>3</strong> atendimentos</td><td style="color:var(--green);font-weight:800">82%</td><td><span class="tag active">Ativo</span></td></tr>
-            <tr><td><div class="avatar-cell"><div class="av g">LP</div><div><div class="av-name">Larissa Pereira</div><div class="av-sub">2 anos de experiência</div></div></div></td><td>Banho &amp; Tosa Geral</td><td><strong>1</strong> atendimento</td><td style="font-weight:800">74%</td><td><span class="tag warn">Meio período</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── PRODUTOS ── -->
-    <div class="page" id="page-produtos">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Produtos</h1>
-          <p>Estoque atual · 68 SKUs cadastrados</p>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost"><i class="ph ph-download-simple"></i> Exportar</button>
-          <button class="btn btn-primary"><i class="ph ph-plus"></i> Novo Produto</button>
-        </div>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-package"></i> Em Estoque</div><div class="kpi-val">68</div><div class="kpi-sub kpi-neutral">SKUs ativos</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-warning"></i> Estoque Baixo</div><div class="kpi-val" style="color:var(--yellow)">7</div><div class="kpi-sub kpi-down">Repor em breve</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-x-circle"></i> Sem Estoque</div><div class="kpi-val" style="color:var(--red)">2</div><div class="kpi-sub kpi-down">Pedido pendente</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-currency-dollar"></i> Vendas Hoje</div><div class="kpi-val">R$<span style="font-size:22px">145</span></div><div class="kpi-sub kpi-up">▲ 4 vendas</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="ph ph-package" style="color:var(--yellow)"></i>Produtos em Destaque <span class="badge">7 com estoque baixo</span></div>
-        <table class="tbl">
-          <thead><tr><th>Produto</th><th>Categoria</th><th>Preço Venda</th><th>Estoque</th><th>Mín.</th><th>Status</th><th></th></tr></thead>
-          <tbody>
-            <tr><td><strong>Shampoo Pet Clean Pro 500ml</strong></td><td>Higiene</td><td style="font-weight:800">R$38</td><td><strong>24</strong> un</td><td>10</td><td><span class="tag active">Ok</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
-            <tr><td><strong>Condicionador Pelo Macio 500ml</strong></td><td>Higiene</td><td style="font-weight:800">R$32</td><td><strong style="color:var(--yellow)">6</strong> un</td><td>10</td><td><span class="tag warn">Baixo</span></td><td><button class="btn btn-ghost btn-sm">Repor</button></td></tr>
-            <tr><td><strong>Ração Premium Adulto 15kg</strong></td><td>Alimentação</td><td style="font-weight:800">R$185</td><td><strong style="color:var(--yellow)">3</strong> un</td><td>5</td><td><span class="tag warn">Baixo</span></td><td><button class="btn btn-ghost btn-sm">Repor</button></td></tr>
-            <tr><td><strong>Coleira Anti-pulgas P</strong></td><td>Saúde</td><td style="font-weight:800">R$29</td><td><strong>18</strong> un</td><td>8</td><td><span class="tag active">Ok</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
-            <tr><td><strong>Petisco Snack Frango 200g</strong></td><td>Alimentação</td><td style="font-weight:800">R$18</td><td><strong style="color:var(--red)">0</strong> un</td><td>15</td><td><span class="tag inactive">Zerado</span></td><td><button class="btn btn-primary btn-sm">Pedir</button></td></tr>
-            <tr><td><strong>Escova Profissional Dupla Face</strong></td><td>Acessórios</td><td style="font-weight:800">R$45</td><td><strong>11</strong> un</td><td>5</td><td><span class="tag active">Ok</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
-            <tr><td><strong>Perfume Pet Lavanda 100ml</strong></td><td>Higiene</td><td style="font-weight:800">R$24</td><td><strong style="color:var(--yellow)">4</strong> un</td><td>8</td><td><span class="tag warn">Baixo</span></td><td><button class="btn btn-ghost btn-sm">Repor</button></td></tr>
-            <tr><td><strong>Tapete Higiênico 30un</strong></td><td>Higiene</td><td style="font-weight:800">R$32</td><td><strong style="color:var(--red)">0</strong> un</td><td>10</td><td><span class="tag inactive">Zerado</span></td><td><button class="btn btn-primary btn-sm">Pedir</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── FINANCEIRO ── -->
-    <div class="page" id="page-financeiro">
-      <div class="page-header flex-between">
-        <div>
-          <h1>Financeiro</h1>
-          <p>Abril 2025 · Semana 3 de 4</p>
-        </div>
-        <button class="btn btn-primary"><i class="ph ph-download-simple"></i> Exportar Relatório</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-trend-up"></i> Receita Abril</div><div class="kpi-val" style="color:var(--green)">R$<span style="font-size:22px">6.840</span></div><div class="kpi-sub kpi-up">▲ 18% vs março</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-receipt"></i> Ticket Médio</div><div class="kpi-val">R$<span style="font-size:22px">82</span></div><div class="kpi-sub kpi-up">▲ R$9 vs março</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-repeat"></i> Retorno (30d)</div><div class="kpi-val" style="color:var(--yellow)">68%</div><div class="kpi-sub kpi-up">▲ 5% vs março</div></div>
-        <div class="kpi"><div class="kpi-label"><i class="ph ph-robot"></i> Gerado pelo Bot</div><div class="kpi-val" style="color:#a89bff)">R$<span style="font-size:22px">1.240</span></div><div class="kpi-sub kpi-neutral">18% da receita</div></div>
-      </div>
-      <div class="section-2col">
-        <div class="card">
-          <div class="card-title"><i class="ph ph-chart-bar" style="color:var(--yellow)"></i>Receita por Semana — Abril</div>
-          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-            <div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 1 (01-07)</span><span style="color:var(--green)">R$1.560</span></div>
-              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--green);border-radius:6px;height:10px;width:55%"></div></div>
-            </div>
-            <div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 2 (08-14)</span><span style="color:var(--green)">R$1.780</span></div>
-              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--green);border-radius:6px;height:10px;width:63%"></div></div>
-            </div>
-            <div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 3 (15-21)</span><span style="color:var(--yellow)">R$2.120 (em andamento)</span></div>
-              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--yellow);border-radius:6px;height:10px;width:75%"></div></div>
-            </div>
-            <div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px"><span>Semana 4 (22-30)</span><span style="color:var(--muted2)">Projetado R$2.400</span></div>
-              <div style="background:var(--bg3);border-radius:6px;height:10px"><div style="background:var(--border2);border-radius:6px;height:10px;width:85%;opacity:.4"></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title"><i class="ph ph-robot" style="color:#a89bff"></i>Impacto do Bot</div>
-          <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px">
-            <div style="background:var(--bg3);border-radius:10px;padding:14px">
-              <div style="font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:6px">Confirmações automáticas</div>
-              <div style="font-size:22px;font-weight:900;color:var(--green)">-34%</div>
-              <div style="font-size:12px;color:var(--muted2)">de no-shows em abril</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:10px;padding:14px">
-              <div style="font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:6px">Clientes reativados (abril)</div>
-              <div style="font-size:22px;font-weight:900;color:var(--yellow)">R$1.240</div>
-              <div style="font-size:12px;color:var(--muted2)">de 9 clientes que voltaram via bot</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:10px;padding:14px">
-              <div style="font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:6px">Reagendamentos automáticos</div>
-              <div style="font-size:22px;font-weight:900;color:#a89bff">12</div>
-              <div style="font-size:12px;color:var(--muted2)">sem precisar ligar para o cliente</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="ph ph-receipt" style="color:var(--yellow)"></i>Últimas Transações</div>
-        <table class="tbl">
-          <thead><tr><th>Data/Hora</th><th>Cliente</th><th>Serviço/Produto</th><th>Forma Pag.</th><th>Valor</th></tr></thead>
-          <tbody>
-            <tr><td style="color:var(--muted2);font-size:12px">Hoje 09:45</td><td><strong>Ricardo Oliveira</strong></td><td>Banho · Thor</td><td><span class="tag new">Pix</span></td><td style="color:var(--green);font-weight:800">+R$60</td></tr>
-            <tr><td style="color:var(--muted2);font-size:12px">Hoje 08:30</td><td><strong>Mariana Ferreira</strong></td><td>Banho + Tosa · Lola</td><td><span class="tag active">Cartão</span></td><td style="color:var(--green);font-weight:800">+R$95</td></tr>
-            <tr><td style="color:var(--muted2);font-size:12px">Ontem 17:20</td><td><strong>Ana Santos</strong></td><td>Ração Premium 15kg</td><td><span class="tag new">Pix</span></td><td style="color:var(--green);font-weight:800">+R$185</td></tr>
-            <tr><td style="color:var(--muted2);font-size:12px">Ontem 15:45</td><td><strong>Joana Lima</strong></td><td>Shampoo Pet Clean + Escova</td><td><span class="tag active">Cartão</span></td><td style="color:var(--green);font-weight:800">+R$83</td></tr>
-            <tr><td style="color:var(--muted2);font-size:12px">Ontem 14:00</td><td><strong>Paulo Costa</strong></td><td>Banho + Tosa · Rex</td><td><span class="tag">Dinheiro</span></td><td style="color:var(--green);font-weight:800">+R$110</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- Modal Reativação -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-title">🤖 Mensagem de Reativação</div>
-    <div class="modal-sub">O bot vai enviar para <strong id="modal-count">23 clientes</strong> automaticamente pelo WhatsApp</div>
-    <div class="msg-preview">
-Olá, <strong>[NOME]</strong>! 🐾<br><br>
-Faz um tempinho que o <strong>[PET]</strong> não passa por aqui no <strong>PetShop São Francisco</strong>!<br><br>
-Que tal agendar um banho ou tosa essa semana? 🛁✂️<br><br>
-<strong>👉 Responda SIM</strong> para receber os horários disponíveis ou acesse o link abaixo para agendar:<br>
-petsgo.link/saofran<br><br>
-<em style="opacity:.6;font-size:12px">Pets Go · PetShop São Francisco</em>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="sendReactivation()">
-        <i class="ph ph-paper-plane-tilt"></i> Enviar Agora
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast -->
-<div class="toast" id="toast">
-  <i class="ph ph-check-circle" style="font-size:20px"></i>
-  <span id="toast-msg">Mensagens enviadas com sucesso!</span>
+  <div class="warn">⚠️ Isso <strong>apaga os dados existentes</strong> no CRM e substitui pelos dados de demo.</div>
+  <button class="btn" onclick="carregarDemo()">Carregar dados de demo</button>
+  <button class="btn btn-ghost" onclick="window.location.href='petsgo-crm-light.html'">Cancelar — ir pro CRM</button>
 </div>
 
 <script>
-// ── CHAT DATA ──
-const chats = {
-  mariana: {
-    avatar: 'MF', avatarClass: 'y', name: 'Mariana Ferreira',
-    pet: '🐩 Lola · Poodle · Última visita: 20/04/2025',
-    messages: [
-      {type:'bot', time:'Ontem 18:00', text:'Olá Mariana! 🐾 Lembrando que a Lola tem banho amanhã (Dom 20/04) às 08:00 no PetShop São Francisco. Confirma?'},
-      {type:'in', time:'Ontem 18:34', text:'Oi! Sim, confirmo ✅ A Lola já tá ansiosa kk'},
-      {type:'bot', time:'Ontem 18:34', text:'Ótimo! ✅ Confirmado para amanhã às 08:00. Até lá! 🐾'},
-      {type:'in', time:'Hoje 10:34', text:'Oi! A Lola ficou linda hoje, obrigada! Já posso agendar para o mês que vem?'},
-      {type:'out', time:'Hoje 10:38', text:'Oi Mariana! Que ótimo 😊 Claro, pode agendar! Qual data prefere?'},
-    ]
-  },
-  carlos: {
-    avatar: 'CM', avatarClass: 'r', name: 'Carlos Mendes',
-    pet: '🐕 Bolão · Labrador · Inativo há 68 dias',
-    messages: [
-      {type:'bot', time:'Hoje 09:58', text:'Olá Carlos! 🐾 Faz 68 dias que o Bolão não passa aqui no PetShop São Francisco! Saudades dele 🥺\n\nQue tal agendar um banho essa semana? 🛁✂️\n\nResponda SIM para ver os horários disponíveis!'},
-    ]
-  },
-  joana: {
-    avatar: 'JL', avatarClass: 'y', name: 'Joana Lima',
-    pet: '🐕 Bolinha · Shih-tzu · Última visita: 10/04/2025',
-    messages: [
-      {type:'bot', time:'Hoje 08:45', text:'Olá Joana! 🐾 Lembrete: o Bolinha tem tosa agendada para hoje (Dom 20/04)! Confirma o horário das 14:30?'},
-      {type:'in', time:'Hoje 09:15', text:'Oi! Que horas pode ser? 14h tá bom?'},
-      {type:'out', time:'Hoje 09:20', text:'Claro Joana! Pode ser às 14h então ✅'},
-      {type:'in', time:'Hoje 09:21', text:'Perfeito, obrigada! 😊'},
-    ]
-  },
-  ricardo: {
-    avatar: 'RO', avatarClass: 'n', name: 'Ricardo Oliveira',
-    pet: '🐕 Thor · Labrador · Última visita: 06/04/2025',
-    messages: [
-      {type:'bot', time:'Ontem 18:00', text:'Olá Ricardo! 🐾 O Thor tem banho amanhã (Dom 20/04) às 09:30 no PetShop São Francisco. Confirma?'},
-      {type:'in', time:'Hoje 08:47', text:'👍 Confirmado para as 9:30'},
-      {type:'bot', time:'Hoje 08:47', text:'Perfeito! ✅ Até amanhã! 🐾'},
-    ]
-  },
-  fernanda: {
-    avatar: 'FM', avatarClass: 'g', name: 'Fernanda Melo',
-    pet: '🐕 Bolinha · Shih-tzu · Última visita: 15/04/2025',
-    messages: [
-      {type:'bot', time:'Ontem 20:15', text:'Olá Fernanda! 🐾 O Bolinha tem tosa amanhã (Dom 20/04) às 11:00. Confirma?'},
-      {type:'in', time:'Ontem 20:30', text:'Oi! Não vou conseguir amanhã, tem como mudar para quinta?'},
-      {type:'bot', time:'Ontem 20:30', text:'Claro! Na quinta (24/04) temos: 09:00, 11:00, 14:00 ou 16:00. Qual prefere?'},
-      {type:'in', time:'Hoje 07:30', text:'11h na quinta fica ótimo!'},
-      {type:'bot', time:'Hoje 07:32', text:'Prontinho! ✅ Reagendado para quinta 24/04 às 11:00. Vejo vocês lá! 🐾'},
-    ]
-  },
-  paulo: {
-    avatar: 'PC', avatarClass: 'r', name: 'Paulo Costa',
-    pet: '🐕 Rex · Pastor Alemão · Última visita: 30/03/2025',
-    messages: [
-      {type:'bot', time:'Ontem 14:00', text:'Olá Paulo! 🐾 Gostaria de agendar o Rex para essa semana. Temos horários amanhã às 13:00 ou 15:00. Tem interesse?'},
-      {type:'in', time:'Ontem 16:42', text:'Sim! Às 13h pode ser'},
-      {type:'bot', time:'Ontem 16:42', text:'✅ Agendado! Rex · Banho + Tosa · Dom 20/04 às 13:00. Até lá! 🐾'},
-      {type:'in', time:'Ontem 16:45', text:'Tá bom, às 13h então'},
-    ]
-  }
-};
+function carregarDemo() {
+  const hoje = '2026-04-25';
 
-// ── INATIVOS DATA ──
-const inactivos = [
-  {name:'Carlos Mendes',pet:'🐕 Bolão',servico:'Banho + Tosa',dias:68,ticket:'R$80',motivo:'Sem retorno'},
-  {name:'Beatriz Alves',pet:'🐈 Mel',servico:'Tosa Higiênica',dias:72,ticket:'R$55',motivo:'Sem retorno'},
-  {name:'Fernando Souza',pet:'🐕 Brutus',servico:'Banho',dias:75,ticket:'R$60',motivo:'Sem retorno'},
-  {name:'Carla Nunes',pet:'🐩 Coco',servico:'Banho + Tosa',dias:81,ticket:'R$95',motivo:'Preço'},
-  {name:'Diego Martins',pet:'🐕 King',servico:'Banho',dias:88,ticket:'R$60',motivo:'Sem retorno'},
-  {name:'Larissa Costa',pet:'🐈 Perola',servico:'Tosa',dias:91,ticket:'R$45',motivo:'Sem retorno'},
-  {name:'Thiago Ramos',pet:'🐕 Scooby',servico:'Banho + Tosa',dias:95,ticket:'R$85',motivo:'Distância'},
-  {name:'Vanessa Lima',pet:'🐕 Bela',servico:'Banho',dias:103,ticket:'R$60',motivo:'Sem retorno'},
-  {name:'Eduardo Ferreira',pet:'🐕 Bob',servico:'Banho + Tosa',dias:110,ticket:'R$90',motivo:'Sem retorno'},
-  {name:'Priscila Gomes',pet:'🐩 Floquinho',servico:'Tosa Completa',dias:115,ticket:'R$120',motivo:'Preço'},
-  {name:'Roberto Silva',pet:'🐕 Titan',servico:'Banho',dias:122,ticket:'R$60',motivo:'Sem retorno'},
-  {name:'Juliana Campos',pet:'🐈 Luna',servico:'Tosa Higiênica',dias:134,ticket:'R$45',motivo:'Sem retorno'},
-];
+  const tutores = [
+    {id:'t01',nome:'Ana Beatriz Silva',  tel:'(51) 99123-4567',email:'ana.silva@email.com',    unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'20/04/2026',criadoEm:'2024-03-10T10:00:00.000Z'},
+    {id:'t02',nome:'Bruno Costa',        tel:'(51) 98234-5678',email:'bruno.costa@email.com',   unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'15/04/2026',criadoEm:'2024-05-20T10:00:00.000Z'},
+    {id:'t03',nome:'Carla Mendes',       tel:'(51) 97345-6789',email:'carla.mendes@gmail.com',  unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'18/04/2026',criadoEm:'2024-06-01T10:00:00.000Z'},
+    {id:'t04',nome:'Diego Ferreira',     tel:'(51) 96456-7890',email:'diego.f@hotmail.com',      unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'01/04/2026',criadoEm:'2024-07-15T10:00:00.000Z'},
+    {id:'t05',nome:'Elena Rodrigues',    tel:'(51) 95567-8901',email:'elena.rod@email.com',      unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'22/04/2026',criadoEm:'2024-08-01T10:00:00.000Z'},
+    {id:'t06',nome:'Felipe Santos',      tel:'(51) 94678-9012',email:'felipesantos@gmail.com',   unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'10/04/2026',criadoEm:'2024-09-10T10:00:00.000Z'},
+    {id:'t07',nome:'Gabriela Lima',      tel:'(51) 93789-0123',email:'gabi.lima@email.com',      unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'23/04/2026',criadoEm:'2024-10-05T10:00:00.000Z'},
+    {id:'t08',nome:'Hugo Alves',         tel:'(51) 92890-1234',email:'hugo.alves@email.com',     unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'12/04/2026',criadoEm:'2024-11-20T10:00:00.000Z'},
+    {id:'t09',nome:'Isabela Castro',     tel:'(51) 91901-2345',email:'isa.castro@gmail.com',     unidade:'Cachorródromo',status:'inativo',ultimaCompra:'15/02/2026',criadoEm:'2023-12-01T10:00:00.000Z'},
+    {id:'t10',nome:'João Paulo Pereira', tel:'(51) 99012-3456',email:'joaopereira@email.com',    unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'20/04/2026',criadoEm:'2025-01-15T10:00:00.000Z'},
+    {id:'t11',nome:'Karen Souza',        tel:'(51) 98123-4567',email:'karen.souza@hotmail.com',  unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'01/04/2026',criadoEm:'2025-02-10T10:00:00.000Z'},
+    {id:'t12',nome:'Lucas Oliveira',     tel:'(51) 97234-5678',email:'lucas.oli@email.com',      unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'24/04/2026',criadoEm:'2025-03-01T10:00:00.000Z'},
+    {id:'t13',nome:'Marina Ribeiro',     tel:'(51) 96345-6789',email:'marina.rib@gmail.com',     unidade:'Rio Branco',   status:'inativo',ultimaCompra:'10/01/2026',criadoEm:'2023-11-01T10:00:00.000Z'},
+    {id:'t14',nome:'Nathan Cardoso',     tel:'(51) 95456-7890',email:'nathan.card@email.com',    unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'21/04/2026',criadoEm:'2025-04-10T10:00:00.000Z'},
+    {id:'t15',nome:'Olivia Martins',     tel:'(51) 94567-8901',email:'olivia.m@email.com',       unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'19/04/2026',criadoEm:'2025-04-15T10:00:00.000Z'},
+  ];
 
-function renderInactivos() {
-  const tbody = document.getElementById('inactive-table');
-  tbody.innerHTML = inactivos.map((c,i) => `
-    <tr>
-      <td><input type="checkbox" class="row-check" onchange="updateCount()"/></td>
-      <td><div class="avatar-cell"><div class="av ${['y','n','g','r'][i%4]}">${c.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><div><div class="av-name">${c.name}</div><div class="av-sub">${c.pet}</div></div></div></td>
-      <td style="font-size:13px">${c.servico}</td>
-      <td><span style="color:${c.dias>90?'var(--red)':'var(--yellow)'};font-weight:800">${c.dias} dias</span></td>
-      <td style="font-weight:700">${c.ticket}</td>
-      <td><span class="tag inactive">${c.motivo}</span></td>
-      <td><button class="btn btn-ghost btn-sm" onclick="sendSingle('${c.name}')"><i class="ph ph-whatsapp-logo"></i> Enviar</button></td>
-    </tr>
-  `).join('');
+  const pets = [
+    {id:'p01',nome:'Max',    tutorId:'t01',raca:'Golden Retriever', porte:'Grande (21–30kg)',   criadoEm:'2024-03-10T10:00:00.000Z'},
+    {id:'p02',nome:'Bolt',   tutorId:'t02',raca:'Husky Siberiano',  porte:'Grande (21–30kg)',   criadoEm:'2024-05-20T10:00:00.000Z'},
+    {id:'p03',nome:'Mel',    tutorId:'t02',raca:'Shih Tzu',         porte:'Pequeno (até 10kg)', criadoEm:'2024-05-20T10:00:00.000Z'},
+    {id:'p04',nome:'Luna',   tutorId:'t03',raca:'Poodle',           porte:'Pequeno (até 10kg)', criadoEm:'2024-06-01T10:00:00.000Z'},
+    {id:'p05',nome:'Thor',   tutorId:'t04',raca:'Rottweiler',       porte:'Extra G (30kg+)',    criadoEm:'2024-07-15T10:00:00.000Z'},
+    {id:'p06',nome:'Bella',  tutorId:'t05',raca:'Labrador',         porte:'Grande (21–30kg)',   criadoEm:'2024-08-01T10:00:00.000Z'},
+    {id:'p07',nome:'Chico',  tutorId:'t06',raca:'Vira-lata',        porte:'Médio (11–20kg)',    criadoEm:'2024-09-10T10:00:00.000Z'},
+    {id:'p08',nome:'Nina',   tutorId:'t07',raca:'Yorkshire',        porte:'Pequeno (até 10kg)', criadoEm:'2024-10-05T10:00:00.000Z'},
+    {id:'p09',nome:'Coco',   tutorId:'t07',raca:'Maltês',           porte:'Pequeno (até 10kg)', criadoEm:'2024-10-05T10:00:00.000Z'},
+    {id:'p10',nome:'Rex',    tutorId:'t08',raca:'Pastor Alemão',    porte:'Grande (21–30kg)',   criadoEm:'2024-11-20T10:00:00.000Z'},
+    {id:'p11',nome:'Pipoca', tutorId:'t09',raca:'Chihuahua',        porte:'Pequeno (até 10kg)', criadoEm:'2023-12-01T10:00:00.000Z'},
+    {id:'p12',nome:'Buddy',  tutorId:'t10',raca:'Beagle',           porte:'Médio (11–20kg)',    criadoEm:'2025-01-15T10:00:00.000Z'},
+    {id:'p13',nome:'Lola',   tutorId:'t11',raca:'Dachshund',        porte:'Pequeno (até 10kg)', criadoEm:'2025-02-10T10:00:00.000Z'},
+    {id:'p14',nome:'Simba',  tutorId:'t12',raca:'Akita',            porte:'Grande (21–30kg)',   criadoEm:'2025-03-01T10:00:00.000Z'},
+    {id:'p15',nome:'Meg',    tutorId:'t13',raca:'Border Collie',    porte:'Médio (11–20kg)',    criadoEm:'2023-11-01T10:00:00.000Z'},
+    {id:'p16',nome:'Zeus',   tutorId:'t14',raca:'Dogue Alemão',     porte:'Extra G (30kg+)',    criadoEm:'2025-04-10T10:00:00.000Z'},
+    {id:'p17',nome:'Mia',    tutorId:'t15',raca:'Ragdoll',          porte:'Pequeno (até 10kg)', criadoEm:'2025-04-15T10:00:00.000Z'},
+    {id:'p18',nome:'Frida',  tutorId:'t15',raca:'Persa',            porte:'Pequeno (até 10kg)', criadoEm:'2025-04-15T10:00:00.000Z'},
+    {id:'p19',nome:'Tobias', tutorId:'t10',raca:'Labrador',         porte:'Grande (21–30kg)',   criadoEm:'2025-01-15T10:00:00.000Z'},
+    {id:'p20',nome:'Pingo',  tutorId:'t06',raca:'Vira-lata',        porte:'Pequeno (até 10kg)', criadoEm:'2024-09-10T10:00:00.000Z'},
+    {id:'p21',nome:'Duque',  tutorId:'t12',raca:'Boxer',            porte:'Grande (21–30kg)',   criadoEm:'2025-03-01T10:00:00.000Z'},
+    {id:'p22',nome:'Kira',   tutorId:'t08',raca:'Husky Siberiano',  porte:'Grande (21–30kg)',   criadoEm:'2024-11-20T10:00:00.000Z'},
+  ];
+
+  const servicos = [
+    {id:'s01',nome:'Banho',               preco:45,  duracao:60, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s02',nome:'Tosa',                preco:65,  duracao:90, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s03',nome:'Banho + Tosa',        preco:95,  duracao:120,desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s04',nome:'Creche — Dia',        preco:50,  duracao:480,desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s05',nome:'Creche — Mês',        preco:800, duracao:0,  desc:'Mensalidade', ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s06',nome:'Hospedagem',          preco:50,  duracao:0,  desc:'Por diária',  ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s07',nome:'Consulta Veterinária',preco:130, duracao:30, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'s08',nome:'Vacinação',           preco:90,  duracao:15, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
+  ];
+
+  const planos = [
+    // Ana — Hospedagem CRÍTICO (3 dias restantes)
+    {id:'pl01',tipo:'Hospedagem',   tutorId:'t01',petId:'p01',valorTotal:500,valorRestante:150,valorDiario:50,
+     dataInicio:'2026-04-16',ultimoAbate:hoje,obs:'Max hospedado — tutor em viagem',status:'ativo',criadoEm:'2026-04-16T10:00:00.000Z'},
+    // Bruno — Creche normal (7 dias)
+    {id:'pl02',tipo:'Creche Diária',tutorId:'t02',petId:'p02',valorTotal:900,valorRestante:210,valorDiario:30,
+     dataInicio:'2026-04-01',ultimoAbate:hoje,obs:'',status:'ativo',criadoEm:'2026-04-01T10:00:00.000Z'},
+    // Diego — VENCIDO
+    {id:'pl03',tipo:'Hospedagem',   tutorId:'t04',petId:'p05',valorTotal:200,valorRestante:0,valorDiario:50,
+     dataInicio:'2026-04-10',ultimoAbate:'2026-04-14',obs:'Thor hospedado semana passada',status:'vencido',criadoEm:'2026-04-10T10:00:00.000Z'},
+    // Karen — Creche Mensal (sem abate diário)
+    {id:'pl04',tipo:'Creche Mensal',tutorId:'t11',petId:'p13',valorTotal:800,valorRestante:800,valorDiario:0,
+     dataInicio:'2026-04-01',ultimoAbate:hoje,obs:'Mensalidade abril',status:'ativo',criadoEm:'2026-04-01T10:00:00.000Z'},
+    // Felipe — Pacote Banho CRÍTICO (1 dia)
+    {id:'pl05',tipo:'Pacote Banho', tutorId:'t06',petId:'p07',valorTotal:180,valorRestante:45,valorDiario:45,
+     dataInicio:'2026-04-21',ultimoAbate:hoje,obs:'Pacote 4 banhos',status:'ativo',criadoEm:'2026-04-21T10:00:00.000Z'},
+  ];
+
+  const agendamentos = [
+    // HOJE
+    {id:'ag01',tutorId:'t02',petId:'p02',servico:'Banho',        data:hoje,hora:'09:00',valor:45, obs:'',status:'confirmado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T18:00:00.000Z'},
+    {id:'ag02',tutorId:'t03',petId:'p04',servico:'Tosa',         data:hoje,hora:'10:30',valor:65, obs:'Poodle continental',status:'andamento',checkinAt:'2026-04-25T10:28:00.000Z',checkoutAt:null,criadoEm:'2026-04-24T19:00:00.000Z'},
+    {id:'ag03',tutorId:'t06',petId:'p07',servico:'Banho + Tosa', data:hoje,hora:'11:00',valor:95, obs:'',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-23T14:00:00.000Z'},
+    {id:'ag04',tutorId:'t07',petId:'p08',servico:'Banho',        data:hoje,hora:'14:00',valor:45, obs:'Nina e Coco juntos',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T09:00:00.000Z'},
+    {id:'ag05',tutorId:'t12',petId:'p14',servico:'Banho + Tosa', data:hoje,hora:'15:30',valor:95, obs:'Akita — usar raquete',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T11:00:00.000Z'},
+    // HISTÓRICO
+    {id:'ag06',tutorId:'t08',petId:'p10',servico:'Banho + Tosa', data:'2026-04-22',hora:'09:00',valor:95, obs:'',status:'concluido',checkinAt:'2026-04-22T09:05:00.000Z',checkoutAt:'2026-04-22T11:00:00.000Z',criadoEm:'2026-04-21T10:00:00.000Z'},
+    {id:'ag07',tutorId:'t01',petId:'p01',servico:'Hospedagem',   data:'2026-04-20',hora:'08:00',valor:50, obs:'Check-out após 5 dias',status:'concluido',checkinAt:'2026-04-15T08:00:00.000Z',checkoutAt:'2026-04-20T08:00:00.000Z',criadoEm:'2026-04-14T10:00:00.000Z'},
+    {id:'ag08',tutorId:'t14',petId:'p16',servico:'Consulta Veterinária',data:'2026-04-21',hora:'10:00',valor:130,obs:'Zeus com dor na pata traseira',status:'concluido',checkinAt:'2026-04-21T10:02:00.000Z',checkoutAt:'2026-04-21T10:45:00.000Z',criadoEm:'2026-04-20T09:00:00.000Z'},
+    // FUTUROS
+    {id:'ag09',tutorId:'t14',petId:'p16',servico:'Vacinação',    data:'2026-04-26',hora:'14:00',valor:90, obs:'V10 + antirrábica',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-21T11:00:00.000Z'},
+    {id:'ag10',tutorId:'t15',petId:'p17',servico:'Banho',        data:'2026-04-27',hora:'10:00',valor:45, obs:'Ragdoll — secar bem',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T15:00:00.000Z'},
+    {id:'ag11',tutorId:'t12',petId:'p21',servico:'Banho + Tosa', data:'2026-04-28',hora:'09:00',valor:95, obs:'',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T16:00:00.000Z'},
+    {id:'ag12',tutorId:'t10',petId:'p12',servico:'Banho',        data:'2026-04-29',hora:'11:00',valor:45, obs:'',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T17:00:00.000Z'},
+  ];
+
+  const financeiro = [
+    {id:'f01',tipo:'receita',valor:800, descricao:'Creche Mensal — Bruno Costa',       categoria:'Serviços', data:'2026-04-01',criadoEm:'2026-04-01T10:00:00.000Z'},
+    {id:'f02',tipo:'receita',valor:800, descricao:'Creche Mensal — Karen Souza',        categoria:'Serviços', data:'2026-04-01',criadoEm:'2026-04-01T10:00:00.000Z'},
+    {id:'f03',tipo:'receita',valor:130, descricao:'Consulta Veterinária — Zeus',        categoria:'Serviços', data:'2026-04-10',criadoEm:'2026-04-10T10:00:00.000Z'},
+    {id:'f04',tipo:'receita',valor:500, descricao:'Hospedagem — Max (Ana Silva)',        categoria:'Serviços', data:'2026-04-15',criadoEm:'2026-04-15T10:00:00.000Z'},
+    {id:'f05',tipo:'receita',valor:200, descricao:'Hospedagem — Thor (Diego Ferreira)', categoria:'Serviços', data:'2026-04-10',criadoEm:'2026-04-10T10:00:00.000Z'},
+    {id:'f06',tipo:'receita',valor:180, descricao:'Pacote Banho — Felipe Santos',       categoria:'Serviços', data:'2026-04-21',criadoEm:'2026-04-21T10:00:00.000Z'},
+    {id:'f07',tipo:'receita',valor:95,  descricao:'Banho + Tosa — Rex',                 categoria:'Serviços', data:'2026-04-22',criadoEm:'2026-04-22T11:00:00.000Z'},
+    {id:'f08',tipo:'receita',valor:45,  descricao:'Banho — Nina',                       categoria:'Serviços', data:'2026-04-23',criadoEm:'2026-04-23T10:00:00.000Z'},
+    {id:'f09',tipo:'despesa',valor:1200,descricao:'Salários — abril',                   categoria:'Salários', data:'2026-04-01',criadoEm:'2026-04-01T08:00:00.000Z'},
+    {id:'f10',tipo:'despesa',valor:800, descricao:'Aluguel — abril',                    categoria:'Aluguel',  data:'2026-04-01',criadoEm:'2026-04-01T08:00:00.000Z'},
+    {id:'f11',tipo:'despesa',valor:380, descricao:'Insumos de higiene',                 categoria:'Insumos',  data:'2026-04-05',criadoEm:'2026-04-05T10:00:00.000Z'},
+    {id:'f12',tipo:'despesa',valor:290, descricao:'Ração — reposição estoque',          categoria:'Produtos', data:'2026-04-08',criadoEm:'2026-04-08T10:00:00.000Z'},
+  ];
+
+  const estoque = [
+    {id:'e01',nome:'Ração Golden Premium 15kg', categoria:'Ração',      unidade:'un',quantidade:8, minimo:5, precoCusto:120,precoVenda:180,criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e02',nome:'Shampoo Profissional 5L',   categoria:'Higiene',    unidade:'un',quantidade:2, minimo:5, precoCusto:45, precoVenda:75, criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e03',nome:'Condicionador Pet 1L',       categoria:'Higiene',    unidade:'un',quantidade:14,minimo:4, precoCusto:20, precoVenda:35, criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e04',nome:'Luvas descartáveis',         categoria:'Insumos',    unidade:'cx',quantidade:1, minimo:5, precoCusto:18, precoVenda:0,  criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e05',nome:'Coleira ajustável M',        categoria:'Acessórios', unidade:'un',quantidade:6, minimo:3, precoCusto:22, precoVenda:45, criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e06',nome:'Antiparasitário Frontline',  categoria:'Medicamentos',unidade:'un',quantidade:0, minimo:5, precoCusto:55, precoVenda:90, criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e07',nome:'Sachê Royal Canin',          categoria:'Ração',      unidade:'un',quantidade:24,minimo:10,precoCusto:6,  precoVenda:12, criadoEm:'2024-01-01T00:00:00.000Z'},
+    {id:'e08',nome:'Tapete Higiênico 30un',      categoria:'Higiene',    unidade:'pç',quantidade:3, minimo:5, precoCusto:35, precoVenda:55, criadoEm:'2024-01-01T00:00:00.000Z'},
+  ];
+
+  localStorage.setItem('petsgo_crm', JSON.stringify({tutores,pets,agendamentos,financeiro,estoque,servicos,planos}));
+
+  document.querySelector('.box').innerHTML = `
+    <div style="font-size:44px;margin-bottom:14px">✅</div>
+    <h1 style="margin-bottom:8px">Demo carregado!</h1>
+    <p style="margin-bottom:24px">15 tutores · 22 pets · 3 filiais · 5 planos · 12 agendamentos · estoque com alertas</p>
+    <button class="btn" onclick="window.location.href='petsgo-crm-light.html'">Abrir Pets Go Control →</button>
+  `;
 }
-
-function updateCount() {
-  const count = document.querySelectorAll('.row-check:checked').length;
-  document.getElementById('sel-count').textContent = count;
-}
-
-function selectAll() {
-  const all = document.querySelectorAll('.row-check');
-  const anyUnchecked = Array.from(all).some(c=>!c.checked);
-  all.forEach(c=>c.checked=anyUnchecked);
-  updateCount();
-}
-
-// ── REATIVAÇÃO DATA (real contacts) ──
-const contatosReais = [
-  {nome:"Ayrton",cel:"(51) 9 9343-1639",animal:"Duna",data:"02/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Mariana Lima Scortegagna",cel:"(51) 9 9992-8199",animal:"Filomena Amélia",data:"03/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Andrea",cel:"(51) 9979-2204",animal:"Billy",data:"03/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Laura Raguzzoni Sussela",cel:"(51) 9 9328-6452",animal:"Theobaldo",data:"06/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Ellen Terezinha Silva Queiroz",cel:"(51) 9 9157-2131",animal:"Cuba",data:"06/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Marta Severo",cel:"(51) 9 9112-1691",animal:"Zen",data:"08/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Barbara Leal",cel:"(51) 9 2003-2769",animal:"Dogo",data:"10/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Núbia Regina Coelho de Sousa",cel:"(51) 9 9921-9840",animal:"Lola",data:"10/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Rosana Alves Silva de Oliveira",cel:"(51) 9 9242-0271",animal:"Thor",data:"13/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Amanda Pezzi",cel:"(51) 9 9982-0435",animal:"Caetano",data:"14/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Renata Dias",cel:"(51) 9 9200-4717",animal:"Pipa",data:"14/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Niara",cel:"(51) 9 9348-1211",animal:"Drake",data:"16/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Marina",cel:"(51) 9 9274-8461",animal:"Koda",data:"16/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Natasha Rodrigues Fernandes",cel:"(51) 9523-5010",animal:"Kiara",data:"17/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Bruna Oliveira",cel:"(51) 9 9328-1730",animal:"Floquinho",data:"21/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Lucas Faviero de Vasconcellos",cel:"(51) 9 8040-214",animal:"Lupita",data:"24/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Fabiane Cid",cel:"(51) 9 9746-4467",animal:"Flora",data:"27/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Daniela",cel:"(51) 9 8184-4413",animal:"Cléo",data:"28/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Julio Machado",cel:"(51) 9 9396-7979",animal:"Oliver",data:"30/01/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Lizie Gomes",cel:"(51) 9 8537-9981",animal:"Chewie",data:"01/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Adriana",cel:"(51) 9 9548-6565",animal:"Meg",data:"05/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Josiane Brauveres",cel:"(51) 9 9795-6976",animal:"Ravi",data:"14/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Katia Barreto Marciniak",cel:"(51) 9 9301-6992",animal:"Calvin",data:"17/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Ana Paula Motta Pinheiro",cel:"(51) 9 8913-8141",animal:"Zora",data:"19/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Patrícia Timm",cel:"(51) 9 9176-2729",animal:"Bolt",data:"22/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Amanda Oliveira Scherer",cel:"(51) 9 9586-8009",animal:"Gaia",data:"25/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Larissa Batista",cel:"(51) 9708-1985",animal:"Tutti",data:"26/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  {nome:"Amira Salim",cel:"(53) 9 8105-4987",animal:"Ohana",data:"28/02/2025",filial:"Rio Branco",status:"a_enviar"},
-  // Cachorródromo
-  {nome:"Andressa Correa",cel:"(51) 8187-6005",animal:"Marie",data:"02/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Ana Júlia",cel:"(51) 9 9148-5265",animal:"Tina",data:"02/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Amanda Ribeiro Viegas",cel:"(51) 9 9578-5073",animal:"Pantera",data:"03/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Gabriela Souza",cel:"(51) 9 8143-4654",animal:"Madalena",data:"03/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Andrei Viesseri Lorenzini",cel:"(51) 9 9352-4204",animal:"Nick",data:"04/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Diego",cel:"(51) 9 9263-6378",animal:"Maria Paçoca",data:"06/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Tamara Neves Elias",cel:"(51) 9 8331-3917",animal:"Aretta",data:"09/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Katiane Passos",cel:"(51) 9 8403-2905",animal:"Mimo",data:"14/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Maria Fernanda Jimenez",cel:"(51) 9 8348-3726",animal:"Boby",data:"30/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Darlei Costa de Souza",cel:"(51) 9 8137-0757",animal:"Pingo",data:"31/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Sonia Elisa Caregnato",cel:"(51) 9 9117-3634",animal:"Feijão",data:"31/01/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Renato Moura",cel:"(51) 8907-0989",animal:"Sheldon",data:"01/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Marcelo Pallamolla",cel:"(51) 9 9306-1377",animal:"Oreo",data:"04/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Darlan Tomazini",cel:"(51) 9 9249-0880",animal:"Pipa",data:"05/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Paula Gonzalez",cel:"(51) 9 9255-4279",animal:"Elis",data:"10/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Êmille Prates Gonçalves",cel:"(51) 9 9751-1717",animal:"Liz",data:"10/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Roberta Baechtold",cel:"(51) 9 9669-9494",animal:"Haru",data:"11/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Isadora Serra Brehm",cel:"(51) 9 9598-9064",animal:"Joy",data:"12/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Guilherme Winter da Silva",cel:"(51) 9 9361-8824",animal:"Lobinho",data:"13/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Evelina Cardoso",cel:"(51) 9 8468-4790",animal:"Arthur",data:"18/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Giovana Zerbielli da Silva",cel:"(51) 9 9422-9709",animal:"Bob",data:"21/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Karolina Ruas Pedrozo",cel:"(55) 9 9621-9638",animal:"Toninho",data:"22/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  {nome:"Vanessa Favero",cel:"(51) 9 9840-4445",animal:"Jasmin",data:"25/02/2025",filial:"Cachorródromo",status:"a_enviar"},
-  // Rio Branco — simulando alguns já em progresso para o demo
-  {nome:"Vera",cel:"(51) 9 8406-8233",animal:"Filipa",data:"17/07/2025",filial:"Petrópolis",status:"enviado"},
-  {nome:"Isabela Sirtoli",cel:"(51) 9242-7642",animal:"Nicolau",data:"24/07/2025",filial:"Petrópolis",status:"respondeu"},
-  {nome:"Dalvenir Flores",cel:"(51) 9 9515-9970",animal:"Duff",data:"15/08/2025",filial:"Petrópolis",status:"agendado"},
-  {nome:"Carlos (Estela)",cel:"(51) 9 9981-2859",animal:"Estela",data:"19/08/2025",filial:"Petrópolis",status:"compareceu"},
-  {nome:"Simone Machado Domingos",cel:"(51) 9 9988-4878",animal:"Amora",data:"21/08/2025",filial:"Petrópolis",status:"enviado"},
-  {nome:"William Flaiban",cel:"(51) 9 9544-0078",animal:"Cadu",data:"25/08/2025",filial:"Petrópolis",status:"respondeu"},
-  {nome:"Carolina Sartori",cel:"(51) 9558-9362",animal:"Brooklyn",data:"15/09/2025",filial:"Petrópolis",status:"agendado"},
-  {nome:"Chiane Nepomuceno",cel:"(51) 9 9612-0262",animal:"Amora",data:"19/09/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Érica",cel:"(51) 9 8947-7371",animal:"Chandler",data:"01/10/2025",filial:"Petrópolis",status:"compareceu"},
-  {nome:"Claudia Manfrão",cel:"(51) 9913-8147",animal:"Channel",data:"02/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Natália Marques",cel:"(54) 9 9923-2980",animal:"Bella",data:"03/10/2025",filial:"Petrópolis",status:"enviado"},
-  {nome:"Melize",cel:"(51) 9 9894-0662",animal:"Frida",data:"04/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Andryelle Brum Paz",cel:"(51) 9 9372-9287",animal:"Antônio",data:"06/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Vitória Minetto Brondani",cel:"(54) 9 9443-289",animal:"Cookie",data:"06/10/2025",filial:"Petrópolis",status:"respondeu"},
-  {nome:"Otávio Al-Alam",cel:"(51) 9992-0809",animal:"Tostão",data:"06/10/2025",filial:"Petrópolis",status:"agendado"},
-  {nome:"Isabelle",cel:"(51) 9 9455-5360",animal:"Flora",data:"10/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Sabrina Ruver",cel:"(51) 9 8438-6297",animal:"Cacau",data:"14/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Elizandra",cel:"(51) 9 8328-1365",animal:"Tobi",data:"15/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Fernanda Conceição",cel:"(51) 9 9944-9993",animal:"Benjamin",data:"18/10/2025",filial:"Petrópolis",status:"compareceu"},
-  {nome:"Camila Trindade Muza",cel:"(51) 9 9603-0022",animal:"Tifi",data:"22/10/2025",filial:"Petrópolis",status:"a_enviar"},
-  {nome:"Ricardo Bello",cel:"(51) 9 9829-3913",animal:"Theo Bello",data:"08/11/2025",filial:"Petrópolis",status:"enviado"},
-  {nome:"Juliana Beck",cel:"(51) 9 9222-7358",animal:"Paçoca",data:"10/11/2025",filial:"Petrópolis",status:"a_enviar"},
-];
-
-const STATUS_CONFIG = {
-  a_enviar:  {label:'A Enviar',  color:'var(--muted2)',  bg:'var(--bg3)',           icon:'ph-paper-plane-tilt'},
-  enviado:   {label:'Enviado',   color:'#a89bff',        bg:'var(--navy-dim)',      icon:'ph-check'},
-  respondeu: {label:'Respondeu', color:'var(--yellow)',  bg:'var(--yellow-dim)',    icon:'ph-chat-circle-dots'},
-  agendado:  {label:'Agendado',  color:'var(--green)',   bg:'var(--green-dim)',     icon:'ph-calendar-check'},
-  compareceu:{label:'Compareceu',color:'#fff',           bg:'linear-gradient(135deg,#00C181,#1a8f62)', icon:'ph-trophy'},
-};
-
-const COMISSAO = 70;
-
-function calcDias(dataStr) {
-  const [d,m,y] = dataStr.split('/');
-  const diff = (new Date() - new Date(y,m-1,d)) / (1000*60*60*24);
-  return Math.floor(diff);
-}
-
-function primeiroNome(nome) {
-  return nome.split(' ')[0].replace(/[^a-zA-ZÀ-ú]/g,'').trim() || nome.split(' ')[0];
-}
-
-function renderReativacao() {
-  const filialFiltro = document.getElementById('r-filial')?.value || 'todas';
-  const statusFiltro = document.getElementById('r-status')?.value || 'todos';
-  const data = contatosReais.filter(c =>
-    (filialFiltro==='todas' || c.filial===filialFiltro) &&
-    (statusFiltro==='todos' || c.status===statusFiltro)
-  );
-
-  // KPIs
-  const total = contatosReais.length;
-  const enviados = contatosReais.filter(c=>['enviado','respondeu','agendado','compareceu'].includes(c.status)).length;
-  const agendados = contatosReais.filter(c=>['agendado','compareceu'].includes(c.status)).length;
-  const compareceu = contatosReais.filter(c=>c.status==='compareceu').length;
-  const comissaoTotal = compareceu * COMISSAO;
-
-  document.getElementById('r-kpi-total').textContent = total;
-  document.getElementById('r-kpi-enviados').textContent = enviados;
-  document.getElementById('r-kpi-agendados').textContent = agendados;
-  document.getElementById('r-kpi-comissao').textContent = 'R$'+comissaoTotal;
-
-  // Pipeline counts
-  Object.keys(STATUS_CONFIG).forEach(s => {
-    const el = document.getElementById('pipe-count-'+s);
-    if(el) el.textContent = contatosReais.filter(c=>c.status===s).length;
-  });
-
-  // Table
-  const tbody = document.getElementById('r-table');
-  tbody.innerHTML = data.map((c,i) => {
-    const sc = STATUS_CONFIG[c.status];
-    const dias = calcDias(c.data);
-    const msg = `Oi ${primeiroNome(c.nome)}! Aqui é o PetShop ${c.filial} 🐾 Mudamos de número e melhoramos toda a operação — agendamento pelo WhatsApp, lembretes automáticos e sem fila. O ${c.animal} tá na nossa lista de saudades 😄 Faz ${dias} dias que ele não aparece! Tem horário essa semana. Quer ver as opções?`;
-    return `<tr>
-      <td><div class="avatar-cell"><div class="av ${['y','n','g','r'][i%4]}">${c.nome.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
-        <div><div class="av-name">${c.nome}</div><div class="av-sub">${c.cel}</div></div></div></td>
-      <td><span style="font-weight:700">🐾 ${c.animal}</span></td>
-      <td><span style="font-size:11px;color:var(--muted2)">${c.filial}</span></td>
-      <td><span style="color:${dias>300?'var(--red)':dias>180?'var(--yellow)':'var(--muted2)'};font-weight:800">${dias}d atrás</span></td>
-      <td><span class="tag" style="background:${sc.bg};color:${sc.color}"><i class="ph ${sc.icon}"></i> ${sc.label}</span></td>
-      <td style="max-width:200px">
-        <div style="font-size:11px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer" onclick="previewMsg(${JSON.stringify(msg).replace(/'/g,"\\'")})">${msg.substring(0,60)}…</div>
-      </td>
-      <td>
-        <div style="display:flex;gap:6px">
-          ${c.status==='a_enviar'?`<button class="btn btn-primary btn-sm" onclick="avancarStatus(${i},'enviado')"><i class="ph ph-paper-plane-tilt"></i> Enviar</button>`:''}
-          ${c.status==='enviado'?`<button class="btn btn-ghost btn-sm" onclick="avancarStatus(${i},'respondeu')"><i class="ph ph-chat-circle-dots"></i> Respondeu</button>`:''}
-          ${c.status==='respondeu'?`<button class="btn btn-primary btn-sm" onclick="avancarStatus(${i},'agendado')"><i class="ph ph-calendar-check"></i> Agendar</button>`:''}
-          ${c.status==='agendado'?`<button class="btn btn-primary btn-sm" onclick="avancarStatus(${i},'compareceu')" style="background:var(--green)"><i class="ph ph-trophy"></i> Compareceu</button>`:''}
-          ${c.status==='compareceu'?`<span style="color:var(--green);font-weight:800;font-size:12px">✅ +R$${COMISSAO}</span>`:''}
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function avancarStatus(idx, novoStatus) {
-  // find real index in contatosReais based on current filter view
-  const filialFiltro = document.getElementById('r-filial')?.value || 'todas';
-  const statusFiltro = document.getElementById('r-status')?.value || 'todos';
-  const filtered = contatosReais.filter(c =>
-    (filialFiltro==='todas' || c.filial===filialFiltro) &&
-    (statusFiltro==='todos' || c.status===statusFiltro)
-  );
-  const contato = filtered[idx];
-  const realIdx = contatosReais.indexOf(contato);
-  if(realIdx>-1){
-    contatosReais[realIdx].status = novoStatus;
-    renderReativacao();
-    const labels = {enviado:'✅ Mensagem marcada como enviada!', respondeu:'💬 Cliente marcado como respondeu!', agendado:'📅 Agendamento confirmado!', compareceu:`🏆 R$${COMISSAO} de comissão registrado!`};
-    showToast(labels[novoStatus]||'Atualizado!');
-  }
-}
-
-function previewMsg(msg) {
-  document.getElementById('msg-preview-text').textContent = msg;
-  document.getElementById('msg-modal').classList.add('open');
-}
-
-// ── NAVIGATION ──
-function switchPage(page, el) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  if(el) el.classList.add('active');
-  else {
-    document.querySelectorAll('.nav-item').forEach(n=>{
-      if(n.textContent.trim().toLowerCase().startsWith(page.slice(0,4))) n.classList.add('active');
-    });
-  }
-}
-
-// ── CHAT ──
-function selectChat(id) {
-  document.querySelectorAll('.wa-item').forEach(i=>i.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  const chat = chats[id];
-  document.getElementById('chat-avatar').textContent = chat.avatar;
-  document.getElementById('chat-avatar').className = `av ${chat.avatarClass}`;
-  document.getElementById('chat-name').textContent = chat.name;
-  document.getElementById('chat-pet').textContent = chat.pet;
-  renderMessages(chat.messages);
-  event.currentTarget.querySelector('.wa-item-unread')?.remove();
-}
-
-function renderMessages(msgs) {
-  const container = document.getElementById('chat-messages');
-  container.innerHTML = msgs.map(m => {
-    const isBot = m.type === 'bot';
-    return `<div class="msg ${m.type}">
-      ${isBot ? '<div class="bot-tag"><i class="ph ph-robot"></i> Bot Automático</div>' : ''}
-      <div class="msg-bubble">${m.text.replace(/\n/g,'<br/>')}</div>
-      <div class="msg-time">${m.time}${m.type==='out'?' <span class="msg-status">✓✓</span>':''}</div>
-    </div>`;
-  }).join('');
-  container.scrollTop = container.scrollHeight;
-}
-
-// ── MODAL ──
-function openModal() {
-  const count = document.querySelectorAll('.row-check:checked').length || 23;
-  document.getElementById('modal-count').textContent = `${count} clientes`;
-  document.getElementById('modal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
-
-function sendSingle(name) {
-  showToast(`✅ Mensagem enviada para ${name}`);
-}
-
-function sendReactivation() {
-  closeModal();
-  const count = document.querySelectorAll('.row-check:checked').length || 23;
-  showToast(`✅ ${count} mensagens de reativação enviadas pelo bot!`);
-  document.querySelectorAll('.row-check').forEach(c=>c.checked=false);
-  updateCount();
-}
-
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'), 3500);
-}
-
-function enviarTodos() {
-  let count=0;
-  contatosReais.forEach(c=>{ if(c.status==='a_enviar'){ c.status='enviado'; count++; } });
-  renderReativacao();
-  showToast(`✅ ${count} mensagens marcadas como enviadas!`);
-}
-
-function exportarCSV() {
-  const rows = [['Nome','Celular','Pet','Filial','Última Visita','Status']];
-  contatosReais.forEach(c=>rows.push([c.nome,c.cel,c.animal,c.filial,c.data,STATUS_CONFIG[c.status].label]));
-  const csv = rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');
-  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
-  a.download='reativacao-pipeline.csv'; a.click();
-}
-
-// Init
-renderInactivos();
-renderReativacao();
-renderMessages(chats.mariana.messages);
 </script>
 </body>
 </html>
