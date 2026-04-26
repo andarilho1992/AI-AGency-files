@@ -189,6 +189,28 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .pb-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
 .pb-fill{height:100%;border-radius:4px}
 
+/* PDV */
+.pdv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.pdv-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.pdv-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pdv-pagamento-bar{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pdv-pg-row{display:flex;align-items:center;gap:10px;font-size:13px}
+.pdv-pg-label{min-width:130px;color:var(--text2);font-weight:500}
+.pdv-pg-val{font-weight:700;color:var(--text);min-width:80px;text-align:right}
+.pdv-pg-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.pdv-pg-bar-fill{height:100%;background:var(--brand);border-radius:3px}
+
+/* FUNCIONÁRIOS */
+.func-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.func-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.func-card.inativo{opacity:.55}
+.func-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
+
+/* CONTAS */
+.conta-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.conta-item.pago{opacity:.6}
+.conta-item.vencida{border-color:#FECACA;background:var(--red-light)}
+
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999}
 .toast.show{transform:translateY(0);opacity:1}
@@ -231,6 +253,13 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <span class="nav-ico"><i class="ph ph-door-open"></i></span> Check-in / Out
     <span class="nav-badge nb-brand" id="badge-checkin" style="display:none">0</span>
   </div>
+  <div class="nav-item" id="nav-pdv" onclick="navTo('pdv')">
+    <span class="nav-ico"><i class="ph ph-storefront"></i></span> PDV / Caixa
+  </div>
+  <div class="nav-item" id="nav-planos" onclick="navTo('planos')">
+    <span class="nav-ico"><i class="ph ph-ticket"></i></span> Planos & Pacotes
+    <span class="nav-badge nb-yellow" id="badge-planos" style="display:none">0</span>
+  </div>
   <div class="sidebar-sep"></div>
   <div class="nav-label">Gestão</div>
   <div class="nav-item" id="nav-financeiro" onclick="navTo('financeiro')">
@@ -238,6 +267,9 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
   </div>
   <div class="nav-item" id="nav-estoque" onclick="navTo('estoque')">
     <span class="nav-ico"><i class="ph ph-package"></i></span> Estoque
+  </div>
+  <div class="nav-item" id="nav-funcionarios" onclick="navTo('funcionarios')">
+    <span class="nav-ico"><i class="ph ph-users-three"></i></span> Funcionários
   </div>
 <div class="nav-item" id="nav-config" onclick="navTo('config')">
     <span class="nav-ico"><i class="ph ph-gear"></i></span> Serviços
@@ -262,22 +294,23 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       </div>
       <button class="btn btn-ghost" onclick="updateDashboard()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
     </div>
+    <div class="filter-row" id="dash-filial-tabs" style="margin-bottom:16px"></div>
     <div class="stats-grid">
       <div class="stat-card stat-c1">
         <div class="stat-icon"><i class="ph ph-users"></i></div>
-        <div><div class="stat-value" id="s-ativos">0</div><div class="stat-label">Tutores ativos</div></div>
+        <div><div class="stat-value" id="s-ativos">0</div><div class="stat-label" id="s-ativos-label">Tutores ativos</div></div>
       </div>
       <div class="stat-card stat-c2">
         <div class="stat-icon"><i class="ph ph-paw-print"></i></div>
-        <div><div class="stat-value" id="s-pets">0</div><div class="stat-label">Pets cadastrados</div></div>
+        <div><div class="stat-value" id="s-pets">0</div><div class="stat-label" id="s-pets-label">Pets cadastrados</div></div>
       </div>
       <div class="stat-card stat-c3">
         <div class="stat-icon"><i class="ph ph-calendar-check"></i></div>
-        <div><div class="stat-value" id="s-hoje">0</div><div class="stat-label">Agendamentos hoje</div></div>
+        <div><div class="stat-value" id="s-hoje">0</div><div class="stat-label" id="s-hoje-label">Agendamentos hoje</div></div>
       </div>
       <div class="stat-card stat-c4">
         <div class="stat-icon"><i class="ph ph-currency-circle-dollar"></i></div>
-        <div><div class="stat-value" id="s-fat">R$0</div><div class="stat-label">Receitas do mês</div></div>
+        <div><div class="stat-value" id="s-fat">R$0</div><div class="stat-label" id="s-fat-label">Receitas do mês</div></div>
       </div>
     </div>
     <div class="quick-grid">
@@ -386,32 +419,85 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         <div class="page-title">Financeiro</div>
         <div class="page-sub" id="fin-sub">—</div>
       </div>
-      <button class="btn btn-primary" onclick="openModal('modal-new-fin')"><i class="ph ph-plus"></i> Lançamento</button>
-    </div>
-    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-      <div class="stat-card stat-c2">
-        <div class="stat-icon"><i class="ph ph-arrow-circle-up"></i></div>
-        <div><div class="stat-value" id="fin-receitas">R$0</div><div class="stat-label">Receitas do mês</div></div>
-      </div>
-      <div class="stat-card stat-c3">
-        <div class="stat-icon"><i class="ph ph-arrow-circle-down"></i></div>
-        <div><div class="stat-value" id="fin-despesas">R$0</div><div class="stat-label">Despesas do mês</div></div>
-      </div>
-      <div class="stat-card stat-c1">
-        <div class="stat-icon"><i class="ph ph-scales"></i></div>
-        <div><div class="stat-value" id="fin-saldo">R$0</div><div class="stat-label">Saldo do mês</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="filter-row" style="margin:0;gap:4px">
+          <div class="svc-tab active" id="ftab-movimento" onclick="setFinTab('movimento')"><i class="ph ph-list-bullets"></i> Movimento</div>
+          <div class="svc-tab" id="ftab-gerencial" onclick="setFinTab('gerencial')"><i class="ph ph-lock"></i> Gerencial</div>
+        </div>
+        <button class="btn btn-primary" id="fin-btn-lancamento" onclick="openModal('modal-new-fin')" style="display:none"><i class="ph ph-plus"></i> Lançamento</button>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">
-        Lançamentos
-        <div style="display:flex;gap:6px">
-          <div class="svc-tab active" id="fin-tab-todos" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('todos')">Todos</div>
-          <div class="svc-tab" id="fin-tab-receita" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('receita')">Receitas</div>
-          <div class="svc-tab" id="fin-tab-despesa" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('despesa')">Despesas</div>
+
+    <!-- MOVIMENTO (sem senha) -->
+    <div id="fin-view-movimento">
+      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="stat-card stat-c2">
+          <div class="stat-icon"><i class="ph ph-arrow-circle-up"></i></div>
+          <div><div class="stat-value" id="mov-receitas-hoje">R$0</div><div class="stat-label">Receitas hoje</div></div>
+        </div>
+        <div class="stat-card stat-c1">
+          <div class="stat-icon"><i class="ph ph-calendar"></i></div>
+          <div><div class="stat-value" id="mov-receitas-mes">R$0</div><div class="stat-label">Receitas do mês</div></div>
         </div>
       </div>
-      <div class="fin-list" id="fin-list"></div>
+      <div class="card">
+        <div class="card-title">Produção de hoje <span id="mov-data-label"></span></div>
+        <div id="mov-list"></div>
+      </div>
+    </div>
+
+    <!-- GERENCIAL (com senha) -->
+    <div id="fin-view-gerencial" style="display:none">
+      <div id="fin-lock-overlay" style="text-align:center;padding:60px 20px">
+        <i class="ph ph-lock" style="font-size:48px;color:var(--muted2);display:block;margin-bottom:16px"></i>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px">Área do Dono</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Esta seção é protegida por senha.</div>
+        <button class="btn btn-primary" onclick="tentarDesbloquearGerencial()"><i class="ph ph-lock-open"></i> Inserir Senha</button>
+      </div>
+      <div id="fin-gerencial-content" style="display:none">
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-card stat-c2">
+            <div class="stat-icon"><i class="ph ph-arrow-circle-up"></i></div>
+            <div><div class="stat-value" id="fin-receitas">R$0</div><div class="stat-label">Receitas do mês</div></div>
+          </div>
+          <div class="stat-card stat-c3">
+            <div class="stat-icon"><i class="ph ph-arrow-circle-down"></i></div>
+            <div><div class="stat-value" id="fin-despesas">R$0</div><div class="stat-label">Despesas do mês</div></div>
+          </div>
+          <div class="stat-card stat-c1">
+            <div class="stat-icon"><i class="ph ph-scales"></i></div>
+            <div><div class="stat-value" id="fin-saldo">R$0</div><div class="stat-label">Saldo do mês</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Lançamentos
+            <div style="display:flex;gap:6px">
+              <div class="svc-tab active" id="fin-tab-todos" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('todos')">Todos</div>
+              <div class="svc-tab" id="fin-tab-receita" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('receita')">Receitas</div>
+              <div class="svc-tab" id="fin-tab-despesa" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('despesa')">Despesas</div>
+            </div>
+          </div>
+          <div class="fin-list" id="fin-list"></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-title">
+            Contas a Pagar / Receber
+            <div style="display:flex;gap:6px;align-items:center">
+              <div class="svc-tab active" id="ct-tab-todas" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('todas')">Todas</div>
+              <div class="svc-tab" id="ct-tab-pagar" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('pagar')">Pagar</div>
+              <div class="svc-tab" id="ct-tab-receber" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('receber')">Receber</div>
+              <div class="svc-tab" id="ct-tab-pendente" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('pendente')">Pendentes</div>
+              <button class="btn btn-ghost btn-sm" onclick="openModal('modal-new-conta')" style="margin-left:4px"><i class="ph ph-plus"></i> Conta</button>
+            </div>
+          </div>
+          <div id="contas-resumo" style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap"></div>
+          <div id="contas-list"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px">
+          <button class="btn btn-ghost btn-sm" onclick="bloquearGerencial()"><i class="ph ph-lock"></i> Bloquear</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -425,6 +511,89 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <button class="btn btn-primary" onclick="openModal('modal-new-produto')"><i class="ph ph-plus"></i> Produto</button>
     </div>
     <div class="estoque-grid" id="est-grid"></div>
+  </div>
+
+  <!-- PDV / CAIXA -->
+  <div class="page" id="page-pdv">
+    <div class="page-header">
+      <div>
+        <div class="page-title">PDV / Caixa</div>
+        <div class="page-sub" id="pdv-sub">Vendas de hoje</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="renderPDV()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
+        <button class="btn btn-primary" onclick="openModal('modal-pdv-venda')"><i class="ph ph-plus"></i> Nova Venda</button>
+      </div>
+    </div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="stat-card stat-c2">
+        <div class="stat-icon"><i class="ph ph-cash-register"></i></div>
+        <div><div class="stat-value" id="pdv-total-hoje">R$0</div><div class="stat-label">Total hoje</div></div>
+      </div>
+      <div class="stat-card stat-c1">
+        <div class="stat-icon"><i class="ph ph-receipt"></i></div>
+        <div><div class="stat-value" id="pdv-qtd-hoje">0</div><div class="stat-label">Vendas hoje</div></div>
+      </div>
+      <div class="stat-card stat-c4">
+        <div class="stat-icon"><i class="ph ph-chart-bar"></i></div>
+        <div><div class="stat-value" id="pdv-ticket-medio">R$0</div><div class="stat-label">Ticket médio</div></div>
+      </div>
+    </div>
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">Vendas do dia</div>
+        <div id="pdv-lista"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Por forma de pagamento</div>
+        <div id="pdv-pagamentos"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANOS & PACOTES -->
+  <div class="page" id="page-planos">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Planos & Pacotes</div>
+        <div class="page-sub" id="planos-sub">Creche, hospedagem e pacotes</div>
+      </div>
+      <button class="btn btn-primary" onclick="openNovoPlanoGlobal()"><i class="ph ph-plus"></i> Novo Plano</button>
+    </div>
+    <div id="planos-alertas"></div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="stat-card stat-c2">
+        <div class="stat-icon"><i class="ph ph-ticket"></i></div>
+        <div><div class="stat-value" id="planos-total-ativos">0</div><div class="stat-label">Ativos</div></div>
+      </div>
+      <div class="stat-card stat-c4">
+        <div class="stat-icon"><i class="ph ph-warning"></i></div>
+        <div><div class="stat-value" id="planos-total-criticos">0</div><div class="stat-label">Críticos (&lt;3 dias)</div></div>
+      </div>
+      <div class="stat-card stat-c3">
+        <div class="stat-icon"><i class="ph ph-x-circle"></i></div>
+        <div><div class="stat-value" id="planos-total-vencidos">0</div><div class="stat-label">Vencidos</div></div>
+      </div>
+    </div>
+    <div class="filter-row" id="planos-filtro-tabs">
+      <div class="svc-tab active" data-filtro="ativos" onclick="setPlanosFiltro('ativos')">Ativos</div>
+      <div class="svc-tab" data-filtro="criticos" onclick="setPlanosFiltro('criticos')">⚠️ Críticos</div>
+      <div class="svc-tab" data-filtro="todos" onclick="setPlanosFiltro('todos')">Todos</div>
+      <div class="svc-tab" data-filtro="vencidos" onclick="setPlanosFiltro('vencidos')">Vencidos</div>
+    </div>
+    <div id="planos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px"></div>
+  </div>
+
+  <!-- FUNCIONÁRIOS -->
+  <div class="page" id="page-funcionarios">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Funcionários</div>
+        <div class="page-sub" id="func-sub">—</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-new-func')"><i class="ph ph-plus"></i> Novo Funcionário</button>
+    </div>
+    <div class="func-grid" id="func-grid"></div>
   </div>
 
   <!-- CONFIGURAÇÕES -->
@@ -441,6 +610,22 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div id="cfg-list">
         <div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhum serviço ainda.</div>
       </div>
+    </div>
+    <div class="card" style="max-width:720px;margin-top:14px">
+      <div class="card-title"><i class="ph ph-lock" style="font-size:15px"></i> Senha Gerencial</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Protege a aba <b>Gerencial</b> do Financeiro. Só o dono sabe.</div>
+      <div class="form-row" style="max-width:400px">
+        <div class="field">
+          <label>Nova senha</label>
+          <input id="cfg-senha" type="password" placeholder="Digite a senha..."/>
+        </div>
+        <div class="field">
+          <label>Confirmar</label>
+          <input id="cfg-senha2" type="password" placeholder="Repita a senha..."/>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="salvarSenha()"><i class="ph ph-floppy-disk"></i> Salvar senha</button>
+      <div id="cfg-senha-status" style="font-size:12px;margin-top:8px;color:var(--muted)"></div>
     </div>
   </div>
 
@@ -543,13 +728,25 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         <select id="ag-tutor" onchange="onAgTutorChange()"><option value="">Selecionar tutor...</option></select>
       </div>
       <div class="field"><label>Pet</label>
-        <select id="ag-pet"><option value="">Selecionar pet...</option></select>
+        <select id="ag-pet" onchange="onAgPetPorteChange()"><option value="">Selecionar pet...</option></select>
       </div>
       <div class="form-row">
         <div class="field"><label>Serviço *</label>
           <select id="ag-servico" onchange="onAgServicoChange()"><option value="">Selecionar...</option></select>
         </div>
         <div class="field"><label>Valor (R$)</label><input id="ag-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Funcionário</label>
+          <select id="ag-func"><option value="">— Qualquer</option></select>
+        </div>
+        <div class="field"><label>Pagamento</label>
+          <select id="ag-pagamento">
+            <option value="">— Não informado</option>
+            <option>Dinheiro</option><option>Pix</option>
+            <option>Cartão Débito</option><option>Cartão Crédito</option>
+          </select>
+        </div>
       </div>
       <div class="field"><label>Observações</label><textarea id="ag-obs" rows="2" placeholder="Anotações..."></textarea></div>
       <div class="form-footer">
@@ -663,6 +860,16 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         <div class="field"><label>Duração (min)</label><input id="svc-duracao" type="number" placeholder="60" min="0"/></div>
       </div>
       <div class="field"><label>Descrição</label><input id="svc-desc" placeholder="Observação opcional"/></div>
+      <div class="form-divider">Preço por porte (opcional — sobrescreve o padrão)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div class="field"><label>Pequeno (R$)</label><input id="svc-preco-p" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Médio (R$)</label><input id="svc-preco-m" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Grande+ (R$)</label><input id="svc-preco-g" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="form-divider">Insumos por execução
+        <button type="button" class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="addSvcInsumo()"><i class="ph ph-plus"></i> Adicionar</button>
+      </div>
+      <div id="svc-insumos-container" style="display:flex;flex-direction:column;gap:6px"></div>
       <div class="form-footer">
         <button class="btn btn-ghost" onclick="closeModal('modal-new-servico')">Cancelar</button>
         <button class="btn btn-primary" onclick="saveServico()"><i class="ph ph-floppy-disk"></i> Salvar</button>
@@ -712,7 +919,13 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       </div>
       <div class="form-row">
         <div class="field"><label>Valor pago (R$) *</label><input id="pl-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
-        <div class="field"><label>Abate diário (R$) *</label><input id="pl-diario" type="number" placeholder="Ex: 50.00" step="0.01" min="0.01"/></div>
+        <div class="field"><label>Valor por diária (R$) *</label><input id="pl-diario" type="number" placeholder="Ex: 50.00" step="0.01" min="0.01"/></div>
+      </div>
+      <div class="field"><label>Modo de abate</label>
+        <select id="pl-modo">
+          <option value="manual">Manual — desconta ao registrar uso (recomendado para creche/pacotes)</option>
+          <option value="auto">Automático — desconta por dia corrido (para hospedagem)</option>
+        </select>
       </div>
       <div class="field"><label>Data início *</label><input id="pl-inicio" type="date"/></div>
       <div class="field"><label>Observações</label><textarea id="pl-obs" rows="2" placeholder="Anotações sobre o plano..."></textarea></div>
@@ -742,6 +955,148 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
+<!-- PDV — Nova Venda -->
+<div class="modal-overlay" id="modal-pdv-venda">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Nova Venda</div>
+      <div class="modal-close" onclick="closeModal('modal-pdv-venda')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Tipo</label>
+        <select id="pdv-tipo" onchange="onPdvTipoChange()">
+          <option value="servico">Serviço avulso</option>
+          <option value="produto">Produto</option>
+          <option value="plano">Plano / Pacote de diárias</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="field" id="pdv-svc-field"><label>Serviço</label>
+        <select id="pdv-servico" onchange="onPdvServicoChange()"><option value="">Selecionar...</option></select>
+      </div>
+      <div class="field" id="pdv-prd-field" style="display:none"><label>Produto</label>
+        <select id="pdv-produto" onchange="onPdvProdutoChange()"><option value="">Selecionar...</option></select>
+      </div>
+      <!-- Campos exclusivos de plano -->
+      <div id="pdv-plano-fields" class="form-grid" style="display:none;padding:0;gap:12px">
+        <div class="field"><label>Tipo de plano</label>
+          <select id="pdv-plano-tipo">
+            <option>Creche</option><option>Hospedagem</option><option>Estética</option><option>Outro</option>
+          </select>
+        </div>
+        <div class="field"><label>Pet do cliente (opcional)</label>
+          <select id="pdv-plano-pet"><option value="">— Sem pet específico</option></select>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Valor total (R$) *</label>
+            <input id="pdv-plano-valor" type="number" placeholder="Ex: 1500.00" step="0.01" min="0" oninput="calcPlanoPreview()"/>
+          </div>
+          <div class="field"><label>Valor por diária (R$) *</label>
+            <input id="pdv-plano-diario" type="number" placeholder="Ex: 60.00" step="0.01" min="0" oninput="calcPlanoPreview()"/>
+          </div>
+        </div>
+        <div id="pdv-plano-preview" style="display:none;background:var(--brand-light);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--brand)"></div>
+        <div class="field"><label>Modo de abate</label>
+          <select id="pdv-plano-modo">
+            <option value="manual">Manual — registrar cada uso (creche/pacotes)</option>
+            <option value="auto">Automático — desconta por dia corrido</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" id="pdv-valor-row">
+        <div class="field"><label>Valor (R$) *</label><input id="pdv-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Qtd</label><input id="pdv-qtd" type="number" value="1" min="1"/></div>
+      </div>
+      <div class="field"><label>Forma de Pagamento *</label>
+        <select id="pdv-pagamento">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Pix">Pix</option>
+          <option value="Cartão Débito">Cartão Débito</option>
+          <option value="Cartão Crédito">Cartão Crédito</option>
+        </select>
+      </div>
+      <div class="field"><label id="pdv-cliente-label">Cliente (opcional)</label>
+        <select id="pdv-cliente" onchange="onPdvClienteChange()"><option value="">— Avulso</option></select>
+      </div>
+      <div class="field" id="pdv-desc-field"><label>Descrição</label><input id="pdv-desc" placeholder="Ex: Banho Poodle — João"/></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-pdv-venda')">Cancelar</button>
+        <button class="btn btn-primary" onclick="savePDV()"><i class="ph ph-cash-register"></i> Registrar Venda</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Novo Funcionário -->
+<div class="modal-overlay" id="modal-new-func">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="func-modal-title">Novo Funcionário</div>
+      <div class="modal-close" onclick="closeModal('modal-new-func')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="func-id"/>
+      <div class="form-row">
+        <div class="field"><label>Nome *</label><input id="func-nome" placeholder="Nome completo"/></div>
+        <div class="field"><label>Cargo</label>
+          <select id="func-cargo">
+            <option>Banhista</option><option>Tosador</option><option>Veterinário</option>
+            <option>Recepcionista</option><option>Cuidador</option><option>Gerente</option><option>Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Comissão (%)</label><input id="func-comissao" type="number" placeholder="10" min="0" max="100" step="0.5"/></div>
+        <div class="field"><label>Status</label>
+          <select id="func-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Telefone</label><input id="func-tel" placeholder="(51) 9 9999-0000"/></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-func')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveFuncionario()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Nova Conta Pagar/Receber -->
+<div class="modal-overlay" id="modal-new-conta">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="conta-modal-title">Nova Conta</div>
+      <div class="modal-close" onclick="closeModal('modal-new-conta')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="conta-id"/>
+      <div class="form-row">
+        <div class="field"><label>Tipo</label>
+          <select id="conta-tipo">
+            <option value="pagar">A Pagar</option>
+            <option value="receber">A Receber</option>
+          </select>
+        </div>
+        <div class="field"><label>Valor (R$) *</label><input id="conta-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="field"><label>Descrição *</label><input id="conta-desc" placeholder="Ex: Aluguel abril, Fornecedor X..."/></div>
+      <div class="form-row">
+        <div class="field"><label>Vencimento *</label><input id="conta-vencimento" type="date"/></div>
+        <div class="field"><label>Categoria</label>
+          <select id="conta-cat">
+            <option value="">—</option><option>Aluguel</option><option>Salários</option>
+            <option>Fornecedores</option><option>Insumos</option><option>Serviços</option>
+            <option>Impostos</option><option>Outros</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-conta')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveConta()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -762,10 +1117,13 @@ function loadDB() {
     d.estoque      = d.estoque      || [];
     d.servicos     = d.servicos     || [];
     d.planos       = d.planos       || [];
+    d.funcionarios = d.funcionarios || [];
+    d.contas       = d.contas       || [];
+    d.config       = d.config       || {};
     return d;
   } catch { return emptyDB(); }
 }
-function emptyDB() { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[],planos:[]}; }
+function emptyDB() { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[],planos:[],funcionarios:[],contas:[],config:{}}; }
 function saveDB(d) { localStorage.setItem(DB_KEY, JSON.stringify(d)); }
 
 function todayISO() { return new Date().toISOString().slice(0,10); }
@@ -821,9 +1179,12 @@ function navTo(page) {
   if (page==='clientes')   renderClientes();
   if (page==='agenda')     agendaHoje();
   if (page==='checkin')    renderCheckin();
-  if (page==='financeiro') renderFinanceiro();
+  if (page==='financeiro') { setFinTab('movimento'); }
   if (page==='estoque')    renderEstoque();
-  if (page==='config')     renderConfig();
+  if (page==='config')       renderConfig();
+  if (page==='pdv')          renderPDV();
+  if (page==='planos')       renderPlanos();
+  if (page==='funcionarios') renderFuncionarios();
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────────
@@ -925,13 +1286,18 @@ function renderClientes() {
       const critico  = plano.status==='vencido' || dias<=3;
       const corBarra = plano.status==='vencido'?'var(--red)':dias<=3?'#F5C218':'#00C896';
       const diasTxt  = plano.status==='vencido' ? '⚠️ Vencido' : dias===Infinity ? '∞ dias' : dias<=3 ? `⚠️ ${dias} dia${dias!==1?'s':''} restante${dias!==1?'s':''}` : `${dias} dias restantes`;
+      const isManual = plano.modoAbate==='manual';
       planoHtml = `<div style="background:${critico?'var(--red-light)':'var(--surface2)'};border-radius:8px;padding:8px 10px;margin:6px 0;border:1px solid ${critico?'#FECACA':'var(--border)'}">
         <div style="display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;color:var(--muted)">${plano.tipo}</span>
-          <span style="font-size:13px;font-weight:800;color:${critico?'var(--red)':'var(--brand)'}">${fmtBRL(plano.valorRestante||0)}</span>
+          <span style="font-size:11px;font-weight:700;color:var(--muted)">${plano.tipo}${isManual?' · pacote':''}</span>
+          <span style="font-size:13px;font-weight:800;color:${critico?'var(--red)':'var(--brand)'}">${isManual?`${dias===Infinity?'∞':dias} diárias`:fmtBRL(plano.valorRestante||0)}</span>
         </div>
         <div class="pb-bar" style="margin:5px 0"><div class="pb-fill" style="width:${pct}%;background:${corBarra}"></div></div>
-        <div style="font-size:11px;font-weight:600;color:${critico?'var(--red)':'var(--muted)'}">${diasTxt}${planos.length>1?` · ${planos.length} planos`:''}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:11px;font-weight:600;color:${critico?'var(--red)':'var(--muted)'}">${isManual?`${plano.diasUsados||0} usadas`+`${planos.length>1?` · ${planos.length} planos`:''}`:diasTxt+`${planos.length>1?` · ${planos.length} planos`:''}`}</div>
+          ${isManual&&plano.status==='ativo'&&!critico?`<button class="btn btn-primary btn-sm" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();usarDiariaCard('${plano.id}')"><i class="ph ph-check-square"></i> Usar diária</button>`:''}
+          ${isManual&&critico&&plano.status!=='vencido'?`<button class="btn btn-primary btn-sm" style="font-size:11px;padding:3px 8px;background:var(--yellow);color:#6b4f00" onclick="event.stopPropagation();usarDiariaCard('${plano.id}')"><i class="ph ph-warning"></i> Usar última</button>`:''}
+        </div>
       </div>`;
     }
     return `<div class="cliente-card ${inativo?'inativo':''}">
@@ -990,16 +1356,31 @@ function viewPets(tid) {
   if (!t) return;
   const pets = D.pets.filter(p=>p.tutorId===tid);
   document.getElementById('vp-titulo').textContent = `🐾 Pets de ${t.nome.split(' ')[0]}`;
+  const agMap = {};
+  D.agendamentos.filter(a=>a.status==='concluido').forEach(a=>{
+    (agMap[a.petId]=agMap[a.petId]||[]).push(a);
+  });
   document.getElementById('vp-content').innerHTML = pets.length===0
     ? '<p style="color:var(--muted);font-size:13px;padding:10px 0">Nenhum pet.</p>'
-    : pets.map(p=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+    : pets.map(p=>{
+      const hist=(agMap[p.id]||[]).sort((a,b)=>(b.data+b.hora).localeCompare(a.data+a.hora)).slice(0,5);
+      const histHtml=hist.length?`<div style="margin-top:6px;padding:6px 8px;background:var(--surface2);border-radius:6px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);margin-bottom:4px">Últimos serviços</div>
+        ${hist.map(a=>`<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:2px">
+          <span>${a.servico||'—'}</span>
+          <span>${fmtDate(a.data)}${a.valor?` · ${fmtBRL(a.valor)}`:''}</span>
+        </div>`).join('')}
+      </div>`:''
+      return `<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div style="font-size:22px">🐾</div>
         <div style="flex:1">
           <div style="font-weight:700;font-size:14px">${p.nome}</div>
           <div style="font-size:12px;color:var(--muted)">${[p.raca,p.porte,p.idade].filter(Boolean).join(' · ')||'Sem detalhes'}</div>
+          ${histHtml}
         </div>
         <button class="btn btn-danger btn-sm" onclick="deletePet('${p.id}','${tid}')"><i class="ph ph-trash"></i></button>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   openModal('modal-view-pets');
 }
 
@@ -1219,7 +1600,19 @@ function setAgStatus(id, status) {
   if (!a) return;
   a.status = status;
   if (status==='andamento') a.checkinAt  = new Date().toISOString();
-  if (status==='concluido') { a.checkoutAt = new Date().toISOString(); if(!a.checkinAt) a.checkinAt=a.checkoutAt; }
+  if (status==='concluido') {
+    a.checkoutAt = new Date().toISOString();
+    if (!a.checkinAt) a.checkinAt = a.checkoutAt;
+    if (a.servicoId) {
+      const svc = D.servicos.find(x=>x.id===a.servicoId);
+      if (svc && (svc.insumos||[]).length) {
+        svc.insumos.forEach(ins=>{
+          const prod=D.estoque.find(x=>x.id===ins.estoqueId);
+          if (prod) prod.quantidade=Math.max(0,prod.quantidade-ins.qty);
+        });
+      }
+    }
+  }
   saveDB(D);
   renderAgenda();
   if (curPage==='checkin') renderCheckin();
@@ -1245,8 +1638,28 @@ function onAgTutorChange() {
 function onAgServicoChange() {
   const opt = document.getElementById('ag-servico').selectedOptions[0];
   if (!opt || !opt.value) return;
-  const preco = parseFloat(opt.dataset.preco)||0;
-  if (preco > 0) document.getElementById('ag-valor').value = preco.toFixed(2);
+  preencherPrecoAgendamento();
+}
+
+function onAgPetPorteChange() {
+  preencherPrecoAgendamento();
+}
+
+function preencherPrecoAgendamento() {
+  const svcOpt = document.getElementById('ag-servico').selectedOptions[0];
+  if (!svcOpt||!svcOpt.value) return;
+  const svcId  = svcOpt.value;
+  const D      = loadDB();
+  const svc    = D.servicos.find(x=>x.id===svcId);
+  if (!svc) return;
+  const petId  = document.getElementById('ag-pet').value;
+  const pet    = D.pets.find(x=>x.id===petId);
+  const porte  = pet?.porte||'';
+  let preco    = svc.preco||0;
+  if (porte.startsWith('Pequeno') && svc.precoP) preco = svc.precoP;
+  else if (porte.startsWith('Médio') && svc.precoM)  preco = svc.precoM;
+  else if ((porte.startsWith('Grande')||porte.startsWith('Extra')) && svc.precoG) preco = svc.precoG;
+  if (preco>0) document.getElementById('ag-valor').value = preco.toFixed(2);
 }
 
 function populateAgTutores() {
@@ -1261,6 +1674,11 @@ function populateAgTutores() {
   document.getElementById('ag-pet').innerHTML = '<option value="">Selecionar pet...</option>';
   document.getElementById('ag-valor').value  = '';
   document.getElementById('ag-data').value   = todayISO();
+  const funs = D.funcionarios.filter(f=>f.status!=='inativo');
+  document.getElementById('ag-func').innerHTML =
+    '<option value="">— Qualquer</option>' +
+    funs.map(f=>`<option value="${f.id}">${f.nome} (${f.cargo||'—'})</option>`).join('');
+  document.getElementById('ag-pagamento').value='';
 }
 
 function saveAgendamento() {
@@ -1273,10 +1691,13 @@ function saveAgendamento() {
   const D = loadDB();
   D.agendamentos.push({
     id:uid(), tutorId,
-    petId:    document.getElementById('ag-pet').value,
+    petId:         document.getElementById('ag-pet').value,
+    servicoId:     document.getElementById('ag-servico').value,
     servico, data, hora,
-    valor:    parseFloat(document.getElementById('ag-valor').value)||0,
-    obs:      document.getElementById('ag-obs').value.trim(),
+    valor:         parseFloat(document.getElementById('ag-valor').value)||0,
+    obs:           document.getElementById('ag-obs').value.trim(),
+    funcionarioId: document.getElementById('ag-func').value||null,
+    formaPagamento:document.getElementById('ag-pagamento').value||null,
     status:   'agendado', checkinAt:null, checkoutAt:null,
     criadoEm: new Date().toISOString()
   });
@@ -1353,6 +1774,105 @@ function renderCheckin() {
 
 // ── FINANCEIRO ────────────────────────────────────────────────────────────────
 let finFilter = 'todos';
+let _finTab = 'movimento';
+let _gerencialUnlocked = false;
+
+function setFinTab(tab) {
+  _finTab = tab;
+  ['movimento','gerencial'].forEach(t=>{
+    document.getElementById('ftab-'+t)?.classList.toggle('active', t===tab);
+  });
+  document.getElementById('fin-view-movimento').style.display = tab==='movimento' ? '' : 'none';
+  document.getElementById('fin-view-gerencial').style.display = tab==='gerencial' ? '' : 'none';
+  document.getElementById('fin-btn-lancamento').style.display = (tab==='gerencial'&&_gerencialUnlocked) ? '' : 'none';
+
+  if (tab==='movimento') {
+    renderMovimento();
+  } else {
+    if (_gerencialUnlocked) {
+      document.getElementById('fin-lock-overlay').style.display = 'none';
+      document.getElementById('fin-gerencial-content').style.display = '';
+      renderFinanceiro(); renderContas();
+    } else {
+      document.getElementById('fin-lock-overlay').style.display = '';
+      document.getElementById('fin-gerencial-content').style.display = 'none';
+    }
+  }
+}
+
+function renderMovimento() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const mes  = hoje.slice(0,7);
+  const now  = new Date();
+  document.getElementById('fin-sub').textContent = now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  document.getElementById('mov-data-label').textContent = new Date(hoje+'T00:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+
+  const recHoje = D.financeiro.filter(l=>l.tipo==='receita'&&l.data===hoje).reduce((s,l)=>s+Number(l.valor||0),0);
+  const recMes  = D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+  document.getElementById('mov-receitas-hoje').textContent = fmtBRL(recHoje);
+  document.getElementById('mov-receitas-mes').textContent  = fmtBRL(recMes);
+
+  const itensHoje = D.financeiro.filter(l=>l.data===hoje&&l.tipo==='receita').sort((a,b)=>(b.criadoEm||'').localeCompare(a.criadoEm||''));
+  const el = document.getElementById('mov-list');
+  if (!itensHoje.length) {
+    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-receipt" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Nenhuma receita hoje ainda.</div>';
+    return;
+  }
+  el.innerHTML = itensHoje.map(l=>`
+    <div class="fin-item fin-receita">
+      <div class="fin-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
+        <div style="font-size:11px;color:var(--muted)">${l.formaPagamento||l.categoria||'—'}</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#006B4F;flex-shrink:0">+${fmtBRL(l.valor)}</div>
+    </div>`).join('');
+}
+
+function tentarDesbloquearGerencial() {
+  const D = loadDB();
+  const senha = D.config?.senhaGerencial;
+  if (!senha) {
+    toast('⚠️ Nenhuma senha configurada. Vá em Configurações para definir.');
+    return;
+  }
+  const input = prompt('Senha gerencial:');
+  if (input === null) return;
+  if (input === senha) {
+    _gerencialUnlocked = true;
+    document.getElementById('fin-lock-overlay').style.display = 'none';
+    document.getElementById('fin-gerencial-content').style.display = '';
+    document.getElementById('fin-btn-lancamento').style.display = '';
+    renderFinanceiro(); renderContas();
+    toast('🔓 Área gerencial desbloqueada');
+  } else {
+    toast('❌ Senha incorreta');
+  }
+}
+
+function bloquearGerencial() {
+  _gerencialUnlocked = false;
+  setFinTab('movimento');
+}
+
+function salvarSenha() {
+  const s1 = document.getElementById('cfg-senha').value;
+  const s2 = document.getElementById('cfg-senha2').value;
+  const st = document.getElementById('cfg-senha-status');
+  if (!s1) { st.textContent = '⚠️ Digite uma senha.'; st.style.color='var(--red)'; return; }
+  if (s1 !== s2) { st.textContent = '⚠️ As senhas não conferem.'; st.style.color='var(--red)'; return; }
+  const D = loadDB();
+  D.config = D.config || {};
+  D.config.senhaGerencial = s1;
+  saveDB(D);
+  document.getElementById('cfg-senha').value = '';
+  document.getElementById('cfg-senha2').value = '';
+  st.textContent = '✅ Senha salva com sucesso!';
+  st.style.color = '#006B4F';
+  toast('✅ Senha gerencial salva');
+}
+
 function setFinFilter(f) {
   finFilter = f;
   ['todos','receita','despesa'].forEach(x=>document.getElementById('fin-tab-'+x)?.classList.toggle('active',x===f));
@@ -1363,7 +1883,6 @@ function renderFinanceiro() {
   const D   = loadDB();
   const now = new Date();
   const mes = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  document.getElementById('fin-sub').textContent = now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
 
   const doMes = D.financeiro.filter(l=>l.data?.startsWith(mes));
   const rec   = doMes.filter(l=>l.tipo==='receita').reduce((s,l)=>s+Number(l.valor||0),0);
@@ -1521,12 +2040,17 @@ function renderConfig() {
   }
   el.innerHTML = svcs.map(s=>{
     const inativo = s.ativo===false;
+    const temPorte = s.precoP||s.precoM||s.precoG;
+    const precoTxt = temPorte
+      ? `P:${fmtBRL(s.precoP||0)} M:${fmtBRL(s.precoM||0)} G:${fmtBRL(s.precoG||0)}`
+      : (s.preco?fmtBRL(s.preco):'— preço');
+    const insumosTxt = (s.insumos||[]).length ? ` · ${s.insumos.length} insumo${s.insumos.length>1?'s':''}` : '';
     return `<div class="svc-row ${inativo?'inativo':''}">
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:700">${s.nome}</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">${s.desc||''}${s.duracao?(s.desc?` · `:``)+ s.duracao+' min':''}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${s.desc||''}${s.duracao?(s.desc?' · ':'')+s.duracao+' min':''}${insumosTxt}</div>
       </div>
-      <div style="font-size:15px;font-weight:800;color:var(--brand);min-width:100px;text-align:right">${s.preco?fmtBRL(s.preco):'— preço'}</div>
+      <div style="font-size:13px;font-weight:800;color:var(--brand);min-width:120px;text-align:right">${precoTxt}</div>
       <div style="display:flex;gap:6px;flex-shrink:0;margin-left:12px">
         <button class="btn btn-ghost btn-sm" onclick="editServico('${s.id}')" title="Editar"><i class="ph ph-pencil"></i></button>
         <button class="btn btn-ghost btn-sm" onclick="toggleServico('${s.id}')" title="${inativo?'Ativar':'Desativar'}">
@@ -1543,21 +2067,29 @@ function saveServico() {
   if (!nome) { toast('⚠️ Nome obrigatório'); return; }
   const D  = loadDB();
   const id = document.getElementById('svc-id').value;
+  const insumos = coletarInsumosSvc();
   if (id) {
     const s = D.servicos.find(x=>x.id===id);
     if (s) {
       s.nome    = nome;
       s.preco   = parseFloat(document.getElementById('svc-preco').value)||0;
+      s.precoP  = parseFloat(document.getElementById('svc-preco-p').value)||0;
+      s.precoM  = parseFloat(document.getElementById('svc-preco-m').value)||0;
+      s.precoG  = parseFloat(document.getElementById('svc-preco-g').value)||0;
       s.duracao = parseInt(document.getElementById('svc-duracao').value)||0;
       s.desc    = document.getElementById('svc-desc').value.trim();
+      s.insumos = insumos;
     }
   } else {
     D.servicos.push({
       id:uid(), nome,
       preco:   parseFloat(document.getElementById('svc-preco').value)||0,
+      precoP:  parseFloat(document.getElementById('svc-preco-p').value)||0,
+      precoM:  parseFloat(document.getElementById('svc-preco-m').value)||0,
+      precoG:  parseFloat(document.getElementById('svc-preco-g').value)||0,
       duracao: parseInt(document.getElementById('svc-duracao').value)||0,
       desc:    document.getElementById('svc-desc').value.trim(),
-      ativo:   true,
+      insumos, ativo:true,
       criadoEm: new Date().toISOString()
     });
   }
@@ -1571,13 +2103,61 @@ function editServico(id) {
   const D = loadDB();
   const s = D.servicos.find(x=>x.id===id);
   if (!s) return;
-  document.getElementById('svc-id').value      = s.id;
-  document.getElementById('svc-nome').value    = s.nome;
-  document.getElementById('svc-preco').value   = s.preco||'';
-  document.getElementById('svc-duracao').value = s.duracao||'';
-  document.getElementById('svc-desc').value    = s.desc||'';
+  document.getElementById('svc-id').value        = s.id;
+  document.getElementById('svc-nome').value      = s.nome;
+  document.getElementById('svc-preco').value     = s.preco||'';
+  document.getElementById('svc-preco-p').value   = s.precoP||'';
+  document.getElementById('svc-preco-m').value   = s.precoM||'';
+  document.getElementById('svc-preco-g').value   = s.precoG||'';
+  document.getElementById('svc-duracao').value   = s.duracao||'';
+  document.getElementById('svc-desc').value      = s.desc||'';
   document.getElementById('svc-modal-title').textContent = 'Editar Serviço';
+  const cont = document.getElementById('svc-insumos-container');
+  cont.innerHTML='';
+  (s.insumos||[]).forEach(ins=>addSvcInsumoPreenchido(ins.estoqueId,ins.qty));
   document.getElementById('modal-new-servico').classList.add('open');
+}
+
+let svcInsumoIdx=0;
+function addSvcInsumo() {
+  const D=loadDB();
+  const opts=D.estoque.map(p=>`<option value="${p.id}">${p.nome} (${p.quantidade} ${p.unidade})</option>`).join('');
+  const i=svcInsumoIdx++;
+  document.getElementById('svc-insumos-container').insertAdjacentHTML('beforeend',`
+    <div id="svc-ins-${i}" style="display:flex;gap:8px;align-items:center">
+      <select data-ins-id="${i}" style="flex:2;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;color:var(--text)">
+        <option value="">Selecionar produto...</option>${opts}
+      </select>
+      <input data-ins-qty="${i}" type="number" value="1" min="0.1" step="0.1" style="width:70px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;text-align:center"/>
+      <span style="font-size:11px;color:var(--muted)">un</span>
+      <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('svc-ins-${i}')?.remove()"><i class="ph ph-x"></i></button>
+    </div>`);
+}
+
+function addSvcInsumoPreenchido(estoqueId, qty) {
+  const D=loadDB();
+  const opts=D.estoque.map(p=>`<option value="${p.id}"${p.id===estoqueId?' selected':''}>${p.nome} (${p.quantidade} ${p.unidade})</option>`).join('');
+  const i=svcInsumoIdx++;
+  document.getElementById('svc-insumos-container').insertAdjacentHTML('beforeend',`
+    <div id="svc-ins-${i}" style="display:flex;gap:8px;align-items:center">
+      <select data-ins-id="${i}" style="flex:2;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;color:var(--text)">
+        <option value="">Selecionar produto...</option>${opts}
+      </select>
+      <input data-ins-qty="${i}" type="number" value="${qty||1}" min="0.1" step="0.1" style="width:70px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;text-align:center"/>
+      <span style="font-size:11px;color:var(--muted)">un</span>
+      <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('svc-ins-${i}')?.remove()"><i class="ph ph-x"></i></button>
+    </div>`);
+}
+
+function coletarInsumosSvc() {
+  const result=[];
+  document.querySelectorAll('[data-ins-id]').forEach(sel=>{
+    const i=sel.dataset.insId;
+    const estoqueId=sel.value; if(!estoqueId) return;
+    const qty=parseFloat(document.querySelector(`[data-ins-qty="${i}"]`)?.value)||1;
+    result.push({estoqueId,qty});
+  });
+  return result;
 }
 
 function toggleServico(id) {
@@ -1605,6 +2185,7 @@ function processarAbates() {
   let changed = false;
   (D.planos||[]).forEach(p => {
     if (p.status !== 'ativo') return;
+    if (p.modoAbate === 'manual') return;
     const ultimo = p.ultimoAbate || p.dataInicio;
     if (!ultimo || ultimo >= hoje) return;
     const dias = Math.floor((new Date(hoje) - new Date(ultimo)) / 86400000);
@@ -1667,8 +2248,15 @@ function renderTutorPlanos(tutorId) {
         <span style="font-weight:700;color:${critico?'var(--red)':'var(--muted)'}">${diasTxt}</span>
       </div>
       ${p.obs?`<div style="font-size:11px;color:var(--muted);margin-bottom:10px;font-style:italic">${p.obs}</div>`:''}
+      ${p.modoAbate==='manual'&&p.status==='ativo'?`<div style="margin-bottom:8px;padding:8px;background:var(--brand-light);border-radius:8px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--brand)">PACOTE MANUAL</div>
+          <div style="font-size:12px;color:var(--brand)">${diasRestantes(p)===Infinity?'∞':diasRestantes(p)} diárias restantes · ${p.diasUsados||0} usadas</div>
+        </div>
+        <button class="btn btn-primary" onclick="usarDiaria('${p.id}')"><i class="ph ph-check-square"></i> Usar 1 diária</button>
+      </div>`:''}
       <div style="display:flex;gap:6px">
-        ${p.status!=='cancelado'?`<button class="btn btn-success btn-sm" style="flex:1" onclick="openRenovar('${p.id}')"><i class="ph ph-plus-circle"></i> Renovar crédito</button>`:''}
+        ${p.status!=='cancelado'?`<button class="btn btn-success btn-sm" style="flex:1" onclick="openRenovar('${p.id}')"><i class="ph ph-plus-circle"></i> Renovar / Adicionar diárias</button>`:''}
         ${p.status==='ativo'?`<button class="btn btn-ghost btn-sm" onclick="cancelPlanoFromTutor('${p.id}')"><i class="ph ph-x"></i> Cancelar</button>`:''}
         <button class="btn btn-danger btn-sm" onclick="delPlanoFromTutor('${p.id}')"><i class="ph ph-trash"></i></button>
       </div>
@@ -1691,6 +2279,33 @@ function openNovoPlanoParaTutor() {
   document.getElementById('pl-diario').value  = '';
   document.getElementById('pl-obs').value     = '';
   document.getElementById('modal-new-plano').classList.add('open');
+}
+
+function usarDiariaCard(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  const tutor = D.tutores.find(t=>t.id===p.tutorId);
+  if (!confirm(`Registrar 1 diária de ${p.tipo} para ${tutor?.nome?.split(' ')[0]||''}?\n\nSaldo atual: ${diasRestantes(p)} diárias`)) return;
+  usarDiaria(id);
+}
+
+function usarDiaria(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  if (p.valorRestante < p.valorDiario) { toast('⚠️ Saldo insuficiente para usar mais uma diária'); return; }
+  p.valorRestante = Math.max(0, (p.valorRestante||0) - (p.valorDiario||0));
+  p.diasUsados    = (p.diasUsados||0) + 1;
+  p.ultimoAbate   = todayISO();
+  if (p.valorRestante <= 0) p.status = 'vencido';
+  saveDB(D);
+  renderTutorPlanos(_curTutorPlanoId);
+  renderClientes();
+  if (curPage==='planos') renderPlanos();
+  updatePlanosBadge();
+  const diasRestam = diasRestantes(p);
+  toast(`✅ 1 diária usada — ${diasRestam===Infinity?'∞':diasRestam} dia${diasRestam!==1?'s':''} restante${diasRestam!==1?'s':''}`);
 }
 
 function cancelPlanoFromTutor(id) {
@@ -1728,15 +2343,20 @@ function savePlano() {
   const valor   = parseFloat(document.getElementById('pl-valor').value)||0;
   const diario  = parseFloat(document.getElementById('pl-diario').value)||0;
   const inicio  = document.getElementById('pl-inicio').value;
-  if (!tutorId||!valor||!diario||!inicio) { toast('⚠️ Tutor, valor, abate diário e data são obrigatórios'); return; }
-  const D = loadDB();
+  if (!tutorId||!valor||!diario||!inicio) { toast('⚠️ Tutor, valor, diária e data são obrigatórios'); return; }
+  const D    = loadDB();
   const tipo = document.getElementById('pl-tipo').value;
+  const modo = document.getElementById('pl-modo').value;
+  const diasTotal = Math.floor(valor/diario);
   D.planos.push({
     id:uid(), tipo, tutorId,
     petId:        document.getElementById('pl-pet').value,
     valorTotal:   valor,
     valorRestante:valor,
     valorDiario:  diario,
+    diasTotal,
+    diasUsados:   0,
+    modoAbate:    modo,
     dataInicio:   inicio,
     ultimoAbate:  inicio,
     obs:          document.getElementById('pl-obs').value.trim(),
@@ -1757,6 +2377,8 @@ function savePlano() {
   document.getElementById('pl-pet').innerHTML='<option value="">Selecionar pet...</option>';
   renderClientes();
   updateDashboard();
+  updatePlanosBadge();
+  if (curPage==='planos') renderPlanos();
   toast('✅ Plano criado!');
 }
 
@@ -1825,30 +2447,217 @@ function seedServicos() {
   saveDB(D);
 }
 
+// ── PLANOS & PACOTES ──────────────────────────────────────────────────────────
+let _planosFiltro = 'ativos';
+
+function setPlanosFiltro(f) {
+  _planosFiltro = f;
+  document.querySelectorAll('#planos-filtro-tabs .svc-tab').forEach(el =>
+    el.classList.toggle('active', el.dataset.filtro === f));
+  renderPlanos();
+}
+
+function openNovoPlanoGlobal() {
+  const D = loadDB();
+  document.getElementById('pl-tutor').innerHTML =
+    '<option value="">Selecionar tutor...</option>' +
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+  document.getElementById('pl-pet').innerHTML = '<option value="">Selecionar pet...</option>';
+  document.getElementById('pl-inicio').value  = todayISO();
+  document.getElementById('pl-tipo').value    = 'Creche';
+  document.getElementById('pl-modo').value    = 'manual';
+  document.getElementById('pl-valor').value   = '';
+  document.getElementById('pl-diario').value  = '';
+  document.getElementById('pl-obs').value     = '';
+  openModal('modal-new-plano');
+}
+
+function updatePlanosBadge() {
+  const D = loadDB();
+  const criticos = (D.planos||[]).filter(p=>p.status==='ativo'&&diasRestantes(p)<=3);
+  const badge = document.getElementById('badge-planos');
+  if (!badge) return;
+  if (criticos.length > 0) { badge.textContent = criticos.length; badge.style.display = ''; }
+  else badge.style.display = 'none';
+}
+
+function renderPlanos() {
+  const D        = loadDB();
+  const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t);
+  const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
+  const todos    = D.planos||[];
+  const ativos   = todos.filter(p=>p.status==='ativo');
+  const criticos = ativos.filter(p=>diasRestantes(p)<=3);
+  const vencidos = todos.filter(p=>p.status==='vencido');
+
+  document.getElementById('planos-total-ativos').textContent   = ativos.length;
+  document.getElementById('planos-total-criticos').textContent = criticos.length;
+  document.getElementById('planos-total-vencidos').textContent = vencidos.length;
+  document.getElementById('planos-sub').textContent =
+    `${ativos.length} ativo${ativos.length!==1?'s':''}${criticos.length?` · ${criticos.length} crítico${criticos.length!==1?'s':''}!`:''}`;
+
+  // Badge sidebar
+  const badge = document.getElementById('badge-planos');
+  if (badge) { if (criticos.length>0) { badge.textContent=criticos.length; badge.style.display=''; } else badge.style.display='none'; }
+
+  // Alert banner
+  const alertEl = document.getElementById('planos-alertas');
+  alertEl.innerHTML = criticos.length ? `<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+    <i class="ph ph-warning" style="font-size:22px;color:var(--red);flex-shrink:0"></i>
+    <div><b style="color:var(--red)">${criticos.length} plano${criticos.length!==1?'s':''} com menos de 3 diárias restantes!</b>
+      <div style="font-size:12px;color:#7F1D1D;margin-top:2px">${criticos.map(p=>{const t=tutorMap[p.tutorId];const d=diasRestantes(p);return `${t?.nome?.split(' ')[0]||'?'} — ${d===0?'<b>ZERADO</b>':`${d} dia${d!==1?'s':''}`}`;}).join(' &nbsp;·&nbsp; ')}</div>
+    </div>
+  </div>` : '';
+
+  // Filter
+  let filtrados;
+  if (_planosFiltro==='ativos')   filtrados = ativos.filter(p=>diasRestantes(p)>3);
+  else if (_planosFiltro==='criticos') filtrados = criticos;
+  else if (_planosFiltro==='vencidos') filtrados = vencidos;
+  else filtrados = todos;
+
+  const grid = document.getElementById('planos-grid');
+  if (!filtrados.length) {
+    const msgs = {ativos:'Todos os planos ativos estão no verde! 🎉',criticos:'Nenhum plano crítico. Ótimo! 🎉',vencidos:'Nenhum plano vencido.',todos:'Nenhum plano cadastrado.'};
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:13px">
+      <i class="ph ph-ticket" style="font-size:32px;display:block;margin-bottom:8px;opacity:.4"></i>${msgs[_planosFiltro]||''}</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtrados.map(p => {
+    const tutor      = tutorMap[p.tutorId];
+    const petNome    = petMap[p.petId]||'';
+    const dias       = diasRestantes(p);
+    const pct        = (p.valorTotal||0)>0 ? Math.max(0,Math.min(100,Math.round((p.valorRestante||0)/p.valorTotal*100))) : 100;
+    const critico    = p.status==='vencido'||(p.status==='ativo'&&dias<=3);
+    const atencao    = p.status==='ativo'&&dias>3&&dias<=7;
+    const cor        = p.status==='vencido'?'var(--red)':dias<=3?'var(--red)':dias<=7?'#F5C218':'var(--teal)';
+    const bgCard     = critico?'#FEF2F2':atencao?'#FFFBEB':'var(--surface)';
+    const bdCard     = critico?'#FECACA':atencao?'#FDE68A':'var(--border)';
+    const diasNum    = p.status==='vencido'?'0':dias===Infinity?'∞':String(dias);
+    const diasUnit   = p.status==='vencido'?'dias':dias===Infinity?'dias':`dia${dias!==1?'s':''}`;
+    const isManual   = p.modoAbate==='manual';
+    const av         = (tutor?.nome||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+    const statusTag  = p.status==='ativo'?(critico?'<span class="tag tag-red">⚠️ Crítico</span>':(atencao?'<span class="tag tag-yellow">Atenção</span>':'<span class="tag tag-green">Ativo</span>')):p.status==='vencido'?'<span class="tag tag-red">Vencido</span>':'<span class="tag tag-gray">Cancelado</span>';
+    return `<div style="border:1px solid ${bdCard};border-radius:12px;padding:16px;background:${bgCard};display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div style="width:40px;height:40px;border-radius:9px;background:var(--brand-light);color:var(--brand);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tutor?.nome||'—'}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:1px">${petNome?`🐾 ${petNome} · `:''}${p.tipo||'Plano'}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;min-width:48px">
+          <div style="font-size:28px;font-weight:900;line-height:1;color:${cor}">${diasNum}</div>
+          <div style="font-size:10px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:.04em">${diasUnit}</div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-bar" style="height:10px;margin-bottom:4px"><div class="pb-fill" style="width:${pct}%;background:${cor}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+          <span style="font-weight:600">${fmtBRL(p.valorRestante||0)} restante</span>
+          <span>${p.diasUsados||0} usadas de ${p.diasTotal||'?'} · ${fmtBRL(p.valorDiario||0)}/dia</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        ${statusTag}
+        <span class="tag ${isManual?'tag-blue':'tag-gray'}" style="font-size:10px">${isManual?'Manual':'Auto'}</span>
+        <span class="tag tag-gray" style="font-size:10px">Início: ${fmtDate(p.dataInicio)}</span>
+      </div>
+      <div style="display:flex;gap:6px">
+        ${isManual&&p.status==='ativo'?`<button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="usarDiariaPlanoPage('${p.id}')"><i class="ph ph-check-square"></i> Usar diária</button>`:''}
+        ${p.status!=='cancelado'?`<button class="btn btn-success btn-sm" onclick="openRenovar('${p.id}')"><i class="ph ph-plus-circle"></i> Renovar</button>`:''}
+        ${p.status==='ativo'?`<button class="btn btn-ghost btn-sm" onclick="cancelPlanoFromPage('${p.id}')"><i class="ph ph-x"></i></button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function usarDiariaPlanoPage(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  const tutor = D.tutores.find(t=>t.id===p.tutorId);
+  const dias  = diasRestantes(p);
+  if (dias <= 0) { toast('⚠️ Plano sem saldo'); return; }
+  if (!confirm(`Registrar 1 diária de ${p.tipo} para ${tutor?.nome?.split(' ')[0]||'?'}?\n\nSaldo atual: ${dias} diária${dias!==1?'s':''}`)) return;
+  usarDiaria(id);
+  renderPlanos();
+}
+
+function cancelPlanoFromPage(id) {
+  if (!confirm('Cancelar este plano?')) return;
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (p) { p.status='cancelado'; saveDB(D); }
+  renderPlanos();
+  toast('Plano cancelado');
+}
+
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
+let curDashFilial = 'todas';
+
+function setDashFilial(f) {
+  curDashFilial = f;
+  document.querySelectorAll('#dash-filial-tabs .svc-tab').forEach(el =>
+    el.classList.toggle('active', el.dataset.filial === f));
+  updateDashboard();
+}
+
 function updateDashboard() {
   const D    = loadDB();
   const hoje = todayISO();
   const now  = new Date();
   const mes  = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
 
-  const ativos  = D.tutores.filter(t=>t.status!=='inativo').length;
-  const inat    = D.tutores.filter(t=>t.status==='inativo').length;
-  const agsHoje = D.agendamentos.filter(a=>a.data===hoje&&a.status!=='cancelado').length;
-  const fat     = D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+  // Build filial tabs dinamicamente
+  const filiais = [...new Set(D.tutores.map(t=>t.unidade||'').filter(Boolean))].sort();
+  const tabsEl  = document.getElementById('dash-filial-tabs');
+  if (filiais.length > 1) {
+    const all = ['todas', ...filiais];
+    tabsEl.innerHTML = all.map(f => {
+      const n = f==='todas' ? D.tutores.length : D.tutores.filter(t=>t.unidade===f).length;
+      const label = f==='todas' ? `Todas (${n})` : `${f} (${n})`;
+      return `<div class="svc-tab${curDashFilial===f?' active':''}" data-filial="${f}" onclick="setDashFilial('${f}')">${label}</div>`;
+    }).join('');
+    tabsEl.style.display = '';
+  } else {
+    tabsEl.style.display = 'none';
+    curDashFilial = 'todas';
+  }
 
-  document.getElementById('s-ativos').textContent = ativos;
-  document.getElementById('s-pets').textContent   = D.pets.length;
-  document.getElementById('s-hoje').textContent   = agsHoje;
-  document.getElementById('s-fat').textContent    = fmtBRL(fat);
-  document.getElementById('badge-clientes').textContent = ativos;
+  // Conjuntos filtrados
+  const filtrando = curDashFilial !== 'todas';
+  const tutoresF  = filtrando ? D.tutores.filter(t=>t.unidade===curDashFilial) : D.tutores;
+  const tutorIdsF = new Set(tutoresF.map(t=>t.id));
+  const petsF     = D.pets.filter(p=>tutorIdsF.has(p.tutorId));
+  const agsF      = D.agendamentos.filter(a=>tutorIdsF.has(a.tutorId));
+
+  const ativos  = tutoresF.filter(t=>t.status!=='inativo').length;
+  const inat    = tutoresF.filter(t=>t.status==='inativo').length;
+  const agsHoje = agsF.filter(a=>a.data===hoje&&a.status!=='cancelado').length;
+
+  // Receita do mês: agendamentos concluídos nessa filial + PDV geral (sem filial)
+  const fatAg  = agsF.filter(a=>a.data?.startsWith(mes)&&a.status==='concluido').reduce((s,a)=>s+Number(a.valor||0),0);
+  const fatFin = filtrando ? fatAg : D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+
+  const sfx = filtrando ? ` · ${curDashFilial}` : '';
+  document.getElementById('s-ativos').textContent      = ativos;
+  document.getElementById('s-ativos-label').textContent = `Tutores ativos${sfx}`;
+  document.getElementById('s-pets').textContent        = petsF.length;
+  document.getElementById('s-pets-label').textContent  = `Pets cadastrados${sfx}`;
+  document.getElementById('s-hoje').textContent        = agsHoje;
+  document.getElementById('s-hoje-label').textContent  = `Agendamentos hoje${sfx}`;
+  document.getElementById('s-fat').textContent         = fmtBRL(filtrando ? fatAg : fatFin);
+  document.getElementById('s-fat-label').textContent   = filtrando ? `Serviços/mês estimados${sfx}` : 'Receitas do mês';
+  document.getElementById('badge-clientes').textContent = D.tutores.filter(t=>t.status!=='inativo').length;
 
   const hj = now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   document.getElementById('dash-data').textContent = hj.charAt(0).toUpperCase()+hj.slice(1);
 
+  // Próximos agendamentos (filtrados pela filial)
   const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
   const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
-  const prox = D.agendamentos
+  const prox = agsF
     .filter(a=>a.data>=hoje&&a.status!=='cancelado'&&a.status!=='concluido')
     .sort((a,b)=>a.data!==b.data?(a.data>b.data?1:-1):(a.hora||'').localeCompare(b.hora||''))
     .slice(0,6);
@@ -1859,25 +2668,28 @@ function updateDashboard() {
         <div style="font-size:12px;font-weight:800;color:var(--brand);min-width:76px">${a.data===hoje?a.hora:fmtDate(a.data)}</div>
         <div style="flex:1;min-width:0">
           <div style="font-size:13px;font-weight:600">${petMap[a.petId]||'Pet'}</div>
-          <div style="font-size:11px;color:var(--muted)">${tutorMap[a.tutorId]||'—'} · ${a.servico||''}</div>
+          <div style="font-size:11px;color:var(--muted)">${tutorMap[a.tutorId]||'—'} · ${a.servico||''}${!filtrando&&tutorMap[a.tutorId]?'':''}</div>
         </div>
         <span class="tag ${AG_STATUS[a.status]?.cls||'tag-gray'}" style="font-size:10px">${AG_STATUS[a.status]?.label||a.status}</span>
       </div>`).join('');
 
+  // Card "Por Filial" — sempre mostra comparativo geral
   const filialCount = {};
   D.tutores.forEach(t=>{ const f=t.unidade||'Sem filial'; filialCount[f]=(filialCount[f]||0)+1; });
   const entries = Object.entries(filialCount).sort((a,b)=>b[1]-a[1]);
+  const totalTutores = D.tutores.length || 1;
   document.getElementById('dash-filiais').innerHTML = entries.length===0
     ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
-    : entries.map(([f,n])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <div style="font-size:12px;font-weight:600;flex:1;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f}</div>
+    : entries.map(([f,n])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;${curDashFilial===f?'opacity:1':'opacity:'+(curDashFilial==='todas'?'1':'.4')}">
+        <div style="font-size:12px;font-weight:${curDashFilial===f?'800':'600'};flex:1;color:${curDashFilial===f?'var(--brand)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f}${curDashFilial===f?' ◀':''}</div>
         <div style="font-size:11px;font-weight:700;color:var(--brand);min-width:20px;text-align:right">${n}</div>
         <div style="flex:2;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
-          <div style="height:100%;background:var(--brand);border-radius:3px;width:${Math.round(n/D.tutores.length*100)}%"></div>
+          <div style="height:100%;background:${curDashFilial===f?'var(--brand)':'var(--muted2)'};border-radius:3px;width:${Math.round(n/totalTutores*100)}%"></div>
         </div>
       </div>`).join('');
 
-  const planos = D.planos || [];
+  // Alerta de planos (filtrado pela filial)
+  const planos  = (D.planos||[]).filter(p=>filtrando?tutorIdsF.has(p.tutorId):true);
   const plAlert = planos.filter(p => p.status==='vencido' || (p.status==='ativo'&&(p.valorDiario||0)>0&&diasRestantes(p)<=3));
   const alertEl = document.getElementById('dash-planos-alert');
   if (alertEl) {
@@ -1888,7 +2700,7 @@ function updateDashboard() {
       alertEl.innerHTML = `<div style="background:var(--yellow-light);border:1px solid #FDE68A;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
         <i class="ph ph-warning" style="font-size:20px;color:#856400;flex-shrink:0"></i>
         <div style="flex:1">
-          <div style="font-size:13px;font-weight:700;color:#856400">${plAlert.length} plano${plAlert.length>1?'s':''} precisam de atenção</div>
+          <div style="font-size:13px;font-weight:700;color:#856400">${plAlert.length} plano${plAlert.length>1?'s':''} precisam de atenção${sfx}</div>
           <div style="font-size:11px;color:#92620A;margin-top:2px">${nVenc>0?`${nVenc} vencido${nVenc>1?'s':''}`:''} ${nBaixo>0?(nVenc>0?' · ':'')+`${nBaixo} com crédito baixo`:''}</div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="navTo('clientes')">Ver clientes</button>
@@ -1898,7 +2710,7 @@ function updateDashboard() {
     }
   }
 
-  document.getElementById('dash-situacao').innerHTML = D.tutores.length===0
+  document.getElementById('dash-situacao').innerHTML = tutoresF.length===0
     ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
     : `<div style="display:flex;gap:12px">
         <div style="flex:1;text-align:center;padding:12px;background:var(--teal-light);border-radius:8px">
@@ -1910,6 +2722,377 @@ function updateDashboard() {
           <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:2px">Inativos</div>
         </div>
       </div>`;
+}
+
+// ── PDV / CAIXA ───────────────────────────────────────────────────────────────
+function renderPDV() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const vendas = (D.financeiro||[]).filter(l=>l.origem==='pdv'&&l.data===hoje);
+  const total  = vendas.reduce((s,l)=>s+Number(l.valor||0),0);
+  document.getElementById('pdv-sub').textContent = `${vendas.length} venda${vendas.length!==1?'s':''} hoje`;
+  document.getElementById('pdv-total-hoje').textContent = fmtBRL(total);
+  document.getElementById('pdv-qtd-hoje').textContent   = vendas.length;
+  document.getElementById('pdv-ticket-medio').textContent = vendas.length ? fmtBRL(total/vendas.length) : 'R$0';
+
+  const pgMap = {};
+  vendas.forEach(l=>{ const pg=l.formaPagamento||'Não informado'; pgMap[pg]=(pgMap[pg]||0)+Number(l.valor||0); });
+  const pgEntries = Object.entries(pgMap).sort((a,b)=>b[1]-a[1]);
+  const pgEl = document.getElementById('pdv-pagamentos');
+  if (!pgEntries.length) {
+    pgEl.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Sem vendas hoje.</div>';
+  } else {
+    pgEl.innerHTML = `<div class="pdv-pagamento-bar">${pgEntries.map(([pg,val])=>`
+      <div class="pdv-pg-row">
+        <div class="pdv-pg-label">${pg}</div>
+        <div class="pdv-pg-val">${fmtBRL(val)}</div>
+        <div class="pdv-pg-bar-wrap"><div class="pdv-pg-bar-fill" style="width:${Math.round(val/total*100)}%"></div></div>
+      </div>`).join('')}</div>`;
+  }
+
+  const lista = document.getElementById('pdv-lista');
+  if (!vendas.length) {
+    lista.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-storefront" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Nenhuma venda hoje ainda.</div>';
+    return;
+  }
+  const tutorMap={}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
+  lista.innerHTML=[...vendas].reverse().map(l=>`
+    <div class="pdv-item">
+      <div class="pdv-dot" style="background:var(--teal)"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
+        <div style="font-size:11px;color:var(--muted)">${l.formaPagamento||'—'}${l.tutorId?` · ${tutorMap[l.tutorId]||''}`:''}</div>
+      </div>
+      <div style="font-weight:800;color:var(--teal);font-size:14px">${fmtBRL(l.valor)}</div>
+      <button class="btn btn-danger btn-sm" onclick="delPDV('${l.id}')"><i class="ph ph-trash"></i></button>
+    </div>`).join('');
+}
+
+function onPdvTipoChange() {
+  const tipo = document.getElementById('pdv-tipo').value;
+  const isPlano = tipo === 'plano';
+  document.getElementById('pdv-svc-field').style.display    = tipo==='servico'?'':'none';
+  document.getElementById('pdv-prd-field').style.display    = tipo==='produto'?'':'none';
+  document.getElementById('pdv-plano-fields').style.display = isPlano?'grid':'none';
+  document.getElementById('pdv-valor-row').style.display    = isPlano?'none':'';
+  document.getElementById('pdv-desc-field').style.display   = isPlano?'none':'';
+  document.getElementById('pdv-cliente-label').textContent  = isPlano?'Cliente *':'Cliente (opcional)';
+  if (isPlano) onPdvClienteChange();
+}
+
+function onPdvClienteChange() {
+  const tipo = document.getElementById('pdv-tipo').value;
+  if (tipo !== 'plano') return;
+  const clienteId = document.getElementById('pdv-cliente').value;
+  const D = loadDB();
+  const pets = clienteId ? D.pets.filter(p=>p.tutorId===clienteId) : [];
+  document.getElementById('pdv-plano-pet').innerHTML =
+    '<option value="">— Sem pet específico</option>' +
+    pets.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+}
+
+function calcPlanoPreview() {
+  const total  = parseFloat(document.getElementById('pdv-plano-valor').value)||0;
+  const diario = parseFloat(document.getElementById('pdv-plano-diario').value)||0;
+  const el     = document.getElementById('pdv-plano-preview');
+  if (total>0 && diario>0) {
+    const dias = Math.floor(total/diario);
+    el.style.display = '';
+    el.textContent = `📅 ${dias} diária${dias!==1?'s':''} no total (${fmtBRL(total)} ÷ ${fmtBRL(diario)}/dia)`;
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function onPdvServicoChange() {
+  const opt = document.getElementById('pdv-servico').selectedOptions[0];
+  if (!opt||!opt.value) return;
+  const preco = parseFloat(opt.dataset.preco)||0;
+  if (preco>0) document.getElementById('pdv-valor').value = preco.toFixed(2);
+  document.getElementById('pdv-desc').value = opt.text.split(' —')[0];
+}
+
+function onPdvProdutoChange() {
+  const opt = document.getElementById('pdv-produto').selectedOptions[0];
+  if (!opt||!opt.value) return;
+  const preco = parseFloat(opt.dataset.preco)||0;
+  if (preco>0) document.getElementById('pdv-valor').value = preco.toFixed(2);
+  document.getElementById('pdv-desc').value = opt.text.split(' —')[0];
+}
+
+function savePDV() {
+  const tipo      = document.getElementById('pdv-tipo').value;
+  const pg        = document.getElementById('pdv-pagamento').value;
+  const clienteId = document.getElementById('pdv-cliente').value;
+
+  // ── Venda de PLANO ────────────────────────────────────────────────────────
+  if (tipo === 'plano') {
+    if (!clienteId) { toast('⚠️ Selecione o cliente para criar o plano'); return; }
+    const valorTotal  = parseFloat(document.getElementById('pdv-plano-valor').value)||0;
+    const valorDiario = parseFloat(document.getElementById('pdv-plano-diario').value)||0;
+    if (!valorTotal||!valorDiario) { toast('⚠️ Valor total e valor por diária obrigatórios'); return; }
+    if (!pg) { toast('⚠️ Selecione a forma de pagamento'); return; }
+    const planoTipo = document.getElementById('pdv-plano-tipo').value;
+    const petId     = document.getElementById('pdv-plano-pet').value||null;
+    const modo      = document.getElementById('pdv-plano-modo').value;
+    const diasTotal = Math.floor(valorTotal/valorDiario);
+    const D = loadDB();
+    const tutor = D.tutores.find(t=>t.id===clienteId);
+    D.planos.push({
+      id:uid(), tipo:planoTipo, tutorId:clienteId, petId,
+      valorTotal, valorDiario, valorRestante:valorTotal,
+      diasTotal, diasUsados:0, modoAbate:modo, status:'ativo',
+      dataInicio:todayISO(), ultimoAbate:todayISO(), obs:''
+    });
+    D.financeiro.push({
+      id:uid(), tipo:'receita', valor:valorTotal,
+      descricao:`Plano ${planoTipo} — ${tutor?.nome?.split(' ')[0]||'?'} (${diasTotal} diárias)`,
+      categoria:'Plano', data:todayISO(),
+      formaPagamento:pg, tutorId:clienteId,
+      origem:'pdv', criadoEm:new Date().toISOString()
+    });
+    saveDB(D);
+    closeModal('modal-pdv-venda');
+    renderPDV(); updateDashboard();
+    if (curPage==='planos') renderPlanos();
+    toast(`✅ Plano criado — ${diasTotal} diárias · ${fmtBRL(valorTotal)}`);
+    return;
+  }
+
+  // ── Venda normal (serviço / produto / outro) ──────────────────────────────
+  const valor = parseFloat(document.getElementById('pdv-valor').value)||0;
+  if (!valor||!pg) { toast('⚠️ Valor e pagamento obrigatórios'); return; }
+  const qtd = parseInt(document.getElementById('pdv-qtd').value)||1;
+  let desc = document.getElementById('pdv-desc').value.trim();
+  if (!desc) {
+    if (tipo==='servico') {
+      const opt = document.getElementById('pdv-servico').selectedOptions[0];
+      desc = opt?.text||'Serviço';
+    } else if (tipo==='produto') {
+      const opt = document.getElementById('pdv-produto').selectedOptions[0];
+      desc = opt?.text||'Produto';
+      if (opt?.value) {
+        const D2=loadDB();
+        const p=D2.estoque.find(x=>x.id===opt.value);
+        if(p){ p.quantidade=Math.max(0,p.quantidade-qtd); saveDB(D2); }
+      }
+    } else { desc='Outro'; }
+  }
+  const totalVenda = valor*qtd;
+  const D=loadDB();
+  D.financeiro.push({
+    id:uid(), tipo:'receita', valor:totalVenda,
+    descricao: desc+(qtd>1?` (x${qtd})`:''),
+    categoria:'Serviços', data:todayISO(),
+    formaPagamento:pg, tutorId:clienteId||null,
+    origem:'pdv', criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-pdv-venda');
+  renderPDV(); updateDashboard();
+  toast(`✅ Venda registrada — ${fmtBRL(totalVenda)}`);
+}
+
+function delPDV(id) {
+  if (!confirm('Remover esta venda?')) return;
+  const D=loadDB();
+  D.financeiro=D.financeiro.filter(l=>l.id!==id);
+  saveDB(D); renderPDV(); updateDashboard(); toast('🗑️ Venda removida');
+}
+
+// ── FUNCIONÁRIOS ──────────────────────────────────────────────────────────────
+function renderFuncionarios() {
+  const D    = loadDB();
+  const funs = D.funcionarios||[];
+  const hoje = todayISO();
+  const mesStr = hoje.slice(0,7);
+  document.getElementById('func-sub').textContent = `${funs.filter(f=>f.status!=='inativo').length} ativo${funs.filter(f=>f.status!=='inativo').length!==1?'s':''}`;
+  const grid = document.getElementById('func-grid');
+  if (!funs.length) {
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><i class="ph ph-users-three"></i><h3>Nenhum funcionário</h3><p>Cadastre a equipe</p></div>`;
+    return;
+  }
+  const agMes = (D.agendamentos||[]).filter(a=>a.data?.startsWith(mesStr)&&a.status==='concluido');
+  grid.innerHTML = funs.map(f=>{
+    const meus = agMes.filter(a=>a.funcionarioId===f.id);
+    const recMes = meus.reduce((s,a)=>s+Number(a.valor||0),0);
+    const comissao = recMes*(f.comissaoPct||0)/100;
+    const inativo = f.status==='inativo';
+    return `<div class="func-card ${inativo?'inativo':''}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="func-avatar" style="${avStyle(f.nome)}">${initials(f.nome)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.nome}</div>
+          <div style="font-size:12px;color:var(--muted)">${f.cargo||'—'}${f.comissaoPct?` · ${f.comissaoPct}% comissão`:''}</div>
+        </div>
+        <span class="tag ${inativo?'tag-gray':'tag-green'}">${inativo?'Inativo':'Ativo'}</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:var(--brand)">${meus.length}</div>
+          <div style="font-size:11px;color:var(--muted)">Serviços/mês</div>
+        </div>
+        <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:14px;font-weight:800;color:var(--teal)">${fmtBRL(comissao)}</div>
+          <div style="font-size:11px;color:var(--muted)">Comissão/mês</div>
+        </div>
+      </div>
+      ${f.tel?`<div style="font-size:12px;color:var(--muted);margin-bottom:10px"><i class="ph ph-phone" style="font-size:11px"></i> ${f.tel}</div>`:''}
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editFuncionario('${f.id}')"><i class="ph ph-pencil"></i> Editar</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleFuncionario('${f.id}')"><i class="ph ph-${inativo?'check':'x'}-circle"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="delFuncionario('${f.id}')"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveFuncionario() {
+  const nome = document.getElementById('func-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome obrigatório'); return; }
+  const D  = loadDB();
+  const id = document.getElementById('func-id').value;
+  if (id) {
+    const f=D.funcionarios.find(x=>x.id===id);
+    if(f){
+      f.nome=nome; f.cargo=document.getElementById('func-cargo').value;
+      f.comissaoPct=parseFloat(document.getElementById('func-comissao').value)||0;
+      f.status=document.getElementById('func-status').value;
+      f.tel=document.getElementById('func-tel').value.trim();
+    }
+  } else {
+    D.funcionarios.push({
+      id:uid(), nome, cargo:document.getElementById('func-cargo').value,
+      comissaoPct:parseFloat(document.getElementById('func-comissao').value)||0,
+      status:document.getElementById('func-status').value,
+      tel:document.getElementById('func-tel').value.trim(),
+      criadoEm:new Date().toISOString()
+    });
+  }
+  saveDB(D); closeModal('modal-new-func'); renderFuncionarios();
+  toast(id?'✅ Funcionário atualizado':'✅ Funcionário cadastrado!');
+}
+
+function editFuncionario(id) {
+  const D=loadDB(); const f=D.funcionarios.find(x=>x.id===id); if(!f) return;
+  document.getElementById('func-id').value       = f.id;
+  document.getElementById('func-nome').value     = f.nome;
+  document.getElementById('func-cargo').value    = f.cargo||'Banhista';
+  document.getElementById('func-comissao').value = f.comissaoPct||'';
+  document.getElementById('func-status').value   = f.status||'ativo';
+  document.getElementById('func-tel').value      = f.tel||'';
+  document.getElementById('func-modal-title').textContent = 'Editar Funcionário';
+  openModal('modal-new-func');
+}
+
+function toggleFuncionario(id) {
+  const D=loadDB(); const f=D.funcionarios.find(x=>x.id===id); if(!f) return;
+  f.status=f.status==='inativo'?'ativo':'inativo';
+  saveDB(D); renderFuncionarios();
+  toast(f.status==='inativo'?`⚠️ ${f.nome.split(' ')[0]} inativado`:`✅ ${f.nome.split(' ')[0]} ativado`);
+}
+
+function delFuncionario(id) {
+  if (!confirm('Remover funcionário?')) return;
+  const D=loadDB();
+  D.funcionarios=D.funcionarios.filter(x=>x.id!==id);
+  saveDB(D); renderFuncionarios(); toast('🗑️ Removido');
+}
+
+// ── CONTAS A PAGAR / RECEBER ──────────────────────────────────────────────────
+let contaFilter='todas';
+function setContaFilter(f) {
+  contaFilter=f;
+  ['todas','pagar','receber','pendente'].forEach(x=>document.getElementById('ct-tab-'+x)?.classList.toggle('active',x===f));
+  renderContas();
+}
+
+function renderContas() {
+  const D=loadDB();
+  const hoje=todayISO();
+  let contas=[...D.contas||[]].sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
+  const totalPagar   = contas.filter(c=>c.tipo==='pagar'&&c.status!=='pago').reduce((s,c)=>s+Number(c.valor||0),0);
+  const totalReceber = contas.filter(c=>c.tipo==='receber'&&c.status!=='pago').reduce((s,c)=>s+Number(c.valor||0),0);
+  const saldoProjetado = totalReceber-totalPagar;
+  document.getElementById('contas-resumo').innerHTML=`
+    <div style="background:var(--red-light);border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center">
+      <i class="ph ph-arrow-circle-down" style="color:var(--red);font-size:18px"></i>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:600">A PAGAR</div><div style="font-size:15px;font-weight:800;color:var(--red)">${fmtBRL(totalPagar)}</div></div>
+    </div>
+    <div style="background:var(--teal-light);border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center">
+      <i class="ph ph-arrow-circle-up" style="color:var(--teal);font-size:18px"></i>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:600">A RECEBER</div><div style="font-size:15px;font-weight:800;color:#006B4F">${fmtBRL(totalReceber)}</div></div>
+    </div>
+    <div style="background:${saldoProjetado>=0?'var(--teal-light)':'var(--red-light)'};border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center">
+      <i class="ph ph-scales" style="color:${saldoProjetado>=0?'var(--teal)':'var(--red)'};font-size:18px"></i>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:600">SALDO PROJETADO</div><div style="font-size:15px;font-weight:800;color:${saldoProjetado>=0?'#006B4F':'var(--red)'}">${fmtBRL(Math.abs(saldoProjetado))}</div></div>
+    </div>`;
+
+  if (contaFilter==='pagar')   contas=contas.filter(c=>c.tipo==='pagar');
+  if (contaFilter==='receber') contas=contas.filter(c=>c.tipo==='receber');
+  if (contaFilter==='pendente')contas=contas.filter(c=>c.status!=='pago');
+  const el=document.getElementById('contas-list');
+  if (!contas.length) { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhuma conta encontrada.</div>'; return; }
+  el.innerHTML=contas.map(c=>{
+    const venc=c.vencimento||'';
+    const pago=c.status==='pago';
+    const vencida=!pago&&venc<hoje;
+    return `<div class="conta-item${pago?' pago':''}${vencida?' vencida':''}">
+      <div style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${c.tipo==='pagar'?'var(--red)':'var(--teal)'}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${c.descricao}</div>
+        <div style="font-size:11px;color:var(--muted)">${c.tipo==='pagar'?'A Pagar':'A Receber'}${c.categoria?` · ${c.categoria}`:''}${venc?` · venc. ${fmtDate(venc)}`:''}${vencida?' ⚠️ Vencida':''}</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:${c.tipo==='pagar'?'var(--red)':'var(--teal)'};flex-shrink:0">${fmtBRL(c.valor)}</div>
+      ${!pago?`<button class="btn btn-success btn-sm" onclick="pagarConta('${c.id}')" title="Marcar como pago"><i class="ph ph-check"></i></button>`:'<span class="tag tag-green">Pago</span>'}
+      <button class="btn btn-danger btn-sm" onclick="delConta('${c.id}')"><i class="ph ph-trash"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function saveConta() {
+  const desc  = document.getElementById('conta-desc').value.trim();
+  const valor = parseFloat(document.getElementById('conta-valor').value)||0;
+  const venc  = document.getElementById('conta-vencimento').value;
+  if (!desc||!valor||!venc) { toast('⚠️ Descrição, valor e vencimento obrigatórios'); return; }
+  const D=loadDB();
+  const id=document.getElementById('conta-id').value;
+  if (id) {
+    const c=D.contas.find(x=>x.id===id);
+    if(c){ c.descricao=desc; c.valor=valor; c.vencimento=venc;
+      c.tipo=document.getElementById('conta-tipo').value;
+      c.categoria=document.getElementById('conta-cat').value; }
+  } else {
+    D.contas.push({
+      id:uid(), tipo:document.getElementById('conta-tipo').value,
+      descricao:desc, valor, vencimento:venc,
+      categoria:document.getElementById('conta-cat').value,
+      status:'pendente', criadoEm:new Date().toISOString()
+    });
+  }
+  saveDB(D); closeModal('modal-new-conta'); renderContas();
+  toast(id?'✅ Conta atualizada':'✅ Conta cadastrada!');
+}
+
+function pagarConta(id) {
+  const D=loadDB(); const c=D.contas.find(x=>x.id===id); if(!c) return;
+  c.status='pago'; c.paidAt=todayISO();
+  if (confirm(`Registrar ${fmtBRL(c.valor)} como lançamento no financeiro?`)) {
+    D.financeiro.push({
+      id:uid(), tipo:c.tipo==='pagar'?'despesa':'receita',
+      valor:c.valor, descricao:c.descricao,
+      categoria:c.categoria||'Outros', data:todayISO(),
+      criadoEm:new Date().toISOString()
+    });
+  }
+  saveDB(D); renderContas(); updateDashboard();
+  toast('✅ Conta marcada como paga');
+}
+
+function delConta(id) {
+  if (!confirm('Remover conta?')) return;
+  const D=loadDB(); D.contas=D.contas.filter(x=>x.id!==id);
+  saveDB(D); renderContas(); toast('🗑️ Removida');
 }
 
 // ── LIMPAR ────────────────────────────────────────────────────────────────────
@@ -1934,14 +3117,59 @@ function openModal(id) {
     document.getElementById('pl-pet').innerHTML = '<option value="">Selecionar pet...</option>';
     document.getElementById('pl-inicio').value  = todayISO();
     document.getElementById('pl-tipo').value    = 'Hospedagem';
+    document.getElementById('pl-modo').value    = 'manual';
   }
   if (id==='modal-new-servico') {
     document.getElementById('svc-id').value = '';
     document.getElementById('svc-nome').value = '';
     document.getElementById('svc-preco').value = '';
+    document.getElementById('svc-preco-p').value = '';
+    document.getElementById('svc-preco-m').value = '';
+    document.getElementById('svc-preco-g').value = '';
     document.getElementById('svc-duracao').value = '';
     document.getElementById('svc-desc').value = '';
+    document.getElementById('svc-insumos-container').innerHTML = '';
     document.getElementById('svc-modal-title').textContent = 'Novo Serviço';
+  }
+  if (id==='modal-pdv-venda') {
+    const D=loadDB();
+    document.getElementById('pdv-servico').innerHTML='<option value="">Selecionar...</option>'+
+      D.servicos.filter(s=>s.ativo!==false).map(s=>`<option value="${s.id}" data-preco="${s.preco||0}">${s.nome}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
+    document.getElementById('pdv-produto').innerHTML='<option value="">Selecionar...</option>'+
+      D.estoque.map(p=>`<option value="${p.id}" data-preco="${p.precoVenda||0}">${p.nome} — ${fmtBRL(p.precoVenda||0)} (${p.quantidade} ${p.unidade})</option>`).join('');
+    document.getElementById('pdv-cliente').innerHTML='<option value="">— Avulso</option>'+
+      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+    document.getElementById('pdv-tipo').value='servico';
+    document.getElementById('pdv-valor').value='';
+    document.getElementById('pdv-qtd').value='1';
+    document.getElementById('pdv-desc').value='';
+    document.getElementById('pdv-plano-valor').value='';
+    document.getElementById('pdv-plano-diario').value='';
+    document.getElementById('pdv-plano-preview').style.display='none';
+    document.getElementById('pdv-plano-fields').style.display='none';
+    document.getElementById('pdv-svc-field').style.display='';
+    document.getElementById('pdv-prd-field').style.display='none';
+    document.getElementById('pdv-valor-row').style.display='';
+    document.getElementById('pdv-desc-field').style.display='';
+    document.getElementById('pdv-cliente-label').textContent='Cliente (opcional)';
+  }
+  if (id==='modal-new-func') {
+    document.getElementById('func-id').value='';
+    document.getElementById('func-nome').value='';
+    document.getElementById('func-comissao').value='';
+    document.getElementById('func-tel').value='';
+    document.getElementById('func-cargo').value='Banhista';
+    document.getElementById('func-status').value='ativo';
+    document.getElementById('func-modal-title').textContent='Novo Funcionário';
+  }
+  if (id==='modal-new-conta') {
+    document.getElementById('conta-id').value='';
+    document.getElementById('conta-desc').value='';
+    document.getElementById('conta-valor').value='';
+    document.getElementById('conta-vencimento').value='';
+    document.getElementById('conta-tipo').value='pagar';
+    document.getElementById('conta-cat').value='';
+    document.getElementById('conta-modal-title').textContent='Nova Conta';
   }
   document.getElementById(id)?.classList.add('open');
 }
@@ -1965,6 +3193,7 @@ processarAbates();
 populateSel('f-unidade','');
 populateSel('e-unidade','');
 addPetField();
+updatePlanosBadge();
 updateDashboard();
 renderClientes();
 </script>

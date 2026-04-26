@@ -2,173 +2,3172 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"/>
-<title>Pets Go Control — Carregar Demo</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go Control — DEMO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#F1F5F9;display:flex;align-items:center;justify-content:center;min-height:100vh}
-.box{background:#fff;border-radius:16px;padding:40px;max-width:420px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center}
-h1{font-size:20px;font-weight:800;color:#0F172A;margin-bottom:8px}
-p{font-size:13px;color:#64748B;line-height:1.6;margin-bottom:24px}
-.warn{background:#FFFDE6;border:1px solid #FDE68A;border-radius:8px;padding:12px;font-size:12px;color:#856400;margin-bottom:20px;text-align:left}
-.btn{display:block;background:#4047C8;color:#fff;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;width:100%;transition:background .15s;margin-bottom:10px}
-.btn:hover{background:#2D33A8}
-.btn-ghost{background:#F1F5F9;color:#334155}
-.btn-ghost:hover{background:#E2E8F0}
-.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px}
-.chip{background:#ECEEFF;color:#4047C8;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
-.chip-warn{background:#FEF2F2;color:#DC2626}
-.chip-yellow{background:#FFFDE6;color:#856400}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4047C8;--brand-dark:#2D33A8;--brand-light:#ECEEFF;
+  --pink:#E8187B;--pink-light:#FFF0F8;
+  --teal:#00C896;--teal-light:#E5FFF8;
+  --yellow:#F5C218;--yellow-light:#FFFDE6;
+  --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;
+  --border:#E2E8F0;--border2:#CBD5E1;
+  --text:#0F172A;--text2:#334155;--muted:#64748B;--muted2:#94A3B8;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px;box-shadow:var(--shadow);z-index:10}
+.tb-brand{display:flex;align-items:center;gap:10px}
+.tb-logo{width:36px;height:36px;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}.tb-logo img{width:100%;height:100%;object-fit:cover}
+.tb-name{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.tb-sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+.tb-location{font-size:12px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:4px}
+.tb-search{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:320px}
+.tb-search input{background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);width:100%}
+.tb-search input::placeholder{color:var(--muted2)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.tb-btn.primary{background:var(--brand);color:#fff}
+.tb-btn.primary:hover{background:var(--brand-dark)}
+.tb-avatar{width:34px;height:34px;border-radius:8px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);padding:12px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .12s;font-size:13px;font-weight:500;color:var(--muted)}
+.nav-item:hover{background:var(--surface2);color:var(--text2)}
+.nav-item.active{background:var(--brand-light);color:var(--brand);font-weight:700}
+.nav-ico{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.nb-brand{background:var(--brand);color:#fff}
+.nb-yellow{background:var(--yellow);color:#6b4f00}
+.sidebar-sep{height:1px;background:var(--border);margin:8px 0}
+.sidebar-bottom{margin-top:auto;padding-top:10px}
+
+/* MAIN */
+.main{overflow-y:auto;padding:24px;background:var(--bg)}
+.page{display:none}.page.active{display:block}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.page-title{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .12s}
+.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--brand-dark)}
+.btn-ghost{background:var(--surface);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--surface2)}
+.btn-danger{background:var(--red-light);color:var(--red);border:1px solid #FECACA}.btn-danger:hover{background:#FEE2E2}
+.btn-success{background:var(--teal-light);color:#006B4F;border:1px solid #6EE7C7}.btn-success:hover{background:#CCFAEE}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
+.stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.stat-value{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.stat-label{font-size:12px;font-weight:500;margin-top:3px;opacity:.75}
+.stat-c1{background:var(--brand-light);color:var(--brand-dark)}.stat-c1 .stat-icon{background:#C8CAEF}
+.stat-c2{background:var(--teal-light);color:#006B4F}.stat-c2 .stat-icon{background:#B3F5E4}
+.stat-c3{background:var(--pink-light);color:#9A0050}.stat-c3 .stat-icon{background:#FFC0DF}
+.stat-c4{background:var(--yellow-light);color:#856400}.stat-c4 .stat-icon{background:#FDEEA0}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-title span{font-size:12px;font-weight:500;color:var(--muted)}
+.grid-2col{display:grid;grid-template-columns:1fr 320px;gap:14px;margin-bottom:14px}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.tag-blue{background:var(--brand-light);color:var(--brand)}
+.tag-green{background:var(--teal-light);color:#006B4F}
+.tag-red{background:#FEF2F2;color:#DC2626}
+.tag-gray{background:#F1F5F9;color:#64748B}
+.tag-yellow{background:var(--yellow-light);color:#856400}
+
+/* FILTER TABS */
+.filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.svc-tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all .12s}
+.svc-tab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.svc-tab:hover:not(.active){background:var(--surface2);color:var(--text2)}
+
+/* CLIENTES */
+.clientes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.cliente-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all .15s;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.cliente-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
+.cliente-card.inativo{opacity:.65}
+.add-card{border-style:dashed;align-items:center;justify-content:center;gap:8px;cursor:pointer;min-height:160px}
+.add-card:hover{border-color:var(--brand);background:var(--brand-light)}
+.c-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.c-nome{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-tel{font-size:11px;color:var(--muted);margin-top:2px}
+.c-pets{font-size:12px;color:var(--muted);margin:8px 0;line-height:1.5;flex:1}
+.c-actions{display:flex;gap:6px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* AGENDA */
+.agenda-list{display:flex;flex-direction:column;gap:8px}
+.agenda-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);transition:all .12s}
+.agenda-item:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
+.agenda-hora{font-size:14px;font-weight:800;color:var(--brand);min-width:42px;flex-shrink:0}
+.agenda-info{flex:1;min-width:0}
+.agenda-pet{font-size:13px;font-weight:700}
+.agenda-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.agenda-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* CHECK-IN */
+.checkin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.ci-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.ci-card.dentro{border-color:#6EE7C7;background:var(--teal-light)}
+.ci-card.saiu{opacity:.65}
+
+/* FINANCEIRO */
+.fin-list{display:flex;flex-direction:column;gap:6px}
+.fin-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.fin-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fin-receita .fin-dot{background:#00C896}
+.fin-despesa .fin-dot{background:var(--red)}
+
+/* ESTOQUE */
+.estoque-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.est-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.est-card.baixo{border-color:#FECACA;background:var(--red-light)}
+.est-qty{font-size:28px;font-weight:800;line-height:1}
+
+/* SERVIÇOS (config) */
+.svc-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.svc-row:last-child{border-bottom:none}
+.svc-row.inativo{opacity:.5}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state i{font-size:40px;display:block;margin-bottom:12px;opacity:.4}
+.empty-state h3{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text2)}
+.empty-state p{font-size:13px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(2px)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:16px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;padding:24px;box-shadow:var(--shadow-lg);transform:translateY(16px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-sm{max-width:440px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:17px;font-weight:800}
+.modal-close{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .12s}
+.modal-close:hover{background:var(--red-light);color:var(--red)}
+
+/* FORM */
+.form-grid{display:grid;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--text2)}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .12s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(64,71,200,.15)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted2)}
+.form-divider{padding:10px 0 4px;font-size:12px;font-weight:700;color:var(--text2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.form-footer{display:flex;justify-content:flex-end;gap:8px;padding-top:4px}
+
+/* QUICK */
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.quick-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.quick-btn:hover{border-color:var(--brand);background:var(--brand-light)}
+.quick-icon{font-size:22px;margin-bottom:6px}
+.quick-label{font-size:12px;font-weight:600;color:var(--text2)}
+
+/* SEARCH INLINE */
+.search-inline{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
+.search-inline input{border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);background:transparent;width:180px}
+
+.pb-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
+.pb-fill{height:100%;border-radius:4px}
+
+/* PDV */
+.pdv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.pdv-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.pdv-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pdv-pagamento-bar{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pdv-pg-row{display:flex;align-items:center;gap:10px;font-size:13px}
+.pdv-pg-label{min-width:130px;color:var(--text2);font-weight:500}
+.pdv-pg-val{font-weight:700;color:var(--text);min-width:80px;text-align:right}
+.pdv-pg-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.pdv-pg-bar-fill{height:100%;background:var(--brand);border-radius:3px}
+
+/* FUNCIONÁRIOS */
+.func-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.func-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.func-card.inativo{opacity:.55}
+.func-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
+
+/* CONTAS */
+.conta-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.conta-item.pago{opacity:.6}
+.conta-item.vencida{border-color:#FECACA;background:var(--red-light)}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
 </style>
 </head>
 <body>
-<div class="box">
-  <div style="font-size:44px;margin-bottom:14px">🐾</div>
-  <h1>Pets Go Control — Demo</h1>
-  <p>Carrega dados fictícios para demonstração completa do sistema.</p>
-  <div class="chips">
-    <span class="chip">15 tutores</span>
-    <span class="chip">22 pets</span>
-    <span class="chip">3 filiais</span>
-    <span class="chip">12 agendamentos</span>
-    <span class="chip-warn">⚠️ 2 estoque baixo</span>
-    <span class="chip-yellow">⏰ 2 planos críticos</span>
-    <span class="chip-warn">1 plano vencido</span>
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#F5C218;color:#6b4f00;text-align:center;font-size:12px;font-weight:700;padding:5px;letter-spacing:.05em;font-family:'Inter',sans-serif">
+  MODO DEMO — dados fictícios para apresentação · Não insira dados reais aqui
+</div>
+<div class="app" style="margin-top:27px">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAA/1BMVEVHS8n///////3///v//v////n///ZHS8hHSsz9//5ISspHSs5GS8lJS8ZBRchHTMRGTcE9Qcf///NISdDv8/U4PcY+RsM7OM3Z3fPd4PDw8PiWmNs6Ocn2+fFNT8s6QcS8wOeztuSEh9JdW9A6OtVjYtJzc9VAO8hRUsayt95yc8Snqt2Wl9NBQ86Jis9VXLz//+x9gMW2tvJ5d9CgouE+QL3p7vtlZMvHy+jz9ftnab9fZcaknuI2M77X2vPj5vHIy/QwMcScndGDgtSRkttxfctqad1wcNWxrt69we6Egc/X2ORYVcq0uNiTk+b18P7f4PtQU7yAfOOdptbK0OXUYTdQAAAL6UlEQVR4nO2cCVcayRbHqa2X6o2mKVqgFVCwY0ib9yIIxAE0+kZnojPjjN//s7xbTeMSITnGJNbk1O8kGrac+nur7lZVlkoajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0Wg0Gs03xylZlmNxi3svPZLvRdk1vZoZlIPopUfyvYi6orfbS1OTv/RIvg9cvNqrUoPUX8fBS4/lm+NYJZ7V+gQteBOXHM966UF9U4KSkwUbxkIfQ2Q/8cyfay2akf/28D90oZASA73NzJce07cliLYaoAykIcIoQWRDuD+XxGhax2A9gub/BamS/Z/M27TeVaQs0jnJaj25HFmj5b70oL4dpukfEILBiIPECxzxDiOC0ZvMtH6W1MazhnWEDco6iXzoDquU2exQmD9N8sbDJkOYGhu5wJKZ9DGDkLGdlVUPGNwPQxm2v+QUrdahQbCBL/3F4yACwQjddAOVl6ITRK2t7XfNUVJzI+fz7/WbmEKUH7SKbNQVbelY8chR2Z16TtK0CUPGeCsLvrCckjrDlDSCpWPxsl3pTkk/+8KP5kXh8QeMKWUYTd6n0Yp5yrnrcvgCk/QI1NDKL63lu7gl6jJgHE6VVQgVbPgeYUIIwhhv7tTkcxbn8NertYRoiUT45tZW4PmhSE8GBsV08zJa+pWonH6QCQ4aKetpuBNNZ7C2KGIEQ56SwQILAu63xHR4/kf/t+ONRrWgcbgxnjMomW665aXrdIIsQPKDffGyOtZjRuEBDJDiKiKEMrYnoPYTl6edWRUmnzQskREevmLCGCNgQnRlxUvHAraO65Cd4rlQ1ZmaDnhDiondO4W5CquxdzIabMCiBEFE6kK2bWMJAW35hDTQ5l7me9yRi9EpZwMCdiU9V9Vqn0eH0t23E/FBRjb08bgo/RAFq4LdDAPGv6R4CTdGEbcW7oaPIHOjxllYUtPZmNHrfMyvQ++knmfUzChqPywfEIxuYRBSin8ZVdMqL2zGh3VCIdQkjpo29NK+HHKjZgXRSKqxwSJLhXg+a180z04Pdg92d3cPzgbtxUtyzo67hcKS6DAKkcbjairk8Y3UdSyiciTGcvhgQliDjePB/16dJEKEoe/7FgDfwpMxqRRmnGy5RXfGP5VWx796agYMa3oo7fIhdLwgHcgJCM7kY/PXWAzjyPw0/IcDhItpi8+DwmY8sOW8HoRq9qOsYe5fzmuW6YzkQCmb7CSZWzadsvdoZfEe+JRiKcJHiv8iyRfwTaJmLyM6QjIkZG4piMfSmhAVAz+AlKa0ynMkN6iwId0pFxkeTy/kBzcVVRiegmPB9gmYwkMLhfg0C9ZNOP9o6Vw3s3IRHbi/m3fdemp6mlafMMrqaamU9bGd+0k2EOa60GbGncLTHCdWkdfACs4975vsh436KYQdBgrHkFWKG5IrpOg3Ya0zh2WmN9LbMjSqOcWshNy0DqZHe8kPG/VTSMbYgIwGFCaNXCEwE58J3m6rQyCHeRPeew4SP8PGdTUVpjPMMLmA8SbVO4XRZ5aUK3pv9q8fuJWwCREUNTwlF6KoS4UDUJjOcaGwnfLy+k9A7RhmDwtl/wDKEloZKRkQkwayDXTWAp/zS74ZAYWGfPQk+NYmBSP+7n+XIT6TQqEve58TY5FUl54824QsJlE//PI7fzxprnAbFJq1943chq+fPtB0LKvgsYp1visasoSXCh0nLA9m9Xdvw6fnJuFFBdJZcKYK+pqwwQgl24sVZLVEd5h9RYPeP4MCikym/Ist5R8PKGR3CiMzcBz+9FHyUZ7xtRxLPYWiIdtNhULTgz9fE9VcjmT53/O/4qfzvZGZDEF/PNPPu1NbKjyoueotxGQOCnHzuQrjuVQ48BVUmIJCqCaeGcnc7kepsD9UMKsRM0Qwe26sdsSxTPeuYgX3SUVbdmbaz43VaVsqHKtY5id7yEDsudlIkOQ9yVmiYN9b9BlDbPapQtMzA+54MOnMwIyCwOHcNdeftDRrTdncmCdrS+eXI3xDIKf581Hxasqedt7LsNygm4qpCP1yedXuooQHZ1JhY6pg31t2oihDJw+fNbMkuIxC4ZslrxaOrjYOD+v9Xhyt28p2aqe5wvXtj5fDh3yLEhTd3xuz/GR/1phU5yCKh72ZIfcvICu7ymomX5m1gMJ8byBUMB5awzyjHNXcu1BWC2ZFQ82+SpqELU/p4flW9LhLLFkqVNGG7nQiY/XZvYNb3JkvN5kwqhqMFg8YNWZJaeXuhFP7Q9lZ6nXrsrLvi1s/aYrO7UYhrlCYn0X7hlYw2u+WV6UtS4UqehovHsuxjePrZQebb6H1jJOVziaI83hYT1U8VbPYP5wny50ka7Gk1jCfrtYAiYOM+CoqtPzcz1e9ZQebt87IeoWz1TZ00sVMWP3qy8J5L9/5HdWWzywkr4DmnfuV69CNb6Q76rQUzEtNd2siXcpprZilDh+tsR/GFB1lwSpfUtSH/ZZ6jqZkOkN5FsO4rRCjwKKrFTJs109Wb0o5U1tO7VNfQRtyLmR4r7STIlo4QVJHK1cipmw7DFZKtLx897tXU/DYkFOOO5CtsI34dqsi7JPlDsZDSH3dLKydy+NGqMUVrPE5z5rSPo3otjLil5t0lREpOVi3B9r6gCH1+XNqKqjQi8IDeXKGbN0tIXFsrHKn7Fisqw/Fb8yglVnsWQpKNN2gghlh9+wTvbLlcb1Ppii1X629HJNUGWO4o+TODCAm+RbincIgHsgm/QOBFVoZJOV1BfDlhMHbt5XcXQOSGQQCdr8Z5cnTUeyBQoxmgq/rYkCSYBBaUfQwBthwz8CY3duFt8pOOGP3oqI0aDW0Ame1Da2wgwkmjVBVhf6ZQW20+WB8bvnwng0JqqCRv3b8zvAv+aZjFbcPcyAzpVDdnt93g0FyfXjPiyL7dXftjo0XvZV2NpqqOpqSmVVlNGtm91YZL2fXE3x7wgsq3+s1UxR+GtmZfE/lUlVHA67zo1TS/qT08Y8qqEhtKmdrI6H8fDKDGY3nKrb0F5iik7dzw0+2N8MdY6EQn8af66Fl13nareY5hRzub0uvwi4fBnRLtJftmub0cxe3wkF+bnpH0TPCJZl878gRsv17RxRMR2zNEbFJ3mjDF8Lx+JrTfLw1J5TQ2TBSMGNbYAX5zR4yFncK3WR3AnkAhVRAvkTaYbbu7pb/NzhiJk8ZK9jCWMDdtCMNNZneKvTFBZMXLCiuL87YsI3rzF190OLkIwFXXDUdFUunBWaUHcjM2vhb9mp4VHLF0V9yhhKb3QxfHTIM1sST98LKHnlLz6ntQlll473ELKmrkEdTOR3xWO7PmOVwOrCNvB7EnWFW8zbyBrFBz068R0aMSvkMx8xRsLq/xSw5aYfJw4XnELOD7us5zpNSvHkaW4FlQRrO5ITFN/zRkT6nNcj97V5X2UUIWA73R7DUGJuJRJzfyOtOMGnRxk4YmCXPcsUFrEkbZu1k+8R3zbv15pi1kfylA2jTCRTsQT2gNc7NNrvYkBdiMBiM9IfL8z9uaxumLZX30sc7gkdm0dKxAp7BKiUM/xOX1bz0dEc2yksJnI8XgT3no9SJlnuF5Xj0FzFkrwMZe69uTxCb8XWdyRVcj52128OqEKRy4wGyr/wwO6ODMJPnv5a3YsyW30aMQWBkuHq1k4Q+59w/eX8oD10yNMoC1QWC1x9CpS+xGcJt/qiY9bq/QwVi57ctUf3ide9y5/RGXtWAyb2v4nbFp3iRX2vLG6OITNpHYkUC5oZWm+UTlVKwJJtQRhihsEA/dNdeQFEImHROfHA12xjvl+PI9R6FdqsUBMl5Pb81JB0teB5wRwgb+B9h/Rt+ewuHVWeGaSqSLJLnLx+VCTLxdv3pdh3nc3lxgZYiRreFU1bwVOlXU+ue3thI/moMecPUQOO3ieph4olE5bDbao4bE7vCNhvtXuy4n7ma8W/E5DJRT9PLo93znWEaBZyreXP0ubjctxQ8WKLRaDQajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0bwo/wcLB+KCSRp3RAAAAABJRU5ErkJggg==" alt="Pets Go"/></div>
+    <div class="tb-name">Pets Go Control</div>
   </div>
-  <div class="warn">⚠️ Isso <strong>apaga os dados existentes</strong> no CRM e substitui pelos dados de demo.</div>
-  <button class="btn" onclick="carregarDemo()">Carregar dados de demo</button>
-  <button class="btn btn-ghost" onclick="window.location.href='petsgo-crm-light.html'">Cancelar — ir pro CRM</button>
+  <div class="tb-search">
+    <i class="ph ph-magnifying-glass" style="color:var(--muted2)"></i>
+    <input id="search-global" placeholder="Buscar cliente ou pet..." oninput="onSearch(this.value)"/>
+  </div>
+  <div class="tb-right">
+    <button class="tb-btn primary" onclick="openModal('modal-new-client')"><i class="ph ph-plus"></i> Novo cliente</button>
+    <div class="tb-avatar">JR</div>
+  </div>
 </div>
 
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="nav-label">Principal</div>
+  <div class="nav-item active" id="nav-dashboard" onclick="navTo('dashboard')">
+    <span class="nav-ico"><i class="ph ph-squares-four"></i></span> Dashboard
+  </div>
+  <div class="nav-item" id="nav-clientes" onclick="navTo('clientes')">
+    <span class="nav-ico"><i class="ph ph-paw-print"></i></span> Clientes & Pets
+    <span class="nav-badge nb-brand" id="badge-clientes">0</span>
+  </div>
+  <div class="nav-item" id="nav-agenda" onclick="navTo('agenda')">
+    <span class="nav-ico"><i class="ph ph-calendar-check"></i></span> Agenda
+    <span class="nav-badge nb-yellow" id="badge-agenda" style="display:none">0</span>
+  </div>
+  <div class="nav-item" id="nav-checkin" onclick="navTo('checkin')">
+    <span class="nav-ico"><i class="ph ph-door-open"></i></span> Check-in / Out
+    <span class="nav-badge nb-brand" id="badge-checkin" style="display:none">0</span>
+  </div>
+  <div class="nav-item" id="nav-pdv" onclick="navTo('pdv')">
+    <span class="nav-ico"><i class="ph ph-storefront"></i></span> PDV / Caixa
+  </div>
+  <div class="nav-item" id="nav-planos" onclick="navTo('planos')">
+    <span class="nav-ico"><i class="ph ph-ticket"></i></span> Planos & Pacotes
+    <span class="nav-badge nb-yellow" id="badge-planos" style="display:none">0</span>
+  </div>
+  <div class="sidebar-sep"></div>
+  <div class="nav-label">Gestão</div>
+  <div class="nav-item" id="nav-financeiro" onclick="navTo('financeiro')">
+    <span class="nav-ico"><i class="ph ph-currency-dollar"></i></span> Financeiro
+  </div>
+  <div class="nav-item" id="nav-estoque" onclick="navTo('estoque')">
+    <span class="nav-ico"><i class="ph ph-package"></i></span> Estoque
+  </div>
+  <div class="nav-item" id="nav-funcionarios" onclick="navTo('funcionarios')">
+    <span class="nav-ico"><i class="ph ph-users-three"></i></span> Funcionários
+  </div>
+<div class="nav-item" id="nav-config" onclick="navTo('config')">
+    <span class="nav-ico"><i class="ph ph-gear"></i></span> Serviços
+  </div>
+  <div class="sidebar-sep"></div>
+  <div class="sidebar-bottom">
+    <div class="nav-item" style="color:var(--red);font-size:12px" onclick="confirmarLimpar()">
+      <span class="nav-ico"><i class="ph ph-trash"></i></span> Limpar dados
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub" id="dash-data">—</div>
+      </div>
+      <button class="btn btn-ghost" onclick="updateDashboard()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
+    </div>
+    <div class="filter-row" id="dash-filial-tabs" style="margin-bottom:16px"></div>
+    <div class="stats-grid">
+      <div class="stat-card stat-c1">
+        <div class="stat-icon"><i class="ph ph-users"></i></div>
+        <div><div class="stat-value" id="s-ativos">0</div><div class="stat-label" id="s-ativos-label">Tutores ativos</div></div>
+      </div>
+      <div class="stat-card stat-c2">
+        <div class="stat-icon"><i class="ph ph-paw-print"></i></div>
+        <div><div class="stat-value" id="s-pets">0</div><div class="stat-label" id="s-pets-label">Pets cadastrados</div></div>
+      </div>
+      <div class="stat-card stat-c3">
+        <div class="stat-icon"><i class="ph ph-calendar-check"></i></div>
+        <div><div class="stat-value" id="s-hoje">0</div><div class="stat-label" id="s-hoje-label">Agendamentos hoje</div></div>
+      </div>
+      <div class="stat-card stat-c4">
+        <div class="stat-icon"><i class="ph ph-currency-circle-dollar"></i></div>
+        <div><div class="stat-value" id="s-fat">R$0</div><div class="stat-label" id="s-fat-label">Receitas do mês</div></div>
+      </div>
+    </div>
+    <div class="quick-grid">
+      <div class="quick-btn" onclick="openModal('modal-new-client')">
+        <div class="quick-icon">👤</div><div class="quick-label">Novo Cliente</div>
+      </div>
+      <div class="quick-btn" onclick="openModal('modal-new-agenda')">
+        <div class="quick-icon">📅</div><div class="quick-label">Novo Agendamento</div>
+      </div>
+      <div class="quick-btn" onclick="navTo('checkin')">
+        <div class="quick-icon">🚪</div><div class="quick-label">Check-in Hoje</div>
+      </div>
+      <div class="quick-btn" onclick="openModal('modal-new-plano')">
+        <div class="quick-icon">📋</div><div class="quick-label">Novo Plano</div>
+      </div>
+    </div>
+    <div id="dash-planos-alert" style="margin-bottom:14px;display:none"></div>
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">Próximos agendamentos <span id="dash-ag-count"></span></div>
+        <div id="dash-ag-list"><div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-calendar" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Sem agendamentos.</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-title">Por Filial</div>
+          <div id="dash-filiais"><div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Situação</div>
+          <div id="dash-situacao"><div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENTES -->
+  <div class="page" id="page-clientes">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Clientes & Pets</div>
+        <div class="page-sub" id="clientes-sub">0 tutores · 0 pets</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="search-inline">
+          <i class="ph ph-magnifying-glass" style="color:var(--muted2)"></i>
+          <input id="search-clientes" placeholder="Buscar..." oninput="onSearch(this.value)"/>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-new-client')"><i class="ph ph-plus"></i> Novo</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="svc-tab active" id="tab-todos" onclick="setFilter('todos')">Todos (0)</div>
+      <div class="svc-tab" id="tab-ativos" onclick="setFilter('ativos')">Ativos (0)</div>
+      <div class="svc-tab" id="tab-inativos" onclick="setFilter('inativos')">Inativos (0)</div>
+    </div>
+    <div class="filter-row" id="filial-tabs" style="margin-top:-6px"></div>
+    <div class="clientes-grid" id="clientes-grid"></div>
+  </div>
+
+  <!-- AGENDA -->
+  <div class="page" id="page-agenda">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Agenda</div>
+        <div class="page-sub" id="agenda-sub">—</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input type="date" id="agenda-date" class="btn btn-ghost" style="font-size:13px" onchange="renderAgenda()"/>
+        <button class="btn btn-ghost" onclick="agendaHoje()"><i class="ph ph-calendar-blank"></i> Hoje</button>
+        <button class="btn btn-primary" onclick="openModal('modal-new-agenda')"><i class="ph ph-plus"></i> Agendar</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="svc-tab active" id="agt-todos" onclick="setAgFilter('todos')">Todos</div>
+      <div class="svc-tab" id="agt-agendado" onclick="setAgFilter('agendado')">Agendado</div>
+      <div class="svc-tab" id="agt-confirmado" onclick="setAgFilter('confirmado')">Confirmado</div>
+      <div class="svc-tab" id="agt-andamento" onclick="setAgFilter('andamento')">Em andamento</div>
+      <div class="svc-tab" id="agt-concluido" onclick="setAgFilter('concluido')">Concluído</div>
+      <div class="svc-tab" id="agt-cancelado" onclick="setAgFilter('cancelado')">Cancelado</div>
+    </div>
+    <div class="agenda-list" id="agenda-list"></div>
+  </div>
+
+  <!-- CHECK-IN -->
+  <div class="page" id="page-checkin">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Check-in / Check-out</div>
+        <div class="page-sub" id="ci-sub">Pets hoje</div>
+      </div>
+      <button class="btn btn-ghost" onclick="renderCheckin()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
+    </div>
+    <div class="filter-row">
+      <div class="svc-tab active" id="ci-tab-todos" onclick="setCiFilter('todos')">Todos</div>
+      <div class="svc-tab" id="ci-tab-aguardando" onclick="setCiFilter('aguardando')">Aguardando</div>
+      <div class="svc-tab" id="ci-tab-dentro" onclick="setCiFilter('dentro')">Dentro</div>
+      <div class="svc-tab" id="ci-tab-saiu" onclick="setCiFilter('saiu')">Saíram</div>
+    </div>
+    <div class="checkin-grid" id="ci-grid"></div>
+  </div>
+
+  <!-- FINANCEIRO -->
+  <div class="page" id="page-financeiro">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Financeiro</div>
+        <div class="page-sub" id="fin-sub">—</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-new-fin')"><i class="ph ph-plus"></i> Lançamento</button>
+    </div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card stat-c2">
+        <div class="stat-icon"><i class="ph ph-arrow-circle-up"></i></div>
+        <div><div class="stat-value" id="fin-receitas">R$0</div><div class="stat-label">Receitas do mês</div></div>
+      </div>
+      <div class="stat-card stat-c3">
+        <div class="stat-icon"><i class="ph ph-arrow-circle-down"></i></div>
+        <div><div class="stat-value" id="fin-despesas">R$0</div><div class="stat-label">Despesas do mês</div></div>
+      </div>
+      <div class="stat-card stat-c1">
+        <div class="stat-icon"><i class="ph ph-scales"></i></div>
+        <div><div class="stat-value" id="fin-saldo">R$0</div><div class="stat-label">Saldo do mês</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        Lançamentos
+        <div style="display:flex;gap:6px">
+          <div class="svc-tab active" id="fin-tab-todos" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('todos')">Todos</div>
+          <div class="svc-tab" id="fin-tab-receita" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('receita')">Receitas</div>
+          <div class="svc-tab" id="fin-tab-despesa" style="padding:4px 10px;font-size:11px" onclick="setFinFilter('despesa')">Despesas</div>
+        </div>
+      </div>
+      <div class="fin-list" id="fin-list"></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-title">
+        Contas a Pagar / Receber
+        <div style="display:flex;gap:6px;align-items:center">
+          <div class="svc-tab active" id="ct-tab-todas" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('todas')">Todas</div>
+          <div class="svc-tab" id="ct-tab-pagar" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('pagar')">Pagar</div>
+          <div class="svc-tab" id="ct-tab-receber" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('receber')">Receber</div>
+          <div class="svc-tab" id="ct-tab-pendente" style="padding:4px 10px;font-size:11px" onclick="setContaFilter('pendente')">Pendentes</div>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-new-conta')" style="margin-left:4px"><i class="ph ph-plus"></i> Conta</button>
+        </div>
+      </div>
+      <div id="contas-resumo" style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap"></div>
+      <div id="contas-list"></div>
+    </div>
+  </div>
+
+  <!-- ESTOQUE -->
+  <div class="page" id="page-estoque">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Estoque</div>
+        <div class="page-sub" id="est-sub">—</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-new-produto')"><i class="ph ph-plus"></i> Produto</button>
+    </div>
+    <div class="estoque-grid" id="est-grid"></div>
+  </div>
+
+  <!-- PDV / CAIXA -->
+  <div class="page" id="page-pdv">
+    <div class="page-header">
+      <div>
+        <div class="page-title">PDV / Caixa</div>
+        <div class="page-sub" id="pdv-sub">Vendas de hoje</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="renderPDV()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
+        <button class="btn btn-primary" onclick="openModal('modal-pdv-venda')"><i class="ph ph-plus"></i> Nova Venda</button>
+      </div>
+    </div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="stat-card stat-c2">
+        <div class="stat-icon"><i class="ph ph-cash-register"></i></div>
+        <div><div class="stat-value" id="pdv-total-hoje">R$0</div><div class="stat-label">Total hoje</div></div>
+      </div>
+      <div class="stat-card stat-c1">
+        <div class="stat-icon"><i class="ph ph-receipt"></i></div>
+        <div><div class="stat-value" id="pdv-qtd-hoje">0</div><div class="stat-label">Vendas hoje</div></div>
+      </div>
+      <div class="stat-card stat-c4">
+        <div class="stat-icon"><i class="ph ph-chart-bar"></i></div>
+        <div><div class="stat-value" id="pdv-ticket-medio">R$0</div><div class="stat-label">Ticket médio</div></div>
+      </div>
+    </div>
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">Vendas do dia</div>
+        <div id="pdv-lista"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Por forma de pagamento</div>
+        <div id="pdv-pagamentos"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANOS & PACOTES -->
+  <div class="page" id="page-planos">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Planos & Pacotes</div>
+        <div class="page-sub" id="planos-sub">Creche, hospedagem e pacotes</div>
+      </div>
+      <button class="btn btn-primary" onclick="openNovoPlanoGlobal()"><i class="ph ph-plus"></i> Novo Plano</button>
+    </div>
+    <div id="planos-alertas"></div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="stat-card stat-c2">
+        <div class="stat-icon"><i class="ph ph-ticket"></i></div>
+        <div><div class="stat-value" id="planos-total-ativos">0</div><div class="stat-label">Ativos</div></div>
+      </div>
+      <div class="stat-card stat-c4">
+        <div class="stat-icon"><i class="ph ph-warning"></i></div>
+        <div><div class="stat-value" id="planos-total-criticos">0</div><div class="stat-label">Críticos (&lt;3 dias)</div></div>
+      </div>
+      <div class="stat-card stat-c3">
+        <div class="stat-icon"><i class="ph ph-x-circle"></i></div>
+        <div><div class="stat-value" id="planos-total-vencidos">0</div><div class="stat-label">Vencidos</div></div>
+      </div>
+    </div>
+    <div class="filter-row" id="planos-filtro-tabs">
+      <div class="svc-tab active" data-filtro="ativos" onclick="setPlanosFiltro('ativos')">Ativos</div>
+      <div class="svc-tab" data-filtro="criticos" onclick="setPlanosFiltro('criticos')">⚠️ Críticos</div>
+      <div class="svc-tab" data-filtro="todos" onclick="setPlanosFiltro('todos')">Todos</div>
+      <div class="svc-tab" data-filtro="vencidos" onclick="setPlanosFiltro('vencidos')">Vencidos</div>
+    </div>
+    <div id="planos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px"></div>
+  </div>
+
+  <!-- FUNCIONÁRIOS -->
+  <div class="page" id="page-funcionarios">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Funcionários</div>
+        <div class="page-sub" id="func-sub">—</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-new-func')"><i class="ph ph-plus"></i> Novo Funcionário</button>
+    </div>
+    <div class="func-grid" id="func-grid"></div>
+  </div>
+
+  <!-- CONFIGURAÇÕES -->
+  <div class="page" id="page-config">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Serviços</div>
+        <div class="page-sub" id="cfg-sub">Serviços do pet shop</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-new-servico')"><i class="ph ph-plus"></i> Novo serviço</button>
+    </div>
+    <div class="card" style="max-width:720px">
+      <div class="card-title">Catálogo de Serviços <span id="cfg-count"></span></div>
+      <div id="cfg-list">
+        <div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhum serviço ainda.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ── MODALS ──────────────────────────────────────────────────────────────── -->
+
+<!-- Novo Cliente -->
+<div class="modal-overlay" id="modal-new-client">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Novo Cliente</div>
+      <div class="modal-close" onclick="closeModal('modal-new-client')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Nome do Tutor *</label><input id="f-nome" placeholder="Nome completo"/></div>
+        <div class="field"><label>WhatsApp</label><input id="f-tel" placeholder="(51) 9 9999-0000"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Email</label><input id="f-email" placeholder="email@exemplo.com"/></div>
+        <div class="field"><label>Filial</label><select id="f-unidade"><option value="">Selecionar...</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Última visita</label><input id="f-ultima" type="date"/></div>
+        <div class="field"><label>Status</label>
+          <select id="f-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select>
+        </div>
+      </div>
+      <div class="form-divider">🐾 Pets
+        <button type="button" class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="addPetField()"><i class="ph ph-plus"></i> Adicionar pet</button>
+      </div>
+      <div id="pets-container"></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-client')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveCliente()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Editar Cliente -->
+<div class="modal-overlay" id="modal-edit-client">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Editar Cliente</div>
+      <div class="modal-close" onclick="closeModal('modal-edit-client')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="e-id"/>
+      <div class="field"><label>Nome *</label><input id="e-nome"/></div>
+      <div class="form-row">
+        <div class="field"><label>WhatsApp</label><input id="e-tel"/></div>
+        <div class="field"><label>Email</label><input id="e-email"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Filial</label><select id="e-unidade"><option value="">Selecionar...</option></select></div>
+        <div class="field"><label>Status</label><select id="e-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
+      </div>
+      <div class="field"><label>Última visita</label><input id="e-ultima" type="date"/></div>
+      <div class="form-divider">🐾 Pets existentes</div>
+      <div id="e-pets-list" style="font-size:13px;color:var(--muted)">—</div>
+      <div class="form-divider">Adicionar pet
+        <button type="button" class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="addEditPet()"><i class="ph ph-plus"></i></button>
+      </div>
+      <div id="e-pets-new"></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-edit-client')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveEdit()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ver Pets -->
+<div class="modal-overlay" id="modal-view-pets">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="vp-titulo">Pets</div>
+      <div class="modal-close" onclick="closeModal('modal-view-pets')"><i class="ph ph-x"></i></div>
+    </div>
+    <div id="vp-content"></div>
+  </div>
+</div>
+
+<!-- Novo Agendamento -->
+<div class="modal-overlay" id="modal-new-agenda">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Novo Agendamento</div>
+      <div class="modal-close" onclick="closeModal('modal-new-agenda')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Data *</label><input id="ag-data" type="date"/></div>
+        <div class="field"><label>Hora *</label><input id="ag-hora" type="time" value="09:00"/></div>
+      </div>
+      <div class="field"><label>Tutor *</label>
+        <select id="ag-tutor" onchange="onAgTutorChange()"><option value="">Selecionar tutor...</option></select>
+      </div>
+      <div class="field"><label>Pet</label>
+        <select id="ag-pet" onchange="onAgPetPorteChange()"><option value="">Selecionar pet...</option></select>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Serviço *</label>
+          <select id="ag-servico" onchange="onAgServicoChange()"><option value="">Selecionar...</option></select>
+        </div>
+        <div class="field"><label>Valor (R$)</label><input id="ag-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Funcionário</label>
+          <select id="ag-func"><option value="">— Qualquer</option></select>
+        </div>
+        <div class="field"><label>Pagamento</label>
+          <select id="ag-pagamento">
+            <option value="">— Não informado</option>
+            <option>Dinheiro</option><option>Pix</option>
+            <option>Cartão Débito</option><option>Cartão Crédito</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Observações</label><textarea id="ag-obs" rows="2" placeholder="Anotações..."></textarea></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-agenda')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveAgendamento()"><i class="ph ph-floppy-disk"></i> Agendar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lançamento Financeiro -->
+<div class="modal-overlay" id="modal-new-fin">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Novo Lançamento</div>
+      <div class="modal-close" onclick="closeModal('modal-new-fin')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Tipo</label>
+          <select id="fin-tipo"><option value="receita">Receita</option><option value="despesa">Despesa</option></select>
+        </div>
+        <div class="field"><label>Valor (R$) *</label><input id="fin-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="field"><label>Descrição *</label><input id="fin-desc" placeholder="Ex: Banho Golden — João"/></div>
+      <div class="form-row">
+        <div class="field"><label>Categoria</label>
+          <select id="fin-cat">
+            <option value="">—</option><option>Serviços</option><option>Produtos</option>
+            <option>Aluguel</option><option>Salários</option><option>Insumos</option><option>Outros</option>
+          </select>
+        </div>
+        <div class="field"><label>Data</label><input id="fin-data" type="date"/></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-fin')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveLancamento()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Novo Produto -->
+<div class="modal-overlay" id="modal-new-produto">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Novo Produto</div>
+      <div class="modal-close" onclick="closeModal('modal-new-produto')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nome *</label><input id="prd-nome" placeholder="Ex: Ração Golden 15kg"/></div>
+      <div class="form-row">
+        <div class="field"><label>Categoria</label>
+          <select id="prd-cat"><option value="">—</option><option>Ração</option><option>Higiene</option><option>Acessórios</option><option>Medicamentos</option><option>Outros</option></select>
+        </div>
+        <div class="field"><label>Unidade</label>
+          <select id="prd-unidade"><option>un</option><option>kg</option><option>L</option><option>cx</option><option>pç</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Quantidade</label><input id="prd-qty" type="number" value="0" min="0"/></div>
+        <div class="field"><label>Mínimo</label><input id="prd-min" type="number" value="5" min="0"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Custo (R$)</label><input id="prd-custo" type="number" placeholder="0.00" step="0.01"/></div>
+        <div class="field"><label>Venda (R$)</label><input id="prd-venda" type="number" placeholder="0.00" step="0.01"/></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-produto')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveProduto()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ajuste Estoque -->
+<div class="modal-overlay" id="modal-ajuste">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="ajuste-titulo">Ajustar Estoque</div>
+      <div class="modal-close" onclick="closeModal('modal-ajuste')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="ajuste-id"/>
+      <div class="form-row">
+        <div class="field"><label>Tipo</label>
+          <select id="ajuste-tipo"><option value="entrada">Entrada (+)</option><option value="saida">Saída (−)</option></select>
+        </div>
+        <div class="field"><label>Quantidade</label><input id="ajuste-qty" type="number" value="1" min="1"/></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-ajuste')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveAjuste()"><i class="ph ph-check"></i> Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Novo / Editar Serviço -->
+<div class="modal-overlay" id="modal-new-servico">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="svc-modal-title">Novo Serviço</div>
+      <div class="modal-close" onclick="closeModal('modal-new-servico')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="svc-id"/>
+      <div class="field"><label>Nome do Serviço *</label><input id="svc-nome" placeholder="Ex: Banho + Tosa Poodle"/></div>
+      <div class="form-row">
+        <div class="field"><label>Preço padrão (R$)</label><input id="svc-preco" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Duração (min)</label><input id="svc-duracao" type="number" placeholder="60" min="0"/></div>
+      </div>
+      <div class="field"><label>Descrição</label><input id="svc-desc" placeholder="Observação opcional"/></div>
+      <div class="form-divider">Preço por porte (opcional — sobrescreve o padrão)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div class="field"><label>Pequeno (R$)</label><input id="svc-preco-p" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Médio (R$)</label><input id="svc-preco-m" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Grande+ (R$)</label><input id="svc-preco-g" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="form-divider">Insumos por execução
+        <button type="button" class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="addSvcInsumo()"><i class="ph ph-plus"></i> Adicionar</button>
+      </div>
+      <div id="svc-insumos-container" style="display:flex;flex-direction:column;gap:6px"></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-servico')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveServico()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Planos do Tutor -->
+<div class="modal-overlay" id="modal-tutor-planos">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="tp-titulo">Planos</div>
+      <div class="modal-close" onclick="closeModal('modal-tutor-planos')"><i class="ph ph-x"></i></div>
+    </div>
+    <div id="tp-planos-list"></div>
+    <div style="padding-top:14px;border-top:1px solid var(--border);margin-top:4px">
+      <button class="btn btn-primary" style="width:100%" onclick="openNovoPlanoParaTutor()">
+        <i class="ph ph-plus"></i> Novo Plano
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Novo Plano -->
+<div class="modal-overlay" id="modal-new-plano">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Novo Plano</div>
+      <div class="modal-close" onclick="closeModal('modal-new-plano')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Tipo *</label>
+        <select id="pl-tipo">
+          <option value="Hospedagem">Hospedagem</option>
+          <option value="Creche Diária">Creche Diária</option>
+          <option value="Creche Mensal">Creche Mensal</option>
+          <option value="Pacote Banho">Pacote Banho</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+      <div class="field"><label>Tutor *</label>
+        <select id="pl-tutor" onchange="onPlTutorChange()"><option value="">Selecionar tutor...</option></select>
+      </div>
+      <div class="field"><label>Pet</label>
+        <select id="pl-pet"><option value="">Selecionar pet...</option></select>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Valor pago (R$) *</label><input id="pl-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Valor por diária (R$) *</label><input id="pl-diario" type="number" placeholder="Ex: 50.00" step="0.01" min="0.01"/></div>
+      </div>
+      <div class="field"><label>Modo de abate</label>
+        <select id="pl-modo">
+          <option value="manual">Manual — desconta ao registrar uso (recomendado para creche/pacotes)</option>
+          <option value="auto">Automático — desconta por dia corrido (para hospedagem)</option>
+        </select>
+      </div>
+      <div class="field"><label>Data início *</label><input id="pl-inicio" type="date"/></div>
+      <div class="field"><label>Observações</label><textarea id="pl-obs" rows="2" placeholder="Anotações sobre o plano..."></textarea></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-plano')">Cancelar</button>
+        <button class="btn btn-primary" onclick="savePlano()"><i class="ph ph-floppy-disk"></i> Criar Plano</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Renovar Crédito -->
+<div class="modal-overlay" id="modal-renovar-plano">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="renovar-titulo">Renovar Crédito</div>
+      <div class="modal-close" onclick="closeModal('modal-renovar-plano')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="renovar-id"/>
+      <div class="field"><label>Valor a adicionar (R$) *</label><input id="renovar-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-renovar-plano')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveRenovar()"><i class="ph ph-plus-circle"></i> Adicionar Crédito</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDV — Nova Venda -->
+<div class="modal-overlay" id="modal-pdv-venda">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Nova Venda</div>
+      <div class="modal-close" onclick="closeModal('modal-pdv-venda')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Tipo</label>
+        <select id="pdv-tipo" onchange="onPdvTipoChange()">
+          <option value="servico">Serviço avulso</option>
+          <option value="produto">Produto</option>
+          <option value="plano">Plano / Pacote de diárias</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="field" id="pdv-svc-field"><label>Serviço</label>
+        <select id="pdv-servico" onchange="onPdvServicoChange()"><option value="">Selecionar...</option></select>
+      </div>
+      <div class="field" id="pdv-prd-field" style="display:none"><label>Produto</label>
+        <select id="pdv-produto" onchange="onPdvProdutoChange()"><option value="">Selecionar...</option></select>
+      </div>
+      <!-- Campos exclusivos de plano -->
+      <div id="pdv-plano-fields" class="form-grid" style="display:none;padding:0;gap:12px">
+        <div class="field"><label>Tipo de plano</label>
+          <select id="pdv-plano-tipo">
+            <option>Creche</option><option>Hospedagem</option><option>Estética</option><option>Outro</option>
+          </select>
+        </div>
+        <div class="field"><label>Pet do cliente (opcional)</label>
+          <select id="pdv-plano-pet"><option value="">— Sem pet específico</option></select>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Valor total (R$) *</label>
+            <input id="pdv-plano-valor" type="number" placeholder="Ex: 1500.00" step="0.01" min="0" oninput="calcPlanoPreview()"/>
+          </div>
+          <div class="field"><label>Valor por diária (R$) *</label>
+            <input id="pdv-plano-diario" type="number" placeholder="Ex: 60.00" step="0.01" min="0" oninput="calcPlanoPreview()"/>
+          </div>
+        </div>
+        <div id="pdv-plano-preview" style="display:none;background:var(--brand-light);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--brand)"></div>
+        <div class="field"><label>Modo de abate</label>
+          <select id="pdv-plano-modo">
+            <option value="manual">Manual — registrar cada uso (creche/pacotes)</option>
+            <option value="auto">Automático — desconta por dia corrido</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" id="pdv-valor-row">
+        <div class="field"><label>Valor (R$) *</label><input id="pdv-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+        <div class="field"><label>Qtd</label><input id="pdv-qtd" type="number" value="1" min="1"/></div>
+      </div>
+      <div class="field"><label>Forma de Pagamento *</label>
+        <select id="pdv-pagamento">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Pix">Pix</option>
+          <option value="Cartão Débito">Cartão Débito</option>
+          <option value="Cartão Crédito">Cartão Crédito</option>
+        </select>
+      </div>
+      <div class="field"><label id="pdv-cliente-label">Cliente (opcional)</label>
+        <select id="pdv-cliente" onchange="onPdvClienteChange()"><option value="">— Avulso</option></select>
+      </div>
+      <div class="field" id="pdv-desc-field"><label>Descrição</label><input id="pdv-desc" placeholder="Ex: Banho Poodle — João"/></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-pdv-venda')">Cancelar</button>
+        <button class="btn btn-primary" onclick="savePDV()"><i class="ph ph-cash-register"></i> Registrar Venda</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Novo Funcionário -->
+<div class="modal-overlay" id="modal-new-func">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="func-modal-title">Novo Funcionário</div>
+      <div class="modal-close" onclick="closeModal('modal-new-func')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="func-id"/>
+      <div class="form-row">
+        <div class="field"><label>Nome *</label><input id="func-nome" placeholder="Nome completo"/></div>
+        <div class="field"><label>Cargo</label>
+          <select id="func-cargo">
+            <option>Banhista</option><option>Tosador</option><option>Veterinário</option>
+            <option>Recepcionista</option><option>Cuidador</option><option>Gerente</option><option>Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Comissão (%)</label><input id="func-comissao" type="number" placeholder="10" min="0" max="100" step="0.5"/></div>
+        <div class="field"><label>Status</label>
+          <select id="func-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Telefone</label><input id="func-tel" placeholder="(51) 9 9999-0000"/></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-func')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveFuncionario()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Nova Conta Pagar/Receber -->
+<div class="modal-overlay" id="modal-new-conta">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="conta-modal-title">Nova Conta</div>
+      <div class="modal-close" onclick="closeModal('modal-new-conta')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="conta-id"/>
+      <div class="form-row">
+        <div class="field"><label>Tipo</label>
+          <select id="conta-tipo">
+            <option value="pagar">A Pagar</option>
+            <option value="receber">A Receber</option>
+          </select>
+        </div>
+        <div class="field"><label>Valor (R$) *</label><input id="conta-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
+      </div>
+      <div class="field"><label>Descrição *</label><input id="conta-desc" placeholder="Ex: Aluguel abril, Fornecedor X..."/></div>
+      <div class="form-row">
+        <div class="field"><label>Vencimento *</label><input id="conta-vencimento" type="date"/></div>
+        <div class="field"><label>Categoria</label>
+          <select id="conta-cat">
+            <option value="">—</option><option>Aluguel</option><option>Salários</option>
+            <option>Fornecedores</option><option>Insumos</option><option>Serviços</option>
+            <option>Impostos</option><option>Outros</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-conta')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveConta()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-function carregarDemo() {
-  const hoje = '2026-04-25';
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DB_KEY = 'petsgo_demo';
+const UNIDADES = ['Cachorródromo','Petrópolis','Teresópolis','Higienópolis','Partenon'];
 
-  const tutores = [
-    {id:'t01',nome:'Ana Beatriz Silva',  tel:'(51) 99123-4567',email:'ana.silva@email.com',    unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'20/04/2026',criadoEm:'2024-03-10T10:00:00.000Z'},
-    {id:'t02',nome:'Bruno Costa',        tel:'(51) 98234-5678',email:'bruno.costa@email.com',   unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'15/04/2026',criadoEm:'2024-05-20T10:00:00.000Z'},
-    {id:'t03',nome:'Carla Mendes',       tel:'(51) 97345-6789',email:'carla.mendes@gmail.com',  unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'18/04/2026',criadoEm:'2024-06-01T10:00:00.000Z'},
-    {id:'t04',nome:'Diego Ferreira',     tel:'(51) 96456-7890',email:'diego.f@hotmail.com',      unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'01/04/2026',criadoEm:'2024-07-15T10:00:00.000Z'},
-    {id:'t05',nome:'Elena Rodrigues',    tel:'(51) 95567-8901',email:'elena.rod@email.com',      unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'22/04/2026',criadoEm:'2024-08-01T10:00:00.000Z'},
-    {id:'t06',nome:'Felipe Santos',      tel:'(51) 94678-9012',email:'felipesantos@gmail.com',   unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'10/04/2026',criadoEm:'2024-09-10T10:00:00.000Z'},
-    {id:'t07',nome:'Gabriela Lima',      tel:'(51) 93789-0123',email:'gabi.lima@email.com',      unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'23/04/2026',criadoEm:'2024-10-05T10:00:00.000Z'},
-    {id:'t08',nome:'Hugo Alves',         tel:'(51) 92890-1234',email:'hugo.alves@email.com',     unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'12/04/2026',criadoEm:'2024-11-20T10:00:00.000Z'},
-    {id:'t09',nome:'Isabela Castro',     tel:'(51) 91901-2345',email:'isa.castro@gmail.com',     unidade:'Cachorródromo',status:'inativo',ultimaCompra:'15/02/2026',criadoEm:'2023-12-01T10:00:00.000Z'},
-    {id:'t10',nome:'João Paulo Pereira', tel:'(51) 99012-3456',email:'joaopereira@email.com',    unidade:'Rio Branco',   status:'ativo',  ultimaCompra:'20/04/2026',criadoEm:'2025-01-15T10:00:00.000Z'},
-    {id:'t11',nome:'Karen Souza',        tel:'(51) 98123-4567',email:'karen.souza@hotmail.com',  unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'01/04/2026',criadoEm:'2025-02-10T10:00:00.000Z'},
-    {id:'t12',nome:'Lucas Oliveira',     tel:'(51) 97234-5678',email:'lucas.oli@email.com',      unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'24/04/2026',criadoEm:'2025-03-01T10:00:00.000Z'},
-    {id:'t13',nome:'Marina Ribeiro',     tel:'(51) 96345-6789',email:'marina.rib@gmail.com',     unidade:'Rio Branco',   status:'inativo',ultimaCompra:'10/01/2026',criadoEm:'2023-11-01T10:00:00.000Z'},
-    {id:'t14',nome:'Nathan Cardoso',     tel:'(51) 95456-7890',email:'nathan.card@email.com',    unidade:'Petrópolis',   status:'ativo',  ultimaCompra:'21/04/2026',criadoEm:'2025-04-10T10:00:00.000Z'},
-    {id:'t15',nome:'Olivia Martins',     tel:'(51) 94567-8901',email:'olivia.m@email.com',       unidade:'Cachorródromo',status:'ativo',  ultimaCompra:'19/04/2026',criadoEm:'2025-04-15T10:00:00.000Z'},
-  ];
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
-  const pets = [
-    {id:'p01',nome:'Max',    tutorId:'t01',raca:'Golden Retriever', porte:'Grande (21–30kg)',   criadoEm:'2024-03-10T10:00:00.000Z'},
-    {id:'p02',nome:'Bolt',   tutorId:'t02',raca:'Husky Siberiano',  porte:'Grande (21–30kg)',   criadoEm:'2024-05-20T10:00:00.000Z'},
-    {id:'p03',nome:'Mel',    tutorId:'t02',raca:'Shih Tzu',         porte:'Pequeno (até 10kg)', criadoEm:'2024-05-20T10:00:00.000Z'},
-    {id:'p04',nome:'Luna',   tutorId:'t03',raca:'Poodle',           porte:'Pequeno (até 10kg)', criadoEm:'2024-06-01T10:00:00.000Z'},
-    {id:'p05',nome:'Thor',   tutorId:'t04',raca:'Rottweiler',       porte:'Extra G (30kg+)',    criadoEm:'2024-07-15T10:00:00.000Z'},
-    {id:'p06',nome:'Bella',  tutorId:'t05',raca:'Labrador',         porte:'Grande (21–30kg)',   criadoEm:'2024-08-01T10:00:00.000Z'},
-    {id:'p07',nome:'Chico',  tutorId:'t06',raca:'Vira-lata',        porte:'Médio (11–20kg)',    criadoEm:'2024-09-10T10:00:00.000Z'},
-    {id:'p08',nome:'Nina',   tutorId:'t07',raca:'Yorkshire',        porte:'Pequeno (até 10kg)', criadoEm:'2024-10-05T10:00:00.000Z'},
-    {id:'p09',nome:'Coco',   tutorId:'t07',raca:'Maltês',           porte:'Pequeno (até 10kg)', criadoEm:'2024-10-05T10:00:00.000Z'},
-    {id:'p10',nome:'Rex',    tutorId:'t08',raca:'Pastor Alemão',    porte:'Grande (21–30kg)',   criadoEm:'2024-11-20T10:00:00.000Z'},
-    {id:'p11',nome:'Pipoca', tutorId:'t09',raca:'Chihuahua',        porte:'Pequeno (até 10kg)', criadoEm:'2023-12-01T10:00:00.000Z'},
-    {id:'p12',nome:'Buddy',  tutorId:'t10',raca:'Beagle',           porte:'Médio (11–20kg)',    criadoEm:'2025-01-15T10:00:00.000Z'},
-    {id:'p13',nome:'Lola',   tutorId:'t11',raca:'Dachshund',        porte:'Pequeno (até 10kg)', criadoEm:'2025-02-10T10:00:00.000Z'},
-    {id:'p14',nome:'Simba',  tutorId:'t12',raca:'Akita',            porte:'Grande (21–30kg)',   criadoEm:'2025-03-01T10:00:00.000Z'},
-    {id:'p15',nome:'Meg',    tutorId:'t13',raca:'Border Collie',    porte:'Médio (11–20kg)',    criadoEm:'2023-11-01T10:00:00.000Z'},
-    {id:'p16',nome:'Zeus',   tutorId:'t14',raca:'Dogue Alemão',     porte:'Extra G (30kg+)',    criadoEm:'2025-04-10T10:00:00.000Z'},
-    {id:'p17',nome:'Mia',    tutorId:'t15',raca:'Ragdoll',          porte:'Pequeno (até 10kg)', criadoEm:'2025-04-15T10:00:00.000Z'},
-    {id:'p18',nome:'Frida',  tutorId:'t15',raca:'Persa',            porte:'Pequeno (até 10kg)', criadoEm:'2025-04-15T10:00:00.000Z'},
-    {id:'p19',nome:'Tobias', tutorId:'t10',raca:'Labrador',         porte:'Grande (21–30kg)',   criadoEm:'2025-01-15T10:00:00.000Z'},
-    {id:'p20',nome:'Pingo',  tutorId:'t06',raca:'Vira-lata',        porte:'Pequeno (até 10kg)', criadoEm:'2024-09-10T10:00:00.000Z'},
-    {id:'p21',nome:'Duque',  tutorId:'t12',raca:'Boxer',            porte:'Grande (21–30kg)',   criadoEm:'2025-03-01T10:00:00.000Z'},
-    {id:'p22',nome:'Kira',   tutorId:'t08',raca:'Husky Siberiano',  porte:'Grande (21–30kg)',   criadoEm:'2024-11-20T10:00:00.000Z'},
-  ];
-
-  const servicos = [
-    {id:'s01',nome:'Banho',               preco:45,  duracao:60, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s02',nome:'Tosa',                preco:65,  duracao:90, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s03',nome:'Banho + Tosa',        preco:95,  duracao:120,desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s04',nome:'Creche — Dia',        preco:50,  duracao:480,desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s05',nome:'Creche — Mês',        preco:800, duracao:0,  desc:'Mensalidade', ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s06',nome:'Hospedagem',          preco:50,  duracao:0,  desc:'Por diária',  ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s07',nome:'Consulta Veterinária',preco:130, duracao:30, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'s08',nome:'Vacinação',           preco:90,  duracao:15, desc:'',            ativo:true,criadoEm:'2024-01-01T00:00:00.000Z'},
-  ];
-
-  const planos = [
-    // Ana — Hospedagem CRÍTICO (3 dias restantes)
-    {id:'pl01',tipo:'Hospedagem',   tutorId:'t01',petId:'p01',valorTotal:500,valorRestante:150,valorDiario:50,
-     dataInicio:'2026-04-16',ultimoAbate:hoje,obs:'Max hospedado — tutor em viagem',status:'ativo',criadoEm:'2026-04-16T10:00:00.000Z'},
-    // Bruno — Creche normal (7 dias)
-    {id:'pl02',tipo:'Creche Diária',tutorId:'t02',petId:'p02',valorTotal:900,valorRestante:210,valorDiario:30,
-     dataInicio:'2026-04-01',ultimoAbate:hoje,obs:'',status:'ativo',criadoEm:'2026-04-01T10:00:00.000Z'},
-    // Diego — VENCIDO
-    {id:'pl03',tipo:'Hospedagem',   tutorId:'t04',petId:'p05',valorTotal:200,valorRestante:0,valorDiario:50,
-     dataInicio:'2026-04-10',ultimoAbate:'2026-04-14',obs:'Thor hospedado semana passada',status:'vencido',criadoEm:'2026-04-10T10:00:00.000Z'},
-    // Karen — Creche Mensal (sem abate diário)
-    {id:'pl04',tipo:'Creche Mensal',tutorId:'t11',petId:'p13',valorTotal:800,valorRestante:800,valorDiario:0,
-     dataInicio:'2026-04-01',ultimoAbate:hoje,obs:'Mensalidade abril',status:'ativo',criadoEm:'2026-04-01T10:00:00.000Z'},
-    // Felipe — Pacote Banho CRÍTICO (1 dia)
-    {id:'pl05',tipo:'Pacote Banho', tutorId:'t06',petId:'p07',valorTotal:180,valorRestante:45,valorDiario:45,
-     dataInicio:'2026-04-21',ultimoAbate:hoje,obs:'Pacote 4 banhos',status:'ativo',criadoEm:'2026-04-21T10:00:00.000Z'},
-  ];
-
-  const agendamentos = [
-    // HOJE
-    {id:'ag01',tutorId:'t02',petId:'p02',servico:'Banho',        data:hoje,hora:'09:00',valor:45, obs:'',status:'confirmado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T18:00:00.000Z'},
-    {id:'ag02',tutorId:'t03',petId:'p04',servico:'Tosa',         data:hoje,hora:'10:30',valor:65, obs:'Poodle continental',status:'andamento',checkinAt:'2026-04-25T10:28:00.000Z',checkoutAt:null,criadoEm:'2026-04-24T19:00:00.000Z'},
-    {id:'ag03',tutorId:'t06',petId:'p07',servico:'Banho + Tosa', data:hoje,hora:'11:00',valor:95, obs:'',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-23T14:00:00.000Z'},
-    {id:'ag04',tutorId:'t07',petId:'p08',servico:'Banho',        data:hoje,hora:'14:00',valor:45, obs:'Nina e Coco juntos',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T09:00:00.000Z'},
-    {id:'ag05',tutorId:'t12',petId:'p14',servico:'Banho + Tosa', data:hoje,hora:'15:30',valor:95, obs:'Akita — usar raquete',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T11:00:00.000Z'},
-    // HISTÓRICO
-    {id:'ag06',tutorId:'t08',petId:'p10',servico:'Banho + Tosa', data:'2026-04-22',hora:'09:00',valor:95, obs:'',status:'concluido',checkinAt:'2026-04-22T09:05:00.000Z',checkoutAt:'2026-04-22T11:00:00.000Z',criadoEm:'2026-04-21T10:00:00.000Z'},
-    {id:'ag07',tutorId:'t01',petId:'p01',servico:'Hospedagem',   data:'2026-04-20',hora:'08:00',valor:50, obs:'Check-out após 5 dias',status:'concluido',checkinAt:'2026-04-15T08:00:00.000Z',checkoutAt:'2026-04-20T08:00:00.000Z',criadoEm:'2026-04-14T10:00:00.000Z'},
-    {id:'ag08',tutorId:'t14',petId:'p16',servico:'Consulta Veterinária',data:'2026-04-21',hora:'10:00',valor:130,obs:'Zeus com dor na pata traseira',status:'concluido',checkinAt:'2026-04-21T10:02:00.000Z',checkoutAt:'2026-04-21T10:45:00.000Z',criadoEm:'2026-04-20T09:00:00.000Z'},
-    // FUTUROS
-    {id:'ag09',tutorId:'t14',petId:'p16',servico:'Vacinação',    data:'2026-04-26',hora:'14:00',valor:90, obs:'V10 + antirrábica',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-21T11:00:00.000Z'},
-    {id:'ag10',tutorId:'t15',petId:'p17',servico:'Banho',        data:'2026-04-27',hora:'10:00',valor:45, obs:'Ragdoll — secar bem',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T15:00:00.000Z'},
-    {id:'ag11',tutorId:'t12',petId:'p21',servico:'Banho + Tosa', data:'2026-04-28',hora:'09:00',valor:95, obs:'',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T16:00:00.000Z'},
-    {id:'ag12',tutorId:'t10',petId:'p12',servico:'Banho',        data:'2026-04-29',hora:'11:00',valor:45, obs:'',status:'agendado',checkinAt:null,checkoutAt:null,criadoEm:'2026-04-24T17:00:00.000Z'},
-  ];
-
-  const financeiro = [
-    {id:'f01',tipo:'receita',valor:800, descricao:'Creche Mensal — Bruno Costa',       categoria:'Serviços', data:'2026-04-01',criadoEm:'2026-04-01T10:00:00.000Z'},
-    {id:'f02',tipo:'receita',valor:800, descricao:'Creche Mensal — Karen Souza',        categoria:'Serviços', data:'2026-04-01',criadoEm:'2026-04-01T10:00:00.000Z'},
-    {id:'f03',tipo:'receita',valor:130, descricao:'Consulta Veterinária — Zeus',        categoria:'Serviços', data:'2026-04-10',criadoEm:'2026-04-10T10:00:00.000Z'},
-    {id:'f04',tipo:'receita',valor:500, descricao:'Hospedagem — Max (Ana Silva)',        categoria:'Serviços', data:'2026-04-15',criadoEm:'2026-04-15T10:00:00.000Z'},
-    {id:'f05',tipo:'receita',valor:200, descricao:'Hospedagem — Thor (Diego Ferreira)', categoria:'Serviços', data:'2026-04-10',criadoEm:'2026-04-10T10:00:00.000Z'},
-    {id:'f06',tipo:'receita',valor:180, descricao:'Pacote Banho — Felipe Santos',       categoria:'Serviços', data:'2026-04-21',criadoEm:'2026-04-21T10:00:00.000Z'},
-    {id:'f07',tipo:'receita',valor:95,  descricao:'Banho + Tosa — Rex',                 categoria:'Serviços', data:'2026-04-22',criadoEm:'2026-04-22T11:00:00.000Z'},
-    {id:'f08',tipo:'receita',valor:45,  descricao:'Banho — Nina',                       categoria:'Serviços', data:'2026-04-23',criadoEm:'2026-04-23T10:00:00.000Z'},
-    {id:'f09',tipo:'despesa',valor:1200,descricao:'Salários — abril',                   categoria:'Salários', data:'2026-04-01',criadoEm:'2026-04-01T08:00:00.000Z'},
-    {id:'f10',tipo:'despesa',valor:800, descricao:'Aluguel — abril',                    categoria:'Aluguel',  data:'2026-04-01',criadoEm:'2026-04-01T08:00:00.000Z'},
-    {id:'f11',tipo:'despesa',valor:380, descricao:'Insumos de higiene',                 categoria:'Insumos',  data:'2026-04-05',criadoEm:'2026-04-05T10:00:00.000Z'},
-    {id:'f12',tipo:'despesa',valor:290, descricao:'Ração — reposição estoque',          categoria:'Produtos', data:'2026-04-08',criadoEm:'2026-04-08T10:00:00.000Z'},
-  ];
-
-  const estoque = [
-    {id:'e01',nome:'Ração Golden Premium 15kg', categoria:'Ração',      unidade:'un',quantidade:8, minimo:5, precoCusto:120,precoVenda:180,criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e02',nome:'Shampoo Profissional 5L',   categoria:'Higiene',    unidade:'un',quantidade:2, minimo:5, precoCusto:45, precoVenda:75, criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e03',nome:'Condicionador Pet 1L',       categoria:'Higiene',    unidade:'un',quantidade:14,minimo:4, precoCusto:20, precoVenda:35, criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e04',nome:'Luvas descartáveis',         categoria:'Insumos',    unidade:'cx',quantidade:1, minimo:5, precoCusto:18, precoVenda:0,  criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e05',nome:'Coleira ajustável M',        categoria:'Acessórios', unidade:'un',quantidade:6, minimo:3, precoCusto:22, precoVenda:45, criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e06',nome:'Antiparasitário Frontline',  categoria:'Medicamentos',unidade:'un',quantidade:0, minimo:5, precoCusto:55, precoVenda:90, criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e07',nome:'Sachê Royal Canin',          categoria:'Ração',      unidade:'un',quantidade:24,minimo:10,precoCusto:6,  precoVenda:12, criadoEm:'2024-01-01T00:00:00.000Z'},
-    {id:'e08',nome:'Tapete Higiênico 30un',      categoria:'Higiene',    unidade:'pç',quantidade:3, minimo:5, precoCusto:35, precoVenda:55, criadoEm:'2024-01-01T00:00:00.000Z'},
-  ];
-
-  localStorage.setItem('petsgo_crm', JSON.stringify({tutores,pets,agendamentos,financeiro,estoque,servicos,planos}));
-
-  document.querySelector('.box').innerHTML = `
-    <div style="font-size:44px;margin-bottom:14px">✅</div>
-    <h1 style="margin-bottom:8px">Demo carregado!</h1>
-    <p style="margin-bottom:24px">15 tutores · 22 pets · 3 filiais · 5 planos · 12 agendamentos · estoque com alertas</p>
-    <button class="btn" onclick="window.location.href='petsgo-crm-light.html'">Abrir Pets Go Control →</button>
-  `;
+function loadDB() {
+  try {
+    const d = JSON.parse(localStorage.getItem(DB_KEY) || 'null');
+    if (!d) return emptyDB();
+    d.tutores      = d.tutores      || [];
+    d.pets         = d.pets         || [];
+    d.agendamentos = d.agendamentos || [];
+    d.financeiro   = d.financeiro   || [];
+    d.estoque      = d.estoque      || [];
+    d.servicos     = d.servicos     || [];
+    d.planos       = d.planos       || [];
+    d.funcionarios = d.funcionarios || [];
+    d.contas       = d.contas       || [];
+    return d;
+  } catch { return emptyDB(); }
 }
+function emptyDB() { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[],planos:[],funcionarios:[],contas:[]}; }
+function saveDB(d) { localStorage.setItem(DB_KEY, JSON.stringify(d)); }
+
+function todayISO() { return new Date().toISOString().slice(0,10); }
+
+function fmtBRL(v) {
+  return 'R$' + Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function fmtDate(s) {
+  if (!s) return '';
+  if (s.includes('/')) {
+    const [d,m,y] = s.split('/');
+    if (!y) return s;
+    return new Date(`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}T00:00:00`).toLocaleDateString('pt-BR');
+  }
+  const dt = new Date(s.length===10 ? s+'T00:00:00' : s);
+  return isNaN(dt) ? s : dt.toLocaleDateString('pt-BR');
+}
+
+function toInputDate(s) {
+  if (!s) return '';
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+  if (s.includes('/')) {
+    const [d,m,y] = s.split('/');
+    return y ? `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}` : '';
+  }
+  return '';
+}
+
+function initials(nome) {
+  return (nome||'').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?';
+}
+
+const PAL = [['#ECEEFF','#4047C8'],['#E5FFF8','#006B4F'],['#FFF0F8','#9A0050'],['#FFFDE6','#856400'],['#FEF2F2','#DC2626'],['#F0FFF4','#16A34A']];
+function avStyle(nome) { const i=((nome||'').charCodeAt(0)||0)%PAL.length; return `background:${PAL[i][0]};color:${PAL[i][1]}`; }
+
+function populateSel(id, cur) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '<option value="">Selecionar...</option>' + UNIDADES.map(u=>`<option${u===cur?' selected':''}>${u}</option>`).join('');
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+let curPage = 'dashboard';
+
+function navTo(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item[id^="nav-"]').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page)?.classList.add('active');
+  document.getElementById('nav-'+page)?.classList.add('active');
+  curPage = page;
+  if (page==='dashboard')  updateDashboard();
+  if (page==='clientes')   renderClientes();
+  if (page==='agenda')     agendaHoje();
+  if (page==='checkin')    renderCheckin();
+  if (page==='financeiro') { renderFinanceiro(); renderContas(); }
+  if (page==='estoque')    renderEstoque();
+  if (page==='config')       renderConfig();
+  if (page==='pdv')          renderPDV();
+  if (page==='planos')       renderPlanos();
+  if (page==='funcionarios') renderFuncionarios();
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+let curFilter = 'todos', curFilial = 'todas', curSearch = '', searchTmr;
+
+function onSearch(val) {
+  clearTimeout(searchTmr);
+  searchTmr = setTimeout(() => {
+    curSearch = val.trim().toLowerCase();
+    if (curPage !== 'clientes') navTo('clientes');
+    else renderClientes();
+    const other = document.getElementById(curPage==='clientes' ? 'search-global' : 'search-clientes');
+    if (other) other.value = val;
+  }, 200);
+}
+
+function setFilter(f) {
+  curFilter = f;
+  ['todos','ativos','inativos'].forEach(x => document.getElementById('tab-'+x)?.classList.toggle('active', x===f));
+  renderClientes();
+}
+
+function setFilial(f) {
+  curFilial = f;
+  document.querySelectorAll('#filial-tabs .svc-tab').forEach(el => el.classList.toggle('active', el.dataset.filial===f));
+  renderClientes();
+}
+
+// ── CLIENTES ──────────────────────────────────────────────────────────────────
+function renderClientes() {
+  const D = loadDB();
+  const petMap = {};
+  D.pets.forEach(p => { (petMap[p.tutorId]=petMap[p.tutorId]||[]).push(p); });
+  const planMap = {};
+  (D.planos||[]).filter(p=>p.status!=='cancelado').forEach(p=>{ (planMap[p.tutorId]=planMap[p.tutorId]||[]).push(p); });
+  const all = D.tutores;
+  const nAt = all.filter(t=>t.status!=='inativo').length;
+  const nIn = all.filter(t=>t.status==='inativo').length;
+
+  document.getElementById('tab-todos').textContent    = `Todos (${all.length})`;
+  document.getElementById('tab-ativos').textContent   = `Ativos (${nAt})`;
+  document.getElementById('tab-inativos').textContent = `Inativos (${nIn})`;
+  document.getElementById('clientes-sub').textContent = `${all.length} tutores · ${D.pets.length} pets`;
+  document.getElementById('badge-clientes').textContent = nAt;
+
+  // Build dynamic filial tabs
+  const filiais = [...new Set(all.map(t=>t.unidade||'').filter(Boolean))].sort();
+  const filialBar = document.getElementById('filial-tabs');
+  if (filiais.length > 1) {
+    const tabs = ['todas', ...filiais];
+    filialBar.innerHTML = tabs.map(f => {
+      const label = f==='todas' ? `Todas (${all.length})` : `${f} (${all.filter(t=>t.unidade===f).length})`;
+      return `<div class="svc-tab${curFilial===f?' active':''}" data-filial="${f}" onclick="setFilial('${f}')">${label}</div>`;
+    }).join('');
+    filialBar.style.display = '';
+  } else {
+    filialBar.style.display = 'none';
+  }
+
+  let list = [...all];
+  if (curFilter==='ativos')   list = list.filter(t=>t.status!=='inativo');
+  if (curFilter==='inativos') list = list.filter(t=>t.status==='inativo');
+  if (curFilial!=='todas')    list = list.filter(t=>t.unidade===curFilial);
+  if (curSearch) {
+    const q = curSearch;
+    list = list.filter(t =>
+      t.nome.toLowerCase().includes(q) ||
+      (t.tel||'').includes(q) ||
+      (t.email||'').toLowerCase().includes(q) ||
+      (petMap[t.id]||[]).some(p=>p.nome.toLowerCase().includes(q))
+    );
+  }
+
+  const addCard = `<div class="cliente-card add-card" onclick="openModal('modal-new-client')">
+    <div style="font-size:28px;color:var(--muted2)"><i class="ph ph-plus-circle"></i></div>
+    <div style="font-size:13px;font-weight:600;color:var(--muted2)">Novo cliente</div>
+  </div>`;
+
+  const grid = document.getElementById('clientes-grid');
+  if (list.length===0 && !curSearch) {
+    grid.innerHTML = `<div class="empty-state"><i class="ph ph-paw-print"></i><h3>Nenhum cliente ainda</h3><p>Adicione ou importe via arquivo seed</p></div>${addCard}`;
+    return;
+  }
+  if (list.length===0) {
+    grid.innerHTML = `<div class="empty-state"><i class="ph ph-magnifying-glass"></i><h3>Nenhum resultado</h3><p>Tente outro nome ou pet</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(t => {
+    const inativo = t.status==='inativo';
+    const pets    = petMap[t.id]||[];
+    const planos  = planMap[t.id]||[];
+    const plano   = planos.find(p=>p.status==='vencido') ||
+                    planos.filter(p=>p.status==='ativo').sort((a,b)=>diasRestantes(a)-diasRestantes(b))[0];
+    let planoHtml = '';
+    if (plano) {
+      const dias     = diasRestantes(plano);
+      const pct      = (plano.valorTotal||0)>0 ? Math.max(0,Math.min(100,Math.round((plano.valorRestante||0)/plano.valorTotal*100))) : 100;
+      const critico  = plano.status==='vencido' || dias<=3;
+      const corBarra = plano.status==='vencido'?'var(--red)':dias<=3?'#F5C218':'#00C896';
+      const diasTxt  = plano.status==='vencido' ? '⚠️ Vencido' : dias===Infinity ? '∞ dias' : dias<=3 ? `⚠️ ${dias} dia${dias!==1?'s':''} restante${dias!==1?'s':''}` : `${dias} dias restantes`;
+      const isManual = plano.modoAbate==='manual';
+      planoHtml = `<div style="background:${critico?'var(--red-light)':'var(--surface2)'};border-radius:8px;padding:8px 10px;margin:6px 0;border:1px solid ${critico?'#FECACA':'var(--border)'}">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;font-weight:700;color:var(--muted)">${plano.tipo}${isManual?' · pacote':''}</span>
+          <span style="font-size:13px;font-weight:800;color:${critico?'var(--red)':'var(--brand)'}">${isManual?`${dias===Infinity?'∞':dias} diárias`:fmtBRL(plano.valorRestante||0)}</span>
+        </div>
+        <div class="pb-bar" style="margin:5px 0"><div class="pb-fill" style="width:${pct}%;background:${corBarra}"></div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:11px;font-weight:600;color:${critico?'var(--red)':'var(--muted)'}">${isManual?`${plano.diasUsados||0} usadas`+`${planos.length>1?` · ${planos.length} planos`:''}`:diasTxt+`${planos.length>1?` · ${planos.length} planos`:''}`}</div>
+          ${isManual&&plano.status==='ativo'&&!critico?`<button class="btn btn-primary btn-sm" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();usarDiariaCard('${plano.id}')"><i class="ph ph-check-square"></i> Usar diária</button>`:''}
+          ${isManual&&critico&&plano.status!=='vencido'?`<button class="btn btn-primary btn-sm" style="font-size:11px;padding:3px 8px;background:var(--yellow);color:#6b4f00" onclick="event.stopPropagation();usarDiariaCard('${plano.id}')"><i class="ph ph-warning"></i> Usar última</button>`:''}
+        </div>
+      </div>`;
+    }
+    return `<div class="cliente-card ${inativo?'inativo':''}">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+        <div class="c-avatar" style="${avStyle(t.nome)}">${initials(t.nome)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="c-nome">${t.nome}</div>
+          ${t.tel?`<div class="c-tel"><i class="ph ph-phone" style="font-size:10px"></i> ${t.tel}</div>`:''}
+        </div>
+        <span class="tag ${inativo?'tag-gray':'tag-green'}">${inativo?'Inativo':'Ativo'}</span>
+      </div>
+      <div class="c-pets">
+        ${pets.length?'🐾 '+pets.map(p=>p.nome+(p.raca?` <span style="color:var(--muted2);font-size:11px">(${p.raca})</span>`:'')).join(', '):'<span style="color:var(--muted2)">Sem pets</span>'}
+      </div>
+      ${planoHtml}
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+        ${t.unidade?`<span class="tag tag-blue">${t.unidade}</span>`:''}
+        ${t.ultimaCompra?`<span class="tag tag-gray">Última: ${fmtDate(t.ultimaCompra)}</span>`:''}
+      </div>
+      <div class="c-actions">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="toggleStatus('${t.id}')">
+          ${inativo?'<i class="ph ph-check-circle"></i> Ativar':'<i class="ph ph-x-circle"></i> Inativar'}
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="openEditModal('${t.id}')" title="Editar"><i class="ph ph-pencil"></i></button>
+        ${pets.length?`<button class="btn btn-ghost btn-sm" onclick="viewPets('${t.id}')" title="Pets"><i class="ph ph-paw-print"></i></button>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="openTutorPlanos('${t.id}')" title="Planos"><i class="ph ph-receipt"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCliente('${t.id}')" title="Remover"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('') + addCard;
+}
+
+function toggleStatus(tid) {
+  const D = loadDB();
+  const t = D.tutores.find(x=>x.id===tid);
+  if (!t) return;
+  t.status = t.status==='inativo' ? 'ativo' : 'inativo';
+  saveDB(D); renderClientes(); updateDashboard();
+  toast(t.status==='inativo'?`⚠️ ${t.nome.split(' ')[0]} inativado`:`✅ ${t.nome.split(' ')[0]} ativado`);
+}
+
+function deleteCliente(tid) {
+  const D = loadDB();
+  const t = D.tutores.find(x=>x.id===tid);
+  if (!t) return;
+  const np = D.pets.filter(p=>p.tutorId===tid).length;
+  if (!confirm(`Remover "${t.nome}"${np?` e ${np} pet(s)`:''}?\n\nEssa ação não pode ser desfeita.`)) return;
+  D.tutores = D.tutores.filter(x=>x.id!==tid);
+  D.pets    = D.pets.filter(p=>p.tutorId!==tid);
+  saveDB(D); renderClientes(); updateDashboard(); toast('🗑️ Cliente removido');
+}
+
+function viewPets(tid) {
+  const D = loadDB();
+  const t = D.tutores.find(x=>x.id===tid);
+  if (!t) return;
+  const pets = D.pets.filter(p=>p.tutorId===tid);
+  document.getElementById('vp-titulo').textContent = `🐾 Pets de ${t.nome.split(' ')[0]}`;
+  const agMap = {};
+  D.agendamentos.filter(a=>a.status==='concluido').forEach(a=>{
+    (agMap[a.petId]=agMap[a.petId]||[]).push(a);
+  });
+  document.getElementById('vp-content').innerHTML = pets.length===0
+    ? '<p style="color:var(--muted);font-size:13px;padding:10px 0">Nenhum pet.</p>'
+    : pets.map(p=>{
+      const hist=(agMap[p.id]||[]).sort((a,b)=>(b.data+b.hora).localeCompare(a.data+a.hora)).slice(0,5);
+      const histHtml=hist.length?`<div style="margin-top:6px;padding:6px 8px;background:var(--surface2);border-radius:6px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);margin-bottom:4px">Últimos serviços</div>
+        ${hist.map(a=>`<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:2px">
+          <span>${a.servico||'—'}</span>
+          <span>${fmtDate(a.data)}${a.valor?` · ${fmtBRL(a.valor)}`:''}</span>
+        </div>`).join('')}
+      </div>`:''
+      return `<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:22px">🐾</div>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px">${p.nome}</div>
+          <div style="font-size:12px;color:var(--muted)">${[p.raca,p.porte,p.idade].filter(Boolean).join(' · ')||'Sem detalhes'}</div>
+          ${histHtml}
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="deletePet('${p.id}','${tid}')"><i class="ph ph-trash"></i></button>
+      </div>`;
+    }).join('');
+  openModal('modal-view-pets');
+}
+
+function deletePet(petId, tid) {
+  if (!confirm('Remover este pet?')) return;
+  const D = loadDB();
+  D.pets = D.pets.filter(p=>p.id!==petId);
+  saveDB(D); viewPets(tid); toast('🗑️ Pet removido');
+}
+
+// ── SAVE CLIENTE ──────────────────────────────────────────────────────────────
+function saveCliente() {
+  const nome = document.getElementById('f-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome obrigatório'); return; }
+  const D = loadDB();
+  const tid = uid();
+  const agora = new Date().toISOString();
+  const ult = document.getElementById('f-ultima').value;
+  D.tutores.push({
+    id:tid, nome,
+    tel:    document.getElementById('f-tel').value.trim(),
+    email:  document.getElementById('f-email').value.trim(),
+    unidade:document.getElementById('f-unidade').value,
+    status: document.getElementById('f-status').value,
+    ultimaCompra: ult ? ult.split('-').reverse().join('/') : '',
+    criadoEm: agora
+  });
+  document.querySelectorAll('.pf-nome').forEach(inp => {
+    const pn = inp.value.trim(); if (!pn) return;
+    const idx = inp.dataset.idx;
+    D.pets.push({id:uid(),nome:pn,tutorId:tid,
+      raca:  document.querySelector(`[data-raca="${idx}"]`)?.value.trim()||'',
+      porte: document.querySelector(`[data-porte="${idx}"]`)?.value||'',
+      criadoEm:agora});
+  });
+  saveDB(D);
+  closeModal('modal-new-client');
+  resetNewForm();
+  if (curPage==='clientes') renderClientes();
+  updateDashboard();
+  toast(`✅ ${nome.split(' ')[0]} cadastrado!`);
+}
+
+function resetNewForm() {
+  ['f-nome','f-tel','f-email','f-ultima'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('f-unidade').value='';
+  document.getElementById('f-status').value='ativo';
+  petCount=0; document.getElementById('pets-container').innerHTML=''; addPetField();
+}
+
+// ── PET FIELDS ────────────────────────────────────────────────────────────────
+let petCount = 0;
+function addPetField() {
+  if (petCount>=6) { toast('⚠️ Máximo 6 pets'); return; }
+  const i = petCount++;
+  document.getElementById('pets-container').insertAdjacentHTML('beforeend',`
+    <div id="pf-${i}" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:700;color:var(--text2)">🐾 Pet ${i+1}</div>
+        ${i>0?`<span style="cursor:pointer;color:var(--red);font-size:12px;font-weight:600" onclick="document.getElementById('pf-${i}')?.remove()">Remover</span>`:''}
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Nome *</label><input class="pf-nome" data-idx="${i}" placeholder="Nome do pet"/></div>
+        <div class="field"><label>Raça</label><input data-raca="${i}" placeholder="Ex: Golden"/></div>
+      </div>
+      <div class="field"><label>Porte</label>
+        <select data-porte="${i}">
+          <option value="">Selecionar...</option>
+          <option>Pequeno (até 10kg)</option><option>Médio (11–20kg)</option>
+          <option>Grande (21–30kg)</option><option>Extra G (30kg+)</option>
+        </select>
+      </div>
+    </div>`);
+}
+
+// ── EDIT CLIENTE ──────────────────────────────────────────────────────────────
+let editPetIdx = 0;
+function addEditPet() {
+  const i = editPetIdx++;
+  document.getElementById('e-pets-new').insertAdjacentHTML('beforeend',`
+    <div id="epf-${i}" style="border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:12px;font-weight:700">🐾 Novo pet</div>
+        <span style="cursor:pointer;color:var(--red);font-size:12px" onclick="document.getElementById('epf-${i}')?.remove()">Remover</span>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Nome *</label><input class="epf-nome" data-idx="${i}" placeholder="Nome"/></div>
+        <div class="field"><label>Raça</label><input data-eraca="${i}" placeholder="Ex: Shih Tzu"/></div>
+      </div>
+    </div>`);
+}
+
+function openEditModal(tid) {
+  const D = loadDB();
+  const t = D.tutores.find(x=>x.id===tid);
+  if (!t) return;
+  document.getElementById('e-id').value    = t.id;
+  document.getElementById('e-nome').value  = t.nome||'';
+  document.getElementById('e-tel').value   = t.tel||'';
+  document.getElementById('e-email').value = t.email||'';
+  document.getElementById('e-status').value= t.status||'ativo';
+  document.getElementById('e-ultima').value= toInputDate(t.ultimaCompra);
+  editPetIdx = 0;
+  document.getElementById('e-pets-new').innerHTML = '';
+  populateSel('e-unidade', t.unidade||'');
+  const pets = D.pets.filter(p=>p.tutorId===tid);
+  document.getElementById('e-pets-list').innerHTML = pets.length
+    ? pets.map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)">
+        <span>🐾 <strong>${p.nome}</strong>${p.raca?` — ${p.raca}`:''}</span>
+        <button class="btn btn-danger btn-sm" onclick="deletePetEdit('${p.id}','${tid}')"><i class="ph ph-trash"></i></button>
+      </div>`).join('')
+    : '<span style="color:var(--muted2)">Sem pets</span>';
+  openModal('modal-edit-client');
+}
+
+function deletePetEdit(petId, tid) {
+  if (!confirm('Remover este pet?')) return;
+  const D = loadDB();
+  D.pets = D.pets.filter(p=>p.id!==petId);
+  saveDB(D); openEditModal(tid); toast('🗑️ Pet removido');
+}
+
+function saveEdit() {
+  const id   = document.getElementById('e-id').value;
+  const nome = document.getElementById('e-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome obrigatório'); return; }
+  const D = loadDB();
+  const t = D.tutores.find(x=>x.id===id);
+  if (!t) return;
+  const ult = document.getElementById('e-ultima').value;
+  t.nome    = nome;
+  t.tel     = document.getElementById('e-tel').value.trim();
+  t.email   = document.getElementById('e-email').value.trim();
+  t.unidade = document.getElementById('e-unidade').value;
+  t.status  = document.getElementById('e-status').value;
+  t.ultimaCompra = ult ? ult.split('-').reverse().join('/') : t.ultimaCompra;
+  const agora = new Date().toISOString();
+  document.querySelectorAll('.epf-nome').forEach(inp=>{
+    const pn=inp.value.trim(); if(!pn) return;
+    const i=inp.dataset.idx;
+    D.pets.push({id:uid(),nome:pn,tutorId:id,
+      raca:document.querySelector(`[data-eraca="${i}"]`)?.value.trim()||'',criadoEm:agora});
+  });
+  saveDB(D);
+  closeModal('modal-edit-client');
+  if (curPage==='clientes') renderClientes();
+  updateDashboard();
+  toast(`✅ ${nome.split(' ')[0]} atualizado`);
+}
+
+// ── AGENDA ────────────────────────────────────────────────────────────────────
+let agFilter = 'todos';
+const AG_STATUS = {
+  agendado:  {label:'Agendado',    cls:'tag-blue'},
+  confirmado:{label:'Confirmado',  cls:'tag-green'},
+  andamento: {label:'Em andamento',cls:'tag-yellow'},
+  concluido: {label:'Concluído',   cls:'tag-gray'},
+  cancelado: {label:'Cancelado',   cls:'tag-red'},
+};
+
+function setAgFilter(f) {
+  agFilter = f;
+  ['todos','agendado','confirmado','andamento','concluido','cancelado'].forEach(x=>
+    document.getElementById('agt-'+x)?.classList.toggle('active',x===f));
+  renderAgenda();
+}
+
+function agendaHoje() {
+  document.getElementById('agenda-date').value = todayISO();
+  renderAgenda();
+}
+
+function renderAgenda() {
+  const D  = loadDB();
+  const dt = document.getElementById('agenda-date')?.value || todayISO();
+  document.getElementById('agenda-sub').textContent = fmtDate(dt);
+  const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
+  const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
+
+  const hoje = todayISO();
+  const pending = D.agendamentos.filter(a=>a.data===hoje&&a.status!=='cancelado'&&a.status!=='concluido').length;
+  const b = document.getElementById('badge-agenda');
+  if (pending) { b.style.display=''; b.textContent=pending; } else b.style.display='none';
+
+  let list = D.agendamentos.filter(a=>a.data===dt);
+  if (agFilter!=='todos') list = list.filter(a=>a.status===agFilter);
+  list.sort((a,b)=>(a.hora||'').localeCompare(b.hora||''));
+
+  const el = document.getElementById('agenda-list');
+  if (!list.length) {
+    el.innerHTML=`<div class="empty-state"><i class="ph ph-calendar-x"></i><h3>Sem agendamentos</h3><p>Nenhum para ${fmtDate(dt)}</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(a=>{
+    const st = AG_STATUS[a.status]||{label:a.status,cls:'tag-gray'};
+    return `<div class="agenda-item">
+      <div class="agenda-hora">${a.hora||'—'}</div>
+      <div class="agenda-info">
+        <div class="agenda-pet">${petMap[a.petId]||'Pet'} <span style="font-weight:400;color:var(--muted)">· ${tutorMap[a.tutorId]||'—'}</span></div>
+        <div class="agenda-sub">${a.servico||''}${a.valor?` · ${fmtBRL(a.valor)}`:''}${a.obs?` · ${a.obs}`:''}</div>
+      </div>
+      <span class="tag ${st.cls}">${st.label}</span>
+      <div class="agenda-actions">
+        ${(a.status==='agendado'||a.status==='confirmado')?`<button class="btn btn-success btn-sm" onclick="setAgStatus('${a.id}','andamento')" title="Check-in"><i class="ph ph-door-open"></i></button>`:''}
+        ${a.status==='andamento'?`<button class="btn btn-primary btn-sm" onclick="setAgStatus('${a.id}','concluido')" title="Concluir"><i class="ph ph-check"></i></button>`:''}
+        ${(a.status!=='cancelado'&&a.status!=='concluido')?`<button class="btn btn-ghost btn-sm" onclick="setAgStatus('${a.id}','confirmado')" title="Confirmar"><i class="ph ph-check-circle"></i></button>`:''}
+        ${(a.status!=='cancelado'&&a.status!=='concluido')?`<button class="btn btn-danger btn-sm" onclick="setAgStatus('${a.id}','cancelado')" title="Cancelar"><i class="ph ph-x"></i></button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="delAgendamento('${a.id}')" title="Remover"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setAgStatus(id, status) {
+  const D = loadDB();
+  const a = D.agendamentos.find(x=>x.id===id);
+  if (!a) return;
+  a.status = status;
+  if (status==='andamento') a.checkinAt  = new Date().toISOString();
+  if (status==='concluido') {
+    a.checkoutAt = new Date().toISOString();
+    if (!a.checkinAt) a.checkinAt = a.checkoutAt;
+    if (a.servicoId) {
+      const svc = D.servicos.find(x=>x.id===a.servicoId);
+      if (svc && (svc.insumos||[]).length) {
+        svc.insumos.forEach(ins=>{
+          const prod=D.estoque.find(x=>x.id===ins.estoqueId);
+          if (prod) prod.quantidade=Math.max(0,prod.quantidade-ins.qty);
+        });
+      }
+    }
+  }
+  saveDB(D);
+  renderAgenda();
+  if (curPage==='checkin') renderCheckin();
+  const msgs = {andamento:'🚪 Check-in feito',concluido:'✅ Concluído',cancelado:'❌ Cancelado',confirmado:'✔️ Confirmado'};
+  toast(msgs[status]||'Atualizado');
+}
+
+function delAgendamento(id) {
+  if (!confirm('Remover agendamento?')) return;
+  const D = loadDB();
+  D.agendamentos = D.agendamentos.filter(a=>a.id!==id);
+  saveDB(D); renderAgenda(); updateDashboard(); toast('🗑️ Removido');
+}
+
+function onAgTutorChange() {
+  const tid = document.getElementById('ag-tutor').value;
+  const D   = loadDB();
+  const pets = D.pets.filter(p=>p.tutorId===tid);
+  document.getElementById('ag-pet').innerHTML =
+    '<option value="">Selecionar pet...</option>' + pets.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+}
+
+function onAgServicoChange() {
+  const opt = document.getElementById('ag-servico').selectedOptions[0];
+  if (!opt || !opt.value) return;
+  preencherPrecoAgendamento();
+}
+
+function onAgPetPorteChange() {
+  preencherPrecoAgendamento();
+}
+
+function preencherPrecoAgendamento() {
+  const svcOpt = document.getElementById('ag-servico').selectedOptions[0];
+  if (!svcOpt||!svcOpt.value) return;
+  const svcId  = svcOpt.value;
+  const D      = loadDB();
+  const svc    = D.servicos.find(x=>x.id===svcId);
+  if (!svc) return;
+  const petId  = document.getElementById('ag-pet').value;
+  const pet    = D.pets.find(x=>x.id===petId);
+  const porte  = pet?.porte||'';
+  let preco    = svc.preco||0;
+  if (porte.startsWith('Pequeno') && svc.precoP) preco = svc.precoP;
+  else if (porte.startsWith('Médio') && svc.precoM)  preco = svc.precoM;
+  else if ((porte.startsWith('Grande')||porte.startsWith('Extra')) && svc.precoG) preco = svc.precoG;
+  if (preco>0) document.getElementById('ag-valor').value = preco.toFixed(2);
+}
+
+function populateAgTutores() {
+  const D = loadDB();
+  const svcAtivos = D.servicos.filter(s=>s.ativo!==false);
+  document.getElementById('ag-servico').innerHTML =
+    '<option value="">Selecionar...</option>' +
+    svcAtivos.map(s=>`<option value="${s.id}" data-nome="${s.nome}" data-preco="${s.preco||0}">${s.nome}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
+  document.getElementById('ag-tutor').innerHTML =
+    '<option value="">Selecionar tutor...</option>' +
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+  document.getElementById('ag-pet').innerHTML = '<option value="">Selecionar pet...</option>';
+  document.getElementById('ag-valor').value  = '';
+  document.getElementById('ag-data').value   = todayISO();
+  const funs = D.funcionarios.filter(f=>f.status!=='inativo');
+  document.getElementById('ag-func').innerHTML =
+    '<option value="">— Qualquer</option>' +
+    funs.map(f=>`<option value="${f.id}">${f.nome} (${f.cargo||'—'})</option>`).join('');
+  document.getElementById('ag-pagamento').value='';
+}
+
+function saveAgendamento() {
+  const data    = document.getElementById('ag-data').value;
+  const hora    = document.getElementById('ag-hora').value;
+  const tutorId = document.getElementById('ag-tutor').value;
+  const svcOpt  = document.getElementById('ag-servico').selectedOptions[0];
+  const servico = svcOpt?.dataset.nome || svcOpt?.text || '';
+  if (!data||!tutorId||!servico) { toast('⚠️ Data, tutor e serviço obrigatórios'); return; }
+  const D = loadDB();
+  D.agendamentos.push({
+    id:uid(), tutorId,
+    petId:         document.getElementById('ag-pet').value,
+    servicoId:     document.getElementById('ag-servico').value,
+    servico, data, hora,
+    valor:         parseFloat(document.getElementById('ag-valor').value)||0,
+    obs:           document.getElementById('ag-obs').value.trim(),
+    funcionarioId: document.getElementById('ag-func').value||null,
+    formaPagamento:document.getElementById('ag-pagamento').value||null,
+    status:   'agendado', checkinAt:null, checkoutAt:null,
+    criadoEm: new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-agenda');
+  document.getElementById('ag-tutor').value='';
+  document.getElementById('ag-pet').innerHTML='<option value="">Selecionar pet...</option>';
+  document.getElementById('ag-servico').value='';
+  document.getElementById('ag-valor').value='';
+  document.getElementById('ag-obs').value='';
+  document.getElementById('ag-hora').value='09:00';
+  if (curPage==='agenda') renderAgenda();
+  updateDashboard();
+  toast('📅 Agendamento criado!');
+}
+
+// ── CHECK-IN ──────────────────────────────────────────────────────────────────
+let ciFilter = 'todos';
+function setCiFilter(f) {
+  ciFilter = f;
+  ['todos','aguardando','dentro','saiu'].forEach(x=>document.getElementById('ci-tab-'+x)?.classList.toggle('active',x===f));
+  renderCheckin();
+}
+
+function renderCheckin() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t);
+  const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p);
+
+  let ags = D.agendamentos.filter(a=>a.data===hoje && a.status!=='cancelado');
+  const dentro = ags.filter(a=>a.status==='andamento').length;
+  const b = document.getElementById('badge-checkin');
+  if (dentro) { b.style.display=''; b.textContent=dentro; } else b.style.display='none';
+  document.getElementById('ci-sub').textContent = `${ags.length} agendamentos hoje · ${dentro} dentro`;
+
+  if (ciFilter==='aguardando') ags = ags.filter(a=>a.status==='agendado'||a.status==='confirmado');
+  if (ciFilter==='dentro')     ags = ags.filter(a=>a.status==='andamento');
+  if (ciFilter==='saiu')       ags = ags.filter(a=>a.status==='concluido');
+  ags.sort((a,b)=>(a.hora||'').localeCompare(b.hora||''));
+
+  const grid = document.getElementById('ci-grid');
+  if (!ags.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="ph ph-door-open"></i><h3>${ciFilter==='todos'?'Nenhum agendamento hoje':'Nenhum nesta categoria'}</h3><p>Agendamentos aparecem aqui automaticamente</p></div>`;
+    return;
+  }
+  grid.innerHTML = ags.map(a=>{
+    const tutor = tutorMap[a.tutorId];
+    const pet   = petMap[a.petId];
+    const dn = a.status==='andamento';
+    const su = a.status==='concluido';
+    return `<div class="ci-card ${dn?'dentro':''} ${su?'saiu':''}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-size:28px">${dn?'🟢':su?'⚪':'🟡'}</div>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px">${pet?.nome||'Pet'}</div>
+          <div style="font-size:12px;color:var(--muted)">${tutor?.nome||'—'}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:700;color:var(--brand)">${a.hora||'—'}</div>
+          <div style="font-size:11px;color:var(--muted)">${a.servico||''}</div>
+        </div>
+      </div>
+      ${a.checkinAt?`<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Entrada: ${new Date(a.checkinAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
+      ${a.checkoutAt?`<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Saída: ${new Date(a.checkoutAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
+      <div style="display:flex;gap:6px;margin-top:4px">
+        ${(!dn&&!su)?`<button class="btn btn-success btn-sm" style="flex:1" onclick="setAgStatus('${a.id}','andamento')"><i class="ph ph-door-open"></i> Check-in</button>`:''}
+        ${dn?`<button class="btn btn-primary btn-sm" style="flex:1" onclick="setAgStatus('${a.id}','concluido')"><i class="ph ph-check"></i> Check-out</button>`:''}
+        ${su?`<span style="font-size:12px;font-weight:600;color:var(--muted);margin:auto">Finalizado ✓</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── FINANCEIRO ────────────────────────────────────────────────────────────────
+let finFilter = 'todos';
+function setFinFilter(f) {
+  finFilter = f;
+  ['todos','receita','despesa'].forEach(x=>document.getElementById('fin-tab-'+x)?.classList.toggle('active',x===f));
+  renderFinanceiro();
+}
+
+function renderFinanceiro() {
+  const D   = loadDB();
+  const now = new Date();
+  const mes = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('fin-sub').textContent = now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+
+  const doMes = D.financeiro.filter(l=>l.data?.startsWith(mes));
+  const rec   = doMes.filter(l=>l.tipo==='receita').reduce((s,l)=>s+Number(l.valor||0),0);
+  const desp  = doMes.filter(l=>l.tipo==='despesa').reduce((s,l)=>s+Number(l.valor||0),0);
+  const saldo = rec - desp;
+  document.getElementById('fin-receitas').textContent = fmtBRL(rec);
+  document.getElementById('fin-despesas').textContent = fmtBRL(desp);
+  const sel = document.getElementById('fin-saldo');
+  sel.textContent = fmtBRL(Math.abs(saldo));
+  sel.style.color = saldo>=0?'#006B4F':'#DC2626';
+
+  let itens = [...D.financeiro].sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  if (finFilter!=='todos') itens = itens.filter(l=>l.tipo===finFilter);
+
+  const el = document.getElementById('fin-list');
+  if (!itens.length) { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhum lançamento ainda.</div>'; return; }
+  el.innerHTML = itens.map(l=>`
+    <div class="fin-item fin-${l.tipo}">
+      <div class="fin-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
+        <div style="font-size:11px;color:var(--muted)">${fmtDate(l.data)}${l.categoria?` · ${l.categoria}`:''}</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:${l.tipo==='receita'?'#006B4F':'#DC2626'};flex-shrink:0">${l.tipo==='receita'?'+':'−'}${fmtBRL(l.valor)}</div>
+      <button class="btn btn-danger btn-sm" style="margin-left:8px" onclick="delLancamento('${l.id}')"><i class="ph ph-trash"></i></button>
+    </div>`).join('');
+}
+
+function saveLancamento() {
+  const valor = parseFloat(document.getElementById('fin-valor').value);
+  const desc  = document.getElementById('fin-desc').value.trim();
+  if (!valor||!desc) { toast('⚠️ Valor e descrição obrigatórios'); return; }
+  const D = loadDB();
+  D.financeiro.push({
+    id:uid(),
+    tipo:      document.getElementById('fin-tipo').value,
+    valor, descricao:desc,
+    categoria: document.getElementById('fin-cat').value,
+    data:      document.getElementById('fin-data').value||todayISO(),
+    criadoEm:  new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-fin');
+  ['fin-valor','fin-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fin-cat').value='';
+  document.getElementById('fin-data').value='';
+  document.getElementById('fin-tipo').value='receita';
+  renderFinanceiro(); updateDashboard(); toast('✅ Lançamento salvo!');
+}
+
+function delLancamento(id) {
+  if (!confirm('Remover lançamento?')) return;
+  const D = loadDB();
+  D.financeiro = D.financeiro.filter(l=>l.id!==id);
+  saveDB(D); renderFinanceiro(); updateDashboard(); toast('🗑️ Removido');
+}
+
+// ── ESTOQUE ───────────────────────────────────────────────────────────────────
+function renderEstoque() {
+  const D  = loadDB();
+  const ps = D.estoque||[];
+  const baixo = ps.filter(p=>p.quantidade<=p.minimo).length;
+  document.getElementById('est-sub').textContent = `${ps.length} produtos${baixo?` · ⚠️ ${baixo} com estoque baixo`:''}`;
+  const grid = document.getElementById('est-grid');
+  if (!ps.length) {
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><i class="ph ph-package"></i><h3>Estoque vazio</h3><p>Cadastre produtos</p></div>`;
+    return;
+  }
+  grid.innerHTML = ps.map(p=>{
+    const low = p.quantidade<=p.minimo;
+    return `<div class="est-card ${low?'baixo':''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:14px;font-weight:700">${p.nome}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${[p.categoria,p.unidade].filter(Boolean).join(' · ')}</div>
+        </div>
+        ${low?'<span class="tag tag-red">Baixo</span>':''}
+      </div>
+      <div class="est-qty" style="color:${low?'var(--red)':'var(--text)'}">${p.quantidade}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">mín: ${p.minimo} ${p.unidade||'un'}</div>
+      ${p.precoVenda?`<div style="font-size:12px;font-weight:700;color:var(--brand);margin-top:6px">${fmtBRL(p.precoVenda)}</div>`:''}
+      <div style="display:flex;gap:6px;margin-top:12px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="openAjuste('${p.id}')"><i class="ph ph-plus-minus"></i> Ajustar</button>
+        <button class="btn btn-danger btn-sm" onclick="delProduto('${p.id}')"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveProduto() {
+  const nome = document.getElementById('prd-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome obrigatório'); return; }
+  const D = loadDB();
+  D.estoque.push({
+    id:uid(), nome,
+    categoria: document.getElementById('prd-cat').value,
+    unidade:   document.getElementById('prd-unidade').value||'un',
+    quantidade:parseInt(document.getElementById('prd-qty').value)||0,
+    minimo:    parseInt(document.getElementById('prd-min').value)||5,
+    precoCusto:parseFloat(document.getElementById('prd-custo').value)||0,
+    precoVenda:parseFloat(document.getElementById('prd-venda').value)||0,
+    criadoEm:  new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-produto');
+  ['prd-nome','prd-custo','prd-venda'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('prd-qty').value='0';
+  document.getElementById('prd-min').value='5';
+  document.getElementById('prd-cat').value='';
+  renderEstoque(); toast('✅ Produto cadastrado!');
+}
+
+function openAjuste(id) {
+  const D = loadDB();
+  const p = D.estoque.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('ajuste-id').value = id;
+  document.getElementById('ajuste-titulo').textContent = `Ajuste — ${p.nome} (atual: ${p.quantidade} ${p.unidade})`;
+  document.getElementById('ajuste-qty').value = 1;
+  document.getElementById('ajuste-tipo').value = 'entrada';
+  openModal('modal-ajuste');
+}
+
+function saveAjuste() {
+  const id  = document.getElementById('ajuste-id').value;
+  const qty = parseInt(document.getElementById('ajuste-qty').value)||0;
+  if (qty<=0) { toast('⚠️ Quantidade inválida'); return; }
+  const tipo = document.getElementById('ajuste-tipo').value;
+  const D = loadDB();
+  const p = D.estoque.find(x=>x.id===id);
+  if (!p) return;
+  p.quantidade = tipo==='entrada' ? p.quantidade+qty : Math.max(0, p.quantidade-qty);
+  saveDB(D); closeModal('modal-ajuste'); renderEstoque();
+  toast(`✅ Estoque de "${p.nome}": ${p.quantidade} ${p.unidade}`);
+}
+
+function delProduto(id) {
+  if (!confirm('Remover produto?')) return;
+  const D = loadDB();
+  D.estoque = D.estoque.filter(x=>x.id!==id);
+  saveDB(D); renderEstoque(); toast('🗑️ Produto removido');
+}
+
+// ── CONFIGURAÇÕES / SERVIÇOS ──────────────────────────────────────────────────
+function renderConfig() {
+  const D    = loadDB();
+  const svcs = D.servicos||[];
+  const ativos = svcs.filter(s=>s.ativo!==false).length;
+  document.getElementById('cfg-sub').textContent = `${ativos} serviço${ativos!==1?'s':''} ativo${ativos!==1?'s':''}`;
+  document.getElementById('cfg-count').textContent = svcs.length?`${svcs.length} total`:'';
+  const el = document.getElementById('cfg-list');
+  if (!svcs.length) {
+    el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhum serviço. Crie o primeiro.</div>';
+    return;
+  }
+  el.innerHTML = svcs.map(s=>{
+    const inativo = s.ativo===false;
+    const temPorte = s.precoP||s.precoM||s.precoG;
+    const precoTxt = temPorte
+      ? `P:${fmtBRL(s.precoP||0)} M:${fmtBRL(s.precoM||0)} G:${fmtBRL(s.precoG||0)}`
+      : (s.preco?fmtBRL(s.preco):'— preço');
+    const insumosTxt = (s.insumos||[]).length ? ` · ${s.insumos.length} insumo${s.insumos.length>1?'s':''}` : '';
+    return `<div class="svc-row ${inativo?'inativo':''}">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:700">${s.nome}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${s.desc||''}${s.duracao?(s.desc?' · ':'')+s.duracao+' min':''}${insumosTxt}</div>
+      </div>
+      <div style="font-size:13px;font-weight:800;color:var(--brand);min-width:120px;text-align:right">${precoTxt}</div>
+      <div style="display:flex;gap:6px;flex-shrink:0;margin-left:12px">
+        <button class="btn btn-ghost btn-sm" onclick="editServico('${s.id}')" title="Editar"><i class="ph ph-pencil"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleServico('${s.id}')" title="${inativo?'Ativar':'Desativar'}">
+          <i class="ph ph-${inativo?'check':'x'}-circle"></i>
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="delServico('${s.id}')" title="Remover"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveServico() {
+  const nome = document.getElementById('svc-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome obrigatório'); return; }
+  const D  = loadDB();
+  const id = document.getElementById('svc-id').value;
+  const insumos = coletarInsumosSvc();
+  if (id) {
+    const s = D.servicos.find(x=>x.id===id);
+    if (s) {
+      s.nome    = nome;
+      s.preco   = parseFloat(document.getElementById('svc-preco').value)||0;
+      s.precoP  = parseFloat(document.getElementById('svc-preco-p').value)||0;
+      s.precoM  = parseFloat(document.getElementById('svc-preco-m').value)||0;
+      s.precoG  = parseFloat(document.getElementById('svc-preco-g').value)||0;
+      s.duracao = parseInt(document.getElementById('svc-duracao').value)||0;
+      s.desc    = document.getElementById('svc-desc').value.trim();
+      s.insumos = insumos;
+    }
+  } else {
+    D.servicos.push({
+      id:uid(), nome,
+      preco:   parseFloat(document.getElementById('svc-preco').value)||0,
+      precoP:  parseFloat(document.getElementById('svc-preco-p').value)||0,
+      precoM:  parseFloat(document.getElementById('svc-preco-m').value)||0,
+      precoG:  parseFloat(document.getElementById('svc-preco-g').value)||0,
+      duracao: parseInt(document.getElementById('svc-duracao').value)||0,
+      desc:    document.getElementById('svc-desc').value.trim(),
+      insumos, ativo:true,
+      criadoEm: new Date().toISOString()
+    });
+  }
+  saveDB(D);
+  closeModal('modal-new-servico');
+  renderConfig();
+  toast(id ? '✅ Serviço atualizado' : '✅ Serviço cadastrado!');
+}
+
+function editServico(id) {
+  const D = loadDB();
+  const s = D.servicos.find(x=>x.id===id);
+  if (!s) return;
+  document.getElementById('svc-id').value        = s.id;
+  document.getElementById('svc-nome').value      = s.nome;
+  document.getElementById('svc-preco').value     = s.preco||'';
+  document.getElementById('svc-preco-p').value   = s.precoP||'';
+  document.getElementById('svc-preco-m').value   = s.precoM||'';
+  document.getElementById('svc-preco-g').value   = s.precoG||'';
+  document.getElementById('svc-duracao').value   = s.duracao||'';
+  document.getElementById('svc-desc').value      = s.desc||'';
+  document.getElementById('svc-modal-title').textContent = 'Editar Serviço';
+  const cont = document.getElementById('svc-insumos-container');
+  cont.innerHTML='';
+  (s.insumos||[]).forEach(ins=>addSvcInsumoPreenchido(ins.estoqueId,ins.qty));
+  document.getElementById('modal-new-servico').classList.add('open');
+}
+
+let svcInsumoIdx=0;
+function addSvcInsumo() {
+  const D=loadDB();
+  const opts=D.estoque.map(p=>`<option value="${p.id}">${p.nome} (${p.quantidade} ${p.unidade})</option>`).join('');
+  const i=svcInsumoIdx++;
+  document.getElementById('svc-insumos-container').insertAdjacentHTML('beforeend',`
+    <div id="svc-ins-${i}" style="display:flex;gap:8px;align-items:center">
+      <select data-ins-id="${i}" style="flex:2;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;color:var(--text)">
+        <option value="">Selecionar produto...</option>${opts}
+      </select>
+      <input data-ins-qty="${i}" type="number" value="1" min="0.1" step="0.1" style="width:70px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;text-align:center"/>
+      <span style="font-size:11px;color:var(--muted)">un</span>
+      <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('svc-ins-${i}')?.remove()"><i class="ph ph-x"></i></button>
+    </div>`);
+}
+
+function addSvcInsumoPreenchido(estoqueId, qty) {
+  const D=loadDB();
+  const opts=D.estoque.map(p=>`<option value="${p.id}"${p.id===estoqueId?' selected':''}>${p.nome} (${p.quantidade} ${p.unidade})</option>`).join('');
+  const i=svcInsumoIdx++;
+  document.getElementById('svc-insumos-container').insertAdjacentHTML('beforeend',`
+    <div id="svc-ins-${i}" style="display:flex;gap:8px;align-items:center">
+      <select data-ins-id="${i}" style="flex:2;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;color:var(--text)">
+        <option value="">Selecionar produto...</option>${opts}
+      </select>
+      <input data-ins-qty="${i}" type="number" value="${qty||1}" min="0.1" step="0.1" style="width:70px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;text-align:center"/>
+      <span style="font-size:11px;color:var(--muted)">un</span>
+      <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('svc-ins-${i}')?.remove()"><i class="ph ph-x"></i></button>
+    </div>`);
+}
+
+function coletarInsumosSvc() {
+  const result=[];
+  document.querySelectorAll('[data-ins-id]').forEach(sel=>{
+    const i=sel.dataset.insId;
+    const estoqueId=sel.value; if(!estoqueId) return;
+    const qty=parseFloat(document.querySelector(`[data-ins-qty="${i}"]`)?.value)||1;
+    result.push({estoqueId,qty});
+  });
+  return result;
+}
+
+function toggleServico(id) {
+  const D = loadDB();
+  const s = D.servicos.find(x=>x.id===id);
+  if (!s) return;
+  s.ativo = s.ativo===false;
+  saveDB(D); renderConfig();
+  toast(s.ativo ? '⚠️ Serviço desativado' : '✅ Serviço ativado');
+}
+
+function delServico(id) {
+  if (!confirm('Remover serviço?')) return;
+  const D = loadDB();
+  D.servicos = D.servicos.filter(x=>x.id!==id);
+  saveDB(D); renderConfig(); toast('🗑️ Serviço removido');
+}
+
+// ── PLANOS / ABATES ───────────────────────────────────────────────────────────
+let _curTutorPlanoId = null;
+
+function processarAbates() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  let changed = false;
+  (D.planos||[]).forEach(p => {
+    if (p.status !== 'ativo') return;
+    if (p.modoAbate === 'manual') return;
+    const ultimo = p.ultimoAbate || p.dataInicio;
+    if (!ultimo || ultimo >= hoje) return;
+    const dias = Math.floor((new Date(hoje) - new Date(ultimo)) / 86400000);
+    if (dias <= 0) return;
+    p.valorRestante = Math.max(0, (p.valorRestante||0) - dias * (p.valorDiario||0));
+    p.ultimoAbate   = hoje;
+    if (p.valorRestante <= 0) p.status = 'vencido';
+    changed = true;
+  });
+  if (changed) saveDB(D);
+}
+
+function diasRestantes(p) {
+  if (!p.valorDiario || p.valorDiario <= 0) return Infinity;
+  return Math.floor((p.valorRestante||0) / p.valorDiario);
+}
+
+function openTutorPlanos(tutorId) {
+  _curTutorPlanoId = tutorId;
+  const D = loadDB();
+  const t = D.tutores.find(x=>x.id===tutorId);
+  if (!t) return;
+  document.getElementById('tp-titulo').textContent = `Planos — ${t.nome.split(' ')[0]}`;
+  renderTutorPlanos(tutorId);
+  openModal('modal-tutor-planos');
+}
+
+function renderTutorPlanos(tutorId) {
+  const D      = loadDB();
+  const petMap = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
+  const planos = (D.planos||[]).filter(p=>p.tutorId===tutorId);
+  const el     = document.getElementById('tp-planos-list');
+  if (!planos.length) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px"><i class="ph ph-receipt" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Nenhum plano cadastrado</div>';
+    return;
+  }
+  const ST = {ativo:'tag-green',vencido:'tag-red',cancelado:'tag-gray'};
+  const STL = {ativo:'Ativo',vencido:'Vencido',cancelado:'Cancelado'};
+  el.innerHTML = planos.map(p => {
+    const dias  = diasRestantes(p);
+    const pct   = (p.valorTotal||0)>0 ? Math.max(0,Math.min(100,Math.round((p.valorRestante||0)/p.valorTotal*100))) : 100;
+    const cor   = p.status==='vencido'?'var(--red)':dias<=3?'#F5C218':'#00C896';
+    const critico = p.status==='vencido' || (p.status==='ativo' && dias<=3);
+    const diasTxt = p.status==='vencido'?'Vencido':dias===Infinity?'∞ dias':`${dias} dia${dias!==1?'s':''} restantes`;
+    return `<div style="border:1px solid ${critico?'#FECACA':'var(--border)'};border-radius:10px;padding:14px;margin-bottom:10px;background:${p.status==='vencido'?'var(--red-light)':dias<=3&&p.status==='ativo'?'#FFFBEB':'var(--surface)'}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div>
+          <div style="font-size:13px;font-weight:800">${p.tipo}</div>
+          ${petMap[p.petId]?`<div style="font-size:11px;color:var(--muted);margin-top:1px">🐾 ${petMap[p.petId]}</div>`:''}
+        </div>
+        <span class="tag ${ST[p.status]||'tag-gray'}">${STL[p.status]||p.status}</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <span style="font-size:22px;font-weight:800;color:${critico?'var(--red)':'var(--text)'}">${fmtBRL(p.valorRestante||0)}</span>
+        <span style="font-size:12px;color:var(--muted)">de ${fmtBRL(p.valorTotal||0)}</span>
+      </div>
+      <div class="pb-bar"><div class="pb-fill" style="width:${pct}%;background:${cor}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:10px">
+        <span style="color:var(--muted)">${fmtBRL(p.valorDiario||0)}/dia · Início: ${fmtDate(p.dataInicio)}</span>
+        <span style="font-weight:700;color:${critico?'var(--red)':'var(--muted)'}">${diasTxt}</span>
+      </div>
+      ${p.obs?`<div style="font-size:11px;color:var(--muted);margin-bottom:10px;font-style:italic">${p.obs}</div>`:''}
+      ${p.modoAbate==='manual'&&p.status==='ativo'?`<div style="margin-bottom:8px;padding:8px;background:var(--brand-light);border-radius:8px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--brand)">PACOTE MANUAL</div>
+          <div style="font-size:12px;color:var(--brand)">${diasRestantes(p)===Infinity?'∞':diasRestantes(p)} diárias restantes · ${p.diasUsados||0} usadas</div>
+        </div>
+        <button class="btn btn-primary" onclick="usarDiaria('${p.id}')"><i class="ph ph-check-square"></i> Usar 1 diária</button>
+      </div>`:''}
+      <div style="display:flex;gap:6px">
+        ${p.status!=='cancelado'?`<button class="btn btn-success btn-sm" style="flex:1" onclick="openRenovar('${p.id}')"><i class="ph ph-plus-circle"></i> Renovar / Adicionar diárias</button>`:''}
+        ${p.status==='ativo'?`<button class="btn btn-ghost btn-sm" onclick="cancelPlanoFromTutor('${p.id}')"><i class="ph ph-x"></i> Cancelar</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="delPlanoFromTutor('${p.id}')"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openNovoPlanoParaTutor() {
+  const D = loadDB();
+  closeModal('modal-tutor-planos');
+  document.getElementById('pl-tutor').innerHTML =
+    '<option value="">Selecionar tutor...</option>' +
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}"${t.id===_curTutorPlanoId?' selected':''}>${t.nome}</option>`).join('');
+  document.getElementById('pl-pet').innerHTML =
+    '<option value="">Selecionar pet...</option>' +
+    D.pets.filter(p=>p.tutorId===_curTutorPlanoId).map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  document.getElementById('pl-inicio').value  = todayISO();
+  document.getElementById('pl-tipo').value    = 'Hospedagem';
+  document.getElementById('pl-valor').value   = '';
+  document.getElementById('pl-diario').value  = '';
+  document.getElementById('pl-obs').value     = '';
+  document.getElementById('modal-new-plano').classList.add('open');
+}
+
+function usarDiariaCard(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  const tutor = D.tutores.find(t=>t.id===p.tutorId);
+  if (!confirm(`Registrar 1 diária de ${p.tipo} para ${tutor?.nome?.split(' ')[0]||''}?\n\nSaldo atual: ${diasRestantes(p)} diárias`)) return;
+  usarDiaria(id);
+}
+
+function usarDiaria(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  if (p.valorRestante < p.valorDiario) { toast('⚠️ Saldo insuficiente para usar mais uma diária'); return; }
+  p.valorRestante = Math.max(0, (p.valorRestante||0) - (p.valorDiario||0));
+  p.diasUsados    = (p.diasUsados||0) + 1;
+  p.ultimoAbate   = todayISO();
+  if (p.valorRestante <= 0) p.status = 'vencido';
+  saveDB(D);
+  renderTutorPlanos(_curTutorPlanoId);
+  renderClientes();
+  if (curPage==='planos') renderPlanos();
+  updatePlanosBadge();
+  const diasRestam = diasRestantes(p);
+  toast(`✅ 1 diária usada — ${diasRestam===Infinity?'∞':diasRestam} dia${diasRestam!==1?'s':''} restante${diasRestam!==1?'s':''}`);
+}
+
+function cancelPlanoFromTutor(id) {
+  if (!confirm('Cancelar este plano?')) return;
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  p.status = 'cancelado';
+  saveDB(D);
+  renderTutorPlanos(_curTutorPlanoId);
+  renderClientes();
+  toast('❌ Plano cancelado');
+}
+
+function delPlanoFromTutor(id) {
+  if (!confirm('Remover plano permanentemente?')) return;
+  const D = loadDB();
+  D.planos = D.planos.filter(x=>x.id!==id);
+  saveDB(D);
+  renderTutorPlanos(_curTutorPlanoId);
+  renderClientes();
+  toast('🗑️ Plano removido');
+}
+
+function onPlTutorChange() {
+  const tid = document.getElementById('pl-tutor').value;
+  const D   = loadDB();
+  document.getElementById('pl-pet').innerHTML =
+    '<option value="">Selecionar pet...</option>' +
+    D.pets.filter(p=>p.tutorId===tid).map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+}
+
+function savePlano() {
+  const tutorId = document.getElementById('pl-tutor').value;
+  const valor   = parseFloat(document.getElementById('pl-valor').value)||0;
+  const diario  = parseFloat(document.getElementById('pl-diario').value)||0;
+  const inicio  = document.getElementById('pl-inicio').value;
+  if (!tutorId||!valor||!diario||!inicio) { toast('⚠️ Tutor, valor, diária e data são obrigatórios'); return; }
+  const D    = loadDB();
+  const tipo = document.getElementById('pl-tipo').value;
+  const modo = document.getElementById('pl-modo').value;
+  const diasTotal = Math.floor(valor/diario);
+  D.planos.push({
+    id:uid(), tipo, tutorId,
+    petId:        document.getElementById('pl-pet').value,
+    valorTotal:   valor,
+    valorRestante:valor,
+    valorDiario:  diario,
+    diasTotal,
+    diasUsados:   0,
+    modoAbate:    modo,
+    dataInicio:   inicio,
+    ultimoAbate:  inicio,
+    obs:          document.getElementById('pl-obs').value.trim(),
+    status:       'ativo',
+    criadoEm:     new Date().toISOString()
+  });
+  D.financeiro.push({
+    id:uid(), tipo:'receita', valor,
+    descricao:`${tipo} — ${D.tutores.find(t=>t.id===tutorId)?.nome||''}`,
+    categoria:'Serviços', data:inicio, criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-plano');
+  document.getElementById('pl-valor').value='';
+  document.getElementById('pl-diario').value='';
+  document.getElementById('pl-obs').value='';
+  document.getElementById('pl-tutor').value='';
+  document.getElementById('pl-pet').innerHTML='<option value="">Selecionar pet...</option>';
+  renderClientes();
+  updateDashboard();
+  updatePlanosBadge();
+  if (curPage==='planos') renderPlanos();
+  toast('✅ Plano criado!');
+}
+
+function openRenovar(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  const tutor = D.tutores.find(t=>t.id===p.tutorId);
+  document.getElementById('renovar-id').value    = id;
+  document.getElementById('renovar-titulo').textContent = `Renovar — ${p.tipo} (${tutor?.nome||'—'})`;
+  document.getElementById('renovar-valor').value = '';
+  openModal('modal-renovar-plano');
+}
+
+function saveRenovar() {
+  const id    = document.getElementById('renovar-id').value;
+  const valor = parseFloat(document.getElementById('renovar-valor').value)||0;
+  if (!valor) { toast('⚠️ Valor obrigatório'); return; }
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  p.valorRestante = (p.valorRestante||0) + valor;
+  p.valorTotal    = (p.valorTotal||0)    + valor;
+  if (p.status==='vencido') p.status = 'ativo';
+  const tutor = D.tutores.find(t=>t.id===p.tutorId);
+  D.financeiro.push({
+    id:uid(), tipo:'receita', valor,
+    descricao:`Renovação ${p.tipo} — ${tutor?.nome||''}`,
+    categoria:'Serviços', data:todayISO(), criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-renovar-plano');
+  if (_curTutorPlanoId) renderTutorPlanos(_curTutorPlanoId);
+  renderClientes();
+  toast(`✅ Crédito adicionado — ${fmtBRL(p.valorRestante)} restante`);
+}
+
+function cancelPlano(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  p.status = 'cancelado';
+  saveDB(D);
+}
+
+function delPlano(id) {
+  const D = loadDB();
+  D.planos = D.planos.filter(x=>x.id!==id);
+  saveDB(D);
+}
+
+function seedServicos() {
+  const D = loadDB();
+  if (D.servicos.length > 0) return;
+  const defaults = [
+    {nome:'Banho',              preco:0,duracao:60, desc:''},
+    {nome:'Tosa',               preco:0,duracao:90, desc:''},
+    {nome:'Banho + Tosa',       preco:0,duracao:120,desc:''},
+    {nome:'Creche — Dia',       preco:0,duracao:480,desc:''},
+    {nome:'Creche — Mês',       preco:0,duracao:0,  desc:'Mensalidade'},
+    {nome:'Consulta Veterinária',preco:0,duracao:30,desc:''},
+    {nome:'Vacinação',          preco:0,duracao:15, desc:''},
+    {nome:'Outros',             preco:0,duracao:0,  desc:''},
+  ];
+  D.servicos = defaults.map(s=>({...s,id:uid(),ativo:true,criadoEm:new Date().toISOString()}));
+  saveDB(D);
+}
+
+// ── PLANOS & PACOTES ──────────────────────────────────────────────────────────
+let _planosFiltro = 'ativos';
+
+function setPlanosFiltro(f) {
+  _planosFiltro = f;
+  document.querySelectorAll('#planos-filtro-tabs .svc-tab').forEach(el =>
+    el.classList.toggle('active', el.dataset.filtro === f));
+  renderPlanos();
+}
+
+function openNovoPlanoGlobal() {
+  const D = loadDB();
+  document.getElementById('pl-tutor').innerHTML =
+    '<option value="">Selecionar tutor...</option>' +
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+  document.getElementById('pl-pet').innerHTML = '<option value="">Selecionar pet...</option>';
+  document.getElementById('pl-inicio').value  = todayISO();
+  document.getElementById('pl-tipo').value    = 'Creche';
+  document.getElementById('pl-modo').value    = 'manual';
+  document.getElementById('pl-valor').value   = '';
+  document.getElementById('pl-diario').value  = '';
+  document.getElementById('pl-obs').value     = '';
+  openModal('modal-new-plano');
+}
+
+function updatePlanosBadge() {
+  const D = loadDB();
+  const criticos = (D.planos||[]).filter(p=>p.status==='ativo'&&diasRestantes(p)<=3);
+  const badge = document.getElementById('badge-planos');
+  if (!badge) return;
+  if (criticos.length > 0) { badge.textContent = criticos.length; badge.style.display = ''; }
+  else badge.style.display = 'none';
+}
+
+function renderPlanos() {
+  const D        = loadDB();
+  const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t);
+  const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
+  const todos    = D.planos||[];
+  const ativos   = todos.filter(p=>p.status==='ativo');
+  const criticos = ativos.filter(p=>diasRestantes(p)<=3);
+  const vencidos = todos.filter(p=>p.status==='vencido');
+
+  document.getElementById('planos-total-ativos').textContent   = ativos.length;
+  document.getElementById('planos-total-criticos').textContent = criticos.length;
+  document.getElementById('planos-total-vencidos').textContent = vencidos.length;
+  document.getElementById('planos-sub').textContent =
+    `${ativos.length} ativo${ativos.length!==1?'s':''}${criticos.length?` · ${criticos.length} crítico${criticos.length!==1?'s':''}!`:''}`;
+
+  // Badge sidebar
+  const badge = document.getElementById('badge-planos');
+  if (badge) { if (criticos.length>0) { badge.textContent=criticos.length; badge.style.display=''; } else badge.style.display='none'; }
+
+  // Alert banner
+  const alertEl = document.getElementById('planos-alertas');
+  alertEl.innerHTML = criticos.length ? `<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+    <i class="ph ph-warning" style="font-size:22px;color:var(--red);flex-shrink:0"></i>
+    <div><b style="color:var(--red)">${criticos.length} plano${criticos.length!==1?'s':''} com menos de 3 diárias restantes!</b>
+      <div style="font-size:12px;color:#7F1D1D;margin-top:2px">${criticos.map(p=>{const t=tutorMap[p.tutorId];const d=diasRestantes(p);return `${t?.nome?.split(' ')[0]||'?'} — ${d===0?'<b>ZERADO</b>':`${d} dia${d!==1?'s':''}`}`;}).join(' &nbsp;·&nbsp; ')}</div>
+    </div>
+  </div>` : '';
+
+  // Filter
+  let filtrados;
+  if (_planosFiltro==='ativos')   filtrados = ativos.filter(p=>diasRestantes(p)>3);
+  else if (_planosFiltro==='criticos') filtrados = criticos;
+  else if (_planosFiltro==='vencidos') filtrados = vencidos;
+  else filtrados = todos;
+
+  const grid = document.getElementById('planos-grid');
+  if (!filtrados.length) {
+    const msgs = {ativos:'Todos os planos ativos estão no verde! 🎉',criticos:'Nenhum plano crítico. Ótimo! 🎉',vencidos:'Nenhum plano vencido.',todos:'Nenhum plano cadastrado.'};
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:13px">
+      <i class="ph ph-ticket" style="font-size:32px;display:block;margin-bottom:8px;opacity:.4"></i>${msgs[_planosFiltro]||''}</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtrados.map(p => {
+    const tutor      = tutorMap[p.tutorId];
+    const petNome    = petMap[p.petId]||'';
+    const dias       = diasRestantes(p);
+    const pct        = (p.valorTotal||0)>0 ? Math.max(0,Math.min(100,Math.round((p.valorRestante||0)/p.valorTotal*100))) : 100;
+    const critico    = p.status==='vencido'||(p.status==='ativo'&&dias<=3);
+    const atencao    = p.status==='ativo'&&dias>3&&dias<=7;
+    const cor        = p.status==='vencido'?'var(--red)':dias<=3?'var(--red)':dias<=7?'#F5C218':'var(--teal)';
+    const bgCard     = critico?'#FEF2F2':atencao?'#FFFBEB':'var(--surface)';
+    const bdCard     = critico?'#FECACA':atencao?'#FDE68A':'var(--border)';
+    const diasNum    = p.status==='vencido'?'0':dias===Infinity?'∞':String(dias);
+    const diasUnit   = p.status==='vencido'?'dias':dias===Infinity?'dias':`dia${dias!==1?'s':''}`;
+    const isManual   = p.modoAbate==='manual';
+    const av         = (tutor?.nome||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+    const statusTag  = p.status==='ativo'?(critico?'<span class="tag tag-red">⚠️ Crítico</span>':(atencao?'<span class="tag tag-yellow">Atenção</span>':'<span class="tag tag-green">Ativo</span>')):p.status==='vencido'?'<span class="tag tag-red">Vencido</span>':'<span class="tag tag-gray">Cancelado</span>';
+    return `<div style="border:1px solid ${bdCard};border-radius:12px;padding:16px;background:${bgCard};display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div style="width:40px;height:40px;border-radius:9px;background:var(--brand-light);color:var(--brand);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tutor?.nome||'—'}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:1px">${petNome?`🐾 ${petNome} · `:''}${p.tipo||'Plano'}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;min-width:48px">
+          <div style="font-size:28px;font-weight:900;line-height:1;color:${cor}">${diasNum}</div>
+          <div style="font-size:10px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:.04em">${diasUnit}</div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-bar" style="height:10px;margin-bottom:4px"><div class="pb-fill" style="width:${pct}%;background:${cor}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+          <span style="font-weight:600">${fmtBRL(p.valorRestante||0)} restante</span>
+          <span>${p.diasUsados||0} usadas de ${p.diasTotal||'?'} · ${fmtBRL(p.valorDiario||0)}/dia</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        ${statusTag}
+        <span class="tag ${isManual?'tag-blue':'tag-gray'}" style="font-size:10px">${isManual?'Manual':'Auto'}</span>
+        <span class="tag tag-gray" style="font-size:10px">Início: ${fmtDate(p.dataInicio)}</span>
+      </div>
+      <div style="display:flex;gap:6px">
+        ${isManual&&p.status==='ativo'?`<button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="usarDiariaPlanoPage('${p.id}')"><i class="ph ph-check-square"></i> Usar diária</button>`:''}
+        ${p.status!=='cancelado'?`<button class="btn btn-success btn-sm" onclick="openRenovar('${p.id}')"><i class="ph ph-plus-circle"></i> Renovar</button>`:''}
+        ${p.status==='ativo'?`<button class="btn btn-ghost btn-sm" onclick="cancelPlanoFromPage('${p.id}')"><i class="ph ph-x"></i></button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function usarDiariaPlanoPage(id) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  const tutor = D.tutores.find(t=>t.id===p.tutorId);
+  const dias  = diasRestantes(p);
+  if (dias <= 0) { toast('⚠️ Plano sem saldo'); return; }
+  if (!confirm(`Registrar 1 diária de ${p.tipo} para ${tutor?.nome?.split(' ')[0]||'?'}?\n\nSaldo atual: ${dias} diária${dias!==1?'s':''}`)) return;
+  usarDiaria(id);
+  renderPlanos();
+}
+
+function cancelPlanoFromPage(id) {
+  if (!confirm('Cancelar este plano?')) return;
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (p) { p.status='cancelado'; saveDB(D); }
+  renderPlanos();
+  toast('Plano cancelado');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+let curDashFilial = 'todas';
+
+function setDashFilial(f) {
+  curDashFilial = f;
+  document.querySelectorAll('#dash-filial-tabs .svc-tab').forEach(el =>
+    el.classList.toggle('active', el.dataset.filial === f));
+  updateDashboard();
+}
+
+function updateDashboard() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const now  = new Date();
+  const mes  = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+  // Build filial tabs dinamicamente
+  const filiais = [...new Set(D.tutores.map(t=>t.unidade||'').filter(Boolean))].sort();
+  const tabsEl  = document.getElementById('dash-filial-tabs');
+  if (filiais.length > 1) {
+    const all = ['todas', ...filiais];
+    tabsEl.innerHTML = all.map(f => {
+      const n = f==='todas' ? D.tutores.length : D.tutores.filter(t=>t.unidade===f).length;
+      const label = f==='todas' ? `Todas (${n})` : `${f} (${n})`;
+      return `<div class="svc-tab${curDashFilial===f?' active':''}" data-filial="${f}" onclick="setDashFilial('${f}')">${label}</div>`;
+    }).join('');
+    tabsEl.style.display = '';
+  } else {
+    tabsEl.style.display = 'none';
+    curDashFilial = 'todas';
+  }
+
+  // Conjuntos filtrados
+  const filtrando = curDashFilial !== 'todas';
+  const tutoresF  = filtrando ? D.tutores.filter(t=>t.unidade===curDashFilial) : D.tutores;
+  const tutorIdsF = new Set(tutoresF.map(t=>t.id));
+  const petsF     = D.pets.filter(p=>tutorIdsF.has(p.tutorId));
+  const agsF      = D.agendamentos.filter(a=>tutorIdsF.has(a.tutorId));
+
+  const ativos  = tutoresF.filter(t=>t.status!=='inativo').length;
+  const inat    = tutoresF.filter(t=>t.status==='inativo').length;
+  const agsHoje = agsF.filter(a=>a.data===hoje&&a.status!=='cancelado').length;
+
+  // Receita do mês: agendamentos concluídos nessa filial + PDV geral (sem filial)
+  const fatAg  = agsF.filter(a=>a.data?.startsWith(mes)&&a.status==='concluido').reduce((s,a)=>s+Number(a.valor||0),0);
+  const fatFin = filtrando ? fatAg : D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+
+  const sfx = filtrando ? ` · ${curDashFilial}` : '';
+  document.getElementById('s-ativos').textContent      = ativos;
+  document.getElementById('s-ativos-label').textContent = `Tutores ativos${sfx}`;
+  document.getElementById('s-pets').textContent        = petsF.length;
+  document.getElementById('s-pets-label').textContent  = `Pets cadastrados${sfx}`;
+  document.getElementById('s-hoje').textContent        = agsHoje;
+  document.getElementById('s-hoje-label').textContent  = `Agendamentos hoje${sfx}`;
+  document.getElementById('s-fat').textContent         = fmtBRL(filtrando ? fatAg : fatFin);
+  document.getElementById('s-fat-label').textContent   = filtrando ? `Serviços/mês estimados${sfx}` : 'Receitas do mês';
+  document.getElementById('badge-clientes').textContent = D.tutores.filter(t=>t.status!=='inativo').length;
+
+  const hj = now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('dash-data').textContent = hj.charAt(0).toUpperCase()+hj.slice(1);
+
+  // Próximos agendamentos (filtrados pela filial)
+  const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
+  const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
+  const prox = agsF
+    .filter(a=>a.data>=hoje&&a.status!=='cancelado'&&a.status!=='concluido')
+    .sort((a,b)=>a.data!==b.data?(a.data>b.data?1:-1):(a.hora||'').localeCompare(b.hora||''))
+    .slice(0,6);
+  document.getElementById('dash-ag-count').textContent = prox.length?`${prox.length} próximos`:'';
+  document.getElementById('dash-ag-list').innerHTML = prox.length===0
+    ? `<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-calendar" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Sem agendamentos.</div>`
+    : prox.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:800;color:var(--brand);min-width:76px">${a.data===hoje?a.hora:fmtDate(a.data)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600">${petMap[a.petId]||'Pet'}</div>
+          <div style="font-size:11px;color:var(--muted)">${tutorMap[a.tutorId]||'—'} · ${a.servico||''}${!filtrando&&tutorMap[a.tutorId]?'':''}</div>
+        </div>
+        <span class="tag ${AG_STATUS[a.status]?.cls||'tag-gray'}" style="font-size:10px">${AG_STATUS[a.status]?.label||a.status}</span>
+      </div>`).join('');
+
+  // Card "Por Filial" — sempre mostra comparativo geral
+  const filialCount = {};
+  D.tutores.forEach(t=>{ const f=t.unidade||'Sem filial'; filialCount[f]=(filialCount[f]||0)+1; });
+  const entries = Object.entries(filialCount).sort((a,b)=>b[1]-a[1]);
+  const totalTutores = D.tutores.length || 1;
+  document.getElementById('dash-filiais').innerHTML = entries.length===0
+    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
+    : entries.map(([f,n])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;${curDashFilial===f?'opacity:1':'opacity:'+(curDashFilial==='todas'?'1':'.4')}">
+        <div style="font-size:12px;font-weight:${curDashFilial===f?'800':'600'};flex:1;color:${curDashFilial===f?'var(--brand)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f}${curDashFilial===f?' ◀':''}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--brand);min-width:20px;text-align:right">${n}</div>
+        <div style="flex:2;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+          <div style="height:100%;background:${curDashFilial===f?'var(--brand)':'var(--muted2)'};border-radius:3px;width:${Math.round(n/totalTutores*100)}%"></div>
+        </div>
+      </div>`).join('');
+
+  // Alerta de planos (filtrado pela filial)
+  const planos  = (D.planos||[]).filter(p=>filtrando?tutorIdsF.has(p.tutorId):true);
+  const plAlert = planos.filter(p => p.status==='vencido' || (p.status==='ativo'&&(p.valorDiario||0)>0&&diasRestantes(p)<=3));
+  const alertEl = document.getElementById('dash-planos-alert');
+  if (alertEl) {
+    if (plAlert.length > 0) {
+      const nVenc = plAlert.filter(p=>p.status==='vencido').length;
+      const nBaixo = plAlert.filter(p=>p.status!=='vencido').length;
+      alertEl.style.display = '';
+      alertEl.innerHTML = `<div style="background:var(--yellow-light);border:1px solid #FDE68A;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+        <i class="ph ph-warning" style="font-size:20px;color:#856400;flex-shrink:0"></i>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:#856400">${plAlert.length} plano${plAlert.length>1?'s':''} precisam de atenção${sfx}</div>
+          <div style="font-size:11px;color:#92620A;margin-top:2px">${nVenc>0?`${nVenc} vencido${nVenc>1?'s':''}`:''} ${nBaixo>0?(nVenc>0?' · ':'')+`${nBaixo} com crédito baixo`:''}</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="navTo('clientes')">Ver clientes</button>
+      </div>`;
+    } else {
+      alertEl.style.display = 'none';
+    }
+  }
+
+  document.getElementById('dash-situacao').innerHTML = tutoresF.length===0
+    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
+    : `<div style="display:flex;gap:12px">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--teal-light);border-radius:8px">
+          <div style="font-size:22px;font-weight:800;color:#006B4F">${ativos}</div>
+          <div style="font-size:11px;color:#006B4F;font-weight:600;margin-top:2px">Ativos</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
+          <div style="font-size:22px;font-weight:800;color:var(--muted)">${inat}</div>
+          <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:2px">Inativos</div>
+        </div>
+      </div>`;
+}
+
+// ── PDV / CAIXA ───────────────────────────────────────────────────────────────
+function renderPDV() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const vendas = (D.financeiro||[]).filter(l=>l.origem==='pdv'&&l.data===hoje);
+  const total  = vendas.reduce((s,l)=>s+Number(l.valor||0),0);
+  document.getElementById('pdv-sub').textContent = `${vendas.length} venda${vendas.length!==1?'s':''} hoje`;
+  document.getElementById('pdv-total-hoje').textContent = fmtBRL(total);
+  document.getElementById('pdv-qtd-hoje').textContent   = vendas.length;
+  document.getElementById('pdv-ticket-medio').textContent = vendas.length ? fmtBRL(total/vendas.length) : 'R$0';
+
+  const pgMap = {};
+  vendas.forEach(l=>{ const pg=l.formaPagamento||'Não informado'; pgMap[pg]=(pgMap[pg]||0)+Number(l.valor||0); });
+  const pgEntries = Object.entries(pgMap).sort((a,b)=>b[1]-a[1]);
+  const pgEl = document.getElementById('pdv-pagamentos');
+  if (!pgEntries.length) {
+    pgEl.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Sem vendas hoje.</div>';
+  } else {
+    pgEl.innerHTML = `<div class="pdv-pagamento-bar">${pgEntries.map(([pg,val])=>`
+      <div class="pdv-pg-row">
+        <div class="pdv-pg-label">${pg}</div>
+        <div class="pdv-pg-val">${fmtBRL(val)}</div>
+        <div class="pdv-pg-bar-wrap"><div class="pdv-pg-bar-fill" style="width:${Math.round(val/total*100)}%"></div></div>
+      </div>`).join('')}</div>`;
+  }
+
+  const lista = document.getElementById('pdv-lista');
+  if (!vendas.length) {
+    lista.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-storefront" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Nenhuma venda hoje ainda.</div>';
+    return;
+  }
+  const tutorMap={}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
+  lista.innerHTML=[...vendas].reverse().map(l=>`
+    <div class="pdv-item">
+      <div class="pdv-dot" style="background:var(--teal)"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
+        <div style="font-size:11px;color:var(--muted)">${l.formaPagamento||'—'}${l.tutorId?` · ${tutorMap[l.tutorId]||''}`:''}</div>
+      </div>
+      <div style="font-weight:800;color:var(--teal);font-size:14px">${fmtBRL(l.valor)}</div>
+      <button class="btn btn-danger btn-sm" onclick="delPDV('${l.id}')"><i class="ph ph-trash"></i></button>
+    </div>`).join('');
+}
+
+function onPdvTipoChange() {
+  const tipo = document.getElementById('pdv-tipo').value;
+  const isPlano = tipo === 'plano';
+  document.getElementById('pdv-svc-field').style.display    = tipo==='servico'?'':'none';
+  document.getElementById('pdv-prd-field').style.display    = tipo==='produto'?'':'none';
+  document.getElementById('pdv-plano-fields').style.display = isPlano?'grid':'none';
+  document.getElementById('pdv-valor-row').style.display    = isPlano?'none':'';
+  document.getElementById('pdv-desc-field').style.display   = isPlano?'none':'';
+  document.getElementById('pdv-cliente-label').textContent  = isPlano?'Cliente *':'Cliente (opcional)';
+  if (isPlano) onPdvClienteChange();
+}
+
+function onPdvClienteChange() {
+  const tipo = document.getElementById('pdv-tipo').value;
+  if (tipo !== 'plano') return;
+  const clienteId = document.getElementById('pdv-cliente').value;
+  const D = loadDB();
+  const pets = clienteId ? D.pets.filter(p=>p.tutorId===clienteId) : [];
+  document.getElementById('pdv-plano-pet').innerHTML =
+    '<option value="">— Sem pet específico</option>' +
+    pets.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+}
+
+function calcPlanoPreview() {
+  const total  = parseFloat(document.getElementById('pdv-plano-valor').value)||0;
+  const diario = parseFloat(document.getElementById('pdv-plano-diario').value)||0;
+  const el     = document.getElementById('pdv-plano-preview');
+  if (total>0 && diario>0) {
+    const dias = Math.floor(total/diario);
+    el.style.display = '';
+    el.textContent = `📅 ${dias} diária${dias!==1?'s':''} no total (${fmtBRL(total)} ÷ ${fmtBRL(diario)}/dia)`;
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function onPdvServicoChange() {
+  const opt = document.getElementById('pdv-servico').selectedOptions[0];
+  if (!opt||!opt.value) return;
+  const preco = parseFloat(opt.dataset.preco)||0;
+  if (preco>0) document.getElementById('pdv-valor').value = preco.toFixed(2);
+  document.getElementById('pdv-desc').value = opt.text.split(' —')[0];
+}
+
+function onPdvProdutoChange() {
+  const opt = document.getElementById('pdv-produto').selectedOptions[0];
+  if (!opt||!opt.value) return;
+  const preco = parseFloat(opt.dataset.preco)||0;
+  if (preco>0) document.getElementById('pdv-valor').value = preco.toFixed(2);
+  document.getElementById('pdv-desc').value = opt.text.split(' —')[0];
+}
+
+function savePDV() {
+  const tipo      = document.getElementById('pdv-tipo').value;
+  const pg        = document.getElementById('pdv-pagamento').value;
+  const clienteId = document.getElementById('pdv-cliente').value;
+
+  // ── Venda de PLANO ────────────────────────────────────────────────────────
+  if (tipo === 'plano') {
+    if (!clienteId) { toast('⚠️ Selecione o cliente para criar o plano'); return; }
+    const valorTotal  = parseFloat(document.getElementById('pdv-plano-valor').value)||0;
+    const valorDiario = parseFloat(document.getElementById('pdv-plano-diario').value)||0;
+    if (!valorTotal||!valorDiario) { toast('⚠️ Valor total e valor por diária obrigatórios'); return; }
+    if (!pg) { toast('⚠️ Selecione a forma de pagamento'); return; }
+    const planoTipo = document.getElementById('pdv-plano-tipo').value;
+    const petId     = document.getElementById('pdv-plano-pet').value||null;
+    const modo      = document.getElementById('pdv-plano-modo').value;
+    const diasTotal = Math.floor(valorTotal/valorDiario);
+    const D = loadDB();
+    const tutor = D.tutores.find(t=>t.id===clienteId);
+    D.planos.push({
+      id:uid(), tipo:planoTipo, tutorId:clienteId, petId,
+      valorTotal, valorDiario, valorRestante:valorTotal,
+      diasTotal, diasUsados:0, modoAbate:modo, status:'ativo',
+      dataInicio:todayISO(), ultimoAbate:todayISO(), obs:''
+    });
+    D.financeiro.push({
+      id:uid(), tipo:'receita', valor:valorTotal,
+      descricao:`Plano ${planoTipo} — ${tutor?.nome?.split(' ')[0]||'?'} (${diasTotal} diárias)`,
+      categoria:'Plano', data:todayISO(),
+      formaPagamento:pg, tutorId:clienteId,
+      origem:'pdv', criadoEm:new Date().toISOString()
+    });
+    saveDB(D);
+    closeModal('modal-pdv-venda');
+    renderPDV(); updateDashboard();
+    if (curPage==='planos') renderPlanos();
+    toast(`✅ Plano criado — ${diasTotal} diárias · ${fmtBRL(valorTotal)}`);
+    return;
+  }
+
+  // ── Venda normal (serviço / produto / outro) ──────────────────────────────
+  const valor = parseFloat(document.getElementById('pdv-valor').value)||0;
+  if (!valor||!pg) { toast('⚠️ Valor e pagamento obrigatórios'); return; }
+  const qtd = parseInt(document.getElementById('pdv-qtd').value)||1;
+  let desc = document.getElementById('pdv-desc').value.trim();
+  if (!desc) {
+    if (tipo==='servico') {
+      const opt = document.getElementById('pdv-servico').selectedOptions[0];
+      desc = opt?.text||'Serviço';
+    } else if (tipo==='produto') {
+      const opt = document.getElementById('pdv-produto').selectedOptions[0];
+      desc = opt?.text||'Produto';
+      if (opt?.value) {
+        const D2=loadDB();
+        const p=D2.estoque.find(x=>x.id===opt.value);
+        if(p){ p.quantidade=Math.max(0,p.quantidade-qtd); saveDB(D2); }
+      }
+    } else { desc='Outro'; }
+  }
+  const totalVenda = valor*qtd;
+  const D=loadDB();
+  D.financeiro.push({
+    id:uid(), tipo:'receita', valor:totalVenda,
+    descricao: desc+(qtd>1?` (x${qtd})`:''),
+    categoria:'Serviços', data:todayISO(),
+    formaPagamento:pg, tutorId:clienteId||null,
+    origem:'pdv', criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-pdv-venda');
+  renderPDV(); updateDashboard();
+  toast(`✅ Venda registrada — ${fmtBRL(totalVenda)}`);
+}
+
+function delPDV(id) {
+  if (!confirm('Remover esta venda?')) return;
+  const D=loadDB();
+  D.financeiro=D.financeiro.filter(l=>l.id!==id);
+  saveDB(D); renderPDV(); updateDashboard(); toast('🗑️ Venda removida');
+}
+
+// ── FUNCIONÁRIOS ──────────────────────────────────────────────────────────────
+function renderFuncionarios() {
+  const D    = loadDB();
+  const funs = D.funcionarios||[];
+  const hoje = todayISO();
+  const mesStr = hoje.slice(0,7);
+  document.getElementById('func-sub').textContent = `${funs.filter(f=>f.status!=='inativo').length} ativo${funs.filter(f=>f.status!=='inativo').length!==1?'s':''}`;
+  const grid = document.getElementById('func-grid');
+  if (!funs.length) {
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><i class="ph ph-users-three"></i><h3>Nenhum funcionário</h3><p>Cadastre a equipe</p></div>`;
+    return;
+  }
+  const agMes = (D.agendamentos||[]).filter(a=>a.data?.startsWith(mesStr)&&a.status==='concluido');
+  grid.innerHTML = funs.map(f=>{
+    const meus = agMes.filter(a=>a.funcionarioId===f.id);
+    const recMes = meus.reduce((s,a)=>s+Number(a.valor||0),0);
+    const comissao = recMes*(f.comissaoPct||0)/100;
+    const inativo = f.status==='inativo';
+    return `<div class="func-card ${inativo?'inativo':''}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="func-avatar" style="${avStyle(f.nome)}">${initials(f.nome)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.nome}</div>
+          <div style="font-size:12px;color:var(--muted)">${f.cargo||'—'}${f.comissaoPct?` · ${f.comissaoPct}% comissão`:''}</div>
+        </div>
+        <span class="tag ${inativo?'tag-gray':'tag-green'}">${inativo?'Inativo':'Ativo'}</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:var(--brand)">${meus.length}</div>
+          <div style="font-size:11px;color:var(--muted)">Serviços/mês</div>
+        </div>
+        <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:14px;font-weight:800;color:var(--teal)">${fmtBRL(comissao)}</div>
+          <div style="font-size:11px;color:var(--muted)">Comissão/mês</div>
+        </div>
+      </div>
+      ${f.tel?`<div style="font-size:12px;color:var(--muted);margin-bottom:10px"><i class="ph ph-phone" style="font-size:11px"></i> ${f.tel}</div>`:''}
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editFuncionario('${f.id}')"><i class="ph ph-pencil"></i> Editar</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleFuncionario('${f.id}')"><i class="ph ph-${inativo?'check':'x'}-circle"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="delFuncionario('${f.id}')"><i class="ph ph-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveFuncionario() {
+  const nome = document.getElementById('func-nome').value.trim();
+  if (!nome) { toast('⚠️ Nome obrigatório'); return; }
+  const D  = loadDB();
+  const id = document.getElementById('func-id').value;
+  if (id) {
+    const f=D.funcionarios.find(x=>x.id===id);
+    if(f){
+      f.nome=nome; f.cargo=document.getElementById('func-cargo').value;
+      f.comissaoPct=parseFloat(document.getElementById('func-comissao').value)||0;
+      f.status=document.getElementById('func-status').value;
+      f.tel=document.getElementById('func-tel').value.trim();
+    }
+  } else {
+    D.funcionarios.push({
+      id:uid(), nome, cargo:document.getElementById('func-cargo').value,
+      comissaoPct:parseFloat(document.getElementById('func-comissao').value)||0,
+      status:document.getElementById('func-status').value,
+      tel:document.getElementById('func-tel').value.trim(),
+      criadoEm:new Date().toISOString()
+    });
+  }
+  saveDB(D); closeModal('modal-new-func'); renderFuncionarios();
+  toast(id?'✅ Funcionário atualizado':'✅ Funcionário cadastrado!');
+}
+
+function editFuncionario(id) {
+  const D=loadDB(); const f=D.funcionarios.find(x=>x.id===id); if(!f) return;
+  document.getElementById('func-id').value       = f.id;
+  document.getElementById('func-nome').value     = f.nome;
+  document.getElementById('func-cargo').value    = f.cargo||'Banhista';
+  document.getElementById('func-comissao').value = f.comissaoPct||'';
+  document.getElementById('func-status').value   = f.status||'ativo';
+  document.getElementById('func-tel').value      = f.tel||'';
+  document.getElementById('func-modal-title').textContent = 'Editar Funcionário';
+  openModal('modal-new-func');
+}
+
+function toggleFuncionario(id) {
+  const D=loadDB(); const f=D.funcionarios.find(x=>x.id===id); if(!f) return;
+  f.status=f.status==='inativo'?'ativo':'inativo';
+  saveDB(D); renderFuncionarios();
+  toast(f.status==='inativo'?`⚠️ ${f.nome.split(' ')[0]} inativado`:`✅ ${f.nome.split(' ')[0]} ativado`);
+}
+
+function delFuncionario(id) {
+  if (!confirm('Remover funcionário?')) return;
+  const D=loadDB();
+  D.funcionarios=D.funcionarios.filter(x=>x.id!==id);
+  saveDB(D); renderFuncionarios(); toast('🗑️ Removido');
+}
+
+// ── CONTAS A PAGAR / RECEBER ──────────────────────────────────────────────────
+let contaFilter='todas';
+function setContaFilter(f) {
+  contaFilter=f;
+  ['todas','pagar','receber','pendente'].forEach(x=>document.getElementById('ct-tab-'+x)?.classList.toggle('active',x===f));
+  renderContas();
+}
+
+function renderContas() {
+  const D=loadDB();
+  const hoje=todayISO();
+  let contas=[...D.contas||[]].sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
+  const totalPagar   = contas.filter(c=>c.tipo==='pagar'&&c.status!=='pago').reduce((s,c)=>s+Number(c.valor||0),0);
+  const totalReceber = contas.filter(c=>c.tipo==='receber'&&c.status!=='pago').reduce((s,c)=>s+Number(c.valor||0),0);
+  const saldoProjetado = totalReceber-totalPagar;
+  document.getElementById('contas-resumo').innerHTML=`
+    <div style="background:var(--red-light);border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center">
+      <i class="ph ph-arrow-circle-down" style="color:var(--red);font-size:18px"></i>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:600">A PAGAR</div><div style="font-size:15px;font-weight:800;color:var(--red)">${fmtBRL(totalPagar)}</div></div>
+    </div>
+    <div style="background:var(--teal-light);border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center">
+      <i class="ph ph-arrow-circle-up" style="color:var(--teal);font-size:18px"></i>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:600">A RECEBER</div><div style="font-size:15px;font-weight:800;color:#006B4F">${fmtBRL(totalReceber)}</div></div>
+    </div>
+    <div style="background:${saldoProjetado>=0?'var(--teal-light)':'var(--red-light)'};border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center">
+      <i class="ph ph-scales" style="color:${saldoProjetado>=0?'var(--teal)':'var(--red)'};font-size:18px"></i>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:600">SALDO PROJETADO</div><div style="font-size:15px;font-weight:800;color:${saldoProjetado>=0?'#006B4F':'var(--red)'}">${fmtBRL(Math.abs(saldoProjetado))}</div></div>
+    </div>`;
+
+  if (contaFilter==='pagar')   contas=contas.filter(c=>c.tipo==='pagar');
+  if (contaFilter==='receber') contas=contas.filter(c=>c.tipo==='receber');
+  if (contaFilter==='pendente')contas=contas.filter(c=>c.status!=='pago');
+  const el=document.getElementById('contas-list');
+  if (!contas.length) { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhuma conta encontrada.</div>'; return; }
+  el.innerHTML=contas.map(c=>{
+    const venc=c.vencimento||'';
+    const pago=c.status==='pago';
+    const vencida=!pago&&venc<hoje;
+    return `<div class="conta-item${pago?' pago':''}${vencida?' vencida':''}">
+      <div style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${c.tipo==='pagar'?'var(--red)':'var(--teal)'}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${c.descricao}</div>
+        <div style="font-size:11px;color:var(--muted)">${c.tipo==='pagar'?'A Pagar':'A Receber'}${c.categoria?` · ${c.categoria}`:''}${venc?` · venc. ${fmtDate(venc)}`:''}${vencida?' ⚠️ Vencida':''}</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:${c.tipo==='pagar'?'var(--red)':'var(--teal)'};flex-shrink:0">${fmtBRL(c.valor)}</div>
+      ${!pago?`<button class="btn btn-success btn-sm" onclick="pagarConta('${c.id}')" title="Marcar como pago"><i class="ph ph-check"></i></button>`:'<span class="tag tag-green">Pago</span>'}
+      <button class="btn btn-danger btn-sm" onclick="delConta('${c.id}')"><i class="ph ph-trash"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function saveConta() {
+  const desc  = document.getElementById('conta-desc').value.trim();
+  const valor = parseFloat(document.getElementById('conta-valor').value)||0;
+  const venc  = document.getElementById('conta-vencimento').value;
+  if (!desc||!valor||!venc) { toast('⚠️ Descrição, valor e vencimento obrigatórios'); return; }
+  const D=loadDB();
+  const id=document.getElementById('conta-id').value;
+  if (id) {
+    const c=D.contas.find(x=>x.id===id);
+    if(c){ c.descricao=desc; c.valor=valor; c.vencimento=venc;
+      c.tipo=document.getElementById('conta-tipo').value;
+      c.categoria=document.getElementById('conta-cat').value; }
+  } else {
+    D.contas.push({
+      id:uid(), tipo:document.getElementById('conta-tipo').value,
+      descricao:desc, valor, vencimento:venc,
+      categoria:document.getElementById('conta-cat').value,
+      status:'pendente', criadoEm:new Date().toISOString()
+    });
+  }
+  saveDB(D); closeModal('modal-new-conta'); renderContas();
+  toast(id?'✅ Conta atualizada':'✅ Conta cadastrada!');
+}
+
+function pagarConta(id) {
+  const D=loadDB(); const c=D.contas.find(x=>x.id===id); if(!c) return;
+  c.status='pago'; c.paidAt=todayISO();
+  if (confirm(`Registrar ${fmtBRL(c.valor)} como lançamento no financeiro?`)) {
+    D.financeiro.push({
+      id:uid(), tipo:c.tipo==='pagar'?'despesa':'receita',
+      valor:c.valor, descricao:c.descricao,
+      categoria:c.categoria||'Outros', data:todayISO(),
+      criadoEm:new Date().toISOString()
+    });
+  }
+  saveDB(D); renderContas(); updateDashboard();
+  toast('✅ Conta marcada como paga');
+}
+
+function delConta(id) {
+  if (!confirm('Remover conta?')) return;
+  const D=loadDB(); D.contas=D.contas.filter(x=>x.id!==id);
+  saveDB(D); renderContas(); toast('🗑️ Removida');
+}
+
+// ── LIMPAR ────────────────────────────────────────────────────────────────────
+function confirmarLimpar() {
+  const D = loadDB();
+  if (!D.tutores.length) { toast('⚠️ Nenhum dado para apagar'); return; }
+  if (!confirm(`⚠️ APAGAR TODOS OS DADOS?\n\n${D.tutores.length} tutores e todos os dados serão removidos permanentemente.\n\nEssa ação não pode ser desfeita.`)) return;
+  if (!confirm('Confirma? Isso é irreversível.')) return;
+  localStorage.removeItem(DB_KEY);
+  renderClientes(); updateDashboard(); toast('🗑️ Todos os dados apagados');
+}
+
+// ── MODAIS ────────────────────────────────────────────────────────────────────
+function openModal(id) {
+  if (id==='modal-new-agenda') populateAgTutores();
+  if (id==='modal-new-client') populateSel('f-unidade','');
+  if (id==='modal-new-plano') {
+    const D = loadDB();
+    document.getElementById('pl-tutor').innerHTML =
+      '<option value="">Selecionar tutor...</option>' +
+      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+    document.getElementById('pl-pet').innerHTML = '<option value="">Selecionar pet...</option>';
+    document.getElementById('pl-inicio').value  = todayISO();
+    document.getElementById('pl-tipo').value    = 'Hospedagem';
+    document.getElementById('pl-modo').value    = 'manual';
+  }
+  if (id==='modal-new-servico') {
+    document.getElementById('svc-id').value = '';
+    document.getElementById('svc-nome').value = '';
+    document.getElementById('svc-preco').value = '';
+    document.getElementById('svc-preco-p').value = '';
+    document.getElementById('svc-preco-m').value = '';
+    document.getElementById('svc-preco-g').value = '';
+    document.getElementById('svc-duracao').value = '';
+    document.getElementById('svc-desc').value = '';
+    document.getElementById('svc-insumos-container').innerHTML = '';
+    document.getElementById('svc-modal-title').textContent = 'Novo Serviço';
+  }
+  if (id==='modal-pdv-venda') {
+    const D=loadDB();
+    document.getElementById('pdv-servico').innerHTML='<option value="">Selecionar...</option>'+
+      D.servicos.filter(s=>s.ativo!==false).map(s=>`<option value="${s.id}" data-preco="${s.preco||0}">${s.nome}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
+    document.getElementById('pdv-produto').innerHTML='<option value="">Selecionar...</option>'+
+      D.estoque.map(p=>`<option value="${p.id}" data-preco="${p.precoVenda||0}">${p.nome} — ${fmtBRL(p.precoVenda||0)} (${p.quantidade} ${p.unidade})</option>`).join('');
+    document.getElementById('pdv-cliente').innerHTML='<option value="">— Avulso</option>'+
+      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+    document.getElementById('pdv-tipo').value='servico';
+    document.getElementById('pdv-valor').value='';
+    document.getElementById('pdv-qtd').value='1';
+    document.getElementById('pdv-desc').value='';
+    document.getElementById('pdv-plano-valor').value='';
+    document.getElementById('pdv-plano-diario').value='';
+    document.getElementById('pdv-plano-preview').style.display='none';
+    document.getElementById('pdv-plano-fields').style.display='none';
+    document.getElementById('pdv-svc-field').style.display='';
+    document.getElementById('pdv-prd-field').style.display='none';
+    document.getElementById('pdv-valor-row').style.display='';
+    document.getElementById('pdv-desc-field').style.display='';
+    document.getElementById('pdv-cliente-label').textContent='Cliente (opcional)';
+  }
+  if (id==='modal-new-func') {
+    document.getElementById('func-id').value='';
+    document.getElementById('func-nome').value='';
+    document.getElementById('func-comissao').value='';
+    document.getElementById('func-tel').value='';
+    document.getElementById('func-cargo').value='Banhista';
+    document.getElementById('func-status').value='ativo';
+    document.getElementById('func-modal-title').textContent='Novo Funcionário';
+  }
+  if (id==='modal-new-conta') {
+    document.getElementById('conta-id').value='';
+    document.getElementById('conta-desc').value='';
+    document.getElementById('conta-valor').value='';
+    document.getElementById('conta-vencimento').value='';
+    document.getElementById('conta-tipo').value='pagar';
+    document.getElementById('conta-cat').value='';
+    document.getElementById('conta-modal-title').textContent='Nova Conta';
+  }
+  document.getElementById(id)?.classList.add('open');
+}
+function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+// ── DEMO SEED ─────────────────────────────────────────────────────────────────
+function seedDemoData() {
+  if (localStorage.getItem(DB_KEY)) return;
+  const D = emptyDB();
+  D.funcionarios = [
+    {id:'func1',nome:'Ana Souza',cargo:'Tosadora',comissao:20,telefone:'(51) 99123-0001',status:'ativo'},
+    {id:'func2',nome:'Pedro Lima',cargo:'Banhista',comissao:15,telefone:'(51) 99123-0002',status:'ativo'},
+    {id:'func3',nome:'Marina Costa',cargo:'Tosadora',comissao:20,telefone:'(51) 99123-0003',status:'ativo'},
+    {id:'func4',nome:'João Silva',cargo:'Banhista',comissao:15,telefone:'(51) 99123-0004',status:'ativo'},
+    {id:'func5',nome:'Carla Mendes',cargo:'Recepcionista',comissao:10,telefone:'(51) 99123-0005',status:'ativo'},
+  ];
+  D.estoque = [
+    {id:'est1',nome:'Shampoo neutro',quantidade:22,minimo:5,precoCompra:12,precoVenda:25,unidade:'un'},
+    {id:'est2',nome:'Condicionador canino',quantidade:18,minimo:5,precoCompra:14,precoVenda:28,unidade:'un'},
+    {id:'est3',nome:'Luva descartável',quantidade:80,minimo:20,precoCompra:0.5,precoVenda:2,unidade:'un'},
+    {id:'est4',nome:'Lenço umedecido',quantidade:4,minimo:10,precoCompra:0.3,precoVenda:1,unidade:'pct'},
+  ];
+  D.servicos = [
+    {id:'svc1',nome:'Banho',preco:50,precoP:35,precoM:50,precoG:70,duracao:60,ativo:true,insumos:[{estoqueId:'est1',qty:1}]},
+    {id:'svc2',nome:'Tosa',preco:70,precoP:50,precoM:70,precoG:100,duracao:90,ativo:true,insumos:[]},
+    {id:'svc3',nome:'Banho + Tosa',preco:110,precoP:75,precoM:110,precoG:155,duracao:120,ativo:true,insumos:[{estoqueId:'est1',qty:1},{estoqueId:'est2',qty:1}]},
+    {id:'svc4',nome:'Creche — Dia',preco:60,precoP:45,precoM:60,precoG:80,duracao:480,ativo:true,insumos:[]},
+    {id:'svc5',nome:'Vacinação',preco:80,precoP:80,precoM:80,precoG:80,duracao:30,ativo:true,insumos:[{estoqueId:'est3',qty:2}]},
+    {id:'svc6',nome:'Consulta Veterinária',preco:120,duracao:30,ativo:true,insumos:[]},
+  ];
+  D.tutores = [
+    {id:'t01',nome:'Bruno Carvalho',telefone:'(51) 99201-0001',email:'bruno@email.com',unidade:'Cachorródromo',status:'ativo',criadoEm:'2025-10-01'},
+    {id:'t02',nome:'Fernanda Oliveira',telefone:'(51) 99201-0002',email:'fernanda@email.com',unidade:'Cachorródromo',status:'ativo',criadoEm:'2025-10-15'},
+    {id:'t03',nome:'Lucas Martins',telefone:'(51) 99201-0003',email:'lucas@email.com',unidade:'Cachorródromo',status:'ativo',criadoEm:'2025-11-01'},
+    {id:'t04',nome:'Juliana Nunes',telefone:'(51) 99201-0004',email:'juliana@email.com',unidade:'Cachorródromo',status:'ativo',criadoEm:'2025-11-20'},
+    {id:'t05',nome:'Rafael Borges',telefone:'(51) 99201-0005',email:'rafael@email.com',unidade:'Cachorródromo',status:'ativo',criadoEm:'2026-01-05'},
+    {id:'t06',nome:'Carolina Silva',telefone:'(51) 99201-0006',email:'carol@email.com',unidade:'Petrópolis',status:'ativo',criadoEm:'2025-09-10'},
+    {id:'t07',nome:'Diego Mendes',telefone:'(51) 99201-0007',email:'diego@email.com',unidade:'Petrópolis',status:'ativo',criadoEm:'2025-12-01'},
+    {id:'t08',nome:'Amanda Rocha',telefone:'(51) 99201-0008',email:'amanda@email.com',unidade:'Petrópolis',status:'ativo',criadoEm:'2026-02-14'},
+    {id:'t09',nome:'Thiago Fonseca',telefone:'(51) 99201-0009',email:'thiago@email.com',unidade:'Petrópolis',status:'ativo',criadoEm:'2026-03-01'},
+    {id:'t10',nome:'Isabela Castro',telefone:'(51) 99201-0010',email:'isabela@email.com',unidade:'Teresópolis',status:'ativo',criadoEm:'2025-11-05'},
+    {id:'t11',nome:'Marcos Pereira',telefone:'(51) 99201-0011',email:'marcos@email.com',unidade:'Teresópolis',status:'ativo',criadoEm:'2026-01-18'},
+    {id:'t12',nome:'Letícia Gomes',telefone:'(51) 99201-0012',email:'leticia@email.com',unidade:'Teresópolis',status:'ativo',criadoEm:'2026-03-22'},
+  ];
+  D.pets = [
+    {id:'p01',tutorId:'t01',nome:'Thor',especie:'Cachorro',raca:'Golden Retriever',porte:'Grande (25–45kg)',nascimento:'2020-03-15',obs:''},
+    {id:'p02',tutorId:'t01',nome:'Mel',especie:'Cachorro',raca:'Poodle',porte:'Pequeno (<10kg)',nascimento:'2022-06-20',obs:''},
+    {id:'p03',tutorId:'t02',nome:'Bob',especie:'Cachorro',raca:'Labrador',porte:'Grande (25–45kg)',nascimento:'2019-09-01',obs:'Adora água'},
+    {id:'p04',tutorId:'t03',nome:'Pipoca',especie:'Gato',raca:'SRD',porte:'Pequeno (<10kg)',nascimento:'2023-01-10',obs:''},
+    {id:'p05',tutorId:'t04',nome:'Bela',especie:'Cachorro',raca:'Shih Tzu',porte:'Pequeno (<10kg)',nascimento:'2021-05-08',obs:'Morde se assustada'},
+    {id:'p06',tutorId:'t04',nome:'Rex',especie:'Cachorro',raca:'Border Collie',porte:'Médio (10–25kg)',nascimento:'2020-11-30',obs:''},
+    {id:'p07',tutorId:'t05',nome:'Duque',especie:'Cachorro',raca:'Dogue Alemão',porte:'Extra Grande (>45kg)',nascimento:'2022-02-14',obs:''},
+    {id:'p08',tutorId:'t06',nome:'Lola',especie:'Cachorro',raca:'Yorkshire',porte:'Pequeno (<10kg)',nascimento:'2021-08-22',obs:''},
+    {id:'p09',tutorId:'t07',nome:'Zeus',especie:'Cachorro',raca:'Husky Siberiano',porte:'Médio (10–25kg)',nascimento:'2020-04-18',obs:''},
+    {id:'p10',tutorId:'t08',nome:'Nina',especie:'Cachorro',raca:'Maltês',porte:'Pequeno (<10kg)',nascimento:'2023-03-05',obs:''},
+    {id:'p11',tutorId:'t09',nome:'Toby',especie:'Cachorro',raca:'Beagle',porte:'Médio (10–25kg)',nascimento:'2021-12-25',obs:''},
+    {id:'p12',tutorId:'t10',nome:'Luna',especie:'Cachorro',raca:'Golden Retriever',porte:'Grande (25–45kg)',nascimento:'2020-07-10',obs:''},
+    {id:'p13',tutorId:'t11',nome:'Max',especie:'Cachorro',raca:'Pinscher',porte:'Pequeno (<10kg)',nascimento:'2022-09-03',obs:''},
+    {id:'p14',tutorId:'t12',nome:'Judy',especie:'Cachorro',raca:'Labrador',porte:'Grande (25–45kg)',nascimento:'2019-12-12',obs:''},
+  ];
+  D.planos = [
+    {id:'pl01',tutorId:'t01',petId:'p01',tipo:'Creche',nome:'Creche Mensal Thor',valorTotal:1500,valorDiario:60,valorRestante:840,diasTotal:25,diasUsados:11,modoAbate:'manual',status:'ativo',dataInicio:'2026-04-01',ultimoAbate:'2026-04-25'},
+    {id:'pl02',tutorId:'t01',petId:'p02',tipo:'Creche',nome:'Creche Mensal Mel',valorTotal:900,valorDiario:45,valorRestante:135,diasTotal:20,diasUsados:17,modoAbate:'manual',status:'ativo',dataInicio:'2026-04-01',ultimoAbate:'2026-04-24'},
+    {id:'pl03',tutorId:'t02',petId:'p03',tipo:'Creche',nome:'Creche Bob — Abril',valorTotal:1800,valorDiario:60,valorRestante:1620,diasTotal:30,diasUsados:3,modoAbate:'auto',status:'ativo',dataInicio:'2026-04-01',ultimoAbate:'2026-04-24'},
+    {id:'pl04',tutorId:'t06',petId:'p08',tipo:'Creche',nome:'Pacote Lola 10 dias',valorTotal:450,valorDiario:45,valorRestante:45,diasTotal:10,diasUsados:9,modoAbate:'manual',status:'ativo',dataInicio:'2026-04-10',ultimoAbate:'2026-04-26'},
+    {id:'pl05',tutorId:'t10',petId:'p12',tipo:'Creche',nome:'Creche Luna — Março',valorTotal:1500,valorDiario:60,valorRestante:0,diasTotal:25,diasUsados:25,modoAbate:'manual',status:'vencido',dataInicio:'2026-03-01',ultimoAbate:'2026-03-31'},
+  ];
+  D.agendamentos = [
+    {id:'ag01',tutorId:'t01',petId:'p01',servicoId:'svc3',funcionarioId:'func1',data:'2026-04-27',hora:'09:00',valor:155,status:'check-in',pagamento:'pix',obs:''},
+    {id:'ag02',tutorId:'t02',petId:'p03',servicoId:'svc1',funcionarioId:'func2',data:'2026-04-27',hora:'10:00',valor:70,status:'agendado',pagamento:'cartao',obs:''},
+    {id:'ag03',tutorId:'t04',petId:'p05',servicoId:'svc2',funcionarioId:'func1',data:'2026-04-27',hora:'11:00',valor:50,status:'agendado',pagamento:'dinheiro',obs:''},
+    {id:'ag04',tutorId:'t06',petId:'p08',servicoId:'svc3',funcionarioId:'func3',data:'2026-04-27',hora:'13:00',valor:75,status:'agendado',pagamento:'pix',obs:''},
+    {id:'ag05',tutorId:'t07',petId:'p09',servicoId:'svc1',funcionarioId:'func4',data:'2026-04-27',hora:'14:30',valor:50,status:'agendado',pagamento:'dinheiro',obs:''},
+    {id:'ag06',tutorId:'t03',petId:'p04',servicoId:'svc5',funcionarioId:'func1',data:'2026-04-28',hora:'09:00',valor:80,status:'agendado',pagamento:'pix',obs:'Vacina V10'},
+    {id:'ag07',tutorId:'t05',petId:'p07',servicoId:'svc3',funcionarioId:'func2',data:'2026-04-28',hora:'10:30',valor:155,status:'agendado',pagamento:'cartao',obs:''},
+    {id:'ag08',tutorId:'t01',petId:'p01',servicoId:'svc3',funcionarioId:'func1',data:'2026-04-22',hora:'09:00',valor:155,status:'concluido',pagamento:'pix',obs:''},
+    {id:'ag09',tutorId:'t04',petId:'p06',servicoId:'svc1',funcionarioId:'func2',data:'2026-04-22',hora:'11:00',valor:50,status:'concluido',pagamento:'dinheiro',obs:''},
+    {id:'ag10',tutorId:'t08',petId:'p10',servicoId:'svc2',funcionarioId:'func3',data:'2026-04-23',hora:'14:00',valor:50,status:'concluido',pagamento:'cartao',obs:''},
+    {id:'ag11',tutorId:'t09',petId:'p11',servicoId:'svc3',funcionarioId:'func4',data:'2026-04-23',hora:'15:00',valor:110,status:'concluido',pagamento:'pix',obs:''},
+    {id:'ag12',tutorId:'t10',petId:'p12',servicoId:'svc1',funcionarioId:'func2',data:'2026-04-24',hora:'10:00',valor:70,status:'concluido',pagamento:'pix',obs:''},
+    {id:'ag13',tutorId:'t11',petId:'p13',servicoId:'svc3',funcionarioId:'func1',data:'2026-04-24',hora:'13:00',valor:75,status:'concluido',pagamento:'dinheiro',obs:''},
+    {id:'ag14',tutorId:'t12',petId:'p14',servicoId:'svc3',funcionarioId:'func2',data:'2026-04-25',hora:'09:00',valor:155,status:'concluido',pagamento:'pix',obs:''},
+    {id:'ag15',tutorId:'t02',petId:'p03',servicoId:'svc5',funcionarioId:'func1',data:'2026-04-25',hora:'11:00',valor:80,status:'concluido',pagamento:'cartao',obs:''},
+    {id:'ag16',tutorId:'t06',petId:'p08',servicoId:'svc2',funcionarioId:'func3',data:'2026-04-21',hora:'14:00',valor:50,status:'concluido',pagamento:'pix',obs:''},
+    {id:'ag17',tutorId:'t01',petId:'p02',servicoId:'svc3',funcionarioId:'func1',data:'2026-04-18',hora:'09:00',valor:75,status:'concluido',pagamento:'dinheiro',obs:''},
+    {id:'ag18',tutorId:'t03',petId:'p04',servicoId:'svc6',funcionarioId:'func1',data:'2026-04-15',hora:'10:00',valor:120,status:'concluido',pagamento:'pix',obs:''},
+    {id:'ag19',tutorId:'t07',petId:'p09',servicoId:'svc3',funcionarioId:'func4',data:'2026-04-10',hora:'13:00',valor:110,status:'concluido',pagamento:'cartao',obs:''},
+    {id:'ag20',tutorId:'t05',petId:'p07',servicoId:'svc1',funcionarioId:'func2',data:'2026-04-08',hora:'11:00',valor:70,status:'concluido',pagamento:'pix',obs:''},
+  ];
+  D.financeiro = [
+    {id:'fin01',tipo:'receita',descricao:'Banho + Tosa — Thor',valor:155,data:'2026-04-22',categoria:'Serviço',origem:'agenda'},
+    {id:'fin02',tipo:'receita',descricao:'Banho — Rex',valor:50,data:'2026-04-22',categoria:'Serviço',origem:'agenda'},
+    {id:'fin03',tipo:'receita',descricao:'Tosa — Nina',valor:50,data:'2026-04-23',categoria:'Serviço',origem:'agenda'},
+    {id:'fin04',tipo:'receita',descricao:'Banho + Tosa — Toby',valor:110,data:'2026-04-23',categoria:'Serviço',origem:'agenda'},
+    {id:'fin05',tipo:'receita',descricao:'Banho — Luna',valor:70,data:'2026-04-24',categoria:'Serviço',origem:'agenda'},
+    {id:'fin06',tipo:'receita',descricao:'Banho + Tosa — Max',valor:75,data:'2026-04-24',categoria:'Serviço',origem:'agenda'},
+    {id:'fin07',tipo:'receita',descricao:'Banho + Tosa — Judy',valor:155,data:'2026-04-25',categoria:'Serviço',origem:'agenda'},
+    {id:'fin08',tipo:'receita',descricao:'Vacinação — Bob',valor:80,data:'2026-04-25',categoria:'Serviço',origem:'agenda'},
+    {id:'fin09',tipo:'receita',descricao:'Tosa — Lola',valor:50,data:'2026-04-21',categoria:'Serviço',origem:'agenda'},
+    {id:'fin10',tipo:'receita',descricao:'Banho + Tosa — Mel',valor:75,data:'2026-04-18',categoria:'Serviço',origem:'agenda'},
+    {id:'fin11',tipo:'receita',descricao:'Consulta Veterinária — Pipoca',valor:120,data:'2026-04-15',categoria:'Serviço',origem:'agenda'},
+    {id:'fin12',tipo:'receita',descricao:'Banho + Tosa — Zeus',valor:110,data:'2026-04-10',categoria:'Serviço',origem:'agenda'},
+    {id:'fin13',tipo:'receita',descricao:'Banho — Duque',valor:70,data:'2026-04-08',categoria:'Serviço',origem:'agenda'},
+    {id:'fin14',tipo:'receita',descricao:'PDV — Shampoo neutro',valor:25,data:'2026-04-22',categoria:'PDV',formaPagamento:'Dinheiro',origem:'pdv'},
+    {id:'fin15',tipo:'receita',descricao:'PDV — Condicionador canino',valor:28,data:'2026-04-23',categoria:'PDV',formaPagamento:'Pix',origem:'pdv'},
+    {id:'fin16',tipo:'receita',descricao:'Plano Creche — Bruno (25 diárias)',valor:1500,data:'2026-04-01',categoria:'Plano',formaPagamento:'Pix',origem:'pdv'},
+    {id:'fin17',tipo:'receita',descricao:'Plano Creche — Fernanda (30 diárias)',valor:1800,data:'2026-04-01',categoria:'Plano',formaPagamento:'Cartão Crédito',origem:'pdv'},
+    {id:'fin18',tipo:'despesa',descricao:'Compra de Shampoo (12 un)',valor:144,data:'2026-04-05',categoria:'Estoque'},
+    {id:'fin19',tipo:'despesa',descricao:'Aluguel — Cachorródromo',valor:3200,data:'2026-04-05',categoria:'Aluguel'},
+    {id:'fin20',tipo:'despesa',descricao:'Aluguel — Petrópolis',valor:2400,data:'2026-04-05',categoria:'Aluguel'},
+    {id:'fin21',tipo:'despesa',descricao:'Aluguel — Teresópolis',valor:2100,data:'2026-04-05',categoria:'Aluguel'},
+    {id:'fin22',tipo:'despesa',descricao:'Energia elétrica',valor:420,data:'2026-04-10',categoria:'Utilidades'},
+    {id:'fin23',tipo:'despesa',descricao:'Folha de pagamento — Abril',valor:8500,data:'2026-04-30',categoria:'Pessoal'},
+    {id:'fin24',tipo:'despesa',descricao:'Material de limpeza',valor:180,data:'2026-04-12',categoria:'Estoque'},
+  ];
+  D.contas = [
+    {id:'cta01',tipo:'pagar',descricao:'Folha de pagamento — Maio',valor:8500,vencimento:'2026-05-05',status:'pendente',categoria:'Pessoal'},
+    {id:'cta02',tipo:'pagar',descricao:'Aluguel Cachorródromo — Maio',valor:3200,vencimento:'2026-05-01',status:'pendente',categoria:'Aluguel'},
+    {id:'cta03',tipo:'pagar',descricao:'Energia elétrica — Maio',valor:420,vencimento:'2026-05-10',status:'pendente',categoria:'Utilidades'},
+    {id:'cta04',tipo:'pagar',descricao:'Reposição estoque (shampoo 24 un)',valor:288,vencimento:'2026-04-30',status:'pendente',categoria:'Estoque'},
+    {id:'cta05',tipo:'receber',descricao:'Plano — Bruno Carvalho (saldo restante)',valor:660,vencimento:'2026-04-30',status:'pendente',categoria:'Plano'},
+    {id:'cta06',tipo:'receber',descricao:'Renovação plano — Fernanda Oliveira',valor:1800,vencimento:'2026-04-30',status:'pendente',categoria:'Plano'},
+    {id:'cta07',tipo:'pagar',descricao:'Aluguel Petrópolis — Abril',valor:2400,vencimento:'2026-04-01',status:'pago',categoria:'Aluguel'},
+    {id:'cta08',tipo:'pagar',descricao:'Internet fibra — Abril',valor:120,vencimento:'2026-04-08',status:'pago',categoria:'Utilidades'},
+  ];
+  saveDB(D);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+seedDemoData();
+processarAbates();
+populateSel('f-unidade','');
+populateSel('e-unidade','');
+addPetField();
+updatePlanosBadge();
+updateDashboard();
+renderClientes();
 </script>
 </body>
 </html>
