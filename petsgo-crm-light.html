@@ -626,6 +626,10 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
           </button>
         </div>
       </div>
+      <div class="field" style="max-width:500px;margin-top:4px">
+        <label>Cor destaque</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="cfg-cores"></div>
+      </div>
       <button class="btn btn-primary" style="margin-top:12px" onclick="salvarPerfil()"><i class="ph ph-floppy-disk"></i> Salvar perfil</button>
     </div>
     <div class="card" style="max-width:720px;margin-top:14px">
@@ -1142,6 +1146,22 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         <button type="button" onclick="addFilialSetup()" style="margin-top:8px;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;border:1px dashed var(--border);background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">
           <i class="ph ph-plus"></i> Adicionar outra unidade
         </button>
+      </div>
+      <div class="field">
+        <label>Cor destaque do sistema</label>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Escolha a cor que vai aparecer em botões, menus e destaques.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="setup-cores">
+          <div class="setup-cor-btn" data-cor="indigo" data-selected="1" onclick="selecionarCor('indigo','setup')" style="width:32px;height:32px;border-radius:50%;background:#4047C8;cursor:pointer;display:flex;align-items:center;justify-content:center;outline:3px solid #4047C8;outline-offset:2px"><i class="ph ph-check" style="color:#fff;font-size:14px"></i></div>
+          <div class="setup-cor-btn" data-cor="violet" data-selected="0" onclick="selecionarCor('violet','setup')" style="width:32px;height:32px;border-radius:50%;background:#7C3AED;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="blue"   data-selected="0" onclick="selecionarCor('blue','setup')"   style="width:32px;height:32px;border-radius:50%;background:#2563EB;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="teal"   data-selected="0" onclick="selecionarCor('teal','setup')"   style="width:32px;height:32px;border-radius:50%;background:#0D9488;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="green"  data-selected="0" onclick="selecionarCor('green','setup')"  style="width:32px;height:32px;border-radius:50%;background:#16A34A;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="rose"   data-selected="0" onclick="selecionarCor('rose','setup')"   style="width:32px;height:32px;border-radius:50%;background:#E11D48;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="pink"   data-selected="0" onclick="selecionarCor('pink','setup')"   style="width:32px;height:32px;border-radius:50%;background:#DB2777;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="orange" data-selected="0" onclick="selecionarCor('orange','setup')" style="width:32px;height:32px;border-radius:50%;background:#EA580C;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="amber"  data-selected="0" onclick="selecionarCor('amber','setup')"  style="width:32px;height:32px;border-radius:50%;background:#D97706;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+          <div class="setup-cor-btn" data-cor="slate"  data-selected="0" onclick="selecionarCor('slate','setup')"  style="width:32px;height:32px;border-radius:50%;background:#475569;cursor:pointer;display:flex;align-items:center;justify-content:center"></div>
+        </div>
       </div>
       <div class="field">
         <label>Senha gerencial <span style="font-weight:400;color:var(--muted)">(protege o financeiro — opcional agora)</span></label>
@@ -3244,12 +3264,47 @@ function toast(msg) {
   t._t = setTimeout(()=>t.classList.remove('show'), 2800);
 }
 
+// ── CORES ─────────────────────────────────────────────────────────────────────
+const CORES = {
+  indigo: {brand:'#4047C8',dark:'#2D33A8',light:'#ECEEFF',label:'Índigo'},
+  violet: {brand:'#7C3AED',dark:'#5B21B6',light:'#EDE9FE',label:'Violeta'},
+  blue:   {brand:'#2563EB',dark:'#1D4ED8',light:'#DBEAFE',label:'Azul'},
+  teal:   {brand:'#0D9488',dark:'#0F766E',light:'#CCFBF1',label:'Teal'},
+  green:  {brand:'#16A34A',dark:'#15803D',light:'#DCFCE7',label:'Verde'},
+  rose:   {brand:'#E11D48',dark:'#BE123C',light:'#FFE4E6',label:'Rosa'},
+  pink:   {brand:'#DB2777',dark:'#BE185D',light:'#FCE7F3',label:'Pink'},
+  orange: {brand:'#EA580C',dark:'#C2410C',light:'#FFEDD5',label:'Laranja'},
+  amber:  {brand:'#D97706',dark:'#B45309',light:'#FEF3C7',label:'Âmbar'},
+  slate:  {brand:'#475569',dark:'#334155',light:'#F1F5F9',label:'Cinza'},
+};
+
+function applyCorDestaque(cor) {
+  const c = CORES[cor] || CORES.indigo;
+  const r = document.documentElement.style;
+  r.setProperty('--brand',       c.brand);
+  r.setProperty('--brand-dark',  c.dark);
+  r.setProperty('--brand-light', c.light);
+}
+
+function selecionarCor(cor, contexto) {
+  applyCorDestaque(cor);
+  const prefix = contexto || 'setup';
+  document.querySelectorAll(`.${prefix}-cor-btn`).forEach(el => {
+    const ativo = el.dataset.cor === cor;
+    el.dataset.selected = ativo ? '1' : '0';
+    el.style.outline      = ativo ? `3px solid ${CORES[cor]?.brand||'#4047C8'}` : 'none';
+    el.style.outlineOffset = '2px';
+    el.innerHTML = ativo ? '<i class="ph ph-check" style="color:#fff;font-size:14px"></i>' : '';
+  });
+}
+
 // ── SETUP WIZARD ──────────────────────────────────────────────────────────────
 function applyConfig(D) {
   const nome = D.config?.nomePetshop || 'Pets Go Control';
   document.getElementById('tb-nome-shop').textContent = nome;
   const av = nome.trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '🐾';
   document.getElementById('tb-avatar-shop').textContent = av;
+  if (D.config?.corDestaque) applyCorDestaque(D.config.corDestaque);
 }
 
 function finishInit(D) {
@@ -3300,10 +3355,13 @@ function saveSetup() {
   if (!filiais.length) { erro.textContent='⚠️ Adicione pelo menos uma filial/unidade.'; erro.style.display=''; return; }
   erro.style.display = 'none';
   const senha = document.getElementById('setup-senha').value.trim();
+  const corBtn = document.querySelector('.setup-cor-btn[data-selected="1"]');
+  const cor = corBtn ? corBtn.dataset.cor : 'indigo';
   const D = loadDB();
-  D.config.setupDone   = true;
-  D.config.nomePetshop = nome;
-  D.config.filiais     = filiais;
+  D.config.setupDone    = true;
+  D.config.nomePetshop  = nome;
+  D.config.filiais      = filiais;
+  D.config.corDestaque  = cor;
   if (senha) D.config.senhaGerencial = senha;
   saveDB(D);
   document.getElementById('setup-overlay').style.display = 'none';
@@ -3322,6 +3380,14 @@ function renderConfigPerfil() {
       <input value="${f}" placeholder="Nome da unidade..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;font-family:Inter,sans-serif;outline:none" class="cfg-filial-input"/>
       ${filiais.length>1?`<button type="button" onclick="this.parentElement.remove()" style="padding:9px 11px;border-radius:8px;border:1px solid #FECACA;background:#FEF2F2;color:#DC2626;cursor:pointer;font-size:16px">×</button>`:''}
     </div>`).join('');
+  const corAtual = D.config?.corDestaque || 'indigo';
+  document.getElementById('cfg-cores').innerHTML = Object.entries(CORES).map(([key,c])=>{
+    const ativo = key === corAtual;
+    return `<div class="cfg-cor-btn" data-cor="${key}" data-selected="${ativo?'1':'0'}" onclick="selecionarCor('${key}','cfg')"
+      style="width:30px;height:30px;border-radius:50%;background:${c.brand};cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;${ativo?`outline:3px solid ${c.brand};outline-offset:2px`:''}" title="${c.label}">
+      ${ativo?'<i class="ph ph-check" style="color:#fff;font-size:13px"></i>':''}
+    </div>`;
+  }).join('');
 }
 
 function addFilialConfig() {
@@ -3338,9 +3404,12 @@ function salvarPerfil() {
   const filiais = [...document.querySelectorAll('.cfg-filial-input')].map(i=>i.value.trim()).filter(Boolean);
   if (!nome) { toast('⚠️ Informe o nome do pet shop'); return; }
   if (!filiais.length) { toast('⚠️ Adicione pelo menos uma unidade'); return; }
+  const corBtn = document.querySelector('.cfg-cor-btn[data-selected="1"]');
+  const cor = corBtn ? corBtn.dataset.cor : null;
   const D = loadDB();
   D.config.nomePetshop = nome;
   D.config.filiais     = filiais;
+  if (cor) D.config.corDestaque = cor;
   saveDB(D);
   applyConfig(D);
   toast('✅ Perfil salvo!');
