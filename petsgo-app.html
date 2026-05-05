@@ -4,6 +4,12 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Pets Go Control</title>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#4047C8"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Pets Go"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -2087,7 +2093,6 @@ function reagendarOutraData() {
   if (!a) return;
   closeModal('modal-reagendar');
   populateAgTutores();
-  // pré-preenche após render do DOM
   setTimeout(()=>{
     const sel = document.getElementById('ag-tutor');
     if (sel) { sel.value = a.tutorId; onAgTutorChange(); }
@@ -3393,7 +3398,6 @@ function onPdvProdutoChange() {
 let _reciboHtml = '';
 let _reciboLanc  = null;
 
-// Atualizar após: cd worker-nfe && npm run deploy
 const NFE_WORKER_URL = 'https://petsgo-nfe.andarilhodigital.workers.dev';
 
 function abrirRecibo(l) {
@@ -4036,6 +4040,15 @@ function salvarPerfil() {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 initApp();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(r => console.log('SW registrado:', r.scope))
+      .catch(e => console.log('SW erro:', e));
+  });
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go — Tabela de Precificação 2025/2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F1F5F9;color:#0F172A;-webkit-font-smoothing:antialiased;padding:40px 20px}
+.container{max-width:960px;margin:0 auto}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:48px}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px}
+.logo-box{width:48px;height:48px;background:#4047C8;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff}
+.brand-name{font-size:24px;font-weight:900;letter-spacing:-.03em}
+.brand-tag{font-size:13px;font-weight:600;color:#4047C8;background:#ECEEFF;padding:3px 10px;border-radius:20px;margin-left:4px}
+.header h1{font-size:32px;font-weight:900;letter-spacing:-.03em;margin-bottom:8px}
+.header p{font-size:15px;color:#64748B;max-width:560px;margin:0 auto;line-height:1.6}
+.data-ref{font-size:12px;color:#94A3B8;margin-top:12px}
+
+/* SECTION */
+.section{margin-bottom:40px}
+.section-title{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94A3B8;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #E2E8F0}
+
+/* PLANOS CARDS */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:12px}
+.plan-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:24px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.plan-card.featured{border:2px solid #4047C8;background:#FAFBFF}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#4047C8;color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.plan-name{font-size:13px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.plan-price{font-size:36px;font-weight:900;letter-spacing:-.03em;color:#0F172A;line-height:1}
+.plan-price span{font-size:15px;font-weight:500;color:#64748B}
+.plan-setup{font-size:12px;color:#94A3B8;margin-top:4px;margin-bottom:16px}
+.plan-desc{font-size:13px;color:#334155;line-height:1.6;margin-bottom:16px;min-height:48px}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:8px}
+.plan-features li{font-size:12px;color:#475569;display:flex;align-items:flex-start;gap:8px}
+.plan-features li::before{content:"✓";color:#4047C8;font-weight:800;flex-shrink:0;margin-top:1px}
+.plan-features li.no::before{content:"✗";color:#CBD5E1}
+.plan-features li.no{color:#94A3B8}
+.plan-divider{border:none;border-top:1px solid #E2E8F0;margin:14px 0}
+
+/* FRANQUIA */
+.franchise-card{background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);border-radius:16px;padding:32px;color:#fff;margin-bottom:16px}
+.franchise-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.franchise-title{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.franchise-sub{font-size:14px;color:#94A3B8;margin-top:4px}
+.franchise-tag{background:#4047C8;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px}
+.inv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
+.inv-item{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px}
+.inv-label{font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.inv-val{font-size:20px;font-weight:800;color:#fff}
+.inv-item.total{background:rgba(64,71,200,.3);border-color:#4047C8;grid-column:1/-1}
+.inv-item.total .inv-val{font-size:28px;color:#A5B4FC}
+.recorrentes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.rec-item{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;text-align:center}
+.rec-label{font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;margin-bottom:6px}
+.rec-val{font-size:18px;font-weight:800;color:#E2E8F0}
+.proj-row{display:flex;align-items:center;gap:24px;background:rgba(255,255,255,.05);border-radius:10px;padding:16px}
+.proj-item{text-align:center;flex:1}
+.proj-label{font-size:11px;color:#94A3B8;font-weight:600;margin-bottom:4px}
+.proj-val{font-size:18px;font-weight:800;color:#fff}
+
+/* COMPARATIVO TABLE */
+.table-wrap{background:#fff;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:#F8FAFC}
+th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #E2E8F0}
+th:not(:first-child){text-align:center}
+td{padding:12px 16px;font-size:13px;color:#334155;border-bottom:1px solid #E2E8F0}
+td:not(:first-child){text-align:center;font-weight:600}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F8FAFC}
+.check{color:#00C896;font-weight:800}
+.cross{color:#CBD5E1}
+.td-highlight{color:#4047C8;font-weight:700}
+
+/* ROI */
+.roi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.roi-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.roi-icon{font-size:24px;margin-bottom:8px}
+.roi-val{font-size:22px;font-weight:900;letter-spacing:-.02em;color:#0F172A}
+.roi-label{font-size:11px;font-weight:600;color:#94A3B8;margin-top:4px;text-transform:uppercase}
+
+/* ALERT */
+.alert{background:#FFFDE6;border:1px solid #FDE68A;border-radius:10px;padding:14px 18px;font-size:13px;color:#854D0E;line-height:1.6;margin-top:12px}
+.note{background:#ECEEFF;border:1px solid #C7D2FE;border-radius:10px;padding:14px 18px;font-size:13px;color:#3730A3;line-height:1.6;margin-top:12px}
+
+@media print{body{background:#fff;padding:20px}.plan-card,.franchise-card,.table-wrap,.roi-card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-box">PG</div>
+      <div>
+        <span class="brand-name">Pets Go</span>
+        <span class="brand-tag">Control</span>
+      </div>
+    </div>
+    <h1>Tabela de Precificação</h1>
+    <p>Planos do sistema de automação e CRM para pet shops, daycare, hotel e clínicas veterinárias.</p>
+    <div class="data-ref">Referência: Abril 2026 · Valores em BRL · Revisão trimestral</div>
+  </div>
+
+  <!-- LINHA 1: SAAS PET SHOPS -->
+  <div class="section">
+    <div class="section-title">01 — Sistema SaaS para Pet Shops Independentes</div>
+
+    <div class="plans-grid">
+
+      <!-- STARTER -->
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">R$197<span>/mês</span></div>
+        <div class="plan-setup">+ R$497 setup único</div>
+        <div class="plan-desc">Para pet shops pequenos com até 300 clientes cadastrados e 1 ponto de operação.</div>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li>CRM: clientes + pets ilimitados</li>
+          <li>Agenda de agendamentos</li>
+          <li>Check-in / Check-out</li>
+          <li>Dashboard operacional</li>
+          <li>1 número WhatsApp</li>
+          <li>Confirmação automática de agendamento</li>
+          <li>Lembrete 24h antes</li>
+          <li class="no">Follow-up pós-serviço</li>
+          <li class="no">Reativação de inativos</li>
+          <li class="no">Múltiplas filiais</li>
+          <li class="no">Relatórios avançados</li>
+        </ul>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card featured">
+        <div class="plan-badge">Mais vendido</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">R$397<span>/mês</span></div>
+        <div class="plan-setup">+ R$797 setup único</div>
+        <div class="plan-desc">Para operações em crescimento com múltiplos funcionários e automação completa de WhatsApp.</div>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li>Tudo do Starter</li>
+          <li>Até 3 números WhatsApp</li>
+          <li>Follow-up automático pós-serviço</li>
+          <li>Gatilho de retorno 30 dias</li>
+          <li>Reativação de clientes 60+ dias</li>
+          <li>Planos pré-pagos com abate</li>
+          <li>PDV / Caixa</li>
+          <li>Financeiro básico</li>
+          <li>Gestão de funcionários</li>
+          <li>Estoque básico</li>
+          <li class="no">Múltiplas filiais</li>
+        </ul>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">R$797<span>/mês</span></div>
+        <div class="plan-setup">+ R$1.497 setup único</div>
+        <div class="plan-desc">Para redes com múltiplas unidades, franquias e necessidade de dashboard consolidado.</div>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li>Tudo do Pro</li>
+          <li>Múltiplas filiais (até 10)</li>
+          <li>WhatsApp ilimitado por filial</li>
+          <li>Dashboard multi-unidade</li>
+          <li>Onboarding de dados (migração)</li>
+          <li>Relatórios consolidados</li>
+          <li>White-label (marca própria)</li>
+          <li>SLA de suporte prioritário</li>
+          <li>Treinamento da equipe incluso</li>
+          <li>Integrações customizadas</li>
+          <li>API de dados</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="note">
+      <strong>Política de onboarding:</strong> Para os 3 primeiros clientes fechados, o setup é gratuito. A partir do 4º cliente, taxa de setup cheia. Isso reduz fricção na fase de validação.
+    </div>
+  </div>
+
+  <!-- LINHA 2: FRANQUIAS -->
+  <div class="section">
+    <div class="section-title">02 — Pacote para Franqueados Pets Go</div>
+
+    <div class="franchise-card">
+      <div class="franchise-header">
+        <div>
+          <div class="franchise-title">Franquia Pets Go — Investimento Total</div>
+          <div class="franchise-sub">Baseado na apresentação oficial de franquias 2025</div>
+        </div>
+        <div class="franchise-tag">Alta ticket</div>
+      </div>
+
+      <div class="inv-grid">
+        <div class="inv-item">
+          <div class="inv-label">Taxa inicial de franquia</div>
+          <div class="inv-val">R$ 80.000</div>
+        </div>
+        <div class="inv-item">
+          <div class="inv-label">Obra / reforma / equipamentos</div>
+          <div class="inv-val">R$ 120.000</div>
+        </div>
+        <div class="inv-item">
+          <div class="inv-label">Marca / identidade visual</div>
+          <div class="inv-val">R$ 15.000</div>
+        </div>
+        <div class="inv-item">
+          <div class="inv-label">Mentoria / treinamento / marketing</div>
+          <div class="inv-val">R$ 25.000</div>
+        </div>
+        <div class="inv-item">
+          <div class="inv-label">Capital de giro</div>
+          <div class="inv-val">R$ 50.000</div>
+        </div>
+        <div class="inv-item">
+          <div class="inv-label">Estoque inicial</div>
+          <div class="inv-val">R$ 5.000</div>
+        </div>
+        <div class="inv-item total">
+          <div class="inv-label">Investimento total estimado</div>
+          <div class="inv-val">R$ 295.000</div>
+        </div>
+      </div>
+
+      <div class="recorrentes">
+        <div class="rec-item">
+          <div class="rec-label">Royalties</div>
+          <div class="rec-val">5%</div>
+        </div>
+        <div class="rec-item">
+          <div class="rec-label">Fundo de marketing</div>
+          <div class="rec-val">2%</div>
+        </div>
+        <div class="rec-item">
+          <div class="rec-label">Sistema Pets Go Control</div>
+          <div class="rec-val">R$397/mês</div>
+        </div>
+      </div>
+
+      <div class="proj-row">
+        <div class="proj-item">
+          <div class="proj-label">Faturamento médio anual</div>
+          <div class="proj-val">R$ 1.000.000</div>
+        </div>
+        <div class="proj-item">
+          <div class="proj-label">Faturamento médio/mês</div>
+          <div class="proj-val">~R$ 83.000</div>
+        </div>
+        <div class="proj-item">
+          <div class="proj-label">Payback estimado</div>
+          <div class="proj-val">16–24 meses</div>
+        </div>
+        <div class="proj-item">
+          <div class="proj-label">Margem operacional est.</div>
+          <div class="proj-val">22–35%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <strong>Proposta para o Junior:</strong> O sistema Pets Go Control (R$397/mês — plano Pro) é incluído no pacote de suporte ao franqueado como diferencial tecnológico. Para o franqueado é transparente — está embutido na estrutura de suporte da franquia. Para vocês, é receita recorrente de R$397/mês por unidade vendida, para sempre.
+    </div>
+  </div>
+
+  <!-- COMPARATIVO -->
+  <div class="section">
+    <div class="section-title">03 — Comparativo de planos</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Funcionalidade</th>
+            <th>Starter<br/><span style="font-size:10px;text-transform:none;letter-spacing:0">R$197/mês</span></th>
+            <th>Pro<br/><span style="font-size:10px;text-transform:none;letter-spacing:0">R$397/mês</span></th>
+            <th>Enterprise<br/><span style="font-size:10px;text-transform:none;letter-spacing:0">R$797/mês</span></th>
+            <th>Franqueado<br/><span style="font-size:10px;text-transform:none;letter-spacing:0">incluso na taxa</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CRM: clientes + pets</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Agenda de serviços</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Check-in / Check-out</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>WhatsApp — confirmação agend.</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>WhatsApp — lembrete 24h</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>WhatsApp — follow-up pós serviço</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Gatilho retorno 30 dias</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Reativação inativos 60+ dias</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Planos pré-pagos (pacotes)</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>PDV / Frente de caixa</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Financeiro básico</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Gestão de funcionários</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Múltiplas filiais</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>White-label</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td>Onboarding de dados (migração)</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Números WhatsApp</td><td>1</td><td>até 3</td><td class="td-highlight">ilimitado</td><td>por filial</td></tr>
+          <tr><td>Setup inicial</td><td>R$497</td><td>R$797</td><td>R$1.497</td><td class="td-highlight">incluso</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROI RÁPIDO -->
+  <div class="section">
+    <div class="section-title">04 — ROI estimado por tipo de cliente</div>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-icon">🐕</div>
+        <div class="roi-val">1 cliente Pro</div>
+        <div class="roi-label">R$397/mês = R$4.764/ano</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">🏪</div>
+        <div class="roi-val">10 clientes Pro</div>
+        <div class="roi-label">R$3.970/mês = R$47.640/ano</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">🏬</div>
+        <div class="roi-val">1 franquia vendida</div>
+        <div class="roi-label">R$80k taxa + R$397/mês forever</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">🌐</div>
+        <div class="roi-val">5 franquias</div>
+        <div class="roi-label">R$400k taxas + R$1.985/mês</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:40px;font-size:12px;color:#94A3B8">
+    Pets Go Control · Documento interno de precificação · Abril 2026 · Não distribuir externamente sem aprovação
+  </div>
+
+</div>
+</body>
+</html>

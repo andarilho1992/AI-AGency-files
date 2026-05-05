@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: transparent; font-family: 'Consolas', monospace; overflow: hidden; }
+
+/* ── HUD DE SOBREVIVÊNCIA (canto inferior esquerdo) ── */
+#hud {
+    position: fixed;
+    bottom: 44px;
+    left: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    pointer-events: none;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-icon {
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.8));
+}
+
+.stat-track {
+    width: 90px;
+    height: 3px;
+    background: rgba(0,0,0,0.45);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease, background-color 0.4s;
+}
+
+/* ── MOODLES (texto de estado) ── */
+#moodles {
+    position: fixed;
+    top: 38px;
+    right: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.moodle {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.55);
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9);
+}
+.moodle-warn   { color: #FDE68A; }
+.moodle-danger { color: #F87171; }
+
+/* ── PAINEL DE INFECÇÃO (canto superior esquerdo) ── */
+#infection-panel {
+    position: fixed;
+    top: 38px;
+    left: 28px;
+    background: rgba(10, 0, 0, 0.75);
+    border: 1px solid #7F1D1D;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #fff;
+    min-width: 200px;
+    display: none;
+    pointer-events: none;
+}
+
+.inf-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #F87171;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.inf-symptom {
+    font-size: 11px;
+    color: #FCA5A5;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.inf-track {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.inf-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #EF4444, #7F1D1D);
+    border-radius: 2px;
+    transition: width 2s linear;
+}
+</style>
+</head>
+<body>
+
+<!-- HUD Principal -->
+<div id="hud">
+    <div class="stat-row">
+        <span class="stat-icon">🍖</span>
+        <div class="stat-track">
+            <div class="stat-fill" id="bar-hunger" style="width:100%;background:#16A34A"></div>
+        </div>
+    </div>
+    <div class="stat-row">
+        <span class="stat-icon">💧</span>
+        <div class="stat-track">
+            <div class="stat-fill" id="bar-thirst" style="width:100%;background:#3B82F6"></div>
+        </div>
+    </div>
+    <div class="stat-row">
+        <span class="stat-icon">😴</span>
+        <div class="stat-track">
+            <div class="stat-fill" id="bar-fatigue" style="width:0%;background:#F59E0B"></div>
+        </div>
+    </div>
+    <div class="stat-row">
+        <span class="stat-icon">🌡️</span>
+        <div class="stat-track">
+            <div class="stat-fill" id="bar-temp" style="width:20%;background:#6B7280"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Moodles -->
+<div id="moodles"></div>
+
+<!-- Painel Knox -->
+<div id="infection-panel">
+    <div class="inf-title">⚠ Infecção Knox</div>
+    <div class="inf-symptom" id="inf-symptom">Você não se sente bem...</div>
+    <div class="inf-track">
+        <div class="inf-fill" id="inf-bar" style="width:0%"></div>
+    </div>
+</div>
+
+<script>
+const bars = {
+    hunger:  document.getElementById('bar-hunger'),
+    thirst:  document.getElementById('bar-thirst'),
+    fatigue: document.getElementById('bar-fatigue'),
+    temp:    document.getElementById('bar-temp')
+}
+
+const moodleEl   = document.getElementById('moodles')
+const infPanel   = document.getElementById('infection-panel')
+const infSymptom = document.getElementById('inf-symptom')
+const infBar     = document.getElementById('inf-bar')
+
+function updateStats(stats, moodles) {
+    // Fome
+    bars.hunger.style.width = stats.hunger + '%'
+    bars.hunger.style.background =
+        stats.hunger < 30 ? '#DC2626' : stats.hunger < 60 ? '#F59E0B' : '#16A34A'
+
+    // Sede
+    bars.thirst.style.width = stats.thirst + '%'
+    bars.thirst.style.background =
+        stats.thirst < 30 ? '#DC2626' : stats.thirst < 60 ? '#93C5FD' : '#3B82F6'
+
+    // Fadiga
+    bars.fatigue.style.width = stats.fatigue + '%'
+    bars.fatigue.style.background =
+        stats.fatigue > 80 ? '#DC2626' : '#F59E0B'
+
+    // Temperatura (36.0–41.0 mapeado para 0–100%)
+    const tempPct = Math.min(100, Math.max(0, (stats.bodyTemp - 36.0) / 5.0 * 100))
+    bars.temp.style.width = tempPct + '%'
+    bars.temp.style.background =
+        stats.bodyTemp >= 41 ? '#DC2626' : stats.bodyTemp >= 40 ? '#F59E0B' : '#6B7280'
+
+    // Moodles
+    const items = []
+    const hungerLabels = { starving:'Morrendo de Fome', veryHungry:'Muita Fome', hungry:'Com Fome', peckish:'Levemente Faminto' }
+    const thirstLabels = { dehydrated:'Desidratado', veryThirsty:'Muita Sede', thirsty:'Com Sede' }
+    const fatigueLabels = { exhausted:'Exausto', veryTired:'Muito Cansado', tired:'Cansado' }
+
+    if (hungerLabels[moodles.hunger]) {
+        const cls = moodles.hunger === 'starving' ? 'moodle-danger' : 'moodle-warn'
+        items.push(`<div class="moodle ${cls}">${hungerLabels[moodles.hunger]}</div>`)
+    }
+    if (thirstLabels[moodles.thirst]) {
+        const cls = moodles.thirst === 'dehydrated' ? 'moodle-danger' : 'moodle-warn'
+        items.push(`<div class="moodle ${cls}">${thirstLabels[moodles.thirst]}</div>`)
+    }
+    if (fatigueLabels[moodles.fatigue]) {
+        const cls = moodles.fatigue === 'exhausted' ? 'moodle-danger' : 'moodle-warn'
+        items.push(`<div class="moodle ${cls}">${fatigueLabels[moodles.fatigue]}</div>`)
+    }
+    if (moodles.temp !== 'fine') {
+        const tempLabels = { hot:'Calor', sunstruck:'Golpe de Calor', hyperthermic:'Hipertérmico' }
+        items.push(`<div class="moodle moodle-danger">${tempLabels[moodles.temp] || ''}</div>`)
+    }
+
+    moodleEl.innerHTML = items.join('')
+}
+
+function updateInfection(infection) {
+    if (!infection.active) { infPanel.style.display = 'none'; return }
+
+    infPanel.style.display = 'block'
+    infBar.style.width = (infection.progress * 100).toFixed(1) + '%'
+
+    const msgs = {
+        none:     'Você não se sente bem...',
+        queasy:   'Enjoado. Febre baixa.',
+        nauseous: 'Náusea. Febre subindo.',
+        sick:     'Muito doente. Sem cura.',
+        dying:    'Seu corpo está falhando...'
+    }
+    infSymptom.textContent = msgs[infection.symptomLevel] || ''
+}
+
+window.addEventListener('message', e => {
+    if (e.data.type === 'updateStats')     updateStats(e.data.stats, e.data.moodles)
+    if (e.data.type === 'updateInfection') updateInfection(e.data.infection)
+})
+</script>
+</body>
+</html>

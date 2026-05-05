@@ -7,7 +7,9 @@ node_modules/
 
 # Dados sensíveis / memória pessoal
 .claude/
-.agent/
+.agent/*
+!.agent/skills/
+!.agent/skills/**
 
 # Imagens pesadas (não vai pra repo)
 *.jpg

@@ -1,0 +1,17 @@
+name               = "petsgo-nfe"
+main               = "src/index.js"
+compatibility_date = "2024-09-23"
+workers_dev        = true
+
+# Secrets — configurar via: wrangler secret put <NOME>
+#
+#   wrangler secret put ENOTAS_API_KEY
+#     → API Key do eNotas (Junior já tem, pegar no painel eNotas)
+#
+#   wrangler secret put ENOTAS_EMPRESA_ID
+#     → ID da empresa cadastrada no eNotas
+#     → Painel eNotas → Empresa → copiar o ID da URL
+#
+# Deploy:  npm run deploy
+# Dev:     npm run dev
+# Logs:    wrangler tail

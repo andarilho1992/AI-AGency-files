@@ -14,71 +14,130 @@
   --yellow:#F5C218;--yellow-light:#FFFDE6;
   --pink:#E8187B;--pink-light:#FFF0F8;
   --red:#DC2626;--red-light:#FEF2F2;
-  --bg:#F1F5F9;--surface:#FFFFFF;
-  --border:#E2E8F0;--text:#0F172A;--text2:#334155;--muted:#64748B;
+  --green:#16A34A;--green-light:#F0FFF4;
+  --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;
+  --border:#E2E8F0;--text:#0F172A;--text2:#334155;--muted:#64748B;--muted2:#94A3B8;
   --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
   --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
 }
-html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,#2D33A8 0%,#4047C8 50%,#6366F1 100%);color:#fff;padding:48px 24px 56px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
-.hero-logo{width:56px;height:56px;background:rgba(255,255,255,.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;backdrop-filter:blur(8px)}
-.hero h1{font-size:28px;font-weight:900;letter-spacing:-.03em;margin-bottom:8px}
-.hero p{font-size:15px;opacity:.8;max-width:420px;margin:0 auto 20px;line-height:1.5}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;backdrop-filter:blur(8px)}
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#1e2690 0%,#4047C8 55%,#6366F1 100%);color:#fff;padding:48px 20px 52px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-logo{width:60px;height:60px;background:rgba(255,255,255,.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;backdrop-filter:blur(8px)}
+.hero h1{font-size:26px;font-weight:900;letter-spacing:-.03em;margin-bottom:8px}
+.hero p{font-size:14px;opacity:.8;max-width:400px;margin:0 auto 20px;line-height:1.6}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:600;backdrop-filter:blur(8px)}
+.hero-badge.new{background:rgba(245,194,24,.2);border-color:rgba(245,194,24,.45);color:#FDE68A}
 
-/* LAYOUT */
-.container{max-width:720px;margin:0 auto;padding:0 16px}
-.section{padding:32px 0 8px}
-.section-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+/* ── LAYOUT ── */
+.container{max-width:680px;margin:0 auto;padding:0 16px}
+.section{padding:28px 0 4px}
+.section-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* MODULE CARD */
-.mod{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
-.mod-header{display:flex;align-items:flex-start;gap:14px}
-.mod-icon{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.mod-title{font-size:16px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
-.mod-desc{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.5}
-.mod-steps{display:flex;flex-direction:column;gap:8px}
-.step{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.4}
-.step-num{width:22px;height:22px;border-radius:6px;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step b{color:var(--text);font-weight:700}
-.step span{color:var(--text2)}
+/* ── MÓDULO CARD ── */
+.mod{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px;box-shadow:var(--shadow)}
+.mod.highlight{border-color:#C7D2FE;box-shadow:0 0 0 3px #ECEEFF,var(--shadow)}
+.mod.pwa{border-color:#6EE7C7;box-shadow:0 0 0 3px #E5FFF8,var(--shadow)}
+.mod-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.mod-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.mod-title{font-size:15px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.mod-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
 
-/* TAGS */
-.tags{display:flex;gap:6px;flex-wrap:wrap}
-.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+/* ── STEPS ── */
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5}
+.step-num{width:22px;height:22px;border-radius:6px;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-num.new{background:#FDE68A;color:#854D0E}
+.step-num.check{background:var(--teal-light);color:#006B4F;font-size:13px}
+.step-num.tip{background:#FEF9C3;color:#854D0E;font-size:13px}
+.step b{color:var(--text)}
+.step span,.step div{color:var(--text2)}
+
+/* ── TAGS ── */
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px}
 .tag-blue{background:var(--brand-light);color:var(--brand)}
 .tag-green{background:var(--teal-light);color:#006B4F}
 .tag-yellow{background:var(--yellow-light);color:#856400}
 .tag-red{background:var(--red-light);color:var(--red)}
-.tag-pink{background:var(--pink-light);color:#9A0050}
 .tag-gray{background:#F1F5F9;color:#64748B}
+.tag-new{background:#FEF9C3;color:#854D0E;border:1px solid #FDE68A}
 
-/* ALERT BOX */
-.alert{border-radius:10px;padding:12px 14px;font-size:13px;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
-.alert-yellow{background:var(--yellow-light);border:1px solid #FDE68A}
+/* ── ALERTS ── */
+.alert{border-radius:10px;padding:12px 14px;font-size:13px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;margin-top:10px}
 .alert-blue{background:var(--brand-light);border:1px solid #C7D2FE}
 .alert-green{background:var(--teal-light);border:1px solid #6EE7C7}
+.alert-yellow{background:var(--yellow-light);border:1px solid #FDE68A}
+.alert-new{background:#FEF9C3;border:1px solid #FDE68A}
+.alert-coming{background:#F0FFF4;border:1px solid #86EFAC}
 .alert i{font-size:18px;flex-shrink:0;margin-top:1px}
 
-/* DIVIDER */
-.divider{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:480px){.divider{grid-template-columns:1fr}}
+/* ── KEY ── */
+.key{display:inline-flex;align-items:center;gap:3px;background:#F1F5F9;border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--text2)}
 
-/* KEY */
-.key{display:inline-flex;align-items:center;gap:4px;background:#F1F5F9;border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--text2)}
+/* ── NOVIDADES GRID ── */
+.new-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.new-card{background:#FEF9C3;border:1px solid #FDE68A;border-radius:10px;padding:13px;display:flex;gap:10px;align-items:flex-start}
+.new-card-icon{font-size:20px;flex-shrink:0}
+.new-card-title{font-size:13px;font-weight:700;color:#854D0E;margin-bottom:2px}
+.new-card-desc{font-size:12px;color:#92400E;line-height:1.4}
 
-/* FOOTER */
-.footer{text-align:center;padding:32px 16px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:16px}
-.footer b{color:var(--text2)}
+/* ── COMING SOON GRID ── */
+.soon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.soon-card{background:var(--green-light);border:1px solid #BBF7D0;border-radius:10px;padding:13px;display:flex;gap:10px;align-items:flex-start}
+.soon-card-icon{font-size:20px;flex-shrink:0}
+.soon-card-title{font-size:13px;font-weight:700;color:#166534;margin-bottom:2px}
+.soon-card-desc{font-size:12px;color:#15803D;line-height:1.4}
 
-/* STATUS MINI */
-.status-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.s-item{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:var(--text2);flex:1;min-width:140px}
+/* ── INSTALL STEPS ── */
+.install-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.install-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.install-title{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.install-step{font-size:12px;color:var(--text2);line-height:1.5;padding:3px 0;border-bottom:1px solid var(--border)}
+.install-step:last-child{border:none}
+
+/* ── FLOW ── */
+.flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:8px 0}
+.flow-step{background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;white-space:nowrap}
+.flow-arrow{color:var(--muted2);font-size:13px}
+
+/* ── COL 2 ── */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 13px;font-size:12px;color:var(--text2);line-height:1.5}
+.info-box .ib-title{font-size:12px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:5px;color:var(--text)}
+
+/* ── PORTE ── */
+.porte-row{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.porte-pill{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid var(--border)}
+
+/* ── STATUS ROW ── */
+.status-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.s-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);flex:1;min-width:130px}
+.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:32px 16px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:20px;line-height:1.8}
+
+/* ── MOBILE ── */
+@media(max-width:520px){
+  .hero{padding:32px 16px 40px}
+  .hero h1{font-size:22px}
+  .hero p{font-size:13px}
+  .container{padding:0 12px}
+  .section{padding:20px 0 4px}
+  .mod{padding:14px 13px}
+  .new-grid{grid-template-columns:1fr}
+  .soon-grid{grid-template-columns:1fr}
+  .install-grid{grid-template-columns:1fr}
+  .col2{grid-template-columns:1fr}
+  .flow-step{font-size:10px;padding:4px 8px}
+  .status-row{gap:6px}
+  .s-item{min-width:110px}
+}
 </style>
 </head>
 <body>
@@ -87,254 +146,611 @@ html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
 <div class="hero">
   <div class="hero-logo"><i class="ph ph-paw-print"></i></div>
   <h1>Pets Go Control</h1>
-  <p>Manual de uso — todas as funcionalidades do sistema explicadas de forma simples.</p>
-  <div class="hero-badge"><i class="ph ph-book-open"></i> Guia completo para operação diária</div>
+  <p>Guia completo do sistema — agenda, planos, caixa e tudo mais explicado de forma simples.</p>
+  <div class="hero-badges">
+    <div class="hero-badge"><i class="ph ph-book-open"></i> Versão 5</div>
+    <div class="hero-badge new"><i class="ph ph-device-mobile"></i> Instala como app no celular</div>
+    <div class="hero-badge new"><i class="ph ph-sparkle"></i> Reagendar + NFS-e no recibo</div>
+  </div>
 </div>
 
 <div class="container">
 
-  <!-- VISÃO GERAL -->
-  <div class="section">
-    <div class="section-label">Visão geral do sistema</div>
+<!-- ─── INSTALAR COMO APP ─── -->
+<div class="section">
+  <div class="section-label">Instalar como app no celular</div>
+  <div class="mod pwa">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-device-mobile"></i></div>
+      <div>
+        <div class="mod-title">Pets Go no celular — sem precisar de internet</div>
+        <div class="mod-desc">O sistema funciona instalado como app. Depois de instalar, abre igual ao WhatsApp — sem precisar digitar link. Funciona offline também.</div>
+      </div>
+    </div>
+
+    <div class="install-grid">
+      <div class="install-card">
+        <div class="install-title"><i class="ph ph-android-logo" style="color:#16A34A"></i> Android (Chrome)</div>
+        <div class="install-step">1. Abra o link do sistema no Chrome</div>
+        <div class="install-step">2. Toque no menu <b>⋮</b> (canto superior direito)</div>
+        <div class="install-step">3. Toque em <b>"Adicionar à tela inicial"</b></div>
+        <div class="install-step">4. Confirme → ícone aparece na tela</div>
+      </div>
+      <div class="install-card">
+        <div class="install-title"><i class="ph ph-apple-logo" style="color:var(--text2)"></i> iPhone (Safari)</div>
+        <div class="install-step">1. Abra o link do sistema no Safari</div>
+        <div class="install-step">2. Toque no botão <b>compartilhar</b> (quadrado com seta)</div>
+        <div class="install-step">3. Role e toque <b>"Adicionar à tela de início"</b></div>
+        <div class="install-step">4. Confirme → ícone aparece na tela</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:10px">
+      <i class="ph ph-wifi-slash" style="color:#006B4F"></i>
+      <div><b>Funciona sem internet:</b> depois de instalado, o sistema fica salvo no dispositivo. Você consegue agendar, registrar diárias e ver o caixa mesmo sem sinal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── NO COMPUTADOR ─── -->
+<div class="section">
+  <div class="section-label">Usar no computador</div>
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-monitor"></i></div>
+      <div>
+        <div class="mod-title">Computador da loja — como funciona</div>
+        <div class="mod-desc">Abre no navegador como qualquer site. Pode ser instalado como app. Funciona offline depois da primeira carga.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Abrir:</b> Chrome ou Edge → acesse o link do sistema. Na primeira vez precisa de internet. Depois de carregar uma vez, funciona offline normalmente — o sistema fica salvo no próprio computador.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Instalar como app (opcional):</b> na barra de endereço do Chrome/Edge aparece um ícone de instalar (<i class="ph ph-arrow-square-in"></i> ou <i class="ph ph-plus"></i>). Clique → confirme → o Pets Go abre em janela própria, sem barra do navegador, igual a um programa instalado.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Sem internet na loja?</b> Sem problema. Depois de instalado, tudo funciona normalmente — agenda, caixa, planos. Os dados ficam salvos no dispositivo.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow" style="margin-top:10px">
+      <i class="ph ph-warning" style="color:#856400"></i>
+      <div><b>Atenção — dados por dispositivo:</b> hoje cada aparelho tem seu próprio banco de dados. Se você registrar uma venda no computador, ela não aparece automaticamente no celular. A sincronização entre dispositivos está em desenvolvimento (próxima versão).</div>
+    </div>
+  </div>
+
+  <div class="mod" style="margin-top:10px">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F0FFF4;color:#16A34A"><i class="ph ph-cloud-arrow-up"></i></div>
+      <div>
+        <div class="mod-title">Próxima versão — Sync entre dispositivos</div>
+        <div class="mod-desc">Dados em todos os aparelhos ao mesmo tempo. Funciona offline e sincroniza quando a internet voltar.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Como vai funcionar:</b> cada aparelho continua salvando os dados localmente. Quando tiver internet, sincroniza automaticamente com a nuvem. Se a internet cair no meio do turno, o sistema não para — só sincroniza depois.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Na prática:</b> venda feita no caixa do computador → aparece no celular em segundos. Agendamento criado no celular → aparece no computador da recepção. Tudo em tempo real.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:10px">
+      <i class="ph ph-check-circle" style="color:#006B4F"></i>
+      <div><b>Essa funcionalidade está planejada</b> e será ativada assim que você aprovar as funcionalidades atuais. Nenhuma mudança no visual ou no uso — só os dados passam a se comunicar entre dispositivos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── O QUE HÁ DE NOVO ─── -->
+<div class="section">
+  <div class="section-label">O que há de novo — Versão 5</div>
+  <div class="new-grid">
+    <div class="new-card">
+      <div class="new-card-icon">💳</div>
+      <div>
+        <div class="new-card-title">Pagar direto na agenda</div>
+        <div class="new-card-desc">Ao concluir um serviço, o sistema abre o pagamento na hora. Escolha Dinheiro, Pix, Débito ou Crédito e o recibo é gerado automaticamente.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🔍</div>
+      <div>
+        <div class="new-card-title">Filtro de serviço na agenda</div>
+        <div class="new-card-desc">Chips automáticos com os serviços do dia. Clique em "Banho" para ver só os banhos, "Creche" para ver só as creches etc.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📋</div>
+      <div>
+        <div class="new-card-title">Histórico de diárias</div>
+        <div class="new-card-desc">Botão 📋 em cada plano mostra todos os dias usados e o valor de cada diária. Responda na hora quando o cliente perguntar.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📅</div>
+      <div>
+        <div class="new-card-title">Diária retroativa com data</div>
+        <div class="new-card-desc">Esqueceu de lançar ontem? Sem problema — escolha a data ao usar a diária. O sistema avisa se já tem lançamento naquele dia.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🗂️</div>
+      <div>
+        <div class="new-card-title">Planos com grupo e modalidade</div>
+        <div class="new-card-desc">Novo cadastro de planos: Grupo (Creche, Hotel, Banho), Modalidade (Mensal, Semestral) e frequência semanal para Creche.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🚫</div>
+      <div>
+        <div class="new-card-title">Cancelar plano limpa o caixa</div>
+        <div class="new-card-desc">Ao cancelar um plano, o lançamento financeiro da contratação é removido automaticamente. Diárias já usadas continuam no histórico.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🔄</div>
+      <div>
+        <div class="new-card-title">Reagendar após serviço</div>
+        <div class="new-card-desc">Após concluir e pagar, o sistema pergunta "Agendar próxima visita?". Escolha +7, +15 ou +30 dias — agendamento criado com um clique, mesmo pet e serviço.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🧾</div>
+      <div>
+        <div class="new-card-title">Botão NFS-e no recibo</div>
+        <div class="new-card-desc">Botão "NFS-e" aparece em todo recibo. A infraestrutura está pronta — será ativada com a API Key do eNotas sem nenhuma mudança no sistema.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── VISÃO GERAL ─── -->
+<div class="section">
+  <div class="section-label">Como o sistema funciona</div>
+  <div class="alert alert-blue" style="margin-top:0;border-radius:12px">
+    <i class="ph ph-squares-four" style="color:var(--brand)"></i>
+    <div>Tudo fica no <b>menu lateral</b> — no celular aparece como ☰. Cada módulo cuida de uma área do pet shop. Números em vermelho ou amarelo no menu são alertas em tempo real: planos críticos, pets em check-in, etc.</div>
+  </div>
+</div>
+
+<!-- ─── AGENDA ─── -->
+<div class="section">
+  <div class="section-label">Agenda — o coração do sistema</div>
+
+  <div class="mod highlight">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-calendar-check"></i></div>
+      <div>
+        <div class="mod-title">Agenda <span class="tag tag-new" style="font-size:10px;margin-left:4px"><i class="ph ph-sparkle"></i> Atualizado</span></div>
+        <div class="mod-desc">Grade visual das 07h às 20h. Filtre por status ou por serviço. Pague direto no card do agendamento.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Agendar:</b> <span class="key">+ Agendar</span> → escolha o tutor → pet aparece automaticamente → selecione o serviço → o preço preenche pelo porte do animal.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Filtros de status:</b> abas no topo — Todos, Agendado, Confirmado, Em andamento, Concluído, Cancelado.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Filtro de serviço:</b> segunda linha de chips aparece automaticamente com os serviços do dia — clique para ver só Banho, só Creche, só Tosa etc.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Check-in:</b> pet chegou? Clique no botão <span class="key"><i class="ph ph-door-open"></i></span> no card — pet aparece na tela de Check-in/Out.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Concluir e pagar:</b> serviço pronto? Clique no <span class="key">✓</span> → sistema abre o pagamento na hora. Escolha a forma e confirme → recibo gerado automaticamente.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Pagar depois:</b> fechou o modal sem pagar? O card fica com um botão <b style="color:#16A34A">💰</b> verde. Clique quando o cliente pagar.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Reagendar na hora:</b> após confirmar o pagamento, o sistema pergunta automaticamente "Agendar próxima visita?". Clique em <span class="key">+7 dias</span>, <span class="key">+15 dias</span> ou <span class="key">+30 dias</span> — agendamento criado com mesmo pet, serviço e valor. Ou clique em <b>Outra data</b> para escolher o dia no calendário.</div>
+      </div>
+    </div>
+
+    <div class="status-row" style="margin-top:10px">
+      <div class="s-item"><div class="s-dot" style="background:#4047C8"></div><span><b>Agendado</b> — azul</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#00C896"></div><span><b>Confirmado</b> — verde</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#F5C218"></div><span><b>Em andamento</b> — amarelo</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#94A3B8"></div><span><b>Concluído</b> — cinza</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#DC2626"></div><span><b>Cancelado</b> — vermelho</span></div>
+    </div>
+
+    <div class="alert alert-new">
+      <i class="ph ph-sparkle" style="color:#854D0E"></i>
+      <div><b>Fluxo completo:</b>
+        <div class="flow">
+          <div class="flow-step">+ Agendar</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🚪 Check-in</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">✓ Concluir</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">💳 Pagar</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🧾 Recibo</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🔄 Reagendar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PLANOS ─── -->
+<div class="section">
+  <div class="section-label">Planos & Pacotes</div>
+
+  <div class="mod highlight">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-ticket"></i></div>
+      <div>
+        <div class="mod-title">Planos & Pacotes <span class="tag tag-new" style="font-size:10px;margin-left:4px"><i class="ph ph-sparkle"></i> Atualizado</span></div>
+        <div class="mod-desc">Pacotes de diárias para creche, hotel e serviços recorrentes. Cada diária usada lança receita no caixa automaticamente.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Criar plano:</b> <span class="key">+ Novo Plano</span> → preencha os campos:</div>
+      </div>
+    </div>
+
+    <div class="col2">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-grid-four" style="color:var(--brand)"></i> Grupo</div>
+        Creche · Hospedagem · Banho/Tosa · Estética · Outro
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-calendar" style="color:#856400"></i> Modalidade</div>
+        Mensal · Trimestral · Semestral · Anual · Avulso
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-repeat" style="color:#006B4F"></i> Frequência (Creche)</div>
+        2× a 6× por semana — aparece só para o grupo Creche
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-currency-dollar" style="color:#9A0050"></i> Modo de abate</div>
+        Manual (creche/pacotes) ou Automático (hospedagem)
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:4px">
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Usar diária com data:</b> <span class="key">Usar diária</span> → escolha a data → confirme. Funciona retroativamente. Se já houver lançamento naquele dia, o sistema avisa antes de criar outro.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Ver histórico:</b> clique no botão <span class="key"><i class="ph ph-list-bullets"></i></span> em qualquer plano — vê todos os dias usados com data e valor.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Barra de progresso:</b> <span style="color:var(--teal);font-weight:700">verde</span> = tranquilo · <span style="color:#F5C218;font-weight:700">amarelo</span> = atenção · <span style="color:var(--red);font-weight:700">vermelho</span> = crítico (menos de 3 dias).</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Renovar:</b> quando estiver acabando, <span class="key">Renovar</span> adiciona mais crédito sem criar plano novo.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Filtros:</b> <span class="tag tag-green" style="font-size:11px">Ativos</span> <span class="tag tag-yellow" style="font-size:11px">⚠️ Críticos</span> <span class="tag tag-gray" style="font-size:11px">Todos</span> <span class="tag tag-red" style="font-size:11px">Vencidos</span> <span class="tag tag-gray" style="font-size:11px">Cancelados</span></div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Cancelar plano:</b> o botão ✕ cancela o plano <b>e remove o lançamento financeiro</b> da contratação. As diárias já usadas continuam no histórico.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <i class="ph ph-warning" style="color:#856400"></i>
+      <div>O número em amarelo na sidebar mostra quantos planos têm menos de 3 diárias. <b>Verifique toda manhã.</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CLIENTES ─── -->
+<div class="section">
+  <div class="section-label">Clientes & Pets</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-paw-print"></i></div>
+      <div>
+        <div class="mod-title">Clientes & Pets</div>
+        <div class="mod-desc">Cadastro completo de tutores e animais. CPF, endereço, peso do pet e histórico de serviços.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Novo cliente:</b> <span class="key">+ Novo Cliente</span> → nome, WhatsApp, CPF, endereço → adicione o pet com raça, porte e peso em kg.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Porte do pet — preencha sempre:</b> o sistema usa o porte para calcular o preço automaticamente ao agendar.</div>
+      </div>
+    </div>
+
+    <div class="porte-row">
+      <span class="porte-pill" style="background:#E5FFF8;border-color:#6EE7C7;color:#006B4F">Pequeno — até 10kg</span>
+      <span class="porte-pill" style="background:#ECEEFF;border-color:#C7D2FE;color:var(--brand)">Médio — 11 a 20kg</span>
+      <span class="porte-pill" style="background:#FFF0F8;border-color:#FBC8E2;color:#9A0050">Grande — 21 a 30kg</span>
+      <span class="porte-pill" style="background:#FEF2F2;border-color:#FECACA;color:var(--red)">Extra G — acima de 30kg</span>
+    </div>
+
+    <div class="steps" style="margin-top:8px">
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Planos do cliente:</b> clique em <span class="key">🎟 Planos</span> no card do tutor para ver, criar e dar baixa em diárias diretamente.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Histórico do pet:</b> clique no pet para ver todos os serviços realizados e os valores cobrados.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CAIXA ─── -->
+<div class="section">
+  <div class="section-label">Caixa & Financeiro</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-storefront"></i></div>
+      <div>
+        <div class="mod-title">PDV / Caixa</div>
+        <div class="mod-desc">Para vendas no balcão sem agendamento. Serviço com agendamento → conclua pela Agenda (entra no caixa automático).</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Serviço avulso:</b> "Serviço" → escolha → informe pagamento → <span class="key">Registrar Venda</span> → recibo abre automático.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Produto:</b> "Produto" → escolha o item → preço preenche sozinho → confirme. Estoque descontado automaticamente.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Vender plano:</b> "Plano / Pacote" → cliente → valor total e diária → confirmar. Plano criado automaticamente em Planos & Pacotes.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-new">
+      <i class="ph ph-receipt" style="color:#854D0E"></i>
+      <div><b>Recibo automático:</b> toda venda gera um recibo com três botões — <span class="key"><i class="ph ph-file-text"></i> NFS-e</span> para emitir nota fiscal, <span class="key"><i class="ph ph-printer"></i> Imprimir / PDF</span> para enviar ao cliente, e <b>Fechar</b>. Para reemitir: Financeiro → ícone <i class="ph ph-receipt"></i> ao lado do lançamento.</div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-currency-dollar"></i></div>
+      <div>
+        <div class="mod-title">Financeiro</div>
+        <div class="mod-desc">Receitas entram automaticamente pela Agenda e Planos. Dois níveis de acesso.</div>
+      </div>
+    </div>
+
+    <div class="col2">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-list-bullets"></i> Movimento</div>
+        Acesso livre. Receitas do dia. Qualquer funcionário pode ver.
+      </div>
+      <div class="info-box" style="border-color:#FECACA">
+        <div class="ib-title" style="color:var(--red)"><i class="ph ph-lock"></i> Gerencial</div>
+        Com senha. Despesas, contas a pagar/receber e saldo real do mês.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="background:#FEF2F2;color:var(--red)">!</div>
+        <div><b>Configurar senha:</b> Configurações → "Senha Gerencial" → definir e salvar antes de usar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OUTROS MÓDULOS ─── -->
+<div class="section">
+  <div class="section-label">Demais módulos</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFF0F8;color:#9A0050"><i class="ph ph-door-open"></i></div>
+      <div>
+        <div class="mod-title">Check-in / Check-out</div>
+        <div class="mod-desc">Painel de quem está no pet shop agora. Pets aparecem aqui quando o Check-in é feito na Agenda.</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div>Pet chegou? Agenda → <span class="key">🚪 Check-in</span> → aparece nesta tela.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Pronto? <span class="key">✓ Concluir</span> aqui ou na Agenda → abre pagamento automaticamente.</div></div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F0FFF4;color:#16A34A"><i class="ph ph-package"></i></div>
+      <div>
+        <div class="mod-title">Estoque</div>
+        <div class="mod-desc">Produtos e insumos. Alerta quando estoque cai abaixo do mínimo. Descontado automático ao concluir serviços.</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><b>Cadastrar:</b> <span class="key">+ Produto</span> → nome, quantidade, mínimo, preço de compra e venda.</div></div>
+      <div class="step"><div class="step-num">2</div><div><b>Insumos:</b> vincule produtos a serviços (ex: shampoo no Banho) — descontado ao concluir o agendamento.</div></div>
+      <div class="step"><div class="step-num">3</div><div>Produto em <b style="color:var(--red)">vermelho</b> = abaixo do mínimo → hora de repor.</div></div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F1F5F9;color:#64748B"><i class="ph ph-gear"></i></div>
+      <div>
+        <div class="mod-title">Configurações — Serviços</div>
+        <div class="mod-desc">Catálogo de serviços com preços por porte P/M/G/GG, insumos e número de diárias incluídas.</div>
+      </div>
+    </div>
+    <div class="porte-row">
+      <span class="porte-pill" style="background:#E5FFF8;border-color:#6EE7C7;color:#006B4F">P</span>
+      <span class="porte-pill" style="background:#ECEEFF;border-color:#C7D2FE;color:var(--brand)">M</span>
+      <span class="porte-pill" style="background:#FFF0F8;border-color:#FBC8E2;color:#9A0050">G</span>
+      <span class="porte-pill" style="background:#FEF2F2;border-color:#FECACA;color:var(--red)">GG</span>
+    </div>
     <div class="alert alert-blue">
       <i class="ph ph-info" style="color:var(--brand)"></i>
-      <div>O sistema é dividido em <b>módulos na barra lateral</b>. Cada módulo cuida de uma parte do pet shop. Você navega clicando nos ícones à esquerda — o menu mostra alertas em tempo real (ex: planos críticos, animais em check-in).</div>
+      <div>O preço por porte preenche automaticamente na agenda. O sistema detecta o porte do pet e aplica o valor correto — inclusive GG para animais acima de 30kg.</div>
     </div>
   </div>
 
-  <!-- MÓDULOS PRINCIPAIS -->
-  <div class="section">
-    <div class="section-label">Módulos principais</div>
-
-    <!-- DASHBOARD -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-squares-four"></i></div>
-        <div>
-          <div class="mod-title">Dashboard</div>
-          <div class="mod-desc">Visão geral de tudo: clientes ativos, agendamentos do dia, faturamento e alertas de planos vencendo.</div>
-        </div>
-      </div>
-      <div class="tags">
-        <span class="tag tag-blue"><i class="ph ph-users"></i> Tutores ativos</span>
-        <span class="tag tag-green"><i class="ph ph-calendar-check"></i> Agenda do dia</span>
-        <span class="tag tag-yellow"><i class="ph ph-warning"></i> Planos críticos</span>
-        <span class="tag tag-pink"><i class="ph ph-currency-dollar"></i> Receita do mês</span>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span>Se tiver <b>mais de uma filial</b>, clique nas abas no topo do dashboard para filtrar os dados por unidade.</span></div>
-        <div class="step"><div class="step-num">2</div><span>O bloco <b>"Por Filial"</b> mostra a distribuição de clientes entre as unidades com barra visual.</span></div>
-        <div class="step"><div class="step-num">3</div><span>Planos com menos de 3 diárias aparecem em <b style="color:var(--red)">vermelho</b> como alerta — verifique todo dia.</span></div>
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-users-three"></i></div>
+      <div>
+        <div class="mod-title">Funcionários</div>
+        <div class="mod-desc">Equipe com cargo e % de comissão. O sistema calcula com base nos serviços concluídos.</div>
       </div>
     </div>
-
-    <!-- CLIENTES & PETS -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-paw-print"></i></div>
-        <div>
-          <div class="mod-title">Clientes & Pets</div>
-          <div class="mod-desc">Cadastro completo de tutores e seus animais. Histórico de serviços por pet, planos vinculados e dados de contato.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Novo Cliente:</b> clique no botão <span class="key">+ Novo Cliente</span> → preencha nome, telefone e filial → adicione os pets com raça e porte.</span></div>
-        <div class="step"><div class="step-num">2</div><span><b>Porte do pet:</b> sempre preencha (Pequeno / Médio / Grande) — o sistema usa isso para calcular o preço automaticamente no agendamento.</span></div>
-        <div class="step"><div class="step-num">3</div><span><b>Histórico:</b> clique em qualquer pet para ver os últimos serviços realizados e o valor de cada um.</span></div>
-        <div class="step"><div class="step-num">4</div><span><b>Planos do cliente:</b> clique em <span class="key">🎟 Planos</span> no card do tutor para ver e gerenciar os pacotes de diárias.</span></div>
-      </div>
-      <div class="alert alert-yellow" style="margin-top:4px">
-        <i class="ph ph-lightbulb" style="color:#856400"></i>
-        <div>Filtre por filial usando as abas no topo da lista. Busca pelo nome funciona na barra de pesquisa no topo da tela.</div>
-      </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><b>Cadastrar:</b> <span class="key">+ Novo Funcionário</span> → nome, cargo, telefone e % de comissão.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Vincule ao agendar — conta para a comissão mensal.</div></div>
     </div>
-
-    <!-- AGENDA -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-calendar-check"></i></div>
-        <div>
-          <div class="mod-title">Agenda</div>
-          <div class="mod-desc">Agendamentos do dia organizados por horário. Mostra serviço, funcionário responsável e status de cada atendimento.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Novo agendamento:</b> <span class="key">+ Agendar</span> → selecione tutor → o pet aparece automaticamente → selecione serviço → o preço preenche sozinho pelo porte do animal.</span></div>
-        <div class="step"><div class="step-num">2</div><span><b>Funcionário:</b> atribua quem vai realizar o serviço — aparece no card do agendamento.</span></div>
-        <div class="step"><div class="step-num">3</div><span><b>Status:</b> clique no botão de ação para mover entre as etapas.</span></div>
-      </div>
-      <div class="status-row">
-        <div class="s-item"><div class="s-dot" style="background:#94A3B8"></div><span><b>Agendado</b> — marcado, aguardando</span></div>
-        <div class="s-item"><div class="s-dot" style="background:#F5C218"></div><span><b>Check-in</b> — pet chegou</span></div>
-        <div class="s-item"><div class="s-dot" style="background:#00C896"></div><span><b>Concluído</b> — serviço feito, insumos deduzidos</span></div>
-        <div class="s-item"><div class="s-dot" style="background:#DC2626"></div><span><b>Cancelado</b> — não aconteceu</span></div>
-      </div>
-    </div>
-
-    <!-- CHECK-IN -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#FFF0F8;color:#9A0050"><i class="ph ph-door-open"></i></div>
-        <div>
-          <div class="mod-title">Check-in / Out</div>
-          <div class="mod-desc">Painel operacional de quem está no pet shop agora. Pets em atendimento ficam aqui até serem marcados como concluídos.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span>Quando o tutor chegar, vá em <b>Agenda</b> e clique em <span class="key">Check-in</span> no agendamento — o pet aparece automaticamente nesta tela.</span></div>
-        <div class="step"><div class="step-num">2</div><span>Ao finalizar o serviço, clique em <span class="key">Concluir</span> aqui ou na Agenda — o sistema deduz os insumos do estoque automaticamente.</span></div>
-      </div>
-    </div>
-
   </div>
+</div>
 
-  <!-- FINANCEIRO -->
-  <div class="section">
-    <div class="section-label">Caixa & Financeiro</div>
-
-    <!-- PDV -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-storefront"></i></div>
-        <div>
-          <div class="mod-title">PDV / Caixa</div>
-          <div class="mod-desc">Registra vendas avulsas: serviços, produtos e venda de planos de diárias. Tudo vai direto para o financeiro.</div>
-        </div>
+<!-- ─── ROTINA DIÁRIA ─── -->
+<div class="section">
+  <div class="section-label">Rotina diária recomendada</div>
+  <div class="mod">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Início do dia:</b> Dashboard → cheque alertas de planos críticos → veja a Agenda do dia.</div>
       </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Serviço avulso:</b> selecione o tipo "Serviço" → escolha o serviço → informe pagamento → <span class="key">Registrar Venda</span>.</span></div>
-        <div class="step"><div class="step-num">2</div><span><b>Produto:</b> selecione "Produto" → escolha o item do estoque → o preço preenche sozinho → confirme. O estoque é descontado automaticamente.</span></div>
-        <div class="step"><div class="step-num">3</div><span><b>Vender um plano:</b> selecione "Plano / Pacote de diárias" → escolha o cliente → informe valor total e valor por diária → o sistema mostra quantas diárias vão gerar → confirme. O plano aparece automaticamente na página de Planos.</span></div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Pet chegou:</b> Agenda → <span class="key">🚪 Check-in</span> → aparece na tela de Check-in/Out.</div>
       </div>
-      <div class="alert alert-green" style="margin-top:4px">
-        <i class="ph ph-check-circle" style="color:#006B4F"></i>
-        <div>O painel mostra o total faturado hoje, quantidade de vendas e ticket médio em tempo real.</div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Serviço pronto:</b> Agenda → <span class="key">✓ Concluir</span> → escolha a forma de pagamento → recibo gerado.</div>
       </div>
-    </div>
-
-    <!-- PLANOS -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-ticket"></i></div>
-        <div>
-          <div class="mod-title">Planos & Pacotes</div>
-          <div class="mod-desc">Gestão visual de todos os pacotes de diárias (creche, hospedagem). Mostra saldo restante, barra de progresso e alertas quando está acabando.</div>
-        </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Pet de creche/hotel (plano):</b> Planos → <span class="key">Usar diária</span> → confirme a data → valor entra no caixa automaticamente.</div>
       </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Barra de progresso:</b> <span style="color:var(--teal);font-weight:700">verde</span> = tranquilo · <span style="color:#F5C218;font-weight:700">amarelo</span> = atenção · <span style="color:var(--red);font-weight:700">vermelho</span> = crítico (menos de 3 dias).</span></div>
-        <div class="step"><div class="step-num">2</div><span><b>Dar baixa manual:</b> clique em <span class="key">Usar diária</span> no card do plano quando o animal usar o dia de creche.</span></div>
-        <div class="step"><div class="step-num">3</div><span><b>Renovar:</b> quando o plano estiver acabando, clique em <span class="key">Renovar</span> para adicionar mais crédito sem criar um plano novo.</span></div>
-        <div class="step"><div class="step-num">4</div><span><b>Filtros:</b> use as abas <span class="key">Críticos</span> para ver só os que precisam de atenção hoje.</span></div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Venda avulsa no balcão:</b> PDV → Nova Venda → tipo → registrar → recibo abre automático.</div>
       </div>
-      <div class="alert alert-yellow" style="margin-top:4px">
-        <i class="ph ph-warning" style="color:#856400"></i>
-        <div>O número em <b style="color:#856400">amarelo</b> na sidebar mostra quantos planos estão críticos — fique de olho todo dia de manhã.</div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Ver caixa do dia:</b> Financeiro → aba Movimento (sem senha).</div>
       </div>
-    </div>
-
-    <!-- FINANCEIRO -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-currency-dollar"></i></div>
-        <div>
-          <div class="mod-title">Financeiro</div>
-          <div class="mod-desc">Dividido em duas abas com níveis de acesso diferentes.</div>
-        </div>
-      </div>
-      <div class="divider">
-        <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:14px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px"><i class="ph ph-list-bullets"></i> Movimento</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.5">Acesso livre. Mostra as receitas do dia e do mês. Funcionários podem consultar sem senha.</div>
-        </div>
-        <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:14px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px;color:var(--red)"><i class="ph ph-lock"></i> Gerencial</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.5">Requer senha do dono. Mostra tudo: despesas, contas a pagar/receber e saldo real do mês.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">!</div><span><b>Configurar senha:</b> vá em <b>Configurações</b> (ícone de engrenagem) → seção "Senha Gerencial" → defina e salve.</span></div>
-        <div class="step"><div class="step-num">!</div><span><b>Desbloquear:</b> clique na aba "Gerencial" → <span class="key">Inserir Senha</span> → a área fica aberta até fechar o navegador.</span></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- GESTÃO -->
-  <div class="section">
-    <div class="section-label">Gestão & Estoque</div>
-
-    <!-- ESTOQUE -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#F0FFF4;color:#16A34A"><i class="ph ph-package"></i></div>
-        <div>
-          <div class="mod-title">Estoque</div>
-          <div class="mod-desc">Controle de produtos e insumos. Alerta automático quando o estoque cai abaixo do mínimo definido.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Cadastrar produto:</b> <span class="key">+ Produto</span> → nome, quantidade atual, estoque mínimo, preço de compra e venda.</span></div>
-        <div class="step"><div class="step-num">2</div><span><b>Insumos automáticos:</b> produtos vinculados a serviços (ex: shampoo no Banho) são descontados automaticamente quando o agendamento é concluído.</span></div>
-        <div class="step"><div class="step-num">3</div><span>Produtos em <b style="color:var(--red)">vermelho</b> estão abaixo do mínimo — hora de repor.</span></div>
-      </div>
-    </div>
-
-    <!-- FUNCIONÁRIOS -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-users-three"></i></div>
-        <div>
-          <div class="mod-title">Funcionários</div>
-          <div class="mod-desc">Cadastro da equipe com cargo e percentual de comissão. O sistema calcula a comissão estimada do mês com base nos serviços concluídos.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Cadastrar:</b> <span class="key">+ Novo Funcionário</span> → nome, cargo, telefone e % de comissão.</span></div>
-        <div class="step"><div class="step-num">2</div><span>Ao agendar um serviço, vincule o funcionário responsável — isso contabiliza para a comissão dele.</span></div>
-      </div>
-    </div>
-
-    <!-- CONFIG -->
-    <div class="mod">
-      <div class="mod-header">
-        <div class="mod-icon" style="background:#F1F5F9;color:#64748B"><i class="ph ph-gear"></i></div>
-        <div>
-          <div class="mod-title">Configurações — Serviços</div>
-          <div class="mod-desc">Catálogo de serviços do pet shop com preços diferenciados por porte e vinculação de insumos.</div>
-        </div>
-      </div>
-      <div class="mod-steps">
-        <div class="step"><div class="step-num">1</div><span><b>Novo serviço:</b> <span class="key">+ Novo Serviço</span> → defina nome, duração e preços por porte: <span class="key">P</span> <span class="key">M</span> <span class="key">G</span>. O agendamento preenche o valor automaticamente.</span></div>
-        <div class="step"><div class="step-num">2</div><span><b>Insumos do serviço:</b> vincule produtos do estoque ao serviço (ex: 1 shampoo por Banho) — eles são descontados automaticamente ao concluir.</span></div>
-        <div class="step"><div class="step-num">3</div><span><b>Senha gerencial:</b> defina aqui a senha para proteger a aba Gerencial do Financeiro.</span></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- DICAS RÁPIDAS -->
-  <div class="section">
-    <div class="section-label">Dicas rápidas de operação</div>
-    <div class="mod">
-      <div class="mod-steps">
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Início do dia:</b> abra o Dashboard → cheque alertas de planos → veja a Agenda do dia.</span></div>
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Pet chegou:</b> Agenda → <span class="key">Check-in</span> → aparece na tela de Check-in/Out.</span></div>
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Serviço concluído:</b> Check-in → <span class="key">Concluir</span> → insumos deduzidos automaticamente.</span></div>
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Pet de creche:</b> Planos → encontre o pet → <span class="key">Usar diária</span>.</span></div>
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Venda no balcão:</b> PDV → Nova Venda → selecione tipo → registrar.</span></div>
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Novo pacote de creche:</b> PDV → Nova Venda → Plano / Pacote → selecione cliente, valores → confirmar.</span></div>
-        <div class="step"><div class="step-num" style="background:var(--teal-light);color:#006B4F">✓</div><span><b>Ver financeiro completo:</b> Financeiro → aba Gerencial → inserir senha do dono.</span></div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Fechamento:</b> Financeiro → Gerencial → inserir senha → ver saldo real do dia.</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- RODAPÉ -->
-  <div class="footer">
-    <div style="margin-bottom:6px"><b>Pets Go Control</b> — Sistema de gestão para pet shops</div>
-    <div>Dúvidas ou ajustes? Fale com o desenvolvedor. 🐾</div>
+<!-- ─── DICAS RÁPIDAS ─── -->
+<div class="section">
+  <div class="section-label">Dicas rápidas</div>
+  <div class="mod">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Busca global:</b> barra de pesquisa no topo encontra cliente por nome ou telefone em qualquer tela.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Reemitir recibo:</b> Financeiro → ícone <i class="ph ph-receipt"></i> ao lado de qualquer receita → imprimir ou PDF.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Histórico de diárias:</b> Planos → ícone <i class="ph ph-list-bullets"></i> no card → vê todos os dias com valor.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Filtrar agenda por serviço:</b> chips dinâmicos abaixo dos filtros de status — somem quando não há agendamentos do dia.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Múltiplas filiais:</b> configure em Configurações → sistema filtra dashboard, clientes e agenda por unidade.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Funciona offline:</b> depois de instalado no celular, todo o sistema funciona sem internet. Os dados ficam salvos no dispositivo.</div>
+      </div>
+    </div>
   </div>
+</div>
 
-</div><!-- /container -->
+<!-- ─── EM BREVE ─── -->
+<div class="section">
+  <div class="section-label">Em breve</div>
+  <div class="soon-grid">
+    <div class="soon-card">
+      <div class="soon-card-icon">🧾</div>
+      <div>
+        <div class="soon-card-title">NFS-e ativa <span style="font-size:10px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE68A;border-radius:8px;padding:1px 6px;margin-left:4px">Quase lá</span></div>
+        <div class="soon-card-desc">Botão já aparece no recibo. A infraestrutura está 100% pronta — assim que a chave de API do eNotas for configurada, a emissão vai funcionar automaticamente.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">☁️</div>
+      <div>
+        <div class="soon-card-title">Sincronização multi-dispositivo</div>
+        <div class="soon-card-desc">Dados compartilhados entre celular, tablet e computador em tempo real. Funciona offline e sincroniza quando a internet voltar.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">💬</div>
+      <div>
+        <div class="soon-card-title">WhatsApp automático</div>
+        <div class="soon-card-desc">Lembretes de agendamento, avisos de plano vencendo e mensagens de reativação enviados automaticamente pelo WhatsApp da pet shop.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="font-size:22px;margin-bottom:8px">🐾</div>
+  <div><b>Pets Go Control</b> — v5</div>
+  <div style="margin-top:4px">Sistema desenvolvido sob medida para a sua pet shop.</div>
+  <div style="margin-top:4px">Encontrou algo errado ou quer uma melhoria? Manda mensagem.</div>
+</div>
+
+</div>
 </body>
 </html>

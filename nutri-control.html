@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nutri Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#16A34A;--brand-dark:#15803D;--brand-light:#DCFCE7;
+  --teal:#0D9488;--teal-light:#CCFBF1;
+  --pink:#E8187B;--pink-light:#FFF0F8;
+  --yellow:#F59E0B;--yellow-light:#FEF3C7;
+  --bg:#F0FDF4;--surface:#FFFFFF;--surface2:#F8FAFC;
+  --border:#E2E8F0;--border2:#CBD5E1;
+  --text:#0F172A;--text2:#334155;--muted:#64748B;--muted2:#94A3B8;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px;box-shadow:var(--shadow);z-index:10}
+.tb-brand{display:flex;align-items:center;gap:10px}
+.tb-logo{width:36px;height:36px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
+.tb-name{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.tb-tag{font-size:10px;font-weight:700;background:var(--brand-light);color:var(--brand);padding:2px 8px;border-radius:20px;margin-left:4px}
+.tb-search{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:320px}
+.tb-search input{background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);width:100%}
+.tb-search input::placeholder{color:var(--muted2)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.tb-btn.primary{background:var(--brand);color:#fff}
+.tb-btn.primary:hover{background:var(--brand-dark)}
+.tb-avatar{width:34px;height:34px;border-radius:8px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);padding:12px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .12s;font-size:13px;font-weight:500;color:var(--muted)}
+.nav-item:hover{background:var(--surface2);color:var(--text2)}
+.nav-item.active{background:var(--brand-light);color:var(--brand);font-weight:700}
+.nav-ico{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--brand);color:#fff}
+.nav-badge.yellow{background:var(--yellow);color:#78350F}
+.sidebar-sep{height:1px;background:var(--border);margin:8px 0}
+.sidebar-bottom{margin-top:auto;padding-top:10px}
+
+/* MAIN */
+.main{overflow-y:auto;padding:24px;background:var(--bg)}
+.page{display:none}.page.active{display:block}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.page-title{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .12s}
+.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--brand-dark)}
+.btn-ghost{background:var(--surface);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--surface2)}
+.btn-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}.btn-outline:hover{background:var(--brand-light)}
+.btn-danger{background:var(--red-light);color:var(--red);border:1px solid #FECACA}.btn-danger:hover{background:#FEE2E2}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
+.stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.stat-value{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.stat-label{font-size:12px;font-weight:500;margin-top:3px;opacity:.75}
+.stat-c1{background:var(--brand-light);color:var(--brand-dark)}.stat-c1 .stat-icon{background:#BBF7D0}
+.stat-c2{background:var(--teal-light);color:#134E4A}.stat-c2 .stat-icon{background:#99F6E4}
+.stat-c3{background:var(--pink-light);color:#9A0050}.stat-c3 .stat-icon{background:#FFC0DF}
+.stat-c4{background:var(--yellow-light);color:#78350F}.stat-c4 .stat-icon{background:#FDE68A}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-title span{font-size:12px;font-weight:500;color:var(--muted)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.tag-green{background:var(--brand-light);color:var(--brand-dark)}
+.tag-red{background:#FEF2F2;color:#DC2626}
+.tag-gray{background:#F1F5F9;color:#64748B}
+.tag-yellow{background:var(--yellow-light);color:#78350F}
+.tag-teal{background:var(--teal-light);color:#134E4A}
+
+/* FILTER */
+.filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.ftab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all .12s}
+.ftab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.ftab:hover:not(.active){background:var(--surface2);color:var(--text2)}
+
+/* PACIENTES */
+.pac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.pac-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all .15s;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.pac-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
+.pac-card.inativo{opacity:.65}
+.add-card{border-style:dashed;align-items:center;justify-content:center;gap:8px;cursor:pointer;min-height:160px;display:flex;flex-direction:column;text-align:center}
+.add-card:hover{border-color:var(--brand);background:var(--brand-light)}
+.p-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.p-nome{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-tel{font-size:11px;color:var(--muted);margin-top:2px}
+.p-obs{font-size:12px;color:var(--muted);margin:8px 0;line-height:1.5;flex:1}
+.p-actions{display:flex;gap:6px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* AGENDA */
+.cal-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex}
+.cal-times{width:52px;flex-shrink:0;border-right:1px solid var(--border);position:relative;background:var(--surface2)}
+.cal-time-lbl{position:absolute;right:6px;font-size:10px;font-weight:600;color:var(--muted2);line-height:1;transform:translateY(-50%)}
+.cal-body{flex:1;position:relative;background:var(--surface)}
+.cal-hour-line{position:absolute;left:0;right:0;height:1px;background:var(--border)}
+.cal-now-line{position:absolute;left:0;right:0;height:2px;background:var(--red);z-index:3}
+.cal-now-line::before{content:'';position:absolute;left:-1px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--red)}
+.cal-event{position:absolute;border-radius:7px;padding:6px 8px;overflow:hidden;display:flex;flex-direction:column;gap:2px;border-left:3px solid transparent;transition:box-shadow .12s;z-index:2;cursor:pointer}
+.cal-event:hover{box-shadow:var(--shadow-md)}
+.cal-event-name{font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.cal-event-sub{font-size:10px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-event-actions{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap}
+.cal-btn{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;transition:all .12s}
+.cal-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:48px;color:var(--muted);text-align:center}
+.cal-empty i{font-size:36px;opacity:.4}
+
+/* EVOLUCAO */
+.evo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.evo-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.evo-chart{display:flex;align-items:flex-end;gap:4px;height:50px;margin:12px 0 6px}
+.evo-bar{flex:1;background:var(--brand-light);border-radius:3px 3px 0 0;min-height:4px;transition:height .3s;position:relative}
+.evo-bar:hover::after{content:attr(data-val);position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--brand-dark);white-space:nowrap}
+.evo-timeline{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.evo-item{border-left:2px solid var(--brand-light);padding:6px 0 6px 12px;position:relative}
+.evo-item::before{content:'';position:absolute;left:-5px;top:10px;width:8px;height:8px;border-radius:50%;background:var(--brand);border:2px solid var(--surface)}
+
+/* FINANCEIRO */
+.fin-list{display:flex;flex-direction:column;gap:6px}
+.fin-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.fin-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fin-receita .fin-dot{background:#16A34A}
+.fin-despesa .fin-dot{background:var(--red)}
+
+/* PLANOS */
+.plano-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.plano-card.esgotado{opacity:.6;border-color:#FECACA}
+.pb-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
+.pb-fill{height:100%;border-radius:4px;background:var(--brand)}
+
+/* SERVICOS */
+.svc-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.svc-row:last-child{border-bottom:none}
+.svc-row.inativo{opacity:.5}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state i{font-size:40px;display:block;margin-bottom:12px;opacity:.4}
+.empty-state h3{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text2)}
+.empty-state p{font-size:13px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(2px)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:16px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;padding:24px;box-shadow:var(--shadow-lg);transform:translateY(16px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-sm{max-width:440px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:17px;font-weight:800}
+.modal-close{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .12s}
+.modal-close:hover{background:var(--red-light);color:var(--red)}
+
+/* FORM */
+.form-grid{display:grid;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--text2)}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .12s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(22,163,74,.15)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted2)}
+.form-footer{display:flex;justify-content:flex-end;gap:8px;padding-top:4px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* QUICK */
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.quick-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.quick-btn:hover{border-color:var(--brand);background:var(--brand-light)}
+.quick-icon{font-size:22px;margin-bottom:6px}
+.quick-label{font-size:12px;font-weight:600;color:var(--text2)}
+
+/* GRID 2COL */
+.grid-2col{display:grid;grid-template-columns:1fr 320px;gap:14px;margin-bottom:14px}
+@media(max-width:900px){.grid-2col{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo"><i class="ph ph-leaf"></i></div>
+    <div class="tb-name" id="tb-nome">Nutri Control</div>
+    <span class="tb-tag" id="tb-especialidade">Nutricionista</span>
+  </div>
+  <div class="tb-search">
+    <i class="ph ph-magnifying-glass" style="color:var(--muted2)"></i>
+    <input id="search-global" placeholder="Buscar paciente..." oninput="onSearch(this.value)"/>
+  </div>
+  <div class="tb-right">
+    <button class="tb-btn primary" onclick="openModal('modal-new-pac')"><i class="ph ph-plus"></i> Novo paciente</button>
+    <div class="tb-avatar" id="tb-avatar">NC</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="nav-label">Principal</div>
+  <div class="nav-item active" id="nav-dashboard" onclick="navTo('dashboard')">
+    <span class="nav-ico"><i class="ph ph-squares-four"></i></span> Dashboard
+  </div>
+  <div class="nav-item" id="nav-pacientes" onclick="navTo('pacientes')">
+    <span class="nav-ico"><i class="ph ph-users"></i></span> Pacientes
+    <span class="nav-badge" id="badge-pac">0</span>
+  </div>
+  <div class="nav-item" id="nav-agenda" onclick="navTo('agenda')">
+    <span class="nav-ico"><i class="ph ph-calendar-check"></i></span> Agenda
+    <span class="nav-badge yellow" id="badge-agenda" style="display:none">0</span>
+  </div>
+  <div class="nav-item" id="nav-evolucao" onclick="navTo('evolucao')">
+    <span class="nav-ico"><i class="ph ph-trend-up"></i></span> Evolução
+  </div>
+  <div class="nav-item" id="nav-exames" onclick="navTo('exames')">
+    <span class="nav-ico"><i class="ph ph-flask"></i></span> Exames
+    <span class="nav-badge yellow" id="badge-exames" style="display:none">!</span>
+  </div>
+  <div class="sidebar-sep"></div>
+  <div class="nav-label">Gestão</div>
+  <div class="nav-item" id="nav-financeiro" onclick="navTo('financeiro')">
+    <span class="nav-ico"><i class="ph ph-currency-dollar"></i></span> Financeiro
+  </div>
+  <div class="nav-item" id="nav-planos" onclick="navTo('planos')">
+    <span class="nav-ico"><i class="ph ph-ticket"></i></span> Planos & Pacotes
+    <span class="nav-badge yellow" id="badge-planos" style="display:none">0</span>
+  </div>
+  <div class="nav-item" id="nav-config" onclick="navTo('config')">
+    <span class="nav-ico"><i class="ph ph-gear"></i></span> Serviços
+  </div>
+  <div class="sidebar-sep"></div>
+  <div class="sidebar-bottom">
+    <div class="nav-item" style="color:var(--red);font-size:12px" onclick="confirmarLimpar()">
+      <span class="nav-ico"><i class="ph ph-trash"></i></span> Limpar dados
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub" id="dash-data">—</div>
+    </div>
+    <button class="btn btn-ghost" onclick="updateDashboard()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card stat-c1">
+      <div class="stat-icon"><i class="ph ph-users"></i></div>
+      <div><div class="stat-value" id="s-pac">0</div><div class="stat-label">Pacientes ativos</div></div>
+    </div>
+    <div class="stat-card stat-c2">
+      <div class="stat-icon"><i class="ph ph-calendar-check"></i></div>
+      <div><div class="stat-value" id="s-hoje">0</div><div class="stat-label">Consultas hoje</div></div>
+    </div>
+    <div class="stat-card stat-c3">
+      <div class="stat-icon"><i class="ph ph-currency-dollar"></i></div>
+      <div><div class="stat-value" id="s-receita">R$0</div><div class="stat-label">Receita do mês</div></div>
+    </div>
+    <div class="stat-card stat-c4">
+      <div class="stat-icon"><i class="ph ph-ticket"></i></div>
+      <div><div class="stat-value" id="s-planos">0</div><div class="stat-label">Planos ativos</div></div>
+    </div>
+  </div>
+  <div class="quick-grid">
+    <div class="quick-btn" onclick="openModal('modal-new-agenda')">
+      <div class="quick-icon">📅</div>
+      <div class="quick-label">Nova consulta</div>
+    </div>
+    <div class="quick-btn" onclick="openModal('modal-new-pac')">
+      <div class="quick-icon">👤</div>
+      <div class="quick-label">Novo paciente</div>
+    </div>
+    <div class="quick-btn" onclick="navTo('agenda')">
+      <div class="quick-icon">🗓️</div>
+      <div class="quick-label">Ver agenda</div>
+    </div>
+  </div>
+  <div class="grid-2col">
+    <div class="card">
+      <div class="card-title">Consultas hoje <span id="dash-hoje-label"></span></div>
+      <div id="dash-hoje-list"><div class="empty-state" style="padding:30px"><i class="ph ph-calendar-blank"></i><p>Nenhuma consulta hoje</p></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">A receber <span style="color:var(--red)"></span></div>
+      <div id="dash-pendentes-list"><div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Nenhum pendente</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PACIENTES -->
+<div class="page" id="page-pacientes">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Pacientes</div>
+      <div class="page-sub" id="pac-sub">0 pacientes</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px">
+        <i class="ph ph-magnifying-glass" style="color:var(--muted2)"></i>
+        <input id="pac-search" placeholder="Buscar..." oninput="renderPacientes()" style="border:none;outline:none;font-size:13px;width:140px;background:transparent"/>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-new-pac')"><i class="ph ph-plus"></i> Novo</button>
+    </div>
+  </div>
+  <div class="filter-row">
+    <div class="ftab active" id="ptab-ativos" onclick="setPacFilter('ativos')">Ativos</div>
+    <div class="ftab" id="ptab-todos" onclick="setPacFilter('todos')">Todos</div>
+    <div class="ftab" id="ptab-inativos" onclick="setPacFilter('inativos')">Inativos</div>
+  </div>
+  <div class="pac-grid" id="pac-grid"></div>
+</div>
+
+<!-- AGENDA -->
+<div class="page" id="page-agenda">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Agenda</div>
+      <div class="page-sub" id="ag-sub">—</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn btn-ghost btn-sm" onclick="agMoveDay(-1)"><i class="ph ph-caret-left"></i></button>
+      <button class="btn btn-ghost btn-sm" onclick="agGoToday()">Hoje</button>
+      <button class="btn btn-ghost btn-sm" onclick="agMoveDay(1)"><i class="ph ph-caret-right"></i></button>
+      <button class="btn btn-primary" onclick="populateAgForm();openModal('modal-new-agenda')"><i class="ph ph-plus"></i> Consulta</button>
+    </div>
+  </div>
+  <div class="filter-row" id="ag-svc-filter"></div>
+  <div id="agenda-view"></div>
+</div>
+
+<!-- EVOLUCAO -->
+<div class="page" id="page-evolucao">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Evolução</div>
+      <div class="page-sub">Acompanhamento por paciente</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-new-evo')"><i class="ph ph-plus"></i> Registrar</button>
+  </div>
+  <div class="filter-row">
+    <select id="evo-pac-filter" onchange="renderEvolucao()" style="border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;background:var(--surface);cursor:pointer;outline:none">
+      <option value="">Todos os pacientes</option>
+    </select>
+  </div>
+  <div id="evo-content"></div>
+</div>
+
+<!-- FINANCEIRO -->
+<div class="page" id="page-financeiro">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Financeiro</div>
+      <div class="page-sub" id="fin-sub">—</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-new-fin')"><i class="ph ph-plus"></i> Lançamento</button>
+  </div>
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card stat-c1">
+      <div class="stat-icon"><i class="ph ph-arrow-up-right"></i></div>
+      <div><div class="stat-value" id="fin-rec-mes">R$0</div><div class="stat-label">Receitas do mês</div></div>
+    </div>
+    <div class="stat-card" style="background:#FEF2F2;color:#991B1B">
+      <div class="stat-icon" style="background:#FECACA"><i class="ph ph-arrow-down-left"></i></div>
+      <div><div class="stat-value" id="fin-desp-mes">R$0</div><div class="stat-label">Despesas do mês</div></div>
+    </div>
+    <div class="stat-card stat-c2">
+      <div class="stat-icon"><i class="ph ph-scales"></i></div>
+      <div><div class="stat-value" id="fin-saldo">R$0</div><div class="stat-label">Saldo do mês</div></div>
+    </div>
+  </div>
+  <div class="filter-row">
+    <div class="ftab active" id="ftab-todos" onclick="setFinFilter('todos')">Todos</div>
+    <div class="ftab" id="ftab-receitas" onclick="setFinFilter('receitas')">Receitas</div>
+    <div class="ftab" id="ftab-despesas" onclick="setFinFilter('despesas')">Despesas</div>
+  </div>
+  <div class="fin-list" id="fin-list"></div>
+</div>
+
+<!-- PLANOS -->
+<div class="page" id="page-planos">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Planos & Pacotes</div>
+      <div class="page-sub">Pacotes de consultas por paciente</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-new-plano')"><i class="ph ph-plus"></i> Novo plano</button>
+  </div>
+  <div class="filter-row">
+    <div class="ftab active" id="plan-tab-ativos" onclick="setPlanFilter('ativos')">Ativos</div>
+    <div class="ftab" id="plan-tab-todos" onclick="setPlanFilter('todos')">Todos</div>
+    <div class="ftab" id="plan-tab-esgotados" onclick="setPlanFilter('esgotados')">Esgotados</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px" id="planos-grid"></div>
+</div>
+
+<!-- EXAMES -->
+<div class="page" id="page-exames">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Exames Laboratoriais</div>
+      <div class="page-sub">Acompanhamento de marcadores por paciente</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-new-exame')"><i class="ph ph-plus"></i> Novo exame</button>
+  </div>
+  <div class="filter-row">
+    <select id="exame-pac-filter" onchange="renderExames()" style="border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;background:var(--surface);cursor:pointer;outline:none">
+      <option value="">Todos os pacientes</option>
+    </select>
+    <select id="exame-cat-filter" onchange="renderExames()" style="border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;background:var(--surface);cursor:pointer;outline:none">
+      <option value="">Todas as categorias</option>
+      <option>Glicemia</option><option>Lipídios</option><option>Hemograma</option>
+      <option>Tireoide</option><option>Vitaminas</option><option>Outros</option>
+    </select>
+  </div>
+  <div id="exames-content"></div>
+</div>
+
+<!-- CONFIG SERVICOS -->
+<div class="page" id="page-config">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Configurações</div>
+      <div class="page-sub">Perfil profissional e serviços</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-new-svc')"><i class="ph ph-plus"></i> Novo serviço</button>
+  </div>
+  <!-- Perfil Profissional -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Perfil Profissional</div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Seu nome completo</label><input id="cfg-nome" placeholder="Dra. Ana Lima"/></div>
+        <div class="field"><label>CRN</label><input id="cfg-crn" placeholder="Ex: CRN-2 12345"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Especialidade</label><input id="cfg-especialidade" placeholder="Nutricionista Clínica"/></div>
+        <div class="field"><label>WhatsApp / Telefone</label><input id="cfg-tel" placeholder="(51) 99999-9999"/></div>
+      </div>
+      <div class="field"><label>E-mail profissional</label><input id="cfg-email" type="email" placeholder="contato@clinica.com"/></div>
+      <div class="form-footer" style="padding-top:0">
+        <button class="btn btn-primary" onclick="saveConfig()"><i class="ph ph-check"></i> Salvar perfil</button>
+      </div>
+    </div>
+  </div>
+  <!-- Serviços -->
+  <div class="card">
+    <div class="card-title">Tipos de consulta</div>
+    <div id="svc-list"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ===== MODAIS ===== -->
+
+<!-- NOVO PACIENTE -->
+<div class="modal-overlay" id="modal-new-pac">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-pac-title"><i class="ph ph-user-plus"></i> Novo Paciente</div>
+      <div class="modal-close" onclick="closeModal('modal-new-pac')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="pac-edit-id"/>
+      <div class="form-row">
+        <div class="field"><label>Nome completo *</label><input id="pac-nome" placeholder="Ex: Ana Silva"/></div>
+        <div class="field"><label>WhatsApp</label><input id="pac-tel" placeholder="(51) 99999-9999"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>E-mail</label><input id="pac-email" type="email" placeholder="ana@email.com"/></div>
+        <div class="field"><label>Data de nasc.</label><input id="pac-nasc" type="date"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Altura (cm)</label><input id="pac-altura" type="number" step="0.1" placeholder="165"/></div>
+        <div class="field"><label>Peso inicial (kg)</label><input id="pac-peso-ini" type="number" step="0.1" placeholder="70"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Sexo</label>
+          <select id="pac-sexo"><option value="F">Feminino</option><option value="M">Masculino</option></select>
+        </div>
+        <div class="field"><label>Nível de atividade</label>
+          <select id="pac-atividade">
+            <option value="1.2">Sedentário</option>
+            <option value="1.375">Levemente ativo</option>
+            <option value="1.55" selected>Moderadamente ativo</option>
+            <option value="1.725">Muito ativo</option>
+            <option value="1.9">Extremamente ativo</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Objetivo</label><input id="pac-objetivo" placeholder="Ex: Emagrecimento, ganho de massa..."/></div>
+      <div class="field"><label>Restrições alimentares</label><input id="pac-restricoes" placeholder="Ex: Lactose, glúten, amendoim..."/></div>
+      <div class="field">
+        <label style="display:flex;align-items:center;justify-content:space-between">
+          Observações / Anamnese
+          <button type="button" id="mic-pac-obs" class="btn btn-ghost btn-sm" onclick="toggleMic('pac-obs','mic-pac-obs')" title="Gravar anotação por voz" style="padding:3px 8px;font-size:11px"><i class="ph ph-microphone"></i> Gravar</button>
+        </label>
+        <textarea id="pac-obs" rows="3" placeholder="Histórico, patologias, medicamentos em uso, histórico familiar..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Status</label>
+          <select id="pac-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-pac')">Cancelar</button>
+        <button class="btn btn-primary" onclick="savePaciente()"><i class="ph ph-check"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVA CONSULTA -->
+<div class="modal-overlay" id="modal-new-agenda">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-calendar-plus"></i> Nova Consulta</div>
+      <div class="modal-close" onclick="closeModal('modal-new-agenda')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Data *</label><input id="ag-data" type="date"/></div>
+        <div class="field"><label>Horário *</label><input id="ag-hora" type="time" value="09:00"/></div>
+      </div>
+      <div class="field"><label>Paciente *</label>
+        <select id="ag-pac"><option value="">Selecionar paciente...</option></select>
+      </div>
+      <div class="field"><label>Tipo de consulta *</label>
+        <select id="ag-svc" onchange="onAgSvcChange()"><option value="">Selecionar...</option></select>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Valor (R$)</label><input id="ag-valor" type="number" step="0.01" placeholder="0,00"/></div>
+        <div class="field"><label>Forma de pagamento</label>
+          <select id="ag-pagamento">
+            <option value="">— A definir</option>
+            <option>PIX</option><option>Dinheiro</option><option>Débito</option><option>Crédito</option><option>Transferência</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Link da consulta (Meet/Zoom/etc)</label>
+        <input id="ag-link" placeholder="https://meet.google.com/xxx-yyy-zzz"/>
+      </div>
+      <div class="field"><label>Observações</label><textarea id="ag-obs" rows="2" placeholder="Instruções, exames solicitados..."></textarea></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-agenda')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveAgendamento()"><i class="ph ph-check"></i> Agendar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGAR CONSULTA -->
+<div class="modal-overlay" id="modal-pagar">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-currency-dollar"></i> Registrar Pagamento</div>
+      <div class="modal-close" onclick="closeModal('modal-pagar')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="pagar-ag-id"/>
+      <div id="pagar-info" style="background:var(--brand-light);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--brand-dark)"></div>
+      <div class="form-row">
+        <div class="field"><label>Valor (R$)</label><input id="pagar-valor" type="number" step="0.01"/></div>
+        <div class="field"><label>Forma</label>
+          <select id="pagar-forma">
+            <option>PIX</option><option>Dinheiro</option><option>Débito</option><option>Crédito</option><option>Transferência</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="concluirSemPagar()">Concluir sem pagamento</button>
+        <button class="btn btn-primary" onclick="confirmarPagamento()"><i class="ph ph-check"></i> Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVA EVOLUÇÃO -->
+<div class="modal-overlay" id="modal-new-evo">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-trend-up"></i> Registrar Evolução</div>
+      <div class="modal-close" onclick="closeModal('modal-new-evo')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Paciente *</label>
+        <select id="evo-pac-sel"><option value="">Selecionar...</option></select>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Data *</label><input id="evo-data" type="date"/></div>
+        <div class="field"><label>Peso (kg)</label><input id="evo-peso" type="number" step="0.1" placeholder="65,0"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Cintura (cm)</label><input id="evo-cintura" type="number" step="0.1" placeholder="80"/></div>
+        <div class="field"><label>Quadril (cm)</label><input id="evo-quadril" type="number" step="0.1" placeholder="95"/></div>
+      </div>
+      <div class="field">
+        <label style="display:flex;align-items:center;justify-content:space-between">
+          Observações / Anotação clínica
+          <button type="button" id="mic-evo-obs" class="btn btn-ghost btn-sm" onclick="toggleMic('evo-obs','mic-evo-obs')" title="Ditar anotação" style="padding:3px 8px;font-size:11px"><i class="ph ph-microphone"></i> Ditar</button>
+        </label>
+        <textarea id="evo-obs" rows="3" placeholder="Progresso, ajustes no plano, humor do paciente..."></textarea>
+      </div>
+      <div class="field"><label>Foto (evolução visual)</label>
+        <input id="evo-foto" type="file" accept="image/*" style="font-size:12px"/>
+        <span style="font-size:11px;color:var(--muted)">Opcional · armazenada localmente</span>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-evo')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveEvolucao()"><i class="ph ph-check"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVO PLANO -->
+<div class="modal-overlay" id="modal-new-plano">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-ticket"></i> Novo Plano</div>
+      <div class="modal-close" onclick="closeModal('modal-new-plano')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Paciente *</label>
+        <select id="plan-pac"><option value="">Selecionar...</option></select>
+      </div>
+      <div class="field"><label>Nome do plano *</label>
+        <input id="plan-nome" placeholder="Ex: Pacote 4 consultas, Acompanhamento Mensal..."/>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Total de sessões</label><input id="plan-total" type="number" min="1" value="4"/></div>
+        <div class="field"><label>Valor total (R$)</label><input id="plan-valor" type="number" step="0.01" placeholder="0,00"/></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-plano')">Cancelar</button>
+        <button class="btn btn-primary" onclick="savePlano()"><i class="ph ph-check"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVO SERVIÇO -->
+<div class="modal-overlay" id="modal-new-svc">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="svc-modal-title"><i class="ph ph-plus"></i> Novo Serviço</div>
+      <div class="modal-close" onclick="closeModal('modal-new-svc')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="svc-edit-id"/>
+      <div class="field"><label>Nome do serviço *</label><input id="svc-nome" placeholder="Ex: Consulta Inicial"/></div>
+      <div class="form-row">
+        <div class="field"><label>Valor padrão (R$)</label><input id="svc-preco" type="number" step="0.01" placeholder="0,00"/></div>
+        <div class="field"><label>Duração (min)</label><input id="svc-duracao" type="number" placeholder="60"/></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-svc')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveSvc()"><i class="ph ph-check"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVO LANÇAMENTO -->
+<div class="modal-overlay" id="modal-new-fin">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-plus"></i> Lançamento</div>
+      <div class="modal-close" onclick="closeModal('modal-new-fin')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Tipo</label>
+        <select id="fin-tipo"><option value="receita">Receita</option><option value="despesa">Despesa</option></select>
+      </div>
+      <div class="field"><label>Descrição *</label><input id="fin-desc" placeholder="Ex: Consulta Ana Silva, Plataforma de telemedicina..."/></div>
+      <div class="form-row">
+        <div class="field"><label>Valor (R$)</label><input id="fin-valor" type="number" step="0.01" placeholder="0,00"/></div>
+        <div class="field"><label>Data</label><input id="fin-data" type="date"/></div>
+      </div>
+      <div class="field"><label>Forma</label>
+        <select id="fin-forma"><option>PIX</option><option>Dinheiro</option><option>Débito</option><option>Crédito</option><option>Transferência</option></select>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-fin')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveFinanceiro()"><i class="ph ph-check"></i> Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- RECIBO -->
+<div class="modal-overlay" id="modal-recibo">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-receipt"></i> Recibo de Consulta</div>
+      <div class="modal-close" onclick="closeModal('modal-recibo')"><i class="ph ph-x"></i></div>
+    </div>
+    <div id="recibo-content" style="font-family:'Inter',sans-serif"></div>
+    <div class="form-footer" style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('modal-recibo')">Fechar</button>
+      <button class="btn btn-outline" onclick="imprimirRecibo()"><i class="ph ph-printer"></i> Imprimir / PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- ATESTADO -->
+<div class="modal-overlay" id="modal-atestado">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-certificate"></i> Atestado de Consulta</div>
+      <div class="modal-close" onclick="closeModal('modal-atestado')"><i class="ph ph-x"></i></div>
+    </div>
+    <div id="atestado-content" style="font-family:'Inter',sans-serif"></div>
+    <div class="form-footer" style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('modal-atestado')">Fechar</button>
+      <button class="btn btn-outline" onclick="imprimirAtestado()"><i class="ph ph-printer"></i> Imprimir / PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOVO EXAME -->
+<div class="modal-overlay" id="modal-new-exame">
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-flask"></i> Novo Exame</div>
+      <div class="modal-close" onclick="closeModal('modal-new-exame')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Paciente *</label>
+          <select id="exame-pac-sel"><option value="">Selecionar...</option></select>
+        </div>
+        <div class="field"><label>Data do exame *</label>
+          <input id="exame-data" type="date"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Categoria</label>
+          <select id="exame-cat" onchange="loadExameTemplate()">
+            <option value="">Selecionar...</option>
+            <option>Glicemia</option><option>Lipídios</option><option>Hemograma</option>
+            <option>Tireoide</option><option>Vitaminas</option><option>Outros</option>
+          </select>
+        </div>
+        <div class="field"><label>Observações gerais</label>
+          <input id="exame-obs" placeholder="Observações sobre o exame..."/>
+        </div>
+      </div>
+      <!-- Tabela de marcadores -->
+      <div id="exame-marcadores-wrap">
+        <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">
+          Selecione uma categoria para ver os marcadores
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-exame')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveExame()"><i class="ph ph-check"></i> Salvar exame</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRONTUÁRIO (hidden, usado pelo html2pdf) -->
+<div id="prontuario-pdf" style="display:none;font-family:'Inter',sans-serif;padding:32px;color:#0F172A;max-width:700px"></div>
+
+<script>
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+const DB_KEY = 'nutri_control';
+const COLORS = ['#16A34A','#0D9488','#7C3AED','#DB2777','#EA580C','#CA8A04','#2563EB','#0891B2'];
+
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function fmtBRL(v){ return 'R$'+(+v||0).toFixed(2).replace('.',','); }
+function fmtDate(s){ if(!s) return '—'; const[y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
+function fmtDateLong(s){ if(!s) return '—'; return new Date(s+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); }
+function initials(n){ if(!n) return '?'; const w=n.trim().split(' '); return (w[0][0]+(w[1]?w[1][0]:'')).toUpperCase(); }
+function avatarBg(n){ const sum=n?[...n].reduce((a,c)=>a+c.charCodeAt(0),0):0; return COLORS[sum%COLORS.length]; }
+function toast(msg,dur=2400){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),dur); }
+
+// ── DB ────────────────────────────────────────────────────────────────────────
+function emptyDB(){
+  return {
+    pacientes:[],
+    agendamentos:[],
+    financeiro:[],
+    evolucao:[],
+    planos:[],
+    servicos:[
+      {id:'s1',nome:'Consulta Inicial',preco:200,duracao:60,ativo:true},
+      {id:'s2',nome:'Retorno',preco:120,duracao:30,ativo:true},
+      {id:'s3',nome:'Plano Alimentar Completo',preco:350,duracao:60,ativo:true},
+      {id:'s4',nome:'Acompanhamento Online',preco:80,duracao:20,ativo:true},
+    ],
+    exames:[],
+    config:{nomeProfissional:'',especialidade:'Nutricionista',telefone:'',email:''}
+  };
+}
+function loadDB(){ try{ const r=localStorage.getItem(DB_KEY); return r?JSON.parse(r):emptyDB(); }catch(e){ return emptyDB(); } }
+function saveDB(D){ localStorage.setItem(DB_KEY,JSON.stringify(D)); }
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+let curPage='dashboard';
+function navTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page)?.classList.add('active');
+  document.getElementById('nav-'+page)?.classList.add('active');
+  curPage=page;
+  if(page==='dashboard') updateDashboard();
+  if(page==='pacientes') renderPacientes();
+  if(page==='agenda') renderAgenda();
+  if(page==='evolucao') renderEvolucao();
+  if(page==='exames') renderExames();
+  if(page==='financeiro') renderFinanceiro();
+  if(page==='planos') renderPlanos();
+  if(page==='config') renderConfig();
+}
+
+function openModal(id){ document.getElementById(id)?.classList.add('open'); }
+function closeModal(id){ document.getElementById(id)?.classList.remove('open'); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+function onSearch(v){
+  if(!v.trim()){ navTo(curPage); return; }
+  navTo('pacientes');
+  document.getElementById('pac-search').value=v;
+  renderPacientes();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function updateDashboard(){
+  const D=loadDB();
+  const hoje=todayISO();
+  const mes=hoje.slice(0,7);
+  document.getElementById('dash-data').textContent=fmtDateLong(hoje);
+  document.getElementById('s-pac').textContent=D.pacientes.filter(p=>p.status!=='inativo').length;
+  const consultasHoje=D.agendamentos.filter(a=>a.data===hoje&&a.status!=='cancelado');
+  document.getElementById('s-hoje').textContent=consultasHoje.length;
+  const recMes=D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+  document.getElementById('s-receita').textContent=fmtBRL(recMes);
+  document.getElementById('s-planos').textContent=D.planos.filter(p=>p.ativo&&(p.sessoesUsadas||0)<(p.totalSessoes||1)).length;
+
+  // badge agenda
+  const agHoje=D.agendamentos.filter(a=>a.data===hoje&&a.status==='agendado').length;
+  const b=document.getElementById('badge-agenda');
+  if(agHoje){ b.style.display=''; b.textContent=agHoje; }else b.style.display='none';
+
+  // badge pacientes
+  document.getElementById('badge-pac').textContent=D.pacientes.filter(p=>p.status!=='inativo').length;
+
+  updateBadgeExames(D);
+  // badge planos
+  const planAtivos=D.planos.filter(p=>p.ativo&&(p.sessoesUsadas||0)<(p.totalSessoes||1)).length;
+  const bp=document.getElementById('badge-planos');
+  if(planAtivos){ bp.style.display=''; bp.textContent=planAtivos; }else bp.style.display='none';
+
+  // consultas hoje list
+  const pacMap={}; D.pacientes.forEach(p=>pacMap[p.id]=p);
+  document.getElementById('dash-hoje-label').textContent=consultasHoje.length?`${consultasHoje.length} consulta${consultasHoje.length>1?'s':''}`:'' ;
+  const el=document.getElementById('dash-hoje-list');
+  if(!consultasHoje.length){ el.innerHTML='<div class="empty-state" style="padding:30px"><i class="ph ph-calendar-blank"></i><p>Nenhuma consulta hoje</p></div>'; }
+  else{
+    el.innerHTML=consultasHoje.sort((a,b)=>(a.hora||'').localeCompare(b.hora||'')).map(a=>{
+      const pac=pacMap[a.pacienteId];
+      const concl=a.status==='concluido';
+      return `<div class="fin-item">
+        <div style="width:8px;height:8px;border-radius:50%;background:${concl?'var(--muted)':'var(--brand)'};flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">${pac?.nome||'—'}</div>
+          <div style="font-size:11px;color:var(--muted)">${a.servico||''} · ${a.hora||'—'}</div>
+          ${a.link?`<a href="${a.link}" target="_blank" style="font-size:11px;color:var(--brand);text-decoration:none"><i class="ph ph-video-camera"></i> Entrar na consulta</a>`:''}
+        </div>
+        <div style="font-size:12px;font-weight:700">${fmtBRL(a.valor)}</div>
+        ${!concl?`<button class="btn btn-sm btn-primary" onclick="abrirPagar('${a.id}')">Pagar</button>`:`<span class="tag tag-green">Pago</span>`}
+      </div>`;
+    }).join('');
+  }
+
+  // pendentes
+  const pendentes=D.agendamentos.filter(a=>a.status==='concluido'&&!a.pago);
+  const ep=document.getElementById('dash-pendentes-list');
+  if(!pendentes.length){ ep.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px"><i class="ph ph-check-circle" style="font-size:24px;display:block;margin-bottom:8px"></i>Sem pendências</div>'; }
+  else{
+    ep.innerHTML=pendentes.map(a=>{
+      const pac=pacMap[a.pacienteId];
+      return `<div class="fin-item">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0"></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700">${pac?.nome||'—'}</div>
+        <div style="font-size:11px;color:var(--muted)">${fmtDate(a.data)} · ${a.servico||''}</div></div>
+        <div style="font-size:12px;font-weight:700">${fmtBRL(a.valor)}</div>
+        <button class="btn btn-sm btn-outline" onclick="abrirPagar('${a.id}')">Cobrar</button>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ── PACIENTES ─────────────────────────────────────────────────────────────────
+let pacFilter='ativos';
+function setPacFilter(f){
+  pacFilter=f;
+  ['ativos','todos','inativos'].forEach(x=>document.getElementById('ptab-'+x)?.classList.toggle('active',x===f));
+  renderPacientes();
+}
+
+function renderPacientes(){
+  const D=loadDB();
+  const q=(document.getElementById('pac-search')?.value||'').toLowerCase();
+  let pacs=D.pacientes;
+  if(pacFilter==='ativos') pacs=pacs.filter(p=>p.status!=='inativo');
+  if(pacFilter==='inativos') pacs=pacs.filter(p=>p.status==='inativo');
+  if(q) pacs=pacs.filter(p=>p.nome?.toLowerCase().includes(q)||p.email?.toLowerCase().includes(q)||p.whatsapp?.includes(q));
+  pacs.sort((a,b)=>a.nome?.localeCompare(b.nome||'')||0);
+  document.getElementById('pac-sub').textContent=`${pacs.length} paciente${pacs.length!==1?'s':''}`;
+  const grid=document.getElementById('pac-grid');
+  grid.innerHTML=`<div class="pac-card add-card" onclick="openModal('modal-new-pac')">
+    <i class="ph ph-user-plus" style="font-size:28px;color:var(--muted2)"></i>
+    <div style="font-size:13px;font-weight:600;color:var(--muted)">Novo paciente</div>
+  </div>`+pacs.map(p=>{
+    const bg=avatarBg(p.nome);
+    const ini=initials(p.nome);
+    const ultConsulta=D.agendamentos.filter(a=>a.pacienteId===p.id&&a.status==='concluido').sort((a,b)=>b.data.localeCompare(a.data))[0];
+    const ultEvo=D.evolucao.filter(e=>e.pacienteId===p.id&&e.peso).sort((a,b)=>b.data.localeCompare(a.data))[0];
+    const pesoAtual=ultEvo?.peso||p.pesoInicial;
+    const imc=pesoAtual&&p.altura?(pesoAtual/((p.altura/100)**2)).toFixed(1):null;
+    const imcLabel=imc?imc<18.5?'Abaixo':imc<25?'Normal':imc<30?'Sobrepeso':'Obesidade':null;
+    const imcColor=imc?imc<18.5?'#2563EB':imc<25?'var(--brand)':imc<30?'var(--yellow)':'var(--red)':'';
+    const waNum=p.whatsapp?.replace(/\D/g,'');
+    return `<div class="pac-card ${p.status==='inativo'?'inativo':''}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="p-avatar" style="background:${bg}20;color:${bg}">${ini}</div>
+        <div style="flex:1;min-width:0">
+          <div class="p-nome">${p.nome}</div>
+          <div class="p-tel">${p.whatsapp||p.email||'—'}</div>
+        </div>
+        ${p.status==='inativo'?'<span class="tag tag-gray">Inativo</span>':''}
+      </div>
+      ${imc||pesoAtual?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:6px 10px;background:${imcColor||'var(--brand)'}15;border-radius:7px;flex-wrap:wrap">
+        ${imc?`<span style="font-size:12px;color:var(--muted)">IMC</span>
+        <span style="font-size:14px;font-weight:800;color:${imcColor}">${imc}</span>
+        <span style="font-size:11px;color:${imcColor}">${imcLabel}</span>`:''}
+        ${pesoAtual?`<span style="margin-left:auto;font-size:12px;font-weight:700;color:var(--muted)">${pesoAtual}kg</span>`:''}
+      </div>`:``}
+      ${(()=>{ const tmb=calcTMB(pesoAtual,p.altura,calcIdade(p.dataNasc),p.sexo||'F'); if(!tmb) return ''; const get=Math.round(tmb*(p.fatorAtividade||1.55)); const tmbR=Math.round(tmb); return `<div style="display:flex;gap:10px;margin-bottom:8px;padding:6px 10px;background:#F0FDF4;border-radius:7px;font-size:11px">
+        <div><span style="color:var(--muted)">TMB</span> <b style="color:var(--brand-dark)">${tmbR} kcal</b></div>
+        <div style="color:var(--border2)">|</div>
+        <div><span style="color:var(--muted)">GET</span> <b style="color:var(--brand-dark)">${get} kcal</b></div>
+      </div>`; })()}
+      ${p.objetivo?`<div class="p-obs"><b>Objetivo:</b> ${p.objetivo}</div>`:''}
+      ${p.restricoes?`<div class="p-obs" style="margin-top:4px"><b>Restrições:</b> ${p.restricoes}</div>`:'<div class="p-obs"></div>'}
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${ultConsulta?'Última consulta: '+fmtDate(ultConsulta.data):'Sem consultas ainda'}</div>
+      <div class="p-actions">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editPaciente('${p.id}')"><i class="ph ph-pencil"></i> Editar</button>
+        ${waNum?`<a class="btn btn-ghost btn-sm" href="https://wa.me/55${waNum}" target="_blank" title="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="novaConsultaPac('${p.id}')"><i class="ph ph-calendar-plus"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="novaEvoPac('${p.id}')"><i class="ph ph-trend-up"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="novoExamePac('${p.id}')" title="Registrar Exame"><i class="ph ph-flask"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="exportarProntuario('${p.id}')" title="Exportar Prontuário PDF"><i class="ph ph-file-pdf"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="abrirAtestado('${p.id}')" title="Emitir Atestado"><i class="ph ph-certificate"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function savePaciente(){
+  const nome=document.getElementById('pac-nome').value.trim();
+  if(!nome){ toast('⚠️ Nome obrigatório'); return; }
+  const D=loadDB();
+  const editId=document.getElementById('pac-edit-id').value;
+  const obj={
+    nome, whatsapp:document.getElementById('pac-tel').value.trim(),
+    email:document.getElementById('pac-email').value.trim(),
+    dataNasc:document.getElementById('pac-nasc').value,
+    altura:parseFloat(document.getElementById('pac-altura').value)||null,
+    pesoInicial:parseFloat(document.getElementById('pac-peso-ini').value)||null,
+    sexo:document.getElementById('pac-sexo').value,
+    fatorAtividade:parseFloat(document.getElementById('pac-atividade').value)||1.55,
+    objetivo:document.getElementById('pac-objetivo').value.trim(),
+    restricoes:document.getElementById('pac-restricoes').value.trim(),
+    obs:document.getElementById('pac-obs').value.trim(),
+    status:document.getElementById('pac-status').value,
+  };
+  if(editId){
+    const idx=D.pacientes.findIndex(p=>p.id===editId);
+    if(idx>=0) Object.assign(D.pacientes[idx],obj);
+    toast('Paciente atualizado!');
+  } else {
+    D.pacientes.push({id:uid(),criadoEm:new Date().toISOString(),...obj});
+    toast('Paciente cadastrado!');
+  }
+  saveDB(D);
+  closeModal('modal-new-pac');
+  clearPacForm();
+  renderPacientes(); updateDashboard();
+}
+
+function clearPacForm(){
+  ['pac-edit-id','pac-nome','pac-tel','pac-email','pac-nasc','pac-altura','pac-peso-ini','pac-objetivo','pac-restricoes','pac-obs'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('pac-sexo').value='F';
+  document.getElementById('pac-atividade').value='1.55';
+  document.getElementById('pac-status').value='ativo';
+  document.getElementById('modal-pac-title').innerHTML='<i class="ph ph-user-plus"></i> Novo Paciente';
+}
+
+function editPaciente(id){
+  const D=loadDB();
+  const p=D.pacientes.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('pac-edit-id').value=id;
+  document.getElementById('pac-nome').value=p.nome||'';
+  document.getElementById('pac-tel').value=p.whatsapp||'';
+  document.getElementById('pac-email').value=p.email||'';
+  document.getElementById('pac-nasc').value=p.dataNasc||'';
+  document.getElementById('pac-altura').value=p.altura||'';
+  document.getElementById('pac-peso-ini').value=p.pesoInicial||'';
+  document.getElementById('pac-sexo').value=p.sexo||'F';
+  document.getElementById('pac-atividade').value=p.fatorAtividade||'1.55';
+  document.getElementById('pac-objetivo').value=p.objetivo||'';
+  document.getElementById('pac-restricoes').value=p.restricoes||'';
+  document.getElementById('pac-obs').value=p.obs||'';
+  document.getElementById('pac-status').value=p.status||'ativo';
+  document.getElementById('modal-pac-title').innerHTML='<i class="ph ph-pencil"></i> Editar Paciente';
+  openModal('modal-new-pac');
+}
+
+function novaConsultaPac(pacId){
+  populateAgForm();
+  setTimeout(()=>{ document.getElementById('ag-pac').value=pacId; }, 50);
+  openModal('modal-new-agenda');
+}
+
+function novaEvoPac(pacId){
+  populateEvoForm();
+  setTimeout(()=>{ document.getElementById('evo-pac-sel').value=pacId; }, 50);
+  openModal('modal-new-evo');
+}
+
+// ── AGENDA ────────────────────────────────────────────────────────────────────
+let agDate=todayISO();
+const AG_START=7, AG_END=20, PX_PER_HOUR=64;
+
+function agMoveDay(d){ const dt=new Date(agDate+'T12:00:00'); dt.setDate(dt.getDate()+d); agDate=dt.toISOString().slice(0,10); renderAgenda(); }
+function agGoToday(){ agDate=todayISO(); renderAgenda(); }
+
+function populateAgForm(){
+  const D=loadDB();
+  document.getElementById('ag-data').value=agDate;
+  document.getElementById('ag-hora').value='09:00';
+  document.getElementById('ag-link').value='';
+  document.getElementById('ag-obs').value='';
+  document.getElementById('ag-valor').value='';
+  document.getElementById('ag-pagamento').value='';
+  document.getElementById('ag-pac').innerHTML='<option value="">Selecionar paciente...</option>'+
+    D.pacientes.filter(p=>p.status!=='inativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  const svcs=D.servicos.filter(s=>s.ativo!==false);
+  document.getElementById('ag-svc').innerHTML='<option value="">Selecionar...</option>'+
+    svcs.map(s=>`<option value="${s.id}" data-preco="${s.preco||0}">${s.nome}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
+}
+
+function onAgSvcChange(){
+  const opt=document.getElementById('ag-svc').selectedOptions[0];
+  if(opt?.dataset.preco) document.getElementById('ag-valor').value=opt.dataset.preco;
+}
+
+function saveAgendamento(){
+  const data=document.getElementById('ag-data').value;
+  const hora=document.getElementById('ag-hora').value;
+  const pacId=document.getElementById('ag-pac').value;
+  const svcOpt=document.getElementById('ag-svc').selectedOptions[0];
+  if(!data||!pacId||!svcOpt?.value){ toast('⚠️ Data, paciente e tipo obrigatórios'); return; }
+  const D=loadDB();
+  D.agendamentos.push({
+    id:uid(), pacienteId:pacId,
+    servicoId:svcOpt.value, servico:svcOpt.text.split(' — ')[0],
+    data, hora,
+    valor:parseFloat(document.getElementById('ag-valor').value)||0,
+    link:document.getElementById('ag-link').value.trim(),
+    obs:document.getElementById('ag-obs').value.trim(),
+    formaPagamento:document.getElementById('ag-pagamento').value||null,
+    status:'agendado', pago:false,
+    criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-agenda');
+  renderAgenda(); updateDashboard();
+  toast('📅 Consulta agendada!');
+}
+
+function renderAgenda(){
+  const D=loadDB();
+  const total=(AG_END-AG_START)*PX_PER_HOUR;
+
+  // filter bar
+  const svcs=['Todos',...new Set(D.agendamentos.map(a=>a.servico).filter(Boolean))];
+  // skip complex filter, just show all
+
+  document.getElementById('ag-sub').textContent=fmtDateLong(agDate);
+  const agDia=D.agendamentos.filter(a=>a.data===agDate&&a.status!=='cancelado');
+  const pacMap={}; D.pacientes.forEach(p=>pacMap[p.id]=p);
+
+  let html=`<div class="cal-wrap" style="min-height:${total+40}px">
+    <div class="cal-times" style="height:${total+40}px">`;
+  for(let h=AG_START;h<=AG_END;h++){
+    const top=((h-AG_START)*PX_PER_HOUR)+20;
+    html+=`<div class="cal-time-lbl" style="top:${top}px">${String(h).padStart(2,'0')}:00</div>`;
+  }
+  html+=`</div><div class="cal-body" style="min-height:${total+40}px;position:relative">`;
+  for(let h=AG_START;h<=AG_END;h++){
+    const top=((h-AG_START)*PX_PER_HOUR)+20;
+    html+=`<div class="cal-hour-line" style="top:${top}px"></div>`;
+  }
+
+  // now line
+  const now=new Date();
+  if(agDate===todayISO()){
+    const nowTop=((now.getHours()-AG_START)*60+now.getMinutes())/60*PX_PER_HOUR+20;
+    if(nowTop>20&&nowTop<total+20) html+=`<div class="cal-now-line" style="top:${nowTop}px"></div>`;
+  }
+
+  if(!agDia.length){
+    html+=`<div class="cal-empty"><i class="ph ph-calendar-blank"></i><h3>Nenhuma consulta</h3><p>Clique em "+ Consulta" para agendar</p></div>`;
+  } else {
+    agDia.sort((a,b)=>(a.hora||'').localeCompare(b.hora||''));
+    agDia.forEach(a=>{
+      const pac=pacMap[a.pacienteId];
+      const [hh,mm]=((a.hora||'08:00').split(':')).map(Number);
+      const top=((hh-AG_START)*60+mm)/60*PX_PER_HOUR+20;
+      const D2=loadDB(); const svc=D2.servicos.find(s=>s.id===a.servicoId);
+      const dur=svc?.duracao||45;
+      const height=Math.max(dur/60*PX_PER_HOUR,36);
+      const bg=avatarBg(pac?.nome||'');
+      const concl=a.status==='concluido';
+      html+=`<div class="cal-event" style="top:${top}px;height:${height}px;left:8px;right:8px;background:${bg}18;border-left-color:${bg}">
+        <div class="cal-event-name" style="color:${bg}">${pac?.nome||'—'}</div>
+        <div class="cal-event-sub">${a.hora||'—'} · ${a.servico||''}</div>
+        ${a.link?`<div class="cal-event-sub"><a href="${a.link}" target="_blank" style="color:${bg}"><i class="ph ph-video-camera"></i> Entrar</a></div>`:''}
+        <div class="cal-event-actions">
+          ${!concl?`<button class="cal-btn" style="background:${bg};color:#fff" onclick="concluirConsulta('${a.id}')">Concluir</button>`:''}
+          ${concl&&!a.pago?`<button class="cal-btn" style="background:var(--yellow-light);color:#78350F" onclick="abrirPagar('${a.id}')">Cobrar</button>`:''}
+          ${a.pago?`<span class="tag tag-green" style="font-size:10px">Pago</span>`:''}
+          <button class="cal-btn" style="background:var(--red-light);color:var(--red)" onclick="cancelarConsulta('${a.id}')">✕</button>
+        </div>
+      </div>`;
+    });
+  }
+  html+=`</div></div>`;
+  document.getElementById('agenda-view').innerHTML=html;
+}
+
+function concluirConsulta(id){
+  const D=loadDB();
+  const a=D.agendamentos.find(x=>x.id===id);
+  if(!a) return;
+  a.status='concluido';
+  saveDB(D);
+  renderAgenda(); updateDashboard();
+  abrirPagar(id);
+}
+
+function cancelarConsulta(id){
+  if(!confirm('Cancelar esta consulta?')) return;
+  const D=loadDB();
+  const a=D.agendamentos.find(x=>x.id===id);
+  if(a) a.status='cancelado';
+  saveDB(D);
+  renderAgenda(); updateDashboard();
+  toast('Consulta cancelada.');
+}
+
+function abrirPagar(id){
+  const D=loadDB();
+  const a=D.agendamentos.find(x=>x.id===id);
+  if(!a) return;
+  const pac=D.pacientes.find(p=>p.id===a.pacienteId);
+  document.getElementById('pagar-ag-id').value=id;
+  document.getElementById('pagar-valor').value=a.valor||'';
+  document.getElementById('pagar-info').innerHTML=`<b>${pac?.nome||'—'}</b> · ${a.servico||''}<br><span style="font-size:12px">${fmtDate(a.data)} ${a.hora||''}</span>`;
+  openModal('modal-pagar');
+}
+
+function confirmarPagamento(){
+  const id=document.getElementById('pagar-ag-id').value;
+  const valor=parseFloat(document.getElementById('pagar-valor').value)||0;
+  const forma=document.getElementById('pagar-forma').value;
+  const D=loadDB();
+  const a=D.agendamentos.find(x=>x.id===id);
+  if(!a) return;
+  const pac=D.pacientes.find(p=>p.id===a.pacienteId);
+  if(valor>0){
+    D.financeiro.push({
+      id:uid(),tipo:'receita',
+      descricao:`${a.servico||'Consulta'}${pac?' — '+pac.nome.split(' ')[0]:''}`,
+      valor,forma,data:todayISO(),origem:'agenda',agendamentoId:a.id,
+      criadoEm:new Date().toISOString()
+    });
+  }
+  a.pago=true; a.status='concluido';
+  saveDB(D);
+  closeModal('modal-pagar');
+  renderAgenda(); renderFinanceiro(); updateDashboard();
+  toast('✅ Pagamento registrado!');
+  setTimeout(()=>abrirRecibo(id), 300);
+}
+
+function concluirSemPagar(){
+  const id=document.getElementById('pagar-ag-id').value;
+  const D=loadDB();
+  const a=D.agendamentos.find(x=>x.id===id);
+  if(a){ a.status='concluido'; a.pago=false; saveDB(D); }
+  closeModal('modal-pagar');
+  renderAgenda(); updateDashboard();
+  toast('Concluído (pagamento pendente)');
+}
+
+// ── EVOLUÇÃO ──────────────────────────────────────────────────────────────────
+function populateEvoForm(){
+  const D=loadDB();
+  document.getElementById('evo-data').value=todayISO();
+  document.getElementById('evo-peso').value='';
+  document.getElementById('evo-cintura').value='';
+  document.getElementById('evo-quadril').value='';
+  document.getElementById('evo-obs').value='';
+  document.getElementById('evo-pac-sel').innerHTML='<option value="">Selecionar...</option>'+
+    D.pacientes.filter(p=>p.status!=='inativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+}
+
+function saveEvolucao(){
+  const pacId=document.getElementById('evo-pac-sel').value;
+  const data=document.getElementById('evo-data').value;
+  if(!pacId||!data){ toast('⚠️ Paciente e data obrigatórios'); return; }
+  const fotoInput=document.getElementById('evo-foto');
+  const file=fotoInput?.files?.[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      _persistEvo(pacId,data,e.target.result);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    _persistEvo(pacId,data,null);
+  }
+}
+function _persistEvo(pacId,data,foto){
+  const D=loadDB();
+  D.evolucao.push({
+    id:uid(), pacienteId:pacId, data,
+    peso:parseFloat(document.getElementById('evo-peso').value)||null,
+    cintura:parseFloat(document.getElementById('evo-cintura').value)||null,
+    quadril:parseFloat(document.getElementById('evo-quadril').value)||null,
+    obs:document.getElementById('evo-obs').value.trim(),
+    foto:foto||null,
+    criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-evo');
+  renderEvolucao();
+  toast('📈 Evolução registrada!');
+}
+
+function renderEvolucao(){
+  const D=loadDB();
+  // populate filter
+  const sel=document.getElementById('evo-pac-filter');
+  const curVal=sel.value;
+  sel.innerHTML='<option value="">Todos os pacientes</option>'+
+    D.pacientes.filter(p=>p.status!=='inativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  sel.value=curVal;
+
+  const filterPac=sel.value;
+  const pacMap={}; D.pacientes.forEach(p=>pacMap[p.id]=p);
+
+  let pacs=filterPac?[D.pacientes.find(p=>p.id===filterPac)].filter(Boolean):
+    D.pacientes.filter(p=>D.evolucao.some(e=>e.pacienteId===p.id));
+
+  if(!pacs.length){
+    document.getElementById('evo-content').innerHTML=`<div class="empty-state"><i class="ph ph-trend-up"></i><h3>Nenhum registro ainda</h3><p>Clique em "+ Registrar" para começar</p></div>`;
+    return;
+  }
+
+  document.getElementById('evo-content').innerHTML=pacs.map(pac=>{
+    if(!pac) return '';
+    const registros=D.evolucao.filter(e=>e.pacienteId===pac.id).sort((a,b)=>a.data.localeCompare(b.data));
+    const pesosReg=registros.filter(r=>r.peso);
+    const pesos=pesosReg.map(r=>r.peso);
+    const minPeso=pesos.length?Math.min(...pesos)-2:0;
+    const maxPeso=pesos.length?Math.max(...pesos)+2:100;
+    const rangeP=maxPeso-minPeso||1;
+    const bg=avatarBg(pac.nome);
+
+    let chartHtml='';
+    if(pesos.length>1){
+      const W=300,H=60,pad=8;
+      const pts=pesosReg.map((r,i)=>{
+        const x=pad+(i/(pesosReg.length-1))*(W-pad*2);
+        const y=H-pad-((r.peso-minPeso)/rangeP)*(H-pad*2);
+        return [x,y,r.peso];
+      });
+      const polyline=pts.map(p=>p[0]+','+p[1]).join(' ');
+      const area=`${pad},${H-pad} `+pts.map(p=>p[0]+','+p[1]).join(' ')+` ${W-pad},${H-pad}`;
+      chartHtml=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:60px;margin:10px 0 4px">
+        <defs><linearGradient id="lg${pac.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${bg}" stop-opacity=".25"/><stop offset="1" stop-color="${bg}" stop-opacity="0"/></linearGradient></defs>
+        <polygon points="${area}" fill="url(#lg${pac.id})"/>
+        <polyline points="${polyline}" fill="none" stroke="${bg}" stroke-width="2" stroke-linejoin="round"/>
+        ${pts.map(([x,y,v])=>`<circle cx="${x}" cy="${y}" r="3.5" fill="${bg}"/><text x="${x}" y="${y-6}" text-anchor="middle" font-size="9" fill="${bg}" font-weight="700">${v}kg</text>`).join('')}
+      </svg>`;
+    }
+
+    const ultPeso=pesos.length?pesos[pesos.length-1]:null;
+    const primPeso=pesos.length?pesos[0]:null;
+    const diff=ultPeso&&primPeso?ultPeso-primPeso:null;
+
+    return `<div class="card" style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="p-avatar" style="background:${bg}20;color:${bg};width:44px;height:44px;font-size:15px">${initials(pac.nome)}</div>
+        <div style="flex:1">
+          <div style="font-weight:800;font-size:15px">${pac.nome}</div>
+          <div style="font-size:12px;color:var(--muted)">${pac.objetivo||'—'}</div>
+        </div>
+        ${ultPeso?`<div style="text-align:right">
+          <div style="font-size:22px;font-weight:800;color:${bg}">${ultPeso}kg</div>
+          ${diff!==null?`<div style="font-size:12px;color:${diff<0?'var(--brand)':diff>0?'var(--red)':'var(--muted)'}">${diff>0?'+':''}${diff.toFixed(1)}kg total</div>`:''}
+        </div>`:''}
+      </div>
+      ${chartHtml}
+      <div class="evo-timeline">
+        ${[...registros].reverse().slice(0,5).map(r=>`
+          <div class="evo-item">
+            <div style="font-size:11px;font-weight:700;color:var(--muted)">${fmtDate(r.data)}</div>
+            <div style="font-size:13px;margin-top:2px">
+              ${[r.peso?`<b>${r.peso}kg</b>`:'',r.cintura?`Cintura: ${r.cintura}cm`:'',r.quadril?`Quadril: ${r.quadril}cm`:''].filter(Boolean).join(' · ')||'—'}
+            </div>
+            ${r.obs?`<div style="font-size:12px;color:var(--muted);margin-top:3px">${r.obs}</div>`:''}
+            ${r.foto?`<img src="${r.foto}" style="max-width:100%;border-radius:6px;margin-top:6px;max-height:120px;object-fit:cover" onclick="this.style.maxHeight=this.style.maxHeight==='none'?'120px':'none'"/>`:''}
+            <button class="btn btn-danger btn-sm" style="margin-top:4px;font-size:10px" onclick="delEvo('${r.id}')"><i class="ph ph-trash"></i></button>
+          </div>
+        `).join('')}
+      </div>
+      ${registros.length>5?`<div style="text-align:center;margin-top:8px;font-size:12px;color:var(--muted)">${registros.length} registros no total</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── FINANCEIRO ────────────────────────────────────────────────────────────────
+let finFilter='todos';
+function setFinFilter(f){
+  finFilter=f;
+  ['todos','receitas','despesas'].forEach(t=>document.getElementById('ftab-'+t)?.classList.toggle('active',t===f));
+  renderFinanceiro();
+}
+
+function renderFinanceiro(){
+  const D=loadDB();
+  const mes=todayISO().slice(0,7);
+  const now=new Date();
+  document.getElementById('fin-sub').textContent=now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  const recMes=D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+  const despMes=D.financeiro.filter(l=>l.tipo==='despesa'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+  document.getElementById('fin-rec-mes').textContent=fmtBRL(recMes);
+  document.getElementById('fin-desp-mes').textContent=fmtBRL(despMes);
+  document.getElementById('fin-saldo').textContent=fmtBRL(recMes-despMes);
+  let lista=D.financeiro;
+  if(finFilter==='receitas') lista=lista.filter(l=>l.tipo==='receita');
+  if(finFilter==='despesas') lista=lista.filter(l=>l.tipo==='despesa');
+  lista=[...lista].sort((a,b)=>(b.criadoEm||'').localeCompare(a.criadoEm||''));
+  const el=document.getElementById('fin-list');
+  if(!lista.length){ el.innerHTML='<div class="empty-state"><i class="ph ph-currency-dollar"></i><h3>Sem lançamentos</h3></div>'; return; }
+  el.innerHTML=lista.map(l=>`<div class="fin-item fin-${l.tipo}">
+    <div class="fin-dot"></div>
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:600">${l.descricao||'—'}</div>
+      <div style="font-size:11px;color:var(--muted)">${fmtDate(l.data)}${l.forma?' · '+l.forma:''}</div>
+    </div>
+    <div style="font-weight:700;color:${l.tipo==='receita'?'var(--brand)':'var(--red)'}">${l.tipo==='receita'?'+':'-'}${fmtBRL(l.valor)}</div>
+    <button class="btn btn-danger btn-sm" onclick="delFinanceiro('${l.id}')"><i class="ph ph-trash"></i></button>
+  </div>`).join('');
+}
+
+function saveFinanceiro(){
+  const desc=document.getElementById('fin-desc').value.trim();
+  const valor=parseFloat(document.getElementById('fin-valor').value)||0;
+  const data=document.getElementById('fin-data').value||todayISO();
+  if(!desc||!valor){ toast('⚠️ Descrição e valor obrigatórios'); return; }
+  const D=loadDB();
+  D.financeiro.push({
+    id:uid(),tipo:document.getElementById('fin-tipo').value,
+    descricao:desc,valor,data,
+    forma:document.getElementById('fin-forma').value,
+    criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-fin');
+  document.getElementById('fin-desc').value='';
+  document.getElementById('fin-valor').value='';
+  renderFinanceiro(); updateDashboard();
+  toast('Lançamento salvo!');
+}
+
+function delFinanceiro(id){
+  if(!confirm('Remover este lançamento?')) return;
+  const D=loadDB(); D.financeiro=D.financeiro.filter(x=>x.id!==id); saveDB(D);
+  renderFinanceiro(); updateDashboard(); toast('Removido.');
+}
+
+// ── PLANOS ────────────────────────────────────────────────────────────────────
+let planFilter='ativos';
+function setPlanFilter(f){
+  planFilter=f;
+  ['ativos','todos','esgotados'].forEach(x=>document.getElementById('plan-tab-'+x)?.classList.toggle('active',x===f));
+  renderPlanos();
+}
+
+function renderPlanos(){
+  const D=loadDB();
+  let planos=[...D.planos];
+  const pacMap={}; D.pacientes.forEach(p=>pacMap[p.id]=p);
+  if(planFilter==='ativos') planos=planos.filter(p=>p.ativo&&(p.sessoesUsadas||0)<(p.totalSessoes||1));
+  if(planFilter==='esgotados') planos=planos.filter(p=>(p.sessoesUsadas||0)>=(p.totalSessoes||1));
+  planos.sort((a,b)=>(b.criadoEm||'').localeCompare(a.criadoEm||''));
+  const grid=document.getElementById('planos-grid');
+  if(!planos.length){ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><i class="ph ph-ticket"></i><h3>Nenhum plano</h3><p>Crie pacotes de consultas por paciente</p></div>`; return; }
+  grid.innerHTML=planos.map(p=>{
+    const pac=pacMap[p.pacienteId];
+    const used=p.sessoesUsadas||0;
+    const total=p.totalSessoes||1;
+    const pct=Math.min(used/total*100,100);
+    const esgotado=used>=total;
+    const bg=avatarBg(pac?.nome||'');
+    return `<div class="plano-card ${esgotado?'esgotado':''}">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:32px;height:32px;border-radius:8px;background:${bg}20;color:${bg};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800">${initials(pac?.nome||'')}</div>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${pac?.nome||'—'}</div>
+        <div style="font-size:11px;color:var(--muted)">${p.nome}</div></div>
+        ${esgotado?'<span class="tag tag-red">Esgotado</span>':'<span class="tag tag-green">Ativo</span>'}
+      </div>
+      <div class="pb-bar"><div class="pb-fill" style="width:${pct}%;background:${esgotado?'var(--red)':'var(--brand)'}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)">
+        <span>${used} de ${total} sessões usadas</span>
+        <span style="font-weight:700">${fmtBRL(p.valor)}</span>
+      </div>
+      ${!esgotado?`<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:10px" onclick="usarSessao('${p.id}')">Usar 1 sessão</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+function savePlano(){
+  const pacId=document.getElementById('plan-pac').value;
+  const nome=document.getElementById('plan-nome').value.trim();
+  if(!pacId||!nome){ toast('⚠️ Paciente e nome obrigatórios'); return; }
+  const D=loadDB();
+  D.planos.push({
+    id:uid(), pacienteId:pacId, nome,
+    totalSessoes:parseInt(document.getElementById('plan-total').value)||4,
+    sessoesUsadas:0,
+    valor:parseFloat(document.getElementById('plan-valor').value)||0,
+    ativo:true, criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-plano');
+  renderPlanos(); updateDashboard();
+  toast('Plano criado!');
+}
+
+function usarSessao(id){
+  const D=loadDB();
+  const p=D.planos.find(x=>x.id===id);
+  if(!p) return;
+  p.sessoesUsadas=(p.sessoesUsadas||0)+1;
+  saveDB(D);
+  renderPlanos(); updateDashboard();
+  toast(`Sessão registrada! (${p.sessoesUsadas}/${p.totalSessoes})`);
+}
+
+function populatePlanoForm(){
+  const D=loadDB();
+  document.getElementById('plan-pac').innerHTML='<option value="">Selecionar...</option>'+
+    D.pacientes.filter(p=>p.status!=='inativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  document.getElementById('plan-nome').value='';
+  document.getElementById('plan-total').value='4';
+  document.getElementById('plan-valor').value='';
+}
+
+// ── SERVIÇOS ──────────────────────────────────────────────────────────────────
+function renderServicos(){
+  const D=loadDB();
+  const el=document.getElementById('svc-list');
+  if(!D.servicos.length){ el.innerHTML='<div class="empty-state"><i class="ph ph-list"></i><h3>Nenhum serviço</h3></div>'; return; }
+  el.innerHTML=D.servicos.map(s=>`<div class="svc-row ${s.ativo===false?'inativo':''}">
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:700">${s.nome}</div>
+      <div style="font-size:12px;color:var(--muted)">${s.preco?fmtBRL(s.preco):'Sem valor padrão'}${s.duracao?' · '+s.duracao+' min':''}</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')"><i class="ph ph-pencil"></i></button>
+    <button class="btn btn-ghost btn-sm" onclick="toggleSvc('${s.id}')">${s.ativo===false?'Ativar':'Desativar'}</button>
+    <button class="btn btn-danger btn-sm" onclick="delSvc('${s.id}')"><i class="ph ph-trash"></i></button>
+  </div>`).join('');
+}
+
+function saveSvc(){
+  const nome=document.getElementById('svc-nome').value.trim();
+  if(!nome){ toast('⚠️ Nome obrigatório'); return; }
+  const D=loadDB();
+  const editId=document.getElementById('svc-edit-id').value;
+  if(editId){
+    const s=D.servicos.find(x=>x.id===editId);
+    if(s){ s.nome=nome; s.preco=parseFloat(document.getElementById('svc-preco').value)||0; s.duracao=parseInt(document.getElementById('svc-duracao').value)||60; }
+    toast('Serviço atualizado!');
+  } else {
+    D.servicos.push({id:uid(),nome,preco:parseFloat(document.getElementById('svc-preco').value)||0,duracao:parseInt(document.getElementById('svc-duracao').value)||60,ativo:true});
+    toast('Serviço criado!');
+  }
+  saveDB(D);
+  closeModal('modal-new-svc');
+  document.getElementById('svc-edit-id').value='';
+  document.getElementById('svc-nome').value='';
+  renderServicos();
+}
+
+function editSvc(id){
+  const D=loadDB(); const s=D.servicos.find(x=>x.id===id); if(!s) return;
+  document.getElementById('svc-edit-id').value=id;
+  document.getElementById('svc-nome').value=s.nome;
+  document.getElementById('svc-preco').value=s.preco||'';
+  document.getElementById('svc-duracao').value=s.duracao||60;
+  document.getElementById('svc-modal-title').innerHTML='<i class="ph ph-pencil"></i> Editar Serviço';
+  openModal('modal-new-svc');
+}
+
+function toggleSvc(id){
+  const D=loadDB(); const s=D.servicos.find(x=>x.id===id); if(!s) return;
+  s.ativo=s.ativo===false; saveDB(D); renderServicos();
+}
+
+function delSvc(id){
+  if(!confirm('Remover este serviço?')) return;
+  const D=loadDB(); D.servicos=D.servicos.filter(x=>x.id!==id); saveDB(D); renderServicos();
+}
+
+function delEvo(id){
+  if(!confirm('Remover este registro?')) return;
+  const D=loadDB(); D.evolucao=D.evolucao.filter(x=>x.id!==id); saveDB(D); renderEvolucao();
+}
+
+// ── MISC ──────────────────────────────────────────────────────────────────────
+function confirmarLimpar(){
+  if(!confirm('Apagar TODOS os dados? Esta ação não pode ser desfeita.')) return;
+  localStorage.removeItem(DB_KEY);
+  location.reload();
+}
+
+// patch openModal to populate forms
+const _openModal=openModal;
+window.openModal=function(id){
+  if(id==='modal-new-pac') clearPacForm();
+  if(id==='modal-new-agenda') populateAgForm();
+  if(id==='modal-new-evo') populateEvoForm();
+  if(id==='modal-new-exame') populateExameForm();
+  if(id==='modal-new-plano') populatePlanoForm();
+  if(id==='modal-new-fin') document.getElementById('fin-data').value=todayISO();
+  if(id==='modal-new-svc'){ document.getElementById('svc-edit-id').value=''; document.getElementById('svc-nome').value=''; document.getElementById('svc-modal-title').innerHTML='<i class="ph ph-plus"></i> Novo Serviço'; }
+  _openModal(id);
+};
+
+// ── EXAMES ────────────────────────────────────────────────────────────────────
+const EXAM_TEMPLATES={
+  'Glicemia':[
+    {nome:'Glicose (jejum)',unidade:'mg/dL',refMin:70,refMax:100},
+    {nome:'HbA1c',unidade:'%',refMin:null,refMax:5.7},
+    {nome:'Insulina',unidade:'µUI/mL',refMin:2.6,refMax:24.9},
+    {nome:'HOMA-IR',unidade:'',refMin:null,refMax:2.71},
+  ],
+  'Lipídios':[
+    {nome:'Colesterol Total',unidade:'mg/dL',refMin:null,refMax:200},
+    {nome:'LDL',unidade:'mg/dL',refMin:null,refMax:130},
+    {nome:'HDL',unidade:'mg/dL',refMin:40,refMax:null},
+    {nome:'Triglicerídeos',unidade:'mg/dL',refMin:null,refMax:150},
+    {nome:'VLDL',unidade:'mg/dL',refMin:null,refMax:30},
+  ],
+  'Hemograma':[
+    {nome:'Hemoglobina',unidade:'g/dL',refMin:12,refMax:16},
+    {nome:'Hematócrito',unidade:'%',refMin:36,refMax:46},
+    {nome:'Ferritina',unidade:'ng/mL',refMin:12,refMax:150},
+    {nome:'Ferro sérico',unidade:'µg/dL',refMin:60,refMax:160},
+    {nome:'VCM',unidade:'fL',refMin:80,refMax:100},
+    {nome:'Leucócitos',unidade:'mil/µL',refMin:4,refMax:11},
+  ],
+  'Tireoide':[
+    {nome:'TSH',unidade:'µUI/mL',refMin:0.4,refMax:4.0},
+    {nome:'T4 Livre',unidade:'ng/dL',refMin:0.8,refMax:1.8},
+    {nome:'T3 Livre',unidade:'pg/mL',refMin:2.3,refMax:4.2},
+    {nome:'Anti-TPO',unidade:'UI/mL',refMin:null,refMax:35},
+  ],
+  'Vitaminas':[
+    {nome:'Vitamina D',unidade:'ng/mL',refMin:30,refMax:100},
+    {nome:'Vitamina B12',unidade:'pg/mL',refMin:200,refMax:900},
+    {nome:'Ácido Fólico',unidade:'ng/mL',refMin:3,refMax:17},
+    {nome:'Zinco',unidade:'µg/dL',refMin:70,refMax:120},
+    {nome:'Magnésio',unidade:'mg/dL',refMin:1.7,refMax:2.4},
+    {nome:'Vitamina A',unidade:'µg/dL',refMin:30,refMax:65},
+  ],
+  'Outros':[]
+};
+
+function calcStatus(val,refMin,refMax){
+  if(val===''||val===null||val===undefined) return 'nd';
+  const v=parseFloat(val); if(isNaN(v)) return 'nd';
+  if(refMin!==null&&v<refMin) return 'baixo';
+  if(refMax!==null&&v>refMax) return 'alto';
+  return 'normal';
+}
+
+function statusTag(s){
+  if(s==='normal') return '<span class="tag tag-green" style="font-size:10px">✓ Normal</span>';
+  if(s==='alto')   return '<span class="tag tag-red" style="font-size:10px">↑ Alto</span>';
+  if(s==='baixo')  return '<span class="tag" style="background:#EFF6FF;color:#1D4ED8;font-size:10px">↓ Baixo</span>';
+  return '<span class="tag tag-gray" style="font-size:10px">—</span>';
+}
+
+function loadExameTemplate(){
+  const cat=document.getElementById('exame-cat').value;
+  const wrap=document.getElementById('exame-marcadores-wrap');
+  if(!cat){ wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Selecione uma categoria</div>'; return; }
+  const markers=EXAM_TEMPLATES[cat]||[];
+  wrap.innerHTML=`
+    <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">Marcadores — ${cat}</div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12px" id="markers-table">
+      <thead><tr style="background:var(--surface2)">
+        <th style="padding:8px;text-align:left;border-bottom:1px solid var(--border)">Marcador</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);width:90px">Valor</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);width:70px">Unidade</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);width:110px">Referência</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);width:80px">Status</th>
+      </tr></thead>
+      <tbody id="markers-body">
+        ${markers.map((m,i)=>`<tr>
+          <td style="padding:6px 8px;border-bottom:1px solid var(--border)">${m.nome}</td>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border)">
+            <input type="number" step="0.01" id="mv-${i}" data-refmin="${m.refMin??''}" data-refmax="${m.refMax??''}"
+              onchange="updateMarkerStatus(${i})" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px;text-align:center;background:var(--surface2);outline:none"/>
+          </td>
+          <td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted)">${m.unidade}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted)">
+            ${m.refMin!==null?m.refMin:''}${m.refMin!==null&&m.refMax!==null?' – ':''}${m.refMax!==null?m.refMax:''}${m.unidade?' '+m.unidade:''}
+          </td>
+          <td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:center" id="ms-${i}">${statusTag('nd')}</td>
+        </tr>`).join('')}
+        ${cat==='Outros'?`<tr><td colspan="5" style="padding:6px 8px;color:var(--muted);font-size:12px">
+          <i>Sem marcadores padrão — use o campo de observações para registrar valores livres.</i>
+        </td></tr>`:''}
+      </tbody>
+    </table></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">Deixe em branco os marcadores não realizados.</div>`;
+}
+
+function updateMarkerStatus(i){
+  const inp=document.getElementById('mv-'+i);
+  if(!inp) return;
+  const s=calcStatus(inp.value,inp.dataset.refmin===''?null:+inp.dataset.refmin, inp.dataset.refmax===''?null:+inp.dataset.refmax);
+  const el=document.getElementById('ms-'+i); if(el) el.innerHTML=statusTag(s);
+}
+
+function saveExame(){
+  const pacId=document.getElementById('exame-pac-sel').value;
+  const data=document.getElementById('exame-data').value;
+  const cat=document.getElementById('exame-cat').value;
+  if(!pacId||!data){ toast('⚠️ Paciente e data obrigatórios'); return; }
+  const D=loadDB();
+  const markers=EXAM_TEMPLATES[cat]||[];
+  const marcadores=markers.map((m,i)=>{
+    const inp=document.getElementById('mv-'+i);
+    const val=inp?.value??'';
+    return {
+      nome:m.nome, valor:val, unidade:m.unidade,
+      refMin:m.refMin, refMax:m.refMax,
+      status:calcStatus(val,m.refMin,m.refMax)
+    };
+  }).filter(m=>m.valor!=='');
+  if(!D.exames) D.exames=[];
+  D.exames.push({
+    id:uid(), pacienteId:pacId, data, categoria:cat||'Outros',
+    marcadores, obs:document.getElementById('exame-obs').value.trim(),
+    criadoEm:new Date().toISOString()
+  });
+  saveDB(D);
+  closeModal('modal-new-exame');
+  renderExames(); updateBadgeExames(D);
+  toast('🔬 Exame registrado!');
+}
+
+function updateBadgeExames(D){
+  if(!D) D=loadDB();
+  const alterados=D.exames?.filter(e=>e.marcadores?.some(m=>m.status==='alto'||m.status==='baixo')).length||0;
+  const b=document.getElementById('badge-exames');
+  if(alterados){ b.style.display=''; b.textContent=alterados; } else b.style.display='none';
+}
+
+function novoExamePac(pacId){
+  populateExameForm();
+  setTimeout(()=>{ document.getElementById('exame-pac-sel').value=pacId; },50);
+  openModal('modal-new-exame');
+}
+
+function populateExameForm(){
+  const D=loadDB();
+  document.getElementById('exame-data').value=todayISO();
+  document.getElementById('exame-cat').value='';
+  document.getElementById('exame-obs').value='';
+  document.getElementById('exame-pac-sel').innerHTML='<option value="">Selecionar...</option>'+
+    D.pacientes.filter(p=>p.status!=='inativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  document.getElementById('exame-marcadores-wrap').innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Selecione uma categoria</div>';
+}
+
+function renderExames(){
+  const D=loadDB();
+  if(!D.exames) D.exames=[];
+  const pacMap={}; D.pacientes.forEach(p=>pacMap[p.id]=p);
+
+  // populate filter
+  const sel=document.getElementById('exame-pac-filter');
+  if(sel){
+    const cur=sel.value;
+    sel.innerHTML='<option value="">Todos os pacientes</option>'+
+      D.pacientes.filter(p=>p.status!=='inativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+    sel.value=cur;
+  }
+
+  const filterPac=document.getElementById('exame-pac-filter')?.value||'';
+  const filterCat=document.getElementById('exame-cat-filter')?.value||'';
+  let exames=[...D.exames];
+  if(filterPac) exames=exames.filter(e=>e.pacienteId===filterPac);
+  if(filterCat) exames=exames.filter(e=>e.categoria===filterCat);
+  exames.sort((a,b)=>b.data.localeCompare(a.data));
+
+  const el=document.getElementById('exames-content');
+  if(!el) return;
+  if(!exames.length){
+    el.innerHTML=`<div class="empty-state"><i class="ph ph-flask"></i><h3>Nenhum exame registrado</h3><p>Clique em "+ Novo exame" para começar</p></div>`;
+    updateBadgeExames(D); return;
+  }
+
+  el.innerHTML=exames.map(e=>{
+    const pac=pacMap[e.pacienteId];
+    const bg=avatarBg(pac?.nome||'');
+    const alterados=e.marcadores?.filter(m=>m.status==='alto'||m.status==='baixo')||[];
+    const normais=e.marcadores?.filter(m=>m.status==='normal')||[];
+
+    // tendência: compara com exame anterior da mesma categoria + paciente
+    const prev=D.exames.filter(x=>x.pacienteId===e.pacienteId&&x.categoria===e.categoria&&x.data<e.data).sort((a,b)=>b.data.localeCompare(a.data))[0];
+
+    return `<div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:36px;height:36px;border-radius:9px;background:${bg}20;color:${bg};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">${initials(pac?.nome||'')}</div>
+        <div style="flex:1">
+          <div style="font-weight:800;font-size:14px">${pac?.nome||'—'}</div>
+          <div style="font-size:12px;color:var(--muted)">${fmtDate(e.data)} · ${e.categoria||'—'}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${alterados.length?`<span class="tag tag-red">${alterados.length} alterado${alterados.length>1?'s':''}</span>`:''}
+          ${normais.length&&!alterados.length?`<span class="tag tag-green">Tudo normal</span>`:''}
+          <button class="btn btn-danger btn-sm" onclick="delExame('${e.id}')"><i class="ph ph-trash"></i></button>
+        </div>
+      </div>
+      ${e.marcadores?.length?`
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:var(--surface2)">
+          <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)">Marcador</th>
+          <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--border)">Valor</th>
+          <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--border)">Ref.</th>
+          <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--border)">Status</th>
+          ${prev?'<th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--border)">Tendência</th>':''}
+        </tr></thead>
+        <tbody>${e.marcadores.map(m=>{
+          let trend='';
+          if(prev){
+            const pm=prev.marcadores?.find(x=>x.nome===m.nome);
+            if(pm?.valor&&m.valor){
+              const diff=parseFloat(m.valor)-parseFloat(pm.valor);
+              const pct=Math.abs(diff/parseFloat(pm.valor)*100).toFixed(0);
+              if(Math.abs(diff)<0.01) trend='→';
+              else if((m.refMax&&m.valor>m.refMax)||(m.refMin&&m.valor<m.refMin)){
+                trend=diff>0?`<span style="color:var(--red)">↑ +${pct}%</span>`:`<span style="color:#2563EB">↓ ${pct}%</span>`;
+              } else {
+                trend=diff>0?`<span style="color:var(--muted)">↑ +${pct}%</span>`:`<span style="color:var(--brand)">↓ ${pct}%</span>`;
+              }
+            }
+          }
+          const ref=`${m.refMin??''}${m.refMin!==null&&m.refMax!==null?' – ':''}${m.refMax??''}${m.unidade?' '+m.unidade:''}`;
+          return `<tr style="${m.status==='alto'||m.status==='baixo'?'background:#FFF9F9':''}">
+            <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:${m.status!=='normal'?'700':'400'}">${m.nome}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:center;font-weight:700;color:${m.status==='normal'?'var(--brand)':m.status==='nd'?'var(--muted)':'var(--red)'}">${m.valor} ${m.unidade}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted);font-size:11px">${ref}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:center">${statusTag(m.status)}</td>
+            ${prev?`<td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:center;font-size:11px">${trend||'—'}</td>`:''}
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>`:''}
+      ${e.obs?`<div style="font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><b>Obs:</b> ${e.obs}</div>`:''}
+    </div>`;
+  }).join('');
+  updateBadgeExames(D);
+}
+
+function delExame(id){
+  if(!confirm('Remover este exame?')) return;
+  const D=loadDB();
+  D.exames=D.exames.filter(x=>x.id!==id);
+  saveDB(D); renderExames();
+  toast('Exame removido.');
+}
+
+// ── CONFIG PROFISSIONAL ───────────────────────────────────────────────────────
+function saveConfig(){
+  const D=loadDB();
+  D.config={
+    nomeProfissional:document.getElementById('cfg-nome').value.trim(),
+    crn:document.getElementById('cfg-crn').value.trim(),
+    especialidade:document.getElementById('cfg-especialidade').value.trim(),
+    telefone:document.getElementById('cfg-tel').value.trim(),
+    email:document.getElementById('cfg-email').value.trim(),
+  };
+  saveDB(D);
+  toast('Perfil salvo!');
+  // atualiza topbar
+  if(D.config.nomeProfissional){
+    document.getElementById('tb-nome').textContent=D.config.nomeProfissional;
+    document.getElementById('tb-especialidade').textContent=D.config.especialidade||'Nutricionista';
+    document.getElementById('tb-avatar').textContent=initials(D.config.nomeProfissional);
+  }
+}
+
+function renderConfig(){
+  const D=loadDB();
+  const c=D.config||{};
+  document.getElementById('cfg-nome').value=c.nomeProfissional||'';
+  document.getElementById('cfg-crn').value=c.crn||'';
+  document.getElementById('cfg-especialidade').value=c.especialidade||'';
+  document.getElementById('cfg-tel').value=c.telefone||'';
+  document.getElementById('cfg-email').value=c.email||'';
+  renderServicos();
+}
+
+// ── RECIBO ────────────────────────────────────────────────────────────────────
+function abrirRecibo(agId){
+  const D=loadDB();
+  const a=D.agendamentos.find(x=>x.id===agId); if(!a) return;
+  const pac=D.pacientes.find(p=>p.id===a.pacienteId);
+  const c=D.config||{};
+  const prof=c.nomeProfissional||'Nutricionista';
+  const crn=c.crn||'';
+  const numRec=String(D.agendamentos.filter(x=>x.pago).indexOf(a)+1).padStart(4,'0');
+  document.getElementById('recibo-content').innerHTML=`
+    <div style="border:1px solid #E2E8F0;border-radius:10px;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #E2E8F0">
+        <div>
+          <div style="font-size:17px;font-weight:800;color:#16A34A">${prof}</div>
+          <div style="font-size:12px;color:#64748B">${c.especialidade||'Nutricionista'}${crn?' · '+crn:''}</div>
+          ${c.telefone?`<div style="font-size:12px;color:#64748B">${c.telefone}</div>`:''}
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:#94A3B8">RECIBO Nº ${numRec}</div>
+          <div style="font-size:12px;font-weight:600">${fmtDate(a.data)}</div>
+        </div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Paciente</div>
+        <div style="font-size:15px;font-weight:700">${pac?.nome||'—'}</div>
+        ${pac?.whatsapp?`<div style="font-size:12px;color:#64748B">${pac.whatsapp}</div>`:''}
+      </div>
+      <div style="background:#F0FDF4;border-radius:8px;padding:12px 14px;margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Serviço prestado</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:14px;font-weight:700">${a.servico||'Consulta nutricional'}</div>
+            <div style="font-size:12px;color:#64748B">${a.hora||''} · ${a.formaPagamento||a.pagamento||'—'}</div>
+          </div>
+          <div style="font-size:22px;font-weight:800;color:#16A34A">${fmtBRL(a.valor)}</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#94A3B8;text-align:center;margin-top:8px">
+        Recebi a quantia acima referente aos serviços de nutrição prestados.<br>
+        ${c.cidade||''} ${fmtDate(todayISO())} · ${prof}${crn?' · '+crn:''}
+      </div>
+    </div>`;
+  openModal('modal-recibo');
+}
+
+function imprimirRecibo(){
+  const c=document.getElementById('recibo-content').innerHTML;
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Recibo</title><style>body{font-family:Inter,sans-serif;padding:32px;max-width:600px;margin:auto}*{box-sizing:border-box}</style></head><body>${c}</body></html>`);
+  w.document.close(); w.focus(); w.print(); w.close();
+}
+
+// ── ATESTADO ──────────────────────────────────────────────────────────────────
+function abrirAtestado(pacId){
+  const D=loadDB();
+  const pac=D.pacientes.find(p=>p.id===pacId); if(!pac) return;
+  const c=D.config||{};
+  const prof=c.nomeProfissional||'Nutricionista';
+  const crn=c.crn||'';
+  const hoje=fmtDate(todayISO());
+  document.getElementById('atestado-content').innerHTML=`
+    <div style="border:1px solid #E2E8F0;border-radius:10px;padding:24px">
+      <div style="text-align:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #E2E8F0">
+        <div style="font-size:17px;font-weight:800;color:#16A34A">${prof}</div>
+        <div style="font-size:12px;color:#64748B">${c.especialidade||'Nutricionista'}${crn?' · '+crn:''}</div>
+      </div>
+      <div style="text-align:center;font-size:16px;font-weight:800;letter-spacing:.05em;margin-bottom:20px">ATESTADO</div>
+      <div style="font-size:14px;line-height:1.8;color:#334155;text-align:justify">
+        Atesto, para os devidos fins, que <b>${pac.nome}</b> realizou consulta de <b>Nutrição Clínica</b>
+        no dia <b>${hoje}</b>, com duração de acordo com a necessidade clínica do atendimento,
+        estando impossibilitado(a) de comparecer às suas atividades habituais neste período,
+        se necessário.
+      </div>
+      <div style="margin-top:30px;padding-top:14px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748B;text-align:center">
+        ${hoje}<br><br>
+        _____________________________________________<br>
+        ${prof}<br>
+        ${crn}
+      </div>
+    </div>`;
+  openModal('modal-atestado');
+}
+
+function imprimirAtestado(){
+  const c=document.getElementById('atestado-content').innerHTML;
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Atestado</title><style>body{font-family:Inter,sans-serif;padding:40px;max-width:600px;margin:auto}*{box-sizing:border-box}</style></head><body>${c}</body></html>`);
+  w.document.close(); w.focus(); w.print(); w.close();
+}
+
+// ── PRONTUÁRIO PDF ────────────────────────────────────────────────────────────
+function exportarProntuario(pacId){
+  const D=loadDB();
+  const pac=D.pacientes.find(p=>p.id===pacId); if(!pac) return;
+  const c=D.config||{};
+  const evo=[...D.evolucao.filter(e=>e.pacienteId===pacId)].sort((a,b)=>b.data.localeCompare(a.data));
+  const ags=[...D.agendamentos.filter(a=>a.pacienteId===pacId&&a.status!=='cancelado')].sort((a,b)=>b.data.localeCompare(a.data));
+  const ultPeso=evo.find(e=>e.peso)?.peso||pac.pesoInicial;
+  const imc=ultPeso&&pac.altura?(ultPeso/((pac.altura/100)**2)).toFixed(1):null;
+  const tmb=calcTMB(ultPeso,pac.altura,calcIdade(pac.dataNasc),pac.sexo||'F');
+  const get=tmb?Math.round(tmb*(pac.fatorAtividade||1.55)):null;
+
+  const html=`
+  <div style="font-family:Arial,sans-serif;color:#0F172A;padding:0">
+    <!-- Cabeçalho -->
+    <div style="background:#16A34A;color:#fff;padding:20px 24px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:20px;font-weight:800">${c.nomeProfissional||'Nutricionista'}</div>
+        <div style="font-size:12px;opacity:.85">${c.especialidade||''}${c.crn?' · '+c.crn:''}</div>
+      </div>
+      <div style="text-align:right;font-size:12px;opacity:.85">
+        <div>PRONTUÁRIO NUTRICIONAL</div>
+        <div>Emitido em ${fmtDate(todayISO())}</div>
+      </div>
+    </div>
+
+    <!-- Dados do paciente -->
+    <div style="padding:20px 24px;background:#F0FDF4;border:1px solid #BBF7D0;border-top:none">
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px">${pac.nome}</div>
+      <div style="font-size:12px;color:#334155;display:flex;gap:16px;flex-wrap:wrap">
+        ${pac.dataNasc?`<span>Nasc: ${fmtDate(pac.dataNasc)} (${calcIdade(pac.dataNasc)} anos)</span>`:''}
+        ${pac.whatsapp?`<span>Tel: ${pac.whatsapp}</span>`:''}
+        ${pac.email?`<span>E-mail: ${pac.email}</span>`:''}
+      </div>
+    </div>
+
+    <!-- Métricas -->
+    ${imc||get?`<div style="display:flex;gap:1px;background:#E2E8F0;border:1px solid #E2E8F0;border-top:none">
+      ${pac.altura?`<div style="flex:1;background:#fff;padding:12px 16px;text-align:center"><div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:.08em">Altura</div><div style="font-size:18px;font-weight:800;color:#16A34A">${pac.altura} cm</div></div>`:''}
+      ${ultPeso?`<div style="flex:1;background:#fff;padding:12px 16px;text-align:center"><div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:.08em">Peso atual</div><div style="font-size:18px;font-weight:800;color:#16A34A">${ultPeso} kg</div></div>`:''}
+      ${imc?`<div style="flex:1;background:#fff;padding:12px 16px;text-align:center"><div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:.08em">IMC</div><div style="font-size:18px;font-weight:800;color:#16A34A">${imc}</div></div>`:''}
+      ${get?`<div style="flex:1;background:#fff;padding:12px 16px;text-align:center"><div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:.08em">GET</div><div style="font-size:18px;font-weight:800;color:#16A34A">${get} kcal</div></div>`:''}
+    </div>`:''}
+
+    <!-- Anamnese -->
+    ${pac.obs||pac.objetivo||pac.restricoes?`
+    <div style="padding:16px 24px;border:1px solid #E2E8F0;border-top:none">
+      <div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Anamnese</div>
+      ${pac.objetivo?`<div style="margin-bottom:6px"><b style="font-size:12px">Objetivo:</b> <span style="font-size:13px">${pac.objetivo}</span></div>`:''}
+      ${pac.restricoes?`<div style="margin-bottom:6px"><b style="font-size:12px">Restrições:</b> <span style="font-size:13px">${pac.restricoes}</span></div>`:''}
+      ${pac.obs?`<div><b style="font-size:12px">Observações:</b><div style="font-size:13px;margin-top:4px;line-height:1.6">${pac.obs}</div></div>`:''}
+    </div>`:''}
+
+    <!-- Evolução -->
+    ${evo.length?`
+    <div style="padding:16px 24px;border:1px solid #E2E8F0;border-top:none">
+      <div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Evolução</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:#F8FAFC">
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #E2E8F0">Data</th>
+          <th style="padding:8px;text-align:center;border-bottom:1px solid #E2E8F0">Peso</th>
+          <th style="padding:8px;text-align:center;border-bottom:1px solid #E2E8F0">Cintura</th>
+          <th style="padding:8px;text-align:center;border-bottom:1px solid #E2E8F0">Quadril</th>
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #E2E8F0">Anotações</th>
+        </tr></thead>
+        <tbody>${evo.map(e=>`<tr>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9">${fmtDate(e.data)}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9;text-align:center;font-weight:700">${e.peso?e.peso+'kg':'—'}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9;text-align:center">${e.cintura?e.cintura+'cm':'—'}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9;text-align:center">${e.quadril?e.quadril+'cm':'—'}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9;font-size:11px;color:#64748B">${e.obs||''}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`:''}
+
+    <!-- Histórico de consultas -->
+    ${ags.length?`
+    <div style="padding:16px 24px;border:1px solid #E2E8F0;border-top:none;border-radius:0 0 8px 8px">
+      <div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Histórico de Consultas</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:#F8FAFC">
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #E2E8F0">Data</th>
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #E2E8F0">Serviço</th>
+          <th style="padding:8px;text-align:center;border-bottom:1px solid #E2E8F0">Valor</th>
+          <th style="padding:8px;text-align:center;border-bottom:1px solid #E2E8F0">Status</th>
+        </tr></thead>
+        <tbody>${ags.map(a=>`<tr>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9">${fmtDate(a.data)}${a.hora?' '+a.hora:''}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9">${a.servico||'Consulta'}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9;text-align:center;font-weight:700">${fmtBRL(a.valor)}</td>
+          <td style="padding:7px 8px;border-bottom:1px solid #F1F5F9;text-align:center">
+            <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:${a.pago?'#DCFCE7':'#FEF3C7'};color:${a.pago?'#15803D':'#92400E'}">${a.pago?'Pago':'Pendente'}</span>
+          </td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`:''}
+
+    <div style="text-align:center;font-size:10px;color:#94A3B8;margin-top:16px">
+      Documento gerado por Nutri Control · ${fmtDate(todayISO())}
+    </div>
+  </div>`;
+
+  toast('Gerando PDF…');
+  const el=document.getElementById('prontuario-pdf');
+  el.style.display='block';
+  el.innerHTML=html;
+  html2pdf().set({
+    margin:10, filename:`Prontuario_${pac.nome.replace(/\s+/g,'_')}.pdf`,
+    image:{type:'jpeg',quality:.95},
+    html2canvas:{scale:2},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(el).save().then(()=>{
+    el.style.display='none'; el.innerHTML='';
+    toast('PDF gerado!');
+  });
+}
+
+// ── CÁLCULO ENERGÉTICO ────────────────────────────────────────────────────────
+function calcIdade(dataNasc){
+  if(!dataNasc) return null;
+  const hoje=new Date(), nasc=new Date(dataNasc+'T00:00:00');
+  let idade=hoje.getFullYear()-nasc.getFullYear();
+  const m=hoje.getMonth()-nasc.getMonth();
+  if(m<0||(m===0&&hoje.getDate()<nasc.getDate())) idade--;
+  return idade>0?idade:null;
+}
+
+function calcTMB(peso,altura,idade,sexo){
+  if(!peso||!altura||!idade) return null;
+  if(sexo==='M') return 88.362+(13.397*peso)+(4.799*altura)-(5.677*idade);
+  return 447.593+(9.247*peso)+(3.098*altura)-(4.330*idade);
+}
+
+// ── TRANSCRIÇÃO DE ÁUDIO ──────────────────────────────────────────────────────
+let _micActive=null;
+
+function toggleMic(targetId, btnId){
+  if(_micActive){
+    _micActive.recognition.stop();
+    _micActive=null;
+    const btn=document.getElementById(btnId);
+    if(btn){ btn.innerHTML='<i class="ph ph-microphone"></i> Gravar'; btn.style.color=''; btn.style.borderColor=''; }
+    return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ toast('⚠️ Use Chrome ou Edge para transcrição de voz'); return; }
+  const rec=new SR();
+  rec.lang='pt-BR'; rec.continuous=true; rec.interimResults=true;
+  let finalText='';
+  rec.onresult=e=>{
+    let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) finalText+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
+    }
+    const el=document.getElementById(targetId);
+    if(el) el.value=finalText+interim;
+  };
+  rec.onerror=e=>{ toast('Erro de microfone: '+e.error); _micActive=null; };
+  rec.onend=()=>{
+    if(_micActive){ rec.start(); } // auto-restart se ainda ativo
+    else {
+      const btn=document.getElementById(btnId);
+      if(btn){ btn.innerHTML='<i class="ph ph-microphone"></i> Gravar'; btn.style.color=''; }
+    }
+  };
+  rec.start();
+  _micActive={recognition:rec,targetId,btnId};
+  const btn=document.getElementById(btnId);
+  if(btn){ btn.innerHTML='<i class="ph ph-record"></i> Parar'; btn.style.color='var(--red)'; btn.style.borderColor='var(--red)'; }
+  toast('🎤 Gravando… fale normalmente');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(function init(){
+  const D=loadDB();
+  const c=D.config||{};
+  if(c.nomeProfissional){
+    document.getElementById('tb-nome').textContent=c.nomeProfissional;
+    document.getElementById('tb-especialidade').textContent=c.especialidade||'Nutricionista';
+    document.getElementById('tb-avatar').textContent=initials(c.nomeProfissional);
+  }
+  updateDashboard();
+})();
+</script>
+</body>
+</html>

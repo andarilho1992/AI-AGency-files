@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go — Plano de Negócio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0F172A;color:#E2E8F0;-webkit-font-smoothing:antialiased}
+.page-cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 40px;background:linear-gradient(160deg,#0F172A 0%,#1E293B 60%,#0F172A 100%);position:relative;overflow:hidden}
+.page-cover::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(64,71,200,.25) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(0,200,150,.1) 0%,transparent 50%);pointer-events:none}
+.cover-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(64,71,200,.3);border:1px solid rgba(64,71,200,.5);color:#A5B4FC;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:24px;letter-spacing:.06em}
+.cover-title{font-size:56px;font-weight:900;letter-spacing:-.04em;line-height:1.05;margin-bottom:16px}
+.cover-title em{font-style:normal;color:#4047C8}
+.cover-sub{font-size:18px;color:#94A3B8;max-width:560px;line-height:1.6;margin-bottom:40px}
+.cover-meta{display:flex;gap:32px;flex-wrap:wrap;justify-content:center}
+.meta-item{text-align:center}
+.meta-val{font-size:28px;font-weight:900;color:#fff}
+.meta-label{font-size:12px;color:#64748B;font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+
+/* CONTENT */
+.content{background:#fff;color:#0F172A;padding:60px 40px;max-width:1000px;margin:0 auto}
+.section{margin-bottom:56px}
+.section-num{font-size:11px;font-weight:800;color:#4047C8;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+.section-title{font-size:28px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px}
+.section-sub{font-size:15px;color:#64748B;margin-bottom:28px;line-height:1.6}
+.section-divider{border:none;border-top:2px solid #F1F5F9;margin:40px 0}
+
+/* TIMELINE */
+.phase{position:relative;padding-left:28px;margin-bottom:40px}
+.phase::before{content:"";position:absolute;left:0;top:8px;width:12px;height:12px;border-radius:50%;background:#4047C8}
+.phase::after{content:"";position:absolute;left:5px;top:22px;width:2px;bottom:-28px;background:#E2E8F0}
+.phase:last-child::after{display:none}
+.phase-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.phase-period{font-size:12px;font-weight:700;color:#4047C8;background:#ECEEFF;padding:4px 12px;border-radius:20px}
+.phase-name{font-size:18px;font-weight:800}
+.phase-goal{font-size:13px;color:#64748B;font-style:italic;margin-bottom:16px}
+.phase-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.phase-block{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:16px}
+.phase-block-title{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.phase-block ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.phase-block li{font-size:13px;color:#334155;padding-left:16px;position:relative;line-height:1.5}
+.phase-block li::before{content:"→";position:absolute;left:0;color:#4047C8;font-weight:700}
+.phase-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.kpi-item{background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:12px;text-align:center}
+.kpi-val{font-size:20px;font-weight:900;color:#4047C8}
+.kpi-label{font-size:10px;font-weight:600;color:#94A3B8;margin-top:2px;text-transform:uppercase}
+
+/* REVENUE TABLE */
+.rev-table-wrap{border:1px solid #E2E8F0;border-radius:12px;overflow:hidden;margin-bottom:16px}
+.rev-table{width:100%;border-collapse:collapse}
+.rev-table th{background:#F8FAFC;padding:10px 14px;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #E2E8F0}
+.rev-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid #F1F5F9}
+.rev-table tr:last-child td{border-bottom:none;font-weight:700;background:#F8FAFC}
+.rev-table td.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.rev-table td.pos{color:#059669}
+.rev-table td.total{color:#4047C8;font-size:15px}
+
+/* FRANCHISE MODEL */
+.franchise-model{background:linear-gradient(135deg,#0F172A,#1E293B);color:#fff;border-radius:16px;padding:32px;margin-bottom:20px}
+.fm-title{font-size:20px;font-weight:900;margin-bottom:6px}
+.fm-sub{font-size:13px;color:#94A3B8;margin-bottom:24px}
+.fm-flow{display:flex;gap:0;margin-bottom:24px;flex-wrap:wrap}
+.fm-step{flex:1;min-width:120px;padding:16px;text-align:center;position:relative}
+.fm-step:not(:last-child)::after{content:"→";position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:#4047C8;font-weight:900;font-size:18px}
+.fm-icon{font-size:28px;margin-bottom:8px}
+.fm-step-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:4px}
+.fm-step-val{font-size:11px;color:#64748B}
+.fm-income{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fm-inc-item{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;text-align:center}
+.fm-inc-val{font-size:20px;font-weight:900;color:#A5B4FC}
+.fm-inc-label{font-size:11px;color:#64748B;margin-top:4px}
+
+/* RISKS */
+.risk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.risk-item{border-radius:10px;padding:16px;border:1px solid}
+.risk-high{background:#FEF2F2;border-color:#FECACA}
+.risk-med{background:#FFFDE6;border-color:#FDE68A}
+.risk-low{background:#E5FFF8;border-color:#6EE7C7}
+.risk-level{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.risk-high .risk-level{color:#DC2626}
+.risk-med .risk-level{color:#D97706}
+.risk-low .risk-level{color:#059669}
+.risk-title{font-size:13px;font-weight:700;margin-bottom:4px;color:#0F172A}
+.risk-mit{font-size:12px;color:#475569;line-height:1.5}
+
+/* DECISION */
+.decision{background:#ECEEFF;border:1px solid #C7D2FE;border-radius:12px;padding:24px}
+.decision-title{font-size:16px;font-weight:800;color:#3730A3;margin-bottom:16px}
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.d-col-title{font-size:12px;font-weight:700;color:#4047C8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.d-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.d-col li{font-size:13px;color:#1E1B4B;padding-left:16px;position:relative}
+.d-col li::before{content:"•";position:absolute;left:4px;color:#4047C8}
+
+@media print{
+  .page-cover{min-height:auto;page-break-after:always}
+  body{background:#fff}
+  .content{padding:40px}
+}
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<div class="page-cover">
+  <div class="cover-tag">📋 Documento Estratégico Interno · Abril 2026</div>
+  <h1 class="cover-title">Plano de Negócio<br/><em>Pets Go</em></h1>
+  <p class="cover-sub">Sistema de automação + modelo de franquias. Horizonte de 12 meses. Da validação interna ao primeiro franqueado externo.</p>
+  <div class="cover-meta">
+    <div class="meta-item">
+      <div class="meta-val">R$295k</div>
+      <div class="meta-label">Ticket por franquia</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-val">1.041</div>
+      <div class="meta-label">Clientes validados</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-val">3</div>
+      <div class="meta-label">Unidades operando</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-val">12 meses</div>
+      <div class="meta-label">Horizonte deste plano</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- CONTEXTO -->
+  <div class="section">
+    <div class="section-num">Contexto</div>
+    <h2 class="section-title">O que já temos, o que estamos construindo</h2>
+    <p class="section-sub">Junior tem uma operação real, grande e validada — 3 unidades, base de ~350 clientes ativos, faturamento médio anual próximo a R$1M. O caos operacional é o problema atual. O sistema resolve isso primeiro, e vira o produto vendável para o mercado de franquias.</p>
+
+    <div class="phase-cols">
+      <div class="phase-block">
+        <div class="phase-block-title">O que Junior tem</div>
+        <ul>
+          <li>3 unidades operando (Cachorródromo, Petrópolis, Rio Branco)</li>
+          <li>~350 clientes ativos + ~690 inativos (base enorme para reativar)</li>
+          <li>Apresentação de franquias pronta (R$295k ticket)</li>
+          <li>Credibilidade no mercado pet de Porto Alegre</li>
+          <li>Rede de contatos: conhece outros donos de pet shop</li>
+          <li>Modelo validado com planos de assinatura recorrentes</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-block-title">O que Guilherme tem</div>
+        <ul>
+          <li>CRM rodando com 1041 clientes importados</li>
+          <li>Sistema white-label pronto para múltiplos clientes</li>
+          <li>Automação WhatsApp estruturada (aguarda Evolution API)</li>
+          <li>Arquitetura SaaS desenhada (multi-tenant)</li>
+          <li>Capacidade de escalar sem dependência de infraestrutura cara</li>
+          <li>Custo operacional próximo de zero nos primeiros clientes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- FASES -->
+  <div class="section">
+    <div class="section-num">Roadmap</div>
+    <h2 class="section-title">Execução em 3 fases</h2>
+    <p class="section-sub">Cada fase tem uma meta clara e um gatilho de entrada para a próxima.</p>
+
+    <!-- FASE 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-period">Meses 1–3 · Maio–Julho 2026</span>
+        <span class="phase-name">Validação Interna</span>
+      </div>
+      <p class="phase-goal">Objetivo: sistema funcionando nas 3 unidades do Junior. Zero caos operacional. Métricas reais em mão.</p>
+      <div class="phase-cols">
+        <div class="phase-block">
+          <div class="phase-block-title">Entregas técnicas</div>
+          <ul>
+            <li>CRM multi-tenant com API (substituir localStorage)</li>
+            <li>Módulo Agenda completo (agendamentos reais)</li>
+            <li>Evolution API conectada + 1 número WhatsApp</li>
+            <li>Flow: confirmação + lembrete 24h automático</li>
+            <li>Dashboard por filial funcionando</li>
+            <li>Seed dos 1041 clientes importado nas 3 filiais</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="phase-block-title">Metas de negócio</div>
+          <ul>
+            <li>100% dos agendamentos passando pelo sistema</li>
+            <li>Taxa de no-show reduzida em ≥30% vs. baseline</li>
+            <li>1a campanha de reativação: 690 inativos no WhatsApp</li>
+            <li>Meta: reativar 10% = 69 clientes = +R$15k faturamento</li>
+            <li>Junior valida o sistema como ferramenta real de operação</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase-kpi">
+        <div class="kpi-item"><div class="kpi-val">3</div><div class="kpi-label">unidades no sistema</div></div>
+        <div class="kpi-item"><div class="kpi-val">≥30%</div><div class="kpi-label">redução no-show</div></div>
+        <div class="kpi-item"><div class="kpi-val">69</div><div class="kpi-label">clientes reativados (meta)</div></div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-period">Meses 4–6 · Agosto–Outubro 2026</span>
+        <span class="phase-name">Primeiros Clientes Externos</span>
+      </div>
+      <p class="phase-goal">Gatilho de entrada: sistema rodando sem problemas há 60 dias nas 3 unidades. Objetivo: 5–10 pet shops pagando.</p>
+      <div class="phase-cols">
+        <div class="phase-block">
+          <div class="phase-block-title">Canal de vendas</div>
+          <ul>
+            <li>Junior apresenta o sistema para conhecidos do mercado</li>
+            <li>Guilherme faz demos via vídeo/call</li>
+            <li>Case: "sistema que reduziu no-shows nas 3 filiais do Junior"</li>
+            <li>Oferta inicial: R$297/mês com setup gratuito (converter)</li>
+            <li>Meta: 5 clientes fechados até o mês 6</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="phase-block-title">Produto nessa fase</div>
+          <ul>
+            <li>Onboarding self-service (setup wizard automático)</li>
+            <li>Todos os 5 flows de WhatsApp ativos</li>
+            <li>Suporte via WhatsApp (Guilherme direto)</li>
+            <li>Documentação básica de uso</li>
+            <li>Sistema estável, sem downtime</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase-kpi">
+        <div class="kpi-item"><div class="kpi-val">5</div><div class="kpi-label">clientes pagantes</div></div>
+        <div class="kpi-item"><div class="kpi-val">R$1.985</div><div class="kpi-label">MRR no mês 6</div></div>
+        <div class="kpi-item"><div class="kpi-val">1</div><div class="kpi-label">franquia em negociação</div></div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-period">Meses 7–12 · Novembro 2026–Abril 2027</span>
+        <span class="phase-name">Escala + Primeira Franquia</span>
+      </div>
+      <p class="phase-goal">Gatilho de entrada: MRR ≥ R$2k e 1 negociação de franquia ativa. Objetivo: 1 franquia fechada, 20+ clientes SaaS.</p>
+      <div class="phase-cols">
+        <div class="phase-block">
+          <div class="phase-block-title">Franquias</div>
+          <ul>
+            <li>1 franquia com sistema incluso fechada (R$295k ticket)</li>
+            <li>Sistema vira diferencial obrigatório do modelo de franquia</li>
+            <li>Royalty do sistema: R$397/mês por unidade franqueada</li>
+            <li>Junior vira canal de vendas das franquias</li>
+            <li>Meta: 2 franquias assinadas até o mês 12</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="phase-block-title">SaaS independente</div>
+          <ul>
+            <li>20–25 clientes pagando até o mês 12</li>
+            <li>MRR alvo: R$8.000–R$10.000</li>
+            <li>Onboarding automatizado (zero tempo de Guilherme)</li>
+            <li>Primeiros clientes Pro (R$397/mês)</li>
+            <li>Guilherme saiu da operação de suporte</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase-kpi">
+        <div class="kpi-item"><div class="kpi-val">2</div><div class="kpi-label">franquias fechadas</div></div>
+        <div class="kpi-item"><div class="kpi-val">R$10k</div><div class="kpi-label">MRR no mês 12</div></div>
+        <div class="kpi-item"><div class="kpi-val">R$590k</div><div class="kpi-label">receita total acumulada</div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- PROJEÇÃO FINANCEIRA -->
+  <div class="section">
+    <div class="section-num">Financeiro</div>
+    <h2 class="section-title">Projeção de receita — 12 meses</h2>
+    <p class="section-sub">Cenário conservador. Considera 0 franquias no mês 6, 1 franquia no mês 9 e 2 no mês 12. SaaS cresce linear de 0 para 20 clientes.</p>
+
+    <div class="rev-table-wrap">
+      <table class="rev-table">
+        <thead>
+          <tr>
+            <th>Período</th>
+            <th>Clientes SaaS</th>
+            <th>MRR SaaS</th>
+            <th>Franquias vendidas</th>
+            <th>Receita franquias</th>
+            <th>Receita total período</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Mês 1–3</strong><br/><span style="font-size:11px;color:#94A3B8">Mai–Jul 2026</span></td>
+            <td class="num">0</td>
+            <td class="num">R$0</td>
+            <td class="num">0</td>
+            <td class="num">R$0</td>
+            <td class="num">R$0</td>
+          </tr>
+          <tr>
+            <td><strong>Mês 4–6</strong><br/><span style="font-size:11px;color:#94A3B8">Ago–Out 2026</span></td>
+            <td class="num">5</td>
+            <td class="num pos">R$1.985/mês</td>
+            <td class="num">0</td>
+            <td class="num">R$0</td>
+            <td class="num pos">~R$6.000</td>
+          </tr>
+          <tr>
+            <td><strong>Mês 7–9</strong><br/><span style="font-size:11px;color:#94A3B8">Nov 2026–Jan 2027</span></td>
+            <td class="num">12</td>
+            <td class="num pos">R$4.764/mês</td>
+            <td class="num">1</td>
+            <td class="num pos">R$295.000</td>
+            <td class="num pos">~R$309.000</td>
+          </tr>
+          <tr>
+            <td><strong>Mês 10–12</strong><br/><span style="font-size:11px;color:#94A3B8">Fev–Abr 2027</span></td>
+            <td class="num">22</td>
+            <td class="num pos">R$8.734/mês</td>
+            <td class="num">+1 (total 2)</td>
+            <td class="num pos">R$295.000</td>
+            <td class="num pos">~R$321.000</td>
+          </tr>
+          <tr>
+            <td><strong>TOTAL 12 MESES</strong></td>
+            <td class="num">22</td>
+            <td class="num total">R$8.734 MRR</td>
+            <td class="num total">2 franquias</td>
+            <td class="num total">R$590.000</td>
+            <td class="num total">~R$636.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:16px;font-size:13px;color:#475569;line-height:1.7">
+      <strong style="color:#0F172A">Notas:</strong> Receita de franquia é one-time (R$295k por unidade fechada). MRR de R$397/mês por franqueado é adicional e cresce para sempre. Custos operacionais estimados: Cloudflare + Railway + Evolution API ≈ R$300–500/mês. Margem bruta do SaaS: ~85%. Margem da franquia: negociada entre Junior e Guilherme (sugerido: 50/50 na taxa de tecnologia).
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- MODELO DE FRANQUIA DETALHADO -->
+  <div class="section">
+    <div class="section-num">Modelo de franquia</div>
+    <h2 class="section-title">Como o sistema entra na franquia</h2>
+    <p class="section-sub">O Pets Go Control não é um produto separado para o franqueado — é parte do suporte tecnológico da franquia. Isso aumenta o valor percebido da franquia e cria receita recorrente para vocês.</p>
+
+    <div class="franchise-model">
+      <div class="fm-title">Fluxo de uma franquia vendida</div>
+      <div class="fm-sub">Do interesse do franqueado ao sistema rodando</div>
+      <div class="fm-flow">
+        <div class="fm-step">
+          <div class="fm-icon">🤝</div>
+          <div class="fm-step-title">Interesse</div>
+          <div class="fm-step-val">Franqueado assina COF</div>
+        </div>
+        <div class="fm-step">
+          <div class="fm-icon">💰</div>
+          <div class="fm-step-title">Pagamento</div>
+          <div class="fm-step-val">R$295k (inclui sistema)</div>
+        </div>
+        <div class="fm-step">
+          <div class="fm-icon">🏗️</div>
+          <div class="fm-step-title">Implantação</div>
+          <div class="fm-step-val">Obra + treinamento</div>
+        </div>
+        <div class="fm-step">
+          <div class="fm-icon">⚙️</div>
+          <div class="fm-step-title">Setup sistema</div>
+          <div class="fm-step-val">Onboarding Pets Go Control</div>
+        </div>
+        <div class="fm-step">
+          <div class="fm-icon">🚀</div>
+          <div class="fm-step-title">Operação</div>
+          <div class="fm-step-val">Sistema + WhatsApp ativos</div>
+        </div>
+      </div>
+      <div class="fm-income">
+        <div class="fm-inc-item">
+          <div class="fm-inc-val">R$80.000</div>
+          <div class="fm-inc-label">Taxa inicial (one-time)</div>
+        </div>
+        <div class="fm-inc-item">
+          <div class="fm-inc-val">7% das compras</div>
+          <div class="fm-inc-label">Royalties + marketing (recorrente)</div>
+        </div>
+        <div class="fm-inc-item">
+          <div class="fm-inc-val">R$397/mês</div>
+          <div class="fm-inc-label">Tech fee — Pets Go Control (eterno)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision">
+      <div class="decision-title">Decisão estratégica: incluir o sistema no pacote ou cobrar separado?</div>
+      <div class="decision-grid">
+        <div class="d-col">
+          <div class="d-col-title">✓ Incluir no pacote (recomendado)</div>
+          <ul>
+            <li>Aumenta valor percebido da franquia sem aumentar o preço</li>
+            <li>Franqueado não sente custo extra mensal no início</li>
+            <li>Diferencia da concorrência ("temos sistema exclusivo")</li>
+            <li>Mais fácil de vender a franquia</li>
+            <li>Vocês absorvem o custo nos primeiros meses, recuperam com royalties</li>
+          </ul>
+        </div>
+        <div class="d-col">
+          <div class="d-col-title">→ Tech fee separado (opcional, depois)</div>
+          <ul>
+            <li>A partir do 2º ano, R$397/mês aparece na nota como "taxa de tecnologia"</li>
+            <li>Franchise fee já está pago — esse é o custo de manutenção</li>
+            <li>Franqueado entende como parte dos custos operacionais (como royalties)</li>
+            <li>Deixa transparente que é um serviço contínuo, não just a franquia</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- RISCOS -->
+  <div class="section">
+    <div class="section-num">Riscos</div>
+    <h2 class="section-title">O que pode dar errado</h2>
+    <p class="section-sub">Identificados e com mitigação. Nenhum é fatal.</p>
+
+    <div class="risk-grid">
+      <div class="risk-item risk-high">
+        <div class="risk-level">Alto — Técnico</div>
+        <div class="risk-title">Evolution API não sobe a tempo</div>
+        <div class="risk-mit">Mitigação: usar Zapi ou Twilio como fallback. Mais caro, mas funciona em 2h. Orçamento: ~R$150/mês no Twilio para testar.</div>
+      </div>
+      <div class="risk-item risk-high">
+        <div class="risk-level">Alto — Operacional</div>
+        <div class="risk-title">Junior não adota o sistema na operação</div>
+        <div class="risk-mit">Mitigação: sessão de treinamento presencial (via call) + acompanhamento semanal das primeiras 4 semanas. Sem adoção interna, não tem case para vender.</div>
+      </div>
+      <div class="risk-item risk-med">
+        <div class="risk-level">Médio — Mercado</div>
+        <div class="risk-title">Pet shops pequenos não pagam R$297/mês</div>
+        <div class="risk-mit">Mitigação: plano Starter R$197/mês reduz fricção. Alternativa: cobrar por resultado (R$X por cliente reativado) nos primeiros 3 meses.</div>
+      </div>
+      <div class="risk-item risk-med">
+        <div class="risk-level">Médio — Negócio</div>
+        <div class="risk-title">Ciclo de venda de franquias é longo (6–12 meses)</div>
+        <div class="risk-mit">Mitigação: não depender de receita de franquias antes do mês 9. SaaS B2B fecha mais rápido e garante caixa enquanto as franquias amadurecem.</div>
+      </div>
+      <div class="risk-item risk-low">
+        <div class="risk-level">Baixo — Técnico</div>
+        <div class="risk-title">localStorage não escala para multi-tenant</div>
+        <div class="risk-mit">Já resolvido no plano: migração para Cloudflare Workers + D1 nos meses 1–2. O risco já virou tarefa.</div>
+      </div>
+      <div class="risk-item risk-low">
+        <div class="risk-level">Baixo — Jurídico</div>
+        <div class="risk-title">Franqueador sem contrato de tecnologia formal</div>
+        <div class="risk-mit">Mitigação: aditar o contrato de franquia para incluir "Sistema de Gestão Digital Pets Go Control" como parte do suporte tecnológico incluído.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- PRÓXIMOS PASSOS -->
+  <div class="section">
+    <div class="section-num">Próximos passos</div>
+    <h2 class="section-title">O que fazer esta semana</h2>
+
+    <div class="phase-block" style="margin-bottom:12px">
+      <div class="phase-block-title">Esta semana (Mai 2026)</div>
+      <ul>
+        <li>Junior abre o link do CRM e importa os dados das 3 filiais</li>
+        <li>Guilherme finaliza a migração localStorage → API (2 dias)</li>
+        <li>Contratar Evolution API ou Zapi (R$50–150/mês)</li>
+        <li>Configurar o primeiro flow: novo agendamento → WhatsApp</li>
+        <li>Junior valida o sistema com a equipe da filial Cachorródromo</li>
+      </ul>
+    </div>
+    <div class="phase-block" style="margin-bottom:12px">
+      <div class="phase-block-title">Próximas 2 semanas</div>
+      <ul>
+        <li>Todos os 5 flows de WhatsApp rodando nas 3 filiais</li>
+        <li>Primeira campanha de reativação: 690 inativos</li>
+        <li>Junior mapeia 3 contatos do mercado para apresentação do sistema</li>
+        <li>Planilha de precificação compartilhada internamente</li>
+      </ul>
+    </div>
+    <div class="phase-block">
+      <div class="phase-block-title">Em 30 dias</div>
+      <ul>
+        <li>Primeira demo para pet shop externo com o Junior presente</li>
+        <li>Métricas reais: quantos agendamentos, quantos no-shows, quanto gerou de retorno</li>
+        <li>Decisão sobre incluir sistema no COF da próxima franquia</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:48px;padding-top:24px;border-top:1px solid #E2E8F0;font-size:12px;color:#94A3B8">
+    Pets Go — Plano de Negócio · Guilherme Andrade &amp; Junior · Abril 2026 · Documento interno — não distribuir
+  </div>
+
+</div>
+</body>
+</html>

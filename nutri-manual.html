@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nutri Control — Manual</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#16A34A;--brand-dark:#15803D;--brand-light:#DCFCE7;
+  --teal:#00C896;--teal-light:#E5FFF8;
+  --yellow:#F5C218;--yellow-light:#FFFDE6;
+  --pink:#E8187B;--pink-light:#FFF0F8;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --green:#16A34A;--green-light:#F0FFF4;
+  --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;
+  --border:#E2E8F0;--text:#0F172A;--text2:#334155;--muted:#64748B;--muted2:#94A3B8;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#064E3B 0%,#16A34A 55%,#4ADE80 100%);color:#fff;padding:48px 20px 52px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-logo{width:60px;height:60px;background:rgba(255,255,255,.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;backdrop-filter:blur(8px)}
+.hero h1{font-size:26px;font-weight:900;letter-spacing:-.03em;margin-bottom:8px}
+.hero p{font-size:14px;opacity:.8;max-width:400px;margin:0 auto 20px;line-height:1.6}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:600;backdrop-filter:blur(8px)}
+.hero-badge.new{background:rgba(245,194,24,.2);border-color:rgba(245,194,24,.45);color:#FDE68A}
+
+/* ── LAYOUT ── */
+.container{max-width:680px;margin:0 auto;padding:0 16px}
+.section{padding:28px 0 4px}
+.section-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── MÓDULO CARD ── */
+.mod{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px;box-shadow:var(--shadow)}
+.mod.highlight{border-color:#BBF7D0;box-shadow:0 0 0 3px #DCFCE7,var(--shadow)}
+.mod.pwa{border-color:#6EE7C7;box-shadow:0 0 0 3px #E5FFF8,var(--shadow)}
+.mod-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.mod-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.mod-title{font-size:15px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.mod-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
+
+/* ── STEPS ── */
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5}
+.step-num{width:22px;height:22px;border-radius:6px;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-num.new{background:#FDE68A;color:#854D0E}
+.step-num.check{background:var(--teal-light);color:#006B4F;font-size:13px}
+.step-num.tip{background:#FEF9C3;color:#854D0E;font-size:13px}
+.step b{color:var(--text)}
+.step span,.step div{color:var(--text2)}
+
+/* ── TAGS ── */
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px}
+.tag-blue{background:#DCFCE7;color:var(--brand)}
+.tag-green{background:var(--teal-light);color:#006B4F}
+.tag-yellow{background:var(--yellow-light);color:#856400}
+.tag-red{background:var(--red-light);color:var(--red)}
+.tag-gray{background:#F1F5F9;color:#64748B}
+.tag-new{background:#FEF9C3;color:#854D0E;border:1px solid #FDE68A}
+
+/* ── ALERTS ── */
+.alert{border-radius:10px;padding:12px 14px;font-size:13px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;margin-top:10px}
+.alert-blue{background:var(--brand-light);border:1px solid #BBF7D0}
+.alert-green{background:var(--teal-light);border:1px solid #6EE7C7}
+.alert-yellow{background:var(--yellow-light);border:1px solid #FDE68A}
+.alert-new{background:#FEF9C3;border:1px solid #FDE68A}
+.alert-coming{background:#F0FFF4;border:1px solid #86EFAC}
+.alert i{font-size:18px;flex-shrink:0;margin-top:1px}
+
+/* ── KEY ── */
+.key{display:inline-flex;align-items:center;gap:3px;background:#F1F5F9;border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--text2)}
+
+/* ── NOVIDADES GRID ── */
+.new-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.new-card{background:#FEF9C3;border:1px solid #FDE68A;border-radius:10px;padding:13px;display:flex;gap:10px;align-items:flex-start}
+.new-card-icon{font-size:20px;flex-shrink:0}
+.new-card-title{font-size:13px;font-weight:700;color:#854D0E;margin-bottom:2px}
+.new-card-desc{font-size:12px;color:#92400E;line-height:1.4}
+
+/* ── COMING SOON GRID ── */
+.soon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.soon-card{background:var(--green-light);border:1px solid #BBF7D0;border-radius:10px;padding:13px;display:flex;gap:10px;align-items:flex-start}
+.soon-card-icon{font-size:20px;flex-shrink:0}
+.soon-card-title{font-size:13px;font-weight:700;color:#166534;margin-bottom:2px}
+.soon-card-desc{font-size:12px;color:#15803D;line-height:1.4}
+
+/* ── INSTALL STEPS ── */
+.install-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.install-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.install-title{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.install-step{font-size:12px;color:var(--text2);line-height:1.5;padding:3px 0;border-bottom:1px solid var(--border)}
+.install-step:last-child{border:none}
+
+/* ── FLOW ── */
+.flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:8px 0}
+.flow-step{background:var(--brand-light);color:var(--brand-dark);font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;white-space:nowrap}
+.flow-arrow{color:var(--muted2);font-size:13px}
+
+/* ── COL 2 ── */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 13px;font-size:12px;color:var(--text2);line-height:1.5}
+.info-box .ib-title{font-size:12px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:5px;color:var(--text)}
+
+/* ── STATUS ROW ── */
+.status-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.s-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);flex:1;min-width:130px}
+.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ── IMC PILLS ── */
+.imc-row{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}
+.imc-pill{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid var(--border)}
+
+/* ── SEMÁFORO ── */
+.semaforo-row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+.sem-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);flex:1;min-width:120px}
+.sem-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:32px 16px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:20px;line-height:1.8}
+
+/* ── MOBILE ── */
+@media(max-width:520px){
+  .hero{padding:32px 16px 40px}
+  .hero h1{font-size:22px}
+  .hero p{font-size:13px}
+  .container{padding:0 12px}
+  .section{padding:20px 0 4px}
+  .mod{padding:14px 13px}
+  .new-grid{grid-template-columns:1fr}
+  .soon-grid{grid-template-columns:1fr}
+  .install-grid{grid-template-columns:1fr}
+  .col2{grid-template-columns:1fr}
+  .flow-step{font-size:10px;padding:4px 8px}
+  .status-row{gap:6px}
+  .s-item{min-width:110px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo"><i class="ph ph-leaf"></i></div>
+  <h1>Nutri Control</h1>
+  <p>Guia completo do sistema — pacientes, consultas, evolução, exames e documentos em um só lugar.</p>
+  <div class="hero-badges">
+    <div class="hero-badge"><i class="ph ph-book-open"></i> Versão 1</div>
+    <div class="hero-badge new"><i class="ph ph-device-mobile"></i> Instala como app no celular</div>
+    <div class="hero-badge new"><i class="ph ph-microphone"></i> Transcrição de voz nas consultas</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ─── INSTALAR COMO APP ─── -->
+<div class="section">
+  <div class="section-label">Instalar como app no celular</div>
+  <div class="mod pwa">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-device-mobile"></i></div>
+      <div>
+        <div class="mod-title">Nutri Control no celular — sem precisar de internet</div>
+        <div class="mod-desc">O sistema funciona instalado como app. Depois de instalar, abre igual ao WhatsApp — sem precisar digitar link. Funciona offline também.</div>
+      </div>
+    </div>
+
+    <div class="install-grid">
+      <div class="install-card">
+        <div class="install-title"><i class="ph ph-android-logo" style="color:#16A34A"></i> Android (Chrome)</div>
+        <div class="install-step">1. Abra o link do sistema no Chrome</div>
+        <div class="install-step">2. Toque no menu <b>⋮</b> (canto superior direito)</div>
+        <div class="install-step">3. Toque em <b>"Adicionar à tela inicial"</b></div>
+        <div class="install-step">4. Confirme → ícone aparece na tela</div>
+      </div>
+      <div class="install-card">
+        <div class="install-title"><i class="ph ph-apple-logo" style="color:var(--text2)"></i> iPhone (Safari)</div>
+        <div class="install-step">1. Abra o link do sistema no Safari</div>
+        <div class="install-step">2. Toque no botão <b>compartilhar</b> (quadrado com seta)</div>
+        <div class="install-step">3. Role e toque <b>"Adicionar à tela de início"</b></div>
+        <div class="install-step">4. Confirme → ícone aparece na tela</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:10px">
+      <i class="ph ph-wifi-slash" style="color:#006B4F"></i>
+      <div><b>Funciona sem internet:</b> depois de instalado, o sistema fica salvo no dispositivo. Você consegue registrar consultas, evoluções e acessar os dados dos pacientes mesmo sem sinal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PRIMEIROS PASSOS ─── -->
+<div class="section">
+  <div class="section-label">Primeiros passos</div>
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--brand-light);color:var(--brand-dark)"><i class="ph ph-gear-six"></i></div>
+      <div>
+        <div class="mod-title">Configure o seu perfil profissional</div>
+        <div class="mod-desc">Antes de começar, preencha os dados da sua clínica. Essas informações aparecem nos recibos, atestados e prontuários.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Configurações:</b> no menu lateral, clique em <span class="key"><i class="ph ph-gear"></i> Config</span> → preencha seu nome completo, CRN, especialidade, telefone e e-mail.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Serviços:</b> na mesma tela, configure os serviços que você oferece — nome, duração e valor. Os serviços padrão já estão cadastrados; edite conforme sua tabela de honorários.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div>Com o perfil preenchido, todas as documentações geradas pelo sistema já sairão com seus dados corretos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── O QUE HÁ DE NOVO ─── -->
+<div class="section">
+  <div class="section-label">Recursos principais — Versão 1</div>
+  <div class="new-grid">
+    <div class="new-card">
+      <div class="new-card-icon">🎙️</div>
+      <div>
+        <div class="new-card-title">Transcrição de voz</div>
+        <div class="new-card-desc">Microfone em todos os campos de anotação. Fale e o texto é digitado automaticamente. Perfeito para anamnese e evoluções durante a consulta.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📊</div>
+      <div>
+        <div class="new-card-title">IMC e GET automático</div>
+        <div class="new-card-desc">O sistema calcula IMC, TMB e Gasto Energético Total automaticamente a partir do peso, altura, idade e nível de atividade do paciente.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📈</div>
+      <div>
+        <div class="new-card-title">Evolução com gráfico</div>
+        <div class="new-card-desc">Cada registro de evolução alimenta um gráfico de linha com o histórico de peso. Tendência visual de meses de acompanhamento em uma tela.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🔬</div>
+      <div>
+        <div class="new-card-title">Exames com semáforo</div>
+        <div class="new-card-desc">Registre os resultados de exames laboratoriais. O sistema classifica cada marcador como Normal, Alto ou Baixo e compara com o exame anterior.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📄</div>
+      <div>
+        <div class="new-card-title">Prontuário em PDF</div>
+        <div class="new-card-desc">Um clique gera o prontuário completo do paciente em PDF — métricas, anamnese, histórico de consultas e evolução de peso.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📋</div>
+      <div>
+        <div class="new-card-title">Recibo e atestado</div>
+        <div class="new-card-desc">Recibo profissional gerado ao concluir o pagamento. Atestado de acompanhamento nutricional pronto para assinar e entregar ao paciente.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── VISÃO GERAL ─── -->
+<div class="section">
+  <div class="section-label">Como o sistema funciona</div>
+  <div class="alert alert-blue" style="margin-top:0;border-radius:12px">
+    <i class="ph ph-squares-four" style="color:var(--brand)"></i>
+    <div>Tudo fica no <b>menu lateral</b> — no celular aparece como ☰. Cada módulo cuida de uma área do atendimento. A barra superior mostra o nome da sua clínica e o total de pacientes ativos.</div>
+  </div>
+</div>
+
+<!-- ─── PACIENTES ─── -->
+<div class="section">
+  <div class="section-label">Pacientes — o centro do sistema</div>
+
+  <div class="mod highlight">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--brand-light);color:var(--brand-dark)"><i class="ph ph-user-circle"></i></div>
+      <div>
+        <div class="mod-title">Pacientes</div>
+        <div class="mod-desc">Ficha completa com dados pessoais, antropometria, IMC, TMB e GET. Todos os indicadores calculados automaticamente.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Novo paciente:</b> <span class="key">+ Novo Paciente</span> → preencha nome, WhatsApp, e-mail, data de nascimento, altura e peso inicial.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Dados metabólicos:</b> escolha o sexo e o fator de atividade — o sistema calcula TMB (Taxa Metabólica Basal) e GET (Gasto Energético Total) automaticamente pela fórmula de Harris-Benedict.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>IMC no cartão:</b> o IMC é exibido no card de cada paciente com cor e classificação — usa o peso mais recente da evolução, ou o peso inicial se ainda não houver registro.</div>
+      </div>
+    </div>
+
+    <div class="imc-row">
+      <span class="imc-pill" style="background:#DBEAFE;border-color:#BFDBFE;color:#1D4ED8">Abaixo do peso — IMC &lt; 18,5</span>
+      <span class="imc-pill" style="background:#DCFCE7;border-color:#BBF7D0;color:#166534">Normal — 18,5 a 24,9</span>
+      <span class="imc-pill" style="background:#FEF9C3;border-color:#FDE68A;color:#854D0E">Sobrepeso — 25 a 29,9</span>
+      <span class="imc-pill" style="background:#FEE2E2;border-color:#FECACA;color:#991B1B">Obesidade — IMC ≥ 30</span>
+    </div>
+
+    <div class="steps" style="margin-top:8px">
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Ações rápidas no card:</b> <span class="key">✏️ Editar</span> · <span class="key">💬 WhatsApp</span> · <span class="key">📅 Nova Consulta</span> · <span class="key">📈 Nova Evolução</span> · <span class="key">🔬 Exame</span> · <span class="key">📄 Prontuário</span> · <span class="key">📋 Atestado</span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div><b>Busca:</b> barra de pesquisa no topo encontra qualquer paciente por nome em tempo real.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── AGENDA ─── -->
+<div class="section">
+  <div class="section-label">Agenda — consultas e horários</div>
+
+  <div class="mod highlight">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-calendar-check"></i></div>
+      <div>
+        <div class="mod-title">Agenda</div>
+        <div class="mod-desc">Grade visual diária das 7h às 20h. Cada consulta tem link de Meet ou Zoom para atendimento online. Pague diretamente no card.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Agendar:</b> <span class="key">+ Agendar</span> → escolha a paciente → selecione o serviço → defina data e horário → o valor preenche automaticamente.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Consulta online:</b> ao criar o agendamento, cole o link do Google Meet ou Zoom — aparece no card para entrar com um clique.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Navegar por datas:</b> setas ← → ao lado da data mudam o dia. Cada bloco na grade representa 30 minutos.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Concluir e pagar:</b> serviço encerrado? Clique em <span class="key">✓ Concluir</span> → sistema abre o pagamento. Confirme o recebimento → recibo gerado automaticamente e receita entra no financeiro.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div><b>Pagar depois:</b> fechou sem pagar? O card fica com o botão <b style="color:#16A34A">💰</b> verde — clique quando o pagamento for confirmado.</div>
+      </div>
+    </div>
+
+    <div class="status-row" style="margin-top:10px">
+      <div class="s-item"><div class="s-dot" style="background:#16A34A"></div><span><b>Agendado</b> — verde</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#00C896"></div><span><b>Confirmado</b> — turquesa</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#F5C218"></div><span><b>Em andamento</b> — amarelo</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#94A3B8"></div><span><b>Concluído</b> — cinza</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#DC2626"></div><span><b>Cancelado</b> — vermelho</span></div>
+    </div>
+
+    <div class="alert alert-new">
+      <i class="ph ph-sparkle" style="color:#854D0E"></i>
+      <div><b>Fluxo completo:</b>
+        <div class="flow">
+          <div class="flow-step">+ Agendar</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">✓ Concluir</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">💳 Pagar</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🧾 Recibo</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">📈 Registrar Evolução</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── EVOLUÇÃO ─── -->
+<div class="section">
+  <div class="section-label">Evolução — peso, medidas e fotos</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--brand-light);color:var(--brand-dark)"><i class="ph ph-chart-line-up"></i></div>
+      <div>
+        <div class="mod-title">Evolução do Paciente</div>
+        <div class="mod-desc">Registre peso, cintura, quadril e fotos a cada retorno. O gráfico atualiza automaticamente e mostra a progressão ao longo do tempo.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Novo registro:</b> no card do paciente clique em <span class="key">📈 Nova Evo</span> → preencha data, peso, cintura, quadril e observações. O microfone 🎙️ ao lado das obs. permite dictar.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Foto do progresso:</b> clique em <span class="key">📷 Adicionar foto</span> — salva junto ao registro. Útil para comparativos visuais com a paciente.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Gráfico de peso:</b> visível na ficha do paciente — linha com pontos em cada registro. Quanto mais registros, mais clara a tendência.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>IMC atualizado:</b> após cada nova evolução, o IMC no card do paciente reflete o peso mais recente automaticamente.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-blue">
+      <i class="ph ph-info" style="color:var(--brand)"></i>
+      <div><b>Dica:</b> registre a evolução em todas as consultas, mesmo que seja só o peso. O gráfico é a prova visual mais poderosa que você pode mostrar para a paciente ver o progresso.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── EXAMES ─── -->
+<div class="section">
+  <div class="section-label">Exames Laboratoriais</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#DBEAFE;color:#1D4ED8"><i class="ph ph-flask"></i></div>
+      <div>
+        <div class="mod-title">Exames Laboratoriais</div>
+        <div class="mod-desc">6 categorias com valores de referência pré-configurados. Cada marcador recebe classificação automática e é comparado com o exame anterior.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Novo exame:</b> no card do paciente clique em <span class="key">🔬 Exame</span> → escolha a categoria → os marcadores aparecem automaticamente → preencha os valores encontrados no laudo.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Categorias disponíveis:</b> Glicemia · Lipídios · Hemograma · Tireoide · Vitaminas · Outros.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Semáforo automático:</b> o sistema compara cada valor com a faixa de referência e classifica em tempo real.</div>
+      </div>
+    </div>
+
+    <div class="semaforo-row">
+      <div class="sem-item"><div class="sem-dot" style="background:#16A34A"></div><span><b>Normal</b> — dentro da faixa de referência</span></div>
+      <div class="sem-item"><div class="sem-dot" style="background:#DC2626"></div><span><b>Alto</b> — acima do limite superior</span></div>
+      <div class="sem-item"><div class="sem-dot" style="background:#F5C218"></div><span><b>Baixo</b> — abaixo do limite inferior</span></div>
+      <div class="sem-item"><div class="sem-dot" style="background:#94A3B8"></div><span><b>N/D</b> — valor não informado</span></div>
+    </div>
+
+    <div class="steps" style="margin-top:4px">
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Tendência vs. exame anterior:</b> se houver um exame anterior da mesma categoria, cada marcador mostra ↑ ou ↓ com a variação percentual — ficou melhor ou piorou?</div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div><b>Histórico:</b> todos os exames ficam na aba de exames do paciente, ordenados por data. Dá para ver a evolução ao longo dos meses.</div>
+      </div>
+    </div>
+
+    <div class="col2" style="margin-top:8px">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-drop" style="color:#DC2626"></i> Glicemia</div>
+        Glicose, Glicose pós-prandial, Hemoglobina Glicada (HbA1c), Insulina em jejum
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-heartbeat" style="color:#E8187B"></i> Lipídios</div>
+        Colesterol Total, HDL, LDL, Triglicerídeos, VLDL
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-circles-three" style="color:#4047C8"></i> Hemograma</div>
+        Hemoglobina, Hematócrito, Ferritina, Ferro Sérico, Vitamina B12, Ácido Fólico
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-atom" style="color:#856400"></i> Tireoide</div>
+        TSH, T4 Livre, T3 Livre
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-sun" style="color:#F5C218"></i> Vitaminas</div>
+        Vitamina D (25-OH), Vitamina B12, Magnésio, Zinco, Cálcio Sérico
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-plus-circle" style="color:var(--brand)"></i> Outros</div>
+        Campo livre para qualquer marcador não listado nas categorias padrão
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FINANCEIRO ─── -->
+<div class="section">
+  <div class="section-label">Financeiro</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--brand-light);color:var(--brand-dark)"><i class="ph ph-currency-dollar"></i></div>
+      <div>
+        <div class="mod-title">Financeiro</div>
+        <div class="mod-desc">Receitas entram automaticamente ao concluir consultas ou planos. Adicione despesas manualmente. Filtro por mês.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Receitas automáticas:</b> toda consulta paga e toda sessão de plano usada entra no financeiro automaticamente — sem precisar lançar nada.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Despesas:</b> <span class="key">+ Lançamento</span> → tipo Despesa → descrição e valor. Use para registro de custos, assinaturas e materiais.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Saldo do mês:</b> painel no topo mostra Receitas, Despesas e Saldo em tempo real para o mês filtrado.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Reemitir recibo:</b> clique no ícone <i class="ph ph-receipt"></i> ao lado de qualquer receita para abrir o recibo novamente e reimprimir ou gerar PDF.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PLANOS ─── -->
+<div class="section">
+  <div class="section-label">Planos & Pacotes de sessões</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-ticket"></i></div>
+      <div>
+        <div class="mod-title">Planos & Pacotes</div>
+        <div class="mod-desc">Pacotes com número fixo de sessões. Cada sessão usada lança receita no financeiro automaticamente e atualiza a barra de progresso.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Criar plano:</b> <span class="key">+ Novo Plano</span> → escolha a paciente → defina nome do plano, número de sessões e valor total.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Usar sessão:</b> <span class="key">Usar sessão</span> no card do plano → confirme. A sessão é deduzida e a receita proporcional entra no financeiro.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Barra de progresso:</b> <span style="color:var(--teal);font-weight:700">verde</span> = sessões disponíveis · <span style="color:#F5C218;font-weight:700">amarelo</span> = atenção · <span style="color:var(--red);font-weight:700">vermelho</span> = última sessão.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Renovar:</b> plano acabou? <span class="key">Renovar</span> adiciona sessões sem criar um plano novo — histórico preservado.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <i class="ph ph-warning" style="color:#856400"></i>
+      <div>Planos são para pacientes que pagam por pacote. Consultas avulsas são agendadas normalmente pela Agenda — cada uma paga separado ao concluir.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── DOCUMENTOS ─── -->
+<div class="section">
+  <div class="section-label">Documentos — recibo, atestado e prontuário</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F0F9FF;color:#0369A1"><i class="ph ph-files"></i></div>
+      <div>
+        <div class="mod-title">Documentos gerados pelo sistema</div>
+        <div class="mod-desc">Três tipos de documento profissional, gerados em PDF com seus dados preenchidos automaticamente.</div>
+      </div>
+    </div>
+
+    <div class="col2">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-receipt" style="color:var(--brand)"></i> Recibo de Pagamento</div>
+        Gerado ao confirmar o pagamento de uma consulta. Mostra serviço, valor, data e forma de pagamento. Reemitir pelo Financeiro a qualquer momento.
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-certificate" style="color:#0369A1"></i> Atestado Nutricional</div>
+        Atestado formal de que a paciente está em acompanhamento nutricional. Clique em <span class="key">📋 Atestado</span> no card → edite o texto → imprima ou salve em PDF.
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:4px">
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Prontuário completo em PDF:</b> clique em <span class="key">📄 Prontuário</span> no card do paciente → o sistema gera um documento com dados pessoais, IMC, TMB, GET, anamnese, histórico de consultas e evolução de peso.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green">
+      <i class="ph ph-check-circle" style="color:#006B4F"></i>
+      <div>Todos os documentos usam os dados do seu perfil profissional (nome, CRN, especialidade). Configure em <b>Configurações</b> antes de gerar o primeiro documento.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TRANSCRIÇÃO DE VOZ ─── -->
+<div class="section">
+  <div class="section-label">Transcrição de voz — mãos livres na consulta</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFF0F8;color:#9A0050"><i class="ph ph-microphone"></i></div>
+      <div>
+        <div class="mod-title">Ditado por voz</div>
+        <div class="mod-desc">Fale e o sistema digita. Disponível em todos os campos de texto longo — anamnese, observações de evolução, objetivos e restrições alimentares.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Ativar:</b> clique no ícone <i class="ph ph-microphone"></i> ao lado do campo → botão fica vermelho → sistema começa a escutar.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Falar:</b> dite normalmente em português. O texto aparece no campo em tempo real. Se parar de falar por alguns segundos, reinicia sozinho.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Parar:</b> clique no microfone novamente → escuta para.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Onde usar:</b> cadastro do paciente (anamnese, objetivo, restrições), nova evolução (observações) e consultas (anotações livres).</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <i class="ph ph-warning" style="color:#856400"></i>
+      <div><b>Requer internet:</b> a transcrição de voz usa o microfone do navegador e processa em tempo real — precisa de conexão ativa para funcionar. Modo offline: escreva manualmente.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÕES ─── -->
+<div class="section">
+  <div class="section-label">Configurações</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F1F5F9;color:#64748B"><i class="ph ph-gear"></i></div>
+      <div>
+        <div class="mod-title">Configurações — Perfil e Serviços</div>
+        <div class="mod-desc">Perfil profissional e catálogo de serviços. Dados usados em todos os documentos gerados pelo sistema.</div>
+      </div>
+    </div>
+
+    <div class="col2">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-identification-card" style="color:var(--brand)"></i> Perfil Profissional</div>
+        Nome completo · CRN · Especialidade · Telefone · E-mail
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-list-bullets" style="color:#856400"></i> Serviços</div>
+        Nome do serviço · Duração em minutos · Valor padrão
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:4px">
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Serviços padrão:</b> Consulta Inicial (R$200 / 60 min) · Retorno (R$120 / 30 min) · Plano Alimentar (R$350 / 60 min) · Acompanhamento Online (R$80 / 20 min). Edite conforme a sua tabela.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Novos serviços:</b> <span class="key">+ Serviço</span> → preencha os dados → o serviço aparece automaticamente ao criar agendamentos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ROTINA DIÁRIA ─── -->
+<div class="section">
+  <div class="section-label">Rotina diária recomendada</div>
+  <div class="mod">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Antes das consultas:</b> Dashboard → veja a agenda do dia → separe os prontuários das pacientes que vão consultar.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Durante a consulta:</b> use o microfone 🎙️ para ditar observações sem precisar digitar. Registre peso e medidas ao final.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Ao concluir a consulta:</b> Agenda → <span class="key">✓ Concluir</span> → confirme o pagamento → recibo gerado automaticamente.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Registrar evolução:</b> no card da paciente → <span class="key">📈 Nova Evo</span> → peso, cintura, quadril e foto se quiser.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Paciente com plano:</b> Planos → <span class="key">Usar sessão</span> → a sessão é descontada e a receita entra no financeiro.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Ver caixa do dia:</b> Financeiro → filtre pelo mês atual → veja receitas, despesas e saldo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── DICAS RÁPIDAS ─── -->
+<div class="section">
+  <div class="section-label">Dicas rápidas</div>
+  <div class="mod">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>IMC automático:</b> o sistema sempre usa o peso mais recente da evolução para calcular o IMC. Registre a evolução com frequência para manter o indicador atualizado.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>WhatsApp rápido:</b> botão 💬 no card de qualquer paciente abre a conversa diretamente. Número salvo no cadastro.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Comparar exames:</b> ao lançar um novo exame da mesma categoria, o sistema busca o anterior automaticamente e mostra as setas ↑ ↓ por marcador.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Prontuário completo:</b> gere o PDF antes de encaminhar para outro profissional — inclui métricas, anamnese e toda a evolução de peso registrada.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Consulta online:</b> cole o link do Meet ou Zoom no agendamento — aparece diretamente no card para entrar com um clique no horário da consulta.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Funciona offline:</b> depois de instalado no celular, o sistema funciona sem internet. Os dados ficam salvos no dispositivo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── EM BREVE ─── -->
+<div class="section">
+  <div class="section-label">Em breve</div>
+  <div class="soon-grid">
+    <div class="soon-card">
+      <div class="soon-card-icon">☁️</div>
+      <div>
+        <div class="soon-card-title">Sincronização multi-dispositivo</div>
+        <div class="soon-card-desc">Dados compartilhados entre celular e computador em tempo real. Funciona offline e sincroniza quando a internet voltar.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">📊</div>
+      <div>
+        <div class="soon-card-title">Relatório mensal</div>
+        <div class="soon-card-desc">Resumo automático de evolução de todos os pacientes ativos: peso médio perdido, metas atingidas e consultas realizadas no mês.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">🥗</div>
+      <div>
+        <div class="soon-card-title">Plano alimentar integrado</div>
+        <div class="soon-card-desc">Monte e envie o plano alimentar diretamente pelo sistema. Salvo no prontuário e acessível pela paciente pelo celular.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">💬</div>
+      <div>
+        <div class="soon-card-title">Lembrete de retorno</div>
+        <div class="soon-card-desc">Aviso automático por WhatsApp quando a paciente está próxima da data de retorno ou há dias sem registrar evolução.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="font-size:22px;margin-bottom:8px">🌿</div>
+  <div><b>Nutri Control</b> — v1</div>
+  <div style="margin-top:4px">Sistema desenvolvido sob medida para o seu consultório.</div>
+  <div style="margin-top:4px">Encontrou algo errado ou quer uma melhoria? Manda mensagem.</div>
+</div>
+
+</div>
+</body>
+</html>

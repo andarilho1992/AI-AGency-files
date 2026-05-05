@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go — Ecossistema Completo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',sans-serif;background:#F1F5F9;color:#0F172A;-webkit-font-smoothing:antialiased;overflow:hidden}
+
+/* SLIDE ENGINE */
+.deck{width:100vw;height:100vh;position:relative}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateX(60px)}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.out{transform:translateX(-60px)}
+
+/* NAV */
+.nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid #E2E8F0;border-radius:40px;padding:10px 20px;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.nav-dots{display:flex;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.15);cursor:pointer;transition:all .2s}
+.dot.active{background:#4047C8;width:20px;border-radius:3px}
+.nav-btn{width:32px;height:32px;border-radius:50%;border:1px solid #E2E8F0;background:#fff;color:#64748B;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:14px}
+.nav-btn:hover{background:#ECEEFF;color:#4047C8;border-color:#4047C8}
+.slide-counter{font-size:11px;font-weight:600;color:#94A3B8;min-width:36px;text-align:center}
+
+/* COMMON */
+.accent{color:#4047C8}
+.green{color:#00A87A}
+.pink{color:#E8187B}
+.yellow{color:#856400}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.chip-blue{background:#ECEEFF;border:1px solid rgba(64,71,200,.3);color:#4047C8}
+.chip-green{background:#E5FFF8;border:1px solid rgba(0,200,150,.3);color:#006B4F}
+.chip-pink{background:#FFF0F8;border:1px solid rgba(232,24,123,.3);color:#E8187B}
+.chip-yellow{background:#FFFDE6;border:1px solid rgba(245,194,24,.4);color:#856400}
+.chip-gray{background:#F1F5F9;border:1px solid #E2E8F0;color:#64748B}
+
+/* ───────────────────── SLIDE 1 — COVER ───────────────────── */
+#s1{background:radial-gradient(ellipse at 20% 50%,rgba(64,71,200,.1) 0%,transparent 55%),radial-gradient(ellipse at 80% 30%,rgba(0,200,150,.07) 0%,transparent 50%),#F1F5F9;align-items:center;justify-content:center;text-align:center;padding:60px}
+.cover-eyebrow{margin-bottom:24px}
+.cover-h1{font-size:clamp(44px,7vw,80px);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:20px}
+.cover-h1 em{font-style:normal;background:linear-gradient(135deg,#4047C8,#00C896);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cover-sub{font-size:18px;color:#64748B;max-width:540px;margin:0 auto 48px;line-height:1.7}
+.cover-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap}
+.cstat{text-align:center}
+.cstat-val{font-size:36px;font-weight:900;letter-spacing:-.03em;color:#0F172A}
+.cstat-label{font-size:11px;font-weight:600;color:#94A3B8;margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+
+/* ───────────────────── SLIDE 2 — PROBLEMA ───────────────────── */
+#s2{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}
+.prob-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.prob-icon{font-size:32px;margin-bottom:12px}
+.prob-title{font-size:16px;font-weight:800;margin-bottom:8px;color:#0F172A}
+.prob-desc{font-size:13px;color:#64748B;line-height:1.7}
+.prob-card.highlighted{border-color:rgba(232,24,123,.3);background:#FFF0F8}
+
+/* ───────────────────── SLIDE 3 — VISÃO GERAL ───────────────────── */
+#s3{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.eco-wrap{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.eco-tier{display:flex;align-items:stretch;gap:16px}
+.eco-label{width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;text-align:right;padding-right:16px;border-right:2px solid #E2E8F0}
+.eco-label-text{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.1em;line-height:1.5}
+.eco-apps{display:flex;gap:12px;flex:1}
+.eco-app{flex:1;border-radius:12px;padding:16px 18px;border:1px solid;display:flex;align-items:center;gap:12px}
+.eco-app.blue{background:#ECEEFF;border-color:rgba(64,71,200,.3)}
+.eco-app.green{background:#E5FFF8;border-color:rgba(0,200,150,.3)}
+.eco-app.pink{background:#FFF0F8;border-color:rgba(232,24,123,.3)}
+.eco-app.yellow{background:#FFFDE6;border-color:rgba(245,194,24,.4)}
+.eco-app.gray{background:#F8FAFC;border-color:#E2E8F0}
+.eco-app-icon{font-size:24px;flex-shrink:0}
+.eco-app-name{font-size:13px;font-weight:800;color:#0F172A}
+.eco-app-desc{font-size:11px;color:#64748B;margin-top:2px}
+.eco-arrow{display:flex;align-items:center;color:#CBD5E1;font-size:20px;font-weight:900;padding:0 4px}
+
+/* ───────────────────── SLIDE 4 — CONTROL ───────────────────── */
+#s4{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.feat-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.feat-icon{font-size:22px;margin-bottom:10px}
+.feat-title{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px}
+.feat-items{list-style:none;display:flex;flex-direction:column;gap:4px}
+.feat-items li{font-size:11px;color:#64748B;padding-left:12px;position:relative}
+.feat-items li::before{content:"·";position:absolute;left:2px;color:#4047C8}
+.feat-card.active-card{border-color:rgba(64,71,200,.4);background:#ECEEFF}
+
+/* ───────────────────── SLIDE 5 — DASH MOBILE ───────────────────── */
+#s5{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.dash-layout{display:grid;grid-template-columns:1fr 340px;gap:40px;margin-top:28px;align-items:start}
+.dash-features{display:flex;flex-direction:column;gap:16px}
+.dash-feat{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dash-feat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.dash-feat-icon.blue{background:#ECEEFF}
+.dash-feat-icon.green{background:#E5FFF8}
+.dash-feat-icon.yellow{background:#FFFDE6}
+.dash-feat-icon.pink{background:#FFF0F8}
+.dash-feat-title{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:4px}
+.dash-feat-desc{font-size:12px;color:#64748B;line-height:1.6}
+/* PHONE MOCKUP — mantém dark para parecer tela de celular */
+.phone{width:220px;background:#0F172A;border:2px solid rgba(255,255,255,.1);border-radius:32px;padding:20px 14px;margin:0 auto;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.phone-bar{width:60px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 16px}
+.ph-card{background:rgba(64,71,200,.15);border:1px solid rgba(64,71,200,.3);border-radius:12px;padding:12px;margin-bottom:8px}
+.ph-label{font-size:9px;font-weight:600;color:#6B7FCC;text-transform:uppercase;letter-spacing:.08em}
+.ph-val{font-size:22px;font-weight:900;color:#fff;line-height:1.1}
+.ph-sub{font-size:9px;color:#475569;margin-top:2px}
+.ph-row{display:flex;gap:8px;margin-bottom:8px}
+.ph-mini{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px;text-align:center}
+.ph-mini-val{font-size:16px;font-weight:800;color:#fff}
+.ph-mini-label{font-size:8px;color:#475569;margin-top:2px}
+.ph-alert{background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.2);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:10px;color:#34D399}
+.ph-alert2{background:rgba(245,194,24,.1);border:1px solid rgba(245,194,24,.2);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:10px;color:#FCD34D}
+
+/* ───────────────────── SLIDE 6 — RECEPÇÃO ───────────────────── */
+#s6{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.app-demo{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:28px;align-items:start}
+.app-screen{background:#fff;border:1px solid #E2E8F0;border-radius:20px;padding:20px;font-size:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.app-screen-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #E2E8F0}
+.app-screen-title{font-size:14px;font-weight:800;color:#0F172A}
+.scan-zone{border:2px dashed rgba(64,71,200,.4);border-radius:12px;padding:24px;text-align:center;margin-bottom:12px;background:#ECEEFF}
+.scan-icon{font-size:36px;margin-bottom:8px}
+.scan-text{font-size:12px;color:#64748B}
+.pet-card-demo{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.pet-avatar-demo{width:36px;height:36px;border-radius:8px;background:#ECEEFF;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pet-name-demo{font-size:12px;font-weight:700;color:#0F172A}
+.pet-sub-demo{font-size:10px;color:#64748B;margin-top:2px}
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.sb-waiting{background:#FFFDE6;color:#856400}
+.sb-service{background:#ECEEFF;color:#4047C8}
+.sb-done{background:#E5FFF8;color:#006B4F}
+.action-btn{width:100%;padding:10px;border-radius:8px;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px}
+.ab-green{background:#E5FFF8;color:#006B4F;border:1px solid rgba(0,200,150,.4)}
+.ab-blue{background:#ECEEFF;color:#4047C8;border:1px solid rgba(64,71,200,.4)}
+
+/* ───────────────────── SLIDE 7 — TOSADOR ───────────────────── */
+#s7{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.tosd-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:28px;align-items:start}
+.agenda-demo{background:#fff;border:1px solid #E2E8F0;border-radius:20px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.agenda-day-header{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.agenda-slot{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;margin-bottom:8px;border:1px solid}
+.as-pending{background:#F8FAFC;border-color:#E2E8F0}
+.as-active{background:#ECEEFF;border-color:rgba(64,71,200,.3)}
+.as-done{background:#E5FFF8;border-color:rgba(0,200,150,.2);opacity:.7}
+.as-time{font-size:11px;font-weight:800;color:#4047C8;min-width:36px}
+.as-pet{font-size:12px;font-weight:700;color:#0F172A}
+.as-svc{font-size:10px;color:#64748B;margin-top:1px}
+.commission-demo{background:#fff;border:1px solid rgba(0,200,150,.3);border-radius:20px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.comm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.comm-total{text-align:right}
+.comm-val{font-size:28px;font-weight:900;color:#00C896}
+.comm-label{font-size:10px;color:#94A3B8;margin-top:2px}
+.comm-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #E2E8F0;font-size:11px}
+.comm-row:last-child{border-bottom:none}
+.comm-svc{color:#64748B}
+.comm-amt{color:#006B4F;font-weight:700}
+.comm-bar{height:4px;background:#E2E8F0;border-radius:2px;margin:10px 0}
+.comm-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#00C896,#4047C8);width:68%}
+
+/* ───────────────────── SLIDE 8 — MOTORISTA ───────────────────── */
+#s8{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.driver-layout{display:grid;grid-template-columns:1fr 300px;gap:40px;margin-top:28px;align-items:start}
+.route-demo{background:#fff;border:1px solid #E2E8F0;border-radius:20px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.route-header{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.route-stop{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;margin-bottom:8px;border:1px solid;position:relative}
+.rs-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.rs-collect{background:#ECEEFF;border-color:rgba(64,71,200,.3);color:#4047C8}
+.rs-done-stop{background:#E5FFF8;border-color:rgba(0,200,150,.2);opacity:.6}
+.rs-pending{background:#F8FAFC;border-color:#E2E8F0}
+.rs-title{font-size:12px;font-weight:700;color:#0F172A}
+.rs-addr{font-size:10px;color:#64748B;margin-top:2px}
+.rs-pet{font-size:10px;color:#94A3B8;margin-top:4px}
+.rs-num-done{background:#E5FFF8;color:#006B4F}
+.map-placeholder{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:16px;height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#94A3B8;font-size:13px;margin-top:12px}
+.driver-feats{display:flex;flex-direction:column;gap:14px}
+
+/* ───────────────────── SLIDE 9 — FLUXO COMPLETO ───────────────────── */
+#s9{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.flow-wrap{margin-top:28px}
+.flow-row{display:flex;gap:0;align-items:stretch}
+.flow-step{flex:1;background:#fff;border:1px solid #E2E8F0;border-radius:0;padding:20px 16px;position:relative;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.flow-step:first-child{border-radius:12px 0 0 12px}
+.flow-step:last-child{border-radius:0 12px 12px 0}
+.flow-arrow-wrap{display:flex;align-items:center;color:rgba(64,71,200,.35);font-size:20px;padding:0 4px}
+.fs-icon{font-size:28px;margin-bottom:8px}
+.fs-title{font-size:11px;font-weight:800;color:#0F172A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.fs-desc{font-size:10px;color:#64748B;line-height:1.5}
+.fs-who{display:inline-block;margin-top:8px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px}
+.fs-who.blue{background:#ECEEFF;color:#4047C8}
+.fs-who.green{background:#E5FFF8;color:#006B4F}
+.fs-who.yellow{background:#FFFDE6;color:#856400}
+.fs-who.pink{background:#FFF0F8;color:#E8187B}
+.flow-auto{margin-top:24px;background:#E5FFF8;border:1px solid rgba(0,200,150,.3);border-radius:12px;padding:16px 20px}
+.auto-title{font-size:12px;font-weight:700;color:#006B4F;margin-bottom:10px}
+.auto-items{display:flex;gap:16px;flex-wrap:wrap}
+.auto-item{display:flex;align-items:center;gap:8px;font-size:11px;color:#64748B}
+.auto-dot{width:6px;height:6px;border-radius:50%;background:#00C896;flex-shrink:0}
+
+/* ───────────────────── SLIDE 10 — ROADMAP ───────────────────── */
+#s10{background:#F1F5F9;padding:60px 80px;justify-content:center}
+.roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.rm-phase{border-radius:16px;padding:24px;border:1px solid}
+.rm-p1{background:#ECEEFF;border-color:rgba(64,71,200,.3)}
+.rm-p2{background:#E5FFF8;border-color:rgba(0,200,150,.3)}
+.rm-p3{background:#FFFDE6;border-color:rgba(245,194,24,.4)}
+.rm-period{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.rm-p1 .rm-period{color:#4047C8}
+.rm-p2 .rm-period{color:#006B4F}
+.rm-p3 .rm-period{color:#856400}
+.rm-name{font-size:18px;font-weight:900;color:#0F172A;margin-bottom:16px}
+.rm-items{list-style:none;display:flex;flex-direction:column;gap:8px}
+.rm-items li{font-size:12px;color:#64748B;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.rm-items li::before{content:"→";flex-shrink:0;font-weight:700}
+.rm-p1 .rm-items li::before{color:#4047C8}
+.rm-p2 .rm-items li::before{color:#00C896}
+.rm-p3 .rm-items li::before{color:#F5C218}
+.rm-kpi{margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,.08);display:flex;gap:16px}
+.rm-kpi-item{text-align:center;flex:1}
+.rm-kpi-val{font-size:16px;font-weight:900;color:#0F172A}
+.rm-kpi-label{font-size:9px;color:#94A3B8;margin-top:2px;text-transform:uppercase}
+
+/* ───────────────────── SLIDE 11 — PROPOSTA PRO JUNIOR ───────────────────── */
+#s11{background:radial-gradient(ellipse at 70% 50%,rgba(0,200,150,.08) 0%,transparent 55%),radial-gradient(ellipse at 20% 30%,rgba(64,71,200,.1) 0%,transparent 50%),#F1F5F9;align-items:center;justify-content:center;text-align:center;padding:60px 80px}
+.prop-title{font-size:48px;font-weight:900;letter-spacing:-.04em;line-height:1.1;margin:20px 0;color:#0F172A}
+.prop-sub{font-size:16px;color:#64748B;max-width:560px;margin:0 auto 40px;line-height:1.7}
+.prop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:700px;margin:0 auto 40px;text-align:left}
+.prop-card{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.prop-card-icon{font-size:24px;margin-bottom:10px}
+.prop-card-title{font-size:13px;font-weight:800;color:#0F172A;margin-bottom:6px}
+.prop-card-desc{font-size:11px;color:#64748B;line-height:1.6}
+.prop-cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#4047C8,#00C896);color:#fff;font-size:14px;font-weight:800;padding:14px 28px;border-radius:12px;cursor:pointer;border:none;font-family:'Inter',sans-serif}
+
+/* SLIDE HEADER COMMON */
+.slide-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94A3B8;margin-bottom:12px}
+.slide-tag::before{content:"";width:16px;height:2px;background:#4047C8;border-radius:1px}
+.slide-h2{font-size:clamp(24px,3.5vw,38px);font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:6px;color:#0F172A}
+.slide-desc{font-size:14px;color:#64748B;line-height:1.6;max-width:640px}
+
+/* KEYBOARD HINT */
+.key-hint{position:fixed;top:20px;right:24px;font-size:11px;color:#CBD5E1;z-index:100}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════ SLIDE 1 — COVER ══════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="cover-eyebrow">
+      <span class="chip chip-blue">Apresentação de produto · 2026</span>
+    </div>
+    <h1 class="cover-h1">Pets Go<br/><em>Ecossistema</em></h1>
+    <p class="cover-sub">Do check-in do cachorro ao relatório do dono.<br/>Um sistema completo para cada pessoa da operação.</p>
+    <div class="cover-stats">
+      <div class="cstat">
+        <div class="cstat-val">3</div>
+        <div class="cstat-label">Camadas de produto</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-val">5</div>
+        <div class="cstat-label">Perfis de usuário</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-val">100%</div>
+        <div class="cstat-label">Operação integrada</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-val">0</div>
+        <div class="cstat-label">Caos operacional</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 2 — PROBLEMA ══════════════════ -->
+  <div class="slide" id="s2">
+    <div class="slide-tag">O problema</div>
+    <h2 class="slide-h2">Como uma pet shop<br/>opera hoje</h2>
+    <p class="slide-desc">Cada ponto da operação é um ponto de falha. Sem sistema, o caos cresce junto com o negócio.</p>
+    <div class="prob-grid">
+      <div class="prob-card highlighted">
+        <div class="prob-icon">📱</div>
+        <div class="prob-title">Agendamentos no WhatsApp pessoal</div>
+        <div class="prob-desc">Sem confirmação automática. Tutor esquece. Pet shop perde horário. Funcionário perde tempo respondendo mensagem.</div>
+      </div>
+      <div class="prob-card highlighted">
+        <div class="prob-icon">📋</div>
+        <div class="prob-title">Controle em papel ou planilha</div>
+        <div class="prob-desc">Sem histórico do pet. Sem controle de planos. Quem verificou se o pacote do cliente acabou?</div>
+      </div>
+      <div class="prob-card highlighted">
+        <div class="prob-icon">👁️</div>
+        <div class="prob-title">Dono não enxerga nada em tempo real</div>
+        <div class="prob-desc">Precisa ligar pro gerente pra saber quantos cachorros estão na unidade. Não sabe o faturamento do dia.</div>
+      </div>
+      <div class="prob-card highlighted">
+        <div class="prob-icon">💸</div>
+        <div class="prob-title">Comissão calculada na mão</div>
+        <div class="prob-desc">Tosador não sabe quanto vai receber. Gestor perde horas somando. Conflito e desmotivação na equipe.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 3 — VISÃO GERAL ══════════════════ -->
+  <div class="slide" id="s3">
+    <div class="slide-tag">A solução</div>
+    <h2 class="slide-h2">Um ecossistema.<br/>Cada um vê o que precisa.</h2>
+    <p class="slide-desc">Não é um sistema genérico. É uma plataforma com apps específicos para cada função da operação.</p>
+    <div class="eco-wrap">
+      <div class="eco-tier">
+        <div class="eco-label"><div class="eco-label-text">Gestão<br/>completa</div></div>
+        <div class="eco-apps">
+          <div class="eco-app blue">
+            <div class="eco-app-icon">🖥️</div>
+            <div><div class="eco-app-name">Pets Go Control</div><div class="eco-app-desc">CRM · Agenda · PDV · Financeiro · Planos · Estoque</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="eco-tier">
+        <div class="eco-label"><div class="eco-label-text">Visão do<br/>dono</div></div>
+        <div class="eco-apps">
+          <div class="eco-app green">
+            <div class="eco-app-icon">📊</div>
+            <div><div class="eco-app-name">Pets Go Dash</div><div class="eco-app-desc">KPIs em tempo real · Alertas · Multi-filial · Mobile</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="eco-tier">
+        <div class="eco-label"><div class="eco-label-text">Apps da<br/>equipe</div></div>
+        <div class="eco-apps">
+          <div class="eco-app pink">
+            <div class="eco-app-icon">🚪</div>
+            <div><div class="eco-app-name">Recepção</div><div class="eco-app-desc">Scan de check-in · Status em tempo real</div></div>
+          </div>
+          <div class="eco-app yellow">
+            <div class="eco-app-icon">✂️</div>
+            <div><div class="eco-app-name">Tosador</div><div class="eco-app-desc">Agenda do dia · Dashboard de comissão</div></div>
+          </div>
+          <div class="eco-app gray">
+            <div class="eco-app-icon">🚗</div>
+            <div><div class="eco-app-name">Motorista</div><div class="eco-app-desc">Rota do dia · Busca e entrega</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 4 — CONTROL ══════════════════ -->
+  <div class="slide" id="s4">
+    <div class="slide-tag">Camada 1 — Gestão</div>
+    <h2 class="slide-h2">Pets Go Control</h2>
+    <p class="slide-desc">O sistema completo de gestão para gerentes e gestores. Web, desktop, todas as informações da operação.</p>
+    <div class="feature-grid">
+      <div class="feat-card active-card">
+        <div class="feat-icon">👥</div>
+        <div class="feat-title">Clientes & Pets</div>
+        <ul class="feat-items">
+          <li>Cadastro completo de tutores e pets</li>
+          <li>Histórico de serviços por pet</li>
+          <li>Filtro por filial e status</li>
+          <li>Busca instantânea</li>
+        </ul>
+      </div>
+      <div class="feat-card active-card">
+        <div class="feat-icon">📅</div>
+        <div class="feat-title">Agenda</div>
+        <ul class="feat-items">
+          <li>Agendamentos por serviço e funcionário</li>
+          <li>Confirmação automática WhatsApp</li>
+          <li>Lembrete 24h antes</li>
+          <li>Gestão de horários e capacidade</li>
+        </ul>
+      </div>
+      <div class="feat-card active-card">
+        <div class="feat-icon">🎟️</div>
+        <div class="feat-title">Planos & Pacotes</div>
+        <ul class="feat-items">
+          <li>Planos de assinatura recorrentes</li>
+          <li>Pacotes pré-pagos com abate diário</li>
+          <li>Alerta de vencimento automático</li>
+          <li>Renovação via WhatsApp</li>
+        </ul>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🏪</div>
+        <div class="feat-title">PDV / Caixa</div>
+        <ul class="feat-items">
+          <li>Frente de caixa simplificada</li>
+          <li>Múltiplos meios de pagamento</li>
+          <li>Integração com planos</li>
+        </ul>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <div class="feat-title">Financeiro</div>
+        <ul class="feat-items">
+          <li>Fluxo de caixa diário</li>
+          <li>Contas a pagar e receber</li>
+          <li>DRE simplificado</li>
+        </ul>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📦</div>
+        <div class="feat-title">Estoque & Serviços</div>
+        <ul class="feat-items">
+          <li>Catálogo de serviços configurável</li>
+          <li>Insumos por serviço</li>
+          <li>Alerta de estoque baixo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 5 — DASH MOBILE ══════════════════ -->
+  <div class="slide" id="s5">
+    <div class="slide-tag">Camada 2 — Visão do dono</div>
+    <h2 class="slide-h2">Pets Go Dash</h2>
+    <p class="slide-desc">O dono acompanha tudo em tempo real do celular. Sem precisar ligar pro gerente.</p>
+    <div class="dash-layout">
+      <div class="dash-features">
+        <div class="dash-feat">
+          <div class="dash-feat-icon blue"><i class="ph ph-chart-line-up"></i></div>
+          <div>
+            <div class="dash-feat-title">KPIs em tempo real</div>
+            <div class="dash-feat-desc">Faturamento do dia, semana e mês. Quantos cachorros estão na unidade agora. Comparativo entre filiais.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon green"><i class="ph ph-bell-ringing"></i></div>
+          <div>
+            <div class="dash-feat-title">Alertas inteligentes</div>
+            <div class="dash-feat-desc">Notificação quando pet chega, quando serviço é concluído, quando pagamento é confirmado. Tudo no celular.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon yellow"><i class="ph ph-buildings"></i></div>
+          <div>
+            <div class="dash-feat-title">Multi-filial unificado</div>
+            <div class="dash-feat-desc">Visualiza todas as unidades de um lugar só. Compara performance. Identifica onde está a gargalo.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon pink"><i class="ph ph-users"></i></div>
+          <div>
+            <div class="dash-feat-title">Performance da equipe</div>
+            <div class="dash-feat-desc">Serviços por funcionário. Comissão acumulada. Quem está rendendo mais hoje.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="phone">
+          <div class="phone-bar"></div>
+          <div class="ph-card">
+            <div class="ph-label">Faturamento hoje</div>
+            <div class="ph-val">R$ 2.840</div>
+            <div class="ph-sub">↑ 18% vs ontem · 3 filiais</div>
+          </div>
+          <div class="ph-row">
+            <div class="ph-mini">
+              <div class="ph-mini-val">14</div>
+              <div class="ph-mini-label">Pets hoje</div>
+            </div>
+            <div class="ph-mini">
+              <div class="ph-mini-val">6</div>
+              <div class="ph-mini-label">Agora dentro</div>
+            </div>
+            <div class="ph-mini">
+              <div class="ph-mini-val">3</div>
+              <div class="ph-mini-label">Pendentes</div>
+            </div>
+          </div>
+          <div class="ph-alert">✓ Thor — check-in confirmado · 09:14</div>
+          <div class="ph-alert">✓ Luna — banho concluído · 10:32</div>
+          <div class="ph-alert2">⚠ 5 clientes inativos há 30+ dias</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 6 — RECEPÇÃO ══════════════════ -->
+  <div class="slide" id="s6">
+    <div class="slide-tag">Camada 3 — App da equipe</div>
+    <h2 class="slide-h2">App de Recepção</h2>
+    <p class="slide-desc">Check-in e check-out com scan de QR code. O tutor recebe WhatsApp automático quando o pet chega e quando vai embora.</p>
+    <div class="app-demo">
+      <div>
+        <div class="app-screen">
+          <div class="app-screen-header">
+            <span style="font-size:18px">🚪</span>
+            <div class="app-screen-title">Recepção — Check-in</div>
+          </div>
+          <div class="scan-zone">
+            <div class="scan-icon">📷</div>
+            <div class="scan-text">Aponte a câmera para a tag do pet<br/>ou busque pelo nome do tutor</div>
+          </div>
+          <div class="pet-card-demo">
+            <div class="pet-avatar-demo">🐕</div>
+            <div style="flex:1">
+              <div class="pet-name-demo">Thor · Golden Retriever</div>
+              <div class="pet-sub-demo">Tutor: Carlos Silva · (51) 9 9999-8888</div>
+            </div>
+            <span class="status-badge sb-waiting">Aguardando</span>
+          </div>
+          <div class="pet-card-demo">
+            <div class="pet-avatar-demo">🐩</div>
+            <div style="flex:1">
+              <div class="pet-name-demo">Luna · Poodle</div>
+              <div class="pet-sub-demo">Tutor: Ana Costa · (51) 9 8888-7777</div>
+            </div>
+            <span class="status-badge sb-service">Em serviço</span>
+          </div>
+          <div class="pet-card-demo" style="opacity:.5">
+            <div class="pet-avatar-demo">🦮</div>
+            <div style="flex:1">
+              <div class="pet-name-demo">Rex · Pastor Alemão</div>
+              <div class="pet-sub-demo">Tutor: Marcos Lima</div>
+            </div>
+            <span class="status-badge sb-done">Pronto</span>
+          </div>
+          <button class="action-btn ab-green">✓ Confirmar check-in → WhatsApp automático</button>
+        </div>
+      </div>
+      <div class="dash-features">
+        <div class="dash-feat">
+          <div class="dash-feat-icon blue"><i class="ph ph-qr-code"></i></div>
+          <div>
+            <div class="dash-feat-title">Scan de QR Code</div>
+            <div class="dash-feat-desc">Tag no colar do pet ou no cadastro impresso. Check-in em 3 segundos.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon green"><i class="ph ph-whatsapp-logo"></i></div>
+          <div>
+            <div class="dash-feat-title">WhatsApp automático</div>
+            <div class="dash-feat-desc">"Thor chegou! Estará pronto por volta das 14h." — sem o funcionário digitar nada.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon yellow"><i class="ph ph-eye"></i></div>
+          <div>
+            <div class="dash-feat-title">Status em tempo real</div>
+            <div class="dash-feat-desc">Todos os pets da unidade: quem chegou, quem está em serviço, quem está pronto pra buscar.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 7 — TOSADOR ══════════════════ -->
+  <div class="slide" id="s7">
+    <div class="slide-tag">Camada 3 — App da equipe</div>
+    <h2 class="slide-h2">App do Tosador / Banhista</h2>
+    <p class="slide-desc">Agenda do dia, histórico do pet e dashboard de comissão em tempo real. O funcionário sabe exatamente quanto vai ganhar.</p>
+    <div class="tosd-layout">
+      <div class="agenda-demo">
+        <div class="agenda-day-header">Segunda-feira · 28 Abril · Mariana</div>
+        <div class="agenda-slot as-done">
+          <div class="as-time" style="color:#34D399">08:00</div>
+          <div>
+            <div class="as-pet" style="color:#64748B">Luna · Poodle</div>
+            <div class="as-svc">Banho + Tosa · concluído ✓</div>
+          </div>
+        </div>
+        <div class="agenda-slot as-active">
+          <div class="as-time">10:00</div>
+          <div>
+            <div class="as-pet">Thor · Golden Retriever</div>
+            <div class="as-svc">Banho completo · em andamento...</div>
+          </div>
+        </div>
+        <div class="agenda-slot as-pending">
+          <div class="as-time" style="color:#475569">13:00</div>
+          <div>
+            <div class="as-pet">Rex · Pastor Alemão</div>
+            <div class="as-svc">Tosa completa + hidratação</div>
+          </div>
+        </div>
+        <div class="agenda-slot as-pending">
+          <div class="as-time" style="color:#475569">15:30</div>
+          <div>
+            <div class="as-pet">Mel · Shih Tzu</div>
+            <div class="as-svc">Banho + Tosa</div>
+          </div>
+        </div>
+        <div class="commission-demo" style="margin-top:14px">
+          <div class="comm-header">
+            <div style="font-size:12px;font-weight:700;color:#94A3B8">Comissão de hoje</div>
+            <div class="comm-total">
+              <div class="comm-val">R$ 87,00</div>
+              <div class="comm-label">4 serviços realizados</div>
+            </div>
+          </div>
+          <div class="comm-bar"><div class="comm-bar-fill"></div></div>
+          <div style="font-size:10px;color:#475569;text-align:right;margin-bottom:10px">Meta diária: R$128 · 68%</div>
+          <div class="comm-row"><span class="comm-svc">Luna — Banho + Tosa</span><span class="comm-amt">R$ 28,00</span></div>
+          <div class="comm-row"><span class="comm-svc">Thor — Banho completo</span><span class="comm-amt">R$ 22,00</span></div>
+          <div class="comm-row"><span class="comm-svc">Rex — Tosa + Hidratação</span><span class="comm-amt">R$ 37,00</span></div>
+        </div>
+      </div>
+      <div class="dash-features">
+        <div class="dash-feat">
+          <div class="dash-feat-icon blue"><i class="ph ph-calendar-check"></i></div>
+          <div>
+            <div class="dash-feat-title">Agenda pessoal</div>
+            <div class="dash-feat-desc">Só vê os pets que são dela. Sem ruído. Histórico do pet aparece ao tocar: última tosa, observações do tutor.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon green"><i class="ph ph-currency-dollar"></i></div>
+          <div>
+            <div class="dash-feat-title">Comissão em tempo real</div>
+            <div class="dash-feat-desc">Quanto ganhou hoje, essa semana, esse mês. Meta diária e progresso. Zero conflito no fechamento.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon pink"><i class="ph ph-paw-print"></i></div>
+          <div>
+            <div class="dash-feat-title">Ficha do pet</div>
+            <div class="dash-feat-desc">Raça, porte, temperamento, observações especiais. O tosador chega preparado antes mesmo de ver o cachorro.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 8 — MOTORISTA ══════════════════ -->
+  <div class="slide" id="s8">
+    <div class="slide-tag">Camada 3 — App da equipe</div>
+    <h2 class="slide-h2">App do Motorista</h2>
+    <p class="slide-desc">Rota do dia organizada, status de cada busca e entrega, e tutor avisado automaticamente. Taxi dog sem ligação.</p>
+    <div class="driver-layout">
+      <div class="driver-feats">
+        <div class="dash-feat">
+          <div class="dash-feat-icon blue"><i class="ph ph-map-pin"></i></div>
+          <div>
+            <div class="dash-feat-title">Rota do dia otimizada</div>
+            <div class="dash-feat-desc">Lista de endereços para buscar e entregar, na ordem certa. Abre no Google Maps direto.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon green"><i class="ph ph-check-circle"></i></div>
+          <div>
+            <div class="dash-feat-title">Status por parada</div>
+            <div class="dash-feat-desc">A caminho → Chegou → Pet buscado → Pet entregue. Cada ação gera WhatsApp automático pro tutor.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon yellow"><i class="ph ph-whatsapp-logo"></i></div>
+          <div>
+            <div class="dash-feat-title">Tutor sempre informado</div>
+            <div class="dash-feat-desc">"O motorista está a caminho!" / "Thor chegou com segurança!" — automático, sem o motorista digitar nada.</div>
+          </div>
+        </div>
+        <div class="dash-feat">
+          <div class="dash-feat-icon pink"><i class="ph ph-clock"></i></div>
+          <div>
+            <div class="dash-feat-title">Histórico de corridas</div>
+            <div class="dash-feat-desc">Total de km, corridas do dia, tempo médio. Base para comissão do motorista.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="route-demo">
+          <div class="route-header">Rota de hoje · Pedro · 5 paradas</div>
+          <div class="route-stop rs-done-stop">
+            <div class="rs-num rs-num-done">✓</div>
+            <div>
+              <div class="rs-title">Busca — Av. Independência, 1200</div>
+              <div class="rs-addr">Moinhos de Vento</div>
+              <div class="rs-pet">🐕 Luna · Poodle · Ana Costa</div>
+            </div>
+          </div>
+          <div class="route-stop rs-collect">
+            <div class="rs-num" style="background:rgba(64,71,200,.3);color:#A5B4FC">2</div>
+            <div>
+              <div class="rs-title">Busca — Rua da República, 450</div>
+              <div class="rs-addr">Rio Branco · em andamento</div>
+              <div class="rs-pet">🐕 Thor · Golden · Carlos Silva</div>
+            </div>
+          </div>
+          <div class="route-stop rs-pending">
+            <div class="rs-num" style="background:rgba(255,255,255,.06);color:#475569">3</div>
+            <div>
+              <div class="rs-title">Entrega — Av. Carlos Gomes, 888</div>
+              <div class="rs-addr">Petrópolis</div>
+              <div class="rs-pet">🐩 Mel · Shih Tzu · Juliana Reis</div>
+            </div>
+          </div>
+          <div class="route-stop rs-pending">
+            <div class="rs-num" style="background:rgba(255,255,255,.06);color:#475569">4</div>
+            <div>
+              <div class="rs-title">Busca — Rua Veríssimo Rosa, 120</div>
+              <div class="rs-addr">Partenon</div>
+              <div class="rs-pet">🦮 Rex · Pastor · Marcos Lima</div>
+            </div>
+          </div>
+          <div class="map-placeholder">
+            <span style="font-size:28px">🗺️</span>
+            <span>Abrir rota no Google Maps</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 9 — FLUXO COMPLETO ══════════════════ -->
+  <div class="slide" id="s9">
+    <div class="slide-tag">Integração</div>
+    <h2 class="slide-h2">Como tudo se conecta</h2>
+    <p class="slide-desc">Um agendamento feito no Control aciona todos os outros apps automaticamente. Zero trabalho duplicado.</p>
+    <div class="flow-wrap">
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="fs-icon">📅</div>
+          <div class="fs-title">Agendamento</div>
+          <div class="fs-desc">Gerente ou tutor cria o agendamento</div>
+          <span class="fs-who blue">Control</span>
+        </div>
+        <div class="flow-arrow-wrap">→</div>
+        <div class="flow-step">
+          <div class="fs-icon">📱</div>
+          <div class="fs-title">Confirmação</div>
+          <div class="fs-desc">WhatsApp automático pro tutor</div>
+          <span class="fs-who green">Automático</span>
+        </div>
+        <div class="flow-arrow-wrap">→</div>
+        <div class="flow-step">
+          <div class="fs-icon">🚗</div>
+          <div class="fs-title">Rota gerada</div>
+          <div class="fs-desc">Motorista já tem a parada na lista</div>
+          <span class="fs-who yellow">App Motorista</span>
+        </div>
+        <div class="flow-arrow-wrap">→</div>
+        <div class="flow-step">
+          <div class="fs-icon">🚪</div>
+          <div class="fs-title">Check-in</div>
+          <div class="fs-desc">Recepção escaneia → tutor recebe aviso</div>
+          <span class="fs-who pink">App Recepção</span>
+        </div>
+        <div class="flow-arrow-wrap">→</div>
+        <div class="flow-step">
+          <div class="fs-icon">✂️</div>
+          <div class="fs-title">Serviço</div>
+          <div class="fs-desc">Aparece na agenda do tosador</div>
+          <span class="fs-who yellow">App Tosador</span>
+        </div>
+        <div class="flow-arrow-wrap">→</div>
+        <div class="flow-step">
+          <div class="fs-icon">📊</div>
+          <div class="fs-title">Dashboard</div>
+          <div class="fs-desc">Dono acompanha tudo em tempo real</div>
+          <span class="fs-who blue">Pets Go Dash</span>
+        </div>
+      </div>
+      <div class="flow-auto">
+        <div class="auto-title">⚡ WhatsApp automático em cada etapa</div>
+        <div class="auto-items">
+          <div class="auto-item"><div class="auto-dot"></div>Confirmação de agendamento</div>
+          <div class="auto-item"><div class="auto-dot"></div>Lembrete 24h antes</div>
+          <div class="auto-item"><div class="auto-dot"></div>Motorista a caminho</div>
+          <div class="auto-item"><div class="auto-dot"></div>Pet chegou ao estabelecimento</div>
+          <div class="auto-item"><div class="auto-dot"></div>Serviço concluído — pronto para buscar</div>
+          <div class="auto-item"><div class="auto-dot"></div>Follow-up 2h após entrega</div>
+          <div class="auto-item"><div class="auto-dot"></div>Gatilho de retorno 30 dias</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 10 — ROADMAP ══════════════════ -->
+  <div class="slide" id="s10">
+    <div class="slide-tag">Execução</div>
+    <h2 class="slide-h2">O que vem em cada fase</h2>
+    <p class="slide-desc">Construímos na ordem certa: primeiro o que já existe, depois o que gera mais valor operacional.</p>
+    <div class="roadmap">
+      <div class="rm-phase rm-p1">
+        <div class="rm-period">Fase 1 · Maio–Julho</div>
+        <div class="rm-name">Controle</div>
+        <ul class="rm-items">
+          <li>Pets Go Control com API real (multi-device)</li>
+          <li>Agenda completa com agendamentos reais</li>
+          <li>WhatsApp automático ativo (confirmação + lembrete)</li>
+          <li>Dashboard do dono (Pets Go Dash v1)</li>
+          <li>3 filiais rodando 100% no sistema</li>
+        </ul>
+        <div class="rm-kpi">
+          <div class="rm-kpi-item"><div class="rm-kpi-val">3</div><div class="rm-kpi-label">filiais ativas</div></div>
+          <div class="rm-kpi-item"><div class="rm-kpi-val">-30%</div><div class="rm-kpi-label">no-shows</div></div>
+          <div class="rm-kpi-item"><div class="rm-kpi-val">690</div><div class="rm-kpi-label">inativos para reativar</div></div>
+        </div>
+      </div>
+      <div class="rm-phase rm-p2">
+        <div class="rm-period">Fase 2 · Agosto–Outubro</div>
+        <div class="rm-name">Operação</div>
+        <ul class="rm-items">
+          <li>App de Recepção com scan de QR Code</li>
+          <li>App do Tosador com agenda e comissão</li>
+          <li>App do Motorista com rota e status</li>
+          <li>Todos os 7 flows de WhatsApp ativos</li>
+          <li>Primeiros 5 clientes externos pagando</li>
+        </ul>
+        <div class="rm-kpi">
+          <div class="rm-kpi-item"><div class="rm-kpi-val">5</div><div class="rm-kpi-label">apps funcionando</div></div>
+          <div class="rm-kpi-item"><div class="rm-kpi-val">5</div><div class="rm-kpi-label">clientes externos</div></div>
+          <div class="rm-kpi-item"><div class="rm-kpi-val">R$2k</div><div class="rm-kpi-label">MRR</div></div>
+        </div>
+      </div>
+      <div class="rm-phase rm-p3">
+        <div class="rm-period">Fase 3 · Nov 2026–</div>
+        <div class="rm-name">Franquias</div>
+        <ul class="rm-items">
+          <li>Ecossistema completo como diferencial da franquia</li>
+          <li>1ª franquia vendida com sistema incluso</li>
+          <li>20+ pet shops usando o sistema</li>
+          <li>App para tutores (acompanhar pet em tempo real)</li>
+          <li>Replicar modelo para outros nichos</li>
+        </ul>
+        <div class="rm-kpi">
+          <div class="rm-kpi-item"><div class="rm-kpi-val">2</div><div class="rm-kpi-label">franquias</div></div>
+          <div class="rm-kpi-item"><div class="rm-kpi-val">20+</div><div class="rm-kpi-label">clientes SaaS</div></div>
+          <div class="rm-kpi-item"><div class="rm-kpi-val">R$10k</div><div class="rm-kpi-label">MRR</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 11 — PROPOSTA ══════════════════ -->
+  <div class="slide" id="s11">
+    <div class="chip chip-green" style="margin-bottom:20px">Para o Junior</div>
+    <h1 class="prop-title">Juntos, construímos<br/>a maior rede pet<br/>do Sul do Brasil.</h1>
+    <p class="prop-sub">Você tem o negócio, a operação, e a rede de contatos. A gente tem o sistema que transforma tudo isso em uma máquina que roda sozinha.</p>
+    <div class="prop-grid">
+      <div class="prop-card">
+        <div class="prop-card-icon">⚙️</div>
+        <div class="prop-card-title">7 dias de teste</div>
+        <div class="prop-card-desc">Sistema nas 3 filiais. Agenda real, WhatsApp automático, dashboard no celular.</div>
+      </div>
+      <div class="prop-card">
+        <div class="prop-card-icon">🤝</div>
+        <div class="prop-card-title">Você vende, eu entrego</div>
+        <div class="prop-card-desc">Junior vai nas pet shops. Mostra o que usa. O sistema faz a demo sozinho.</div>
+      </div>
+      <div class="prop-card">
+        <div class="prop-card-icon">🏪</div>
+        <div class="prop-card-title">Franquia com sistema</div>
+        <div class="prop-card-desc">Cada nova unidade Pets Go já abre com todo o ecossistema rodando. Diferencial que nenhum concorrente tem.</div>
+      </div>
+    </div>
+    <button class="prop-cta" onclick="alert('Vamos começar? 🚀')">
+      Começar os 7 dias de teste agora →
+    </button>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)"><i class="ph ph-caret-left"></i></button>
+  <div class="nav-dots" id="dots"></div>
+  <div class="slide-counter" id="counter">1 / 11</div>
+  <button class="nav-btn" id="next-btn" onclick="changeSlide(1)"><i class="ph ph-caret-right"></i></button>
+</div>
+
+<div class="key-hint">← → para navegar</div>
+
+<script>
+const TOTAL = 11;
+let current = 1;
+
+function buildDots() {
+  const c = document.getElementById('dots');
+  for (let i = 1; i <= TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 1 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    c.appendChild(d);
+  }
+}
+
+function goTo(n) {
+  const prev = document.getElementById('s' + current);
+  prev.classList.remove('active');
+  prev.classList.add('out');
+  setTimeout(() => prev.classList.remove('out'), 400);
+
+  current = Math.max(1, Math.min(TOTAL, n));
+  const next = document.getElementById('s' + current);
+  next.classList.add('active');
+
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === current));
+  document.getElementById('counter').textContent = current + ' / ' + TOTAL;
+}
+
+function changeSlide(dir) { goTo(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+});
+
+// Touch/swipe
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = tx - e.changedTouches[0].clientX;
+  if (Math.abs(dx) > 50) changeSlide(dx > 0 ? 1 : -1);
+});
+
+buildDots();
+</script>
+</body>
+</html>

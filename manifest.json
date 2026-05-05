@@ -1,0 +1,24 @@
+{
+  "name": "Pets Go Control",
+  "short_name": "Pets Go",
+  "description": "Sistema de gestão para pet shops",
+  "start_url": "/petsgo-app.html",
+  "display": "standalone",
+  "background_color": "#F1F5F9",
+  "theme_color": "#4047C8",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

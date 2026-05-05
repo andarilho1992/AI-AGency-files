@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go Control — User Guide</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4047C8;--brand-dark:#2D33A8;--brand-light:#ECEEFF;
+  --teal:#00C896;--teal-light:#E5FFF8;
+  --yellow:#F5C218;--yellow-light:#FFFDE6;
+  --pink:#E8187B;--pink-light:#FFF0F8;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --green:#16A34A;--green-light:#F0FFF4;
+  --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;
+  --border:#E2E8F0;--text:#0F172A;--text2:#334155;--muted:#64748B;--muted2:#94A3B8;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;font-size:17px}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#1e2690 0%,#4047C8 55%,#6366F1 100%);color:#fff;padding:52px 20px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-logo{width:68px;height:68px;background:rgba(255,255,255,.15);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 18px;backdrop-filter:blur(8px)}
+.hero h1{font-size:32px;font-weight:900;letter-spacing:-.03em;margin-bottom:10px}
+.hero p{font-size:17px;opacity:.85;max-width:440px;margin:0 auto 22px;line-height:1.6}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:6px 15px;font-size:14px;font-weight:600;backdrop-filter:blur(8px)}
+.hero-badge.new{background:rgba(245,194,24,.2);border-color:rgba(245,194,24,.45);color:#FDE68A}
+
+/* ── LAYOUT ── */
+.container{max-width:720px;margin:0 auto;padding:0 20px}
+.section{padding:32px 0 6px}
+.section-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── MODULE CARD ── */
+.mod{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:12px;box-shadow:var(--shadow)}
+.mod.highlight{border-color:#C7D2FE;box-shadow:0 0 0 3px #ECEEFF,var(--shadow)}
+.mod.pwa{border-color:#6EE7C7;box-shadow:0 0 0 3px #E5FFF8,var(--shadow)}
+.mod-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+.mod-icon{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.mod-title{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.mod-desc{font-size:15px;color:var(--muted);margin-top:4px;line-height:1.5}
+
+/* ── STEPS ── */
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;align-items:flex-start;gap:12px;font-size:16px;line-height:1.6}
+.step-num{width:26px;height:26px;border-radius:7px;background:var(--brand-light);color:var(--brand);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-num.new{background:#FDE68A;color:#854D0E}
+.step-num.check{background:var(--teal-light);color:#006B4F;font-size:15px}
+.step-num.tip{background:#FEF9C3;color:#854D0E;font-size:15px}
+.step b{color:var(--text)}
+.step span,.step div{color:var(--text2)}
+
+/* ── TAGS ── */
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:20px}
+.tag-blue{background:var(--brand-light);color:var(--brand)}
+.tag-green{background:var(--teal-light);color:#006B4F}
+.tag-yellow{background:var(--yellow-light);color:#856400}
+.tag-red{background:var(--red-light);color:var(--red)}
+.tag-gray{background:#F1F5F9;color:#64748B}
+.tag-new{background:#FEF9C3;color:#854D0E;border:1px solid #FDE68A}
+
+/* ── ALERTS ── */
+.alert{border-radius:12px;padding:14px 16px;font-size:15px;display:flex;gap:12px;align-items:flex-start;line-height:1.6;margin-top:12px}
+.alert-blue{background:var(--brand-light);border:1px solid #C7D2FE}
+.alert-green{background:var(--teal-light);border:1px solid #6EE7C7}
+.alert-yellow{background:var(--yellow-light);border:1px solid #FDE68A}
+.alert-new{background:#FEF9C3;border:1px solid #FDE68A}
+.alert-coming{background:#F0FFF4;border:1px solid #86EFAC}
+.alert i{font-size:22px;flex-shrink:0;margin-top:1px}
+
+/* ── KEY ── */
+.key{display:inline-flex;align-items:center;gap:3px;background:#F1F5F9;border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:14px;font-weight:700;color:var(--text2)}
+
+/* ── NEW FEATURES GRID ── */
+.new-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.new-card{background:#FEF9C3;border:1px solid #FDE68A;border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start}
+.new-card-icon{font-size:24px;flex-shrink:0}
+.new-card-title{font-size:15px;font-weight:700;color:#854D0E;margin-bottom:4px}
+.new-card-desc{font-size:14px;color:#92400E;line-height:1.5}
+
+/* ── COMING SOON GRID ── */
+.soon-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.soon-card{background:var(--green-light);border:1px solid #BBF7D0;border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start}
+.soon-card-icon{font-size:24px;flex-shrink:0}
+.soon-card-title{font-size:15px;font-weight:700;color:#166534;margin-bottom:4px}
+.soon-card-desc{font-size:14px;color:#15803D;line-height:1.5}
+
+/* ── INSTALL STEPS ── */
+.install-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.install-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.install-title{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.install-step{font-size:15px;color:var(--text2);line-height:1.6;padding:5px 0;border-bottom:1px solid var(--border)}
+.install-step:last-child{border:none}
+
+/* ── FLOW ── */
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0}
+.flow-step{background:var(--brand-light);color:var(--brand);font-size:13px;font-weight:700;padding:6px 12px;border-radius:8px;white-space:nowrap}
+.flow-arrow{color:var(--muted2);font-size:15px}
+
+/* ── COL 2 ── */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 15px;font-size:14px;color:var(--text2);line-height:1.6}
+.info-box .ib-title{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px;color:var(--text)}
+
+/* ── SIZE PILLS ── */
+.porte-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.porte-pill{padding:5px 12px;border-radius:20px;font-size:13px;font-weight:700;border:1px solid var(--border)}
+
+/* ── STATUS ROW ── */
+.status-row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.s-item{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--text2);flex:1;min-width:140px}
+.s-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:36px 20px 48px;color:var(--muted);font-size:15px;border-top:1px solid var(--border);margin-top:24px;line-height:1.9}
+
+/* ── MOBILE ── */
+@media(max-width:520px){
+  .hero{padding:36px 16px 44px}
+  .hero h1{font-size:26px}
+  .hero p{font-size:15px}
+  .container{padding:0 14px}
+  .section{padding:24px 0 6px}
+  .mod{padding:16px 15px}
+  .new-grid{grid-template-columns:1fr}
+  .soon-grid{grid-template-columns:1fr}
+  .install-grid{grid-template-columns:1fr}
+  .col2{grid-template-columns:1fr}
+  .flow-step{font-size:12px;padding:5px 9px}
+  .status-row{gap:8px}
+  .s-item{min-width:120px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo"><i class="ph ph-paw-print"></i></div>
+  <h1>Pets Go Control</h1>
+  <p>Complete system guide — appointments, packages, register, and everything else explained simply.</p>
+  <div class="hero-badges">
+    <div class="hero-badge"><i class="ph ph-book-open"></i> Version 5</div>
+    <div class="hero-badge new"><i class="ph ph-device-mobile"></i> Installs as an app on your phone</div>
+    <div class="hero-badge new"><i class="ph ph-sparkle"></i> Re-booking + Invoice button</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ─── INSTALL AS APP ─── -->
+<div class="section">
+  <div class="section-label">Install as an app on your phone</div>
+  <div class="mod pwa">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-device-mobile"></i></div>
+      <div>
+        <div class="mod-title">Pets Go on your phone — no internet required</div>
+        <div class="mod-desc">The system works installed as an app. Once installed, it opens just like WhatsApp — no need to type the link. Also works offline.</div>
+      </div>
+    </div>
+
+    <div class="install-grid">
+      <div class="install-card">
+        <div class="install-title"><i class="ph ph-android-logo" style="color:#16A34A"></i> Android (Chrome)</div>
+        <div class="install-step">1. Open the system link in Chrome</div>
+        <div class="install-step">2. Tap the menu <b>⋮</b> (top right corner)</div>
+        <div class="install-step">3. Tap <b>"Add to Home screen"</b></div>
+        <div class="install-step">4. Confirm → icon appears on your screen</div>
+      </div>
+      <div class="install-card">
+        <div class="install-title"><i class="ph ph-apple-logo" style="color:var(--text2)"></i> iPhone (Safari)</div>
+        <div class="install-step">1. Open the system link in Safari</div>
+        <div class="install-step">2. Tap the <b>Share</b> button (box with arrow)</div>
+        <div class="install-step">3. Scroll and tap <b>"Add to Home Screen"</b></div>
+        <div class="install-step">4. Confirm → icon appears on your screen</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:12px">
+      <i class="ph ph-wifi-slash" style="color:#006B4F"></i>
+      <div><b>Works without internet:</b> once installed, the system is saved on the device. You can schedule appointments, log daily sessions, and check the register even with no signal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ON THE COMPUTER ─── -->
+<div class="section">
+  <div class="section-label">Using on a computer</div>
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-monitor"></i></div>
+      <div>
+        <div class="mod-title">Store computer — how it works</div>
+        <div class="mod-desc">Opens in the browser like any website. Can be installed as an app. Works offline after the first load.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Open it:</b> Chrome or Edge → visit the system link. The first time you need internet. After loading once, it works offline normally — the system is saved on the computer itself.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Install as an app (optional):</b> in the Chrome/Edge address bar an install icon appears (<i class="ph ph-arrow-square-in"></i> or <i class="ph ph-plus"></i>). Click → confirm → Pets Go opens in its own window, without the browser bar, just like an installed program.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>No internet at the store?</b> No problem. Once installed, everything works normally — appointments, register, packages. Data is saved on the device.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow" style="margin-top:12px">
+      <i class="ph ph-warning" style="color:#856400"></i>
+      <div><b>Note — data per device:</b> right now each device has its own database. A sale recorded on the computer does not automatically appear on the phone. Sync between devices is in development (next version).</div>
+    </div>
+  </div>
+
+  <div class="mod" style="margin-top:12px">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F0FFF4;color:#16A34A"><i class="ph ph-cloud-arrow-up"></i></div>
+      <div>
+        <div class="mod-title">Next version — Multi-device sync</div>
+        <div class="mod-desc">Data shared across all devices at the same time. Works offline and syncs when internet comes back.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>How it will work:</b> each device keeps saving data locally. When internet is available, it syncs automatically to the cloud. If internet drops mid-shift, the system keeps running — it just syncs later.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>In practice:</b> sale made on the register computer → appears on the phone in seconds. Appointment created on the phone → appears on the reception computer. Everything in real time.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:12px">
+      <i class="ph ph-check-circle" style="color:#006B4F"></i>
+      <div><b>This feature is planned</b> and will be activated as soon as the current features are approved. No change in appearance or usage — data simply starts syncing between devices.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WHAT'S NEW ─── -->
+<div class="section">
+  <div class="section-label">What's new — Version 5</div>
+  <div class="new-grid">
+    <div class="new-card">
+      <div class="new-card-icon">💳</div>
+      <div>
+        <div class="new-card-title">Pay directly from the schedule</div>
+        <div class="new-card-desc">When a service is completed, the system opens payment right away. Choose Cash, Pix, Debit or Credit — receipt generated automatically.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🔍</div>
+      <div>
+        <div class="new-card-title">Service filter on schedule</div>
+        <div class="new-card-desc">Automatic filter chips with the day's services. Click "Bath" to see only baths, "Daycare" to see only daycare, etc.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📋</div>
+      <div>
+        <div class="new-card-title">Daily session history</div>
+        <div class="new-card-desc">📋 button on each package shows all days used and the value of each session. Answer client questions on the spot.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">📅</div>
+      <div>
+        <div class="new-card-title">Retroactive session with date</div>
+        <div class="new-card-desc">Forgot to log yesterday? No problem — choose the date when using the session. System warns if there's already a log for that day.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🗂️</div>
+      <div>
+        <div class="new-card-title">Packages with type and frequency</div>
+        <div class="new-card-desc">New package setup: Group (Daycare, Boarding, Bath/Grooming), Plan type (Monthly, Semi-annual) and weekly frequency for Daycare.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🚫</div>
+      <div>
+        <div class="new-card-title">Canceling a package clears the register</div>
+        <div class="new-card-desc">When a package is canceled, the financial entry from the purchase is removed automatically. Sessions already used remain in the history.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🔄</div>
+      <div>
+        <div class="new-card-title">Re-book after a service</div>
+        <div class="new-card-desc">After completing and paying, the system automatically asks "Schedule next visit?" Choose +7, +15 or +30 days — appointment created with one click, same pet and service.</div>
+      </div>
+    </div>
+    <div class="new-card">
+      <div class="new-card-icon">🧾</div>
+      <div>
+        <div class="new-card-title">Invoice button on every receipt</div>
+        <div class="new-card-desc">"Invoice" button appears on every receipt. The infrastructure is ready — it will be activated with the eNotas API Key without any changes to the system.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── HOW IT WORKS ─── -->
+<div class="section">
+  <div class="section-label">How the system works</div>
+  <div class="alert alert-blue" style="margin-top:0;border-radius:14px">
+    <i class="ph ph-squares-four" style="color:var(--brand)"></i>
+    <div>Everything is in the <b>side menu</b> — on mobile it appears as ☰. Each module handles one area of the pet shop. Numbers in red or yellow on the menu are live alerts: critical packages, pets checked in, etc.</div>
+  </div>
+</div>
+
+<!-- ─── SCHEDULE ─── -->
+<div class="section">
+  <div class="section-label">Schedule — the heart of the system</div>
+
+  <div class="mod highlight">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-calendar-check"></i></div>
+      <div>
+        <div class="mod-title">Schedule <span class="tag tag-new" style="font-size:11px;margin-left:6px"><i class="ph ph-sparkle"></i> Updated</span></div>
+        <div class="mod-desc">Visual grid from 7am to 8pm. Filter by status or by service. Pay directly from the appointment card.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Book appointment:</b> <span class="key">+ Schedule</span> → choose the owner → pet appears automatically → select the service → price fills in based on pet size.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Status filters:</b> tabs at the top — All, Scheduled, Confirmed, In Progress, Completed, Canceled.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Service filter:</b> a second row of chips appears automatically with the day's services — click to see only Bath, only Daycare, only Grooming, etc.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Check-in:</b> pet arrived? Click the <span class="key"><i class="ph ph-door-open"></i></span> button on the card — pet appears on the Check-in/Out screen.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Complete and pay:</b> service done? Click <span class="key">✓</span> → system opens payment right away. Choose the method and confirm → receipt generated automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Pay later:</b> closed the window without paying? The card keeps a <b style="color:#16A34A">💰</b> green button. Click it when the client pays.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Re-book on the spot:</b> after confirming payment, the system automatically asks "Schedule next visit?" Click <span class="key">+7 days</span>, <span class="key">+15 days</span> or <span class="key">+30 days</span> — appointment created with same pet, service and price. Or click <b>Other date</b> to pick a day on the calendar.</div>
+      </div>
+    </div>
+
+    <div class="status-row" style="margin-top:12px">
+      <div class="s-item"><div class="s-dot" style="background:#4047C8"></div><span><b>Scheduled</b> — blue</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#00C896"></div><span><b>Confirmed</b> — green</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#F5C218"></div><span><b>In Progress</b> — yellow</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#94A3B8"></div><span><b>Completed</b> — gray</span></div>
+      <div class="s-item"><div class="s-dot" style="background:#DC2626"></div><span><b>Canceled</b> — red</span></div>
+    </div>
+
+    <div class="alert alert-new">
+      <i class="ph ph-sparkle" style="color:#854D0E"></i>
+      <div><b>Full flow:</b>
+        <div class="flow">
+          <div class="flow-step">+ Schedule</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🚪 Check-in</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">✓ Complete</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">💳 Pay</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🧾 Receipt</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🔄 Re-book</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PACKAGES ─── -->
+<div class="section">
+  <div class="section-label">Packages & Plans</div>
+
+  <div class="mod highlight">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFFDE6;color:#856400"><i class="ph ph-ticket"></i></div>
+      <div>
+        <div class="mod-title">Packages & Plans <span class="tag tag-new" style="font-size:11px;margin-left:6px"><i class="ph ph-sparkle"></i> Updated</span></div>
+        <div class="mod-desc">Day packages for daycare, boarding, and recurring services. Each day used automatically adds revenue to the register.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Create a package:</b> <span class="key">+ New Package</span> → fill in the fields:</div>
+      </div>
+    </div>
+
+    <div class="col2">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-grid-four" style="color:var(--brand)"></i> Group</div>
+        Daycare · Boarding · Bath/Grooming · Aesthetics · Other
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-calendar" style="color:#856400"></i> Plan Type</div>
+        Monthly · Quarterly · Semi-annual · Annual · Single
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-repeat" style="color:#006B4F"></i> Frequency (Daycare)</div>
+        2× to 6× per week — only shown for the Daycare group
+      </div>
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-currency-dollar" style="color:#9A0050"></i> Deduction mode</div>
+        Manual (daycare/packages) or Automatic (boarding)
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:6px">
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Log a session with a date:</b> <span class="key">Use session</span> → choose the date → confirm. Works retroactively. If there's already a log for that day, the system warns you before creating another.</div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>View history:</b> click the <span class="key"><i class="ph ph-list-bullets"></i></span> button on any package — see all days used with date and value.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Progress bar:</b> <span style="color:var(--teal);font-weight:700">green</span> = fine · <span style="color:#F5C218;font-weight:700">yellow</span> = attention · <span style="color:var(--red);font-weight:700">red</span> = critical (fewer than 3 days left).</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Renew:</b> when running low, <span class="key">Renew</span> adds more credit without creating a new package.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Filters:</b> <span class="tag tag-green" style="font-size:12px">Active</span> <span class="tag tag-yellow" style="font-size:12px">⚠️ Critical</span> <span class="tag tag-gray" style="font-size:12px">All</span> <span class="tag tag-red" style="font-size:12px">Expired</span> <span class="tag tag-gray" style="font-size:12px">Canceled</span></div>
+      </div>
+      <div class="step">
+        <div class="step-num new">N</div>
+        <div><b>Cancel a package:</b> the ✕ button cancels the package <b>and removes the financial entry</b> from the purchase. Sessions already used remain in the history.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <i class="ph ph-warning" style="color:#856400"></i>
+      <div>The yellow number in the sidebar shows how many packages have fewer than 3 days left. <b>Check it every morning.</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CLIENTS ─── -->
+<div class="section">
+  <div class="section-label">Clients & Pets</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-paw-print"></i></div>
+      <div>
+        <div class="mod-title">Clients & Pets</div>
+        <div class="mod-desc">Complete registration for owners and animals. Phone, address, pet weight, and full service history.</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>New client:</b> <span class="key">+ New Client</span> → name, WhatsApp, ID, address → add the pet with breed, size, and weight in kg.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Pet size — always fill this in:</b> the system uses the size to calculate the price automatically when scheduling.</div>
+      </div>
+    </div>
+
+    <div class="porte-row">
+      <span class="porte-pill" style="background:#E5FFF8;border-color:#6EE7C7;color:#006B4F">Small — up to 22 lbs</span>
+      <span class="porte-pill" style="background:#ECEEFF;border-color:#C7D2FE;color:var(--brand)">Medium — 23–44 lbs</span>
+      <span class="porte-pill" style="background:#FFF0F8;border-color:#FBC8E2;color:#9A0050">Large — 45–66 lbs</span>
+      <span class="porte-pill" style="background:#FEF2F2;border-color:#FECACA;color:var(--red)">XL — over 66 lbs</span>
+    </div>
+
+    <div class="steps" style="margin-top:10px">
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Client packages:</b> click <span class="key">🎟 Packages</span> on the owner's card to view, create and log sessions directly.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><b>Pet history:</b> click on the pet to see all services performed and amounts charged.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── REGISTER ─── -->
+<div class="section">
+  <div class="section-label">Register & Finances</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#E5FFF8;color:#006B4F"><i class="ph ph-storefront"></i></div>
+      <div>
+        <div class="mod-title">Point of Sale / Register</div>
+        <div class="mod-desc">For counter sales without a scheduled appointment. Service with appointment → complete it through Schedule (enters the register automatically).</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><b>Walk-in service:</b> "Service" → choose → enter payment → <span class="key">Record Sale</span> → receipt opens automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><b>Product sale:</b> "Product" → choose item → price fills automatically → confirm. Inventory is deducted automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><b>Sell a package:</b> "Package / Plan" → client → total value and daily rate → confirm. Package is created automatically in Packages & Plans.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-new">
+      <i class="ph ph-receipt" style="color:#854D0E"></i>
+      <div><b>Automatic receipt:</b> every sale generates a receipt with three buttons — <span class="key"><i class="ph ph-file-text"></i> Invoice</span> to issue an electronic invoice, <span class="key"><i class="ph ph-printer"></i> Print / PDF</span> to send to the client, and <b>Close</b>. To reissue: Finances → receipt icon <i class="ph ph-receipt"></i> next to any entry.</div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-currency-dollar"></i></div>
+      <div>
+        <div class="mod-title">Finances</div>
+        <div class="mod-desc">Revenue enters automatically from Schedule and Packages. Two levels of access.</div>
+      </div>
+    </div>
+
+    <div class="col2">
+      <div class="info-box">
+        <div class="ib-title"><i class="ph ph-list-bullets"></i> Transactions</div>
+        Open access. Today's revenue. Any staff member can view.
+      </div>
+      <div class="info-box" style="border-color:#FECACA">
+        <div class="ib-title" style="color:var(--red)"><i class="ph ph-lock"></i> Management</div>
+        Password protected. Expenses, accounts payable/receivable, and real monthly balance.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="background:#FEF2F2;color:var(--red)">!</div>
+        <div><b>Set up password:</b> Settings → "Management Password" → set and save before using.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OTHER MODULES ─── -->
+<div class="section">
+  <div class="section-label">Other modules</div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#FFF0F8;color:#9A0050"><i class="ph ph-door-open"></i></div>
+      <div>
+        <div class="mod-title">Check-in / Check-out</div>
+        <div class="mod-desc">Panel showing who is at the pet shop right now. Pets appear here when Check-in is done from Schedule.</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div>Pet arrived? Schedule → <span class="key">🚪 Check-in</span> → appears on this screen.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Done? <span class="key">✓ Complete</span> here or in Schedule → payment opens automatically.</div></div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F0FFF4;color:#16A34A"><i class="ph ph-package"></i></div>
+      <div>
+        <div class="mod-title">Inventory</div>
+        <div class="mod-desc">Products and supplies. Alerts when stock falls below the minimum. Automatically deducted when services are completed.</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><b>Register:</b> <span class="key">+ Product</span> → name, quantity, minimum, purchase price and sale price.</div></div>
+      <div class="step"><div class="step-num">2</div><div><b>Supplies:</b> link products to services (e.g., shampoo to Bath) — deducted when the appointment is completed.</div></div>
+      <div class="step"><div class="step-num">3</div><div>Product in <b style="color:var(--red)">red</b> = below minimum → time to restock.</div></div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#F1F5F9;color:#64748B"><i class="ph ph-gear"></i></div>
+      <div>
+        <div class="mod-title">Settings — Services</div>
+        <div class="mod-desc">Service catalog with prices by size S/M/L/XL, linked supplies, and number of sessions included.</div>
+      </div>
+    </div>
+    <div class="porte-row">
+      <span class="porte-pill" style="background:#E5FFF8;border-color:#6EE7C7;color:#006B4F">S</span>
+      <span class="porte-pill" style="background:#ECEEFF;border-color:#C7D2FE;color:var(--brand)">M</span>
+      <span class="porte-pill" style="background:#FFF0F8;border-color:#FBC8E2;color:#9A0050">L</span>
+      <span class="porte-pill" style="background:#FEF2F2;border-color:#FECACA;color:var(--red)">XL</span>
+    </div>
+    <div class="alert alert-blue">
+      <i class="ph ph-info" style="color:var(--brand)"></i>
+      <div>The price by size fills automatically when scheduling. The system detects the pet's size and applies the correct value — including XL for animals over 66 lbs.</div>
+    </div>
+  </div>
+
+  <div class="mod">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:#ECEEFF;color:#4047C8"><i class="ph ph-users-three"></i></div>
+      <div>
+        <div class="mod-title">Staff</div>
+        <div class="mod-desc">Team with role and commission %. The system calculates based on completed services.</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><b>Register:</b> <span class="key">+ New Staff Member</span> → name, role, phone, and commission %.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Link when scheduling — counts toward the monthly commission.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── DAILY ROUTINE ─── -->
+<div class="section">
+  <div class="section-label">Recommended daily routine</div>
+  <div class="mod">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Start of day:</b> Dashboard → check critical package alerts → view today's Schedule.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Pet arrived:</b> Schedule → <span class="key">🚪 Check-in</span> → appears on Check-in/Out screen.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Service done:</b> Schedule → <span class="key">✓ Complete</span> → choose payment method → receipt generated.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Daycare/boarding pet (package):</b> Packages → <span class="key">Use session</span> → confirm the date → value enters the register automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>Walk-in counter sale:</b> Register → New Sale → type → record → receipt opens automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>View today's revenue:</b> Finances → Transactions tab (no password needed).</div>
+      </div>
+      <div class="step">
+        <div class="step-num check">✓</div>
+        <div><b>End of day:</b> Finances → Management → enter password → view real daily balance.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── QUICK TIPS ─── -->
+<div class="section">
+  <div class="section-label">Quick tips</div>
+  <div class="mod">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Global search:</b> search bar at the top finds any client by name or phone number from any screen.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Reissue a receipt:</b> Finances → receipt icon <i class="ph ph-receipt"></i> next to any revenue entry → print or PDF.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Session history:</b> Packages → list icon <i class="ph ph-list-bullets"></i> on the card → see all days with value.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Filter schedule by service:</b> dynamic chips below the status filters — they disappear when there are no appointments for that service today.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Multiple branches:</b> configure in Settings → the system filters dashboard, clients, and schedule by location.</div>
+      </div>
+      <div class="step">
+        <div class="step-num tip">💡</div>
+        <div><b>Works offline:</b> once installed on the phone, the entire system works without internet. Data is saved on the device.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── COMING SOON ─── -->
+<div class="section">
+  <div class="section-label">Coming soon</div>
+  <div class="soon-grid">
+    <div class="soon-card">
+      <div class="soon-card-icon">🧾</div>
+      <div>
+        <div class="soon-card-title">Electronic Invoice — almost ready <span style="font-size:11px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE68A;border-radius:8px;padding:2px 7px;margin-left:4px">Almost there</span></div>
+        <div class="soon-card-desc">Button already appears on every receipt. Infrastructure is 100% ready — once the eNotas API Key is configured, invoicing will work automatically with one click.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">☁️</div>
+      <div>
+        <div class="soon-card-title">Multi-device sync</div>
+        <div class="soon-card-desc">Data shared across phone, tablet, and computer in real time. Works offline and syncs when internet comes back.</div>
+      </div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-card-icon">💬</div>
+      <div>
+        <div class="soon-card-title">Automatic WhatsApp messages</div>
+        <div class="soon-card-desc">Appointment reminders, expiring package alerts, and reactivation messages sent automatically via the pet shop's WhatsApp.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="font-size:26px;margin-bottom:10px">🐾</div>
+  <div><b>Pets Go Control</b> — v5</div>
+  <div style="margin-top:6px">System developed specifically for your pet shop.</div>
+  <div style="margin-top:6px">Found something wrong or want an improvement? Send us a message.</div>
+</div>
+
+</div>
+</body>
+</html>
