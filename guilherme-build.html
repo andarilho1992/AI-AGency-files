@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Guilherme Andrade — Designer de Produto → Engenheiro de Produto</title>
+<meta name="description" content="9 anos como designer industrial. Aprendi a construir. Hoje desenvolvo produtos digitais completos — do conceito ao código — com IA."/>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0B09;
+  --surface:#161310;
+  --surface2:#1E1A15;
+  --border:rgba(255,255,255,0.07);
+  --accent:#E8734A;
+  --accent2:#C5A572;
+  --text:#F0EDE8;
+  --text2:#B8AFA6;
+  --muted:#6B5F55;
+  --green:#4ADE80;
+  --green-dim:#1A3325;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Satoshi',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+
+/* ── TYPOGRAPHY ── */
+h1,h2,h3,.display{font-family:'Clash Display',sans-serif;letter-spacing:-.03em;line-height:1.1}
+.display-xl{font-size:clamp(3.5rem,8vw,7rem);font-weight:700}
+.display-lg{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700}
+.display-md{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:600}
+.label{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* ── LAYOUT ── */
+.container{max-width:1160px;margin:0 auto;padding:0 24px}
+.container-narrow{max-width:760px;margin:0 auto;padding:0 24px}
+
+/* ── ENTRANCE ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp .7s cubic-bezier(.22,1,.36,1) forwards}
+.delay-1{animation-delay:.1s}
+.delay-2{animation-delay:.2s}
+.delay-3{animation-delay:.35s}
+.delay-4{animation-delay:.5s}
+.delay-5{animation-delay:.65s}
+@media(prefers-reduced-motion:reduce){.fade-up{opacity:1;animation:none}}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 0;border-bottom:1px solid transparent;transition:all .3s}
+nav.scrolled{background:rgba(13,11,9,.9);backdrop-filter:blur(12px);border-color:var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Clash Display',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);text-decoration:none;letter-spacing:-.02em}
+.nav-logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.lang-toggle{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 2px;display:flex;gap:2px}
+.lang-btn{border:none;background:transparent;padding:4px 10px;border-radius:16px;font-size:.75rem;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'Satoshi',sans-serif;letter-spacing:.04em}
+.lang-btn.active{background:var(--accent);color:#fff}
+.nav-cta{background:var(--accent);color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:.875rem;font-weight:700;cursor:pointer;font-family:'Satoshi',sans-serif;text-decoration:none;transition:background .2s}
+.nav-cta:hover{background:#D4622E}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(232,115,74,.08) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:28px}
+.hero-eyebrow i{color:var(--accent);font-size:14px}
+.hero-title{margin-bottom:24px}
+.hero-title .line-accent{color:var(--accent)}
+.hero-sub{font-size:1.1rem;color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:36px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{background:var(--accent);color:#fff;padding:13px 26px;border-radius:9px;font-size:.9rem;font-weight:700;text-decoration:none;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:#D4622E}
+.btn-secondary{background:transparent;color:var(--text2);padding:13px 26px;border-radius:9px;font-size:.9rem;font-weight:600;text-decoration:none;border:1px solid var(--border);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.hero-visual{position:relative}
+.hero-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative}
+.hero-card::before{content:'';position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(232,115,74,.05),transparent);pointer-events:none}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border:none;padding-bottom:0}
+.tl-dot{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px}
+.tl-year{font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:2px}
+.tl-title{font-family:'Clash Display',sans-serif;font-size:1rem;font-weight:600;margin-bottom:4px}
+.tl-desc{font-size:.8rem;color:var(--text2);line-height:1.5}
+.tl-tag{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:6px;letter-spacing:.04em}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:64px 0}
+.stat-item{background:var(--surface);padding:28px 24px;text-align:center}
+.stat-num{font-family:'Clash Display',sans-serif;font-size:2.2rem;font-weight:700;color:var(--accent);line-height:1}
+.stat-label{font-size:.75rem;color:var(--text2);margin-top:6px;line-height:1.4}
+
+/* ── SECTION ── */
+.section{padding:96px 0}
+.section-header{margin-bottom:52px}
+.section-line{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.section-line::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── PRODUCTS ── */
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;transition:border-color .2s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.product-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--card-accent),transparent);opacity:0;transition:opacity .3s}
+.product-card:hover{border-color:var(--card-accent)}
+.product-card:hover::before{opacity:1}
+.product-icon{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.product-name{font-family:'Clash Display',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:8px}
+.product-desc{font-size:.9rem;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.product-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.ptag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.04em}
+.product-link{font-size:.85rem;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.product-link i{font-size:14px;transition:transform .2s}
+.product-card:hover .product-link i{transform:translateX(4px)}
+
+/* ── SERVICES ── */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.service-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .2s}
+.service-card:hover{border-color:var(--accent)}
+.service-icon{font-size:28px;margin-bottom:16px;display:block}
+.service-title{font-family:'Clash Display',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.service-desc{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:16px}
+.service-items{list-style:none;display:flex;flex-direction:column;gap:6px}
+.service-items li{font-size:.8rem;color:var(--text2);display:flex;align-items:center;gap:8px}
+.service-items li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* ── STORY ── */
+.story-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:start}
+.story-text{font-size:1.05rem;color:var(--text2);line-height:1.8}
+.story-text p+p{margin-top:20px}
+.story-highlight{font-family:'Clash Display',sans-serif;font-size:1.5rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:28px}
+.journey-list{display:flex;flex-direction:column;gap:4px}
+.journey-item{display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;transition:border-color .2s}
+.journey-item:hover{border-color:var(--border)}
+.journey-flag{font-size:1.4rem;flex-shrink:0}
+.journey-title{font-family:'Clash Display',sans-serif;font-size:.95rem;font-weight:600;margin-bottom:3px}
+.journey-detail{font-size:.8rem;color:var(--text2)}
+
+/* ── CTA SECTION ── */
+.cta-section{padding:96px 0;text-align:center;position:relative}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(232,115,74,.06) 0%,transparent 70%);pointer-events:none}
+.cta-title{margin-bottom:16px}
+.cta-sub{font-size:1.1rem;color:var(--text2);margin-bottom:36px}
+.cta-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{padding:40px 0;border-top:1px solid var(--border)}
+.footer-inner{display:flex;align-items:center;justify-content:space-between}
+.footer-left{font-size:.85rem;color:var(--muted)}
+.footer-right{display:flex;gap:20px}
+.footer-link{font-size:.8rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-link:hover{color:var(--accent)}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-visual{display:none}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .products-grid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+  .story-grid{grid-template-columns:1fr;gap:40px}
+  .footer-inner{flex-direction:column;gap:16px;text-align:center}
+  .display-xl{font-size:clamp(2.8rem,8vw,4rem)}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .container{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">G<span>.</span>Andrade</a>
+      <div class="nav-right">
+        <div class="lang-toggle">
+          <button class="lang-btn active" onclick="setLang('pt')" id="btn-pt">PT</button>
+          <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+        </div>
+        <a href="#contato" class="nav-cta" data-pt="Vamos conversar" data-en="Let's talk">Vamos conversar</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow fade-up">
+          <i class="ph ph-map-pin"></i>
+          <span data-pt="Chiang Mai, Tailândia" data-en="Chiang Mai, Thailand">Chiang Mai, Tailândia</span>
+        </div>
+        <div class="hero-title display-xl fade-up delay-1">
+          <div data-pt="Eu projeto." data-en="I design.">Eu projeto.</div>
+          <div data-pt="Eu construo." data-en="I build.">Eu construo.</div>
+          <div class="line-accent" data-pt="Eu entrego." data-en="I ship.">Eu entrego.</div>
+        </div>
+        <p class="hero-sub fade-up delay-2" data-pt="9 anos como designer industrial. Aprendi a construir. Hoje desenvolvo produtos digitais completos — do conceito ao código — sozinho, com IA." data-en="9 years as an industrial designer. Then I learned to build. Now I develop complete digital products — from concept to code — solo, with AI.">
+          9 anos como designer industrial. Aprendi a construir. Hoje desenvolvo produtos digitais completos — do conceito ao código — sozinho, com IA.
+        </p>
+        <div class="hero-ctas fade-up delay-3">
+          <a href="#produtos" class="btn-primary">
+            <i class="ph ph-squares-four"></i>
+            <span data-pt="Ver produtos" data-en="See products">Ver produtos</span>
+          </a>
+          <a href="#servicos" class="btn-secondary">
+            <span data-pt="Trabalhar junto" data-en="Work together">Trabalhar junto</span>
+            <i class="ph ph-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual fade-up delay-4">
+        <div class="hero-card">
+          <div class="label" style="margin-bottom:20px" data-pt="Linha do tempo" data-en="Timeline">Linha do tempo</div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(101,163,13,.15);color:#65A30D"><i class="ph ph-graduation-cap"></i></div>
+              <div>
+                <div class="tl-year">2006 — 2015</div>
+                <div class="tl-title" data-pt="Designer Industrial" data-en="Industrial Designer">Designer Industrial</div>
+                <div class="tl-desc" data-pt="9 anos. Projetos nacionais e internacionais. Brasil e Suíça." data-en="9 years. National and international projects. Brazil and Switzerland.">9 anos. Projetos nacionais e internacionais. Brasil e Suíça.</div>
+                <span class="tl-tag" style="background:rgba(101,163,13,.1);color:#65A30D">🇧🇷 🇨🇭</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(232,115,74,.15);color:var(--accent)"><i class="ph ph-globe"></i></div>
+              <div>
+                <div class="tl-year">2015 — 2025</div>
+                <div class="tl-title" data-pt="Sistemas de Sobrevivência" data-en="Survival Systems">Sistemas de Sobrevivência</div>
+                <div class="tl-desc" data-pt="Pintor em Londres. Motorista e gerente de hostel na Suíça. Cada país, um sistema novo." data-en="Painter in London. Driver and hostel manager in Switzerland. Each country, a new system.">Pintor em Londres. Motorista e gerente de hostel na Suíça.</div>
+                <span class="tl-tag" style="background:rgba(232,115,74,.1);color:var(--accent)">🇬🇧 🇨🇭</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(197,165,114,.15);color:var(--accent2)"><i class="ph ph-cpu"></i></div>
+              <div>
+                <div class="tl-year">2026 →</div>
+                <div class="tl-title" data-pt="Engenheiro de Produto" data-en="Product Engineer">Engenheiro de Produto</div>
+                <div class="tl-desc" data-pt="Construindo sistemas digitais com IA. Da Tailândia, para o mundo." data-en="Building digital systems with AI. From Thailand, to the world.">Construindo sistemas digitais com IA. Da Tailândia, para o mundo.</div>
+                <span class="tl-tag" style="background:rgba(74,222,128,.1);color:var(--green)">🇹🇭 → 🌍</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="container fade-up delay-5">
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num">9</div>
+      <div class="stat-label" data-pt="anos como designer" data-en="years as designer">anos como designer</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1k+</div>
+      <div class="stat-label" data-pt="clientes importados" data-en="clients imported">clientes importados</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2</div>
+      <div class="stat-label" data-pt="produtos ativos" data-en="active products">produtos ativos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label" data-pt="países vividos" data-en="countries lived in">países vividos</div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="section" id="historia">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-line">
+        <span class="label" data-pt="História" data-en="Story">História</span>
+      </div>
+    </div>
+    <div class="story-grid">
+      <div>
+        <p class="story-highlight" data-pt="A maioria dos designers não sabe construir. A maioria dos engenheiros não sabe projetar. Eu aprendi os dois." data-en="Most designers can't build. Most engineers can't design. I learned both.">
+          A maioria dos designers não sabe construir. A maioria dos engenheiros não sabe projetar. Eu aprendi os dois.
+        </p>
+        <div class="story-text">
+          <p data-pt="Passei 9 anos como designer industrial no Brasil — projetos nacionais e internacionais, incluindo Suíça. Aprendi a ver o problema antes de pensar na solução. Depois saí do Brasil." data-en="I spent 9 years as an industrial designer in Brazil — national and international projects, including Switzerland. I learned to see the problem before thinking about the solution. Then I left Brazil.">
+            Passei 9 anos como designer industrial no Brasil — projetos nacionais e internacionais, incluindo Suíça. Aprendi a ver o problema antes de pensar na solução. Depois saí do Brasil.
+          </p>
+          <p data-pt="Trabalhei como pintor em Londres. Motorista e gerente de hostel na Suíça. Cada país era um sistema novo que precisava entrar, operar e extrair valor. Design industrial aplicado à sobrevivência." data-en="I worked as a painter in London. Driver and hostel manager in Switzerland. Each country was a new system I had to enter, operate and extract value from. Industrial design applied to survival.">
+            Trabalhei como pintor em Londres. Motorista e gerente de hostel na Suíça. Cada país era um sistema novo que precisava entrar, operar e extrair valor. Design industrial aplicado à sobrevivência.
+          </p>
+          <p data-pt="Hoje estou na Tailândia construindo o primeiro sistema que funciona independente da minha localização. Produtos digitais com IA. Do wireframe ao código rodando em produção." data-en="Now I'm in Thailand building the first system that works independent of my location. Digital products with AI. From wireframe to code running in production.">
+            Hoje estou na Tailândia construindo o primeiro sistema que funciona independente da minha localização. Produtos digitais com IA. Do wireframe ao código rodando em produção.
+          </p>
+        </div>
+      </div>
+      <div class="journey-list">
+        <div class="journey-item">
+          <div class="journey-flag">🇧🇷</div>
+          <div>
+            <div class="journey-title" data-pt="Brasil — Design Industrial" data-en="Brazil — Industrial Design">Brasil — Design Industrial</div>
+            <div class="journey-detail" data-pt="9 anos. Projetos nacionais e internacionais. Base técnica." data-en="9 years. National and international projects. Technical foundation.">9 anos. Projetos nacionais e internacionais. Base técnica.</div>
+          </div>
+        </div>
+        <div class="journey-item">
+          <div class="journey-flag">🇨🇭</div>
+          <div>
+            <div class="journey-title" data-pt="Suíça — Sistema 01 e 04" data-en="Switzerland — Systems 01 & 04">Suíça — Sistema 01 e 04</div>
+            <div class="journey-detail" data-pt="Motorista, jardineiro, gerente de hostel nos Alpes. Promovido a gerente em 3 meses." data-en="Driver, gardener, hostel manager in the Alps. Promoted to manager in 3 months.">Motorista, jardineiro, gerente de hostel nos Alpes.</div>
+          </div>
+        </div>
+        <div class="journey-item">
+          <div class="journey-flag">🇬🇧</div>
+          <div>
+            <div class="journey-title" data-pt="Londres — Sistema 02 e 05" data-en="London — Systems 02 & 05">Londres — Sistema 02 e 05</div>
+            <div class="journey-detail" data-pt="Pintor residencial (spray machine). 6 meses acumulando para o próximo sistema." data-en="Residential painter (spray machine). 6 months accumulating for the next system.">Pintor residencial (spray machine). 6 meses, duas vezes.</div>
+          </div>
+        </div>
+        <div class="journey-item" style="border-color:rgba(232,115,74,.3)">
+          <div class="journey-flag">🇹🇭</div>
+          <div>
+            <div class="journey-title" style="color:var(--accent)" data-pt="Tailândia — Sistema 06 (agora)" data-en="Thailand — System 06 (now)">Tailândia — Sistema 06 (agora)</div>
+            <div class="journey-detail" data-pt="Construindo. Digital. Com IA. Independente de localização. A aposta definitiva." data-en="Building. Digital. With AI. Location-independent. The definitive bet.">Construindo. Digital. Com IA. Independente de localização.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUTOS -->
+<section class="section" id="produtos" style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-line">
+        <span class="label" data-pt="Produtos" data-en="Products">Produtos</span>
+      </div>
+      <h2 class="display-md" data-pt="O que eu construí" data-en="What I built">O que eu construí</h2>
+    </div>
+    <div class="products-grid">
+      <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank" class="product-card" style="--card-accent:#16A34A">
+        <div class="product-icon" style="background:rgba(22,163,74,.15);color:#4ADE80"><i class="ph ph-paw-print"></i></div>
+        <div class="product-name">Pets Go Control</div>
+        <p class="product-desc" data-pt="Sistema de gestão completo para pet shops. Agenda, clientes, caixa, planos e estoque. Funciona como app, offline." data-en="Complete management system for pet shops. Scheduling, clients, POS, plans and stock. Works as app, offline.">
+          Sistema de gestão completo para pet shops. Agenda, clientes, caixa, planos e estoque. Funciona como app, offline.
+        </p>
+        <div class="product-tags">
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">PWA</span>
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">Offline</span>
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">NFS-e</span>
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">1.041 clientes</span>
+        </div>
+        <span class="product-link" style="color:#4ADE80">
+          <span data-pt="Ver demo ao vivo" data-en="See live demo">Ver demo ao vivo</span>
+          <i class="ph ph-arrow-right"></i>
+        </span>
+      </a>
+
+      <a href="https://andarilho-digital.pages.dev/nutri-control.html" target="_blank" class="product-card" style="--card-accent:#16A34A">
+        <div class="product-icon" style="background:rgba(22,163,74,.15);color:#4ADE80"><i class="ph ph-leaf"></i></div>
+        <div class="product-name">Nutri Control</div>
+        <p class="product-desc" data-pt="Sistema de gestão para nutricionistas. Pacientes, agenda, evolução de peso, exames laboratoriais e documentos PDF." data-en="Management system for nutritionists. Patients, scheduling, weight evolution, lab exams and PDF documents.">
+          Sistema de gestão para nutricionistas. Pacientes, agenda, evolução de peso, exames laboratoriais e documentos PDF.
+        </p>
+        <div class="product-tags">
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">PWA</span>
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">Transcrição de voz</span>
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">IMC/TMB auto</span>
+          <span class="ptag" style="background:rgba(22,163,74,.1);color:#4ADE80">PDF</span>
+        </div>
+        <span class="product-link" style="color:#4ADE80">
+          <span data-pt="Ver demo ao vivo" data-en="See live demo">Ver demo ao vivo</span>
+          <i class="ph ph-arrow-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="section" id="servicos" style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-line">
+        <span class="label" data-pt="Serviços" data-en="Services">Serviços</span>
+      </div>
+      <h2 class="display-md" data-pt="O que eu faço para clientes" data-en="What I do for clients">O que eu faço para clientes</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon"><i class="ph ph-layout" style="color:var(--accent)"></i></span>
+        <div class="service-title" data-pt="Sistema de Gestão Customizado" data-en="Custom Management System">Sistema de Gestão Customizado</div>
+        <p class="service-desc" data-pt="CRM, agenda, financeiro, estoque — o que o seu negócio precisa. Construído do zero, para a sua operação específica." data-en="CRM, scheduling, finance, stock — what your business needs. Built from scratch, for your specific operation.">
+          CRM, agenda, financeiro, estoque — o que o seu negócio precisa. Construído do zero, para a sua operação específica.
+        </p>
+        <ul class="service-items">
+          <li data-pt="Single-file, sem servidor mensal" data-en="Single-file, no monthly server">Single-file, sem servidor mensal</li>
+          <li data-pt="Funciona offline como app" data-en="Works offline as app">Funciona offline como app</li>
+          <li data-pt="Entrega em semanas, não meses" data-en="Delivered in weeks, not months">Entrega em semanas, não meses</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-icon"><i class="ph ph-robot" style="color:var(--accent2)"></i></span>
+        <div class="service-title" data-pt="Integração com IA" data-en="AI Integration">Integração com IA</div>
+        <p class="service-desc" data-pt="Automação de processos, agentes de IA, workflows. Conecta o que você já usa com inteligência artificial." data-en="Process automation, AI agents, workflows. Connects what you already use with artificial intelligence.">
+          Automação de processos, agentes de IA, workflows. Conecta o que você já usa com inteligência artificial.
+        </p>
+        <ul class="service-items">
+          <li data-pt="Agentes WhatsApp" data-en="WhatsApp agents">Agentes WhatsApp</li>
+          <li data-pt="Automação n8n/Make" data-en="n8n/Make automation">Automação n8n/Make</li>
+          <li data-pt="Integração com APIs externas" data-en="External API integration">Integração com APIs externas</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-icon"><i class="ph ph-package" style="color:var(--green)"></i></span>
+        <div class="service-title" data-pt="Produto Digital Completo" data-en="Complete Digital Product">Produto Digital Completo</div>
+        <p class="service-desc" data-pt="Do conceito ao ar. Design, código e deploy. Uma pessoa que faz os dois elimina o gap entre o que foi projetado e o que foi construído." data-en="From concept to live. Design, code and deploy. One person doing both eliminates the gap between what was designed and what was built.">
+          Do conceito ao ar. Design, código e deploy. Uma pessoa que faz os dois elimina o gap entre o que foi projetado e o que foi construído.
+        </p>
+        <ul class="service-items">
+          <li data-pt="Wireframe → protótipo → produção" data-en="Wireframe → prototype → production">Wireframe → protótipo → produção</li>
+          <li data-pt="Design system incluído" data-en="Design system included">Design system incluído</li>
+          <li data-pt="Suporte e evolução contínua" data-en="Continuous support and evolution">Suporte e evolução contínua</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contato">
+  <div class="container-narrow" style="position:relative;z-index:1">
+    <span class="label" data-pt="Contato" data-en="Contact">Contato</span>
+    <h2 class="display-lg cta-title" style="margin-top:16px" data-pt="Vamos construir algo." data-en="Let's build something.">Vamos construir algo.</h2>
+    <p class="cta-sub" data-pt="Tem um problema que um sistema bem feito resolve? Me conta." data-en="Have a problem that a well-built system solves? Tell me.">
+      Tem um problema que um sistema bem feito resolve? Me conta.
+    </p>
+    <div class="cta-links">
+      <a href="mailto:braziliangui1992@gmail.com" class="btn-primary">
+        <i class="ph ph-envelope"></i>
+        <span>Email</span>
+      </a>
+      <a href="https://wa.me/5551995478349" class="btn-secondary" target="_blank">
+        <i class="ph ph-whatsapp-logo"></i>
+        <span>WhatsApp</span>
+      </a>
+      <a href="https://www.youtube.com/@umforasteiro" class="btn-secondary" target="_blank">
+        <i class="ph ph-youtube-logo"></i>
+        <span>Um Forasteiro</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left" data-pt="© 2026 Guilherme Andrade. Construído em Chiang Mai." data-en="© 2026 Guilherme Andrade. Built in Chiang Mai.">
+        © 2026 Guilherme Andrade. Construído em Chiang Mai.
+      </div>
+      <div class="footer-right">
+        <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" class="footer-link" target="_blank">Pets Go Control</a>
+        <a href="https://andarilho-digital.pages.dev/nutri-control.html" class="footer-link" target="_blank">Nutri Control</a>
+        <a href="https://www.youtube.com/@umforasteiro" class="footer-link" target="_blank">Um Forasteiro</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── LANGUAGE TOGGLE ──────────────────────────────────────────────
+let currentLang = 'pt'
+
+function setLang(lang) {
+  currentLang = lang
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en'
+  document.getElementById('btn-pt').classList.toggle('active', lang === 'pt')
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en')
+
+  document.querySelectorAll('[data-pt]').forEach(el => {
+    el.textContent = el.dataset[lang]
+  })
+}
+
+// ── NAV SCROLL ────────────────────────────────────────────────────
+const nav = document.getElementById('nav')
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40)
+}, { passive: true })
+
+// ── INTERSECTION OBSERVER for scroll animations ────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running'
+      observer.unobserve(entry.target)
+    }
+  })
+}, { threshold: 0.1 })
+
+document.querySelectorAll('.fade-up').forEach(el => {
+  el.style.animationPlayState = 'paused'
+  observer.observe(el)
+})
+</script>
+</body>
+</html>

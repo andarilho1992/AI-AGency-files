@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pets Go Control — CRM para Pet Shop</title>
+  <meta name="description" content="Agenda, clientes, caixa e planos num só lugar. O sistema de gestão completo para pet shops. Funciona como app no celular. Sem mensalidade de servidor." />
+
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600&f[]=satoshi@400,500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0A0F0A;
+      --surface: #111811;
+      --surface2: #182018;
+      --border: rgba(255,255,255,0.07);
+      --green: #16A34A;
+      --accent: #4ADE80;
+      --text: #F0F5F0;
+      --muted: #6B8F6B;
+      --font-display: 'Clash Display', system-ui, sans-serif;
+      --font-body: 'Satoshi', system-ui, sans-serif;
+      --max: 1200px;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─── ENTRANCE ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .anim {
+        opacity: 0;
+        animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      .anim-1 { animation-delay: 0.05s; }
+      .anim-2 { animation-delay: 0.15s; }
+      .anim-3 { animation-delay: 0.25s; }
+      .anim-4 { animation-delay: 0.35s; }
+      .anim-5 { animation-delay: 0.45s; }
+      .anim-6 { animation-delay: 0.55s; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim { opacity: 1; animation: none; }
+    }
+
+    /* ─── LAYOUT ─── */
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 96px 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 10, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo i {
+      font-size: 1.35rem;
+      color: var(--accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #15803d;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .btn-large {
+      padding: 14px 32px;
+      font-size: 1rem;
+      border-radius: 10px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 96px 0 80px;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge i {
+      font-size: 0.85rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── HERO VISUAL ─── */
+    .hero-visual {
+      position: relative;
+    }
+
+    .mock-window {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .mock-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .mock-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .mock-dot.red   { background: #FF5F57; }
+    .mock-dot.yellow { background: #FEBC2E; }
+    .mock-dot.green { background: #28C840; }
+
+    .mock-title {
+      margin-left: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .mock-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mock-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+    }
+
+    .mock-topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .mock-topbar-logo i {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .mock-badge-filial {
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(22, 163, 74, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(22, 163, 74, 0.25);
+    }
+
+    .mock-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mock-stat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+
+    .mock-stat-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mock-stat-value {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .mock-stat-value.green { color: var(--accent); }
+
+    .mock-agenda-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+    }
+
+    .mock-agenda-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .mock-agenda-info {
+      flex: 1;
+    }
+
+    .mock-agenda-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .mock-agenda-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .mock-agenda-time {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .mock-glow {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── SECTION HEADER ─── */
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    .section-header {
+      margin-bottom: 56px;
+    }
+
+    /* ─── DORES ─── */
+    .dores {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dores-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .dor-card {
+      background: var(--surface);
+      padding: 40px 36px;
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dor-card:last-child {
+      border-right: none;
+    }
+
+    .dor-before {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #ef4444;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dor-problem {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .dor-divider {
+      width: 32px;
+      height: 2px;
+      background: var(--green);
+      margin-bottom: 20px;
+    }
+
+    .dor-after {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dor-solution {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .dor-accent-bg {
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.06) 0%, transparent 70%);
+    }
+
+    /* ─── MODULES BENTO ─── */
+    .modules-section {
+      background: var(--bg);
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .bento-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.25s ease, background 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bento-card:hover {
+      border-color: rgba(74, 222, 128, 0.2);
+      background: var(--surface2);
+    }
+
+    .bento-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .bento-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Bento layout: 8 cards across 12 cols */
+    .bento-card:nth-child(1) { grid-column: span 5; }
+    .bento-card:nth-child(2) { grid-column: span 7; }
+    .bento-card:nth-child(3) { grid-column: span 4; }
+    .bento-card:nth-child(4) { grid-column: span 4; }
+    .bento-card:nth-child(5) { grid-column: span 4; }
+    .bento-card:nth-child(6) { grid-column: span 6; }
+    .bento-card:nth-child(7) { grid-column: span 6; }
+    .bento-card:nth-child(8) { grid-column: span 12; }
+
+    .bento-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(22, 163, 74, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: var(--accent);
+      font-size: 1.3rem;
+    }
+
+    .bento-card-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .bento-card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .bento-card:nth-child(8) {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 28px 36px;
+    }
+
+    .bento-card:nth-child(8) .bento-icon {
+      margin-bottom: 0;
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      font-size: 1.5rem;
+    }
+
+    .bento-card:nth-child(8) .bento-text {
+      flex: 1;
+    }
+
+    .bento-card:nth-child(8) .bento-card-title {
+      margin-bottom: 4px;
+    }
+
+    .pwa-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* ─── PWA SECTION ─── */
+    .pwa-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pwa-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .pwa-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pwa-platform-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .pwa-platform-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .pwa-platform-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(22, 163, 74, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .pwa-platform-name {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .pwa-platform-browser {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .pwa-step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pwa-step-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .pwa-step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(22, 163, 74, 0.15);
+      color: var(--accent);
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .offline-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(74, 222, 128, 0.05);
+      border: 1px solid rgba(74, 222, 128, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 20px;
+    }
+
+    .offline-note i {
+      color: var(--accent);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── NUMBERS ─── */
+    .numbers-section {
+      background: var(--bg);
+    }
+
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .number-card {
+      background: var(--surface);
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .number-card:last-child {
+      border-right: none;
+    }
+
+    .number-value {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .number-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .numbers-note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .numbers-note i {
+      color: var(--green);
+      font-size: 0.9rem;
+    }
+
+    /* ─── NFSe ─── */
+    .nfse-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nfse-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .nfse-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nfse-coming-soon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .nfse-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba(22, 163, 74, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .nfse-card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.015em;
+    }
+
+    .nfse-card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .nfse-progress {
+      margin-top: 24px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .nfse-progress-bar {
+      height: 100%;
+      width: 72%;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      border-radius: 100px;
+    }
+
+    .nfse-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .nfse-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .nfse-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+
+    .check-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .check-done {
+      background: rgba(22, 163, 74, 0.15);
+      color: var(--accent);
+    }
+
+    .check-pending {
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .check-label-done {
+      color: var(--text);
+    }
+
+    .check-label-pending {
+      color: var(--muted);
+    }
+
+    /* ─── CTA FINAL ─── */
+    .cta-section {
+      background: var(--bg);
+      text-align: center;
+    }
+
+    .cta-inner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 80px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(22, 163, 74, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner .section-title {
+      max-width: 600px;
+      margin: 0 auto 16px;
+    }
+
+    .cta-inner .section-sub {
+      max-width: 480px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+
+    .cta-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .cta-contact {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .cta-contact a {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .cta-contact a:hover {
+      text-decoration: underline;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding: 32px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .footer-logo i {
+      color: var(--accent);
+    }
+
+    .footer-by {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .dores-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dor-card {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .dor-card:last-child {
+        border-bottom: none;
+      }
+
+      .bento-card:nth-child(1),
+      .bento-card:nth-child(2),
+      .bento-card:nth-child(3),
+      .bento-card:nth-child(4),
+      .bento-card:nth-child(5),
+      .bento-card:nth-child(6),
+      .bento-card:nth-child(7) {
+        grid-column: span 6;
+      }
+
+      .bento-card:nth-child(8) {
+        grid-column: span 12;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .bento-card:nth-child(8) .pwa-badge {
+        margin-left: 0;
+      }
+
+      .pwa-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .numbers-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .number-card:nth-child(2) { border-right: none; }
+      .number-card:nth-child(3) { border-top: 1px solid var(--border); }
+      .number-card:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+
+      .nfse-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .cta-inner {
+        padding: 56px 28px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding: 64px 0;
+      }
+
+      .hero {
+        padding: 60px 0 48px;
+      }
+
+      .pwa-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-card:nth-child(1),
+      .bento-card:nth-child(2),
+      .bento-card:nth-child(3),
+      .bento-card:nth-child(4),
+      .bento-card:nth-child(5),
+      .bento-card:nth-child(6),
+      .bento-card:nth-child(7) {
+        grid-column: span 12;
+      }
+
+      .numbers-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <i class="ph-bold ph-paw-print"></i>
+        Pets Go Control
+      </a>
+      <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank" rel="noopener" class="btn btn-primary">
+        Ver demonstração
+        <i class="ph-bold ph-arrow-right"></i>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-badge anim anim-1">
+            <i class="ph-fill ph-circle" style="font-size: 0.5rem;"></i>
+            Sistema em operação real
+          </div>
+          <h1 class="anim anim-2">
+            O seu pet shop<br />
+            organizado.<br />
+            <span>Finalmente.</span>
+          </h1>
+          <p class="hero-sub anim anim-3">
+            Agenda, clientes, caixa e planos num só lugar. Funciona como app no celular. Sem mensalidade de servidor.
+          </p>
+          <div class="hero-ctas anim anim-4">
+            <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank" rel="noopener" class="btn btn-primary btn-large">
+              <i class="ph-bold ph-play"></i>
+              Ver demo ao vivo
+            </a>
+            <a href="https://andarilho-digital.pages.dev/petsgo-manual.html" target="_blank" rel="noopener" class="btn btn-secondary btn-large">
+              <i class="ph-bold ph-book-open"></i>
+              Ver manual
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual anim anim-5">
+          <div class="mock-glow"></div>
+          <div class="mock-window">
+            <div class="mock-titlebar">
+              <div class="mock-dot red"></div>
+              <div class="mock-dot yellow"></div>
+              <div class="mock-dot green"></div>
+              <span class="mock-title">Pets Go Control — Dashboard</span>
+            </div>
+            <div class="mock-body">
+              <div class="mock-topbar">
+                <div class="mock-topbar-logo">
+                  <i class="ph-bold ph-paw-print"></i>
+                  Pets Go Control
+                </div>
+                <div class="mock-badge-filial">Filial Centro</div>
+              </div>
+
+              <div class="mock-grid">
+                <div class="mock-stat">
+                  <div class="mock-stat-label">Caixa hoje</div>
+                  <div class="mock-stat-value green">R$1.240</div>
+                </div>
+                <div class="mock-stat">
+                  <div class="mock-stat-label">Agendamentos</div>
+                  <div class="mock-stat-value">14</div>
+                </div>
+                <div class="mock-stat">
+                  <div class="mock-stat-label">Tutores</div>
+                  <div class="mock-stat-value">1.041</div>
+                </div>
+                <div class="mock-stat">
+                  <div class="mock-stat-label">Pets ativos</div>
+                  <div class="mock-stat-value">1.382</div>
+                </div>
+              </div>
+
+              <div style="font-size: 0.7rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 0 2px;">Agenda — Hoje</div>
+
+              <div class="mock-agenda-row">
+                <div class="mock-agenda-dot" style="background: var(--accent);"></div>
+                <div class="mock-agenda-info">
+                  <div class="mock-agenda-name">Bolinha — Banho e Tosa</div>
+                  <div class="mock-agenda-sub">Tutor: Maria S. · Poodle</div>
+                </div>
+                <div class="mock-agenda-time">09:00</div>
+              </div>
+
+              <div class="mock-agenda-row">
+                <div class="mock-agenda-dot" style="background: #FACC15;"></div>
+                <div class="mock-agenda-info">
+                  <div class="mock-agenda-name">Thor — Banho</div>
+                  <div class="mock-agenda-sub">Tutor: Carlos R. · Golden</div>
+                </div>
+                <div class="mock-agenda-time">10:30</div>
+              </div>
+
+              <div class="mock-agenda-row">
+                <div class="mock-agenda-dot" style="background: var(--muted);"></div>
+                <div class="mock-agenda-info">
+                  <div class="mock-agenda-name">Mel — Tosa Higiênica</div>
+                  <div class="mock-agenda-sub">Tutor: Ana P. · Shih-tzu</div>
+                </div>
+                <div class="mock-agenda-time">14:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DORES ─── -->
+  <section class="dores">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Problemas reais</div>
+        <h2 class="section-title">Reconhece algum desses?</h2>
+        <p class="section-sub">A maioria dos pet shops ainda opera no caos. O Pets Go Control resolve isso de vez.</p>
+      </div>
+      <div class="dores-grid">
+        <div class="dor-card">
+          <div class="dor-before">
+            <i class="ph-bold ph-x-circle"></i> Antes
+          </div>
+          <div class="dor-problem">"Agendamento no papel ou WhatsApp"</div>
+          <div class="dor-divider"></div>
+          <div class="dor-after">
+            <i class="ph-bold ph-check-circle"></i> Depois
+          </div>
+          <div class="dor-solution">Tudo na agenda digital, sem conflito de horário. Grade visual de 7h às 20h, com check-in e reagendamento em um clique.</div>
+          <div class="dor-accent-bg"></div>
+        </div>
+        <div class="dor-card">
+          <div class="dor-before">
+            <i class="ph-bold ph-x-circle"></i> Antes
+          </div>
+          <div class="dor-problem">"Não sabe quanto entrou no mês"</div>
+          <div class="dor-divider"></div>
+          <div class="dor-after">
+            <i class="ph-bold ph-check-circle"></i> Depois
+          </div>
+          <div class="dor-solution">Financeiro em tempo real, com senha gerencial. Saldo, entradas e saídas num painel simples. Sem planilha.</div>
+          <div class="dor-accent-bg"></div>
+        </div>
+        <div class="dor-card">
+          <div class="dor-before">
+            <i class="ph-bold ph-x-circle"></i> Antes
+          </div>
+          <div class="dor-problem">"Cliente sumiu e você não sabe por quê"</div>
+          <div class="dor-divider"></div>
+          <div class="dor-after">
+            <i class="ph-bold ph-check-circle"></i> Depois
+          </div>
+          <div class="dor-solution">Histórico completo de cada pet e tutor. Último serviço, raça, endereço, CPF. Tudo acessível em segundos.</div>
+          <div class="dor-accent-bg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MÓDULOS ─── -->
+  <section class="modules-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Funcionalidades</div>
+        <h2 class="section-title">Tudo que o seu pet shop precisa</h2>
+        <p class="section-sub">Oito módulos integrados, num único sistema. Sem integrar API de terceiro, sem plano separado por módulo.</p>
+      </div>
+      <div class="bento">
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-calendar-check"></i></div>
+          <div class="bento-card-title">Agenda</div>
+          <div class="bento-card-desc">Grade visual das 7h às 20h. Check-in, pagamento e reagendamento em um clique. Sem conflito de horário.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-paw-print"></i></div>
+          <div class="bento-card-title">Clientes &amp; Pets</div>
+          <div class="bento-card-desc">Cadastro com CPF, endereço, histórico completo de serviços e raça. Busca instantânea por nome ou tutor. 1.041 clientes já importados em produção.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-storefront"></i></div>
+          <div class="bento-card-title">PDV / Caixa</div>
+          <div class="bento-card-desc">Serviços, produtos e planos. Recibo automático em toda venda.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-currency-dollar"></i></div>
+          <div class="bento-card-title">Financeiro</div>
+          <div class="bento-card-desc">Movimento liberado, gerencial com senha. Saldo em tempo real.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-package"></i></div>
+          <div class="bento-card-title">Estoque</div>
+          <div class="bento-card-desc">Alerta de mínimo. Descontado automaticamente ao concluir serviços.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-ticket"></i></div>
+          <div class="bento-card-title">Planos &amp; Pacotes</div>
+          <div class="bento-card-desc">Diárias com abate automático. Barra de progresso por plano contratado. Ideal para planos mensais de banho.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-users-three"></i></div>
+          <div class="bento-card-title">Funcionários</div>
+          <div class="bento-card-desc">Comissão por serviço calculada automaticamente. Controle de acesso por perfil.</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-icon"><i class="ph-bold ph-device-mobile"></i></div>
+          <div class="bento-text">
+            <div class="bento-card-title">Instala como app no celular</div>
+            <div class="bento-card-desc">Funciona offline após instalação. Android e iPhone. Sem baixar da loja. Sem assinatura de servidor.</div>
+          </div>
+          <div class="pwa-badge">
+            <i class="ph-bold ph-wifi-slash"></i>
+            Funciona offline
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PWA / INSTALL ─── -->
+  <section class="pwa-section">
+    <div class="container">
+      <div class="pwa-inner">
+        <div>
+          <div class="section-label">Instalação</div>
+          <h2 class="section-title">Instala no celular como app</h2>
+          <p class="section-sub" style="margin-bottom: 0;">Funciona sem internet após instalado. Seus dados ficam no dispositivo, sem depender de servidor. Android e iPhone.</p>
+          <div class="offline-note">
+            <i class="ph-bold ph-wifi-slash"></i>
+            <span>Sem internet, sem problema. O sistema continua funcionando normalmente após a primeira instalação.</span>
+          </div>
+        </div>
+        <div class="pwa-steps">
+          <div class="pwa-platform-card">
+            <div class="pwa-platform-header">
+              <div class="pwa-platform-icon"><i class="ph-bold ph-android-logo"></i></div>
+              <div>
+                <div class="pwa-platform-name">Android</div>
+                <div class="pwa-platform-browser">Chrome</div>
+              </div>
+            </div>
+            <ul class="pwa-step-list">
+              <li>
+                <span class="pwa-step-num">1</span>
+                Abra o sistema no Chrome
+              </li>
+              <li>
+                <span class="pwa-step-num">2</span>
+                Toque no menu (⋮) no canto superior direito
+              </li>
+              <li>
+                <span class="pwa-step-num">3</span>
+                Selecione "Adicionar à tela inicial"
+              </li>
+              <li>
+                <span class="pwa-step-num">4</span>
+                Confirme e abra como app
+              </li>
+            </ul>
+          </div>
+          <div class="pwa-platform-card">
+            <div class="pwa-platform-header">
+              <div class="pwa-platform-icon"><i class="ph-bold ph-apple-logo"></i></div>
+              <div>
+                <div class="pwa-platform-name">iPhone</div>
+                <div class="pwa-platform-browser">Safari</div>
+              </div>
+            </div>
+            <ul class="pwa-step-list">
+              <li>
+                <span class="pwa-step-num">1</span>
+                Abra o sistema no Safari
+              </li>
+              <li>
+                <span class="pwa-step-num">2</span>
+                Toque no ícone de compartilhar (↑)
+              </li>
+              <li>
+                <span class="pwa-step-num">3</span>
+                Selecione "Adicionar à Tela de Início"
+              </li>
+              <li>
+                <span class="pwa-step-num">4</span>
+                Toque em "Adicionar" e abra como app
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NÚMEROS ─── -->
+  <section class="numbers-section">
+    <div class="container">
+      <div class="section-header" style="text-align: center;">
+        <div class="section-label" style="text-align: center;">Prova social</div>
+        <h2 class="section-title" style="text-align: center; margin: 0 auto 16px;">Em operação real</h2>
+        <p class="section-sub" style="text-align: center; margin: 0 auto;">Não é demo de portfólio. Esses são dados reais de um negócio em funcionamento.</p>
+      </div>
+      <div class="numbers-grid">
+        <div class="number-card">
+          <div class="number-value">1.041</div>
+          <div class="number-label">tutores importados</div>
+        </div>
+        <div class="number-card">
+          <div class="number-value">1.382</div>
+          <div class="number-label">pets cadastrados</div>
+        </div>
+        <div class="number-card">
+          <div class="number-value">4</div>
+          <div class="number-label">filiais ativas</div>
+        </div>
+        <div class="number-card">
+          <div class="number-value">Abr<span style="font-size: 1.8rem;">'26</span></div>
+          <div class="number-label">em produção desde</div>
+        </div>
+      </div>
+      <div class="numbers-note">
+        <i class="ph-fill ph-seal-check"></i>
+        Em operação real desde abril de 2026
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NFS-e ─── -->
+  <section class="nfse-section">
+    <div class="container">
+      <div class="nfse-inner">
+        <div>
+          <div class="section-label">Integração fiscal</div>
+          <h2 class="section-title">Nota fiscal pronta para ativar</h2>
+          <p class="section-sub" style="margin-bottom: 32px;">A infraestrutura de emissão de NFS-e já está no ar. A integração com o eNotas aguarda apenas a configuração final da chave de API.</p>
+          <ul class="nfse-checklist">
+            <li>
+              <div class="check-icon check-done"><i class="ph-bold ph-check"></i></div>
+              <span class="check-label-done">Worker de emissão no Cloudflare</span>
+            </li>
+            <li>
+              <div class="check-icon check-done"><i class="ph-bold ph-check"></i></div>
+              <span class="check-label-done">Estrutura de dados da NFS-e mapeada</span>
+            </li>
+            <li>
+              <div class="check-icon check-done"><i class="ph-bold ph-check"></i></div>
+              <span class="check-label-done">Botão "Emitir nota" no PDV pronto</span>
+            </li>
+            <li>
+              <div class="check-icon check-pending"><i class="ph-bold ph-clock"></i></div>
+              <span class="check-label-pending">Chave de API eNotas (em breve)</span>
+            </li>
+          </ul>
+        </div>
+        <div class="nfse-card">
+          <div class="nfse-coming-soon">Em breve</div>
+          <div class="nfse-icon"><i class="ph-bold ph-file-text"></i></div>
+          <div class="nfse-card-title">NFS-e automática a cada venda</div>
+          <div class="nfse-card-desc">
+            Emissão direta do PDV. Sem copiar e colar dados. Sem abrir outro sistema. A nota sai junto com o recibo, no mesmo clique.
+          </div>
+          <div class="nfse-progress">
+            <div class="nfse-progress-bar"></div>
+          </div>
+          <div class="nfse-progress-label">
+            <span>Infraestrutura concluída</span>
+            <span>72%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA FINAL ─── -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-glow"></div>
+        <h2 class="section-title">Quero conhecer o sistema</h2>
+        <p class="section-sub">Acesse a demo ao vivo e explore o sistema completo agora mesmo. Sem cadastro, sem cartão.</p>
+        <div class="cta-buttons">
+          <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank" rel="noopener" class="btn btn-primary btn-large">
+            <i class="ph-bold ph-play"></i>
+            Acessar demo ao vivo
+          </a>
+          <a href="https://andarilho-digital.pages.dev/petsgo-manual.html" target="_blank" rel="noopener" class="btn btn-secondary btn-large">
+            <i class="ph-bold ph-book-open"></i>
+            Ver manual completo
+          </a>
+        </div>
+        <div class="cta-contact">
+          Prefere conversar? <a href="https://wa.me/5551999999999?text=Olá,%20quero%20saber%20mais%20sobre%20o%20Pets%20Go%20Control" target="_blank" rel="noopener">Fale pelo WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">
+            <i class="ph-bold ph-paw-print"></i>
+            Pets Go Control
+          </div>
+          <div class="footer-by">desenvolvido por Guilherme Andrade</div>
+        </div>
+        <div class="footer-links">
+          <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank" rel="noopener">Demo</a>
+          <a href="https://andarilho-digital.pages.dev/petsgo-manual.html" target="_blank" rel="noopener">Manual</a>
+          <a href="https://wa.me/5551999999999?text=Olá,%20quero%20saber%20mais%20sobre%20o%20Pets%20Go%20Control" target="_blank" rel="noopener">Contato</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
