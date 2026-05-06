@@ -350,17 +350,25 @@ footer a{color:rgba(255,255,255,.7);text-decoration:underline}
   .pwa-grid{grid-template-columns:1fr}
 }
 @media(max-width:600px){
-  section{padding:60px 0}
-  .hero{padding:72px 0 60px}
-  .hero h1{font-size:36px}
+  section{padding:56px 0}
+  .wrap{padding:0 16px}
+  .hero{padding:64px 0 52px}
+  .hero h1{font-size:clamp(28px,8vw,38px)}
+  .hero-sub{font-size:15px}
   .bento{grid-template-columns:1fr}
   .bento-card.wide{grid-column:auto}
   .cats-grid{grid-template-columns:1fr}
   .semaforo-row{flex-direction:column}
   .pain-grid{grid-template-columns:1fr}
   .docs-grid{grid-template-columns:1fr}
-  .hero-actions{flex-direction:column;align-items:center}
+  .hero-actions{flex-direction:column;align-items:stretch}
   .btn-lg{width:100%;justify-content:center}
+  .nav-logo span{display:none}
+}
+
+@media(max-width:400px){
+  .hero h1{font-size:26px}
+  .btn-lg{padding:14px 20px}
 }
 </style>
 </head>

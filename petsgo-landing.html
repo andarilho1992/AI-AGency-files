@@ -1089,11 +1089,33 @@
 
     @media (max-width: 600px) {
       section {
-        padding: 64px 0;
+        padding: 56px 0;
+      }
+
+      .container {
+        padding: 0 16px;
       }
 
       .hero {
-        padding: 60px 0 48px;
+        padding: 56px 0 44px;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.9rem, 8vw, 2.6rem);
+      }
+
+      .hero-sub {
+        font-size: 1rem;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-large {
+        width: 100%;
+        justify-content: center;
       }
 
       .pwa-steps {
@@ -1122,6 +1144,16 @@
       .footer-links {
         justify-content: center;
       }
+    }
+
+    @media (max-width: 400px) {
+      .numbers-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .number-card:nth-child(2) { border-right: none; border-top: 1px solid var(--border); }
+      .number-card:nth-child(3) { border-top: 1px solid var(--border); }
+      .number-card:nth-child(4) { border-top: 1px solid var(--border); }
     }
   </style>
 </head>
