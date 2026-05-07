@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pets Go Control — Relatório de Desenvolvimento</title>
+  <style>
+    /* ── Reset ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Fontes via data-URI (fallback seguro) ─────────── */
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #1a1a2e;
+      background: #f4f5f9;
+    }
+
+    /* ── Variáveis de cor ────────────────────────────────── */
+    :root {
+      --brand:   #4047C8;
+      --teal:    #00C896;
+      --pink:    #E8187B;
+      --dark:    #0D0B09;
+      --text:    #1a1a2e;
+      --muted:   #5a5f7a;
+      --border:  #dde1ef;
+      --bg-alt:  #f0f2fb;
+      --shadow:  0 2px 12px rgba(64,71,200,.10);
+    }
+
+    /* ── Botão imprimir (só na tela) ────────────────────── */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 999;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(64,71,200,.35);
+      transition: background .2s;
+      letter-spacing: .3px;
+    }
+    .print-btn:hover { background: #3038b0; }
+
+    /* ── Wrapper de página ──────────────────────────────── */
+    .page-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       CAPA
+    ══════════════════════════════════════════════════════ */
+    .capa {
+      background: var(--dark);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decoração geométrica de fundo */
+    .capa::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: -120px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(64,71,200,.30) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .capa::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; right: -80px;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,200,150,.20) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .capa-logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .capa-logo-icon {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--teal) 100%);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 8px 32px rgba(64,71,200,.45);
+    }
+    .capa-logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+    .capa-logo-text span { color: var(--teal); }
+
+    .capa-divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--brand), var(--teal));
+      border-radius: 2px;
+      margin: 0 auto 32px;
+      position: relative; z-index: 1;
+    }
+
+    .capa-subtitulo {
+      font-size: 17px;
+      color: rgba(255,255,255,.65);
+      letter-spacing: .5px;
+      margin-bottom: 64px;
+      position: relative; z-index: 1;
+      text-align: center;
+    }
+
+    .capa-meta {
+      position: relative; z-index: 1;
+      text-align: center;
+    }
+    .capa-meta-item {
+      font-size: 13px;
+      color: rgba(255,255,255,.50);
+      margin-bottom: 6px;
+      letter-spacing: .4px;
+    }
+    .capa-meta-item strong {
+      color: rgba(255,255,255,.85);
+      font-weight: 600;
+    }
+
+    .capa-badge {
+      display: inline-block;
+      background: rgba(0,200,150,.15);
+      border: 1px solid rgba(0,200,150,.35);
+      color: var(--teal);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin-top: 24px;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       CONTEÚDO PRINCIPAL
+    ══════════════════════════════════════════════════════ */
+    .main-content {
+      background: #fff;
+      padding: 60px;
+    }
+
+    /* Seção genérica */
+    .secao {
+      margin-bottom: 52px;
+    }
+
+    .secao-numero {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 6px;
+    }
+
+    .secao-titulo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -.3px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+      position: relative;
+    }
+    .secao-titulo::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 48px; height: 2px;
+      background: var(--brand);
+      border-radius: 2px;
+    }
+
+    /* ── Resumo executivo ─────────────────────────────── */
+    .resumo-box {
+      background: var(--bg-alt);
+      border-left: 4px solid var(--brand);
+      border-radius: 0 8px 8px 0;
+      padding: 20px 24px;
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    .link-sistema {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      background: var(--brand);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 7px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .3px;
+      box-shadow: 0 3px 10px rgba(64,71,200,.30);
+    }
+    .link-sistema:hover { background: #3038b0; }
+
+    /* ── Tabela de módulos ─────────────────────────────── */
+    .tabela-wrapper {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    thead tr {
+      background: var(--brand);
+      color: #fff;
+    }
+    thead th {
+      padding: 13px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    tbody tr:nth-child(even) { background: var(--bg-alt); }
+    tbody tr:hover { background: rgba(64,71,200,.05); }
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .status-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0,200,150,.12);
+      color: #00915f;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .modulo-nome {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .modulo-desc {
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    /* ── Cards de segurança ─────────────────────────────── */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .grid-cards { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .card-titulo {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Arquitetura — lista ────────────────────────────── */
+    .arq-lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .arq-lista li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-alt);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .arq-lista li .arq-dot {
+      flex-shrink: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      margin-top: 5px;
+    }
+
+    /* ── Roadmap ─────────────────────────────────────────── */
+    .roadmap-wrapper {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .prioridade-alta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(232,24,123,.10);
+      color: #b00d5a;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+
+    .prioridade-media {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(64,71,200,.10);
+      color: var(--brand);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+
+    /* ── Rodapé ──────────────────────────────────────────── */
+    .rodape {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .rodape p {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .rodape strong { color: var(--brand); }
+
+    .rodape-versao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #aab;
+      letter-spacing: .5px;
+    }
+    .rodape-versao span {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #aab;
+      display: inline-block;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       PRINT
+    ══════════════════════════════════════════════════════ */
+    @media print {
+      body { background: #fff; font-size: 13px; }
+
+      .print-btn { display: none !important; }
+
+      .capa {
+        min-height: 100vh;
+        page-break-after: always;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .main-content { padding: 40px; }
+
+      .card { break-inside: avoid; }
+
+      .tabela-wrapper, .roadmap-wrapper { break-inside: avoid; }
+
+      a { color: inherit; text-decoration: none; }
+
+      .link-sistema { display: none; }
+    }
+
+    /* ── Mobile ──────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .capa { padding: 60px 32px; }
+      .main-content { padding: 32px 24px; }
+      .capa-logo-text { font-size: 22px; }
+      .secao-titulo { font-size: 19px; }
+      thead th, tbody td { padding: 10px 12px; }
+      .print-btn { top: 12px; right: 12px; padding: 8px 14px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Botão de impressão -->
+<button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>
+
+<div class="page-wrapper">
+
+  <!-- ══════════════════════════════════════════════════════
+       CAPA
+  ══════════════════════════════════════════════════════ -->
+  <section class="capa">
+
+    <div class="capa-logo">
+      <div class="capa-logo-icon">🐾</div>
+      <div class="capa-logo-text">Pets Go <span>Control</span></div>
+    </div>
+
+    <div class="capa-divider"></div>
+
+    <div class="capa-subtitulo">Sistema de Gestão para Pet Shops</div>
+
+    <div class="capa-meta">
+      <div class="capa-meta-item"><strong>Relatório de Desenvolvimento</strong></div>
+      <div class="capa-meta-item">Entregue a: <strong>Junior</strong></div>
+      <div class="capa-meta-item">Data: <strong>07 de maio de 2026</strong></div>
+    </div>
+
+    <div class="capa-badge">Sistema em Produção ✓</div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CONTEÚDO
+  ══════════════════════════════════════════════════════ -->
+  <div class="main-content">
+
+    <!-- 1. Resumo Executivo -->
+    <div class="secao">
+      <div class="secao-numero">Seção 01</div>
+      <h2 class="secao-titulo">Resumo Executivo</h2>
+      <div class="resumo-box">
+        O sistema Pets Go Control está <strong>completo e em produção</strong>. Todos os 11 módulos foram entregues e estão funcionando — da agenda ao financeiro, passando por hospedagem e internação veterinária. O acesso é por link direto no navegador, sem instalação, e funciona tanto no computador quanto no celular. O sistema roda offline e armazena todos os dados localmente, sem custo de servidor.
+      </div>
+      <a class="link-sistema" href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank">
+        ↗ Acessar sistema agora
+      </a>
+    </div>
+
+    <!-- 2. Módulos Entregues -->
+    <div class="secao">
+      <div class="secao-numero">Seção 02</div>
+      <h2 class="secao-titulo">Módulos Entregues</h2>
+
+      <div class="tabela-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Módulo</th>
+              <th>Status</th>
+              <th>O que faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="modulo-nome">Dashboard</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Visão geral: clientes ativos, agendamentos do dia, receita do mês e alertas de planos vencendo</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Agenda</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Calendário visual de serviços com filtros por serviço e profissional; check-in e registro de pagamento</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Clientes &amp; Pets</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Cadastro completo de tutores e animais, histórico de serviços e filtro por filial</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Planos &amp; Pacotes</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Planos pré-pagos com créditos, diárias com abate automático e alertas de vencimento</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Hospedagem</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Prontuário do hóspede com checklist diário (alimentação, medicações, atividades), badge de atraso e navegação de datas</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Internação Veterinária</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Admissão clínica, rotina diária com medicações e alimentação, alta e relatório PDF para o tutor</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">PDV / Caixa</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Ponto de venda para produtos, serviços e planos com resumo do movimento do dia</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Financeiro</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Movimento completo, lançamentos gerenciais protegidos por senha e relatório mensal</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Estoque</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Cadastro de produtos com controle de quantidade e alertas de estoque baixo</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Funcionários</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Cadastro da equipe com vinculação nos serviços e agendamentos</td>
+            </tr>
+            <tr>
+              <td class="modulo-nome">Configurações</td>
+              <td><span class="status-ok">✅ Entregue</span></td>
+              <td class="modulo-desc">Nome do pet shop, filiais, cor de tema personalizada e senha gerencial</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. Segurança e Qualidade Técnica -->
+    <div class="secao">
+      <div class="secao-numero">Seção 03</div>
+      <h2 class="secao-titulo">Segurança e Qualidade Técnica</h2>
+
+      <p style="color: var(--muted); margin-bottom: 24px; font-size: 14px;">
+        Na versão mais recente (07/05/2026) foram aplicadas melhorias técnicas de segurança e performance, sem nenhuma mudança visível para o usuário final:
+      </p>
+
+      <div class="grid-cards">
+
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-titulo">Proteção de dados</div>
+          <div class="card-desc">Todos os textos digitados — nomes, observações, diagnósticos — são verificados antes de serem exibidos, prevenindo corrupção de informações no banco local.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔐</div>
+          <div class="card-titulo">Senha gerencial protegida</div>
+          <div class="card-desc">A senha da área financeira agora é armazenada com criptografia (hash SHA-256), não mais em texto simples. Ninguém consegue ler a senha diretamente nos dados salvos.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⏱️</div>
+          <div class="card-titulo">Bloqueio automático</div>
+          <div class="card-desc">A área financeira trava automaticamente após 15 minutos sem uso, protegendo o caixa quando o computador fica sem supervisão.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-titulo">Performance aprimorada</div>
+          <div class="card-desc">O banco de dados local é lido uma única vez por interação (cache inteligente), tornando o sistema mais ágil — especialmente em fichas com muito histórico.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">✔️</div>
+          <div class="card-titulo">Validações de negócio</div>
+          <div class="card-desc">O sistema impede dois agendamentos no mesmo horário para o mesmo profissional. Planos de hospedagem exigem que o pet esteja devidamente cadastrado antes.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🗑️</div>
+          <div class="card-titulo">Proteção contra exclusão acidental</div>
+          <div class="card-desc">Para apagar todos os dados do sistema, é necessário digitar manualmente a palavra "APAGAR" — evitando perdas por clique acidental.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 4. Arquitetura Técnica -->
+    <div class="secao">
+      <div class="secao-numero">Seção 04</div>
+      <h2 class="secao-titulo">Como o Sistema Funciona</h2>
+
+      <ul class="arq-lista">
+        <li>
+          <span class="arq-dot"></span>
+          <span><strong>Roda 100% no navegador</strong> — sem servidor próprio, sem mensalidade de infraestrutura. O sistema é acessado direto pelo Chrome, Edge ou Firefox.</span>
+        </li>
+        <li>
+          <span class="arq-dot"></span>
+          <span><strong>Dados salvos localmente</strong> — todas as informações ficam no computador (localStorage do navegador). Funciona normalmente mesmo sem internet.</span>
+        </li>
+        <li>
+          <span class="arq-dot"></span>
+          <span><strong>Um único arquivo HTML</strong> — toda a lógica, visual e dados em um só lugar. Atualizar o sistema é simples e fazer backup é trivial.</span>
+        </li>
+        <li>
+          <span class="arq-dot"></span>
+          <span><strong>Link de acesso permanente:</strong> <a href="https://andarilho-digital.pages.dev/petsgo-crm-light.html" target="_blank" style="color: var(--brand); font-weight: 600;">andarilho-digital.pages.dev/petsgo-crm-light.html</a></span>
+        </li>
+        <li>
+          <span class="arq-dot"></span>
+          <span><strong>Compatível com Chrome, Edge e Firefox</strong> em desktop e mobile. Recomendado: Chrome no computador para melhor experiência.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 5. Próximos Passos -->
+    <div class="secao">
+      <div class="secao-numero">Seção 05</div>
+      <h2 class="secao-titulo">Próximos Passos</h2>
+
+      <div class="roadmap-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Prioridade</th>
+              <th>Feature</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="prioridade-alta">● Alta</span></td>
+              <td class="modulo-nome">PWA + Instalação</td>
+              <td class="modulo-desc">Instalar o sistema como app no celular (Android/iPhone), funcionando offline sem depender do navegador</td>
+            </tr>
+            <tr>
+              <td><span class="prioridade-alta">● Alta</span></td>
+              <td class="modulo-nome">Sync entre dispositivos</td>
+              <td class="modulo-desc">Acesso simultâneo em múltiplos computadores ou celulares, com dados sincronizados em tempo real</td>
+            </tr>
+            <tr>
+              <td><span class="prioridade-alta">● Alta</span></td>
+              <td class="modulo-nome">Nota Fiscal Eletrônica</td>
+              <td class="modulo-desc">NFC-e para produtos e NFS-e para serviços — aguardando número da última nota com o contador</td>
+            </tr>
+            <tr>
+              <td><span class="prioridade-media">● Média</span></td>
+              <td class="modulo-nome">Dashboard financeiro avançado</td>
+              <td class="modulo-desc">Gráfico de receita diária, ranking dos serviços mais vendidos e comparativo entre meses</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="rodape">
+      <p>Desenvolvido por <strong>Guilherme Andrade</strong> — Andarilho Digital</p>
+      <p>Todos os direitos reservados — uso exclusivo Pets Go</p>
+      <div class="rodape-versao">
+        Versão: 07/05/2026
+        <span></span>
+        Commit: b019e73
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+</div><!-- /page-wrapper -->
+
+</body>
+</html>
