@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Proposta Nutri Control — Guilherme Andrade</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0D0B09;
+  --surface:#141210;
+  --surface2:#1C1916;
+  --border:rgba(255,255,255,0.08);
+  --accent:#E8734A;
+  --accent-dim:rgba(232,115,74,0.12);
+  --green:#4ADE80;
+  --green-dim:rgba(74,222,128,0.1);
+  --text:#F0EDE8;
+  --text2:#9E9590;
+  --muted:#5A534D;
+  --max:760px;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'Satoshi',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+a{color:var(--accent);text-decoration:none}
+.display{font-family:'Clash Display',sans-serif;line-height:1.1;letter-spacing:-.03em}
+
+/* ── PAGE ── */
+.page{max-width:var(--max);margin:0 auto}
+
+/* ── HEADER ── */
+.header{
+  padding:48px 48px 40px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+.header::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),#f4a57a);
+}
+.header-tag{
+  font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.header-tag::before{content:'';display:inline-block;width:20px;height:2px;background:var(--accent)}
+.header h1{
+  font-family:'Clash Display',sans-serif;
+  font-size:clamp(1.8rem,4vw,2.6rem);
+  font-weight:700;letter-spacing:-.03em;
+  color:var(--text);margin-bottom:8px;
+}
+.header h1 em{font-style:normal;color:var(--accent)}
+.header-sub{font-size:.95rem;color:var(--text2);margin-bottom:28px}
+.meta-row{
+  display:flex;gap:32px;flex-wrap:wrap;
+  padding-top:24px;border-top:1px solid var(--border);
+}
+.meta-item .mi-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.meta-item .mi-val{font-size:.9rem;color:var(--text2)}
+.meta-item .mi-val strong{color:var(--text)}
+
+/* ── BODY ── */
+.body{padding:0 48px}
+
+/* ── SECTION ── */
+section{padding:36px 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+.section-tag{
+  font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;
+}
+
+/* ── DORES ── */
+.pain-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.pain-list li{
+  display:flex;align-items:flex-start;gap:14px;
+  font-size:.9rem;color:var(--text2);line-height:1.65;
+}
+.pain-list li::before{
+  content:'→';color:var(--accent);font-weight:700;
+  flex-shrink:0;margin-top:2px;font-size:.9rem;
+}
+
+/* ── PRODUTO BASE ── */
+.base-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;padding:24px;
+  display:flex;align-items:flex-start;gap:18px;
+}
+.base-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(74,222,128,.1);color:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;flex-shrink:0;
+  font-family:'Satoshi',sans-serif;
+}
+.base-title{
+  font-family:'Clash Display',sans-serif;
+  font-size:1.1rem;font-weight:600;margin-bottom:6px;
+}
+.base-desc{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:12px}
+.base-tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{
+  font-size:.68rem;font-weight:700;letter-spacing:.04em;
+  padding:3px 9px;border-radius:8px;
+  background:var(--surface);color:var(--text2);
+  border:1px solid var(--border);
+}
+.badge-live{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+  background:var(--green-dim);color:var(--green);
+  border:1px solid rgba(74,222,128,.2);
+  margin-left:10px;vertical-align:middle;
+}
+
+/* ── FASES ── */
+.fases{display:flex;flex-direction:column;gap:12px}
+.fase{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;padding:20px 24px;
+  display:grid;grid-template-columns:auto 1fr auto;
+  align-items:start;gap:16px;
+}
+.fase-num{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--accent-dim);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Clash Display',sans-serif;
+  font-size:.85rem;font-weight:700;color:var(--accent);
+  flex-shrink:0;
+}
+.fase-num.done{background:var(--green-dim);color:var(--green)}
+.fase-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:5px}
+.fase-desc{font-size:.82rem;color:var(--text2);line-height:1.6}
+.fase-modules{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.fase-prazo{
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap;padding-top:4px;
+  text-align:right;
+}
+
+/* ── INVESTIMENTO ── */
+.invest-block{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;
+}
+.invest-header{
+  padding:28px 32px;
+  border-bottom:1px solid var(--border);
+}
+.invest-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.invest-price{
+  font-family:'Clash Display',sans-serif;
+  font-size:2.8rem;font-weight:700;
+  color:var(--accent);line-height:1;margin-bottom:4px;
+}
+.invest-price span{font-size:1.1rem;color:var(--text2);font-family:'Satoshi',sans-serif}
+.invest-note{font-size:.8rem;color:var(--text2)}
+.invest-body{padding:24px 32px}
+.invest-includes{list-style:none;display:flex;flex-direction:column;gap:9px}
+.invest-includes li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:.85rem;color:var(--text2);line-height:1.5;
+}
+.invest-includes li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:2px}
+
+/* ── ROI ── */
+.roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.roi-item{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;
+}
+.ri-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ri-value{
+  font-family:'Clash Display',sans-serif;
+  font-size:1.9rem;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;
+}
+.ri-value.accent{color:var(--accent)}
+.ri-desc{font-size:.78rem;color:var(--text2);line-height:1.45}
+
+/* ── PRÓXIMOS PASSOS ── */
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;align-items:flex-start;gap:14px}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;font-weight:700;color:#fff;
+  flex-shrink:0;
+}
+.step-text{font-size:.9rem;color:var(--text2);line-height:1.6;padding-top:3px}
+.step-text strong{color:var(--text)}
+
+/* ── VALIDADE ── */
+.validity{
+  background:rgba(232,115,74,.06);
+  border:1px solid rgba(232,115,74,.18);
+  border-radius:10px;padding:16px 20px;
+  font-size:.85rem;color:var(--text2);
+  margin-top:28px;
+}
+.validity strong{color:var(--accent)}
+
+/* ── FOOTER ── */
+.footer{
+  padding:32px 48px;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  background:var(--surface);
+}
+.footer-contact .fc-name{
+  font-family:'Clash Display',sans-serif;
+  font-size:1rem;font-weight:600;margin-bottom:4px;
+}
+.footer-contact .fc-info{font-size:.82rem;color:var(--text2)}
+.footer-brand{
+  font-family:'Clash Display',sans-serif;
+  font-size:.9rem;font-weight:700;letter-spacing:.04em;
+  color:var(--accent);
+}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .header,.body,.footer{padding-left:24px;padding-right:24px}
+  .header{padding-top:36px;padding-bottom:32px}
+  .meta-row{gap:20px}
+  .roi-grid{grid-template-columns:1fr}
+  .fase{grid-template-columns:auto 1fr;gap:12px}
+  .fase-prazo{grid-column:2;padding-top:0}
+  .invest-header,.invest-body{padding-left:20px;padding-right:20px}
+  .footer{padding:24px}
+}
+
+/* ── PRINT ── */
+@media print{
+  body{background:#fff;color:#1a1a1a}
+  :root{--bg:#fff;--surface:#f8f8f8;--surface2:#f0f0f0;--border:rgba(0,0,0,.1);--text:#1a1a1a;--text2:#444;--muted:#888}
+  .header::after{display:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-tag">Proposta Comercial · Nutri Control</div>
+  <h1 class="display">Sistema de gestão<br>para <em>nutricionistas</em></h1>
+  <p class="header-sub">Preparada por Guilherme Andrade — Andarilho Digital</p>
+  <div class="meta-row">
+    <div class="meta-item">
+      <div class="mi-label">Data</div>
+      <div class="mi-val"><strong>06 de maio de 2026</strong></div>
+    </div>
+    <div class="meta-item">
+      <div class="mi-label">Segmento</div>
+      <div class="mi-val"><strong>Nutrição Clínica</strong></div>
+    </div>
+    <div class="meta-item">
+      <div class="mi-label">Válida até</div>
+      <div class="mi-val"><strong>11 de maio de 2026</strong></div>
+    </div>
+    <div class="meta-item">
+      <div class="mi-label">Formato</div>
+      <div class="mi-val"><strong>Recorrente mensal</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+  <!-- DIAGNÓSTICO -->
+  <section>
+    <div class="section-tag">Diagnóstico — o que não está funcionando</div>
+    <ul class="pain-list">
+      <li>Ficha de paciente em planilha ou papel — sem evolução visual de peso, IMC e composição corporal ao longo das consultas</li>
+      <li>Anamnese refeita do zero em cada nova consulta — sem estrutura para 1ª e 2ª consulta, sem histórico de respostas salvo</li>
+      <li>Antropometria calculada na mão ou em calculadora externa — Pollock, Petroski, circunferências e RCQ sem registro automático</li>
+      <li>Exames laboratoriais comparados visualmente de forma manual — sem destaque automático de melhora ou piora por parâmetro</li>
+    </ul>
+  </section>
+
+  <!-- O PRODUTO JÁ EXISTE -->
+  <section>
+    <div class="section-tag">O ponto de partida — produto já no ar</div>
+    <p style="font-size:.9rem;color:var(--text2);line-height:1.7;margin-bottom:20px">
+      O Nutri Control já existe e está funcionando. Não é uma proposta de desenvolvimento do zero —
+      é o acesso a um sistema completo com expansão mensal dos módulos que você pediu.
+      Você começa a usar agora, e cada mês um novo módulo entra.
+    </p>
+    <div class="base-card">
+      <div class="base-icon">🌿</div>
+      <div>
+        <div class="base-title">
+          Nutri Control
+          <span class="badge-live">
+            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" style="vertical-align:middle"><circle cx="3" cy="3" r="3" fill="#4ADE80"/></svg>
+            No ar
+          </span>
+        </div>
+        <div class="base-desc">Sistema completo para nutricionistas — roda no navegador, funciona offline, sem mensalidade de servidor. Dados ficam no seu dispositivo.</div>
+        <div class="base-tags">
+          <span class="tag">Pacientes</span>
+          <span class="tag">Agenda</span>
+          <span class="tag">IMC / TMB auto</span>
+          <span class="tag">Evolução de peso</span>
+          <span class="tag">Exames laboratoriais</span>
+          <span class="tag">Documentos PDF</span>
+          <span class="tag">Transcrição de voz</span>
+          <span class="tag">Offline-first</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FASES DE ENTREGA -->
+  <section>
+    <div class="section-tag">Entrega por fases — um módulo por ciclo</div>
+    <p style="font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:20px">
+      A ordem abaixo é baseada no que você pediu e no impacto direto na sua rotina. Cada fase fecha no começo do mês seguinte.
+    </p>
+    <div class="fases">
+
+      <div class="fase">
+        <div class="fase-num done">✓</div>
+        <div>
+          <div class="fase-title">Base — produto atual</div>
+          <div class="fase-desc">Pacientes, Agenda, Evolução peso/IMC/TMB, Exames, PDF, Transcrição de voz. Tudo funcional hoje.</div>
+          <div class="fase-modules">
+            <span class="tag" style="color:var(--green);border-color:rgba(74,222,128,.2)">Incluído</span>
+          </div>
+        </div>
+        <div class="fase-prazo">Disponível<br>agora</div>
+      </div>
+
+      <div class="fase">
+        <div class="fase-num">1</div>
+        <div>
+          <div class="fase-title">Antropometria completa</div>
+          <div class="fase-desc">
+            Avaliação com fórmulas selecionáveis: Pollock 3 dobras, Pollock 7 dobras, Petroski, Guedes, Durnin, Faulkner.
+            Circunferências (cintura, quadril, braço, coxa, panturrilha) com cálculo automático de RCQ.
+            Gráfico de evolução de cada parâmetro. Tabela comparativa entre avaliações.
+          </div>
+          <div class="fase-modules">
+            <span class="tag">% Gordura corporal</span>
+            <span class="tag">Circunferências</span>
+            <span class="tag">RCQ auto</span>
+            <span class="tag">Gráfico evolução</span>
+          </div>
+        </div>
+        <div class="fase-prazo">Mês 1</div>
+      </div>
+
+      <div class="fase">
+        <div class="fase-num">2</div>
+        <div>
+          <div class="fase-title">Anamnese estruturada</div>
+          <div class="fase-desc">
+            Dois formulários completos: 1ª Consulta (objetivos, histórico de dietas, saúde, atividade física, escala de Bristol, hábitos, QPC completo)
+            e 2ª Consulta (TGI, imunidade, saúde da mulher, anamnese nutricional, recordatório 24h).
+            Salvo no prontuário de cada paciente.
+          </div>
+          <div class="fase-modules">
+            <span class="tag">Formulário 1ª consulta</span>
+            <span class="tag">Formulário 2ª consulta</span>
+            <span class="tag">Recordatório 24h</span>
+          </div>
+        </div>
+        <div class="fase-prazo">Mês 2</div>
+      </div>
+
+      <div class="fase">
+        <div class="fase-num">3</div>
+        <div>
+          <div class="fase-title">Prontuário por consulta + Diário expandido</div>
+          <div class="fase-desc">
+            Cada consulta com prontuário próprio: texto livre ou ditado por voz (integrado com a transcrição já existente). Histórico completo por paciente.
+            Diário alimentar com campo de emoção, nota da nutricionista, feedback visível para o paciente e histórico visual por semana/mês.
+          </div>
+          <div class="fase-modules">
+            <span class="tag">Prontuário por consulta</span>
+            <span class="tag">Histórico cronológico</span>
+            <span class="tag">Emoção no diário</span>
+            <span class="tag">Feedback da nutri</span>
+          </div>
+        </div>
+        <div class="fase-prazo">Mês 3</div>
+      </div>
+
+      <div class="fase">
+        <div class="fase-num">4</div>
+        <div>
+          <div class="fase-title">Exames com comparação + Faturamento</div>
+          <div class="fase-desc">
+            Comparação automática entre dois exames: % de mudança por parâmetro com destaque verde (melhorou), vermelho (piorou), cinza (estável).
+            Campo de comentário da nutricionista por resultado.
+            Faturamento por paciente: histórico de pagamentos, status (pago / em aberto / atrasado), alertas de renovação.
+          </div>
+          <div class="fase-modules">
+            <span class="tag">Comparação % exames</span>
+            <span class="tag">Highlight automático</span>
+            <span class="tag">Faturamento paciente</span>
+            <span class="tag">Status pagamentos</span>
+          </div>
+        </div>
+        <div class="fase-prazo">Mês 4</div>
+      </div>
+
+      <div class="fase">
+        <div class="fase-num">5</div>
+        <div>
+          <div class="fase-title">Plano alimentar + Sintomas correlacionados</div>
+          <div class="fase-desc">
+            Montagem do plano a partir do recordatório 24h. Lista de substituições por grupo alimentar. Dietas base: vegetariana, emagrecimento (ozempic/canetas), constipação.
+            Lista de compras automática. Painel de correlações: sintoma → possível deficiência nutricional (magnésio, ferro, B12, zinco, ômega-3, vitamina D…).
+          </div>
+          <div class="fase-modules">
+            <span class="tag">Plano alimentar</span>
+            <span class="tag">Lista de compras auto</span>
+            <span class="tag">Sintomas correlacionados</span>
+          </div>
+        </div>
+        <div class="fase-prazo">Mês 5</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INVESTIMENTO -->
+  <section>
+    <div class="section-tag">Investimento</div>
+    <div class="invest-block">
+      <div class="invest-header">
+        <div class="invest-label">Mensalidade recorrente</div>
+        <div class="invest-price">R$ 1.200 <span>/mês</span></div>
+        <div class="invest-note">Ou R$800/mês para contrato de 12 meses fechado agora.</div>
+      </div>
+      <div class="invest-body">
+        <ul class="invest-includes">
+          <li>Acesso completo ao produto base — disponível hoje, sem carência</li>
+          <li>1 módulo novo entregue por mês, na ordem das fases acima</li>
+          <li>Ajustes e melhorias solicitadas durante o uso</li>
+          <li>Suporte via WhatsApp em horário comercial (resposta em até 4h)</li>
+          <li>Dados 100% seus — armazenados localmente, sem assinatura de servidor</li>
+          <li>Atualizações incluídas — sem cobranças extras por versões novas</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI -->
+  <section>
+    <div class="section-tag">Por que faz sentido financeiramente</div>
+    <div class="roi-grid">
+      <div class="roi-item">
+        <div class="ri-label">Tempo economizado por consulta</div>
+        <div class="ri-value">~20 min</div>
+        <div class="ri-desc">Anamnese, antropometria e prontuário preenchidos no sistema — sem transcrever depois</div>
+      </div>
+      <div class="roi-item">
+        <div class="ri-label">Em 20 consultas/mês</div>
+        <div class="ri-value">+6,5h</div>
+        <div class="ri-desc">Recuperadas para mais pacientes, descanso ou marketing</div>
+      </div>
+      <div class="roi-item">
+        <div class="ri-label">Valor do tempo recuperado</div>
+        <div class="ri-value accent">R$975–</div>
+        <div class="ri-desc">Calculado em R$150/h (estimativa conservadora p/ nutricionista clínica)</div>
+      </div>
+      <div class="roi-item">
+        <div class="ri-label">Diferencial competitivo</div>
+        <div class="ri-value">Real</div>
+        <div class="ri-desc">Gráficos de evolução + comparação de exames = valor percebido pelo paciente que renova e indica</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÓXIMOS PASSOS -->
+  <section>
+    <div class="section-tag">Como funciona a partir daqui</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Você confirma pelo WhatsApp</strong> — sem contrato formal necessário para começar</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Acesso imediato ao produto base</strong> — você já usa e cadastra os primeiros pacientes</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Módulo de Antropometria</strong> entregue em até 15 dias úteis após confirmação</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Cada mês um módulo</strong> — você acompanha o desenvolvimento e prioriza se algo mudar</div>
+      </div>
+    </div>
+
+    <div class="validity">
+      <strong>Esta proposta é válida até 11 de maio de 2026.</strong><br>
+      Trabalho com no máximo 4 clientes ativos ao mesmo tempo para garantir a qualidade da entrega.
+      Se tiver interesse, é só me responder no WhatsApp — o módulo de Antropometria começa assim que confirmar.
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-contact">
+    <div class="fc-name">Guilherme Andrade</div>
+    <div class="fc-info">+55 51 99547-8349 · braziliangui1992@gmail.com</div>
+    <div class="fc-info" style="margin-top:4px">
+      <a href="https://andarilho-digital.pages.dev/guilherme-build.html">andarilho-digital.pages.dev</a>
+    </div>
+  </div>
+  <div class="footer-brand">ANDARILHO DIGITAL</div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>

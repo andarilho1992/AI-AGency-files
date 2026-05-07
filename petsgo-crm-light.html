@@ -264,6 +264,14 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <span class="nav-ico"><i class="ph ph-door-open"></i></span> Check-in / Out
     <span class="nav-badge nb-brand" id="badge-checkin" style="display:none">0</span>
   </div>
+  <div class="nav-item" id="nav-hospedagem" onclick="navTo('hospedagem')">
+    <span class="nav-ico"><i class="ph ph-house"></i></span> Hospedagem
+    <span class="nav-badge nb-brand" id="badge-hospedagem" style="display:none">0</span>
+  </div>
+  <div class="nav-item" id="nav-internacao" onclick="navTo('internacao')">
+    <span class="nav-ico"><i class="ph ph-heartbeat"></i></span> Internação
+    <span class="nav-badge nb-brand" id="badge-internacao" style="display:none">0</span>
+  </div>
   <div class="nav-item" id="nav-pdv" onclick="navTo('pdv')">
     <span class="nav-ico"><i class="ph ph-storefront"></i></span> PDV / Caixa
   </div>
@@ -511,6 +519,40 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- HOSPEDAGEM -->
+  <div class="page" id="page-hospedagem">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Hospedagem</div>
+        <div class="page-sub" id="hosp-sub">—</div>
+      </div>
+    </div>
+    <!-- Filtro status -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn btn-sm" id="hosp-tab-ativos" onclick="setHospTab('ativos')" style="background:var(--brand);color:#fff">Hospedados agora</button>
+      <button class="btn btn-ghost btn-sm" id="hosp-tab-todos" onclick="setHospTab('todos')">Todos</button>
+      <button class="btn btn-ghost btn-sm" id="hosp-tab-alta" onclick="setHospTab('alta')">Com alta</button>
+    </div>
+    <div id="hosp-list"></div>
+  </div>
+
+  <!-- INTERNAÇÃO VETERINÁRIA -->
+  <div class="page" id="page-internacao">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Internação Veterinária</div>
+        <div class="page-sub" id="int-sub">—</div>
+      </div>
+      <button class="btn btn-primary" onclick="abrirNovaInternacao()"><i class="ph ph-plus"></i> Internar animal</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn btn-sm" id="int-tab-ativos" onclick="setIntTab('ativos')" style="background:var(--brand);color:#fff">Internados agora</button>
+      <button class="btn btn-ghost btn-sm" id="int-tab-todos" onclick="setIntTab('todos')">Todos</button>
+      <button class="btn btn-ghost btn-sm" id="int-tab-alta" onclick="setIntTab('alta')">Com alta</button>
+    </div>
+    <div id="int-list"></div>
   </div>
 
   <!-- ESTOQUE -->
@@ -790,6 +832,22 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
           </select>
         </div>
       </div>
+      <div class="field" id="ag-vacina-field" style="display:none">
+        <label>Tipo de vacina</label>
+        <select id="ag-vacina">
+          <option value="">— Selecionar tipo</option>
+          <option value="Polivalente">Polivalente (V8/V10)</option>
+          <option value="Raiva">Raiva</option>
+          <option value="Gripe">Gripe</option>
+          <option value="Giárdia">Giárdia</option>
+        </select>
+      </div>
+      <div class="field" id="ag-plano-field" style="display:none">
+        <label>Debitar de plano ativo</label>
+        <select id="ag-plano">
+          <option value="">— Não debitar de plano</option>
+        </select>
+      </div>
       <div class="field"><label>Observações</label><textarea id="ag-obs" rows="2" placeholder="Anotações..."></textarea></div>
       <div class="form-footer">
         <button class="btn btn-ghost" onclick="closeModal('modal-new-agenda')">Cancelar</button>
@@ -982,16 +1040,20 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         <select id="pl-pet"><option value="">Selecionar pet...</option></select>
       </div>
       <div class="form-row">
-        <div class="field"><label>Valor pago (R$) *</label><input id="pl-valor" type="number" placeholder="0.00" step="0.01" min="0"/></div>
-        <div class="field"><label>Valor por diária (R$) *</label><input id="pl-diario" type="number" placeholder="Ex: 50.00" step="0.01" min="0.01"/></div>
+        <div class="field"><label>Valor pago (R$) *</label><input id="pl-valor" type="number" placeholder="0.00" step="0.01" min="0" oninput="onPlValorChange()"/></div>
+        <div class="field"><label>Nº de diárias *</label><input id="pl-dias" type="number" placeholder="Ex: 10" step="1" min="1" oninput="onPlDiasChange()"/></div>
       </div>
+      <div class="field"><label>Valor por diária (R$)</label><input id="pl-diario" type="number" placeholder="Calculado automaticamente" step="0.01" min="0.01" oninput="onPlDiarioChange()"/></div>
       <div class="field"><label>Modo de abate</label>
         <select id="pl-modo">
           <option value="manual">Manual — desconta ao registrar uso (recomendado para creche/pacotes)</option>
           <option value="auto">Automático — desconta por dia corrido (para hospedagem)</option>
         </select>
       </div>
-      <div class="field"><label>Data início *</label><input id="pl-inicio" type="date"/></div>
+      <div class="form-row">
+        <div class="field"><label>Data início *</label><input id="pl-inicio" type="date"/></div>
+        <div class="field"><label>Data término</label><input id="pl-termino" type="date"/></div>
+      </div>
       <div class="field"><label>Observações</label><textarea id="pl-obs" rows="2" placeholder="Anotações sobre o plano..."></textarea></div>
       <div class="form-footer">
         <button class="btn btn-ghost" onclick="closeModal('modal-new-plano')">Cancelar</button>
@@ -1011,7 +1073,19 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <div class="form-grid">
       <input type="hidden" id="diaria-plano-id"/>
       <div id="diaria-info" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;margin-bottom:4px"></div>
-      <div class="field"><label>Data da diária</label><input id="diaria-data" type="date"/></div>
+      <div class="field">
+        <label>Modo</label>
+        <div style="display:flex;gap:16px;margin-top:4px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px">
+            <input type="radio" name="diaria-modo" value="single" checked onchange="onDiariaModoChange()"> 1 diária
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px">
+            <input type="radio" name="diaria-modo" value="periodo" onchange="onDiariaModoChange()"> Período
+          </label>
+        </div>
+      </div>
+      <div class="field"><label>Data início</label><input id="diaria-data" type="date"/></div>
+      <div class="field" id="diaria-fim-field" style="display:none"><label>Data fim</label><input id="diaria-data-fim" type="date"/></div>
       <div class="form-footer">
         <button class="btn btn-ghost" onclick="closeModal('modal-usar-diaria')">Cancelar</button>
         <button class="btn btn-primary" onclick="confirmarUsoDiaria()"><i class="ph ph-check"></i> Confirmar</button>
@@ -1097,6 +1171,204 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div class="form-footer" style="margin-top:4px">
         <button class="btn btn-ghost" onclick="closeModal('modal-reagendar')">Não, obrigado</button>
         <button class="btn btn-primary" onclick="reagendarOutraData()"><i class="ph ph-calendar"></i> Outra data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Prontuário do Hóspede -->
+<div class="modal-overlay" id="modal-prontuario-hospede">
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-house" style="margin-right:6px"></i><span id="pront-titulo">Prontuário</span></div>
+      <div class="modal-close" onclick="closeModal('modal-prontuario-hospede')"><i class="ph ph-x"></i></div>
+    </div>
+    <input type="hidden" id="pront-plano-id"/>
+    <!-- Info pet (sempre visível) -->
+    <div id="pront-info-pet" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:13px;margin-bottom:14px"></div>
+    <!-- Período chips (sempre visível) -->
+    <div id="pront-periodo" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
+    <!-- Tabs -->
+    <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:16px;padding-bottom:2px">
+      <button id="pront-btn-prontuario" class="btn btn-sm" style="background:var(--brand);color:#fff" onclick="setProntTab('prontuario')"><i class="ph ph-note-pencil" style="margin-right:4px"></i>Prontuário</button>
+      <button id="pront-btn-rotina" class="btn btn-ghost btn-sm" onclick="setProntTab('rotina')"><i class="ph ph-check-square" style="margin-right:4px"></i>Rotina do dia</button>
+    </div>
+
+    <!-- Tab: Prontuário -->
+    <div id="pront-tab-prontuario" class="form-grid">
+      <div class="field">
+        <label>Alimentação padrão</label>
+        <textarea id="pront-alimentacao" rows="2" placeholder="Ex: Ração Royal Canin 200g manhã e noite. Não aceita ração úmida."></textarea>
+      </div>
+      <div class="field">
+        <label>Observações gerais</label>
+        <textarea id="pront-obs" rows="2" placeholder="Comportamento, medos, alergias, necessidades especiais..."></textarea>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Medicações</div>
+        <div id="pront-meds-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button class="btn btn-ghost btn-sm" onclick="abrirAddMed()"><i class="ph ph-plus"></i> Adicionar medicação</button>
+      </div>
+      <div id="pront-add-med" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Nova medicação</div>
+        <div class="form-row">
+          <div class="field"><label>Nome</label><input id="med-nome" type="text" placeholder="Ex: Amoxicilina"/></div>
+          <div class="field"><label>Dose</label><input id="med-dose" type="text" placeholder="Ex: 250mg"/></div>
+        </div>
+        <div class="field">
+          <label>Horários (separados por vírgula)</label>
+          <input id="med-horarios" type="text" placeholder="Ex: 08:00, 20:00"/>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('pront-add-med').style.display='none'">Cancelar</button>
+          <button class="btn btn-primary btn-sm" onclick="salvarMedicacao()"><i class="ph ph-check"></i> Salvar</button>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-prontuario-hospede')">Fechar</button>
+        <button class="btn btn-primary" onclick="salvarProntuario()"><i class="ph ph-floppy-disk"></i> Salvar prontuário</button>
+      </div>
+    </div>
+
+    <!-- Tab: Rotina do dia -->
+    <div id="pront-tab-rotina" style="display:none">
+      <!-- Plantonista + Navegação de data -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px" onclick="navChecklistDate(-1)"><i class="ph ph-caret-left"></i></button>
+          <span id="check-date-label" style="font-size:.85rem;font-weight:700;min-width:120px;text-align:center"></span>
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px" onclick="navChecklistDate(1)"><i class="ph ph-caret-right"></i></button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label style="font-size:.8rem;color:var(--text2)">Plantonista:</label>
+          <select id="check-plantonista" style="font-size:.8rem;padding:4px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)">
+            <option value="">— Selecionar</option>
+          </select>
+        </div>
+      </div>
+      <!-- Checklist content -->
+      <div id="check-content" style="display:flex;flex-direction:column;gap:16px;max-height:65vh;overflow-y:auto;padding-right:4px"></div>
+      <div class="form-footer" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="closeModal('modal-prontuario-hospede')">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Nova Internação -->
+<div class="modal-overlay" id="modal-nova-internacao">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-heartbeat" style="margin-right:6px"></i>Internar animal</div>
+      <div class="modal-close" onclick="closeModal('modal-nova-internacao')"><i class="ph ph-x"></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Tutor *</label>
+        <select id="int-tutor" onchange="onIntTutorChange()"><option value="">— Selecionar tutor</option></select>
+      </div>
+      <div class="field">
+        <label>Pet *</label>
+        <select id="int-pet"><option value="">— Selecionar pet</option></select>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Data entrada *</label><input id="int-entrada" type="date"/></div>
+        <div class="field"><label>Previsão de alta</label><input id="int-previsao" type="date"/></div>
+      </div>
+      <div class="field"><label>Diagnóstico / motivo *</label><input id="int-diag" type="text" placeholder="Ex: Parvovirose, pós-cirúrgico castração..."/></div>
+      <div class="field"><label>Médico responsável</label><input id="int-medico" type="text" placeholder="Nome do veterinário"/></div>
+      <div class="field"><label>Observações de admissão</label><textarea id="int-obs" rows="2" placeholder="Estado geral, peso, temperatura, anamnese rápida..."></textarea></div>
+      <div class="form-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-nova-internacao')">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarInternacao()"><i class="ph ph-heartbeat"></i> Internar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Prontuário Internação -->
+<div class="modal-overlay" id="modal-prontuario-internacao">
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ph ph-heartbeat" style="margin-right:6px"></i><span id="int-pront-titulo">Internação</span></div>
+      <div class="modal-close" onclick="closeModal('modal-prontuario-internacao')"><i class="ph ph-x"></i></div>
+    </div>
+    <input type="hidden" id="int-pront-id"/>
+    <!-- Info pet -->
+    <div id="int-pront-info" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:13px;margin-bottom:14px"></div>
+    <!-- Chips período -->
+    <div id="int-pront-periodo" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
+    <!-- Tabs -->
+    <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:16px;padding-bottom:2px">
+      <button id="int-btn-admissao" class="btn btn-sm" style="background:var(--brand);color:#fff" onclick="setIntProntTab('admissao')"><i class="ph ph-note-pencil" style="margin-right:4px"></i>Admissão</button>
+      <button id="int-btn-rotina" class="btn btn-ghost btn-sm" onclick="setIntProntTab('rotina')"><i class="ph ph-check-square" style="margin-right:4px"></i>Rotina</button>
+      <button id="int-btn-relatorio" class="btn btn-ghost btn-sm" onclick="gerarRelatorioTutor(document.getElementById('int-pront-id').value)" style="margin-left:auto"><i class="ph ph-file-text" style="margin-right:4px"></i>Relatório tutor</button>
+    </div>
+
+    <!-- Tab: Admissão -->
+    <div id="int-tab-admissao" class="form-grid">
+      <div class="field"><label>Diagnóstico / motivo</label><input id="int-pront-diag" type="text" placeholder="Diagnóstico..."/></div>
+      <div class="field"><label>Médico responsável</label><input id="int-pront-medico" type="text" placeholder="Veterinário..."/></div>
+      <div class="form-row">
+        <div class="field"><label>Data entrada</label><input id="int-pront-entrada" type="date"/></div>
+        <div class="field"><label>Previsão de alta</label><input id="int-pront-previsao" type="date"/></div>
+      </div>
+      <div class="field"><label>Observações de admissão</label><textarea id="int-pront-obs" rows="2" placeholder="Estado geral, peso, histórico..."></textarea></div>
+      <!-- Medicações -->
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Medicações prescritas</div>
+        <div id="int-meds-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button class="btn btn-ghost btn-sm" onclick="abrirAddIntMed()"><i class="ph ph-plus"></i> Adicionar medicação</button>
+      </div>
+      <div id="int-add-med" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Nova medicação</div>
+        <div class="form-row">
+          <div class="field"><label>Nome</label><input id="int-med-nome" type="text" placeholder="Ex: Amoxicilina"/></div>
+          <div class="field"><label>Dose</label><input id="int-med-dose" type="text" placeholder="Ex: 250mg"/></div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Via</label>
+            <select id="int-med-via">
+              <option value="VO">VO (oral)</option>
+              <option value="SC">SC (subcutâneo)</option>
+              <option value="IM">IM (intramuscular)</option>
+              <option value="IV">IV (intravenoso)</option>
+            </select>
+          </div>
+          <div class="field"><label>Horários (vírgula)</label><input id="int-med-horarios" type="text" placeholder="08:00, 20:00"/></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('int-add-med').style.display='none'">Cancelar</button>
+          <button class="btn btn-primary btn-sm" onclick="salvarIntMedicacao()"><i class="ph ph-check"></i> Salvar</button>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="darAltaInternacao(document.getElementById('int-pront-id').value)"><i class="ph ph-sign-out"></i> Dar alta</button>
+        <div style="flex:1"></div>
+        <button class="btn btn-ghost" onclick="closeModal('modal-prontuario-internacao')">Fechar</button>
+        <button class="btn btn-primary" onclick="salvarAdmissao()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+      </div>
+    </div>
+
+    <!-- Tab: Rotina -->
+    <div id="int-tab-rotina" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px" onclick="navIntChecklistDate(-1)"><i class="ph ph-caret-left"></i></button>
+          <span id="int-check-date-label" style="font-size:.85rem;font-weight:700;min-width:120px;text-align:center"></span>
+          <button class="btn btn-ghost btn-sm" style="padding:4px 10px" onclick="navIntChecklistDate(1)"><i class="ph ph-caret-right"></i></button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label style="font-size:.8rem;color:var(--text2)">Plantonista:</label>
+          <select id="int-check-plantonista" style="font-size:.8rem;padding:4px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)">
+            <option value="">— Selecionar</option>
+          </select>
+        </div>
+      </div>
+      <div id="int-check-content" style="display:flex;flex-direction:column;gap:16px;max-height:65vh;overflow-y:auto;padding-right:4px"></div>
+      <div class="form-footer" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="closeModal('modal-prontuario-internacao')">Fechar</button>
       </div>
     </div>
   </div>
@@ -1337,11 +1609,12 @@ function loadDB() {
     d.planos       = d.planos       || [];
     d.funcionarios = d.funcionarios || [];
     d.contas       = d.contas       || [];
+    d.internacoes  = d.internacoes  || [];
     d.config       = d.config       || {};
     return d;
   } catch { return emptyDB(); }
 }
-function emptyDB() { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[],planos:[],funcionarios:[],contas:[],config:{}}; }
+function emptyDB() { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[],planos:[],funcionarios:[],contas:[],internacoes:[],config:{}}; }
 function saveDB(d) { localStorage.setItem(DB_KEY, JSON.stringify(d)); }
 
 function todayISO() { return new Date().toISOString().slice(0,10); }
@@ -1403,6 +1676,8 @@ function navTo(page) {
   if (page==='pdv')          renderPDV();
   if (page==='planos')       renderPlanos();
   if (page==='funcionarios') renderFuncionarios();
+  if (page==='hospedagem')   renderHospedagem();
+  if (page==='internacao')   renderInternacao();
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────────
@@ -2111,12 +2386,14 @@ function onAgTutorChange() {
   const pets = D.pets.filter(p=>p.tutorId===tid);
   document.getElementById('ag-pet').innerHTML =
     '<option value="">Selecionar pet...</option>' + pets.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  atualizarPlanoBanho();
 }
 
 function onAgServicoChange() {
   const opt = document.getElementById('ag-servico').selectedOptions[0];
   if (!opt || !opt.value) return;
   preencherPrecoAgendamento();
+  atualizarPlanoBanho();
 }
 
 function onAgPetPorteChange() {
@@ -2153,6 +2430,10 @@ function populateAgTutores() {
   document.getElementById('ag-pet').innerHTML = '<option value="">Selecionar pet...</option>';
   document.getElementById('ag-valor').value  = '';
   document.getElementById('ag-data').value   = todayISO();
+  document.getElementById('ag-vacina-field').style.display='none';
+  document.getElementById('ag-plano-field').style.display='none';
+  document.getElementById('ag-vacina').value='';
+  document.getElementById('ag-plano').value='';
   const funs = D.funcionarios.filter(f=>f.status!=='inativo');
   document.getElementById('ag-func').innerHTML =
     '<option value="">— Qualquer</option>' +
@@ -2168,6 +2449,8 @@ function saveAgendamento() {
   const servico = svcOpt?.dataset.nome || svcOpt?.text || '';
   if (!data||!tutorId||!servico) { toast('⚠️ Data, tutor e serviço obrigatórios'); return; }
   const D = loadDB();
+  const planoSelecionado = document.getElementById('ag-plano')?.value||'';
+  const vacinaSubtipo    = document.getElementById('ag-vacina')?.value||'';
   D.agendamentos.push({
     id:uid(), tutorId,
     petId:         document.getElementById('ag-pet').value,
@@ -2177,10 +2460,13 @@ function saveAgendamento() {
     obs:           document.getElementById('ag-obs').value.trim(),
     funcionarioId: document.getElementById('ag-func').value||null,
     formaPagamento:document.getElementById('ag-pagamento').value||null,
+    vacinaSubtipo: vacinaSubtipo||null,
+    planoDebitado: planoSelecionado||null,
     status:   'agendado', checkinAt:null, checkoutAt:null,
     criadoEm: new Date().toISOString()
   });
   saveDB(D);
+  if (planoSelecionado) usarDiaria(planoSelecionado, data);
   closeModal('modal-new-agenda');
   document.getElementById('ag-tutor').value='';
   document.getElementById('ag-pet').innerHTML='<option value="">Selecionar pet...</option>';
@@ -2188,6 +2474,10 @@ function saveAgendamento() {
   document.getElementById('ag-valor').value='';
   document.getElementById('ag-obs').value='';
   document.getElementById('ag-hora').value='09:00';
+  document.getElementById('ag-vacina-field').style.display='none';
+  document.getElementById('ag-plano-field').style.display='none';
+  document.getElementById('ag-plano').value='';
+  document.getElementById('ag-vacina').value='';
   if (curPage==='agenda') renderAgenda();
   updateDashboard();
   toast('📅 Agendamento criado!');
@@ -2849,16 +3139,107 @@ function onPlTutorChange() {
     D.pets.filter(p=>p.tutorId===tid).map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
 }
 
+function onPlValorChange() {
+  const valor  = parseFloat(document.getElementById('pl-valor').value)||0;
+  const dias   = parseFloat(document.getElementById('pl-dias').value)||0;
+  const diario = parseFloat(document.getElementById('pl-diario').value)||0;
+  if (valor && dias) document.getElementById('pl-diario').value = (valor/dias).toFixed(2);
+  else if (valor && diario) document.getElementById('pl-dias').value = Math.floor(valor/diario);
+}
+function onPlDiasChange() {
+  const valor = parseFloat(document.getElementById('pl-valor').value)||0;
+  const dias  = parseFloat(document.getElementById('pl-dias').value)||0;
+  if (valor && dias) document.getElementById('pl-diario').value = (valor/dias).toFixed(2);
+}
+function onPlDiarioChange() {
+  const valor  = parseFloat(document.getElementById('pl-valor').value)||0;
+  const diario = parseFloat(document.getElementById('pl-diario').value)||0;
+  if (valor && diario) document.getElementById('pl-dias').value = Math.floor(valor/diario);
+}
+
+function onDiariaModoChange() {
+  const modo = document.querySelector('input[name="diaria-modo"]:checked')?.value;
+  document.getElementById('diaria-fim-field').style.display = modo==='periodo' ? '' : 'none';
+}
+
+function usarPeriodo(id, dataInicio, dataFim) {
+  const D = loadDB();
+  const p = D.planos.find(x=>x.id===id);
+  if (!p) return;
+  const datas = [];
+  let cur = new Date(dataInicio + 'T12:00:00');
+  const fim = new Date(dataFim + 'T12:00:00');
+  while (cur <= fim) { datas.push(cur.toISOString().split('T')[0]); cur.setDate(cur.getDate()+1); }
+  if (p.valorRestante < p.valorDiario * datas.length) {
+    if (!confirm(`Saldo insuficiente para ${datas.length} diárias. Usar o máximo possível?`)) return;
+  }
+  const tutor = D.tutores.find(x=>x.id===p.tutorId);
+  const pet   = D.pets.find(x=>x.id===p.petId);
+  let count = 0;
+  for (const data of datas) {
+    if (p.valorRestante < p.valorDiario) break;
+    if ((p.historicoDiarias||[]).some(h=>h.data===data)) continue;
+    p.valorRestante = Math.max(0, p.valorRestante - p.valorDiario);
+    p.diasUsados    = (p.diasUsados||0) + 1;
+    p.ultimoAbate   = data;
+    if (!p.historicoDiarias) p.historicoDiarias = [];
+    p.historicoDiarias.push({data, valor: p.valorDiario});
+    if (p.valorRestante <= 0) p.status = 'vencido';
+    D.financeiro.push({
+      id:uid(), tipo:'receita',
+      descricao:`Diária ${p.tipo}${pet?' — '+pet.nome:''}${tutor?' ('+tutor.nome.split(' ')[0]+')':''}`,
+      valor:p.valorDiario, data, categoria:'planos', origem:'plano', planoId:p.id,
+      criadoEm:new Date().toISOString()
+    });
+    count++;
+  }
+  saveDB(D);
+  renderTutorPlanos(_curTutorPlanoId);
+  renderClientes();
+  if (curPage==='planos') renderPlanos();
+  updatePlanosBadge();
+  const diasRestam = diasRestantes(p);
+  toast(`✅ ${count} diária${count!==1?'s':''} usada${count!==1?'s':''} (${fmtDate(dataInicio)} → ${fmtDate(dataFim)}) — ${diasRestam===Infinity?'∞':diasRestam} restante${diasRestam!==1?'s':''}`);
+}
+
+function atualizarPlanoBanho() {
+  const tutorId = document.getElementById('ag-tutor').value;
+  const svcOpt  = document.getElementById('ag-servico').selectedOptions[0];
+  const svcNome = (svcOpt?.dataset.nome || svcOpt?.text || '').toLowerCase();
+  const isBanhoTosa = svcNome.includes('banho') || svcNome.includes('tosa');
+  const isVacina    = svcNome.includes('vacin');
+  // vacina field
+  const vField = document.getElementById('ag-vacina-field');
+  if (vField) vField.style.display = isVacina ? '' : 'none';
+  // plano field
+  const pField = document.getElementById('ag-plano-field');
+  if (!pField) return;
+  if (!tutorId || !isBanhoTosa) { pField.style.display='none'; return; }
+  const D = loadDB();
+  const planos = D.planos.filter(p=>p.tutorId===tutorId && p.status==='ativo' && (p.tipo==='Banho/Tosa'||p.tipo==='Estética'||p.tipo==='Outro'));
+  if (!planos.length) { pField.style.display='none'; return; }
+  const sel = document.getElementById('ag-plano');
+  sel.innerHTML = '<option value="">— Não debitar de plano</option>' +
+    planos.map(p=>{
+      const dias = diasRestantes(p);
+      return `<option value="${p.id}">${p.tipo}${p.subtipo?' · '+p.subtipo:''} — ${dias===Infinity?'∞':dias} diária${dias!==1?'s':''} restante${dias!==1?'s':''}</option>`;
+    }).join('');
+  pField.style.display = '';
+}
+
 function savePlano() {
   const tutorId = document.getElementById('pl-tutor').value;
   const valor   = parseFloat(document.getElementById('pl-valor').value)||0;
-  const diario  = parseFloat(document.getElementById('pl-diario').value)||0;
+  const diasInput = parseInt(document.getElementById('pl-dias').value)||0;
+  const diarioInput = parseFloat(document.getElementById('pl-diario').value)||0;
   const inicio  = document.getElementById('pl-inicio').value;
-  if (!tutorId||!valor||!diario||!inicio) { toast('⚠️ Tutor, valor, diária e data são obrigatórios'); return; }
+  if (!tutorId||!valor||!inicio) { toast('⚠️ Tutor, valor e data de início são obrigatórios'); return; }
+  if (!diasInput && !diarioInput) { toast('⚠️ Informe o Nº de diárias ou o valor por diária'); return; }
+  const diasTotal = diasInput || Math.floor(valor/diarioInput);
+  const diario    = diarioInput || (diasTotal ? valor/diasTotal : 0);
   const D    = loadDB();
   const tipo = document.getElementById('pl-tipo').value;
   const modo = document.getElementById('pl-modo').value;
-  const diasTotal = Math.floor(valor/diario);
   const planoId = uid();
   const subtipo = (document.getElementById('pl-subtipo')?.value)||'';
   const freq    = parseInt(document.getElementById('pl-frequencia')?.value)||0;
@@ -2873,6 +3254,7 @@ function savePlano() {
     historicoDiarias: [],
     modoAbate:    modo,
     dataInicio:   inicio,
+    dataTermino:  document.getElementById('pl-termino').value||null,
     ultimoAbate:  inicio,
     obs:          document.getElementById('pl-obs').value.trim(),
     status:       'ativo',
@@ -2887,7 +3269,9 @@ function savePlano() {
   saveDB(D);
   closeModal('modal-new-plano');
   document.getElementById('pl-valor').value='';
+  document.getElementById('pl-dias').value='';
   document.getElementById('pl-diario').value='';
+  document.getElementById('pl-termino').value='';
   document.getElementById('pl-obs').value='';
   document.getElementById('pl-tutor').value='';
   document.getElementById('pl-pet').innerHTML='<option value="">Selecionar pet...</option>';
@@ -3111,6 +3495,10 @@ function abrirModalUsarDiaria(id) {
   const dias  = diasRestantes(p);
   document.getElementById('diaria-plano-id').value = id;
   document.getElementById('diaria-data').value     = todayISO();
+  document.getElementById('diaria-data-fim').value = '';
+  document.getElementById('diaria-fim-field').style.display = 'none';
+  const radioSingle = document.querySelector('input[name="diaria-modo"][value="single"]');
+  if (radioSingle) radioSingle.checked = true;
   document.getElementById('diaria-info').innerHTML =
     `<b>${p.tipo}${p.subtipo?' · '+p.subtipo:''}</b><br>
      <span style="color:var(--muted)">
@@ -3125,8 +3513,17 @@ function confirmarUsoDiaria() {
   const id   = document.getElementById('diaria-plano-id').value;
   const data = document.getElementById('diaria-data').value;
   if (!data) { toast('⚠️ Selecione a data'); return; }
-  closeModal('modal-usar-diaria');
-  usarDiaria(id, data);
+  const modo = document.querySelector('input[name="diaria-modo"]:checked')?.value;
+  if (modo === 'periodo') {
+    const dataFim = document.getElementById('diaria-data-fim').value;
+    if (!dataFim) { toast('⚠️ Selecione a data fim'); return; }
+    if (dataFim < data) { toast('⚠️ Data fim deve ser depois do início'); return; }
+    closeModal('modal-usar-diaria');
+    usarPeriodo(id, data, dataFim);
+  } else {
+    closeModal('modal-usar-diaria');
+    usarDiaria(id, data);
+  }
 }
 
 function abrirHistoricoPlano(id) {
@@ -3595,6 +3992,1016 @@ function delPDV(id) {
 }
 
 // ── FUNCIONÁRIOS ──────────────────────────────────────────────────────────────
+// ── HOSPEDAGEM ────────────────────────────────────────────────────────────────
+
+let _hospTab = 'ativos';
+
+function setHospTab(tab) {
+  _hospTab = tab;
+  ['ativos','todos','alta'].forEach(t => {
+    const btn = document.getElementById('hosp-tab-'+t);
+    if (!btn) return;
+    btn.className = t === tab
+      ? 'btn btn-sm'
+      : 'btn btn-ghost btn-sm';
+    if (t === tab) btn.style.cssText = 'background:var(--brand);color:#fff';
+    else btn.style.cssText = '';
+  });
+  renderHospedagem();
+}
+
+function renderHospedagem() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const tutorMap = {}; D.tutores.forEach(t => tutorMap[t.id] = t);
+  const petMap   = {}; D.pets.forEach(p => petMap[p.id] = p);
+
+  let planos = (D.planos||[]).filter(p => p.tipo === 'Hospedagem');
+
+  if (_hospTab === 'ativos') {
+    planos = planos.filter(p => {
+      if (p.status === 'cancelado') return false;
+      if (p.dataInicio > hoje) return false;
+      if (p.dataTermino && p.dataTermino < hoje) return false;
+      return p.status === 'ativo';
+    });
+  } else if (_hospTab === 'alta') {
+    planos = planos.filter(p => p.status === 'vencido' || (p.dataTermino && p.dataTermino < hoje));
+  }
+  // 'todos' = todos exceto cancelados
+  if (_hospTab === 'todos') planos = planos.filter(p => p.status !== 'cancelado');
+
+  const sub = document.getElementById('hosp-sub');
+  if (sub) sub.textContent = `${planos.length} hóspede${planos.length !== 1 ? 's' : ''}`;
+
+  // Badge no nav
+  const ativos = (D.planos||[]).filter(p => {
+    if (p.tipo !== 'Hospedagem' || p.status !== 'ativo') return false;
+    if (p.dataInicio > hoje) return false;
+    if (p.dataTermino && p.dataTermino < hoje) return false;
+    return true;
+  }).length;
+  const badge = document.getElementById('badge-hospedagem');
+  if (badge) { badge.textContent = ativos; badge.style.display = ativos ? '' : 'none'; }
+
+  const list = document.getElementById('hosp-list');
+  if (!list) return;
+
+  if (!planos.length) {
+    list.innerHTML = `<div style="text-align:center;padding:48px 24px;color:var(--muted)">
+      <i class="ph ph-house" style="font-size:2.5rem;display:block;margin-bottom:12px;opacity:.3"></i>
+      Nenhum hóspede ${_hospTab === 'ativos' ? 'no momento' : 'encontrado'}
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = planos.map(p => {
+    const tutor = tutorMap[p.tutorId];
+    const pet   = petMap[p.petId];
+    const diasRestam = p.dataTermino ? Math.ceil((new Date(p.dataTermino+'T12:00:00') - new Date(hoje+'T12:00:00')) / 86400000) : null;
+    const meds  = (p.medicacoes||[]).length;
+    const statusColor = p.status === 'ativo' ? 'var(--green)' : 'var(--muted)';
+    const statusLabel = p.status === 'ativo' ? 'Hospedado' : 'Alta';
+    const diasLabel = p.dataInicio ? `Entrada: ${fmtDate(p.dataInicio)}` : '';
+    const saidaLabel = p.dataTermino ? ` · Saída: ${fmtDate(p.dataTermino)}` : '';
+    const alerta = diasRestam !== null && diasRestam <= 1 && p.status === 'ativo'
+      ? `<span style="background:rgba(255,100,50,.15);color:#ff6432;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px">${diasRestam === 0 ? 'Saída hoje' : 'Saída amanhã'}</span>`
+      : '';
+
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer" onclick="abrirProntuarioHospede('${p.id}')">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:0">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(74,222,128,.1);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">
+          <i class="ph ph-dog"></i>
+        </div>
+        <div style="min-width:0">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:2px">${pet?.nome || '—'}${alerta}</div>
+          <div style="font-size:.8rem;color:var(--text2)">${tutor?.nome || '—'} · ${tutor?.tel || ''}</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${diasLabel}${saidaLabel}${meds ? ` · <span style="color:var(--accent)">${meds} medicação${meds!==1?'ões':''}</span>` : ''}</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <span style="font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${statusColor}">${statusLabel}</span>
+        ${diasRestam !== null && p.status==='ativo' ? `<span style="font-size:.75rem;color:var(--muted)">${diasRestam > 0 ? diasRestam+' dia'+( diasRestam!==1?'s':'')+' restante'+(diasRestam!==1?'s':'') : 'Último dia'}</span>` : ''}
+        <i class="ph ph-caret-right" style="color:var(--muted);font-size:.9rem"></i>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function abrirProntuarioHospede(planoId) {
+  const D = loadDB();
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  const pet   = D.pets.find(x => x.id === p.petId);
+  const tutor = D.tutores.find(x => x.id === p.tutorId);
+
+  document.getElementById('pront-plano-id').value = planoId;
+  document.getElementById('pront-titulo').textContent = pet?.nome || 'Hóspede';
+  document.getElementById('pront-alimentacao').value = p.alimentacaoPadrao || '';
+  document.getElementById('pront-obs').value = p.obsGerais || '';
+
+  // Info pet
+  document.getElementById('pront-info-pet').innerHTML = `
+    <div style="display:flex;gap:14px;align-items:center">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(74,222,128,.1);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0"><i class="ph ph-dog"></i></div>
+      <div>
+        <div style="font-weight:700;font-size:.95rem">${pet?.nome || '—'} <span style="font-weight:400;color:var(--text2)">${pet?.raca ? '· '+pet.raca : ''}</span></div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">${tutor?.nome || '—'} · ${tutor?.tel || '—'}</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">${pet?.peso ? 'Peso: '+pet.peso+'kg' : ''} ${pet?.porte ? '· '+pet.porte : ''}</div>
+      </div>
+    </div>`;
+
+  // Período
+  const periodoEl = document.getElementById('pront-periodo');
+  const chips = [];
+  if (p.dataInicio) chips.push(`<span style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--text2)"><i class="ph ph-sign-in" style="margin-right:4px"></i>Entrada: ${fmtDate(p.dataInicio)}</span>`);
+  if (p.dataTermino) chips.push(`<span style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--text2)"><i class="ph ph-sign-out" style="margin-right:4px"></i>Saída: ${fmtDate(p.dataTermino)}</span>`);
+  const diasRestam = p.dataTermino ? Math.ceil((new Date(p.dataTermino+'T12:00:00') - new Date(todayISO()+'T12:00:00')) / 86400000) : null;
+  if (diasRestam !== null && p.status==='ativo') chips.push(`<span style="background:var(--accent-dim);border:1px solid rgba(232,115,74,.2);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--accent)">${diasRestam > 0 ? diasRestam+' dia'+(diasRestam!==1?'s':'')+' restante'+(diasRestam!==1?'s':'') : 'Último dia'}</span>`);
+  periodoEl.innerHTML = chips.join('');
+
+  // Medicações
+  renderMedsLista(p.medicacoes || []);
+  document.getElementById('pront-add-med').style.display = 'none';
+  document.getElementById('med-nome').value = '';
+  document.getElementById('med-dose').value = '';
+  document.getElementById('med-horarios').value = '';
+
+  // Inicializa tabs e data do checklist
+  _checkDate = todayISO();
+  setProntTab('prontuario');
+  popularPlantonistas();
+
+  openModal('modal-prontuario-hospede');
+}
+
+function renderMedsLista(meds) {
+  const el = document.getElementById('pront-meds-list');
+  if (!meds.length) {
+    el.innerHTML = `<div style="font-size:.82rem;color:var(--muted)">Nenhuma medicação cadastrada.</div>`;
+    return;
+  }
+  el.innerHTML = meds.map((m, i) => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <div>
+        <div style="font-size:.85rem;font-weight:700">${m.nome} <span style="font-weight:400;color:var(--text2)">· ${m.dose}</span></div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${(m.horarios||[]).join(' · ')}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="removerMed(${i})"><i class="ph ph-trash"></i></button>
+    </div>`).join('');
+}
+
+function abrirAddMed() {
+  document.getElementById('pront-add-med').style.display = '';
+  document.getElementById('med-nome').focus();
+}
+
+function salvarMedicacao() {
+  const nome     = document.getElementById('med-nome').value.trim();
+  const dose     = document.getElementById('med-dose').value.trim();
+  const horariosRaw = document.getElementById('med-horarios').value.trim();
+  if (!nome) { toast('⚠️ Informe o nome da medicação'); return; }
+  const horarios = horariosRaw ? horariosRaw.split(',').map(h => h.trim()).filter(Boolean) : [];
+  const D = loadDB();
+  const planoId = document.getElementById('pront-plano-id').value;
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  if (!p.medicacoes) p.medicacoes = [];
+  p.medicacoes.push({ nome, dose, horarios });
+  saveDB(D);
+  renderMedsLista(p.medicacoes);
+  document.getElementById('pront-add-med').style.display = 'none';
+  document.getElementById('med-nome').value = '';
+  document.getElementById('med-dose').value = '';
+  document.getElementById('med-horarios').value = '';
+  toast('✅ Medicação adicionada');
+}
+
+function removerMed(idx) {
+  const D = loadDB();
+  const planoId = document.getElementById('pront-plano-id').value;
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p || !p.medicacoes) return;
+  p.medicacoes.splice(idx, 1);
+  saveDB(D);
+  renderMedsLista(p.medicacoes);
+}
+
+function salvarProntuario() {
+  const D = loadDB();
+  const planoId = document.getElementById('pront-plano-id').value;
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  p.alimentacaoPadrao = document.getElementById('pront-alimentacao').value.trim();
+  p.obsGerais         = document.getElementById('pront-obs').value.trim();
+  saveDB(D);
+  closeModal('modal-prontuario-hospede');
+  renderHospedagem();
+  toast('✅ Prontuário salvo');
+}
+
+function updateHospedagemBadge() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const ativos = (D.planos||[]).filter(p => {
+    if (p.tipo !== 'Hospedagem' || p.status !== 'ativo') return false;
+    if (p.dataInicio > hoje) return false;
+    if (p.dataTermino && p.dataTermino < hoje) return false;
+    return true;
+  }).length;
+  const badge = document.getElementById('badge-hospedagem');
+  if (badge) { badge.textContent = ativos; badge.style.display = ativos ? '' : 'none'; }
+}
+
+// ─── Hospedagem S2: Rotina / Checklist ───────────────────────────────────────
+
+let _checkDate = '';
+
+function setProntTab(tab) {
+  document.getElementById('pront-tab-prontuario').style.display = tab === 'prontuario' ? '' : 'none';
+  document.getElementById('pront-tab-rotina').style.display     = tab === 'rotina'     ? '' : 'none';
+  const btnP = document.getElementById('pront-btn-prontuario');
+  const btnR = document.getElementById('pront-btn-rotina');
+  if (tab === 'prontuario') {
+    btnP.className='btn btn-sm'; btnP.style.cssText='background:var(--brand);color:#fff';
+    btnR.className='btn btn-ghost btn-sm'; btnR.style.cssText='';
+  } else {
+    btnR.className='btn btn-sm'; btnR.style.cssText='background:var(--brand);color:#fff';
+    btnP.className='btn btn-ghost btn-sm'; btnP.style.cssText='';
+    const planoId = document.getElementById('pront-plano-id').value;
+    renderChecklist(planoId, _checkDate);
+  }
+}
+
+function popularPlantonistas() {
+  const D   = loadDB();
+  const sel = document.getElementById('check-plantonista');
+  if (!sel) return;
+  const funs = (D.funcionarios||[]).filter(f => f.status !== 'inativo');
+  sel.innerHTML = '<option value="">— Selecionar</option>' +
+    funs.map(f => `<option value="${f.id}">${f.nome}</option>`).join('');
+}
+
+function navChecklistDate(delta) {
+  const d = new Date(_checkDate + 'T12:00:00');
+  d.setDate(d.getDate() + delta);
+  _checkDate = d.toISOString().slice(0,10);
+  const planoId = document.getElementById('pront-plano-id').value;
+  renderChecklist(planoId, _checkDate);
+}
+
+function getOrCreateChecklist(p, dateISO) {
+  if (!p.checklist) p.checklist = {};
+  if (!p.checklist[dateISO]) {
+    p.checklist[dateISO] = {
+      alimentacao: {
+        manha: { feito:false, obs:'', feitorPor:'', hora:null },
+        tarde: { feito:false, obs:'', feitorPor:'', hora:null },
+        noite: { feito:false, obs:'', feitorPor:'', hora:null }
+      },
+      medicacoes: (p.medicacoes||[]).map(m => ({
+        nome: m.nome, dose: m.dose,
+        horarios: (m.horarios||[]).map(h => ({ hora:h, feito:false, feitorPor:'', horaReal:null }))
+      })),
+      atividades: { passeio:false, recreacao:false, socializacao:false },
+      observacoes: ''
+    };
+  }
+  return p.checklist[dateISO];
+}
+
+function isOverdue(dateISO, hora) {
+  if (!hora) return false;
+  const hoje = todayISO();
+  if (dateISO !== hoje) return false;
+  const now  = new Date();
+  const [hh, mm] = hora.split(':').map(Number);
+  const scheduled = new Date(); scheduled.setHours(hh, mm+30, 0, 0);
+  return now > scheduled;
+}
+
+function renderChecklist(planoId, dateISO) {
+  const D = loadDB();
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+
+  const ck = getOrCreateChecklist(p, dateISO);
+
+  // Label da data
+  const labelEl = document.getElementById('check-date-label');
+  if (labelEl) {
+    const hoje = todayISO();
+    const d = new Date(dateISO + 'T12:00:00');
+    const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const label = dateISO === hoje ? 'Hoje' : dateISO === ontem() ? 'Ontem' : weekdays[d.getDay()];
+    labelEl.textContent = `${label}, ${fmtDate(dateISO)}`;
+  }
+
+  const REFEICOES = [
+    { key:'manha', label:'Manhã',  icon:'ph-sun-horizon', hora:'07:30' },
+    { key:'tarde', label:'Tarde',  icon:'ph-sun',         hora:'13:00' },
+    { key:'noite', label:'Noite',  icon:'ph-moon',        hora:'19:00' }
+  ];
+
+  const ATIVIDADES = [
+    { key:'passeio',      label:'Passeio'      },
+    { key:'recreacao',    label:'Recreação'     },
+    { key:'socializacao', label:'Socialização'  }
+  ];
+
+  let html = '';
+
+  // ── Alimentação ──────────────────────────────────────────────────────────
+  html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
+      <i class="ph ph-bowl-food" style="margin-right:4px"></i>Alimentação
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">`;
+
+  REFEICOES.forEach(r => {
+    const slot = ck.alimentacao[r.key];
+    const overdue = !slot.feito && isOverdue(dateISO, r.hora);
+    const doneStyle = slot.feito ? 'opacity:.5;text-decoration:line-through' : '';
+    const badge = overdue ? `<span style="background:rgba(255,80,50,.15);color:#ff5032;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px">Atrasado</span>` : '';
+    html += `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:${slot.feito?'rgba(74,222,128,.07)':overdue?'rgba(255,80,50,.04)':'var(--surface)'};border:1px solid ${overdue&&!slot.feito?'rgba(255,80,50,.2)':'var(--border)'}">
+        <button onclick="toggleAlimentacao('${planoId}','${dateISO}','${r.key}')"
+          style="width:22px;height:22px;border-radius:6px;border:2px solid ${slot.feito?'var(--green)':overdue?'#ff5032':'var(--border)'};background:${slot.feito?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s">
+          ${slot.feito?'<i class="ph ph-check" style="color:#fff;font-size:12px"></i>':''}
+        </button>
+        <i class="ph ${r.icon}" style="color:var(--text2);font-size:.9rem;flex-shrink:0"></i>
+        <div style="flex:1;min-width:0">
+          <span style="font-size:.85rem;font-weight:600;${doneStyle}">${r.label}${badge}</span>
+          ${slot.feitorPor ? `<div style="font-size:.72rem;color:var(--muted);margin-top:1px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${slot.feitorPor} · ${slot.hora}</div>` : `<div style="font-size:.72rem;color:var(--muted)">Previsto: ${r.hora}</div>`}
+        </div>
+      </div>`;
+  });
+
+  html += `</div></div>`;
+
+  // ── Medicações ───────────────────────────────────────────────────────────
+  if (ck.medicacoes && ck.medicacoes.length) {
+    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
+        <i class="ph ph-pill" style="margin-right:4px"></i>Medicações
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">`;
+
+    ck.medicacoes.forEach((med, mi) => {
+      const pendentes = (med.horarios||[]).filter(h => !h.feito).length;
+      const atrasados = (med.horarios||[]).filter(h => !h.feito && isOverdue(dateISO, h.hora)).length;
+      html += `<div>
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">
+          ${med.nome} <span style="font-weight:400;color:var(--text2)">· ${med.dose}</span>
+          ${atrasados ? `<span style="background:rgba(255,80,50,.15);color:#ff5032;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px">${atrasados} atrasado${atrasados!==1?'s':''}</span>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">`;
+
+      (med.horarios||[]).forEach((slot, hi) => {
+        const overdue = !slot.feito && isOverdue(dateISO, slot.hora);
+        html += `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:${slot.feito?'rgba(74,222,128,.07)':overdue?'rgba(255,80,50,.04)':'var(--surface)'};border:1px solid ${overdue&&!slot.feito?'rgba(255,80,50,.2)':'var(--border)'}">
+            <button onclick="toggleMedicacao('${planoId}','${dateISO}',${mi},${hi})"
+              style="width:22px;height:22px;border-radius:6px;border:2px solid ${slot.feito?'var(--green)':overdue?'#ff5032':'var(--border)'};background:${slot.feito?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s">
+              ${slot.feito?'<i class="ph ph-check" style="color:#fff;font-size:12px"></i>':''}
+            </button>
+            <div style="flex:1;min-width:0">
+              <span style="font-size:.82rem;font-weight:600;${slot.feito?'opacity:.5;text-decoration:line-through':''}">${slot.hora}</span>
+              ${slot.feitorPor ? `<span style="font-size:.72rem;color:var(--muted);margin-left:6px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${slot.feitorPor} · ${slot.horaReal}</span>` : (overdue?`<span style="font-size:.72rem;color:#ff5032;margin-left:6px">Passou o horário</span>`:'')}
+            </div>
+          </div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    html += `</div></div>`;
+  } else {
+    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px"><i class="ph ph-pill" style="margin-right:4px"></i>Medicações</div>
+      <div style="font-size:.82rem;color:var(--muted)">Nenhuma medicação cadastrada no prontuário.</div>
+    </div>`;
+  }
+
+  // ── Atividades ───────────────────────────────────────────────────────────
+  html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
+      <i class="ph ph-dog" style="margin-right:4px"></i>Atividades
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">`;
+
+  ATIVIDADES.forEach(a => {
+    const ativo = ck.atividades[a.key];
+    html += `<button onclick="toggleAtividade('${planoId}','${dateISO}','${a.key}')"
+      style="padding:6px 14px;border-radius:8px;font-size:.8rem;font-weight:600;border:2px solid ${ativo?'var(--green)':'var(--border)'};background:${ativo?'rgba(74,222,128,.12)':'transparent'};color:${ativo?'var(--green)':'var(--text2)'};cursor:pointer;transition:all .15s">
+      ${ativo?'<i class="ph ph-check" style="margin-right:4px"></i>':''}${a.label}
+    </button>`;
+  });
+
+  html += `</div></div>`;
+
+  // ── Observações do dia ───────────────────────────────────────────────────
+  html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">
+      <i class="ph ph-note" style="margin-right:4px"></i>Obs do dia
+    </div>
+    <textarea id="check-obs" rows="2" style="width:100%;box-sizing:border-box"
+      placeholder="Comportamento, apetite, ocorrências..."
+      onblur="saveChecklistObs('${planoId}','${dateISO}')">${ck.observacoes||''}</textarea>
+  </div>`;
+
+  document.getElementById('check-content').innerHTML = html;
+}
+
+function ontem() {
+  const d = new Date(todayISO()+'T12:00:00'); d.setDate(d.getDate()-1);
+  return d.toISOString().slice(0,10);
+}
+
+function getPlantonistaNome() {
+  const sel = document.getElementById('check-plantonista');
+  if (!sel || !sel.value) return 'Plantonista';
+  const D = loadDB();
+  const f = (D.funcionarios||[]).find(x => x.id === sel.value);
+  return f ? f.nome.split(' ')[0] : 'Plantonista';
+}
+
+function toggleAlimentacao(planoId, dateISO, refeicao) {
+  const D = loadDB();
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  getOrCreateChecklist(p, dateISO);
+  const slot = p.checklist[dateISO].alimentacao[refeicao];
+  slot.feito = !slot.feito;
+  if (slot.feito) {
+    slot.feitorPor = getPlantonistaNome();
+    slot.hora = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+  } else {
+    slot.feitorPor = ''; slot.hora = null;
+  }
+  saveDB(D);
+  renderChecklist(planoId, dateISO);
+}
+
+function toggleMedicacao(planoId, dateISO, medIdx, horIdx) {
+  const D = loadDB();
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  getOrCreateChecklist(p, dateISO);
+  const slot = p.checklist[dateISO].medicacoes[medIdx].horarios[horIdx];
+  slot.feito = !slot.feito;
+  if (slot.feito) {
+    slot.feitorPor = getPlantonistaNome();
+    slot.horaReal = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+  } else {
+    slot.feitorPor = ''; slot.horaReal = null;
+  }
+  saveDB(D);
+  renderChecklist(planoId, dateISO);
+}
+
+function toggleAtividade(planoId, dateISO, atividade) {
+  const D = loadDB();
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  getOrCreateChecklist(p, dateISO);
+  p.checklist[dateISO].atividades[atividade] = !p.checklist[dateISO].atividades[atividade];
+  saveDB(D);
+  renderChecklist(planoId, dateISO);
+}
+
+function saveChecklistObs(planoId, dateISO) {
+  const D = loadDB();
+  const p = D.planos.find(x => x.id === planoId);
+  if (!p) return;
+  getOrCreateChecklist(p, dateISO);
+  p.checklist[dateISO].observacoes = document.getElementById('check-obs')?.value || '';
+  saveDB(D);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ─── Internação Veterinária ───────────────────────────────────────────────────
+
+let _intTab  = 'ativos';
+let _intCheckDate = '';
+
+function setIntTab(tab) {
+  _intTab = tab;
+  ['ativos','todos','alta'].forEach(t => {
+    const btn = document.getElementById('int-tab-'+t);
+    if (!btn) return;
+    if (t === tab) { btn.className='btn btn-sm'; btn.style.cssText='background:var(--brand);color:#fff'; }
+    else           { btn.className='btn btn-ghost btn-sm'; btn.style.cssText=''; }
+  });
+  renderInternacao();
+}
+
+function renderInternacao() {
+  const D    = loadDB();
+  const hoje = todayISO();
+  const tutorMap = {}; D.tutores.forEach(t => tutorMap[t.id] = t);
+  const petMap   = {}; D.pets.forEach(p => petMap[p.id] = p);
+
+  let list = (D.internacoes||[]);
+  if (_intTab === 'ativos') list = list.filter(i => i.status === 'internado');
+  else if (_intTab === 'alta') list = list.filter(i => i.status === 'alta');
+  else list = list.filter(i => i.status !== 'cancelado');
+
+  const sub = document.getElementById('int-sub');
+  if (sub) sub.textContent = `${list.length} animal${list.length !== 1 ? 'is' : ''}`;
+
+  updateInternacaoBadge();
+
+  const el = document.getElementById('int-list');
+  if (!el) return;
+
+  if (!list.length) {
+    el.innerHTML = `<div style="text-align:center;padding:48px 24px;color:var(--muted)">
+      <i class="ph ph-heartbeat" style="font-size:2.5rem;display:block;margin-bottom:12px;opacity:.3"></i>
+      Nenhum animal ${_intTab === 'ativos' ? 'internado no momento' : 'encontrado'}
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(i => {
+    const tutor = tutorMap[i.tutorId];
+    const pet   = petMap[i.petId];
+    const dias  = i.dataEntrada ? Math.ceil((new Date(hoje+'T12:00:00') - new Date(i.dataEntrada+'T12:00:00')) / 86400000) : 0;
+    const meds  = (i.medicacoes||[]).length;
+    const statusColor = i.status === 'internado' ? '#ff8c42' : 'var(--muted)';
+    const statusLabel = i.status === 'internado' ? 'Internado' : 'Alta';
+    const alertaVia = i.previsaoAlta && i.previsaoAlta <= hoje && i.status === 'internado'
+      ? `<span style="background:rgba(255,80,50,.15);color:#ff5032;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px">Alta prevista</span>` : '';
+
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer" onclick="abrirProntuarioInternacao('${i.id}')">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:0">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,140,66,.1);color:#ff8c42;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">
+          <i class="ph ph-heartbeat"></i>
+        </div>
+        <div style="min-width:0">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:2px">${pet?.nome || '—'}${alertaVia}</div>
+          <div style="font-size:.8rem;color:var(--text2)">${tutor?.nome || '—'} · ${tutor?.tel || ''}</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${i.diagnostico || '—'} · ${dias}d internado${meds ? ` · <span style="color:var(--accent)">${meds} medicação${meds!==1?'ões':''}</span>` : ''}</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <span style="font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${statusColor}">${statusLabel}</span>
+        ${i.medicoResponsavel ? `<span style="font-size:.72rem;color:var(--muted)">${i.medicoResponsavel}</span>` : ''}
+        <i class="ph ph-caret-right" style="color:var(--muted);font-size:.9rem"></i>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateInternacaoBadge() {
+  const D = loadDB();
+  const n = (D.internacoes||[]).filter(i => i.status === 'internado').length;
+  const badge = document.getElementById('badge-internacao');
+  if (badge) { badge.textContent = n; badge.style.display = n ? '' : 'none'; }
+}
+
+function abrirNovaInternacao() {
+  const D = loadDB();
+  // Populate tutor select
+  const sel = document.getElementById('int-tutor');
+  sel.innerHTML = '<option value="">— Selecionar tutor</option>' +
+    D.tutores.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+  document.getElementById('int-pet').innerHTML = '<option value="">— Selecionar tutor primeiro</option>';
+  document.getElementById('int-entrada').value  = todayISO();
+  document.getElementById('int-previsao').value = '';
+  document.getElementById('int-diag').value     = '';
+  document.getElementById('int-medico').value   = '';
+  document.getElementById('int-obs').value      = '';
+  openModal('modal-nova-internacao');
+}
+
+function onIntTutorChange() {
+  const D = loadDB();
+  const tutorId = document.getElementById('int-tutor').value;
+  const pets = D.pets.filter(p => p.tutorId === tutorId);
+  const sel = document.getElementById('int-pet');
+  sel.innerHTML = pets.length
+    ? '<option value="">— Selecionar pet</option>' + pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join('')
+    : '<option value="">Nenhum pet cadastrado</option>';
+}
+
+function salvarInternacao() {
+  const petId    = document.getElementById('int-pet').value;
+  const tutorId  = document.getElementById('int-tutor').value;
+  const entrada  = document.getElementById('int-entrada').value;
+  const diag     = document.getElementById('int-diag').value.trim();
+  if (!petId || !tutorId || !entrada || !diag) { toast('⚠️ Preencha tutor, pet, data e diagnóstico'); return; }
+  const D = loadDB();
+  D.internacoes.push({
+    id: uid(),
+    petId, tutorId,
+    dataEntrada:    entrada,
+    previsaoAlta:   document.getElementById('int-previsao').value || null,
+    dataAlta:       null,
+    status:         'internado',
+    diagnostico:    diag,
+    medicoResponsavel: document.getElementById('int-medico').value.trim(),
+    obsAdmissao:    document.getElementById('int-obs').value.trim(),
+    medicacoes:     [],
+    checklist:      {}
+  });
+  saveDB(D);
+  closeModal('modal-nova-internacao');
+  renderInternacao();
+  toast('✅ Animal internado');
+}
+
+function abrirProntuarioInternacao(intId) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  const pet   = D.pets.find(x => x.id === i.petId);
+  const tutor = D.tutores.find(x => x.id === i.tutorId);
+
+  document.getElementById('int-pront-id').value = intId;
+  document.getElementById('int-pront-titulo').textContent = pet?.nome || 'Internação';
+  document.getElementById('int-pront-diag').value    = i.diagnostico || '';
+  document.getElementById('int-pront-medico').value  = i.medicoResponsavel || '';
+  document.getElementById('int-pront-entrada').value = i.dataEntrada || '';
+  document.getElementById('int-pront-previsao').value = i.previsaoAlta || '';
+  document.getElementById('int-pront-obs').value     = i.obsAdmissao || '';
+
+  document.getElementById('int-pront-info').innerHTML = `
+    <div style="display:flex;gap:14px;align-items:center">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,140,66,.1);color:#ff8c42;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0"><i class="ph ph-heartbeat"></i></div>
+      <div>
+        <div style="font-weight:700;font-size:.95rem">${pet?.nome || '—'} <span style="font-weight:400;color:var(--text2)">${pet?.raca ? '· '+pet.raca : ''}</span></div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">${tutor?.nome || '—'} · ${tutor?.tel || '—'}</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">${pet?.peso ? 'Peso: '+pet.peso+'kg' : ''} ${i.status === 'internado' ? '· <span style="color:#ff8c42;font-weight:700">Internado</span>' : '· <span style="color:var(--muted)">Alta</span>'}</div>
+      </div>
+    </div>`;
+
+  const chips = [];
+  if (i.dataEntrada) chips.push(`<span style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--text2)"><i class="ph ph-sign-in" style="margin-right:4px"></i>Entrada: ${fmtDate(i.dataEntrada)}</span>`);
+  if (i.previsaoAlta) chips.push(`<span style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--text2)"><i class="ph ph-calendar" style="margin-right:4px"></i>Alta prevista: ${fmtDate(i.previsaoAlta)}</span>`);
+  if (i.dataAlta) chips.push(`<span style="background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--green)"><i class="ph ph-sign-out" style="margin-right:4px"></i>Alta: ${fmtDate(i.dataAlta)}</span>`);
+  document.getElementById('int-pront-periodo').innerHTML = chips.join('');
+
+  renderIntMedsLista(i.medicacoes || []);
+  document.getElementById('int-add-med').style.display = 'none';
+
+  _intCheckDate = todayISO();
+  setIntProntTab('admissao');
+  popularIntPlantonistas();
+  openModal('modal-prontuario-internacao');
+}
+
+function setIntProntTab(tab) {
+  document.getElementById('int-tab-admissao').style.display = tab === 'admissao' ? '' : 'none';
+  document.getElementById('int-tab-rotina').style.display   = tab === 'rotina'   ? '' : 'none';
+  const btnA = document.getElementById('int-btn-admissao');
+  const btnR = document.getElementById('int-btn-rotina');
+  if (tab === 'admissao') {
+    btnA.className='btn btn-sm'; btnA.style.cssText='background:var(--brand);color:#fff';
+    btnR.className='btn btn-ghost btn-sm'; btnR.style.cssText='';
+  } else {
+    btnR.className='btn btn-sm'; btnR.style.cssText='background:var(--brand);color:#fff';
+    btnA.className='btn btn-ghost btn-sm'; btnA.style.cssText='';
+    renderIntChecklist(document.getElementById('int-pront-id').value, _intCheckDate);
+  }
+}
+
+function salvarAdmissao() {
+  const D = loadDB();
+  const intId = document.getElementById('int-pront-id').value;
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  i.diagnostico      = document.getElementById('int-pront-diag').value.trim();
+  i.medicoResponsavel = document.getElementById('int-pront-medico').value.trim();
+  i.dataEntrada      = document.getElementById('int-pront-entrada').value;
+  i.previsaoAlta     = document.getElementById('int-pront-previsao').value || null;
+  i.obsAdmissao      = document.getElementById('int-pront-obs').value.trim();
+  saveDB(D);
+  closeModal('modal-prontuario-internacao');
+  renderInternacao();
+  toast('✅ Prontuário salvo');
+}
+
+function darAltaInternacao(intId) {
+  if (!confirm('Confirmar alta do animal?')) return;
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  i.status   = 'alta';
+  i.dataAlta = todayISO();
+  saveDB(D);
+  closeModal('modal-prontuario-internacao');
+  renderInternacao();
+  toast('✅ Alta registrada');
+}
+
+function renderIntMedsLista(meds) {
+  const el = document.getElementById('int-meds-list');
+  if (!meds.length) {
+    el.innerHTML = `<div style="font-size:.82rem;color:var(--muted)">Nenhuma medicação prescrita.</div>`;
+    return;
+  }
+  el.innerHTML = meds.map((m, idx) => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <div>
+        <div style="font-size:.85rem;font-weight:700">${m.nome} <span style="font-weight:400;color:var(--text2)">· ${m.dose}</span> <span style="background:rgba(255,140,66,.15);color:#ff8c42;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700">${m.via||'VO'}</span></div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${(m.horarios||[]).join(' · ')}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="removerIntMed(${idx})"><i class="ph ph-trash"></i></button>
+    </div>`).join('');
+}
+
+function abrirAddIntMed() {
+  document.getElementById('int-add-med').style.display = '';
+  document.getElementById('int-med-nome').focus();
+}
+
+function salvarIntMedicacao() {
+  const nome  = document.getElementById('int-med-nome').value.trim();
+  const dose  = document.getElementById('int-med-dose').value.trim();
+  const via   = document.getElementById('int-med-via').value;
+  const hRaw  = document.getElementById('int-med-horarios').value.trim();
+  if (!nome) { toast('⚠️ Informe o nome'); return; }
+  const horarios = hRaw ? hRaw.split(',').map(h => h.trim()).filter(Boolean) : [];
+  const D = loadDB();
+  const intId = document.getElementById('int-pront-id').value;
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  if (!i.medicacoes) i.medicacoes = [];
+  i.medicacoes.push({ nome, dose, via, horarios });
+  saveDB(D);
+  renderIntMedsLista(i.medicacoes);
+  document.getElementById('int-add-med').style.display = 'none';
+  ['int-med-nome','int-med-dose','int-med-horarios'].forEach(id => document.getElementById(id).value = '');
+  toast('✅ Medicação adicionada');
+}
+
+function removerIntMed(idx) {
+  const D = loadDB();
+  const intId = document.getElementById('int-pront-id').value;
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i || !i.medicacoes) return;
+  i.medicacoes.splice(idx, 1);
+  saveDB(D);
+  renderIntMedsLista(i.medicacoes);
+}
+
+function popularIntPlantonistas() {
+  const D   = loadDB();
+  const sel = document.getElementById('int-check-plantonista');
+  if (!sel) return;
+  const funs = (D.funcionarios||[]).filter(f => f.status !== 'inativo');
+  sel.innerHTML = '<option value="">— Selecionar</option>' +
+    funs.map(f => `<option value="${f.id}">${f.nome}</option>`).join('');
+}
+
+function getIntPlantonistaNome() {
+  const sel = document.getElementById('int-check-plantonista');
+  if (!sel || !sel.value) return 'Plantonista';
+  const D = loadDB();
+  const f = (D.funcionarios||[]).find(x => x.id === sel.value);
+  return f ? f.nome.split(' ')[0] : 'Plantonista';
+}
+
+function navIntChecklistDate(delta) {
+  const d = new Date(_intCheckDate + 'T12:00:00');
+  d.setDate(d.getDate() + delta);
+  _intCheckDate = d.toISOString().slice(0,10);
+  renderIntChecklist(document.getElementById('int-pront-id').value, _intCheckDate);
+}
+
+function getOrCreateIntChecklist(i, dateISO) {
+  if (!i.checklist) i.checklist = {};
+  if (!i.checklist[dateISO]) {
+    i.checklist[dateISO] = {
+      medicacoes: (i.medicacoes||[]).map(m => ({
+        nome: m.nome, dose: m.dose, via: m.via||'VO',
+        horarios: (m.horarios||[]).map(h => ({ hora:h, feito:false, feitorPor:'', horaReal:null }))
+      })),
+      alimentacao: { aceitou: null, obs: '' },
+      evolucao: ''
+    };
+  }
+  return i.checklist[dateISO];
+}
+
+function renderIntChecklist(intId, dateISO) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+
+  const ck = getOrCreateIntChecklist(i, dateISO);
+
+  const labelEl = document.getElementById('int-check-date-label');
+  if (labelEl) {
+    const hoje = todayISO();
+    const d = new Date(dateISO + 'T12:00:00');
+    const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const label = dateISO === hoje ? 'Hoje' : dateISO === ontem() ? 'Ontem' : weekdays[d.getDay()];
+    labelEl.textContent = `${label}, ${fmtDate(dateISO)}`;
+  }
+
+  let html = '';
+
+  // ── Medicações ───────────────────────────────────────────────────────────
+  if (ck.medicacoes && ck.medicacoes.length) {
+    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
+        <i class="ph ph-pill" style="margin-right:4px"></i>Medicações
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">`;
+
+    ck.medicacoes.forEach((med, mi) => {
+      const atrasados = (med.horarios||[]).filter(h => !h.feito && isOverdue(dateISO, h.hora)).length;
+      html += `<div>
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">
+          ${med.nome} <span style="font-weight:400;color:var(--text2)">· ${med.dose}</span>
+          <span style="background:rgba(255,140,66,.15);color:#ff8c42;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700">${med.via}</span>
+          ${atrasados ? `<span style="background:rgba(255,80,50,.15);color:#ff5032;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px">${atrasados} atrasada${atrasados!==1?'s':''}</span>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">`;
+
+      (med.horarios||[]).forEach((slot, hi) => {
+        const overdue = !slot.feito && isOverdue(dateISO, slot.hora);
+        html += `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:${slot.feito?'rgba(74,222,128,.07)':overdue?'rgba(255,80,50,.04)':'var(--surface)'};border:1px solid ${overdue&&!slot.feito?'rgba(255,80,50,.2)':'var(--border)'}">
+            <button onclick="toggleIntMedicacao('${intId}','${dateISO}',${mi},${hi})"
+              style="width:22px;height:22px;border-radius:6px;border:2px solid ${slot.feito?'var(--green)':overdue?'#ff5032':'var(--border)'};background:${slot.feito?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s">
+              ${slot.feito?'<i class="ph ph-check" style="color:#fff;font-size:12px"></i>':''}
+            </button>
+            <div style="flex:1;min-width:0">
+              <span style="font-size:.82rem;font-weight:600;${slot.feito?'opacity:.5;text-decoration:line-through':''}">${slot.hora}</span>
+              ${slot.feitorPor ? `<span style="font-size:.72rem;color:var(--muted);margin-left:6px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${slot.feitorPor} · ${slot.horaReal}</span>` : (overdue?`<span style="font-size:.72rem;color:#ff5032;margin-left:6px">Passou o horário</span>`:'')}
+            </div>
+          </div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    html += `</div></div>`;
+  } else {
+    html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px"><i class="ph ph-pill" style="margin-right:4px"></i>Medicações</div>
+      <div style="font-size:.82rem;color:var(--muted)">Nenhuma medicação prescrita. Cadastre na aba Admissão.</div>
+    </div>`;
+  }
+
+  // ── Alimentação ───────────────────────────────────────────────────────────
+  const al = ck.alimentacao;
+  html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
+      <i class="ph ph-bowl-food" style="margin-right:4px"></i>Alimentação
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <button onclick="toggleIntAlimentacao('${intId}','${dateISO}',true)"
+        style="padding:6px 16px;border-radius:8px;font-size:.82rem;font-weight:600;border:2px solid ${al.aceitou===true?'var(--green)':'var(--border)'};background:${al.aceitou===true?'rgba(74,222,128,.12)':'transparent'};color:${al.aceitou===true?'var(--green)':'var(--text2)'};cursor:pointer;transition:all .15s">
+        ${al.aceitou===true?'<i class="ph ph-check" style="margin-right:4px"></i>':''}Aceitou
+      </button>
+      <button onclick="toggleIntAlimentacao('${intId}','${dateISO}',false)"
+        style="padding:6px 16px;border-radius:8px;font-size:.82rem;font-weight:600;border:2px solid ${al.aceitou===false?'#ff5032':'var(--border)'};background:${al.aceitou===false?'rgba(255,80,50,.08)':'transparent'};color:${al.aceitou===false?'#ff5032':'var(--text2)'};cursor:pointer;transition:all .15s">
+        ${al.aceitou===false?'<i class="ph ph-x" style="margin-right:4px"></i>':''}Recusou
+      </button>
+    </div>
+    <input type="text" id="int-al-obs" value="${al.obs||''}" placeholder="Obs (quantidade, horário, aceitação parcial...)"
+      style="width:100%;box-sizing:border-box;font-size:.82rem;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text)"
+      onblur="saveIntAlObs('${intId}','${dateISO}')"/>
+  </div>`;
+
+  // ── Evolução do dia ────────────────────────────────────────────────────────
+  html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">
+      <i class="ph ph-note-pencil" style="margin-right:4px"></i>Evolução do dia
+    </div>
+    <textarea id="int-evolucao" rows="3" style="width:100%;box-sizing:border-box"
+      placeholder="Estado geral, temperatura, FC, FR, comportamento, intercorrências..."
+      onblur="saveIntEvolucao('${intId}','${dateISO}')">${ck.evolucao||''}</textarea>
+  </div>`;
+
+  document.getElementById('int-check-content').innerHTML = html;
+}
+
+function toggleIntMedicacao(intId, dateISO, medIdx, horIdx) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  getOrCreateIntChecklist(i, dateISO);
+  const slot = i.checklist[dateISO].medicacoes[medIdx].horarios[horIdx];
+  slot.feito = !slot.feito;
+  if (slot.feito) {
+    slot.feitorPor = getIntPlantonistaNome();
+    slot.horaReal  = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+  } else {
+    slot.feitorPor = ''; slot.horaReal = null;
+  }
+  saveDB(D);
+  renderIntChecklist(intId, dateISO);
+}
+
+function toggleIntAlimentacao(intId, dateISO, aceitou) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  getOrCreateIntChecklist(i, dateISO);
+  const al = i.checklist[dateISO].alimentacao;
+  al.aceitou = al.aceitou === aceitou ? null : aceitou;
+  saveDB(D);
+  renderIntChecklist(intId, dateISO);
+}
+
+function saveIntAlObs(intId, dateISO) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  getOrCreateIntChecklist(i, dateISO);
+  i.checklist[dateISO].alimentacao.obs = document.getElementById('int-al-obs')?.value || '';
+  saveDB(D);
+}
+
+function saveIntEvolucao(intId, dateISO) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  getOrCreateIntChecklist(i, dateISO);
+  i.checklist[dateISO].evolucao = document.getElementById('int-evolucao')?.value || '';
+  saveDB(D);
+}
+
+function gerarRelatorioTutor(intId) {
+  const D = loadDB();
+  const i = D.internacoes.find(x => x.id === intId);
+  if (!i) return;
+  const pet   = D.pets.find(x => x.id === i.petId);
+  const tutor = D.tutores.find(x => x.id === i.tutorId);
+  const cfg   = D.config || {};
+  const hoje  = todayISO();
+  const ck    = i.checklist?.[hoje];
+
+  const medsHtml = (ck?.medicacoes||[]).map(m => {
+    const total  = (m.horarios||[]).length;
+    const feitos = (m.horarios||[]).filter(h => h.feito).length;
+    return `<tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #eee">${m.nome} <span style="color:#666">${m.dose}</span></td>
+      <td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center">${m.via||'VO'}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center">${feitos}/${total}</td>
+    </tr>`;
+  }).join('');
+
+  const alimentacaoLine = ck?.alimentacao?.aceitou === true ? '✅ Aceitou a alimentação'
+    : ck?.alimentacao?.aceitou === false ? '❌ Recusou a alimentação' : '— Não registrado';
+
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+    <title>Relatório — ${pet?.nome || ''}</title>
+    <style>
+      body{font-family:Inter,sans-serif;max-width:600px;margin:40px auto;color:#111;font-size:14px;line-height:1.5}
+      h1{font-size:20px;margin:0 0 4px}
+      h2{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin:24px 0 8px;border-bottom:1px solid #eee;padding-bottom:6px}
+      table{width:100%;border-collapse:collapse}
+      th{background:#f5f5f5;padding:7px 10px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#666}
+      .chip{display:inline-block;background:#f0f0f0;padding:2px 10px;border-radius:4px;font-size:12px;margin:2px}
+      .footer{margin-top:32px;padding-top:16px;border-top:1px solid #eee;font-size:12px;color:#888}
+      @media print{body{margin:20px}}
+    </style>
+  </head><body>
+    <h1>${cfg.nomePetshop || 'Pets Go Control'}</h1>
+    <div style="color:#666;font-size:13px">Relatório de internação — ${fmtDate(hoje)}</div>
+    <hr style="border:none;border-top:2px solid #E8734A;margin:16px 0"/>
+
+    <h2>Animal</h2>
+    <table><tr>
+      <td style="padding:4px 0"><strong>${pet?.nome || '—'}</strong> ${pet?.raca ? '· '+pet.raca : ''}</td>
+      <td style="padding:4px 0;text-align:right;color:#666">${pet?.peso ? pet.peso+'kg' : ''}</td>
+    </tr></table>
+    <div style="margin-top:8px;font-size:13px;color:#444">Tutor: <strong>${tutor?.nome||'—'}</strong> · ${tutor?.tel||''}</div>
+
+    <h2>Internação</h2>
+    <div><span class="chip">Entrada: ${fmtDate(i.dataEntrada)}</span>${i.previsaoAlta?`<span class="chip">Alta prevista: ${fmtDate(i.previsaoAlta)}</span>`:''}</div>
+    <div style="margin-top:8px"><strong>Diagnóstico:</strong> ${i.diagnostico||'—'}</div>
+    ${i.medicoResponsavel?`<div><strong>Médico:</strong> ${i.medicoResponsavel}</div>`:''}
+
+    <h2>Hoje — Medicações</h2>
+    ${medsHtml ? `<table><thead><tr><th>Medicação</th><th>Via</th><th>Administrado</th></tr></thead><tbody>${medsHtml}</tbody></table>` : '<p style="color:#888">Sem medicações prescritas.</p>'}
+
+    <h2>Hoje — Alimentação</h2>
+    <p>${alimentacaoLine}${ck?.alimentacao?.obs ? ' · '+ck.alimentacao.obs : ''}</p>
+
+    <h2>Evolução do dia</h2>
+    <p>${ck?.evolucao || '— Sem registro de evolução para hoje.'}</p>
+
+    <div class="footer">
+      Relatório gerado em ${new Date().toLocaleString('pt-BR')} · ${cfg.nomePetshop || 'Pets Go Control'}
+      <br>Em caso de dúvidas, entre em contato com a equipe.
+    </div>
+    <div style="margin-top:20px;text-align:center">
+      <button onclick="window.print()" style="padding:10px 24px;background:#E8734A;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:Inter,sans-serif">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </body></html>`);
+  win.document.close();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function renderFuncionarios() {
   const D    = loadDB();
   const funs = D.funcionarios||[];
@@ -3934,6 +5341,8 @@ function finishInit(D) {
   populateSel('e-unidade','');
   addPetField();
   updatePlanosBadge();
+  updateHospedagemBadge();
+  updateInternacaoBadge();
   updateDashboard();
   renderClientes();
 }
