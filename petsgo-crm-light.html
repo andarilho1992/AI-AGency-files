@@ -1592,30 +1592,42 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const DB_KEY = 'petsgo_crm';
+let _dbCache = null;
 function getUnidades() { return loadDB().config?.filiais || []; }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
-function loadDB() {
-  try {
-    const d = JSON.parse(localStorage.getItem(DB_KEY) || 'null');
-    if (!d) return emptyDB();
-    d.tutores      = d.tutores      || [];
-    d.pets         = d.pets         || [];
-    d.agendamentos = d.agendamentos || [];
-    d.financeiro   = d.financeiro   || [];
-    d.estoque      = d.estoque      || [];
-    d.servicos     = d.servicos     || [];
-    d.planos       = d.planos       || [];
-    d.funcionarios = d.funcionarios || [];
-    d.contas       = d.contas       || [];
-    d.internacoes  = d.internacoes  || [];
-    d.config       = d.config       || {};
-    return d;
-  } catch { return emptyDB(); }
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
-function emptyDB() { return {tutores:[],pets:[],agendamentos:[],financeiro:[],estoque:[],servicos:[],planos:[],funcionarios:[],contas:[],internacoes:[],config:{}}; }
-function saveDB(d) { localStorage.setItem(DB_KEY, JSON.stringify(d)); }
+
+const DB_SCHEMA = {
+  tutores:[], pets:[], agendamentos:[], financeiro:[], estoque:[],
+  servicos:[], planos:[], funcionarios:[], contas:[], internacoes:[],
+  config:{}
+};
+
+function emptyDB() { return JSON.parse(JSON.stringify(DB_SCHEMA)); }
+
+function loadDB() {
+  if (_dbCache) return _dbCache;
+  try {
+    _dbCache = JSON.parse(localStorage.getItem(DB_KEY) || 'null') || emptyDB();
+  } catch(e) {
+    _dbCache = emptyDB();
+  }
+  Object.keys(DB_SCHEMA).forEach(k => {
+    if (_dbCache[k] === undefined || _dbCache[k] === null) {
+      _dbCache[k] = JSON.parse(JSON.stringify(DB_SCHEMA[k]));
+    }
+  });
+  return _dbCache;
+}
+
+function saveDB(d) {
+  _dbCache = d;
+  localStorage.setItem(DB_KEY, JSON.stringify(d));
+}
 
 function todayISO() { return new Date().toISOString().slice(0,10); }
 
@@ -1689,8 +1701,10 @@ function onSearch(val) {
     curSearch = val.trim().toLowerCase();
     if (curPage !== 'clientes') navTo('clientes');
     else renderClientes();
-    const other = document.getElementById(curPage==='clientes' ? 'search-global' : 'search-clientes');
-    if (other) other.value = val;
+    const globalInput = document.getElementById('search-global');
+    const localInput  = document.getElementById('search-clientes');
+    if (globalInput && globalInput !== document.activeElement) globalInput.value = val;
+    if (localInput  && localInput  !== document.activeElement) localInput.value  = val;
   }, 200);
 }
 
@@ -1797,17 +1811,17 @@ function renderClientes() {
       <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
         <div class="c-avatar" style="${avStyle(t.nome)}">${initials(t.nome)}</div>
         <div style="flex:1;min-width:0">
-          <div class="c-nome">${t.nome}</div>
-          ${t.tel?`<div class="c-tel"><i class="ph ph-phone" style="font-size:10px"></i> ${t.tel}</div>`:''}
+          <div class="c-nome">${esc(t.nome)}</div>
+          ${t.tel?`<div class="c-tel"><i class="ph ph-phone" style="font-size:10px"></i> ${esc(t.tel)}</div>`:''}
         </div>
         <span class="tag ${inativo?'tag-gray':'tag-green'}">${inativo?'Inativo':'Ativo'}</span>
       </div>
       <div class="c-pets">
-        ${pets.length?'🐾 '+pets.map(p=>p.nome+(p.raca?` <span style="color:var(--muted2);font-size:11px">(${p.raca})</span>`:'')).join(', '):'<span style="color:var(--muted2)">Sem pets</span>'}
+        ${pets.length?'🐾 '+pets.map(p=>esc(p.nome)+(p.raca?` <span style="color:var(--muted2);font-size:11px">(${esc(p.raca)})</span>`:'')).join(', '):'<span style="color:var(--muted2)">Sem pets</span>'}
       </div>
       ${planoHtml}
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
-        ${t.unidade?`<span class="tag tag-blue">${t.unidade}</span>`:''}
+        ${t.unidade?`<span class="tag tag-blue">${esc(t.unidade)}</span>`:''}
         ${t.ultimaCompra?`<span class="tag tag-gray">Última: ${fmtDate(t.ultimaCompra)}</span>`:''}
       </div>
       <div class="c-actions">
@@ -1867,8 +1881,8 @@ function viewPets(tid) {
       return `<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div style="font-size:22px">🐾</div>
         <div style="flex:1">
-          <div style="font-weight:700;font-size:14px">${p.nome}</div>
-          <div style="font-size:12px;color:var(--muted)">${[p.raca,p.porte,p.idade].filter(Boolean).join(' · ')||'Sem detalhes'}</div>
+          <div style="font-weight:700;font-size:14px">${esc(p.nome)}</div>
+          <div style="font-size:12px;color:var(--muted)">${[p.raca,p.porte,p.idade].filter(Boolean).map(esc).join(' · ')||'Sem detalhes'}</div>
           ${histHtml}
         </div>
         <button class="btn btn-danger btn-sm" onclick="deletePet('${p.id}','${tid}')"><i class="ph ph-trash"></i></button>
@@ -2000,7 +2014,7 @@ function openEditModal(tid) {
   const pets = D.pets.filter(p=>p.tutorId===tid);
   document.getElementById('e-pets-list').innerHTML = pets.length
     ? pets.map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)">
-        <span>🐾 <strong>${p.nome}</strong>${p.raca?` — ${p.raca}`:''}</span>
+        <span>🐾 <strong>${esc(p.nome)}</strong>${p.raca?` — ${esc(p.raca)}`:''}</span>
         <button class="btn btn-danger btn-sm" onclick="deletePetEdit('${p.id}','${tid}')"><i class="ph ph-trash"></i></button>
       </div>`).join('')
     : '<span style="color:var(--muted2)">Sem pets</span>';
@@ -2096,7 +2110,7 @@ function renderAgenda() {
   const svcChipsEl = document.getElementById('ag-svc-chips');
   if (svcChipsEl) {
     svcChipsEl.innerHTML = `<div class="svc-tab ${agSvcFilter==='todos'?'active':''}" onclick="setAgSvcFilter('todos')">Todos</div>`
-      + svcsNoDia.map(s=>`<div class="svc-tab ${agSvcFilter===s?'active':''}" onclick="setAgSvcFilter('${s.replace(/'/g,'\\\'')}')">${s}</div>`).join('');
+      + svcsNoDia.map(s=>`<div class="svc-tab chip-svc ${agSvcFilter===s?'active':''}" data-svc="${esc(s)}" onclick="setAgSvcFilter(this.dataset.svc)">${esc(s)}</div>`).join('');
   }
 
   if (agSvcFilter!=='todos') list = list.filter(a=>a.servico===agSvcFilter);
@@ -2179,8 +2193,8 @@ function renderAgenda() {
     </div>` : '';
 
     return `<div class="cal-event" style="top:${top}px;height:${height}px;left:${L};width:${W};background:${s.bg};border-left-color:${s.bd};color:${s.tx}">
-      <div class="cal-event-pet">${petNome}${tutorNome?' <span style="font-weight:500;opacity:.7">· '+tutorNome+'</span>':''}</div>
-      ${wide?`<div class="cal-event-sub">${a.hora} · ${a.servico||''}${a.valor?' · '+fmtBRL(a.valor):''}${funcNome?' · '+funcNome:''}</div>`:''}
+      <div class="cal-event-pet">${esc(petNome)}${tutorNome?' <span style="font-weight:500;opacity:.7">· '+esc(tutorNome)+'</span>':''}</div>
+      ${wide?`<div class="cal-event-sub">${a.hora} · ${esc(a.servico||'')}${a.valor?' · '+fmtBRL(a.valor):''}${funcNome?' · '+esc(funcNome):''}</div>`:''}
       ${actions}
     </div>`;
   }).join('');
@@ -2193,8 +2207,8 @@ function renderAgenda() {
         const st = a.status||'agendado';
         const s  = ST_STYLE[st]||ST_STYLE.agendado;
         return `<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:${s.bg};border-left:3px solid ${s.bd};border-radius:8px;color:${s.tx}">
-          <span style="font-size:12px;font-weight:800">${petMap[a.petId]||'Pet'}</span>
-          <span style="font-size:11px;opacity:.75">${a.servico||''}</span>
+          <span style="font-size:12px;font-weight:800">${esc(petMap[a.petId]||'Pet')}</span>
+          <span style="font-size:11px;opacity:.75">${esc(a.servico||'')}</span>
           <div style="margin-left:auto;display:flex;gap:4px">
             ${(st==='agendado'||st==='confirmado')?`<button class="btn btn-success btn-sm" style="font-size:10px;padding:2px 5px" onclick="setAgStatus('${a.id}','andamento')"><i class="ph ph-door-open"></i></button>`:''}
             ${st==='andamento'?`<button class="btn btn-primary btn-sm" style="font-size:10px;padding:2px 5px" onclick="setAgStatus('${a.id}','concluido')"><i class="ph ph-check"></i></button>`:''}
@@ -2270,8 +2284,8 @@ function abrirModalPagarAgenda(id) {
   document.getElementById('pagar-ag-id').value  = id;
   document.getElementById('pagar-ag-valor').value = a.valor||0;
   document.getElementById('pagar-ag-info').innerHTML =
-    `<b>${pet?.nome||'Pet'}</b> · ${tutor?.nome?.split(' ')[0]||''}<br>
-     <span style="color:var(--muted);font-size:12px">${a.servico||''} · ${a.hora||''}</span>`;
+    `<b>${esc(pet?.nome||'Pet')}</b> · ${esc(tutor?.nome?.split(' ')[0]||'')}<br>
+     <span style="color:var(--muted);font-size:12px">${esc(a.servico||'')} · ${a.hora||''}</span>`;
   openModal('modal-pagar-agenda');
 }
 
@@ -2385,7 +2399,7 @@ function onAgTutorChange() {
   const D   = loadDB();
   const pets = D.pets.filter(p=>p.tutorId===tid);
   document.getElementById('ag-pet').innerHTML =
-    '<option value="">Selecionar pet...</option>' + pets.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+    '<option value="">Selecionar pet...</option>' + pets.map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join('');
   atualizarPlanoBanho();
 }
 
@@ -2423,10 +2437,10 @@ function populateAgTutores() {
   const svcAtivos = D.servicos.filter(s=>s.ativo!==false);
   document.getElementById('ag-servico').innerHTML =
     '<option value="">Selecionar...</option>' +
-    svcAtivos.map(s=>`<option value="${s.id}" data-nome="${s.nome}" data-preco="${s.preco||0}">${s.nome}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
+    svcAtivos.map(s=>`<option value="${s.id}" data-nome="${esc(s.nome)}" data-preco="${s.preco||0}">${esc(s.nome)}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
   document.getElementById('ag-tutor').innerHTML =
     '<option value="">Selecionar tutor...</option>' +
-    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${esc(t.nome)}</option>`).join('');
   document.getElementById('ag-pet').innerHTML = '<option value="">Selecionar pet...</option>';
   document.getElementById('ag-valor').value  = '';
   document.getElementById('ag-data').value   = todayISO();
@@ -2437,7 +2451,7 @@ function populateAgTutores() {
   const funs = D.funcionarios.filter(f=>f.status!=='inativo');
   document.getElementById('ag-func').innerHTML =
     '<option value="">— Qualquer</option>' +
-    funs.map(f=>`<option value="${f.id}">${f.nome} (${f.cargo||'—'})</option>`).join('');
+    funs.map(f=>`<option value="${f.id}">${esc(f.nome)} (${esc(f.cargo||'—')})</option>`).join('');
   document.getElementById('ag-pagamento').value='';
 }
 
@@ -2451,6 +2465,16 @@ function saveAgendamento() {
   const D = loadDB();
   const planoSelecionado = document.getElementById('ag-plano')?.value||'';
   const vacinaSubtipo    = document.getElementById('ag-vacina')?.value||'';
+  const funcId = document.getElementById('ag-func').value||null;
+  if (funcId && hora) {
+    const conflito = D.agendamentos.find(ex =>
+      ex.funcionarioId === funcId &&
+      ex.data === data &&
+      ex.status !== 'cancelado' &&
+      ex.hora === hora
+    );
+    if (conflito) return toast(`⚠️ ${hora} já ocupado para este profissional`);
+  }
   D.agendamentos.push({
     id:uid(), tutorId,
     petId:         document.getElementById('ag-pet').value,
@@ -2458,7 +2482,7 @@ function saveAgendamento() {
     servico, data, hora,
     valor:         parseFloat(document.getElementById('ag-valor').value)||0,
     obs:           document.getElementById('ag-obs').value.trim(),
-    funcionarioId: document.getElementById('ag-func').value||null,
+    funcionarioId: funcId,
     formaPagamento:document.getElementById('ag-pagamento').value||null,
     vacinaSubtipo: vacinaSubtipo||null,
     planoDebitado: planoSelecionado||null,
@@ -2522,12 +2546,12 @@ function renderCheckin() {
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div style="font-size:28px">${dn?'🟢':su?'⚪':'🟡'}</div>
         <div style="flex:1">
-          <div style="font-weight:700;font-size:14px">${pet?.nome||'Pet'}</div>
-          <div style="font-size:12px;color:var(--muted)">${tutor?.nome||'—'}</div>
+          <div style="font-weight:700;font-size:14px">${esc(pet?.nome||'Pet')}</div>
+          <div style="font-size:12px;color:var(--muted)">${esc(tutor?.nome||'—')}</div>
         </div>
         <div style="text-align:right">
           <div style="font-size:13px;font-weight:700;color:var(--brand)">${a.hora||'—'}</div>
-          <div style="font-size:11px;color:var(--muted)">${a.servico||''}</div>
+          <div style="font-size:11px;color:var(--muted)">${esc(a.servico||'')}</div>
         </div>
       </div>
       ${a.checkinAt?`<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Entrada: ${new Date(a.checkinAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
@@ -2545,6 +2569,18 @@ function renderCheckin() {
 let finFilter = 'todos';
 let _finTab = 'movimento';
 let _gerencialUnlocked = false;
+let _gerencialLockTimer = null;
+let _reciboMap = {};
+
+function iniciarAutoLockGerencial() {
+  clearTimeout(_gerencialLockTimer);
+  _gerencialLockTimer = setTimeout(() => {
+    if (_gerencialUnlocked) {
+      bloquearGerencial();
+      toast('🔒 Área gerencial bloqueada por inatividade');
+    }
+  }, 15 * 60 * 1000);
+}
 
 function setFinTab(tab) {
   _finTab = tab;
@@ -2588,37 +2624,50 @@ function renderMovimento() {
     el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-receipt" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Nenhuma receita hoje ainda.</div>';
     return;
   }
+  _reciboMap = {};
+  itensHoje.forEach(l => { _reciboMap[l.id] = l; });
   el.innerHTML = itensHoje.map(l=>`
     <div class="fin-item fin-receita">
       <div class="fin-dot"></div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
-        <div style="font-size:11px;color:var(--muted)">${l.formaPagamento||l.categoria||'—'}</div>
+        <div style="font-size:13px;font-weight:600">${esc(l.descricao)}</div>
+        <div style="font-size:11px;color:var(--muted)">${esc(l.formaPagamento||l.categoria||'—')}</div>
       </div>
       <div style="font-size:14px;font-weight:800;color:#006B4F;flex-shrink:0">+${fmtBRL(l.valor)}</div>
-      <button class="btn btn-ghost btn-sm" style="margin-left:6px" title="Gerar recibo" onclick="abrirRecibo(${JSON.stringify(l).replace(/"/g,'&quot;')})"><i class="ph ph-receipt"></i></button>
+      <button class="btn btn-ghost btn-sm" style="margin-left:6px" title="Gerar recibo" onclick="abrirRecibo('${l.id}')"><i class="ph ph-receipt"></i></button>
     </div>`).join('');
 }
 
-function tentarDesbloquearGerencial() {
+async function hashSenha(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function tentarDesbloquearGerencial() {
   const D = loadDB();
-  const senha = D.config?.senhaGerencial;
-  if (!senha) {
+  const stored = D.config?.senhaGerencial;
+  if (!stored) {
     toast('⚠️ Nenhuma senha configurada. Vá em Configurações para definir.');
     return;
   }
   const input = prompt('Senha gerencial:');
   if (input === null) return;
-  if (input === senha) {
-    _gerencialUnlocked = true;
-    document.getElementById('fin-lock-overlay').style.display = 'none';
-    document.getElementById('fin-gerencial-content').style.display = '';
-    document.getElementById('fin-btn-lancamento').style.display = '';
-    renderFinanceiro(); renderContas();
-    toast('🔓 Área gerencial desbloqueada');
+  const isHashed = /^[0-9a-f]{64}$/.test(stored);
+  if (isHashed) {
+    const inputHash = await hashSenha(input);
+    if (inputHash !== stored) { toast('❌ Senha incorreta'); return; }
   } else {
-    toast('❌ Senha incorreta');
+    if (input !== stored) { toast('❌ Senha incorreta'); return; }
+    D.config.senhaGerencial = await hashSenha(input);
+    saveDB(D);
   }
+  _gerencialUnlocked = true;
+  iniciarAutoLockGerencial();
+  document.getElementById('fin-lock-overlay').style.display = 'none';
+  document.getElementById('fin-gerencial-content').style.display = '';
+  document.getElementById('fin-btn-lancamento').style.display = '';
+  renderFinanceiro(); renderContas();
+  toast('🔓 Área gerencial desbloqueada');
 }
 
 function bloquearGerencial() {
@@ -2626,7 +2675,7 @@ function bloquearGerencial() {
   setFinTab('movimento');
 }
 
-function salvarSenha() {
+async function salvarSenha() {
   const s1 = document.getElementById('cfg-senha').value;
   const s2 = document.getElementById('cfg-senha2').value;
   const st = document.getElementById('cfg-senha-status');
@@ -2634,7 +2683,7 @@ function salvarSenha() {
   if (s1 !== s2) { st.textContent = '⚠️ As senhas não conferem.'; st.style.color='var(--red)'; return; }
   const D = loadDB();
   D.config = D.config || {};
-  D.config.senhaGerencial = s1;
+  D.config.senhaGerencial = await hashSenha(s1);
   saveDB(D);
   document.getElementById('cfg-senha').value = '';
   document.getElementById('cfg-senha2').value = '';
@@ -2650,6 +2699,7 @@ function setFinFilter(f) {
 }
 
 function renderFinanceiro() {
+  if (_gerencialUnlocked) iniciarAutoLockGerencial();
   const D   = loadDB();
   const now = new Date();
   const mes = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -2666,6 +2716,8 @@ function renderFinanceiro() {
 
   let itens = [...D.financeiro].sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   if (finFilter!=='todos') itens = itens.filter(l=>l.tipo===finFilter);
+  _reciboMap = {};
+  itens.forEach(l => { _reciboMap[l.id] = l; });
 
   const el = document.getElementById('fin-list');
   if (!itens.length) { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhum lançamento ainda.</div>'; return; }
@@ -2673,11 +2725,11 @@ function renderFinanceiro() {
     <div class="fin-item fin-${l.tipo}">
       <div class="fin-dot"></div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
-        <div style="font-size:11px;color:var(--muted)">${fmtDate(l.data)}${l.categoria?` · ${l.categoria}`:''}</div>
+        <div style="font-size:13px;font-weight:600">${esc(l.descricao)}</div>
+        <div style="font-size:11px;color:var(--muted)">${fmtDate(l.data)}${l.categoria?` · ${esc(l.categoria)}`:''}</div>
       </div>
       <div style="font-size:14px;font-weight:800;color:${l.tipo==='receita'?'#006B4F':'#DC2626'};flex-shrink:0">${l.tipo==='receita'?'+':'−'}${fmtBRL(l.valor)}</div>
-      ${l.tipo==='receita'?`<button class="btn btn-ghost btn-sm" style="margin-left:4px" title="Gerar recibo" onclick="abrirRecibo(${JSON.stringify(l).replace(/"/g,'&quot;')})"><i class="ph ph-receipt"></i></button>`:''}
+      ${l.tipo==='receita'?`<button class="btn btn-ghost btn-sm" style="margin-left:4px" title="Gerar recibo" onclick="abrirRecibo('${l.id}')"><i class="ph ph-receipt"></i></button>`:''}
       <button class="btn btn-danger btn-sm" style="margin-left:4px" onclick="delLancamento('${l.id}')"><i class="ph ph-trash"></i></button>
     </div>`).join('');
 }
@@ -2727,8 +2779,8 @@ function renderEstoque() {
     return `<div class="est-card ${low?'baixo':''}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
         <div>
-          <div style="font-size:14px;font-weight:700">${p.nome}</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">${[p.categoria,p.unidade].filter(Boolean).join(' · ')}</div>
+          <div style="font-size:14px;font-weight:700">${esc(p.nome)}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${[p.categoria,p.unidade].filter(Boolean).map(esc).join(' · ')}</div>
         </div>
         ${low?'<span class="tag tag-red">Baixo</span>':''}
       </div>
@@ -2819,8 +2871,8 @@ function renderConfig() {
     const insumosTxt = (s.insumos||[]).length ? ` · ${s.insumos.length} insumo${s.insumos.length>1?'s':''}` : '';
     return `<div class="svc-row ${inativo?'inativo':''}">
       <div style="flex:1;min-width:0">
-        <div style="font-size:14px;font-weight:700">${s.nome}</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">${s.desc||''}${s.duracao?(s.desc?' · ':'')+s.duracao+' min':''}${insumosTxt}</div>
+        <div style="font-size:14px;font-weight:700">${esc(s.nome)}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${esc(s.desc||'')}${s.duracao?(s.desc?' · ':'')+s.duracao+' min':''}${insumosTxt}</div>
       </div>
       <div style="font-size:13px;font-weight:800;color:var(--brand);min-width:120px;text-align:right">${precoTxt}</div>
       <div style="display:flex;gap:6px;flex-shrink:0;margin-left:12px">
@@ -2899,7 +2951,7 @@ function editServico(id) {
 let svcInsumoIdx=0;
 function addSvcInsumo() {
   const D=loadDB();
-  const opts=D.estoque.map(p=>`<option value="${p.id}">${p.nome} (${p.quantidade} ${p.unidade})</option>`).join('');
+  const opts=D.estoque.map(p=>`<option value="${p.id}">${esc(p.nome)} (${p.quantidade} ${esc(p.unidade||'')})</option>`).join('');
   const i=svcInsumoIdx++;
   document.getElementById('svc-insumos-container').insertAdjacentHTML('beforeend',`
     <div id="svc-ins-${i}" style="display:flex;gap:8px;align-items:center">
@@ -2914,7 +2966,7 @@ function addSvcInsumo() {
 
 function addSvcInsumoPreenchido(estoqueId, qty) {
   const D=loadDB();
-  const opts=D.estoque.map(p=>`<option value="${p.id}"${p.id===estoqueId?' selected':''}>${p.nome} (${p.quantidade} ${p.unidade})</option>`).join('');
+  const opts=D.estoque.map(p=>`<option value="${p.id}"${p.id===estoqueId?' selected':''}>${esc(p.nome)} (${p.quantidade} ${esc(p.unidade||'')})</option>`).join('');
   const i=svcInsumoIdx++;
   document.getElementById('svc-insumos-container').insertAdjacentHTML('beforeend',`
     <div id="svc-ins-${i}" style="display:flex;gap:8px;align-items:center">
@@ -3012,7 +3064,7 @@ function renderTutorPlanos(tutorId) {
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div>
           <div style="font-size:13px;font-weight:800">${p.tipo}</div>
-          ${petMap[p.petId]?`<div style="font-size:11px;color:var(--muted);margin-top:1px">🐾 ${petMap[p.petId]}</div>`:''}
+          ${petMap[p.petId]?`<div style="font-size:11px;color:var(--muted);margin-top:1px">🐾 ${esc(petMap[p.petId])}</div>`:''}
         </div>
         <span class="tag ${ST[p.status]||'tag-gray'}">${STL[p.status]||p.status}</span>
       </div>
@@ -3025,7 +3077,7 @@ function renderTutorPlanos(tutorId) {
         <span style="color:var(--muted)">${fmtBRL(p.valorDiario||0)}/dia · Início: ${fmtDate(p.dataInicio)}</span>
         <span style="font-weight:700;color:${critico?'var(--red)':'var(--muted)'}">${diasTxt}</span>
       </div>
-      ${p.obs?`<div style="font-size:11px;color:var(--muted);margin-bottom:10px;font-style:italic">${p.obs}</div>`:''}
+      ${p.obs?`<div style="font-size:11px;color:var(--muted);margin-bottom:10px;font-style:italic">${esc(p.obs)}</div>`:''}
       ${p.modoAbate==='manual'&&p.status==='ativo'?`<div style="margin-bottom:8px;padding:8px;background:var(--brand-light);border-radius:8px;display:flex;align-items:center;justify-content:space-between">
         <div>
           <div style="font-size:11px;font-weight:700;color:var(--brand)">PACOTE MANUAL</div>
@@ -3047,10 +3099,10 @@ function openNovoPlanoParaTutor() {
   closeModal('modal-tutor-planos');
   document.getElementById('pl-tutor').innerHTML =
     '<option value="">Selecionar tutor...</option>' +
-    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}"${t.id===_curTutorPlanoId?' selected':''}>${t.nome}</option>`).join('');
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}"${t.id===_curTutorPlanoId?' selected':''}>${esc(t.nome)}</option>`).join('');
   document.getElementById('pl-pet').innerHTML =
     '<option value="">Selecionar pet...</option>' +
-    D.pets.filter(p=>p.tutorId===_curTutorPlanoId).map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+    D.pets.filter(p=>p.tutorId===_curTutorPlanoId).map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join('');
   document.getElementById('pl-inicio').value  = todayISO();
   document.getElementById('pl-tipo').value    = 'Hospedagem';
   document.getElementById('pl-valor').value   = '';
@@ -3136,7 +3188,7 @@ function onPlTutorChange() {
   const D   = loadDB();
   document.getElementById('pl-pet').innerHTML =
     '<option value="">Selecionar pet...</option>' +
-    D.pets.filter(p=>p.tutorId===tid).map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+    D.pets.filter(p=>p.tutorId===tid).map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join('');
 }
 
 function onPlValorChange() {
@@ -3235,6 +3287,11 @@ function savePlano() {
   const inicio  = document.getElementById('pl-inicio').value;
   if (!tutorId||!valor||!inicio) { toast('⚠️ Tutor, valor e data de início são obrigatórios'); return; }
   if (!diasInput && !diarioInput) { toast('⚠️ Informe o Nº de diárias ou o valor por diária'); return; }
+  const tipoPlano = document.getElementById('pl-tipo')?.value || '';
+  const petIdPlano = document.getElementById('pl-pet')?.value || '';
+  if (['Hospedagem','Internação'].includes(tipoPlano) && !petIdPlano) {
+    return toast('⚠️ Selecione o pet para plano de ' + tipoPlano);
+  }
   const diasTotal = diasInput || Math.floor(valor/diarioInput);
   const diario    = diarioInput || (diasTotal ? valor/diasTotal : 0);
   const D    = loadDB();
@@ -3362,7 +3419,7 @@ function openNovoPlanoGlobal() {
   const D = loadDB();
   document.getElementById('pl-tutor').innerHTML =
     '<option value="">Selecionar tutor...</option>' +
-    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${esc(t.nome)}</option>`).join('');
   document.getElementById('pl-pet').innerHTML = '<option value="">Selecionar pet...</option>';
   document.getElementById('pl-inicio').value  = todayISO();
   document.getElementById('pl-tipo').value    = 'Creche';
@@ -3408,7 +3465,7 @@ function renderPlanos() {
   alertEl.innerHTML = criticos.length ? `<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
     <i class="ph ph-warning" style="font-size:22px;color:var(--red);flex-shrink:0"></i>
     <div><b style="color:var(--red)">${criticos.length} plano${criticos.length!==1?'s':''} com menos de 3 diárias restantes!</b>
-      <div style="font-size:12px;color:#7F1D1D;margin-top:2px">${criticos.map(p=>{const t=tutorMap[p.tutorId];const d=diasRestantes(p);return `${t?.nome?.split(' ')[0]||'?'} — ${d===0?'<b>ZERADO</b>':`${d} dia${d!==1?'s':''}`}`;}).join(' &nbsp;·&nbsp; ')}</div>
+      <div style="font-size:12px;color:#7F1D1D;margin-top:2px">${criticos.map(p=>{const t=tutorMap[p.tutorId];const d=diasRestantes(p);return `${esc(t?.nome?.split(' ')[0]||'?')} — ${d===0?'<b>ZERADO</b>':`${d} dia${d!==1?'s':''}`}`;}).join(' &nbsp;·&nbsp; ')}</div>
     </div>
   </div>` : '';
 
@@ -3447,8 +3504,8 @@ function renderPlanos() {
       <div style="display:flex;align-items:flex-start;gap:10px">
         <div style="width:40px;height:40px;border-radius:9px;background:var(--brand-light);color:var(--brand);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tutor?.nome||'—'}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:1px">${petNome?`🐾 ${petNome} · `:''}${p.tipo||'Plano'}${p.subtipo?' · '+p.subtipo:''}${p.frequenciaSemana?' · '+p.frequenciaSemana+'×/sem':''}</div>
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(tutor?.nome||'—')}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:1px">${petNome?`🐾 ${esc(petNome)} · `:''}${esc(p.tipo||'Plano')}${p.subtipo?' · '+esc(p.subtipo):''}${p.frequenciaSemana?' · '+p.frequenciaSemana+'×/sem':''}</div>
         </div>
         <div style="text-align:right;flex-shrink:0;min-width:48px">
           <div style="font-size:28px;font-weight:900;line-height:1;color:${cor}">${diasNum}</div>
@@ -3570,44 +3627,40 @@ function setDashFilial(f) {
   updateDashboard();
 }
 
-function updateDashboard() {
-  const D    = loadDB();
+function _getDashContext(D) {
   const hoje = todayISO();
   const now  = new Date();
   const mes  = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const filtrando = curDashFilial !== 'todas';
+  const tutoresF  = filtrando ? D.tutores.filter(t=>t.unidade===curDashFilial) : D.tutores;
+  const tutorIdsF = new Set(tutoresF.map(t=>t.id));
+  const petsF     = D.pets.filter(p=>tutorIdsF.has(p.tutorId));
+  const agsF      = D.agendamentos.filter(a=>tutorIdsF.has(a.tutorId));
+  return {hoje, now, mes, filtrando, tutoresF, tutorIdsF, petsF, agsF};
+}
 
-  // Build filial tabs dinamicamente
+function renderDashStats(D, ctx) {
+  const {hoje, now, mes, filtrando, tutoresF, tutorIdsF, petsF, agsF} = ctx;
   const filiais = [...new Set(D.tutores.map(t=>t.unidade||'').filter(Boolean))].sort();
   const tabsEl  = document.getElementById('dash-filial-tabs');
   if (filiais.length > 1) {
     const all = ['todas', ...filiais];
     tabsEl.innerHTML = all.map(f => {
       const n = f==='todas' ? D.tutores.length : D.tutores.filter(t=>t.unidade===f).length;
-      const label = f==='todas' ? `Todas (${n})` : `${f} (${n})`;
-      return `<div class="svc-tab${curDashFilial===f?' active':''}" data-filial="${f}" onclick="setDashFilial('${f}')">${label}</div>`;
+      const label = f==='todas' ? `Todas (${n})` : `${esc(f)} (${n})`;
+      return `<div class="svc-tab${curDashFilial===f?' active':''}" data-filial="${esc(f)}" onclick="setDashFilial(this.dataset.filial)">${label}</div>`;
     }).join('');
     tabsEl.style.display = '';
   } else {
     tabsEl.style.display = 'none';
     curDashFilial = 'todas';
   }
-
-  // Conjuntos filtrados
-  const filtrando = curDashFilial !== 'todas';
-  const tutoresF  = filtrando ? D.tutores.filter(t=>t.unidade===curDashFilial) : D.tutores;
-  const tutorIdsF = new Set(tutoresF.map(t=>t.id));
-  const petsF     = D.pets.filter(p=>tutorIdsF.has(p.tutorId));
-  const agsF      = D.agendamentos.filter(a=>tutorIdsF.has(a.tutorId));
-
   const ativos  = tutoresF.filter(t=>t.status!=='inativo').length;
   const inat    = tutoresF.filter(t=>t.status==='inativo').length;
   const agsHoje = agsF.filter(a=>a.data===hoje&&a.status!=='cancelado').length;
-
-  // Receita do mês: agendamentos concluídos nessa filial + PDV geral (sem filial)
   const fatAg  = agsF.filter(a=>a.data?.startsWith(mes)&&a.status==='concluido').reduce((s,a)=>s+Number(a.valor||0),0);
   const fatFin = filtrando ? fatAg : D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
-
-  const sfx = filtrando ? ` · ${curDashFilial}` : '';
+  const sfx = filtrando ? ` · ${esc(curDashFilial)}` : '';
   document.getElementById('s-ativos').textContent      = ativos;
   document.getElementById('s-ativos-label').textContent = `Tutores ativos${sfx}`;
   document.getElementById('s-pets').textContent        = petsF.length;
@@ -3617,11 +3670,37 @@ function updateDashboard() {
   document.getElementById('s-fat').textContent         = fmtBRL(filtrando ? fatAg : fatFin);
   document.getElementById('s-fat-label').textContent   = filtrando ? `Serviços/mês estimados${sfx}` : 'Receitas do mês';
   document.getElementById('badge-clientes').textContent = D.tutores.filter(t=>t.status!=='inativo').length;
-
   const hj = now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   document.getElementById('dash-data').textContent = hj.charAt(0).toUpperCase()+hj.slice(1);
+  const filialCount = {};
+  D.tutores.forEach(t=>{ const f=t.unidade||'Sem filial'; filialCount[f]=(filialCount[f]||0)+1; });
+  const entries = Object.entries(filialCount).sort((a,b)=>b[1]-a[1]);
+  const totalTutores = D.tutores.length || 1;
+  document.getElementById('dash-filiais').innerHTML = entries.length===0
+    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
+    : entries.map(([f,n])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;${curDashFilial===f?'opacity:1':'opacity:'+(curDashFilial==='todas'?'1':'.4')}">
+        <div style="font-size:12px;font-weight:${curDashFilial===f?'800':'600'};flex:1;color:${curDashFilial===f?'var(--brand)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(f)}${curDashFilial===f?' ◀':''}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--brand);min-width:20px;text-align:right">${n}</div>
+        <div style="flex:2;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+          <div style="height:100%;background:${curDashFilial===f?'var(--brand)':'var(--muted2)'};border-radius:3px;width:${Math.round(n/totalTutores*100)}%"></div>
+        </div>
+      </div>`).join('');
+  document.getElementById('dash-situacao').innerHTML = tutoresF.length===0
+    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
+    : `<div style="display:flex;gap:12px">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--teal-light);border-radius:8px">
+          <div style="font-size:22px;font-weight:800;color:#006B4F">${ativos}</div>
+          <div style="font-size:11px;color:#006B4F;font-weight:600;margin-top:2px">Ativos</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
+          <div style="font-size:22px;font-weight:800;color:var(--muted)">${inat}</div>
+          <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:2px">Inativos</div>
+        </div>
+      </div>`;
+}
 
-  // Próximos agendamentos (filtrados pela filial)
+function renderDashAgList(D, ctx) {
+  const {hoje, agsF} = ctx;
   const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
   const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
   const prox = agsF
@@ -3634,28 +3713,16 @@ function updateDashboard() {
     : prox.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
         <div style="font-size:12px;font-weight:800;color:var(--brand);min-width:76px">${a.data===hoje?a.hora:fmtDate(a.data)}</div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600">${petMap[a.petId]||'Pet'}</div>
-          <div style="font-size:11px;color:var(--muted)">${tutorMap[a.tutorId]||'—'} · ${a.servico||''}${!filtrando&&tutorMap[a.tutorId]?'':''}</div>
+          <div style="font-size:13px;font-weight:600">${esc(petMap[a.petId]||'Pet')}</div>
+          <div style="font-size:11px;color:var(--muted)">${esc(tutorMap[a.tutorId]||'—')} · ${esc(a.servico||'')}</div>
         </div>
         <span class="tag ${AG_STATUS[a.status]?.cls||'tag-gray'}" style="font-size:10px">${AG_STATUS[a.status]?.label||a.status}</span>
       </div>`).join('');
+}
 
-  // Card "Por Filial" — sempre mostra comparativo geral
-  const filialCount = {};
-  D.tutores.forEach(t=>{ const f=t.unidade||'Sem filial'; filialCount[f]=(filialCount[f]||0)+1; });
-  const entries = Object.entries(filialCount).sort((a,b)=>b[1]-a[1]);
-  const totalTutores = D.tutores.length || 1;
-  document.getElementById('dash-filiais').innerHTML = entries.length===0
-    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
-    : entries.map(([f,n])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;${curDashFilial===f?'opacity:1':'opacity:'+(curDashFilial==='todas'?'1':'.4')}">
-        <div style="font-size:12px;font-weight:${curDashFilial===f?'800':'600'};flex:1;color:${curDashFilial===f?'var(--brand)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f}${curDashFilial===f?' ◀':''}</div>
-        <div style="font-size:11px;font-weight:700;color:var(--brand);min-width:20px;text-align:right">${n}</div>
-        <div style="flex:2;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
-          <div style="height:100%;background:${curDashFilial===f?'var(--brand)':'var(--muted2)'};border-radius:3px;width:${Math.round(n/totalTutores*100)}%"></div>
-        </div>
-      </div>`).join('');
-
-  // Alerta de planos (filtrado pela filial)
+function renderDashAlerts(D, ctx) {
+  const {filtrando, tutorIdsF} = ctx;
+  const sfx = filtrando ? ` · ${esc(curDashFilial)}` : '';
   const planos  = (D.planos||[]).filter(p=>filtrando?tutorIdsF.has(p.tutorId):true);
   const plAlert = planos.filter(p => p.status==='vencido' || (p.status==='ativo'&&(p.valorDiario||0)>0&&diasRestantes(p)<=3));
   const alertEl = document.getElementById('dash-planos-alert');
@@ -3676,19 +3743,14 @@ function updateDashboard() {
       alertEl.style.display = 'none';
     }
   }
+}
 
-  document.getElementById('dash-situacao').innerHTML = tutoresF.length===0
-    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
-    : `<div style="display:flex;gap:12px">
-        <div style="flex:1;text-align:center;padding:12px;background:var(--teal-light);border-radius:8px">
-          <div style="font-size:22px;font-weight:800;color:#006B4F">${ativos}</div>
-          <div style="font-size:11px;color:#006B4F;font-weight:600;margin-top:2px">Ativos</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
-          <div style="font-size:22px;font-weight:800;color:var(--muted)">${inat}</div>
-          <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:2px">Inativos</div>
-        </div>
-      </div>`;
+function updateDashboard() {
+  const D   = loadDB();
+  const ctx = _getDashContext(D);
+  renderDashStats(D, ctx);
+  renderDashAgList(D, ctx);
+  renderDashAlerts(D, ctx);
 }
 
 // ── PDV / CAIXA ───────────────────────────────────────────────────────────────
@@ -3727,8 +3789,8 @@ function renderPDV() {
     <div class="pdv-item">
       <div class="pdv-dot" style="background:var(--teal)"></div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:600">${l.descricao}</div>
-        <div style="font-size:11px;color:var(--muted)">${l.formaPagamento||'—'}${l.tutorId?` · ${tutorMap[l.tutorId]||''}`:''}</div>
+        <div style="font-size:13px;font-weight:600">${esc(l.descricao)}</div>
+        <div style="font-size:11px;color:var(--muted)">${esc(l.formaPagamento||'—')}${l.tutorId?` · ${esc(tutorMap[l.tutorId]||'')}`:''}</div>
       </div>
       <div style="font-weight:800;color:var(--teal);font-size:14px">${fmtBRL(l.valor)}</div>
       <button class="btn btn-danger btn-sm" onclick="delPDV('${l.id}')"><i class="ph ph-trash"></i></button>
@@ -3755,7 +3817,7 @@ function onPdvClienteChange() {
   const pets = clienteId ? D.pets.filter(p=>p.tutorId===clienteId) : [];
   document.getElementById('pdv-plano-pet').innerHTML =
     '<option value="">— Sem pet específico</option>' +
-    pets.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+    pets.map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join('');
 }
 
 function calcPlanoPreview() {
@@ -3793,7 +3855,9 @@ let _reciboLanc  = null;
 // Atualizar após: cd worker-nfe && npm run deploy
 const NFE_WORKER_URL = 'https://petsgo-nfe.andarilhodigital.workers.dev';
 
-function abrirRecibo(l) {
+function abrirRecibo(arg) {
+  const l = (typeof arg === 'string') ? _reciboMap[arg] : arg;
+  if (!l) return;
   _reciboLanc = l;
   const D    = loadDB();
   const cfg  = D.config || {};
@@ -3825,41 +3889,41 @@ hr{border:none;border-top:1px dashed #ccc;margin:12px 0}
 </style></head><body>
 <div class="header">
   <div class="logo">${ini}</div>
-  <div class="shop">${shop}</div>
+  <div class="shop">${esc(shop)}</div>
   <div class="rec-num">Recibo nº ${num}</div>
 </div>
 <hr/>
 <div class="row"><span class="label">Data</span><span class="value">${data} às ${hora}</span></div>
-${tutor?`<div class="row"><span class="label">Cliente</span><span class="value">${tutor.nome}</span></div>`:''}
-${tutor?.tel?`<div class="row"><span class="label">WhatsApp</span><span class="value">${tutor.tel}</span></div>`:''}
-${tutor?.cpf?`<div class="row"><span class="label">CPF</span><span class="value">${tutor.cpf}</span></div>`:''}
-${pet?`<div class="row"><span class="label">Pet</span><span class="value">${pet.nome}${pet.raca?' ('+pet.raca+')':''}</span></div>`:''}
+${tutor?`<div class="row"><span class="label">Cliente</span><span class="value">${esc(tutor.nome)}</span></div>`:''}
+${tutor?.tel?`<div class="row"><span class="label">WhatsApp</span><span class="value">${esc(tutor.tel)}</span></div>`:''}
+${tutor?.cpf?`<div class="row"><span class="label">CPF</span><span class="value">${esc(tutor.cpf)}</span></div>`:''}
+${pet?`<div class="row"><span class="label">Pet</span><span class="value">${esc(pet.nome)}${pet.raca?' ('+esc(pet.raca)+')':''}</span></div>`:''}
 <hr/>
-<div class="row"><span class="label">Descrição</span><span class="value">${l.descricao||'Serviço'}</span></div>
-${l.categoria?`<div class="row"><span class="label">Categoria</span><span class="value">${l.categoria}</span></div>`:''}
-${l.formaPagamento?`<div class="row"><span class="label">Pagamento</span><span class="value">${l.formaPagamento}</span></div>`:''}
+<div class="row"><span class="label">Descrição</span><span class="value">${esc(l.descricao||'Serviço')}</span></div>
+${l.categoria?`<div class="row"><span class="label">Categoria</span><span class="value">${esc(l.categoria)}</span></div>`:''}
+${l.formaPagamento?`<div class="row"><span class="label">Pagamento</span><span class="value">${esc(l.formaPagamento)}</span></div>`:''}
 <div class="total-row"><span>Total</span><span>R$ ${Number(l.valor||0).toFixed(2).replace('.',',')}</span></div>
 <hr/>
-<div class="footer">Obrigado pela preferência!<br>${shop}</div>
+<div class="footer">Obrigado pela preferência!<br>${esc(shop)}</div>
 </body></html>`;
 
   document.getElementById('recibo-preview').innerHTML = `
     <div style="text-align:center;margin-bottom:12px">
       <div style="width:36px;height:36px;border-radius:8px;background:var(--brand);color:#fff;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;margin-bottom:6px">${ini}</div>
-      <div style="font-size:15px;font-weight:800">${shop}</div>
+      <div style="font-size:15px;font-weight:800">${esc(shop)}</div>
       <div style="font-size:11px;color:var(--muted)">Recibo nº ${num}</div>
     </div>
     <div style="border-top:1px dashed var(--border);margin:10px 0"></div>
     <div style="display:flex;flex-direction:column;gap:5px;font-size:12px">
       <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Data</span><span style="font-weight:600">${data} às ${hora}</span></div>
-      ${tutor?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Cliente</span><span style="font-weight:600">${tutor.nome}</span></div>`:''}
-      ${tutor?.cpf?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">CPF</span><span style="font-weight:600">${tutor.cpf}</span></div>`:''}
-      ${pet?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Pet</span><span style="font-weight:600">${pet.nome}</span></div>`:''}
+      ${tutor?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Cliente</span><span style="font-weight:600">${esc(tutor.nome)}</span></div>`:''}
+      ${tutor?.cpf?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">CPF</span><span style="font-weight:600">${esc(tutor.cpf)}</span></div>`:''}
+      ${pet?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Pet</span><span style="font-weight:600">${esc(pet.nome)}</span></div>`:''}
     </div>
     <div style="border-top:1px dashed var(--border);margin:10px 0"></div>
     <div style="display:flex;flex-direction:column;gap:5px;font-size:12px">
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Descrição</span><span style="font-weight:600;text-align:right;max-width:200px">${l.descricao||'Serviço'}</span></div>
-      ${l.formaPagamento?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Pagamento</span><span style="font-weight:600">${l.formaPagamento}</span></div>`:''}
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Descrição</span><span style="font-weight:600;text-align:right;max-width:200px">${esc(l.descricao||'Serviço')}</span></div>
+      ${l.formaPagamento?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Pagamento</span><span style="font-weight:600">${esc(l.formaPagamento)}</span></div>`:''}
     </div>
     <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid var(--text);font-size:16px;font-weight:800">
       <span>Total</span><span style="color:#006B4F">${fmtBRL(l.valor)}</span>
@@ -4105,9 +4169,9 @@ function abrirProntuarioHospede(planoId) {
     <div style="display:flex;gap:14px;align-items:center">
       <div style="width:44px;height:44px;border-radius:10px;background:rgba(74,222,128,.1);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0"><i class="ph ph-dog"></i></div>
       <div>
-        <div style="font-weight:700;font-size:.95rem">${pet?.nome || '—'} <span style="font-weight:400;color:var(--text2)">${pet?.raca ? '· '+pet.raca : ''}</span></div>
-        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">${tutor?.nome || '—'} · ${tutor?.tel || '—'}</div>
-        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">${pet?.peso ? 'Peso: '+pet.peso+'kg' : ''} ${pet?.porte ? '· '+pet.porte : ''}</div>
+        <div style="font-weight:700;font-size:.95rem">${esc(pet?.nome || '—')} <span style="font-weight:400;color:var(--text2)">${pet?.raca ? '· '+esc(pet.raca) : ''}</span></div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">${esc(tutor?.nome || '—')} · ${esc(tutor?.tel || '—')}</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">${pet?.peso ? 'Peso: '+pet.peso+'kg' : ''} ${pet?.porte ? '· '+esc(pet.porte) : ''}</div>
       </div>
     </div>`;
 
@@ -4144,7 +4208,7 @@ function renderMedsLista(meds) {
   el.innerHTML = meds.map((m, i) => `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
       <div>
-        <div style="font-size:.85rem;font-weight:700">${m.nome} <span style="font-weight:400;color:var(--text2)">· ${m.dose}</span></div>
+        <div style="font-size:.85rem;font-weight:700">${esc(m.nome)} <span style="font-weight:400;color:var(--text2)">· ${esc(m.dose)}</span></div>
         <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${(m.horarios||[]).join(' · ')}</div>
       </div>
       <button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="removerMed(${i})"><i class="ph ph-trash"></i></button>
@@ -4239,7 +4303,7 @@ function popularPlantonistas() {
   if (!sel) return;
   const funs = (D.funcionarios||[]).filter(f => f.status !== 'inativo');
   sel.innerHTML = '<option value="">— Selecionar</option>' +
-    funs.map(f => `<option value="${f.id}">${f.nome}</option>`).join('');
+    funs.map(f => `<option value="${f.id}">${esc(f.nome)}</option>`).join('');
 }
 
 function navChecklistDate(delta) {
@@ -4332,7 +4396,7 @@ function renderChecklist(planoId, dateISO) {
         <i class="ph ${r.icon}" style="color:var(--text2);font-size:.9rem;flex-shrink:0"></i>
         <div style="flex:1;min-width:0">
           <span style="font-size:.85rem;font-weight:600;${doneStyle}">${r.label}${badge}</span>
-          ${slot.feitorPor ? `<div style="font-size:.72rem;color:var(--muted);margin-top:1px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${slot.feitorPor} · ${slot.hora}</div>` : `<div style="font-size:.72rem;color:var(--muted)">Previsto: ${r.hora}</div>`}
+          ${slot.feitorPor ? `<div style="font-size:.72rem;color:var(--muted);margin-top:1px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${esc(slot.feitorPor)} · ${slot.hora}</div>` : `<div style="font-size:.72rem;color:var(--muted)">Previsto: ${r.hora}</div>`}
         </div>
       </div>`;
   });
@@ -4352,7 +4416,7 @@ function renderChecklist(planoId, dateISO) {
       const atrasados = (med.horarios||[]).filter(h => !h.feito && isOverdue(dateISO, h.hora)).length;
       html += `<div>
         <div style="font-size:.82rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">
-          ${med.nome} <span style="font-weight:400;color:var(--text2)">· ${med.dose}</span>
+          ${esc(med.nome)} <span style="font-weight:400;color:var(--text2)">· ${esc(med.dose)}</span>
           ${atrasados ? `<span style="background:rgba(255,80,50,.15);color:#ff5032;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px">${atrasados} atrasado${atrasados!==1?'s':''}</span>` : ''}
         </div>
         <div style="display:flex;flex-direction:column;gap:6px">`;
@@ -4367,7 +4431,7 @@ function renderChecklist(planoId, dateISO) {
             </button>
             <div style="flex:1;min-width:0">
               <span style="font-size:.82rem;font-weight:600;${slot.feito?'opacity:.5;text-decoration:line-through':''}">${slot.hora}</span>
-              ${slot.feitorPor ? `<span style="font-size:.72rem;color:var(--muted);margin-left:6px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${slot.feitorPor} · ${slot.horaReal}</span>` : (overdue?`<span style="font-size:.72rem;color:#ff5032;margin-left:6px">Passou o horário</span>`:'')}
+              ${slot.feitorPor ? `<span style="font-size:.72rem;color:var(--muted);margin-left:6px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${esc(slot.feitorPor)} · ${slot.horaReal}</span>` : (overdue?`<span style="font-size:.72rem;color:#ff5032;margin-left:6px">Passou o horário</span>`:'')}
             </div>
           </div>`;
       });
@@ -4539,14 +4603,14 @@ function renderInternacao() {
           <i class="ph ph-heartbeat"></i>
         </div>
         <div style="min-width:0">
-          <div style="font-weight:700;font-size:.95rem;margin-bottom:2px">${pet?.nome || '—'}${alertaVia}</div>
-          <div style="font-size:.8rem;color:var(--text2)">${tutor?.nome || '—'} · ${tutor?.tel || ''}</div>
-          <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${i.diagnostico || '—'} · ${dias}d internado${meds ? ` · <span style="color:var(--accent)">${meds} medicação${meds!==1?'ões':''}</span>` : ''}</div>
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:2px">${esc(pet?.nome || '—')}${alertaVia}</div>
+          <div style="font-size:.8rem;color:var(--text2)">${esc(tutor?.nome || '—')} · ${esc(tutor?.tel || '')}</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${esc(i.diagnostico || '—')} · ${dias}d internado${meds ? ` · <span style="color:var(--accent)">${meds} medicação${meds!==1?'ões':''}</span>` : ''}</div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
         <span style="font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${statusColor}">${statusLabel}</span>
-        ${i.medicoResponsavel ? `<span style="font-size:.72rem;color:var(--muted)">${i.medicoResponsavel}</span>` : ''}
+        ${i.medicoResponsavel ? `<span style="font-size:.72rem;color:var(--muted)">${esc(i.medicoResponsavel)}</span>` : ''}
         <i class="ph ph-caret-right" style="color:var(--muted);font-size:.9rem"></i>
       </div>
     </div>`;
@@ -4565,7 +4629,7 @@ function abrirNovaInternacao() {
   // Populate tutor select
   const sel = document.getElementById('int-tutor');
   sel.innerHTML = '<option value="">— Selecionar tutor</option>' +
-    D.tutores.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+    D.tutores.map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join('');
   document.getElementById('int-pet').innerHTML = '<option value="">— Selecionar tutor primeiro</option>';
   document.getElementById('int-entrada').value  = todayISO();
   document.getElementById('int-previsao').value = '';
@@ -4581,7 +4645,7 @@ function onIntTutorChange() {
   const pets = D.pets.filter(p => p.tutorId === tutorId);
   const sel = document.getElementById('int-pet');
   sel.innerHTML = pets.length
-    ? '<option value="">— Selecionar pet</option>' + pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join('')
+    ? '<option value="">— Selecionar pet</option>' + pets.map(p => `<option value="${p.id}">${esc(p.nome)}</option>`).join('')
     : '<option value="">Nenhum pet cadastrado</option>';
 }
 
@@ -4630,8 +4694,8 @@ function abrirProntuarioInternacao(intId) {
     <div style="display:flex;gap:14px;align-items:center">
       <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,140,66,.1);color:#ff8c42;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0"><i class="ph ph-heartbeat"></i></div>
       <div>
-        <div style="font-weight:700;font-size:.95rem">${pet?.nome || '—'} <span style="font-weight:400;color:var(--text2)">${pet?.raca ? '· '+pet.raca : ''}</span></div>
-        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">${tutor?.nome || '—'} · ${tutor?.tel || '—'}</div>
+        <div style="font-weight:700;font-size:.95rem">${esc(pet?.nome || '—')} <span style="font-weight:400;color:var(--text2)">${pet?.raca ? '· '+esc(pet.raca) : ''}</span></div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">${esc(tutor?.nome || '—')} · ${esc(tutor?.tel || '—')}</div>
         <div style="font-size:.78rem;color:var(--muted);margin-top:2px">${pet?.peso ? 'Peso: '+pet.peso+'kg' : ''} ${i.status === 'internado' ? '· <span style="color:#ff8c42;font-weight:700">Internado</span>' : '· <span style="color:var(--muted)">Alta</span>'}</div>
       </div>
     </div>`;
@@ -4704,7 +4768,7 @@ function renderIntMedsLista(meds) {
   el.innerHTML = meds.map((m, idx) => `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
       <div>
-        <div style="font-size:.85rem;font-weight:700">${m.nome} <span style="font-weight:400;color:var(--text2)">· ${m.dose}</span> <span style="background:rgba(255,140,66,.15);color:#ff8c42;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700">${m.via||'VO'}</span></div>
+        <div style="font-size:.85rem;font-weight:700">${esc(m.nome)} <span style="font-weight:400;color:var(--text2)">· ${esc(m.dose)}</span> <span style="background:rgba(255,140,66,.15);color:#ff8c42;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700">${esc(m.via||'VO')}</span></div>
         <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${(m.horarios||[]).join(' · ')}</div>
       </div>
       <button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="removerIntMed(${idx})"><i class="ph ph-trash"></i></button>
@@ -4752,7 +4816,7 @@ function popularIntPlantonistas() {
   if (!sel) return;
   const funs = (D.funcionarios||[]).filter(f => f.status !== 'inativo');
   sel.innerHTML = '<option value="">— Selecionar</option>' +
-    funs.map(f => `<option value="${f.id}">${f.nome}</option>`).join('');
+    funs.map(f => `<option value="${f.id}">${esc(f.nome)}</option>`).join('');
 }
 
 function getIntPlantonistaNome() {
@@ -4815,8 +4879,8 @@ function renderIntChecklist(intId, dateISO) {
       const atrasados = (med.horarios||[]).filter(h => !h.feito && isOverdue(dateISO, h.hora)).length;
       html += `<div>
         <div style="font-size:.82rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">
-          ${med.nome} <span style="font-weight:400;color:var(--text2)">· ${med.dose}</span>
-          <span style="background:rgba(255,140,66,.15);color:#ff8c42;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700">${med.via}</span>
+          ${esc(med.nome)} <span style="font-weight:400;color:var(--text2)">· ${esc(med.dose)}</span>
+          <span style="background:rgba(255,140,66,.15);color:#ff8c42;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700">${esc(med.via)}</span>
           ${atrasados ? `<span style="background:rgba(255,80,50,.15);color:#ff5032;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px">${atrasados} atrasada${atrasados!==1?'s':''}</span>` : ''}
         </div>
         <div style="display:flex;flex-direction:column;gap:6px">`;
@@ -4831,7 +4895,7 @@ function renderIntChecklist(intId, dateISO) {
             </button>
             <div style="flex:1;min-width:0">
               <span style="font-size:.82rem;font-weight:600;${slot.feito?'opacity:.5;text-decoration:line-through':''}">${slot.hora}</span>
-              ${slot.feitorPor ? `<span style="font-size:.72rem;color:var(--muted);margin-left:6px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${slot.feitorPor} · ${slot.horaReal}</span>` : (overdue?`<span style="font-size:.72rem;color:#ff5032;margin-left:6px">Passou o horário</span>`:'')}
+              ${slot.feitorPor ? `<span style="font-size:.72rem;color:var(--muted);margin-left:6px"><i class="ph ph-user-circle" style="margin-right:2px"></i>${esc(slot.feitorPor)} · ${slot.horaReal}</span>` : (overdue?`<span style="font-size:.72rem;color:#ff5032;margin-left:6px">Passou o horário</span>`:'')}
             </div>
           </div>`;
       });
@@ -4941,8 +5005,8 @@ function gerarRelatorioTutor(intId) {
     const total  = (m.horarios||[]).length;
     const feitos = (m.horarios||[]).filter(h => h.feito).length;
     return `<tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #eee">${m.nome} <span style="color:#666">${m.dose}</span></td>
-      <td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center">${m.via||'VO'}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #eee">${esc(m.nome)} <span style="color:#666">${esc(m.dose)}</span></td>
+      <td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center">${esc(m.via||'VO')}</td>
       <td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center">${feitos}/${total}</td>
     </tr>`;
   }).join('');
@@ -4964,33 +5028,33 @@ function gerarRelatorioTutor(intId) {
       @media print{body{margin:20px}}
     </style>
   </head><body>
-    <h1>${cfg.nomePetshop || 'Pets Go Control'}</h1>
+    <h1>${esc(cfg.nomePetshop || 'Pets Go Control')}</h1>
     <div style="color:#666;font-size:13px">Relatório de internação — ${fmtDate(hoje)}</div>
     <hr style="border:none;border-top:2px solid #E8734A;margin:16px 0"/>
 
     <h2>Animal</h2>
     <table><tr>
-      <td style="padding:4px 0"><strong>${pet?.nome || '—'}</strong> ${pet?.raca ? '· '+pet.raca : ''}</td>
+      <td style="padding:4px 0"><strong>${esc(pet?.nome || '—')}</strong> ${pet?.raca ? '· '+esc(pet.raca) : ''}</td>
       <td style="padding:4px 0;text-align:right;color:#666">${pet?.peso ? pet.peso+'kg' : ''}</td>
     </tr></table>
-    <div style="margin-top:8px;font-size:13px;color:#444">Tutor: <strong>${tutor?.nome||'—'}</strong> · ${tutor?.tel||''}</div>
+    <div style="margin-top:8px;font-size:13px;color:#444">Tutor: <strong>${esc(tutor?.nome||'—')}</strong> · ${esc(tutor?.tel||'')}</div>
 
     <h2>Internação</h2>
     <div><span class="chip">Entrada: ${fmtDate(i.dataEntrada)}</span>${i.previsaoAlta?`<span class="chip">Alta prevista: ${fmtDate(i.previsaoAlta)}</span>`:''}</div>
-    <div style="margin-top:8px"><strong>Diagnóstico:</strong> ${i.diagnostico||'—'}</div>
-    ${i.medicoResponsavel?`<div><strong>Médico:</strong> ${i.medicoResponsavel}</div>`:''}
+    <div style="margin-top:8px"><strong>Diagnóstico:</strong> ${esc(i.diagnostico||'—')}</div>
+    ${i.medicoResponsavel?`<div><strong>Médico:</strong> ${esc(i.medicoResponsavel)}</div>`:''}
 
     <h2>Hoje — Medicações</h2>
     ${medsHtml ? `<table><thead><tr><th>Medicação</th><th>Via</th><th>Administrado</th></tr></thead><tbody>${medsHtml}</tbody></table>` : '<p style="color:#888">Sem medicações prescritas.</p>'}
 
     <h2>Hoje — Alimentação</h2>
-    <p>${alimentacaoLine}${ck?.alimentacao?.obs ? ' · '+ck.alimentacao.obs : ''}</p>
+    <p>${alimentacaoLine}${ck?.alimentacao?.obs ? ' · '+esc(ck.alimentacao.obs) : ''}</p>
 
     <h2>Evolução do dia</h2>
-    <p>${ck?.evolucao || '— Sem registro de evolução para hoje.'}</p>
+    <p>${esc(ck?.evolucao || '— Sem registro de evolução para hoje.')}</p>
 
     <div class="footer">
-      Relatório gerado em ${new Date().toLocaleString('pt-BR')} · ${cfg.nomePetshop || 'Pets Go Control'}
+      Relatório gerado em ${new Date().toLocaleString('pt-BR')} · ${esc(cfg.nomePetshop || 'Pets Go Control')}
       <br>Em caso de dúvidas, entre em contato com a equipe.
     </div>
     <div style="margin-top:20px;text-align:center">
@@ -5023,8 +5087,8 @@ function renderFuncionarios() {
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div class="func-avatar" style="${avStyle(f.nome)}">${initials(f.nome)}</div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.nome}</div>
-          <div style="font-size:12px;color:var(--muted)">${f.cargo||'—'}${f.comissaoPct?` · ${f.comissaoPct}% comissão`:''}</div>
+          <div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(f.nome)}</div>
+          <div style="font-size:12px;color:var(--muted)">${esc(f.cargo||'—')}${f.comissaoPct?` · ${f.comissaoPct}% comissão`:''}</div>
         </div>
         <span class="tag ${inativo?'tag-gray':'tag-green'}">${inativo?'Inativo':'Ativo'}</span>
       </div>
@@ -5141,8 +5205,8 @@ function renderContas() {
     return `<div class="conta-item${pago?' pago':''}${vencida?' vencida':''}">
       <div style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${c.tipo==='pagar'?'var(--red)':'var(--teal)'}"></div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:600">${c.descricao}</div>
-        <div style="font-size:11px;color:var(--muted)">${c.tipo==='pagar'?'A Pagar':'A Receber'}${c.categoria?` · ${c.categoria}`:''}${venc?` · venc. ${fmtDate(venc)}`:''}${vencida?' ⚠️ Vencida':''}</div>
+        <div style="font-size:13px;font-weight:600">${esc(c.descricao)}</div>
+        <div style="font-size:11px;color:var(--muted)">${c.tipo==='pagar'?'A Pagar':'A Receber'}${c.categoria?` · ${esc(c.categoria)}`:''}${venc?` · venc. ${fmtDate(venc)}`:''}${vencida?' ⚠️ Vencida':''}</div>
       </div>
       <div style="font-size:14px;font-weight:800;color:${c.tipo==='pagar'?'var(--red)':'var(--teal)'};flex-shrink:0">${fmtBRL(c.valor)}</div>
       ${!pago?`<button class="btn btn-success btn-sm" onclick="pagarConta('${c.id}')" title="Marcar como pago"><i class="ph ph-check"></i></button>`:'<span class="tag tag-green">Pago</span>'}
@@ -5200,10 +5264,13 @@ function delConta(id) {
 function confirmarLimpar() {
   const D = loadDB();
   if (!D.tutores.length) { toast('⚠️ Nenhum dado para apagar'); return; }
-  if (!confirm(`⚠️ APAGAR TODOS OS DADOS?\n\n${D.tutores.length} tutores e todos os dados serão removidos permanentemente.\n\nEssa ação não pode ser desfeita.`)) return;
-  if (!confirm('Confirma? Isso é irreversível.')) return;
+  const resp = prompt('Para apagar TODOS os dados, digite: APAGAR\n\n⚠️ Esta ação é IRREVERSÍVEL.');
+  if (resp !== 'APAGAR') return toast('Operação cancelada');
+  const resp2 = confirm('ÚLTIMA CONFIRMAÇÃO: Todos os dados serão perdidos permanentemente. Continuar?');
+  if (!resp2) return;
   localStorage.removeItem(DB_KEY);
-  renderClientes(); updateDashboard(); toast('🗑️ Todos os dados apagados');
+  _dbCache = null;
+  location.reload();
 }
 
 // ── MODAIS ────────────────────────────────────────────────────────────────────
@@ -5214,7 +5281,7 @@ function openModal(id) {
     const D = loadDB();
     document.getElementById('pl-tutor').innerHTML =
       '<option value="">Selecionar tutor...</option>' +
-      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${esc(t.nome)}</option>`).join('');
     document.getElementById('pl-pet').innerHTML = '<option value="">Selecionar pet...</option>';
     document.getElementById('pl-inicio').value  = todayISO();
     document.getElementById('pl-tipo').value    = 'Creche';
@@ -5237,11 +5304,11 @@ function openModal(id) {
   if (id==='modal-pdv-venda') {
     const D=loadDB();
     document.getElementById('pdv-servico').innerHTML='<option value="">Selecionar...</option>'+
-      D.servicos.filter(s=>s.ativo!==false).map(s=>`<option value="${s.id}" data-preco="${s.preco||0}">${s.nome}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
+      D.servicos.filter(s=>s.ativo!==false).map(s=>`<option value="${s.id}" data-preco="${s.preco||0}">${esc(s.nome)}${s.preco?' — '+fmtBRL(s.preco):''}</option>`).join('');
     document.getElementById('pdv-produto').innerHTML='<option value="">Selecionar...</option>'+
-      D.estoque.map(p=>`<option value="${p.id}" data-preco="${p.precoVenda||0}">${p.nome} — ${fmtBRL(p.precoVenda||0)} (${p.quantidade} ${p.unidade})</option>`).join('');
+      D.estoque.map(p=>`<option value="${p.id}" data-preco="${p.precoVenda||0}">${esc(p.nome)} — ${fmtBRL(p.precoVenda||0)} (${p.quantidade} ${esc(p.unidade||'')})</option>`).join('');
     document.getElementById('pdv-cliente').innerHTML='<option value="">— Avulso</option>'+
-      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
+      D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${esc(t.nome)}</option>`).join('');
     document.getElementById('pdv-tipo').value='servico';
     document.getElementById('pdv-valor').value='';
     document.getElementById('pdv-qtd').value='1';
@@ -5375,7 +5442,7 @@ function addFilialSetup() {
   document.getElementById('setup-filiais').appendChild(row);
 }
 
-function saveSetup() {
+async function saveSetup() {
   const nome    = document.getElementById('setup-nome').value.trim();
   const filiais = [...document.querySelectorAll('.setup-filial-input')].map(i=>i.value.trim()).filter(Boolean);
   const erro    = document.getElementById('setup-erro');
@@ -5390,7 +5457,7 @@ function saveSetup() {
   D.config.nomePetshop  = nome;
   D.config.filiais      = filiais;
   D.config.corDestaque  = cor;
-  if (senha) D.config.senhaGerencial = senha;
+  if (senha) D.config.senhaGerencial = await hashSenha(senha);
   saveDB(D);
   document.getElementById('setup-overlay').style.display = 'none';
   finishInit(D);
@@ -5405,7 +5472,7 @@ function renderConfigPerfil() {
   const filiais = D.config?.filiais || [];
   container.innerHTML = filiais.map((f,i)=>`
     <div style="display:flex;gap:6px" data-idx="${i}">
-      <input value="${f}" placeholder="Nome da unidade..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;font-family:Inter,sans-serif;outline:none" class="cfg-filial-input"/>
+      <input value="${esc(f)}" placeholder="Nome da unidade..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;font-family:Inter,sans-serif;outline:none" class="cfg-filial-input"/>
       ${filiais.length>1?`<button type="button" onclick="this.parentElement.remove()" style="padding:9px 11px;border-radius:8px;border:1px solid #FECACA;background:#FEF2F2;color:#DC2626;cursor:pointer;font-size:16px">×</button>`:''}
     </div>`).join('');
   const corAtual = D.config?.corDestaque || 'indigo';

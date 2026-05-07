@@ -1,14 +1,13 @@
 # tasks/todo.md
-_Última atualização: 06/05/2026_
+_Última atualização: 07/05/2026_
 
 ---
 
-## Em andamento
+## Bloqueado
 
 | # | Tarefa | Arquivo | Status |
 |---|--------|---------|--------|
 | 1 | NF-e via eNotas — aguarda último nº de nota do contador do Junior | `petsgo-crm-light.html` + Cloudflare Worker | 🟡 Bloqueado (dependência externa) |
-| 2 | Reagendamento pós-serviço — ✅ JÁ EXISTE (modal automático após pagamento, chips 7/15/30 dias) | `petsgo-crm-light.html` | ✅ Concluído (sessão anterior) |
 
 ---
 
@@ -16,10 +15,9 @@ _Última atualização: 06/05/2026_
 
 | # | Tarefa | Prioridade |
 |---|--------|-----------|
-| 3 | PWA + service worker (offline-first real) | Alta |
-| 4 | Cloudflare D1 — sync entre dispositivos | Alta |
-| 5 | NF-e: NFC-e (produtos) + NFS-e POA (serviços) via eNotas API | Alta |
-| 6 | Reagendamento pós-serviço no recibo | Alta |
+| 2 | PWA + service worker (offline-first real, instalável no celular) | Alta |
+| 3 | Cloudflare D1 — sync entre dispositivos | Alta |
+| 4 | NF-e: NFC-e (produtos) + NFS-e POA (serviços) via eNotas API | Alta |
 
 ---
 
@@ -27,15 +25,21 @@ _Última atualização: 06/05/2026_
 
 | # | Tarefa | Prioridade | Condição |
 |---|--------|-----------|----------|
-| 7 | Módulo Antropometria (Pollock, Petroski, Guedes, Durnin, Faulkner) | Alta | **Só após contrato assinado** |
-| 8 | Anamnese estruturada 1ª e 2ª consulta | Alta | Após módulo 7 |
-| 9 | Prontuário por consulta + Diário expandido | Média | Após módulo 8 |
-| 10 | Exames com comparação % (verde/vermelho/cinza) | Média | Após módulo 8 |
-| 11 | Faturamento por paciente | Média | — |
-| 12 | Plano alimentar + Sintomas correlacionados | Baixa | — |
-| 13 | Transcrição Google Meet | Baixa | **Fase futura — não implementar agora** |
+| 5 | Módulo Antropometria (Pollock, Petroski, Guedes, Durnin, Faulkner) | Alta | **Só após contrato assinado** |
+| 6 | Anamnese estruturada 1ª e 2ª consulta | Alta | Após módulo 5 |
+| 7 | Prontuário por consulta + Diário expandido | Média | Após módulo 6 |
+| 8 | Exames com comparação % (verde/vermelho/cinza) | Média | Após módulo 6 |
+| 9 | Faturamento por paciente | Média | — |
+| 10 | Plano alimentar + Sintomas correlacionados | Baixa | — |
+| 11 | Transcrição Google Meet | Baixa | **Fase futura — não implementar agora** |
 
 ---
+
+## Concluído (07/05/2026)
+
+- [x] Hospedagem S1 — lista de hóspedes ativos + prontuário básico (alimentação padrão, obs, medicações)
+- [x] Hospedagem S2 — aba Rotina: checklist diário (manhã/tarde/noite + medicações com slots automáticos + atividades + obs) + badge atrasado + navegação de datas + plantonista
+- [x] Internação Veterinária — módulo completo: lista com badge, prontuário clínico (diagnóstico, médico, via IV/IM/SC/VO), aba Rotina (medicações + alimentação aceitou/recusou + evolução do dia), dar alta, relatório PDF para tutor
 
 ## Concluído (06/05/2026)
 
@@ -50,3 +54,4 @@ _Última atualização: 06/05/2026_
 - [x] NUTRI_PROPOSTA.html gerada e deployada
 - [x] LINKEDIN_PERFIL.md gerado
 - [x] STATUS_20260506.md gerado e commitado em my-workspace
+- [x] Reagendamento pós-serviço — já existia (modal automático após pagamento, chips 7/15/30 dias)
