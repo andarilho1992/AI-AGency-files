@@ -340,7 +340,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       </div>
       <button class="btn btn-ghost" onclick="updateDashboard()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
     </div>
-    <div class="filter-row" id="dash-filial-tabs" style="margin-bottom:16px"></div>
+    <div class="filter-row" id="dash-filial-tabs" style="margin-bottom:16px;min-height:0;contain:layout"></div>
     <div class="stats-grid">
       <div class="stat-card stat-c1">
         <div class="stat-icon"><i class="ph ph-users"></i></div>
@@ -1882,7 +1882,13 @@ async function pullFromCloud(silent) {
     if (!res.ok) return false;
     const json = await res.json();
     if (!json.ok) return false;
-    if (json.version > _syncVersion) {
+    const hasData = json.data && (
+      (json.data.tutores?.length > 0) ||
+      (json.data.pets?.length > 0) ||
+      (json.data.agendamentos?.length > 0) ||
+      json.data.config?.setupDone
+    );
+    if (json.version > _syncVersion && (hasData || _syncVersion === 0)) {
       _dbCache = null;
       localStorage.setItem(DB_KEY, JSON.stringify(json.data));
       _syncVersion = json.version;
@@ -6534,6 +6540,8 @@ function cobrarDiariasExtras() {
 
 function finishInit(D) {
   applyConfig(D);
+  // Dashboard roda primeiro para reservar espaço dos tabs antes do usuário interagir
+  updateDashboard();
   seedServicos();
   processarAbates();
   cobrarDiariasExtras();
@@ -6543,7 +6551,6 @@ function finishInit(D) {
   updatePlanosBadge();
   updateHospedagemBadge();
   updateInternacaoBadge();
-  updateDashboard();
   renderClientes();
 }
 

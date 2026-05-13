@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pataforma — Sistema de Gestão para Pet Shops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F1F5F9;--bg2:#FFFFFF;--bg3:#F8FAFC;
+  --border:#E2E8F0;--border-hl:#CBD5E1;
+  --text:#0F172A;--text2:#334155;--muted:#475569;--muted2:#94A3B8;
+  --brand:#47399C;--brand-d:#372D80;--brand-l:#6155C4;--brand-light:#EDEBF8;
+  --teal:#02B9BD;--teal-d:#019da1;--teal-light:#E0F9FA;
+  --gold:#D97706;--red:#DC2626;--red-light:#FEF2F2;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.08),0 4px 6px rgba(0,0,0,.05);
+  --mono:'IBM Plex Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(255,255,255,.92);backdrop-filter:blur(16px);padding:14px 0}
+.nav-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-name{font-size:16px;font-weight:800;letter-spacing:-.03em;color:var(--text)}
+.nav-badge{font-family:var(--mono);font-size:10px;background:var(--brand-light);color:var(--brand);border:1px solid rgba(71,57,156,.2);padding:3px 9px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase}
+.btn-nav{background:var(--brand);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:background .2s}
+.btn-nav:hover{background:var(--brand-d)}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* HERO */
+.hero{padding:96px 0 72px}
+.hero-inner{display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center}
+.hero-tag{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:22px;display:block}
+.hero h1{font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-.04em;line-height:1.02;margin-bottom:24px}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero-sub{font-size:16px;color:var(--muted);max-width:480px;line-height:1.65;margin-bottom:36px}
+.hero-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-primary{background:var(--brand);color:#fff;border:none;padding:14px 28px;border-radius:9px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;letter-spacing:-.01em;box-shadow:0 4px 14px rgba(71,57,156,.3)}
+.btn-primary:hover{background:var(--brand-d);transform:translateY(-1px);box-shadow:0 6px 20px rgba(71,57,156,.4)}
+.btn-ghost{background:var(--bg2);color:var(--text2);border:1px solid var(--border-hl);padding:14px 24px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;box-shadow:var(--shadow)}
+.btn-ghost:hover{border-color:var(--brand-l);background:var(--brand-light);color:var(--brand)}
+
+/* HERO DEMO — browser chrome dark, app inside light */
+.hero-demo{background:#1e2035;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-lg)}
+.demo-bar{background:#161728;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-dot{width:10px;height:10px;border-radius:50%}
+.demo-url{font-family:var(--mono);font-size:11px;color:#6b7280;margin-left:4px}
+.demo-screen{padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:10px}
+.demo-stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
+.demo-stat-label{font-family:var(--mono);font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.demo-stat-val{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.demo-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.demo-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;box-shadow:var(--shadow)}
+.demo-item-name{font-weight:600;margin-bottom:2px;color:var(--text)}
+.demo-item-sub{color:var(--muted);font-size:11px;font-family:var(--mono)}
+.demo-badge{display:inline-block;font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:20px;margin-top:5px;font-weight:600}
+.badge-ok{background:var(--teal-light);color:#065f46;border:1px solid rgba(2,185,189,.3)}
+.badge-wait{background:#FEF3C7;color:#92400e;border:1px solid #FDE68A}
+.badge-in{background:var(--brand-light);color:var(--brand);border:1px solid rgba(71,57,156,.3)}
+
+/* PROOF */
+.proof-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 0;margin-bottom:96px;background:var(--bg2)}
+.proof-inner{display:flex;align-items:center;gap:40px;flex-wrap:wrap}
+.proof-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);flex-shrink:0}
+.proof-item strong{color:var(--text);font-weight:700}
+.proof-sep{width:1px;height:24px;background:var(--border-hl);flex-shrink:0}
+
+/* SECTIONS */
+section{margin-bottom:96px}
+.section-tag{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--brand-l);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;display:block}
+.section-title{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:15px;color:var(--muted);max-width:520px;line-height:1.65}
+
+/* SPLIT */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.split-card{border-radius:14px;padding:32px;border:1px solid}
+.split-before{background:var(--red-light);border-color:#FECACA}
+.split-after{background:#F0FDF9;border-color:rgba(2,185,189,.25)}
+.split-label{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px}
+.split-before .split-label{color:var(--red)}
+.split-after .split-label{color:var(--teal-d)}
+.split-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.split-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;color:var(--text2)}
+.split-list li::before{flex-shrink:0;margin-top:1px;font-size:13px}
+.split-before .split-list li::before{content:'✗';color:var(--red)}
+.split-after .split-list li::before{content:'✓';color:var(--teal-d);font-weight:700}
+
+/* BENTO */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px}
+.bento-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .2s,box-shadow .2s;box-shadow:var(--shadow)}
+.bento-card:hover{border-color:rgba(71,57,156,.3);box-shadow:var(--shadow-md)}
+.bento-wide{grid-column:span 2}
+.bento-icon{font-size:24px;margin-bottom:16px}
+.bento-title{font-size:17px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.bento-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.bento-hl{background:linear-gradient(135deg,var(--brand-light),var(--teal-light));border-color:rgba(71,57,156,.2)}
+
+/* WPP — dark brand bg for contrast break */
+.hook-section{background:var(--brand);border-radius:20px;padding:56px;margin-bottom:96px;position:relative;overflow:hidden}
+.hook-section::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
+.hook-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.hook-tag{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;display:block}
+.hook-title{font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:20px;color:#fff}
+.hook-sub{font-size:15px;color:rgba(255,255,255,.72);line-height:1.7;margin-bottom:28px}
+.chat-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.chat-msg{max-width:82%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5}
+.chat-msg.dono{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.1);align-self:flex-start;border-bottom-left-radius:4px;color:#fff}
+.chat-msg.bot{background:#fff;color:var(--brand);align-self:flex-end;border-bottom-right-radius:4px;font-weight:700}
+.chat-msg.crm{background:rgba(2,185,189,.2);border:1px solid rgba(2,185,189,.3);align-self:flex-end;border-bottom-right-radius:4px;font-size:12px;color:var(--teal)}
+.chat-lbl{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.38);margin-bottom:4px}
+.wpp-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.wpp-stat{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:16px}
+.wpp-val{font-size:28px;font-weight:800;letter-spacing:-.03em;color:#fff}
+.wpp-lbl{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* ROI */
+.calc-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px;margin-top:48px;box-shadow:var(--shadow-md)}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.calc-group{margin-bottom:28px}
+.calc-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);margin-bottom:10px}
+.calc-val{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:12px}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border-hl);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--brand);cursor:pointer;border:3px solid var(--bg2);box-shadow:0 0 0 2px rgba(71,57,156,.2)}
+.result-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.result-row{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.result-row:last-child{border-bottom:none;padding-bottom:0}
+.r-label{color:var(--muted)}
+.r-val{font-weight:700;font-family:var(--mono)}
+.result-verdict{background:var(--brand-light);border:1px solid rgba(71,57,156,.2);border-radius:10px;padding:20px;text-align:center;margin-top:16px}
+.verdict-val{font-size:36px;font-weight:900;letter-spacing:-.04em;color:var(--brand)}
+.verdict-lbl{font-size:12px;color:var(--muted);margin-top:4px;font-family:var(--mono)}
+
+/* PLANS */
+.plans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:52px;align-items:start}
+.plan-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;position:relative;box-shadow:var(--shadow)}
+.plan-card.featured{background:var(--brand);border-color:var(--brand-d)}
+.plan-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#fff;color:var(--brand);font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap;font-family:var(--mono);letter-spacing:.06em}
+.plan-name{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-family:var(--mono);margin-bottom:8px}
+.featured .plan-name{color:rgba(255,255,255,.6)}
+.plan-price{font-size:44px;font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
+.featured .plan-price{color:#fff}
+.plan-price sup{font-size:18px;font-weight:700;vertical-align:top;margin-top:8px;margin-right:1px}
+.plan-period{font-size:13px;color:var(--muted);margin-bottom:8px}
+.featured .plan-period{color:rgba(255,255,255,.6)}
+.plan-setup{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.plan-setup strong{color:var(--muted)}
+.featured .plan-setup{color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.15)}
+.featured .plan-setup strong{color:rgba(255,255,255,.8)}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:32px}
+.plan-features li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--muted)}
+.plan-features li.on{color:var(--text)}
+.featured .plan-features li{color:rgba(255,255,255,.6)}
+.featured .plan-features li.on{color:#fff}
+.check{color:var(--teal);flex-shrink:0;font-size:14px}
+.featured .check{color:#02B9BD}
+.dash{color:var(--muted2);flex-shrink:0}
+.plan-btn{width:100%;padding:13px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;border:none;transition:all .2s}
+.plan-btn-outline{background:transparent;border:1px solid var(--border-hl);color:var(--text)}
+.plan-btn-outline:hover{border-color:var(--brand-l);background:var(--brand-light);color:var(--brand)}
+.plan-btn-fill{background:#fff;color:var(--brand);font-weight:800}
+.plan-btn-fill:hover{background:rgba(255,255,255,.9);transform:translateY(-1px)}
+.plan-btn-ghost{background:var(--brand-light);border:1px solid rgba(71,57,156,.2);color:var(--brand)}
+.plan-btn-ghost:hover{background:rgba(71,57,156,.15)}
+
+/* FAQ */
+.faq{margin-top:48px;display:flex;flex-direction:column;gap:2px}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;color:var(--text);font-family:inherit;font-size:15px;font-weight:600;text-align:left;padding:22px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;letter-spacing:-.01em}
+.faq-q .arrow{color:var(--muted);font-size:18px;transition:transform .25s;flex-shrink:0}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .25s}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:20px}
+.faq-item.open .arrow{transform:rotate(45deg)}
+
+/* FINAL CTA */
+.final-cta{background:var(--brand);text-align:center;padding:100px 24px;position:relative;overflow:hidden}
+.final-cta::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(255,255,255,.07) 0%,transparent 65%);pointer-events:none}
+.final-cta h2{font-size:clamp(32px,5vw,56px);font-weight:900;letter-spacing:-.04em;margin-bottom:20px;line-height:1.05;color:#fff}
+.final-cta p{font-size:16px;color:rgba(255,255,255,.72);max-width:480px;margin:0 auto 40px;line-height:1.65}
+.btn-final{background:#fff;color:var(--brand);border:none;padding:16px 36px;border-radius:9px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.btn-final:hover{background:rgba(255,255,255,.92);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.cta-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.38);margin-top:16px}
+
+footer{border-top:1px solid var(--border);padding:28px 0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted2);background:var(--bg2)}
+
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr}.hero-demo{display:none}
+  .split{grid-template-columns:1fr}.bento{grid-template-columns:1fr}.bento-wide{grid-column:span 1}
+  .hook-inner{grid-template-columns:1fr}.hook-section{padding:36px 20px}.chat-box{order:-1}
+  .calc-grid{grid-template-columns:1fr}.plans{grid-template-columns:1fr}
+  .plan-card.featured{margin-top:24px}.proof-inner{flex-direction:column;gap:20px}.proof-sep{display:none}
+  .wpp-stats{grid-template-columns:1fr 1fr}
+  .calc-box{padding:24px}
+  .hero{padding:64px 0 48px}
+  section{margin-bottom:64px}
+}
+@media(max-width:560px){
+  .nav-badge{display:none}
+  .nav-name{font-size:15px}
+  .hook-section{margin-left:-24px;margin-right:-24px;border-radius:0}
+}
+@media(max-width:380px){
+  .nav-name{font-size:14px}
+  .btn-nav{padding:9px 14px;font-size:12px}
+  .wrap{padding:0 16px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="9" fill="#47399C"/>
+        <circle cx="8.5" cy="15.5" r="3.5" fill="white"/>
+        <circle cx="15.5" cy="10.5" r="3.5" fill="white"/>
+        <circle cx="23" cy="10.5" r="3.5" fill="white"/>
+        <circle cx="29.5" cy="15.5" r="3.5" fill="white"/>
+        <ellipse cx="19" cy="26" rx="10" ry="7.5" fill="white"/>
+      </svg>
+      <div class="nav-name">Pataforma</div>
+      <div class="nav-badge">Pet Shop OS</div>
+    </div>
+    <a href="#planos" class="btn-nav">Ver planos →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-tag">Sistema de gestão para pet shops</span>
+        <h1>Aposentar o caderno vai te fazer <em>ganhar mais</em></h1>
+        <p class="hero-sub">Check-in, agenda, caixa, hospedagem, pacotes e prontuário — tudo em uma tela. Mais o robô de WhatsApp que responde e agenda sozinho enquanto você trabalha.</p>
+        <div class="hero-actions">
+          <a href="#planos" class="btn-primary">Ver planos e valores →</a>
+          <a href="#roi" class="btn-ghost">Calcular meu ROI</a>
+        </div>
+      </div>
+      <div class="hero-demo">
+        <div class="demo-bar">
+          <div class="demo-dot" style="background:#ff5a5a"></div>
+          <div class="demo-dot" style="background:#f5c218"></div>
+          <div class="demo-dot" style="background:#02B9BD"></div>
+          <span class="demo-url">pataforma.app/agenda</span>
+        </div>
+        <div class="demo-screen">
+          <div class="demo-stat" style="background:var(--teal-light);border-color:rgba(2,185,189,.25)">
+            <div class="demo-stat-label">Hoje — 13/05/2026</div>
+            <div class="demo-stat-val" style="color:var(--teal-d)">R$ 2.847</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--mono)">19 atendimentos · 4 unidades</div>
+          </div>
+          <div class="demo-row">
+            <div class="demo-stat">
+              <div class="demo-stat-label">Hospedagem</div>
+              <div class="demo-stat-val">4</div>
+              <div style="font-size:11px;color:var(--muted);font-family:var(--mono)">hóspedes agora</div>
+            </div>
+            <div class="demo-stat">
+              <div class="demo-stat-label">Caixa hoje</div>
+              <div class="demo-stat-val" style="color:var(--teal-d)">R$1.2k</div>
+              <div style="font-size:11px;color:var(--muted);font-family:var(--mono)">PDV + agenda</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="demo-item">
+              <div class="demo-item-name">Thor — Golden Retriever</div>
+              <div class="demo-item-sub">Hospedagem · Marcos O.</div>
+              <span class="demo-badge badge-in">Dentro</span>
+            </div>
+            <div class="demo-item">
+              <div class="demo-item-name">Luna — Border Collie</div>
+              <div class="demo-item-sub">Creche · 09:30</div>
+              <span class="demo-badge badge-ok">Concluído</span>
+            </div>
+            <div class="demo-item">
+              <div class="demo-item-name">Meg — Banho higiênico</div>
+              <div class="demo-item-sub">10:30 · Centro</div>
+              <span class="demo-badge badge-wait">Aguardando</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="wrap">
+    <div class="proof-inner">
+      <div class="proof-item">🐾 <span>Usado em <strong>4 filiais</strong> em Porto Alegre</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item">📋 <span><strong>100% dos módulos</strong> integrados numa tela</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item">📱 <span>Funciona no <strong>celular, tablet e computador</strong></span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item">🤖 <span>WhatsApp que <strong>responde e agenda sozinho</strong></span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item">🔒 <span><strong>Sem contrato</strong> — cancela quando quiser</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ANTES / DEPOIS -->
+<div class="wrap">
+  <section>
+    <span class="section-tag">O problema que você conhece bem</span>
+    <h2 class="section-title">Cada pet shop tem o mesmo<br/>caos escondido atrás do balcão</h2>
+    <p class="section-sub">Não é falta de dedicação. É falta de sistema. O caderno não fecha o caixa, não te lembra do cliente que sumiu, e não manda o recibo automaticamente.</p>
+    <div class="split">
+      <div class="split-card split-before">
+        <div class="split-label">❌ Sem o sistema</div>
+        <ul class="split-list">
+          <li>Agendamento perdido no WhatsApp porque a recepção não deu conta</li>
+          <li>Cliente ligou, anotou no papel, esqueceu — o pet não veio, você não sabe por quê</li>
+          <li>Hospedagem: você não sabe quantos estão dentro e o que cada um comeu</li>
+          <li>Caixa fecha no feeling — sem saber de onde veio cada real</li>
+          <li>Pacote de 10 banhos: sem controle de quantos usaram, quando expira</li>
+          <li>Cliente inativo sumiu. Ninguém ligou. Você nem sabe quem é</li>
+        </ul>
+      </div>
+      <div class="split-card split-after">
+        <div class="split-label">✓ Com Pataforma</div>
+        <ul class="split-list">
+          <li>WhatsApp responde na hora, cria o agendamento e manda confirmação — sem você tocar</li>
+          <li>Agenda visual com horários, serviços e status em tempo real</li>
+          <li>Prontuário completo de hospedagem: alimentação, medicação e checklist por dia</li>
+          <li>Financeiro automático: cada serviço pago gera o lançamento na hora</li>
+          <li>Pacotes com abate automático e histórico de uso</li>
+          <li>Robô resgata clientes inativos por WhatsApp no piloto automático</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO -->
+  <section>
+    <span class="section-tag">O que está incluído</span>
+    <h2 class="section-title">Tudo que a loja precisa,<br/>numa única tela</h2>
+    <p class="section-sub">Não é um sistema de agendamento. É o sistema operacional completo do seu pet shop.</p>
+    <div class="bento">
+      <div class="bento-card bento-wide bento-hl">
+        <div class="bento-icon">📅</div>
+        <div class="bento-title">Agenda Visual — estilo Google Calendar</div>
+        <div class="bento-desc">Visualize todos os atendimentos do dia por horário, filial e funcionário. Check-in e check-out com um toque. Status em tempo real: aguardando, em andamento, concluído.</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">👥</div>
+        <div class="bento-title">CRM Clientes & Pets</div>
+        <div class="bento-desc">Ficha completa do pet: raça, peso, vacinas, observações. Histórico de todos os atendimentos e pagamentos.</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">💰</div>
+        <div class="bento-title">PDV / Caixa</div>
+        <div class="bento-desc">Venda produtos e serviços com emissão de recibo. Forma de pagamento, fechamento de caixa e relatório gerencial por período.</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">🏠</div>
+        <div class="bento-title">Hospedagem com Prontuário</div>
+        <div class="bento-desc">Checklist diário de alimentação (manhã/tarde/noite), medicação com horário e quem administrou, atividades e observações. Alta com resumo para o tutor.</div>
+      </div>
+      <div class="bento-card bento-wide">
+        <div class="bento-icon">📦</div>
+        <div class="bento-title">Pacotes & Planos com Abate Automático</div>
+        <div class="bento-desc">Pacote de 10 banhos, creche mensal, hospedagem por período — o sistema debita automaticamente a cada uso. Saldo em tempo real, alerta quando o pacote está quase no fim, histórico completo de diárias.</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">💊</div>
+        <div class="bento-title">Internação Veterinária</div>
+        <div class="bento-desc">Prontuário clínico completo com diagnóstico, medicações hora a hora, evolução diária e controle de diárias no financeiro.</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">📊</div>
+        <div class="bento-title">Financeiro Gerencial</div>
+        <div class="bento-desc">Receitas, despesas e saldo. Visão gerencial mensal com ranking dos serviços mais vendidos.</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">🏪</div>
+        <div class="bento-title">Multi-filial Nativo</div>
+        <div class="bento-desc">Gerencie todas as unidades em uma conta. Dashboard consolidado por filial. Cada funcionário acessa só o que é seu.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- WPP HOOK -->
+<div class="wrap">
+  <div class="hook-section" id="wpp">
+    <div class="hook-inner">
+      <div>
+        <span class="hook-tag">O diferencial que fecha a venda</span>
+        <h2 class="hook-title">O robô que atende o WhatsApp da sua loja enquanto você trabalha</h2>
+        <p class="hook-sub">Um cliente manda mensagem às 22h pedindo para agendar um banho para amanhã. Sem o robô: ninguém responde, o cliente liga para o concorrente. Com o robô: confirma o horário, envia para a agenda e manda lembrança automática de manhã.</p>
+        <div class="wpp-stats">
+          <div class="wpp-stat"><div class="wpp-val">24h</div><div class="wpp-lbl">atendimento ininterrupto</div></div>
+          <div class="wpp-stat"><div class="wpp-val">0s</div><div class="wpp-lbl">tempo de resposta</div></div>
+          <div class="wpp-stat"><div class="wpp-val">Auto</div><div class="wpp-lbl">lança na agenda</div></div>
+          <div class="wpp-stat"><div class="wpp-val">∞</div><div class="wpp-lbl">resgates de inativo</div></div>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,.38);font-family:var(--mono);margin-top:20px">* WhatsApp bot disponível no plano Pro</p>
+      </div>
+      <div class="chat-box">
+        <div>
+          <div class="chat-lbl">CLIENTE</div>
+          <div class="chat-msg dono">Oi, queria agendar banho e tosa pra minha labrador pra amanhã de manhã. Tem vaga?</div>
+        </div>
+        <div style="align-self:flex-end">
+          <div class="chat-lbl" style="text-align:right">ROBÔ PATAFORMA</div>
+          <div class="chat-msg bot">Oi! Que ótimo 😊 Tenho horários amanhã às 09h e às 10h30. Qual você prefere?</div>
+        </div>
+        <div>
+          <div class="chat-lbl">CLIENTE</div>
+          <div class="chat-msg dono">09h tá ótimo!</div>
+        </div>
+        <div style="align-self:flex-end">
+          <div class="chat-msg bot">Perfeito! Agendei a Luna para amanhã às 09h — banho e tosa. Te mando um lembrete às 08h. A gente se vê amanhã! 🐾</div>
+        </div>
+        <div style="align-self:flex-end">
+          <div class="chat-msg crm">✅ Agendamento criado · Luna · 09:00 · Banho e Tosa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROI -->
+<div class="wrap">
+  <section id="roi">
+    <span class="section-tag">Calculadora de ROI</span>
+    <h2 class="section-title">Quanto você está <em style="font-style:normal;color:var(--brand)">deixando na mesa</em> por mês?</h2>
+    <p class="section-sub">Ajuste os números da sua loja. O sistema se paga quando o robô resgata clientes que já sumiram.</p>
+    <div class="calc-box">
+      <div class="calc-grid">
+        <div>
+          <div class="calc-group">
+            <div class="calc-label">Ticket médio por atendimento (R$)</div>
+            <div class="calc-val" id="lbl-ticket">R$ 90</div>
+            <input type="range" id="sl-ticket" min="40" max="300" value="90" step="5" oninput="calcRoi()"/>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:6px"><span>R$40</span><span>R$300</span></div>
+          </div>
+          <div class="calc-group">
+            <div class="calc-label">Clientes inativos que o robô pode resgatar/mês</div>
+            <div class="calc-val" id="lbl-resgates">8 clientes</div>
+            <input type="range" id="sl-resgates" min="2" max="40" value="8" step="1" oninput="calcRoi()"/>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:6px"><span>2</span><span>40</span></div>
+          </div>
+          <div class="calc-group">
+            <div class="calc-label">Atendimentos perdidos por falta de resposta rápida/mês</div>
+            <div class="calc-val" id="lbl-perdidos">5 atendimentos</div>
+            <input type="range" id="sl-perdidos" min="0" max="30" value="5" step="1" oninput="calcRoi()"/>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:6px"><span>0</span><span>30</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="result-box">
+            <div class="result-row">
+              <span class="r-label">Receita extra por resgates</span>
+              <span class="r-val" id="r-resgates" style="color:var(--teal-d)">+R$ 720</span>
+            </div>
+            <div class="result-row">
+              <span class="r-label">Receita recuperada (respostas perdidas)</span>
+              <span class="r-val" id="r-perdidos" style="color:var(--teal-d)">+R$ 450</span>
+            </div>
+            <div class="result-row">
+              <span class="r-label">Custo do plano Pro</span>
+              <span class="r-val" style="color:var(--red)">−R$ 597</span>
+            </div>
+            <div class="result-row">
+              <span class="r-label" style="font-weight:700;color:var(--text)">Lucro líquido extra/mês</span>
+              <span class="r-val" id="r-lucro" style="color:var(--teal-d);font-size:18px">+R$ 573</span>
+            </div>
+          </div>
+          <div class="result-verdict">
+            <div class="verdict-val" id="r-payback">11 dias</div>
+            <div class="verdict-lbl">para o sistema se pagar completamente</div>
+          </div>
+          <p style="font-size:11px;color:var(--muted2);font-family:var(--mono);text-align:center;margin-top:12px">Estimativa conservadora. Lojas reais reportam resgates maiores.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PLANS -->
+<div class="wrap">
+  <section id="planos">
+    <span class="section-tag">Planos e valores</span>
+    <h2 class="section-title">Escolha o plano<br/>certo para sua loja</h2>
+    <p class="section-sub">Sem contrato mínimo. Sem taxa de cancelamento. Setup pago uma única vez — inclui migração dos seus dados e treinamento.</p>
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-name">Base</div>
+        <div class="plan-price"><sup>R$</sup>297</div>
+        <div class="plan-period">/mês · por unidade</div>
+        <div class="plan-setup">Setup único: <strong>R$ 997</strong> — migração + treinamento</div>
+        <ul class="plan-features">
+          <li class="on"><span class="check">✓</span> Agenda visual completa</li>
+          <li class="on"><span class="check">✓</span> CRM clientes & pets</li>
+          <li class="on"><span class="check">✓</span> PDV / Caixa + recibo PDF</li>
+          <li class="on"><span class="check">✓</span> Hospedagem com prontuário</li>
+          <li class="on"><span class="check">✓</span> Pacotes com abate automático</li>
+          <li class="on"><span class="check">✓</span> Financeiro gerencial</li>
+          <li class="on"><span class="check">✓</span> Multi-filial nativo</li>
+          <li class="on"><span class="check">✓</span> Acesso por função (banhista, tosador...)</li>
+          <li><span class="dash">–</span> <span>WhatsApp bot (disponível no Pro)</span></li>
+          <li><span class="dash">–</span> <span>Resgate automático de inativos</span></li>
+        </ul>
+        <a href="https://wa.me/555199999999?text=Quero+saber+mais+sobre+o+plano+Base+da+Pataforma" class="plan-btn plan-btn-outline">Quero o plano Base</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-tag">MAIS ESCOLHIDO</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><sup>R$</sup>597</div>
+        <div class="plan-period">/mês · por unidade</div>
+        <div class="plan-setup">Setup único: <strong>R$ 1.997</strong> — migração + WhatsApp + treinamento</div>
+        <ul class="plan-features">
+          <li class="on"><span class="check">✓</span> Tudo do plano Base</li>
+          <li class="on"><span class="check">✓</span> <strong>WhatsApp bot 24h</strong></li>
+          <li class="on"><span class="check">✓</span> Agendamento automático via chat</li>
+          <li class="on"><span class="check">✓</span> Resgate automático de inativos</li>
+          <li class="on"><span class="check">✓</span> Lembretes automáticos (D-1)</li>
+          <li class="on"><span class="check">✓</span> Suporte prioritário</li>
+          <li class="on"><span class="check">✓</span> Atualizações antecipadas</li>
+        </ul>
+        <a href="https://wa.me/555199999999?text=Quero+saber+mais+sobre+o+plano+Pro+da+Pataforma" class="plan-btn plan-btn-fill">Começar com o Pro →</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Rede</div>
+        <div class="plan-price" style="font-size:32px;letter-spacing:-.03em">Sob consulta</div>
+        <div class="plan-period">para redes e franquias</div>
+        <div class="plan-setup" style="min-height:36px">Para 3 ou mais unidades · contrato anual com desconto</div>
+        <ul class="plan-features">
+          <li class="on"><span class="check">✓</span> Tudo do plano Pro</li>
+          <li class="on"><span class="check">✓</span> Dashboard consolidado da rede</li>
+          <li class="on"><span class="check">✓</span> Relatório gerencial multi-filial</li>
+          <li class="on"><span class="check">✓</span> Onboarding presencial</li>
+          <li class="on"><span class="check">✓</span> SLA de suporte garantido</li>
+          <li class="on"><span class="check">✓</span> Possibilidade de white-label</li>
+        </ul>
+        <a href="https://wa.me/555199999999?text=Tenho+uma+rede+e+quero+saber+sobre+a+Pataforma" class="plan-btn plan-btn-ghost">Falar sobre a rede →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FAQ -->
+<div class="wrap">
+  <section>
+    <span class="section-tag">Dúvidas frequentes</span>
+    <h2 class="section-title">Perguntas que<br/>todo dono faz</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Preciso trocar de sistema? Meus dados vão se perder?<span class="arrow">+</span></button>
+        <div class="faq-a">O setup inclui migração completa dos seus dados — seja da planilha, do sistema antigo ou do caderno. A equipe técnica cuida de tudo. Você entra rodando no primeiro dia.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Funciona sem internet? O sistema pode cair?<span class="arrow">+</span></button>
+        <div class="faq-a">O sistema roda offline no dispositivo e sincroniza quando a conexão voltar. Se a internet cair durante o atendimento, você continua trabalhando normalmente — nenhum dado é perdido.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Posso cancelar quando quiser?<span class="arrow">+</span></button>
+        <div class="faq-a">Sim. Sem multa, sem contrato mínimo, sem burocracia. O setup é pago uma única vez para cobrir a migração e o treinamento — a mensalidade cancela quando você decidir.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">A equipe consegue aprender a usar o sistema?<span class="arrow">+</span></button>
+        <div class="faq-a">O sistema tem acesso por função — a banhista vê só a agenda dela, o tosador só os seus atendimentos, o plantonista só o check-in e hospedagem. O treinamento leva menos de 1 hora por função.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">O WhatsApp bot substitui minha recepcionista?<span class="arrow">+</span></button>
+        <div class="faq-a">Não substitui — libera. O bot cuida dos agendamentos de rotina, confirmações e lembretes. Sua recepcionista foca no atendimento presencial e na relação com o cliente — o que realmente importa.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <h2>Pronto para aposentar<br/>o caderno de vez?</h2>
+  <p>Demonstração ao vivo em 20 minutos — você vê o sistema rodando com os dados da sua loja, não com uma demo genérica.</p>
+  <a href="https://wa.me/555199999999?text=Oi%2C+quero+uma+demonstra%C3%A7%C3%A3o+da+Pataforma" class="btn-final">
+    📱 Solicitar demonstração gratuita
+  </a>
+  <div class="cta-note">Resposta em até 2 horas · Sem compromisso · Sem pitch agressivo</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    Pataforma · Sistema de Gestão para Pet Shops · Porto Alegre, RS<br/>
+    Desenvolvido por <a href="#" style="color:var(--muted);text-decoration:none">Andarilho Digital</a>
+  </div>
+</footer>
+
+<script>
+function calcRoi() {
+  const ticket   = +document.getElementById('sl-ticket').value;
+  const resgates = +document.getElementById('sl-resgates').value;
+  const perdidos = +document.getElementById('sl-perdidos').value;
+  const plano    = 597;
+  document.getElementById('lbl-ticket').textContent   = 'R$ ' + ticket;
+  document.getElementById('lbl-resgates').textContent = resgates + ' clientes';
+  document.getElementById('lbl-perdidos').textContent = perdidos + ' atendimentos';
+  const rResgate = ticket * resgates;
+  const rPerdido = ticket * perdidos;
+  const lucro    = rResgate + rPerdido - plano;
+  const payback  = lucro > 0 ? Math.ceil(plano / ((rResgate + rPerdido) / 30)) : 999;
+  document.getElementById('r-resgates').textContent = '+R$ ' + rResgate.toLocaleString('pt-BR');
+  document.getElementById('r-perdidos').textContent = '+R$ ' + rPerdido.toLocaleString('pt-BR');
+  document.getElementById('r-lucro').textContent    = (lucro >= 0 ? '+R$ ' : '−R$ ') + Math.abs(lucro).toLocaleString('pt-BR');
+  document.getElementById('r-lucro').style.color    = lucro >= 0 ? 'var(--teal-d)' : 'var(--red)';
+  document.getElementById('r-payback').textContent  = payback <= 30 ? payback + ' dias' : '> 30 dias';
+  document.getElementById('r-payback').style.color  = payback <= 15 ? 'var(--brand)' : payback <= 25 ? 'var(--gold)' : 'var(--red)';
+}
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+calcRoi();
+</script>
+</body>
+</html>
