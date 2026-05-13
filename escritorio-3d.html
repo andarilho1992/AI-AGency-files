@@ -84,7 +84,7 @@ canvas{display:block}
   <div id="ui-hd">
     <div class="hd-badge">Andarilho Digital</div>
     <div class="hd-title">The <span>Office</span> 3D</div>
-    <div class="hd-sub">Dunder Mifflin HQ · Arrastar = rotacionar · Scroll = zoom</div>
+    <div class="hd-sub">Dunder Mifflin HQ · Scroll = zoom · Arrastar = mover câmera</div>
   </div>
   <div id="ui-ctrl">
     <button class="ubtn ubtn-g" onclick="resetCam()">📷 Reset</button>
@@ -113,9 +113,9 @@ scene.background = new THREE.Color(0x0f0804);
 scene.fog = new THREE.Fog(0x0f0804, 22, 40);
 
 const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
-const camera = new THREE.PerspectiveCamera(48, W()/H(), 0.1, 80);
-camera.position.set(0, 9, 15);
-camera.lookAt(0, 0, -1);
+const camera = new THREE.PerspectiveCamera(45, W()/H(), 0.1, 100);
+camera.position.set(8, 24, 14);
+camera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
@@ -132,13 +132,15 @@ document.getElementById('css2d').appendChild(css2d.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0,0,0); controls.enableDamping=true; controls.dampingFactor=0.07;
-controls.maxPolarAngle=Math.PI/2.1; controls.minDistance=7; controls.maxDistance=32;
+controls.enableRotate=false;
+controls.screenSpacePanning=false;
+controls.minDistance=12; controls.maxDistance=45;
 
 window.addEventListener('resize',()=>{
   camera.aspect=W()/H(); camera.updateProjectionMatrix();
   renderer.setSize(W(),H()); css2d.setSize(W(),H());
 });
-window.resetCam=()=>{ camera.position.set(0,9,15); controls.target.set(0,0,-1); };
+window.resetCam=()=>{ camera.position.set(8,24,14); controls.target.set(0,0,0); controls.update(); };
 
 // ─── LIGHTS ──────────────────────────────────────────────────────
 lf(20); lt('Iluminação...');
@@ -327,136 +329,151 @@ const agents={}, aStates={}, bubT={};
 
 function mkChibi(id, def){
   const g=new THREE.Group();
-  const bw=def.bodyWide?1.3:1;
+  const bw=def.bodyWide?1.22:1;
 
-  // ── FEET ──
+  // ── FLOOR DISC (identificador de cor) ──
+  const disc=new THREE.Mesh(new THREE.CircleGeometry(0.34,18),
+    new THREE.MeshBasicMaterial({color:def.shirt,transparent:true,opacity:0.28}));
+  disc.rotation.x=-Math.PI/2; disc.position.y=0.012; g.add(disc);
+
+  // ── SHOES ──
   [-0.09,0.09].forEach(fx=>{
-    const ft=new THREE.Mesh(new THREE.SphereGeometry(0.085,8,8),new THREE.MeshLambertMaterial({color:def.pants}));
-    ft.scale.set(1.1*bw,0.65,1.4); ft.position.set(fx*bw,0.085,0.04); g.add(ft);
+    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.078,8,6),
+      new THREE.MeshLambertMaterial({color:0x1a1010}));
+    sh.scale.set(1.1*bw,0.6,1.45); sh.position.set(fx*bw,0.072,0.04); g.add(sh);
   });
 
   // ── LEGS ──
-  [-0.08,0.08].forEach(lx=>{
-    const lg=new THREE.Mesh(new THREE.CylinderGeometry(0.068,0.068,0.20,8),new THREE.MeshLambertMaterial({color:def.pants}));
-    lg.position.set(lx*bw,0.22,0); g.add(lg);
+  [-0.082,0.082].forEach(lx=>{
+    const lg=new THREE.Mesh(new THREE.CylinderGeometry(0.062,0.062,0.44,8),
+      new THREE.MeshLambertMaterial({color:def.pants}));
+    lg.position.set(lx*bw,0.3,0); g.add(lg);
   });
 
-  // ── BODY ──
-  const body=new THREE.Mesh(new THREE.CylinderGeometry(0.20,0.24,0.32,14),new THREE.MeshLambertMaterial({color:def.shirt}));
-  body.position.y=0.47; body.scale.x=bw; body.castShadow=true; g.add(body);
-
-  // Neck
-  const collar=new THREE.Mesh(new THREE.CylinderGeometry(0.11,0.11,0.06,10),new THREE.MeshLambertMaterial({color:def.skin}));
-  collar.position.y=0.66; g.add(collar);
+  // ── BODY (tall, slim — visible from isometric top-down) ──
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(0.185,0.215,0.78,14),
+    new THREE.MeshLambertMaterial({color:def.shirt}));
+  body.position.y=0.82; body.scale.x=bw; body.castShadow=true; g.add(body);
 
   // Jacket lapels (Michael's suit)
   if(def.jacket){
     const jm=new THREE.MeshLambertMaterial({color:def.jacket});
     [-1,1].forEach(s=>{
-      const lap=new THREE.Mesh(new THREE.BoxGeometry(0.09,0.22,0.05),jm);
-      lap.position.set(s*0.09,0.52,0.21); lap.rotation.z=-s*0.35; g.add(lap);
+      const lap=new THREE.Mesh(new THREE.BoxGeometry(0.085,0.30,0.055),jm);
+      lap.position.set(s*0.088,0.86,0.185); lap.rotation.z=-s*0.3; g.add(lap);
     });
   }
 
-  // Tie
+  // Tie (Michael)
   if(def.tie){
-    const tie=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.20,0.04),new THREE.MeshLambertMaterial({color:def.tie}));
-    tie.position.set(0,0.50,0.23); g.add(tie);
+    const tie=new THREE.Mesh(new THREE.BoxGeometry(0.055,0.30,0.04),
+      new THREE.MeshLambertMaterial({color:def.tie}));
+    tie.position.set(0,0.80,0.215); g.add(tie);
   }
 
   // ── ARMS ──
   [-1,1].forEach(s=>{
-    const arm=new THREE.Mesh(new THREE.CapsuleGeometry(0.07,0.19,4,8),new THREE.MeshLambertMaterial({color:def.shirt}));
-    arm.position.set(s*(0.27*bw),0.46,0); arm.rotation.z=-s*0.5; g.add(arm);
+    const arm=new THREE.Mesh(new THREE.CapsuleGeometry(0.062,0.30,4,8),
+      new THREE.MeshLambertMaterial({color:def.shirt}));
+    arm.position.set(s*(0.262*bw),0.80,0); arm.rotation.z=-s*0.52; g.add(arm);
   });
 
-  // "World's Best Boss" mug (Michael)
+  // Mug (Michael — held in right hand)
   if(def.mug){
-    const mugM=new THREE.MeshLambertMaterial({color:0xfafae8});
-    const mugB=new THREE.Mesh(new THREE.CylinderGeometry(0.052,0.048,0.09,10),mugM);
-    mugB.position.set(0.37,0.33,0.05); g.add(mugB);
-    const handle=new THREE.Mesh(new THREE.TorusGeometry(0.033,0.011,6,10,Math.PI),mugM);
-    handle.rotation.y=-Math.PI/2; handle.position.set(0.435,0.33,0.05); g.add(handle);
-    const star=new THREE.Mesh(new THREE.BoxGeometry(0.016,0.016,0.01),new THREE.MeshBasicMaterial({color:0xf5c518}));
-    star.position.set(0.37,0.33,0.096); g.add(star);
+    const mugM=new THREE.MeshLambertMaterial({color:0xf8f4e0});
+    const mugB=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.046,0.092,10),mugM);
+    mugB.position.set(0.38,0.56,0.05); g.add(mugB);
+    const mh=new THREE.Mesh(new THREE.TorusGeometry(0.03,0.01,6,10,Math.PI),mugM);
+    mh.rotation.y=-Math.PI/2; mh.position.set(0.435,0.56,0.05); g.add(mh);
   }
 
-  // ── HEAD (bigger chibi sphere) ──
-  const HR=0.42;
-  const head=new THREE.Mesh(new THREE.SphereGeometry(HR,20,16),new THREE.MeshLambertMaterial({color:def.skin}));
-  head.position.y=1.02; head.castShadow=true; g.add(head);
+  // ── NECK ──
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(0.095,0.095,0.12,10),
+    new THREE.MeshLambertMaterial({color:def.skin}));
+  neck.position.y=1.27; g.add(neck);
+
+  // ── HEAD ──
+  const HR=0.40;
+  const head=new THREE.Mesh(new THREE.SphereGeometry(HR,20,16),
+    new THREE.MeshLambertMaterial({color:def.skin}));
+  head.position.y=1.44; head.castShadow=true; g.add(head);
 
   // ── HAIR CAP (hemisphere) ──
   const hairCap=new THREE.Mesh(
-    new THREE.SphereGeometry(HR+0.015,16,10,0,Math.PI*2,0,Math.PI*0.52),
+    new THREE.SphereGeometry(HR+0.018,16,10,0,Math.PI*2,0,Math.PI*0.52),
     new THREE.MeshLambertMaterial({color:def.hair})
   );
-  hairCap.position.y=1.02; g.add(hairCap);
+  hairCap.position.y=1.44; g.add(hairCap);
 
-  // Jim: side-swept messy tuft
+  // Jim: side-swept tuft
   if(def.hairSweep){
-    const tuft=new THREE.Mesh(new THREE.SphereGeometry(0.17,8,8),new THREE.MeshLambertMaterial({color:def.hair}));
-    tuft.scale.set(1.55,0.55,0.8); tuft.position.set(0.16,1.39,0.14); g.add(tuft);
+    const tuft=new THREE.Mesh(new THREE.SphereGeometry(0.155,8,8),
+      new THREE.MeshLambertMaterial({color:def.hair}));
+    tuft.scale.set(1.55,0.52,0.8); tuft.position.set(0.14,1.78,0.13); g.add(tuft);
   }
 
-  // Pam: long flowing hair behind + side pieces
+  // Pam: long hair behind + sides
   if(def.hairLong){
-    const lng=new THREE.Mesh(new THREE.SphereGeometry(0.28,12,10),new THREE.MeshLambertMaterial({color:def.hair}));
-    lng.scale.set(0.92,1.9,0.66); lng.position.set(0,0.87,-0.22); g.add(lng);
-    [-0.23,0.23].forEach(sx=>{
-      const side=new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshLambertMaterial({color:def.hair}));
-      side.scale.set(0.7,1.35,0.58); side.position.set(sx,0.90,-0.09); g.add(side);
+    const lng=new THREE.Mesh(new THREE.SphereGeometry(0.26,12,10),
+      new THREE.MeshLambertMaterial({color:def.hair}));
+    lng.scale.set(0.88,1.85,0.65); lng.position.set(0,1.25,-0.21); g.add(lng);
+    [-0.21,0.21].forEach(sx=>{
+      const side=new THREE.Mesh(new THREE.SphereGeometry(0.14,8,8),
+        new THREE.MeshLambertMaterial({color:def.hair}));
+      side.scale.set(0.68,1.3,0.58); side.position.set(sx,1.28,-0.08); g.add(side);
     });
   }
 
   // ── EYES ──
-  const EY=1.05, EZ=HR*0.88;
-  [[-0.135,0],[0.135,0]].forEach(([ex])=>{
-    const w=new THREE.Mesh(new THREE.SphereGeometry(0.094,10,10),new THREE.MeshBasicMaterial({color:0xffffff}));
+  const EY=1.47, EZ=HR*0.87;
+  [[-0.128,0],[0.128,0]].forEach(([ex])=>{
+    const w=new THREE.Mesh(new THREE.SphereGeometry(0.09,10,10),new THREE.MeshBasicMaterial({color:0xffffff}));
     w.position.set(ex,EY,EZ); g.add(w);
-    const p=new THREE.Mesh(new THREE.SphereGeometry(0.056,8,8),new THREE.MeshBasicMaterial({color:0x111111}));
-    p.position.set(ex,EY-0.008,EZ+0.042); g.add(p);
-    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.022,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));
-    sh.position.set(ex+0.033,EY+0.033,EZ+0.072); g.add(sh);
+    const p=new THREE.Mesh(new THREE.SphereGeometry(0.053,8,8),new THREE.MeshBasicMaterial({color:0x111}));
+    p.position.set(ex,EY-0.007,EZ+0.04); g.add(p);
+    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.02,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));
+    sh.position.set(ex+0.03,EY+0.03,EZ+0.068); g.add(sh);
   });
 
   // ── MOUTH ──
-  const MY=0.91, MZ=HR*0.91;
+  const MY=1.33, MZ=HR*0.90;
   if(def.mouthFlat){
-    // Dwight: stern flat line
-    const flat=new THREE.Mesh(new THREE.BoxGeometry(0.13,0.012,0.012),new THREE.MeshBasicMaterial({color:0x6a3010}));
+    const flat=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.011,0.011),
+      new THREE.MeshBasicMaterial({color:0x6a3010}));
     flat.position.set(0,MY,MZ); g.add(flat);
   } else if(def.mouthSmirk){
-    // Jim: asymmetric smirk (arc only on right side)
-    const smirk=new THREE.Mesh(new THREE.TorusGeometry(0.062,0.011,6,12,Math.PI*0.65),new THREE.MeshBasicMaterial({color:0x9b5c2a}));
-    smirk.rotation.z=Math.PI+0.55; smirk.position.set(0.025,MY,MZ); g.add(smirk);
+    const smirk=new THREE.Mesh(new THREE.TorusGeometry(0.058,0.011,6,12,Math.PI*0.65),
+      new THREE.MeshBasicMaterial({color:0x9b5c2a}));
+    smirk.rotation.z=Math.PI+0.55; smirk.position.set(0.022,MY,MZ); g.add(smirk);
   } else {
-    const sr=def.bigSmile?0.10:0.08;
-    const smile=new THREE.Mesh(new THREE.TorusGeometry(sr,0.012,6,12,Math.PI),new THREE.MeshBasicMaterial({color:0x9b5c2a}));
+    const sr=def.bigSmile?0.095:0.075;
+    const smile=new THREE.Mesh(new THREE.TorusGeometry(sr,0.011,6,12,Math.PI),
+      new THREE.MeshBasicMaterial({color:0x9b5c2a}));
     smile.rotation.z=Math.PI; smile.position.set(0,MY,MZ); g.add(smile);
   }
 
   // ── GLASSES (Dwight) ──
   if(def.glasses){
     const fm=new THREE.MeshBasicMaterial({color:0x1a1a1a});
-    [-0.135,0.135].forEach(gx=>{
-      const fr=new THREE.Mesh(new THREE.TorusGeometry(0.078,0.013,6,14),fm);
-      fr.position.set(gx,EY,EZ+0.042); g.add(fr);
+    [-0.128,0.128].forEach(gx=>{
+      const fr=new THREE.Mesh(new THREE.TorusGeometry(0.074,0.012,6,14),fm);
+      fr.position.set(gx,EY,EZ+0.04); g.add(fr);
     });
-    const br=new THREE.Mesh(new THREE.BoxGeometry(0.1,0.013,0.013),fm);
-    br.position.set(0,EY,EZ+0.042); g.add(br);
+    const br=new THREE.Mesh(new THREE.BoxGeometry(0.096,0.012,0.012),fm);
+    br.position.set(0,EY,EZ+0.04); g.add(br);
   }
 
   // ── LABEL + BUBBLE ──
   const nd=document.createElement('div'); nd.className='ag-lbl';
   nd.textContent=def.role+' ('+def.name+')';
-  const no=new CSS2DObject(nd); no.position.set(0,1.68,0); g.add(no);
+  const no=new CSS2DObject(nd); no.position.set(0,2.1,0); g.add(no);
 
   const bd=document.createElement('div'); bd.className='ag-bub';
-  const bo=new CSS2DObject(bd); bo.position.set(0,2.22,0); g.add(bo);
+  const bo=new CSS2DObject(bd); bo.position.set(0,2.68,0); g.add(bo);
 
   const r=def.desk;
   g.position.set(r.x+(Math.random()-.5)*.3,0,r.z+(Math.random()-.5)*.3);
+  g.scale.set(1.1,1.1,1.1);
   scene.add(g);
 
   agents[id]={g,head,bDiv:bd,tX:r.x,tZ:r.z,phase:Math.random()*Math.PI*2};
@@ -619,13 +636,13 @@ function animate(){
     switch(aStates[id]){
       case 'idle':
         a.g.position.y=Math.sin(ph*1.4)*.045;
-        a.head.position.y=1.02+Math.sin(ph*1.9)*.018;
+        a.head.position.y=1.44+Math.sin(ph*1.9)*.018;
         a.g.rotation.z=Math.sin(ph*.7)*.035;
         break;
       case 'working':
         a.g.position.y=Math.sin(ph*9)*.028;
         a.g.rotation.z=Math.sin(ph*9)*.09;
-        a.head.position.y=1.02+Math.sin(ph*11)*.03;
+        a.head.position.y=1.44+Math.sin(ph*11)*.03;
         break;
       case 'celebrating':
         a.g.position.y=Math.abs(Math.sin(ph*8))*0.42;
