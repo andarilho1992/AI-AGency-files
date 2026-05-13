@@ -115,12 +115,12 @@ scene.fog = new THREE.Fog(0x0f0804, 22, 40);
 const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
 
 // ── ORTHOGRAPHIC CAMERA (isometric top-down, no perspective distortion) ──
-const VIEW = 12; // half-height in world units
+const VIEW = 7; // half-height in world units — zoom in
 const camAspect = ()=>W()/H();
 const camera = new THREE.OrthographicCamera(
   -VIEW*camAspect(), VIEW*camAspect(), VIEW, -VIEW, -30, 80
 );
-camera.position.set(10, 18, 12);
+camera.position.set(3, 26, 7);
 camera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
@@ -150,7 +150,7 @@ window.addEventListener('resize',()=>{
   renderer.setSize(W(),H()); css2d.setSize(W(),H());
 });
 window.resetCam=()=>{
-  camera.position.set(10,18,12); camera.zoom=1;
+  camera.position.set(3,26,7); camera.zoom=1;
   camera.updateProjectionMatrix(); controls.target.set(0,0,0); controls.update();
 };
 
@@ -343,10 +343,13 @@ function mkChibi(id, def){
   const g=new THREE.Group();
   const bw=def.bodyWide?1.22:1;
 
-  // ── FLOOR DISC (identificador de cor) ──
-  const disc=new THREE.Mesh(new THREE.CircleGeometry(0.34,18),
-    new THREE.MeshBasicMaterial({color:def.shirt,transparent:true,opacity:0.28}));
-  disc.rotation.x=-Math.PI/2; disc.position.y=0.012; g.add(disc);
+  // ── FLOOR DISC (identificador de cor — visível de cima) ──
+  const disc=new THREE.Mesh(new THREE.CircleGeometry(0.55,18),
+    new THREE.MeshBasicMaterial({color:def.shirt,transparent:true,opacity:0.72}));
+  disc.rotation.x=-Math.PI/2; disc.position.y=0.015; g.add(disc);
+  const discBorder=new THREE.Mesh(new THREE.RingGeometry(0.54,0.62,18),
+    new THREE.MeshBasicMaterial({color:def.hair,transparent:true,opacity:0.9,side:THREE.DoubleSide}));
+  discBorder.rotation.x=-Math.PI/2; discBorder.position.y=0.016; g.add(discBorder);
 
   // ── SHOES ──
   [-0.09,0.09].forEach(fx=>{

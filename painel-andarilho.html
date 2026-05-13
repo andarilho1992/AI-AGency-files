@@ -1526,13 +1526,19 @@ function pipeExecutarImport(){
 
 // worker sync
 const WORKER_URL = 'https://andarilho-prospecao.andarilhodigital92.workers.dev';
-async function syncWorker(){
-  const secret = localStorage.getItem('worker_secret') || prompt('Worker secret (SYNC_SECRET):','');
+async function syncWorker(forcePrompt=false){
+  let secret = forcePrompt ? null : localStorage.getItem('worker_secret');
+  if(!secret) secret = prompt('Worker secret (SYNC_SECRET):','andarilho-secret');
   if(!secret) return;
   localStorage.setItem('worker_secret', secret);
   const btn = R('btn-sync'); if(btn){ btn.textContent='⟳ Sincronizando...'; btn.disabled=true; }
   try {
     const r = await fetch(`${WORKER_URL}/sync`,{ method:'POST', headers:{'Content-Type':'application/json','x-sync-secret':secret}, body:JSON.stringify({leads:pipeLeads}) });
+    if(r.status===401){
+      localStorage.removeItem('worker_secret');
+      toast('Secret incorreto. Clique Sync Worker novamente para corrigir.',false);
+      return;
+    }
     if(!r.ok) throw new Error(`HTTP ${r.status}`);
     const data = await r.json();
     if(data.novosParaCliente?.length){ const ids=new Set(pipeLeads.map(l=>l.id)); pipeLeads=[...data.novosParaCliente.filter(l=>!ids.has(l.id)),...pipeLeads]; }
