@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pets Go Control — Guia da Recepção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4047C8;--brand-dark:#2D33A8;--brand-light:#ECEEFF;
+  --teal:#00C896;--teal-light:#E5FFF8;
+  --yellow:#F5C218;--yellow-light:#FFFDE6;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --bg:#F1F5F9;--surface:#FFFFFF;--border:#E2E8F0;
+  --text:#0F172A;--text2:#334155;--muted:#64748B;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+.header{background:var(--brand);color:#fff;padding:40px 24px 32px;text-align:center}
+.header-logo{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:10px}
+.header h1{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+.header p{font-size:1rem;opacity:.8;max-width:500px;margin:0 auto}
+.version{display:inline-block;background:rgba(255,255,255,.15);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;margin-top:14px}
+
+/* NAV */
+.nav{background:var(--surface);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100;padding:0 24px}
+.nav-inner{display:flex;gap:4px;overflow-x:auto;max-width:960px;margin:0 auto;-ms-overflow-style:none;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-link{display:inline-flex;align-items:center;gap:6px;padding:14px 12px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;text-decoration:none;transition:all .15s;margin-bottom:-2px}
+.nav-link:hover{color:var(--brand)}
+.nav-link.active{color:var(--brand);border-bottom-color:var(--brand)}
+
+/* LAYOUT */
+.container{max-width:960px;margin:0 auto;padding:40px 24px}
+.section{margin-bottom:56px;scroll-margin-top:70px}
+.section-title{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.section-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+.section-divider{height:2px;background:var(--brand-light);margin-bottom:24px;border-radius:2px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
+.card-title{font-size:15px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card p{font-size:14px;color:var(--text2);margin-bottom:8px}
+.card p:last-child{margin-bottom:0}
+
+/* STEPS */
+.steps{counter-reset:steps}
+.step{display:flex;gap:16px;margin-bottom:16px;align-items:flex-start}
+.step-num{counter-increment:steps;content:counter(steps);width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body{padding-top:5px;font-size:14px;color:var(--text2);flex:1}
+.step-body strong{color:var(--text);display:block;font-size:14px;font-weight:700;margin-bottom:3px}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:16px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:12px;align-items:flex-start}
+.callout-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.callout-body strong{display:block;font-weight:700;margin-bottom:3px}
+.callout.tip{background:#EFF6FF;border:1px solid #BFDBFE;color:#1e40af}
+.callout.warn{background:var(--yellow-light);border:1px solid #FDE68A;color:#78350f}
+.callout.limit{background:var(--red-light);border:1px solid #FECACA;color:#991b1b}
+.callout.ok{background:var(--teal-light);border:1px solid #6EE7C7;color:#064e3b}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--bg);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border)}
+td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td strong{color:var(--text);font-weight:600}
+
+/* MODULE GRID */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px}
+.module-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .15s}
+.module-card:hover{border-color:var(--brand)}
+.module-icon{font-size:26px;flex-shrink:0}
+.module-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.module-desc{font-size:13px;color:var(--muted);line-height:1.4}
+
+/* TAG */
+.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.tag-blue{background:var(--brand-light);color:var(--brand-dark)}
+.tag-green{background:var(--teal-light);color:#065f46}
+.tag-yellow{background:var(--yellow-light);color:#78350f}
+.tag-red{background:var(--red-light);color:var(--red)}
+
+/* FAQ */
+.faq-item{border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.faq-q{padding:16px 18px;font-size:14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--surface)}
+.faq-q:hover{background:var(--bg)}
+.faq-a{padding:0 18px 16px;font-size:14px;color:var(--text2);display:none}
+.faq-a.open{display:block}
+
+.badge{display:inline-block;background:var(--brand);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
+
+@media(max-width:600px){
+  .header h1{font-size:1.5rem}
+  .container{padding:24px 16px}
+  .module-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Pets Go Control</div>
+  <h1>Guia da Recepção</h1>
+  <p>Tudo que você precisa saber para usar o sistema no dia a dia do pet shop</p>
+  <span class="version">Versão maio/2026</span>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-link active" href="#visao-geral">Visão Geral</a>
+    <a class="nav-link" href="#clientes-pets">Clientes & Pets</a>
+    <a class="nav-link" href="#agenda">Agenda</a>
+    <a class="nav-link" href="#checkin">Entrada / Saída</a>
+    <a class="nav-link" href="#pdv">PDV / Caixa</a>
+    <a class="nav-link" href="#recibo">Recibo</a>
+    <a class="nav-link" href="#financeiro">Financeiro</a>
+    <a class="nav-link" href="#planos">Planos</a>
+    <a class="nav-link" href="#faq">Dúvidas Frequentes</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- VISÃO GERAL -->
+  <section class="section" id="visao-geral">
+    <div class="section-title">📋 Visão Geral do Sistema</div>
+    <p class="section-sub">O Pets Go Control é o sistema de gestão da Pets Go. Ele substitui cadernos, planilhas e anotações avulsas — tudo fica registrado num só lugar.</p>
+    <div class="section-divider"></div>
+
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-icon">🐾</div>
+        <div>
+          <div class="module-name">Clientes & Pets</div>
+          <div class="module-desc">Cadastro dos tutores e dos pets com histórico completo de atendimentos</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">📅</div>
+        <div>
+          <div class="module-name">Agenda</div>
+          <div class="module-desc">Agendamentos por dia, semana e mês. Filtro por serviço e filial</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">✅</div>
+        <div>
+          <div class="module-name">Entrada / Saída</div>
+          <div class="module-desc">Registra a entrada e saída dos pets. Mostra quem está no pet shop agora</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">🛒</div>
+        <div>
+          <div class="module-name">PDV / Caixa</div>
+          <div class="module-desc">Registra os atendimentos, produtos e recebe os pagamentos</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">📄</div>
+        <div>
+          <div class="module-name">Recibo</div>
+          <div class="module-desc">Gera o comprovante do atendimento para o tutor ao fechar o caixa</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">💰</div>
+        <div>
+          <div class="module-name">Financeiro</div>
+          <div class="module-desc">Movimento do dia e relatório gerencial por período</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">🎟️</div>
+        <div>
+          <div class="module-name">Planos & Pacotes</div>
+          <div class="module-desc">Planos pré-pagos de creche e hospedagem com abate automático de diárias</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">📦</div>
+        <div>
+          <div class="module-name">Estoque</div>
+          <div class="module-desc">Controle de produtos e insumos utilizados nos atendimentos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTES & PETS -->
+  <section class="section" id="clientes-pets">
+    <div class="section-title">🐾 Clientes & Pets</div>
+    <p class="section-sub">Cadastre o tutor e os pets dele. Um tutor pode ter vários pets.</p>
+    <div class="section-divider"></div>
+
+    <div class="card">
+      <div class="card-title">Para que serve?</div>
+      <p>É o banco de dados da Pets Go. Todo atendimento precisa de um pet cadastrado. Se o tutor já é cliente, basta pesquisar o nome na busca — não precisa cadastrar de novo.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como cadastrar um novo cliente</div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vá em "Clientes" no menu lateral</strong>Clique no botão "+ Novo Cliente" no canto superior direito.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Preencha os dados do tutor</strong>Nome, telefone e CPF são os mais importantes. Endereço é opcional.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Adicione o pet</strong>Clique em "+ Adicionar Pet" dentro da ficha do cliente. Preencha nome, raça, sexo e peso.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Salve</strong>O cliente já aparece disponível para agendar e fazer check-in.</div></div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>Dica</strong>Use a barra de busca no topo da tela para encontrar qualquer cliente pelo nome, CPF ou nome do pet.</div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section class="section" id="agenda">
+    <div class="section-title">📅 Agenda</div>
+    <p class="section-sub">Visualize e gerencie todos os agendamentos do pet shop.</p>
+    <div class="section-divider"></div>
+
+    <div class="card">
+      <div class="card-title">Para que serve?</div>
+      <p>A agenda funciona como um Google Calendar do pet shop. Você vê os atendimentos do dia, da semana ou do mês. Dá pra filtrar por tipo de serviço (banho, tosa, creche, veterinário) usando os chips coloridos no topo.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como criar um agendamento</div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Clique no horário desejado</strong>Na grade da agenda, clique no dia e horário que quer agendar.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Selecione o cliente e o pet</strong>Digite o nome do tutor para buscar. Se não estiver cadastrado, cadastre primeiro em "Clientes".</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Escolha o serviço</strong>Banho, tosa, creche, hospedagem, veterinário, etc.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Confirme o agendamento</strong>O bloco aparece na grade da agenda na cor do serviço escolhido.</div></div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>Ver agendamentos de outros dias</strong>Use as setas ao lado da data no topo da agenda para navegar entre os dias. Você consegue ver agendamentos passados e futuros.</div>
+    </div>
+  </section>
+
+  <!-- CHECK-IN / OUT -->
+  <section class="section" id="checkin">
+    <div class="section-title">✅ Entrada / Saída de Pets</div>
+    <p class="section-sub">Registra quais pets estão fisicamente no pet shop neste momento.</p>
+    <div class="section-divider"></div>
+
+    <div class="card">
+      <div class="card-title">Para que serve?</div>
+      <p>Controle de presença do pet shop. Quando um pet chega, você faz o check-in. Quando ele sai, você faz o check-out. Funciona para qualquer serviço: banho, tosa, creche, hospedagem ou consulta.</p>
+      <p>• Marca o pet como "presente" no sistema</p>
+      <p>• Registra o horário de entrada para controle interno</p>
+      <p>• Mostra o histórico do pet (raça, peso, alergias, observações)</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como fazer o check-in — passo a passo</div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vá em "Entrada / Saída" no menu lateral</strong>O sistema mostra todos os agendamentos do dia.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Encontre o pet que chegou</strong>Os cards aparecem com nome do pet, tutor e horário do agendamento.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Clique em "Check-in"</strong>O card fica verde — o pet está marcado como dentro do pet shop.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Ao sair, clique em "Check-out"</strong>O card fica cinza — o registro de presença está fechado.</div></div>
+    </div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div class="callout-body"><strong>Regra simples</strong>Pet chegou → Check-in. Pet saiu → Check-out. Vale para qualquer serviço.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Situação</th><th>O que fazer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pet chegou para banho</td><td>Check-in → serviço: Banho</td></tr>
+          <tr><td>Pet chegou para creche</td><td>Check-in → serviço: Creche</td></tr>
+          <tr><td>Pet chegou para hospedagem</td><td>Check-in → serviço: Hospedagem</td></tr>
+          <tr><td>Pet chegou para consulta veterinária</td><td>Check-in → serviço: Veterinário</td></tr>
+          <tr><td>Pet saiu</td><td>Check-out no pet correspondente</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PDV / CAIXA -->
+  <section class="section" id="pdv">
+    <div class="section-title">🛒 PDV / Caixa</div>
+    <p class="section-sub">Registre o atendimento e receba o pagamento.</p>
+    <div class="section-divider"></div>
+
+    <div class="card">
+      <div class="card-title">Para que serve?</div>
+      <p>O PDV é o caixa do pet shop. Aqui você registra o que foi feito no atendimento (serviços e produtos), o valor cobrado e a forma de pagamento.</p>
+      <p>Toda venda que passar pelo PDV fica registrada automaticamente no financeiro.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como registrar um atendimento</div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vá em "PDV" no menu lateral</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Selecione o cliente e o pet</strong>Digite o nome para buscar.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Adicione os serviços e/ou produtos</strong>Banho, tosa, ração, medicamento — o que for.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Escolha a forma de pagamento</strong>Dinheiro, PIX, cartão de débito ou crédito.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Finalize</strong>O sistema confirma o pagamento e oferece a opção de gerar o recibo.</div></div>
+    </div>
+  </section>
+
+  <!-- RECIBO -->
+  <section class="section" id="recibo">
+    <div class="section-title">📄 Recibo</div>
+    <p class="section-sub">Comprovante do atendimento gerado na hora para o tutor.</p>
+    <div class="section-divider"></div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div class="callout-body"><strong>O recibo abre automaticamente</strong>Assim que o pagamento é confirmado no PDV ou na agenda, o recibo já aparece na tela. Não precisa procurar nada.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como enviar o recibo para o tutor</div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Finalize o atendimento no PDV</strong>Registre os serviços e confirme o pagamento. O recibo abre automaticamente.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Clique em "Salvar PDF"</strong>O botão azul no canto inferior direito do recibo. O PDF é baixado no celular ou computador.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Envie pelo WhatsApp</strong>Abra o WhatsApp, selecione o tutor, anexe o PDF e envie. Pronto.</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">O que aparece no recibo?</div>
+      <p>• Nome do pet shop e da filial</p>
+      <p>• Nome do tutor e do pet</p>
+      <p>• Serviços realizados e valores</p>
+      <p>• Forma de pagamento</p>
+      <p>• Data e hora do atendimento</p>
+    </div>
+  </section>
+
+  <!-- FINANCEIRO -->
+  <section class="section" id="financeiro">
+    <div class="section-title">💰 Financeiro</div>
+    <p class="section-sub">Acompanhe o movimento de caixa e os relatórios.</p>
+    <div class="section-divider"></div>
+
+    <div class="card">
+      <div class="card-title">Movimento do Dia</div>
+      <p>Mostra todas as receitas do dia selecionado: total recebido, forma de pagamento e lista de atendimentos.</p>
+      <p>Atualiza automaticamente conforme os atendimentos são fechados no PDV.</p>
+      <p>Use as <strong>setas &lt; &gt;</strong> ao lado da data para navegar entre os dias e ver o movimento de qualquer data passada.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Relatório Gerencial</div>
+      <p>Visão geral do período: faturamento por semana, por mês, por serviço. Usado pelo gestor para acompanhar o desempenho da filial. Requer senha de acesso.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>Ver movimento de ontem ou outro dia</strong>Na aba Movimento, clique na seta "&lt;" ao lado da data para voltar um dia. Clique em "&gt;" para avançar. A seta direita trava no dia de hoje.</div>
+    </div>
+  </section>
+
+  <!-- PLANOS -->
+  <section class="section" id="planos">
+    <div class="section-title">🎟️ Planos & Pacotes</div>
+    <p class="section-sub">Planos pré-pagos com abate automático de diárias.</p>
+    <div class="section-divider"></div>
+
+    <div class="card">
+      <div class="card-title">Para que serve?</div>
+      <p>Quando um tutor compra um pacote de creche ou hospedagem (ex: 10 diárias), o sistema cria um saldo de diárias para o pet. A cada dia de uso, o sistema abate automaticamente uma diária do plano — sem precisar registrar manualmente.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como lançar um plano</div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vá em "Planos" no menu lateral</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Selecione o cliente e o pet</strong></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Escolha o tipo de plano</strong>Creche, hospedagem, frequência semanal, etc.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Defina a quantidade de diárias e o valor pago</strong></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Salve</strong>O saldo aparece no perfil do pet e vai sendo descontado automaticamente.</div></div>
+    </div>
+
+    <div class="callout limit">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Limitação atual — Edição de plano</strong>
+        Depois que um plano é lançado, não é possível editar. Se precisar corrigir algo (tipo de plano, quantidade de diárias), é necessário cancelar o plano e lançar novamente do zero. Estamos trabalhando para adicionar a edição direta. Por enquanto: revise bem os dados antes de salvar.
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>Ver histórico de diárias</strong>No perfil do pet, dentro de Clientes, você consegue ver todas as diárias consumidas e o saldo restante do plano.</div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="section-title">❓ Dúvidas Frequentes</div>
+    <p class="section-sub">Situações comuns no dia a dia da recepção.</p>
+    <div class="section-divider"></div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        O pet chegou mas não está cadastrado. O que faço? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        Cadastre o tutor e o pet em "Clientes" primeiro. Leva menos de 2 minutos. Depois volte para fazer o check-in ou agendamento normalmente.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Preciso ver o que entrou no caixa ontem. Como faço? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        Na aba <strong>Financeiro → Movimento</strong>, clique na seta "&lt;" ao lado da data no canto superior direito do card. Cada clique volta um dia. Para avançar, use a seta "&gt;". A seta direita trava no dia de hoje.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Lancei o plano errado. Consigo editar? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        Não é possível editar um plano já lançado. Você precisa cancelar o plano (botão "Cancelar Plano" na ficha do plano) e lançar novamente com os dados corretos. O cancelamento remove automaticamente os registros financeiros vinculados ao plano.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Como enviar o recibo para o tutor pelo WhatsApp? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        O recibo abre automaticamente depois que você confirma o pagamento no PDV. Clique no botão azul <strong>"Salvar PDF"</strong>, o arquivo vai para os downloads do celular ou computador. Depois é só abrir o WhatsApp, entrar na conversa do tutor, anexar o PDF e enviar.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Qual a diferença entre Agenda e Entrada/Saída? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        <strong>Agenda</strong>: planejamento — mostra o que está marcado para acontecer (hoje, amanhã, essa semana).<br><br>
+        <strong>Entrada / Saída</strong>: presença — registra o que está acontecendo agora (quem chegou, qual serviço, que horas entrou).
+        <br><br>Um pet pode estar agendado mas ainda não ter dado entrada. Quando ele chega, você faz o check-in em "Entrada / Saída".
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        O pet tem plano de creche. Preciso registrar algo quando ele usa uma diária? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        Sim. Em "Entrada / Saída", faça o check-in normalmente com o serviço "Creche". O sistema identifica que o pet tem plano ativo e abate a diária automaticamente. Você pode ver o saldo restante no perfil do pet em "Clientes".
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Como filtrar a agenda só para ver os banhos do dia? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        Na parte superior da agenda tem chips coloridos com os nomes dos serviços. Clique no chip "Banho" para mostrar só os agendamentos de banho. Clique em outro chip para trocar o filtro. Clique em "Todos" para ver tudo novamente.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Estou em qual filial? Consigo ver as outras filiais? <span>▼</span>
+      </div>
+      <div class="faq-a">
+        A filial ativa aparece no canto superior esquerdo da tela, ao lado do logo. Você consegue trocar de filial clicando nesse nome. Cada filial tem seus próprios dados de agenda e caixa.
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<div style="background:var(--brand);color:#fff;text-align:center;padding:28px;font-size:13px;opacity:.9">
+  Pets Go Control — Guia da Recepção &nbsp;·&nbsp; Atualizado em 09/05/2026 &nbsp;·&nbsp; Dúvidas? Fale com o Junior ou com a equipe Andarilho Digital
+</div>
+
+<script>
+function toggleFaq(el){
+  const a=el.nextElementSibling;
+  const isOpen=a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.faq-q span').forEach(x=>x.textContent='▼');
+  if(!isOpen){a.classList.add('open');el.querySelector('span').textContent='▲'}
+}
+document.querySelectorAll('.nav-link').forEach(link=>{
+  link.addEventListener('click',function(e){
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+    this.classList.add('active');
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target)target.scrollIntoView({behavior:'smooth'});
+  });
+});
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      document.querySelectorAll('.nav-link').forEach(l=>{
+        l.classList.toggle('active',l.getAttribute('href')==='#'+id);
+      });
+    }
+  });
+},{threshold:0.4});
+document.querySelectorAll('.section[id]').forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

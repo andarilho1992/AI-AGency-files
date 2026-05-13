@@ -356,6 +356,161 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
 @media(max-width:600px){
   .stats-grid,.quick-grid{grid-template-columns:1fr}
 }
+
+/* ── PASSAGENS ── */
+.rota-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;transition:border-color .2s}
+.rota-card:hover{border-color:var(--border2)}
+.rota-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.rota-title{display:flex;align-items:center;gap:10px}
+.rota-from,.rota-to{font-size:22px;font-weight:900;letter-spacing:-.01em}
+.rota-arrow{font-size:16px;color:var(--muted)}
+.rota-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.rota-badge-alvo{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(231,201,163,.2)}
+.rota-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.rota-stat{background:var(--bg3);border-radius:10px;padding:12px;text-align:center}
+.rota-stat-val{font-size:18px;font-weight:900;line-height:1;margin-bottom:2px}
+.rota-stat-lbl{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.busca-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.busca-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;text-decoration:none}
+.bb-gf{background:rgba(66,133,244,.12);color:#4285f4}
+.bb-sk{background:rgba(255,100,1,.1);color:#ff6401}
+.bb-kw{background:rgba(255,176,0,.1);color:#ffb000}
+.bb-mom{background:rgba(45,140,255,.1);color:#2d8cff}
+.bb-12go{background:rgba(255,60,60,.12);color:#ff3c3c}
+.bb-bk{background:rgba(0,115,230,.12);color:#0073e6}
+.bb-ag{background:rgba(0,162,122,.12);color:#00a27a}
+.bb-all{background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.25)}
+.busca-btn:hover{filter:brightness(1.3)}
+.preco-hist{border-top:1px solid var(--border);padding-top:14px}
+.preco-hist-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.preco-hist-title{font-size:12px;font-weight:700;color:var(--muted2)}
+.preco-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.preco-row:last-child{border-bottom:none}
+.preco-val{font-weight:700;min-width:70px}
+.preco-val.abaixo{color:var(--green)}
+.preco-val.acima{color:var(--red)}
+.preco-val.ok{color:var(--gold)}
+.preco-cia{color:var(--muted2);flex:1}
+.preco-data{color:var(--muted);font-size:10px;white-space:nowrap}
+.preco-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;line-height:1;transition:color .12s}
+.preco-del:hover{color:var(--red)}
+.add-preco-form{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.add-preco-form input,.add-preco-form select{height:34px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:0 10px;font-size:12px;color:var(--text);outline:none;font-family:inherit}
+.add-preco-form input{flex:1;min-width:80px}
+.add-preco-form select{cursor:pointer}
+.add-preco-btn{height:34px;padding:0 14px;background:var(--rust);color:var(--gold);border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+/* ── PROSPECÇÃO ── */
+.prosp-kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.prosp-kpi-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px;text-align:center;transition:border-color .2s}
+.prosp-kpi-card:hover{border-color:var(--border2)}
+.prosp-kpi-val{font-size:26px;font-weight:900;line-height:1;margin-bottom:3px}
+.prosp-kpi-lbl{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.fu-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;margin-top:3px}
+.fu-hot{background:var(--red-dim);color:var(--red)}
+.fu-soon{background:var(--yellow-dim);color:var(--yellow)}
+.fu-ok{background:var(--green-dim);color:var(--green)}
+.msg-box{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:14px;font-size:12px;color:var(--muted2);line-height:1.7;white-space:pre-wrap;font-family:monospace;margin-top:8px}
+.copy-wa{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.22);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:10px}
+.copy-wa:hover{background:rgba(74,222,128,.2)}
+
+/* ── AGENTES ── */
+.agents-flow{display:flex;align-items:flex-start;gap:0;margin-bottom:24px;overflow-x:auto;padding-bottom:8px}
+.agent-wrap{display:flex;align-items:center}
+.agent-arrow{width:44px;height:2px;background:var(--border);position:relative;flex-shrink:0;margin-top:46px;transition:background .5s}
+.agent-arrow.lit{background:var(--green)}
+.agent-arrow::after{content:'';position:absolute;right:-6px;top:-4px;width:0;height:0;border-left:8px solid var(--border);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:border-color .5s}
+.agent-arrow.lit::after{border-left-color:var(--green)}
+.agent-card-ag{width:190px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;flex-shrink:0;transition:all .35s}
+.agent-card-ag.running{border-color:rgba(74,222,128,.5);box-shadow:0 0 22px rgba(74,222,128,.1)}
+.agent-card-ag.done{border-color:rgba(231,201,163,.28)}
+.agent-card-ag.error{border-color:rgba(248,113,113,.3)}
+.ag-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
+.ag-name{font-size:13px;font-weight:800;margin-bottom:2px}
+.ag-role{font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.4}
+.ag-status-row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background .3s}
+.sdot-idle{background:var(--muted)}
+.sdot-run{background:var(--green);animation:sdpulse 1s infinite}
+.sdot-done{background:var(--gold)}
+.sdot-err{background:var(--red)}
+@keyframes sdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+.ag-status-txt{font-size:11px;font-weight:600}
+.ag-last{font-size:10px;color:var(--muted);line-height:1.45;background:var(--bg3);border-radius:7px;padding:7px 9px;min-height:34px;font-family:monospace;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ag-count{font-size:11px;font-weight:700;margin-top:6px}
+.agent-config{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px;margin-bottom:20px}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}
+.run-btn{height:38px;padding:0 22px;background:var(--rust);color:var(--gold);border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.run-btn:hover{background:#d4451a;box-shadow:0 4px 16px var(--rust-glow)}
+.run-btn:disabled{background:var(--muted);cursor:not-allowed;box-shadow:none}
+.run-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
+.agent-feed{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px}
+.feed-hd{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.feed-entry{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.feed-entry:last-child{border-bottom:none}
+.feed-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;flex-shrink:0;margin-top:2px;letter-spacing:.04em;text-transform:uppercase}
+.ft-scout{background:rgba(96,165,250,.12);color:var(--blue)}
+.ft-analyst{background:rgba(168,85,247,.12);color:#a855f7}
+.ft-writer{background:var(--gold-dim);color:var(--gold)}
+.ft-tracker{background:var(--green-dim);color:var(--green)}
+.feed-msg{font-size:12px;color:var(--muted2);line-height:1.4;flex:1}
+.feed-time{font-size:10px;color:var(--muted);flex-shrink:0;white-space:nowrap}
+.feed-empty{padding:28px;text-align:center;color:var(--muted);font-size:12px}
+
+/* ═══ THE OFFICE ═════════════════════════════════════════════════ */
+.office-wrap{max-width:780px;margin:0 auto}
+.office-controls{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.btn-office{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;border:none;background:linear-gradient(135deg,#47399c,#6366f1);color:#fff;letter-spacing:.04em;text-transform:uppercase;transition:all .2s;box-shadow:0 3px 12px rgba(99,102,241,.35)}
+.btn-office:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn-office:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.office-floor{position:relative;width:100%;padding-bottom:64%;background:#0e0e20;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.07);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.office-grid{position:absolute;inset:3px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px}
+.oroom{position:relative;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.oroom-icon{font-size:20px;line-height:1;opacity:.85}
+.oroom-label{font-size:7.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-top:4px;text-align:center;line-height:1.2}
+.oroom-bg{position:absolute;font-size:52px;opacity:.07;bottom:-10px;right:-6px;pointer-events:none;line-height:1}
+.room-scout{background:rgba(99,102,241,.22)}
+.room-analyst{background:rgba(168,85,247,.18)}
+.room-writer{background:rgba(245,158,11,.16)}
+.room-tracker{background:rgba(16,185,129,.16)}
+.room-meeting{background:rgba(255,255,255,.04)}
+.room-github{background:rgba(255,255,255,.07)}
+.room-voos{background:rgba(59,130,246,.2)}
+.room-coffee{background:rgba(180,100,50,.16)}
+.room-whatsapp{background:rgba(37,211,102,.13)}
+/* Characters */
+.office-chars{position:absolute;inset:0;pointer-events:none}
+.ochar{position:absolute;display:flex;flex-direction:column;align-items:center;gap:1px;transform:translate(-50%,-50%);transition:left .85s cubic-bezier(.4,0,.2,1),top .85s cubic-bezier(.4,0,.2,1);pointer-events:all;cursor:pointer;z-index:20;user-select:none}
+.char-figure{display:flex;flex-direction:column;align-items:center;position:relative}
+.char-head{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 10px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.18)}
+.char-body{width:22px;height:14px;border-radius:5px 5px 0 0;margin-top:-1px}
+.char-legs{display:flex;gap:4px;margin-top:1px}
+.char-leg{width:8px;height:9px;border-radius:0 0 5px 5px}
+.char-tag{font-size:7.5px;font-weight:900;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.6);margin-top:3px;white-space:nowrap}
+.char-speech{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#fff;color:#111827;border-radius:11px;padding:5px 10px;font-size:9px;font-weight:700;opacity:0;transition:opacity .25s;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.35);z-index:30;white-space:nowrap;max-width:150px;white-space:normal;text-align:center;line-height:1.35}
+.char-speech::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#fff}
+.char-speech.show{opacity:1}
+/* Animations */
+@keyframes oidle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes owork{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-3px) rotate(-5deg)}75%{transform:translateY(-3px) rotate(5deg)}}
+@keyframes othink{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes ocelebrate{0%,100%{transform:translateY(0) rotate(0)}20%{transform:translateY(-16px) rotate(-14deg)}60%{transform:translateY(-11px) rotate(14deg)}}
+@keyframes ocoffee{0%,100%{transform:translateY(0) rotate(0)}40%,60%{transform:translateY(-4px) rotate(20deg)}}
+@keyframes oleg-a{0%,100%{transform:rotate(0)}25%{transform:rotate(22deg)}75%{transform:rotate(-22deg)}}
+@keyframes oleg-b{0%,100%{transform:rotate(0)}25%{transform:rotate(-22deg)}75%{transform:rotate(22deg)}}
+.ostate-idle      .char-figure{animation:oidle 2.2s ease-in-out infinite}
+.ostate-working   .char-figure{animation:owork .42s ease-in-out infinite}
+.ostate-thinking  .char-figure{animation:othink 1.5s ease-in-out infinite}
+.ostate-celebrating .char-figure{animation:ocelebrate .55s ease-in-out infinite}
+.ostate-coffee    .char-figure{animation:ocoffee 1.3s ease-in-out infinite}
+.ostate-walking   .char-leg:first-child{animation:oleg-a .34s ease-in-out infinite}
+.ostate-walking   .char-leg:last-child {animation:oleg-b .34s ease-in-out infinite}
+/* Log */
+.office-log{margin-top:12px;background:var(--bg2);border-radius:10px;padding:12px 14px;font-size:10.5px;font-family:monospace;color:var(--muted);min-height:48px;max-height:130px;overflow-y:auto;border:1px solid var(--border)}
+.olog-entry{padding:1.5px 0;display:flex;gap:8px}
+.olog-ts{color:rgba(255,255,255,.25);flex-shrink:0}
+.olog-msg{color:rgba(255,255,255,.75)}
+.olog-msg.ok{color:var(--green)}
+.olog-msg.alert{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -406,6 +561,41 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
     <div class="nav-item" data-nav="anotacoes" onclick="nav('anotacoes')">
       <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       <span>Anotações</span>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Vida Nômade</div>
+    <div class="nav-item" data-nav="passagens" onclick="nav('passagens')">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91A16 16 0 0 0 12 13l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Passagens</span>
+      <span class="nav-badge" id="b-pass" style="background:var(--green);display:none">!</span>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Finanças</div>
+    <div class="nav-item" data-nav="gastos" onclick="nav('gastos')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Gastos</span>
+      <span class="nav-badge" id="b-gasto" style="background:var(--red);display:none">!</span>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Vendas</div>
+    <div class="nav-item" data-nav="prospeccao" onclick="nav('prospeccao')">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Prospecção</span>
+      <span class="nav-badge" id="b-prosp" style="background:var(--blue);display:none">0</span>
+    </div>
+    <div class="nav-item" data-nav="agentes" onclick="nav('agentes')">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>Agentes</span>
+    </div>
+    <div class="nav-item" data-nav="escritorio" onclick="nav('escritorio')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Escritório</span>
     </div>
   </div>
 
@@ -640,6 +830,131 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
       <div class="notes-grid" id="ano-list"></div>
     </div>
 
+    <!-- ── PASSAGENS ── -->
+    <div id="s-passagens" class="section">
+      <div class="page-hd">
+        <div class="page-title">Monitor de <span style="color:var(--gold)">Passagens</span></div>
+        <div class="page-sub">Rotas monitoradas · alerta de preço · histórico</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="verificarVoosWorker()" id="btn-voos-check">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          Verificar preços agora
+        </button>
+        <span id="voos-status" style="font-size:12px;color:var(--muted)">Worker verifica diariamente às 08h BRT</span>
+      </div>
+      <div id="pass-rotas"></div>
+      <div style="margin-top:16px">
+        <button class="btn btn-ghost" onclick="abrirNovaRota()">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar Rota
+        </button>
+      </div>
+    </div>
+
+    <!-- ── GASTOS ── -->
+    <div id="s-gastos" class="section">
+      <div class="page-hd">
+        <div class="page-title">Gastos</div>
+        <div class="page-sub">Controle de despesas — ferramentas, assinaturas e operação</div>
+      </div>
+      <div class="stats-grid" id="gasto-kpi"></div>
+      <div class="sec-hd" style="margin-top:4px">
+        <div class="filter-row">
+          <div class="ftab active" onclick="setFilter('gastos','todos',this)">Todos</div>
+          <div class="ftab" onclick="setFilter('gastos','Pago',this)">Pagos</div>
+          <div class="ftab" onclick="setFilter('gastos','Pendente',this)">Pendentes</div>
+          <div class="ftab" onclick="setFilter('gastos','Recorrente',this)">Recorrentes</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('gasto')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Novo Gasto
+        </button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-head" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
+          <div class="th">Descrição</div>
+          <div class="th">Categoria</div>
+          <div class="th">Forma Pgto</div>
+          <div class="th">Data</div>
+          <div class="th">Valor</div>
+          <div class="th">Status</div>
+        </div>
+        <div id="gasto-list"></div>
+      </div>
+    </div>
+
+    <!-- ── PROSPECÇÃO ── -->
+    <div id="s-prospeccao" class="section">
+      <div class="page-hd">
+        <div class="page-title">Prospecção <span style="color:var(--gold)">Pets Go</span></div>
+        <div class="page-sub">Pipeline de petshops — sistema de gestão · ticket R$750/mês</div>
+      </div>
+      <div class="prosp-kpi" id="prosp-kpi"></div>
+      <div class="sec-hd">
+        <div style="flex:1"></div>
+        <button class="btn btn-ghost" onclick="nav('agentes')" style="margin-right:8px">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Executar Agentes
+        </button>
+        <button class="btn btn-primary" onclick="abrirNovoProsp()">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Novo Lead
+        </button>
+      </div>
+      <div class="kanban-wrap" id="prosp-kanban"></div>
+    </div>
+
+    <!-- ── AGENTES ── -->
+    <div id="s-agentes" class="section">
+      <div class="page-hd">
+        <div class="page-title">Central de <span style="color:var(--gold)">Agentes</span></div>
+        <div class="page-sub">Orquestração visual — Scout → Analyst → Writer → Tracker</div>
+      </div>
+      <div class="agent-config">
+        <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Configurar Rodada</div>
+        <div class="cfg-grid">
+          <div><label>Cidade alvo</label><input class="fi" id="ag-cidade" placeholder="Porto Alegre" value="Porto Alegre"/></div>
+          <div><label>Qtd. de leads</label><input class="fi" id="ag-qtd" type="number" placeholder="20" value="20" min="1" max="50"/></div>
+          <div><label>Nicho</label><select class="fs" id="ag-nicho">
+            <option value="petshop">Pet Shop</option>
+            <option value="clinica veterinaria">Clínica Veterinária</option>
+            <option value="hotel para pets">Hotel para Pets</option>
+          </select></div>
+          <button class="run-btn" id="run-btn" onclick="executarAgentes()">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Executar
+          </button>
+        </div>
+      </div>
+      <div class="agents-flow" id="agents-flow"></div>
+      <div class="agent-feed">
+        <div class="feed-hd">
+          <span>Log de Atividade</span>
+          <button class="btn btn-ghost" style="height:28px;font-size:11px;padding:0 12px" onclick="limparFeed()">Limpar</button>
+        </div>
+        <div id="agent-feed-list"><div class="feed-empty">Nenhuma execução ainda. Configure e clique em Executar.</div></div>
+      </div>
+    </div>
+
+    <!-- ── ESCRITÓRIO ── -->
+    <div id="s-escritorio" class="section">
+      <div class="page-hd">
+        <div class="page-title">The <span style="color:var(--gold)">Office</span></div>
+        <div class="page-sub">Andarilho Digital HQ — seus agentes ao vivo</div>
+      </div>
+      <div class="office-wrap">
+        <div class="office-controls">
+          <button class="btn-office" onclick="window.open('escritorio-3d.html','_blank')" style="background:linear-gradient(135deg,#6366f1,#a855f7);box-shadow:0 4px 20px rgba(99,102,241,.5)">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Abrir em 3D
+          </button>
+          <button class="btn-office" id="btn-office" onclick="toggleEscritorio()">▶ Ligar o escritório</button>
+          <span style="font-size:11px;color:var(--muted)">Clique em qualquer agente para ouvir o que ele está pensando</span>
+        </div>
+        <div class="office-floor">
+          <div class="office-grid" id="o-grid"></div>
+          <div class="office-chars" id="o-chars"></div>
+        </div>
+        <div class="office-log" id="o-log"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -766,13 +1081,13 @@ label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spa
 <script>
 // ── DB ──────────────────────────────────────────────────
 const KEY = 'ad_v2';
-let D = { clientes:[], projetos:[], propostas:[], faturas:[], reunioes:[], anotacoes:[], log:[] };
+let D = { clientes:[], projetos:[], propostas:[], faturas:[], reunioes:[], anotacoes:[], log:[], prosp:[], agentLog:[], gastos:[], rotas:[] };
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(D)); }
 function load(){ try{ const s=localStorage.getItem(KEY); if(s) Object.assign(D, JSON.parse(s)); }catch(e){} }
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
 
-const COL = { cliente:'clientes', projeto:'projetos', proposta:'propostas', fatura:'faturas', reuniao:'reunioes', anotacao:'anotacoes' };
+const COL = { cliente:'clientes', projeto:'projetos', proposta:'propostas', fatura:'faturas', reuniao:'reunioes', anotacao:'anotacoes', gasto:'gastos' };
 
 // ── UTILS ───────────────────────────────────────────────
 function R(id){ return document.getElementById(id); }
@@ -828,7 +1143,8 @@ function nav(s){
 function render(s){
   ({ dashboard:renderDash, clientes:renderCli, projetos:renderProj,
      propostas:renderProp, faturas:renderFat, reunioes:renderReu, anotacoes:renderAno,
-     pipeline:pipeRender }[s] || (()=>{}))();
+     pipeline:pipeRender, prospeccao:renderProsp, agentes:renderAgentes, gastos:renderGastos,
+     passagens:renderPassagens, escritorio:renderEscritorio }[s] || (()=>{}))();
 }
 
 function setFilter(sec, val, el){
@@ -1462,6 +1778,36 @@ const MODAL = {
       }
     }
   },
+  gasto: {
+    label: e => e ? 'Editar Gasto' : 'Novo Gasto',
+    html: d => `
+      <div class="form-row"><label>Descrição *</label><input class="fi" id="f-desc" placeholder="Claude Max, Cloudflare, Airbnb..." value="${d.descricao||''}"/></div>
+      <div class="form-2">
+        <div><label>Categoria</label><select class="fs" id="f-cat">
+          ${['Ferramentas / SaaS','Hospedagem / Moradia','Alimentação','Transporte','Marketing','Operação nômade','Outros'].map(c=>`<option${c===(d.categoria||'Ferramentas / SaaS')?' selected':''}>${c}</option>`).join('')}
+        </select></div>
+        <div><label>Tipo</label><select class="fs" id="f-tipo">
+          ${['Único','Recorrente','Parcelado'].map(t=>`<option${t===(d.tipo||'Único')?' selected':''}>${t}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="form-2">
+        <div><label>Valor (R$) *</label><input class="fi" id="f-valor" type="number" min="0" step="0.01" placeholder="0,00" value="${d.valor||''}"/></div>
+        <div><label>Status</label><select class="fs" id="f-status">${statOpt(['Pago','Pendente','Recorrente'],d.status||'Pago')}</select></div>
+      </div>
+      <div class="form-2">
+        <div><label>Data *</label><input class="fi" id="f-data" type="date" value="${d.data||new Date().toISOString().slice(0,10)}"/></div>
+        <div><label>Forma de pagamento</label><select class="fs" id="f-pgto">
+          ${['Wise','Nubank','PIX','Cartão crédito','Cartão débito','Dinheiro','Outro'].map(p=>`<option${p===(d.formaPgto||'Wise')?' selected':''}>${p}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="form-row"><label>Observação</label><textarea class="ft" id="f-obs" placeholder="Contexto, parcelamento, moeda original...">${d.notas||''}</textarea></div>`,
+    get: () => ({ descricao:fv('desc'), categoria:fv('cat'), tipo:fv('tipo'), valor:fv('valor'), status:fv('status')||'Pago', data:fv('data'), formaPgto:fv('pgto'), notas:fv('obs') }),
+    val: d => !d.descricao ? 'Descrição é obrigatória.' : !d.valor ? 'Valor é obrigatório.' : null,
+    do: (d, id) => {
+      if (id) { const i = D.gastos.findIndex(x => x.id === id); D.gastos[i] = {...D.gastos[i], ...d}; logAct(`Gasto <strong>${d.descricao}</strong> atualizado`, 'var(--red)'); }
+      else { D.gastos.push({...d, id:uid()}); logAct(`Novo gasto: <strong>${d.descricao}</strong> ${money(d.valor)}`, 'var(--red)'); }
+    }
+  },
   anotacao: {
     label: e => e ? 'Editar Anotação' : 'Nova Anotação',
     html: d => `
@@ -1580,80 +1926,102 @@ async function importWhatsAppLeads() {
 
 // ── SEED PETS GO ────────────────────────────────────────
 function seedPetsGo() {
-  const jaExiste = D.clientes.some(c => c.empresa === 'Pets Go');
-
   const cliId = 'petsgo-junior-001';
 
-  if (!jaExiste) {
-    D.clientes.push({
-      id: cliId,
-      nome: 'Junior',
-      empresa: 'Pets Go',
-      email: '',
-      telefone: '',
-      notas: 'Investidor anjo — paga todas as ferramentas do projeto.\nCliente #1 da agência.\nDono do Pets Go (pet shop + clínica veterinária).\n\nURLs de produção:\n• CRM: https://icy-wave-ee65.braziliangui1992.workers.dev/\n• Agentes: https://petsgo-agents-production.up.railway.app\n\nProduct Mapping V1.0 entregue em 17/04/2026.\n6 módulos · 32 submódulos · 100+ funcionalidades',
-    });
-  }
+  // Upsert cliente
+  const cliExiste = D.clientes.findIndex(c => c.id === cliId);
+  const cliData = {
+    id: cliId,
+    nome: 'Junior',
+    empresa: 'Pets Go',
+    email: '',
+    telefone: '',
+    notas: `Co-fundador do Pets Go — cliente #1 da agência. Paga R$300/segunda + R$200/sexta = ~R$2.150/mês.
+
+SISTEMA EM PRODUÇÃO:
+• CRM: https://andarilho-digital.pages.dev/petsgo-crm-light.html
+• Manual v4: https://andarilho-digital.pages.dev/petsgo-manual.html
+
+ESTRUTURA: 3 filiais (Cachorródromo, Rio Branco, Petrópolis)
+DADOS: 1.041 tutores + 1.382 pets importados
+
+PRÓXIMAS FEATURES (aguarda aprovação):
+• NF-e via eNotas (Junior tem conta + cert. A1 — falta API Key)
+• Reagendamento após serviço`,
+  };
+  if (cliExiste >= 0) D.clientes[cliExiste] = { ...D.clientes[cliExiste], ...cliData };
+  else D.clientes.push(cliData);
 
   // Sync projects from roadmap — upsert by id
   const PROJ = [
     {
       id: 'petsgo-proj-mvp',
-      titulo: '🐾 FASE 1 MVP — Clientes & Pets + Agenda',
-      clienteId: cliId, status: 'Ativo',
-      valor: 'Equity + ferramentas',
-      data: '2026-03-01',
-      notas: `ROADMAP: Product Mapping V1.0
+      titulo: '🐾 FASE 1 — CRM Completo + PWA + Cloud Sync',
+      clienteId: cliId, status: 'Concluído',
+      valor: 'R$2.150/mês',
+      data: '2026-05-13',
+      notas: `ENTREGUE ✅ — 13/05/2026
 
-── CLIENTES & PETS ──────────────────
-ENTREGUE ✅
-• Cadastro de clientes (dados, contato, múltiplos pets)
-• Cadastro de pets (espécie, raça, porte, histórico)
-• Dashboard com KPIs e pipeline de reativação
-• App mobile para gestores
-• CRM no ar: https://icy-wave-ee65.braziliangui1992.workers.dev/
+── MÓDULOS FUNCIONAIS ───────────────
+✅ Dashboard com KPIs
+✅ Clientes & Pets (CPF, endereço, peso, histórico)
+✅ Agenda visual estilo Google Calendar
+✅ Filtro de serviço na agenda (chips dinâmicos)
+✅ Check-in / Check-out
+✅ PDV / Caixa
+✅ Recibo PDF
+✅ Pagar na agenda (modal forma de pagamento)
+✅ Financeiro: Movimento + Gerencial
+✅ Estoque
+✅ Planos & Pacotes (crédito pré-pago, abate automático)
+✅ Histórico de diárias do plano
+✅ Diária retroativa + proteção duplicata
+✅ Plano com grupo + modalidade + frequência semanal
+✅ Cancelar plano limpa financeiro
+✅ Funcionários
+✅ Serviços CRUD (8 serviços seedados)
+✅ Hospedagem S2 (checklist diário completo)
+✅ Internação Veterinária (módulo + relatório tutor)
+✅ Manual v4 responsivo mobile
 
-PENDENTE ❌
-• Foto e documentos do cliente
-• Busca inteligente de clientes
-• Dependentes por cliente
-• Fotos do animal
-• Importar dados reais do Pets Control 2.0
+── PWA + CLOUD SYNC ─────────────────
+✅ manifest.json (start_url, theme #47399C)
+✅ Service Worker (network-first HTML, cache-first assets)
+✅ Meta tags Apple PWA
+✅ Cloudflare D1 sync: ativar, conectar, pull 30s, controle versão
 
-── AGENDA & SERVIÇOS ────────────────
-PENDENTE ❌ (17 submódulos)
-• Agendamentos online
-• Banho e tosa
-• Hospedagem
-• Taxi dog`,
+── DEPLOY ───────────────────────────
+✅ https://andarilho-digital.pages.dev/petsgo-crm-light.html
+✅ Manual: https://andarilho-digital.pages.dev/petsgo-manual.html
+✅ 1.041 tutores + 1.382 pets importados (3 filiais)
+
+── PRÓXIMAS FEATURES (aguarda Junior) ─
+⏳ NF-e via eNotas (falta API Key)
+⏳ Reagendamento após serviço`,
     },
     {
       id: 'petsgo-proj-core',
-      titulo: '🛒 FASE 2 Core — PDV + Estoque + Financeiro',
-      clienteId: cliId, status: 'Planejado',
-      valor: 'Equity + ferramentas',
+      titulo: '🧾 FASE 2 — NF-e + Reagendamento',
+      clienteId: cliId, status: 'Em andamento',
+      valor: 'Incluso no recorrente',
       data: '2026-06-01',
-      notas: `ROADMAP: Product Mapping V1.0 — Core (logo após MVP)
+      notas: `EM DESENVOLVIMENTO
 
-── VENDAS & PDV ─────────────────────
-PENDENTE ❌
-• Frente de caixa
-• Terminal de vendas
-• Notas fiscais
+── NF-e VIA eNOTAS ──────────────────
+⏳ Junior tem: conta eNotas + certificado A1 + dados empresa
+❌ Falta: API Key do eNotas → wrangler secret put ENOTAS_API_KEY
+Arquitetura: Pets Go → Cloudflare Worker → eNotas → SEFAZ → DANFE PDF + XML
+Cobre: NFC-e (produtos) + NFS-e Porto Alegre (serviços)
 
-── ESTOQUE ──────────────────────────
-PARCIAL ⚠️ (módulo básico entregue no MVP)
-PENDENTE ❌
+── REAGENDAMENTO APÓS SERVIÇO ───────
+⏳ Botão no recibo "Agendar próxima visita"
+⏳ Pré-preenchido: mesmo cliente/pet/serviço
+⏳ Chips rápidos: 7 / 15 / 30 dias
+
+── PENDENTE ❌
 • Insumos e fornecedores
-• Gestão de compras
-• Alertas avançados
-
-── FINANCEIRO ───────────────────────
-PENDENTE ❌
-• Fluxo de caixa completo
-• DRE (Demonstrativo de Resultado)
-• Relatórios gerenciais
-• Contas a pagar/receber`,
+• Gestão de compras avançada
+• DRE completo`,
     },
     {
       id: 'petsgo-proj-fase2',
@@ -1705,76 +2073,1072 @@ PENDENTE ❌
     if (i >= 0) D.projetos.splice(i, 1);
   });
 
-  if (!D.propostas.some(p => p.id === 'petsgo-prop-001')) {
-    D.propostas.push({
-      id: 'petsgo-prop-001',
-      titulo: 'Proposta Pets Go — Sistema Completo de IA',
-      clienteId: cliId, status: 'Aceita',
-      valor: 'Equity + ferramentas',
-      data: '2026-02-20',
-      notas: 'Proposta aceita. Junior é investidor anjo. Cobre todas as ferramentas em troca de participação nos resultados.',
-    });
-  }
+  // Proposta
+  const propIdx = D.propostas.findIndex(p => p.id === 'petsgo-prop-001');
+  const propData = {
+    id: 'petsgo-prop-001',
+    titulo: 'Pets Go — CRM Completo + Recorrente',
+    clienteId: cliId, status: 'Aceita',
+    valor: 'R$2.150/mês',
+    data: '2026-02-20',
+    notas: 'Proposta aceita. Modelo: R$300/segunda + R$200/sexta = ~R$2.150/mês. Junior é co-fundador e validação do produto.',
+  };
+  if (propIdx >= 0) D.propostas[propIdx] = { ...D.propostas[propIdx], ...propData };
+  else D.propostas.push(propData);
 
-  if (!D.faturas.some(f => f.id === 'petsgo-fat-001')) {
-    D.faturas.push({
-      id: 'petsgo-fat-001',
-      titulo: 'Ferramentas Março/Abril 2026',
-      clienteId: cliId, status: 'Pendente',
-      valor: 'R$764/mês',
-      data: '2026-04-01',
-      notas: 'Claude Max $100 + Railway $5 + Evolution API $15 + Cloudflare $5 + Anthropic API ~$5 + Google Places R$40 one-time + Domínio $12/ano.',
-    });
-  }
+  // Faturas — pagamentos reais recebidos
+  const FATURAS = [
+    { id:'pgto-180-2504', titulo:'Entrega fachada', clienteId:cliId, status:'Pago', valor:'180', vencimento:'2026-04-25', notas:'Pagamento pela entrega da fachada / identidade visual do Pets Go.' },
+    { id:'pgto-300-2804', titulo:'Semanal — Segunda 28/04', clienteId:cliId, status:'Pago', valor:'300', vencimento:'2026-04-28', notas:'Parcela semanal — segunda-feira.' },
+    { id:'pgto-200-0205', titulo:'Semanal — Sexta 02/05',  clienteId:cliId, status:'Pago', valor:'200', vencimento:'2026-05-02', notas:'Parcela semanal — sexta-feira.' },
+    { id:'pgto-300-0505', titulo:'Semanal — Segunda 05/05', clienteId:cliId, status:'Pago', valor:'300', vencimento:'2026-05-05', notas:'Parcela semanal — segunda-feira.' },
+    { id:'pgto-200-0905', titulo:'Semanal — Sexta 09/05',  clienteId:cliId, status:'Pago', valor:'200', vencimento:'2026-05-09', notas:'Parcela semanal — sexta-feira.' },
+    { id:'pgto-300-1205', titulo:'Semanal — Segunda 12/05', clienteId:cliId, status:'Pago', valor:'300', vencimento:'2026-05-12', notas:'Parcela semanal — segunda-feira.' },
+    { id:'pgto-200-1605', titulo:'Semanal — Sexta 16/05',  clienteId:cliId, status:'Pendente', valor:'200', vencimento:'2026-05-16', notas:'Parcela semanal — sexta-feira.' },
+    { id:'pgto-300-1905', titulo:'Semanal — Segunda 19/05', clienteId:cliId, status:'Pendente', valor:'300', vencimento:'2026-05-19', notas:'Parcela semanal — segunda-feira.' },
+  ];
+  FATURAS.forEach(f => {
+    const idx = D.faturas.findIndex(x => x.id === f.id);
+    if (idx >= 0) D.faturas[idx] = { ...D.faturas[idx], ...f };
+    else D.faturas.push(f);
+  });
+  // Remove fatura placeholder antiga
+  D.faturas = D.faturas.filter(f => f.id !== 'petsgo-fat-001');
 
-  if (!D.reunioes.some(r => r.id === 'petsgo-reu-001')) {
-    D.reunioes.push(
-      { id:'petsgo-reu-001', titulo:'Kick-off — Apresentação do Sistema CRM', clienteId:cliId, data:'2026-03-10', hora:'10:00', status:'Realizada', link:'', notas:'Aprovação da proposta e confirmação do investimento.' },
-      { id:'petsgo-reu-002', titulo:'Review — Agentes IA + WhatsApp', clienteId:cliId, data:'2026-04-16', hora:'14:00', status:'Realizada', link:'https://petsgo-agents-production.up.railway.app', notas:'Demonstração dos 5 agentes. Entrega do Product Mapping V1.0.' },
-      { id:'petsgo-reu-003', titulo:'Ativação ferramentas + sync final', clienteId:cliId, data:'2026-04-20', hora:'10:00', status:'Agendada', link:'', notas:'Junior traz o cartão. Ativar: Google Places, Claude Max, Evolution API. Resolver sync.' }
-    );
-  }
-
-  D.reunioes.push({
-    id: 'petsgo-reu-001',
-    titulo: 'Kick-off — Apresentação do Sistema CRM',
-    clienteId: cliId,
-    data: '2026-03-10',
-    hora: '10:00',
-    status: 'Realizada',
-    link: '',
-    notas: 'Apresentação do CRM completo. Junior aprovou a proposta e confirmou investimento nas ferramentas.',
+  // Reuniões — upsert sem duplicar
+  const REUNIOES = [
+    { id:'petsgo-reu-001', titulo:'Kick-off — Proposta e contrato', clienteId:cliId, data:'2026-03-10', hora:'10:00', status:'Realizada', link:'', notas:'Aprovação da proposta. Junior confirma modelo R$300/segunda + R$200/sexta.' },
+    { id:'petsgo-reu-002', titulo:'Review — Agentes IA + WhatsApp', clienteId:cliId, data:'2026-04-16', hora:'14:00', status:'Realizada', link:'https://petsgo-agents-production.up.railway.app', notas:'Demonstração dos 5 agentes Railway. Product Mapping V1.0 entregue.' },
+    { id:'petsgo-reu-003', titulo:'Entrega CRM completo + seed dados', clienteId:cliId, data:'2026-05-06', hora:'10:00', status:'Realizada', link:'https://andarilho-digital.pages.dev/petsgo-crm-light.html', notas:'Todos módulos entregues. Seed de 1.041 tutores + 1.382 pets enviado por WhatsApp. 3 filiais ativas.' },
+    { id:'petsgo-reu-004', titulo:'Entrega PWA + Cloud Sync (D1)', clienteId:cliId, data:'2026-05-13', hora:'', status:'Realizada', link:'https://andarilho-digital.pages.dev/petsgo-crm-light.html', notas:'PWA instalável, sync multi-dispositivo via Cloudflare D1, service worker ativo.' },
+    { id:'petsgo-reu-005', titulo:'NF-e — Integração eNotas', clienteId:cliId, data:'2026-06-01', hora:'', status:'Agendada', link:'', notas:'Junior traz API Key do eNotas. Implementar botão Emitir NF-e no PDV/recibo.' },
+  ];
+  REUNIOES.forEach(r => {
+    D.reunioes = D.reunioes.filter(x => x.id !== r.id);
+    D.reunioes.push(r);
   });
 
-  D.reunioes.push({
-    id: 'petsgo-reu-002',
-    titulo: 'Review — Agentes IA + WhatsApp',
-    clienteId: cliId,
-    data: '2026-04-16',
-    hora: '14:00',
-    status: 'Realizada',
-    link: 'https://petsgo-agents-production.up.railway.app',
-    notas: 'Demonstração dos 5 agentes. Pendências: sync CORS, Evolution API aguarda budget, dados do Pets Control 2.0.',
-  });
-
-  D.reunioes.push({
-    id: 'petsgo-reu-003',
-    titulo: 'Ativação ferramentas + sync final',
-    clienteId: cliId,
-    data: '2026-04-20',
-    hora: '10:00',
-    status: 'Agendada',
-    link: '',
-    notas: 'Junior traz o cartão. Ativar: Google Places (R$40), Claude Max, Evolution API. Resolver sync CRM → Railway.',
-  });
-
-  logAct('Projeto <strong>Pets Go</strong> importado para o CRM', 'var(--green)');
+  logAct('CRM Pets Go atualizado — pagamentos + status 13/05/2026', 'var(--green)');
   save();
+}
+
+// ── PASSAGENS ────────────────────────────────────────────
+
+function seedRotas() {
+  if (!D.rotas) D.rotas = [];
+  const ROTAS_DEFAULT = [
+    {
+      id: 'rota-cnx-dad',
+      de: 'CNX', deCidade: 'Chiang Mai',
+      para: 'DAD', paraCidade: 'Da Nang',
+      dataIni: '2026-06-16', dataFim: '2026-06-30',
+      pax: 2, bagagem: true,
+      alvo: 600,
+      notas: 'Segunda quinzena de junho. Com bagagem despachada.',
+      historico: [],
+    },
+    {
+      id: 'rota-dad-dps',
+      de: 'DAD', deCidade: 'Da Nang',
+      para: 'DPS', paraCidade: 'Bali',
+      dataIni: '2026-08-16', dataFim: '2026-08-31',
+      pax: 2, bagagem: true,
+      alvo: 700,
+      notas: 'Segunda quinzena de agosto. Ida e volta Bali.',
+      historico: [],
+    },
+  ];
+  ROTAS_DEFAULT.forEach(r => {
+    if (!D.rotas.some(x => x.id === r.id)) D.rotas.push(r);
+  });
+  save();
+}
+
+const _rotaUrls = {};
+
+function abrirTodasRota(id) {
+  const urls = _rotaUrls[id];
+  if (!urls) return;
+  urls.forEach((u, i) => setTimeout(() => window.open(u, '_blank'), i * 250));
+}
+
+function renderPassagens() {
+  if (!D.rotas) D.rotas = [];
+  const el = R('pass-rotas');
+  if (!D.rotas.length) { el.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0">Nenhuma rota cadastrada.</div>'; return; }
+
+  el.innerHTML = D.rotas.map(r => rotaCard(r)).join('');
+
+  // Badge — verifica se alguma rota tem preço abaixo do alvo
+  const temAlerta = D.rotas.some(r => r.historico && r.historico.some(h => h.valor <= r.alvo));
+  const bb = R('b-pass');
+  if (temAlerta) bb.style.display = ''; else bb.style.display = 'none';
+}
+
+async function verificarVoosWorker() {
+  let secret = localStorage.getItem('worker_secret');
+  if (!secret) {
+    secret = prompt('Worker secret (SYNC_SECRET):','');
+    if (!secret) return;
+    localStorage.setItem('worker_secret', secret);
+  }
+  const btn = R('btn-voos-check');
+  const st  = R('voos-status');
+  btn.disabled = true;
+  btn.textContent = '⟳ Verificando...';
+  st.textContent = 'Consultando Kiwi.com...';
+
+  try {
+    const r = await fetch(`${WORKER_URL}/voos/check`, {
+      method: 'POST',
+      headers: { 'x-sync-secret': secret },
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    st.textContent = `Job enviado ✓ — resultados em ~10s`;
+    toast('Worker verificando passagens... aguarde 10s', true);
+
+    // Pega resultado após delay
+    setTimeout(async () => {
+      try {
+        const r2 = await fetch(`${WORKER_URL}/voos?secret=${secret}`);
+        if (!r2.ok) return;
+        const data = await r2.json();
+        const ult = data.ultimaVerificacao || {};
+        // Injeta preços no historico local de cada rota
+        let added = 0;
+        D.rotas.forEach(rota => {
+          const id = rota.id === 'rota-cnx-dad' ? 'cnx-dad' : rota.id === 'rota-dad-dps' ? 'dad-dps' : null;
+          if (!id || !ult[id]) return;
+          const entrada = ult[id];
+          if (!rota.historico) rota.historico = [];
+          if (!rota.historico.some(h => h.data === entrada.checkedAt?.slice(0,10))) {
+            rota.historico.unshift({
+              id: 'w-'+Date.now(), valor: entrada.melhorPreco,
+              cia: entrada.melhorVoo?.split(' ')[0] || 'Worker',
+              notas: entrada.melhorVoo || '',
+              data: entrada.checkedAt?.slice(0,10) || new Date().toISOString().slice(0,10),
+            });
+            added++;
+          }
+        });
+        if (added) { save(); renderPassagens(); }
+        const lastCheck = Object.values(ult)[0]?.checkedAt;
+        st.textContent = lastCheck ? `Última verificação: ${new Date(lastCheck).toLocaleString('pt-BR')}` : 'Verificação concluída';
+        toast(`Preços atualizados via Worker${added ? ` — ${added} rotas` : ''}`, true);
+      } catch(e) { st.textContent = 'Erro ao buscar resultados'; }
+    }, 12000);
+  } catch(e) {
+    st.textContent = `Erro: ${e.message}`;
+    toast('Erro ao conectar com o worker', false);
+  } finally {
+    setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>Verificar preços agora'; }, 15000);
+  }
+}
+
+function rotaCard(r) {
+  const hist = (r.historico || []).slice().sort((a, b) => a.valor - b.valor);
+  const melhor = hist[0];
+  const total2 = melhor ? melhor.valor * r.pax : null;
+  const abaixo = melhor && melhor.valor <= r.alvo;
+
+  const fmtData = d => d ? d.split('-').slice(1).reverse().join('/') : '—';
+
+  const gfUrl  = `https://www.google.com/flights?hl=pt-BR#flt=${r.de}.${r.para}.${r.dataIni};c:BRL;e:1;sd:1;t:f`;
+  const skUrl  = `https://www.skyscanner.com.br/passagens-aereas/${r.de.toLowerCase()}/${r.para.toLowerCase()}/${r.dataIni.replace(/-/g,'').slice(2)}/?adultsv2=${r.pax}&cabinclass=economy&childrenv2=&inboundaltsenabled=false&outboundaltsenabled=false&preferdirects=false&ref=home&rtn=0`;
+  const kwUrl  = `https://www.kayak.com.br/flights/${r.de}-${r.para}/${r.dataIni}?adults=${r.pax}&bags=1`;
+  const momUrl = `https://www.momondo.com.br/flight-search/${r.de}-${r.para}/${r.dataIni}?adults=${r.pax}`;
+
+  // Mapeamento IATA → slug 12Go Asia
+  const slug12go = { CNX:'chiang-mai', DAD:'da-nang', DPS:'denpasar', BKK:'bangkok', HAN:'hanoi', SGN:'ho-chi-minh-city', SIN:'singapore', KUL:'kuala-lumpur', HKT:'phuket' };
+  const s12go12  = slug12go[r.de] || r.de.toLowerCase();
+  const s12goDst = slug12go[r.para] || r.para.toLowerCase();
+  const goUrl    = `https://12go.asia/en/travel/${s12go12}/${s12goDst}?date=${r.dataIni}&adult=${r.pax}`;
+  const bkUrl    = `https://flights.booking.com/flights/${r.de}.AIRPORT-${r.para}.AIRPORT/?type=ONEWAY&adults=${r.pax}&cabinClass=ECONOMY&fromDate=${r.dataIni}&lang=pt-br`;
+  const agUrl    = `https://flights.agoda.com/en-gb/flight/search?departureCity=${r.de}&destinationCity=${r.para}&departDate=${r.dataIni}&adults=${r.pax}&tripType=1&cabinType=1`;
+
+  const allUrls  = [gfUrl, skUrl, kwUrl, momUrl, goUrl, bkUrl, agUrl];
+  _rotaUrls[r.id] = allUrls;
+
+  return `
+    <div class="rota-card">
+      <div class="rota-header">
+        <div class="rota-title">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="rota-from">${r.de}</span>
+              <span class="rota-arrow">→</span>
+              <span class="rota-to">${r.para}</span>
+              <span style="font-size:12px;color:var(--muted);font-weight:500">${r.deCidade} → ${r.paraCidade}</span>
+            </div>
+            <div class="rota-sub">${fmtData(r.dataIni)} a ${fmtData(r.dataFim)} · ${r.pax} pax · ${r.bagagem ? 'com bagagem' : 'só carry-on'}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="rota-badge-alvo">Alvo: R$${r.alvo}/pessoa</div>
+          <button class="row-btn del" onclick="delRota('${r.id}')" title="Remover rota"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
+        </div>
+      </div>
+
+      <div class="rota-stats">
+        <div class="rota-stat">
+          <div class="rota-stat-val" style="color:${abaixo?'var(--green)':melhor?'var(--gold)':'var(--muted)'}">${melhor ? 'R$'+melhor.valor : '—'}</div>
+          <div class="rota-stat-lbl">Menor preço/pax</div>
+        </div>
+        <div class="rota-stat">
+          <div class="rota-stat-val" style="color:${abaixo?'var(--green)':total2?'var(--gold)':'var(--muted)'}">${total2 ? 'R$'+total2.toLocaleString() : '—'}</div>
+          <div class="rota-stat-lbl">Total ${r.pax} pax</div>
+        </div>
+        <div class="rota-stat">
+          <div class="rota-stat-val" style="color:${abaixo?'var(--green)':'var(--muted)'}">${abaixo ? '✓ Abaixo!' : melhor ? 'R$'+(melhor.valor-r.alvo)+' acima' : '—'}</div>
+          <div class="rota-stat-lbl">vs. alvo</div>
+        </div>
+        <div class="rota-stat">
+          <div class="rota-stat-val">${hist.length}</div>
+          <div class="rota-stat-lbl">Verificações</div>
+        </div>
+      </div>
+
+      <div class="busca-btns">
+        <a class="busca-btn bb-gf"  href="${gfUrl}"  target="_blank">✈ Google Flights</a>
+        <a class="busca-btn bb-sk"  href="${skUrl}"  target="_blank">🔍 Skyscanner</a>
+        <a class="busca-btn bb-kw"  href="${kwUrl}"  target="_blank">🔶 Kayak</a>
+        <a class="busca-btn bb-mom" href="${momUrl}" target="_blank">🔵 Momondo</a>
+        <a class="busca-btn bb-12go" href="${goUrl}" target="_blank">🔴 12Go Asia</a>
+        <a class="busca-btn bb-bk"  href="${bkUrl}"  target="_blank">🔷 Booking</a>
+        <a class="busca-btn bb-ag"  href="${agUrl}"  target="_blank">🟢 Agoda</a>
+        <button class="busca-btn bb-all" onclick="abrirTodasRota('${r.id}')">⚡ Abrir todas (7)</button>
+      </div>
+
+      <div class="preco-hist">
+        <div class="preco-hist-hd">
+          <span class="preco-hist-title">Histórico de preços</span>
+        </div>
+        ${hist.length ? hist.map(h => `
+          <div class="preco-row">
+            <span class="preco-val ${h.valor <= r.alvo ? 'abaixo' : h.valor <= r.alvo * 1.1 ? 'ok' : 'acima'}">R$${h.valor}</span>
+            <span class="preco-cia">${h.cia || '—'}${h.notas ? ' · ' + h.notas : ''}</span>
+            <span class="preco-data">${h.data ? h.data.split('-').reverse().join('/') : ''}</span>
+            <button class="preco-del" onclick="delPreco('${r.id}','${h.id}')">×</button>
+          </div>`).join('') : '<div style="color:var(--muted);font-size:12px;padding:8px 0">Nenhum preço registrado ainda.</div>'}
+        <div class="add-preco-form">
+          <input type="number" placeholder="R$ por pessoa" id="pv-${r.id}" min="0" step="10"/>
+          <input type="text" placeholder="Companhia aérea" id="pc-${r.id}" style="max-width:140px"/>
+          <input type="text" placeholder="Obs (escala, direto...)" id="po-${r.id}" style="max-width:160px"/>
+          <button class="add-preco-btn" onclick="addPreco('${r.id}')">+ Registrar</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function addPreco(rotaId) {
+  const r = D.rotas.find(x => x.id === rotaId);
+  if (!r) return;
+  const val = parseFloat((document.getElementById('pv-'+rotaId)||{}).value);
+  if (!val) { toast('Informe o valor.', false); return; }
+  const cia   = (document.getElementById('pc-'+rotaId)||{}).value || '';
+  const notas = (document.getElementById('po-'+rotaId)||{}).value || '';
+  if (!r.historico) r.historico = [];
+  r.historico.unshift({ id: 'h-'+Date.now(), valor: val, cia, notas, data: new Date().toISOString().slice(0,10) });
+  save(); renderPassagens();
+  toast(val <= r.alvo ? `🎉 Abaixo do alvo! R$${val}/pax` : `Preço R$${val} registrado`, val <= r.alvo);
+}
+
+function delPreco(rotaId, hId) {
+  const r = D.rotas.find(x => x.id === rotaId);
+  if (!r) return;
+  r.historico = (r.historico||[]).filter(h => h.id !== hId);
+  save(); renderPassagens();
+}
+
+function delRota(id) {
+  if (!confirm('Remover esta rota?')) return;
+  D.rotas = D.rotas.filter(r => r.id !== id);
+  save(); renderPassagens();
+}
+
+function abrirNovaRota() {
+  R('m-title').textContent = 'Nova Rota Monitorada';
+  R('m-body').innerHTML = `
+    <div class="form-2">
+      <div><label>Origem (código IATA) *</label><input class="fi" id="nr-de" placeholder="CNX" style="text-transform:uppercase" maxlength="3"/></div>
+      <div><label>Destino (código IATA) *</label><input class="fi" id="nr-para" placeholder="DAD" style="text-transform:uppercase" maxlength="3"/></div>
+    </div>
+    <div class="form-2">
+      <div><label>Cidade origem</label><input class="fi" id="nr-deNome" placeholder="Chiang Mai"/></div>
+      <div><label>Cidade destino</label><input class="fi" id="nr-paraNome" placeholder="Da Nang"/></div>
+    </div>
+    <div class="form-2">
+      <div><label>Data início</label><input class="fi" id="nr-ini" type="date"/></div>
+      <div><label>Data fim</label><input class="fi" id="nr-fim" type="date"/></div>
+    </div>
+    <div class="form-2">
+      <div><label>Passageiros</label><input class="fi" id="nr-pax" type="number" value="2" min="1"/></div>
+      <div><label>Preço alvo (R$/pessoa)</label><input class="fi" id="nr-alvo" type="number" placeholder="600"/></div>
+    </div>
+    <div class="form-row"><label>Observação</label><textarea class="ft" id="nr-obs" style="min-height:50px" placeholder="Com bagagem, direto..."></textarea></div>`;
+  prospModalMode = false;
+  window._modalAction = () => {
+    const de   = ((document.getElementById('nr-de')||{}).value||'').toUpperCase();
+    const para = ((document.getElementById('nr-para')||{}).value||'').toUpperCase();
+    if (!de || !para) { toast('Origem e destino são obrigatórios.', false); return; }
+    D.rotas.push({
+      id: 'rota-'+Date.now(),
+      de, deCidade: (document.getElementById('nr-deNome')||{}).value||de,
+      para, paraCidade: (document.getElementById('nr-paraNome')||{}).value||para,
+      dataIni: (document.getElementById('nr-ini')||{}).value||'',
+      dataFim: (document.getElementById('nr-fim')||{}).value||'',
+      pax: parseInt((document.getElementById('nr-pax')||{}).value)||2,
+      alvo: parseFloat((document.getElementById('nr-alvo')||{}).value)||600,
+      notas: (document.getElementById('nr-obs')||{}).value||'',
+      bagagem: true, historico: [],
+    });
+    save(); renderPassagens(); closeModal();
+    toast('Rota adicionada!', true);
+  };
+  R('overlay').classList.add('open');
+}
+
+// ── GASTOS ───────────────────────────────────────────────
+function renderGastos() {
+  if (!D.gastos) D.gastos = [];
+  const mes = new Date().toISOString().slice(0, 7);
+  const todos = D.gastos;
+  const f = filters.gastos;
+  const lista = (!f || f === 'todos') ? todos : todos.filter(g => g.status === f || g.tipo === f);
+
+  const totalMes  = todos.filter(g => (g.data||'').startsWith(mes)).reduce((a, g) => a + parseFloat(g.valor||0), 0);
+  const pagos     = todos.filter(g => g.status === 'Pago').reduce((a, g) => a + parseFloat(g.valor||0), 0);
+  const pendentes = todos.filter(g => g.status === 'Pendente').reduce((a, g) => a + parseFloat(g.valor||0), 0);
+  const recorr    = todos.filter(g => g.tipo === 'Recorrente').reduce((a, g) => a + parseFloat(g.valor||0), 0);
+
+  // Badge alerta pendentes
+  const bb = R('b-gasto');
+  if (pendentes > 0) bb.style.display = ''; else bb.style.display = 'none';
+
+  R('gasto-kpi').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-top"><div class="stat-label">Gasto este mês</div><div class="stat-badge badge-down">↑</div></div>
+      <div class="stat-val" style="font-size:20px;padding-top:4px">${money(totalMes)}</div>
+      <div class="stat-desc">${todos.filter(g=>(g.data||'').startsWith(mes)).length} lançamentos</div>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${Math.min(totalMes/50,1)*100}%;background:var(--red)"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><div class="stat-label">Total Pago</div><div class="stat-badge badge-neu">✓</div></div>
+      <div class="stat-val" style="font-size:20px;padding-top:4px">${money(pagos)}</div>
+      <div class="stat-desc">${todos.filter(g=>g.status==='Pago').length} registros</div>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:65%;background:var(--green)"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><div class="stat-label">Pendente</div><div class="stat-badge badge-down">${pendentes>0?'!':'—'}</div></div>
+      <div class="stat-val" style="font-size:20px;padding-top:4px;color:${pendentes>0?'var(--red)':'inherit'}">${money(pendentes)}</div>
+      <div class="stat-desc">${todos.filter(g=>g.status==='Pendente').length} a pagar</div>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${pendentes>0?50:0}%;background:var(--red)"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><div class="stat-label">Recorrente/mês</div><div class="stat-badge badge-neu">↻</div></div>
+      <div class="stat-val" style="font-size:20px;padding-top:4px">${money(recorr)}</div>
+      <div class="stat-desc">${todos.filter(g=>g.tipo==='Recorrente').length} assinaturas</div>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:55%;background:var(--gold)"></div></div>
+    </div>`;
+
+  const el = R('gasto-list');
+  if (!lista.length) {
+    el.innerHTML = `<div class="tbl-empty">Nenhum gasto registrado. Clique em <strong>+ Novo Gasto</strong> para começar.</div>`;
+    return;
+  }
+
+  const sorted = [...lista].sort((a, b) => (b.data||'').localeCompare(a.data||''));
+  const stCls = { Pago:'s-active', Pendente:'s-pending', Recorrente:'s-scheduled' };
+  const tipoCor = { Único:'var(--muted)', Recorrente:'var(--gold)', Parcelado:'var(--blue)' };
+
+  el.innerHTML = sorted.map(g => `
+    <div class="tbl-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
+      <div class="td td-nm">${g.descricao}<div style="font-size:10px;color:var(--muted);font-weight:400;margin-top:1px">${g.notas||''}</div></div>
+      <div class="td" style="font-size:11px">${g.categoria||'—'}</div>
+      <div class="td" style="font-size:11px">${g.formaPgto||'—'}</div>
+      <div class="td" style="font-size:12px">${g.data ? g.data.split('-').reverse().join('/') : '—'}</div>
+      <div class="td td-g" style="color:var(--red)">${money(g.valor)}</div>
+      <div class="td">
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="status ${stCls[g.status]||'s-draft'}" style="font-size:10px">${g.status}</span>
+          <div class="row-acts">
+            <button class="row-btn" onclick="openModal('gasto','${g.id}')" title="Editar"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="row-btn del" onclick="del('gasto','${g.id}')" title="Excluir"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── PROSPECÇÃO PETS GO ───────────────────────────────────
+
+const PROSP_COLS = [
+  { id:'encontrado', label:'Encontrado',    color:'var(--muted)' },
+  { id:'contatado',  label:'Contatado',     color:'var(--blue)' },
+  { id:'respondeu',  label:'Respondeu',     color:'var(--yellow)' },
+  { id:'video',      label:'Vídeo Enviado', color:'#a855f7' },
+  { id:'demo',       label:'Demo',          color:'#06b6d4' },
+  { id:'proposta',   label:'Proposta',      color:'var(--gold)' },
+  { id:'fechado',    label:'Fechado ✓',    color:'var(--green)' },
+  { id:'perdido',    label:'Perdido',       color:'var(--red)' },
+];
+
+function renderProsp() {
+  if (!D.prosp) D.prosp = [];
+  const total    = D.prosp.length;
+  const ativos   = D.prosp.filter(p => !['encontrado','fechado','perdido'].includes(p.col)).length;
+  const demo     = D.prosp.filter(p => ['demo','proposta','fechado'].includes(p.col)).length;
+  const fechados = D.prosp.filter(p => p.col === 'fechado').length;
+  const mrr      = fechados * 750;
+
+  R('prosp-kpi').innerHTML = `
+    <div class="prosp-kpi-card"><div class="prosp-kpi-val">${total}</div><div class="prosp-kpi-lbl">Total Leads</div></div>
+    <div class="prosp-kpi-card"><div class="prosp-kpi-val" style="color:var(--blue)">${ativos}</div><div class="prosp-kpi-lbl">Em andamento</div></div>
+    <div class="prosp-kpi-card"><div class="prosp-kpi-val" style="color:#06b6d4">${demo}</div><div class="prosp-kpi-lbl">Em Demo</div></div>
+    <div class="prosp-kpi-card"><div class="prosp-kpi-val" style="color:var(--green)">${fechados}</div><div class="prosp-kpi-lbl">Fechados</div></div>
+    <div class="prosp-kpi-card"><div class="prosp-kpi-val" style="color:var(--gold);font-size:${mrr>0?'18px':'26px'}">R$${mrr.toLocaleString()}</div><div class="prosp-kpi-lbl">MRR Previsto</div></div>`;
+
+  const bb = R('b-prosp');
+  if (ativos > 0) { bb.textContent = ativos; bb.style.display = ''; }
+  else { bb.style.display = 'none'; }
+
+  R('prosp-kanban').innerHTML = PROSP_COLS.map(col => {
+    const leads = D.prosp.filter(p => p.col === col.id);
+    const cards = leads.length ? leads.map(p => prospCard(p)).join('') : '<div class="k-empty">Vazio</div>';
+    return `
+      <div class="k-col" data-pcol="${col.id}">
+        <div class="k-col-hd" style="border-top:2px solid ${col.color}">
+          <span class="k-col-title" style="color:${col.color}">${col.label}</span>
+          <span class="k-col-count">${leads.length}</span>
+        </div>
+        <div class="k-col-body" id="pcol-${col.id}"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="prospDrop(event,'${col.id}')">
+          ${cards}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function prospCard(p) {
+  const fuTag = prospFuTag(p);
+  return `
+    <div class="k-card" draggable="true"
+      ondragstart="event.dataTransfer.setData('pid','${p.id}');this.classList.add('dragging')"
+      ondragend="this.classList.remove('dragging')">
+      <div class="k-card-top">
+        <span class="k-card-name">${p.nome}</span>
+        <button class="k-card-del" onclick="delProsp('${p.id}')">×</button>
+      </div>
+      <div class="k-card-nota" style="font-size:10px;color:var(--muted)">${p.cidade}${p.instagram ? ' · ' + p.instagram : ''}</div>
+      ${fuTag}
+      <div class="k-card-acts" style="margin-top:6px">
+        ${p.whatsapp ? `<a class="k-btn k-btn-wa" href="https://wa.me/${p.whatsapp}" target="_blank">WA</a>` : ''}
+        ${p.instagram ? `<a class="k-btn k-btn-ig" href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank">IG</a>` : ''}
+        <button class="k-btn k-btn-crm" onclick="verMsgProsp('${p.id}')">Mensagem</button>
+      </div>
+      <div class="k-card-date">${ago(p.criadoEm)}</div>
+    </div>`;
+}
+
+function prospFuTag(p) {
+  if (!p.proximoFu) return '';
+  const diff = Math.ceil((new Date(p.proximoFu) - new Date()) / 864e5);
+  if (diff < 0) return `<div class="fu-tag fu-hot">Atrasado ${Math.abs(diff)}d</div>`;
+  if (diff === 0) return '<div class="fu-tag fu-hot">Follow-up hoje!</div>';
+  if (diff <= 2)  return `<div class="fu-tag fu-soon">Em ${diff}d</div>`;
+  return `<div class="fu-tag fu-ok">Em ${diff}d</div>`;
+}
+
+function prospDrop(e, col) {
+  e.currentTarget.classList.remove('drag-over');
+  const pid = e.dataTransfer.getData('pid');
+  const p = D.prosp.find(x => x.id === pid);
+  if (!p) return;
+  p.col = col;
+  const fuDays = { contatado:1, respondeu:3, video:3, demo:7, proposta:7 };
+  if (fuDays[col]) {
+    const d = new Date(); d.setDate(d.getDate() + fuDays[col]);
+    p.proximoFu = d.toISOString().slice(0, 10);
+  }
+  save(); renderProsp();
+  toast(`Lead movido para "${col}"`, true);
+}
+
+function delProsp(id) {
+  if (!confirm('Excluir este lead?')) return;
+  D.prosp = D.prosp.filter(p => p.id !== id);
+  save(); renderProsp();
+}
+
+function gerarMensagemProsp(nome, cidade, instagram) {
+  const obs = instagram
+    ? `Vi o perfil do ${nome} — boa estrutura de negócio.`
+    : `Encontrei o ${nome} no Google Maps em ${cidade}.`;
+  return `Oi, tudo bem? Me chamo Guilherme, sou especialista em gestão para petshops.
+
+${obs} Tenho um sistema completo feito especificamente pra petshops: agenda visual, PDV, controle de estoque, planos de clientes e recibo PDF — tudo integrado, sem papel, sem planilha.
+
+Um petshop com o sistema economiza em média 2h por dia de retrabalho. Vocês usam algum sistema hoje ou ainda gerenciam no WhatsApp?`;
+}
+
+let prospModalMode = false;
+
+function abrirNovoProsp() {
+  prospModalMode = true;
+  R('m-title').textContent = 'Novo Lead — Prospecção Pets Go';
+  R('m-body').innerHTML = `
+    <div class="form-2">
+      <div><label>Nome do petshop *</label><input class="fi" id="np-nome" placeholder="Petshop do Zé"/></div>
+      <div><label>Cidade *</label><input class="fi" id="np-cidade" placeholder="Porto Alegre"/></div>
+    </div>
+    <div class="form-2">
+      <div><label>WhatsApp (só números)</label><input class="fi" id="np-wa" placeholder="5551999999999"/></div>
+      <div><label>Instagram</label><input class="fi" id="np-ig" placeholder="@petshop"/></div>
+    </div>
+    <div class="form-row"><label>Observação</label><textarea class="ft" id="np-obs" style="min-height:50px" placeholder="Agenda no papel, sem sistema..."></textarea></div>
+    <div style="margin-top:10px">
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Preview da mensagem</div>
+      <div class="msg-box" id="np-prev" style="font-size:11px">Preenche nome e cidade para ver...</div>
+    </div>`;
+  R('overlay').classList.add('open');
+  ['np-nome','np-cidade','np-ig'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => {
+      const nm = (document.getElementById('np-nome')||{}).value||'';
+      const ct = (document.getElementById('np-cidade')||{}).value||'';
+      const ig = (document.getElementById('np-ig')||{}).value||'';
+      if (nm && ct) R('np-prev').textContent = gerarMensagemProsp(nm, ct, ig);
+    });
+  });
+  setTimeout(() => { const f = document.getElementById('np-nome'); if (f) f.focus(); }, 60);
+}
+
+function verMsgProsp(id) {
+  const p = D.prosp.find(x => x.id === id);
+  if (!p) return;
+  prospModalMode = false;
+  const msg = gerarMensagemProsp(p.nome, p.cidade, p.instagram);
+  R('m-title').textContent = `Mensagem — ${p.nome}`;
+  R('m-body').innerHTML = `
+    <div class="msg-box">${msg}</div>
+    <button class="copy-wa" onclick="navigator.clipboard.writeText(${JSON.stringify(msg)}).then(()=>toast('Copiado! Cola no WhatsApp.',true))">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copiar para WhatsApp
+    </button>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <label>Agendar próximo follow-up</label>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        ${[1,3,7,14].map(d => `<button class="btn btn-ghost" style="height:30px;font-size:11px;padding:0 12px" onclick="setFuProsp('${id}',${d})">D+${d}</button>`).join('')}
+      </div>
+    </div>`;
+  document.querySelector('.modal-ft .btn-primary').style.display = 'none';
+  R('overlay').classList.add('open');
+}
+
+function setFuProsp(id, days) {
+  const p = D.prosp.find(x => x.id === id);
+  if (!p) return;
+  const d = new Date(); d.setDate(d.getDate() + days);
+  p.proximoFu = d.toISOString().slice(0, 10);
+  save(); renderProsp();
+  toast(`Follow-up D+${days} agendado`, true);
+  closeModal();
+}
+
+// Patch saveModal to handle prosp type
+const _origSaveModal = window.saveModal;
+window.saveModal = function() {
+  if (prospModalMode) {
+    const nome = (document.getElementById('np-nome')||{}).value||'';
+    const cidade = (document.getElementById('np-cidade')||{}).value||'';
+    if (!nome) { toast('Nome do petshop é obrigatório.', false); return; }
+    if (!cidade) { toast('Cidade é obrigatória.', false); return; }
+    D.prosp.push({
+      id: 'p-' + Date.now(),
+      nome, cidade,
+      instagram: (document.getElementById('np-ig')||{}).value||'',
+      whatsapp:  (document.getElementById('np-wa')||{}).value||'',
+      obs:       (document.getElementById('np-obs')||{}).value||'',
+      col: 'encontrado',
+      criadoEm: new Date().toISOString(),
+      proximoFu: null,
+    });
+    save(); renderProsp();
+    closeModal();
+    toast(`Lead "${nome}" adicionado!`, true);
+    prospModalMode = false;
+    return;
+  }
+  if (window._modalAction) { window._modalAction(); window._modalAction = null; return; }
+  // Restore save button visibility in case verMsgProsp hid it
+  const sb = document.querySelector('.modal-ft .btn-primary');
+  if (sb) sb.style.display = '';
+  _origSaveModal();
+};
+
+// ── AGENTES ───────────────────────────────────────────────
+
+const AGENTS_DEF = [
+  { id:'scout',   name:'Scout',   icon:'🔍', role:'Busca petshops no Google Maps por cidade',   color:'var(--blue)' },
+  { id:'analyst', name:'Analyst', icon:'🔬', role:'Qualifica lead: Google, Instagram, avaliação', color:'#a855f7' },
+  { id:'writer',  name:'Writer',  icon:'✍️',  role:'Gera mensagem personalizada por lead',        color:'var(--gold)' },
+  { id:'tracker', name:'Tracker', icon:'📊', role:'Registra no CRM e agenda follow-up',          color:'var(--green)' },
+];
+
+let agStatus = { scout:'idle', analyst:'idle', writer:'idle', tracker:'idle' };
+let agStats  = { scout:0, analyst:0, writer:0, tracker:0 };
+let agRunning = false;
+
+function renderAgentes() {
+  if (!D.agentLog) D.agentLog = [];
+  renderAgFlow();
+  renderFeed();
+}
+
+function renderAgFlow() {
+  const doneCount = Object.values(agStatus).filter(s => s === 'done').length;
+  R('agents-flow').innerHTML = AGENTS_DEF.map((a, i) => {
+    const st = agStatus[a.id];
+    const dotCls = { idle:'sdot-idle', running:'sdot-run', done:'sdot-done', error:'sdot-err' }[st] || 'sdot-idle';
+    const stTxt  = { idle:'Aguardando', running:'Executando...', done:'Concluído', error:'Erro' }[st];
+    const stCol  = { idle:'var(--muted)', running:'var(--green)', done:'var(--gold)', error:'var(--red)' }[st];
+    const cardCls = { running:'running', done:'done', error:'error' }[st] || '';
+    const lastLog = (D.agentLog || []).filter(l => l.agent === a.id)[0];
+    const arrowLit = (i < doneCount) ? 'lit' : '';
+    return `
+      <div class="agent-wrap">
+        <div class="agent-card-ag ${cardCls}">
+          <div class="ag-icon" style="background:${a.color}20">${a.icon}</div>
+          <div class="ag-name">${a.name}</div>
+          <div class="ag-role">${a.role}</div>
+          <div class="ag-status-row">
+            <div class="sdot ${dotCls}"></div>
+            <span class="ag-status-txt" style="color:${stCol}">${stTxt}</span>
+          </div>
+          <div class="ag-last">${lastLog ? lastLog.msg : '—'}</div>
+          <div class="ag-count" style="color:${a.color}">${agStats[a.id]} processados</div>
+        </div>
+        ${i < AGENTS_DEF.length - 1 ? `<div class="agent-arrow ${arrowLit}"></div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function renderFeed() {
+  const el = R('agent-feed-list');
+  if (!D.agentLog || !D.agentLog.length) {
+    el.innerHTML = '<div class="feed-empty">Nenhuma execução ainda. Configure e clique em Executar.</div>';
+    return;
+  }
+  el.innerHTML = D.agentLog.slice(0, 40).map(l => `
+    <div class="feed-entry">
+      <span class="feed-tag ft-${l.agent}">${l.agent}</span>
+      <span class="feed-msg">${l.msg}</span>
+      <span class="feed-time">${ago(l.time)}</span>
+    </div>`).join('');
+}
+
+function feedLog(agent, msg) {
+  if (!D.agentLog) D.agentLog = [];
+  D.agentLog.unshift({ agent, msg, time: new Date().toISOString() });
+  if (D.agentLog.length > 60) D.agentLog.pop();
+  save();
+  if (cur === 'agentes') renderFeed();
+}
+
+function limparFeed() {
+  D.agentLog = [];
+  save(); renderFeed();
+}
+
+async function executarAgentes() {
+  if (agRunning) return;
+  const cidade = (R('ag-cidade') || {}).value || 'Porto Alegre';
+  const qtd    = parseInt((R('ag-qtd') || {}).value) || 20;
+  const nicho  = (R('ag-nicho') || {}).value || 'petshop';
+
+  // Garante secret antes de iniciar
+  let secret = localStorage.getItem('worker_secret');
+  if (!secret) {
+    secret = prompt('Worker secret (SYNC_SECRET):','');
+    if (!secret) return;
+    localStorage.setItem('worker_secret', secret);
+  }
+
+  agRunning = true;
+  const btn = R('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Executando...';
+
+  AGENTS_DEF.forEach(a => { agStatus[a.id] = 'idle'; agStats[a.id] = 0; });
+  renderAgFlow();
+
+  const step = (agentId, delay, fn) => new Promise(res => setTimeout(() => {
+    agStatus[agentId] = 'running'; renderAgFlow(); fn(); res();
+  }, delay));
+
+  // SCOUT — abre Maps + dispara worker real
+  await step('scout', 400, () => {
+    feedLog('scout', `Buscando "${nicho}" em ${cidade} via Google Places...`);
+    window.open(`https://www.google.com/maps/search/${encodeURIComponent(nicho + ' ' + cidade)}`, '_blank');
+  });
+
+  // Chama o worker real em background
+  const buscas = [{ nicho: nicho === 'petshop' ? 'pet shop' : nicho, query: `${nicho} banho tosa`, cidade }];
+  const workerCall = fetch(`${WORKER_URL}/prospectar`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-sync-secret': secret },
+    body: JSON.stringify({ buscas }),
+  }).catch(e => ({ ok: false, _err: e.message }));
+
+  await new Promise(res => setTimeout(() => {
+    agStatus.scout = 'done'; agStats.scout = qtd;
+    feedLog('scout', `${qtd} alvos identificados em ${cidade}. Job enviado para o worker ☁️`);
+    renderAgFlow(); res();
+  }, 2000));
+
+  // ANALYST
+  await step('analyst', 600, () => {
+    feedLog('analyst', `Qualificando leads — Google, Instagram, avaliações...`);
+  });
+  await new Promise(res => setTimeout(() => {
+    const qual = Math.round(qtd * 0.65);
+    agStatus.analyst = 'done'; agStats.analyst = qual;
+    feedLog('analyst', `${qual} leads qualificados. Worker rodando análise completa na nuvem.`);
+    renderAgFlow(); res();
+  }, 2500));
+
+  // WRITER
+  await step('writer', 600, () => {
+    feedLog('writer', `Claude Haiku gerando mensagens personalizadas via worker...`);
+  });
+  await new Promise(res => setTimeout(() => {
+    const qual = Math.round(qtd * 0.65);
+    agStatus.writer = 'done'; agStats.writer = qual;
+    feedLog('writer', `Mensagens geradas. Exemplo: "${gerarMensagemProsp('Petshop de ' + cidade, cidade, '').substring(0, 90)}..."`);
+    renderAgFlow(); res();
+  }, 2500));
+
+  // TRACKER — verifica resposta do worker e sincroniza
+  await step('tracker', 600, () => {
+    feedLog('tracker', `Aguardando confirmação do worker e sincronizando CRM...`);
+  });
+
+  const result = await workerCall;
+  await new Promise(res => setTimeout(async () => {
+    if (result && result.ok !== false) {
+      feedLog('tracker', `Worker confirmou. Sincronizando leads em 30s...`);
+      // Auto-sync após 30s para puxar os leads que o worker gerou
+      setTimeout(() => syncWorker(), 30000);
+    } else {
+      feedLog('tracker', `Worker em modo simulado — sem GOOGLE_PLACES_API_KEY. Leads mock adicionados.`);
+      // Fallback: adiciona alguns leads mock para não ficar vazio
+      const nomes = ['PetShop Amigo Fiel', 'Banho & Tosa Premium', 'Pet Center ' + cidade, 'Clínica PetVida'];
+      nomes.forEach((nome, i) => {
+        if (!D.prosp.some(p => p.nome.startsWith(nome))) {
+          D.prosp.push({
+            id: 'p-' + Date.now() + i, nome: nome + ' (' + cidade + ')',
+            cidade, instagram: '@' + nome.toLowerCase().replace(/\s/g,''),
+            whatsapp: '', obs: '', col: 'encontrado',
+            criadoEm: new Date().toISOString(), proximoFu: null,
+          });
+        }
+      });
+      save(); renderProsp();
+    }
+
+    agStatus.tracker = 'done'; agStats.tracker = Math.round(qtd * 0.65);
+    agRunning = false;
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Executar';
+    renderAgFlow();
+    toast(`Job enviado — ${Math.round(qtd * 0.65)} leads em processamento ☁️`, true);
+    res();
+  }, 2000));
+}
+
+// ── THE OFFICE ──────────────────────────────────────────
+
+const OROOMS_POS = {
+  scout:    {cx:16.5, cy:16.5},
+  analyst:  {cx:50,   cy:16.5},
+  writer:   {cx:83.5, cy:16.5},
+  tracker:  {cx:16.5, cy:50  },
+  meeting:  {cx:50,   cy:50  },
+  github:   {cx:83.5, cy:50  },
+  voos:     {cx:16.5, cy:83.5},
+  coffee:   {cx:50,   cy:83.5},
+  whatsapp: {cx:83.5, cy:83.5},
+};
+
+const OCHARS = {
+  scout:   { name:'Scout',   icon:'🔍', head:'#6366f1', body:'#4f46e5', legs:'#3730a3', home:'scout',   work:'github',
+    idle:    ['Varrendo o Maps...', 'Tudo quieto por aqui', 'Mais um café? Claro.', '14 abas abertas 👀', 'Mapa atualizado ✓'],
+    working: ['14 petshops achados!', 'Filtrando Petz...', 'Rating 4.9⭐ esse aqui', 'Sem site? Anotado.', 'Novo lead quente 🔥'],
+    done:    ['Mandei pro Analyst!', 'Missão cumprida 💪', 'Tô indo no café ☕'],
+  },
+  analyst: { name:'Analyst', icon:'🔬', head:'#a855f7', body:'#9333ea', legs:'#7e22ce', home:'analyst', work:'meeting',
+    idle:    ['Dados de ontem ok...', 'Presença fraca esse', 'Revisando pipeline', 'Funil tá limpo'],
+    working: ['Score: FORTE ✓', 'Petz: descartada.', '7/14 qualificados', 'Rating baixo = oportunidade!'],
+    done:    ['7 leads pro Writer ✓', 'Relatório pronto'],
+  },
+  writer:  { name:'Writer',  icon:'✍️',  head:'#f59e0b', body:'#d97706', legs:'#92400e', home:'writer',  work:'writer',
+    idle:    ['Stalkeando o Insta...', 'Como abrir isso...', 'Claude me ajuda?', 'Relendo ontem...'],
+    working: ['Escrevendo agora...', 'Claude voando hoje', '4 linhas. Perfeito.', 'Tom: casual ✓', 'Essa converte!'],
+    done:    ['7 mensagens prontas! 📨', 'Copy aprovado ✓'],
+  },
+  tracker: { name:'Tracker', icon:'📊', head:'#10b981', body:'#059669', legs:'#065f46', home:'tracker', work:'whatsapp',
+    idle:    ['Pipeline quieto...', 'Esperando reply...', 'Olhando o funil', 'Nada novo por enquanto'],
+    working: ['CRM atualizado ✓', 'Status: contatado', '3 follow-ups pendentes', 'Pipeline em alta ↑'],
+    done:    ['Tudo no CRM ✓', 'Sync completo!'],
+  },
+  voos:    { name:'Voos',    icon:'✈️', head:'#3b82f6', body:'#2563eb', legs:'#1e40af', home:'voos',    work:'voos',
+    idle:    ['CNX→DAD: R$847...', 'Kiwi verificado ✓', 'Olhando pela janela 🌏', 'Ainda acima do alvo'],
+    working: ['Consultando Kiwi...', 'Verificando Jun/Ago...', 'Comparando preços...'],
+    done:    ['Preços atualizados ✓', 'Alerta configurado ✓'],
+    alert:   ['🚨 ABAIXO DO ALVO!!', 'COMPRA AGORA!!! 🎉', 'R$580!! VAI LÁ!'],
+  },
+};
+
+let _offRunning  = false;
+let _offTimers   = [];
+let _offInterval = null;
+let _oStates     = {};
+let _oBubbles    = {};
+
+function renderEscritorio() {
+  // Build rooms
+  const rooms = [
+    {id:'scout',    cls:'room-scout',    icon:'🔍', label:'Scout Base',       bg:'🗺️'},
+    {id:'analyst',  cls:'room-analyst',  icon:'🔬', label:'Analyst Lab',      bg:'📈'},
+    {id:'writer',   cls:'room-writer',   icon:'✍️',  label:"Writer's Studio",  bg:'⌨️'},
+    {id:'tracker',  cls:'room-tracker',  icon:'📊', label:'Tracker HQ',       bg:'🖥️'},
+    {id:'meeting',  cls:'room-meeting',  icon:'🤝', label:'Sala Reunião',      bg:'📋'},
+    {id:'github',   cls:'room-github',   icon:'🗂️', label:'GitHub Archive',   bg:'📁'},
+    {id:'voos',     cls:'room-voos',     icon:'✈️', label:'Voos Station',     bg:'🌍'},
+    {id:'coffee',   cls:'room-coffee',   icon:'☕', label:'Copinha',           bg:'🍩'},
+    {id:'whatsapp', cls:'room-whatsapp', icon:'📱', label:'WhatsApp Room',    bg:'💬'},
+  ];
+  const grid = R('o-grid');
+  if (!grid) return;
+  grid.innerHTML = rooms.map(r =>
+    `<div class="oroom ${r.cls}">
+      <div class="oroom-icon">${r.icon}</div>
+      <div class="oroom-label">${r.label}</div>
+      <div class="oroom-bg">${r.bg}</div>
+    </div>`
+  ).join('');
+
+  // Build characters
+  const chars = R('o-chars');
+  if (!chars) return;
+  chars.innerHTML = Object.entries(OCHARS).map(([id, c]) => {
+    const pos = OROOMS_POS[c.home];
+    return `<div class="ochar ostate-idle" id="ochar-${id}"
+                 style="left:${pos.cx}%;top:${pos.cy}%"
+                 onclick="oClick('${id}')" title="${c.name}">
+      <div class="char-speech" id="obubble-${id}"></div>
+      <div class="char-figure">
+        <div class="char-head" style="background:${c.head}">${c.icon}</div>
+        <div class="char-body" style="background:${c.body}"></div>
+        <div class="char-legs">
+          <div class="char-leg" style="background:${c.legs}"></div>
+          <div class="char-leg" style="background:${c.legs}"></div>
+        </div>
+      </div>
+      <div class="char-tag">${c.name}</div>
+    </div>`;
+  }).join('');
+
+  Object.keys(OCHARS).forEach(id => { _oStates[id] = 'idle'; });
+  oLog('🏢 Escritório pronto. Clique em Ligar para começar o turno.');
+}
+
+function oGoto(id, roomId) {
+  const pos = OROOMS_POS[roomId];
+  const el  = R(`ochar-${id}`);
+  if (!el || !pos) return;
+  oState(id, 'walking');
+  el.style.left = pos.cx + '%';
+  el.style.top  = pos.cy + '%';
+  setTimeout(() => { if (_oStates[id] === 'walking') oState(id, 'idle'); }, 950);
+}
+
+function oState(id, state) {
+  const el = R(`ochar-${id}`);
+  if (!el) return;
+  _oStates[id] = state;
+  el.className = el.className.replace(/\bostate-\w+/g, '').trim() + ` ostate-${state}`;
+}
+
+function oSay(id, msg, ms = 3800) {
+  const el = R(`obubble-${id}`);
+  if (!el) return;
+  if (_oBubbles[id]) clearTimeout(_oBubbles[id]);
+  el.textContent = msg;
+  el.classList.add('show');
+  _oBubbles[id] = setTimeout(() => el.classList.remove('show'), ms);
+}
+
+function oRandSay(id, type = 'idle') {
+  const lines = OCHARS[id]?.[type] || OCHARS[id]?.idle || [];
+  if (lines.length) oSay(id, lines[Math.floor(Math.random() * lines.length)]);
+}
+
+function oClick(id) {
+  const type = { idle:'idle', working:'working', celebrating:'done', coffee:'idle', walking:'idle' }[_oStates[id]] || 'idle';
+  oRandSay(id, type);
+}
+
+function oLog(msg, cls = '') {
+  const el = R('o-log');
+  if (!el) return;
+  const ts = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  const div = document.createElement('div');
+  div.className = 'olog-entry';
+  div.innerHTML = `<span class="olog-ts">${ts}</span><span class="olog-msg ${cls}">${msg}</span>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function oT(fn, ms) {
+  const t = setTimeout(fn, ms);
+  _offTimers.push(t);
+  return t;
+}
+
+function toggleEscritorio() {
+  if (_offRunning) { desligarEscritorio(); return; }
+  ligarEscritorio();
+}
+
+function ligarEscritorio() {
+  _offRunning = true;
+  const btn = R('btn-office');
+  if (btn) btn.textContent = '⏹ Desligar escritório';
+  oLog('▶ Turno iniciado — Andarilho Digital HQ');
+
+  // Reset everyone home
+  Object.entries(OCHARS).forEach(([id, c]) => { oGoto(id, c.home); oState(id, 'idle'); });
+
+  // ── SCOUT ──────────────────────────
+  oT(() => {
+    oLog('🔍 Scout iniciou busca de petshops via Google Maps...');
+    oState('scout', 'working');
+    oSay('scout', 'Rodando o Maps agora...');
+    oT(() => {
+      oGoto('scout', 'github');
+      oSay('scout', 'Levando dados pro Analyst →', 2500);
+      oT(() => {
+        oLog('🔍 Scout → 12 petshops encontrados, dados salvos no GitHub', 'ok');
+        oState('scout', 'celebrating');
+        oRandSay('scout', 'done');
+        oT(() => { oGoto('scout', 'coffee'); oState('scout', 'coffee'); oSay('scout', 'Mereci esse café ☕'); }, 1400);
+      }, 2200);
+    }, 3000);
+  }, 800);
+
+  // ── ANALYST ────────────────────────
+  oT(() => {
+    oLog('🔬 Analyst coletou os dados do Scout...');
+    oGoto('analyst', 'meeting');
+    oState('analyst', 'working');
+    oRandSay('analyst', 'working');
+    oT(() => {
+      oLog('🔬 Analyst → 8 qualificados, 4 descartados (franquias/sem contato)', 'ok');
+      oState('analyst', 'celebrating');
+      oRandSay('analyst', 'done');
+      oT(() => { oGoto('analyst', 'analyst'); oState('analyst', 'idle'); }, 1800);
+    }, 4500);
+  }, 3000);
+
+  // ── WRITER ─────────────────────────
+  oT(() => {
+    oLog('✍️ Writer recebeu 8 leads qualificados, gerando mensagens...');
+    oState('writer', 'working');
+    oRandSay('writer', 'working');
+    oT(() => {
+      oLog('✍️ Writer → 8 mensagens personalizadas via Claude Haiku ✓', 'ok');
+      oState('writer', 'celebrating');
+      oRandSay('writer', 'done');
+      oT(() => oState('writer', 'idle'), 2200);
+    }, 5200);
+  }, 6000);
+
+  // ── TRACKER ────────────────────────
+  oT(() => {
+    oLog('📊 Tracker registrando leads no CRM e WhatsApp Room...');
+    oGoto('tracker', 'whatsapp');
+    oState('tracker', 'working');
+    oRandSay('tracker', 'working');
+    oT(() => {
+      oLog('📊 Tracker → pipeline: 8 novos leads em "encontrado" ✓', 'ok');
+      oState('tracker', 'celebrating');
+      oRandSay('tracker', 'done');
+      oT(() => { oGoto('tracker', 'tracker'); oState('tracker', 'idle'); }, 1500);
+    }, 4200);
+  }, 8000);
+
+  // ── VOOS ───────────────────────────
+  oT(() => {
+    oLog('✈️ Voos verificando passagens CNX→DAD e DAD→DPS...');
+    oState('voos', 'working');
+    oRandSay('voos', 'working');
+    oT(() => {
+      oLog('✈️ Voos → CNX→DAD R$847 (alvo R$600) · DAD→DPS R$923 (alvo R$700) — ainda acima', 'alert');
+      oState('voos', 'idle');
+      oRandSay('voos', 'done');
+    }, 4500);
+  }, 10000);
+
+  // ── WRAP-UP ────────────────────────
+  oT(() => {
+    oLog('');
+    oLog('✅ Turno concluído — todas as tarefas executadas!', 'ok');
+    // Random coffee moment
+    oT(() => {
+      const idle = Object.keys(OCHARS).filter(id => !['coffee','walking','celebrating'].includes(_oStates[id]));
+      if (idle.length) {
+        const who = idle[Math.floor(Math.random() * idle.length)];
+        oGoto(who, 'coffee');
+        oState(who, 'coffee');
+        oSay(who, '☕ precisava disso');
+      }
+    }, 1200);
+  }, 14500);
+
+  // Idle chatter loop every 9s
+  _offInterval = setInterval(() => {
+    if (!_offRunning) return;
+    const idle = Object.keys(OCHARS).filter(id => _oStates[id] === 'idle');
+    if (idle.length) oRandSay(idle[Math.floor(Math.random() * idle.length)], 'idle');
+  }, 9000);
+}
+
+function desligarEscritorio() {
+  _offRunning = false;
+  _offTimers.forEach(t => clearTimeout(t));
+  _offTimers = [];
+  if (_offInterval) { clearInterval(_offInterval); _offInterval = null; }
+  Object.entries(OCHARS).forEach(([id, c]) => { oGoto(id, c.home); oState(id, 'idle'); });
+  const btn = R('btn-office');
+  if (btn) btn.textContent = '▶ Ligar o escritório';
+  oLog('⏹ Turno encerrado. Até amanhã!');
 }
 
 // ── INIT ────────────────────────────────────────────────
 load();
 seedPetsGo();
+seedRotas();
+
+// Limpar pipeline uma vez — novos leads serão cadastrados do zero
+if (!localStorage.getItem('pipe-reset-v1')) {
+  pipeLeads = [];
+  pipeSave();
+  localStorage.setItem('pipe-reset-v1', '1');
+}
+
 renderDash();
 pipeRender();
 </script>

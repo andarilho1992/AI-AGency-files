@@ -2,11 +2,13 @@
   "name": "Pets Go Control",
   "short_name": "Pets Go",
   "description": "Sistema de gestão para pet shops",
-  "start_url": "/petsgo-app.html",
+  "start_url": "/petsgo-crm-light.html",
   "display": "standalone",
-  "background_color": "#F1F5F9",
-  "theme_color": "#4047C8",
+  "background_color": "#47399C",
+  "theme_color": "#47399C",
   "orientation": "any",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity"],
   "icons": [
     {
       "src": "/icon-192.png",

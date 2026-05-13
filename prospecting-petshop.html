@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospecção Pet Shops — Andarilho Digital</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d0d0d; color: #e5e5e5; font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding: 24px; }
+
+  h1 { font-size: 1.4rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; color: #666; margin-bottom: 24px; }
+
+  .stats { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px 20px; }
+  .stat-num { font-size: 1.6rem; font-weight: 700; color: #25D366; }
+  .stat-label { font-size: 0.75rem; color: #666; margin-top: 2px; }
+
+  .msg-section { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; margin-bottom: 28px; }
+  .msg-section label { font-size: 0.8rem; color: #888; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  textarea { width: 100%; background: #111; border: 1px solid #333; border-radius: 8px; color: #e5e5e5; font-size: 0.9rem; padding: 12px; resize: vertical; min-height: 100px; line-height: 1.5; }
+  textarea:focus { outline: none; border-color: #25D366; }
+  .msg-hint { font-size: 0.75rem; color: #555; margin-top: 8px; }
+
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #333; background: transparent; color: #888; font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
+  .filter-btn.active, .filter-btn:hover { background: #25D366; border-color: #25D366; color: #000; font-weight: 600; }
+
+  .leads { display: grid; gap: 12px; }
+  .lead-card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; transition: border-color 0.15s; }
+  .lead-card:hover { border-color: #333; }
+  .lead-card.status-enviado { border-left: 3px solid #f59e0b; }
+  .lead-card.status-respondeu { border-left: 3px solid #3b82f6; }
+  .lead-card.status-fechado { border-left: 3px solid #25D366; }
+  .lead-card.status-nao-interessou { border-left: 3px solid #ef4444; opacity: 0.5; }
+
+  .lead-info { flex: 1; min-width: 0; }
+  .lead-name { font-weight: 600; font-size: 0.95rem; color: #fff; }
+  .lead-city { font-size: 0.78rem; color: #666; margin-top: 2px; }
+  .lead-phone { font-size: 0.82rem; color: #25D366; margin-top: 4px; font-family: monospace; }
+
+  .lead-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  .btn-wa { background: #25D366; color: #000; border: none; border-radius: 8px; padding: 9px 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.15s; white-space: nowrap; }
+  .btn-wa:hover { opacity: 0.85; }
+  .btn-wa svg { width: 16px; height: 16px; }
+
+  .status-select { background: #111; border: 1px solid #333; border-radius: 8px; color: #888; font-size: 0.78rem; padding: 6px 10px; cursor: pointer; }
+  .status-select:focus { outline: none; border-color: #555; }
+
+  .empty { text-align: center; color: #444; padding: 40px; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<h1>Prospecção Pet Shops</h1>
+<p class="subtitle">Hotel e creche para cães — Andarilho Digital</p>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num" id="total-count">11</div>
+    <div class="stat-label">Total leads</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="enviado-count" style="color:#f59e0b">0</div>
+    <div class="stat-label">Enviados</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="respondeu-count" style="color:#3b82f6">0</div>
+    <div class="stat-label">Responderam</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="fechado-count" style="color:#25D366">0</div>
+    <div class="stat-label">Fechados</div>
+  </div>
+</div>
+
+<div class="msg-section">
+  <label>Mensagem de primeiro contato</label>
+  <textarea id="msg-template">Oi, tudo bem? Me chamo Guilherme — trabalho com sistemas de gestão para pet shops.
+
+Fui pesquisar negócios de hotel e creche para cães e encontrei o [nome]. Vocês usam algum sistema pra controlar agenda, check-in/out e pagamentos hoje em dia?</textarea>
+  <p class="msg-hint">Edite a mensagem acima antes de enviar. "[nome]" será substituído pelo nome do negócio automaticamente.</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="setFilter('todos')">Todos (11)</button>
+  <button class="filter-btn" onclick="setFilter('pendente')">Pendentes</button>
+  <button class="filter-btn" onclick="setFilter('enviado')">Enviados</button>
+  <button class="filter-btn" onclick="setFilter('respondeu')">Responderam</button>
+  <button class="filter-btn" onclick="setFilter('fechado')">Fechados</button>
+</div>
+
+<div class="leads" id="leads-list"></div>
+
+<script>
+const LEADS = [
+  { id: 1,  nome: "Day Dog",             cidade: "São Paulo — SP",       phone: "5511999812570" },
+  { id: 2,  nome: "Coisa de Cachorro",   cidade: "São Paulo — SP",       phone: "5511993745050" },
+  { id: 3,  nome: "Paraíso Pet Hotel",   cidade: "Rio de Janeiro — RJ",  phone: "5521988643952" },
+  { id: 4,  nome: "Hotel dos Peludos",   cidade: "Rio de Janeiro — RJ",  phone: "5521972804312" },
+  { id: 5,  nome: "Vale do Cão",         cidade: "Belo Horizonte — MG",  phone: "5531973377670" },
+  { id: 6,  nome: "Carol's Bark Home",   cidade: "Brasília — DF",        phone: "5561994236446" },
+  { id: 7,  nome: "Rancho dos Animais",  cidade: "Goiânia — GO",         phone: "5562982193957" },
+  { id: 8,  nome: "Dog Inn Gyn",         cidade: "Goiânia — GO",         phone: "5562999189530" },
+  { id: 9,  nome: "Bee Pet Club",        cidade: "Goiânia — GO",         phone: "5562981366985" },
+  { id: 10, nome: "Creche Pet Resort",   cidade: "Goiânia — GO",         phone: "5562996955337" },
+  { id: 11, nome: "Hotel Pet City",      cidade: "Fortaleza — CE",       phone: "5585982179881" },
+];
+
+let currentFilter = 'todos';
+
+function getStatus(id) {
+  return localStorage.getItem('lead_status_' + id) || 'pendente';
+}
+function setStatus(id, status) {
+  localStorage.setItem('lead_status_' + id, status);
+  render();
+  updateStats();
+}
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function buildWaLink(lead) {
+  const msg = document.getElementById('msg-template').value
+    .replace('[nome]', lead.nome)
+    .trim();
+  return 'https://wa.me/' + lead.phone + '?text=' + encodeURIComponent(msg);
+}
+
+function render() {
+  const list = document.getElementById('leads-list');
+  const filtered = LEADS.filter(l => {
+    const s = getStatus(l.id);
+    if (currentFilter === 'todos') return true;
+    return s === currentFilter;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty">Nenhum lead nesse filtro.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(l => {
+    const status = getStatus(l.id);
+    return `
+    <div class="lead-card status-${status}" id="card-${l.id}">
+      <div class="lead-info">
+        <div class="lead-name">${l.nome}</div>
+        <div class="lead-city">${l.cidade}</div>
+        <div class="lead-phone">+${l.phone}</div>
+      </div>
+      <div class="lead-actions">
+        <select class="status-select" onchange="setStatus(${l.id}, this.value)">
+          <option value="pendente"   ${status==='pendente'   ?'selected':''}>⏳ Pendente</option>
+          <option value="enviado"    ${status==='enviado'    ?'selected':''}>📤 Enviado</option>
+          <option value="respondeu"  ${status==='respondeu'  ?'selected':''}>💬 Respondeu</option>
+          <option value="fechado"    ${status==='fechado'    ?'selected':''}>✅ Fechado</option>
+          <option value="nao-interessou" ${status==='nao-interessou'?'selected':''}>❌ Não quis</option>
+        </select>
+        <a class="btn-wa" href="${buildWaLink(l)}" target="_blank" onclick="autoMarkSent(${l.id})">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Abrir WhatsApp
+        </a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function autoMarkSent(id) {
+  const current = getStatus(id);
+  if (current === 'pendente') {
+    setTimeout(() => setStatus(id, 'enviado'), 800);
+  }
+}
+
+function updateStats() {
+  const statuses = LEADS.map(l => getStatus(l.id));
+  document.getElementById('enviado-count').textContent = statuses.filter(s => s === 'enviado').length;
+  document.getElementById('respondeu-count').textContent = statuses.filter(s => s === 'respondeu').length;
+  document.getElementById('fechado-count').textContent = statuses.filter(s => s === 'fechado').length;
+}
+
+render();
+updateStats();
+</script>
+</body>
+</html>

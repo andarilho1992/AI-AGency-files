@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Andarilho Digital — The Office 3D</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1008;overflow:hidden;font-family:'Inter',system-ui,sans-serif;color:#fff}
+canvas{display:block}
+#css2d{position:absolute;top:0;left:0;pointer-events:none}
+#ui{position:absolute;inset:0;pointer-events:none}
+
+/* Header */
+#ui-hd{position:absolute;top:18px;left:22px}
+.hd-badge{font-size:9px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);background:rgba(255,255,255,.07);padding:3px 8px;border-radius:20px;display:inline-block;margin-bottom:6px}
+.hd-title{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.hd-title span{color:#f59e0b}
+.hd-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+
+/* Controls */
+#ui-ctrl{position:absolute;top:18px;right:22px;display:flex;gap:8px;pointer-events:all}
+.ubtn{padding:9px 16px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;border:none;letter-spacing:.05em;text-transform:uppercase;transition:all .18s}
+.ubtn-p{background:linear-gradient(135deg,#b45309,#d97706);color:#fff;box-shadow:0 4px 18px rgba(180,83,9,.45)}
+.ubtn-p:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.ubtn-g{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.1)}
+.ubtn-g:hover{background:rgba(255,255,255,.13);color:#fff}
+
+/* Agent cards */
+#ui-agents{position:absolute;bottom:18px;right:22px;display:flex;flex-direction:column;gap:5px;pointer-events:all}
+.acard{background:rgba(15,8,2,.85);backdrop-filter:blur(14px);border:1px solid rgba(255,220,100,.08);border-radius:11px;padding:8px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:all .15s;min-width:172px}
+.acard:hover{border-color:rgba(255,220,100,.22);transform:translateX(-3px)}
+.adot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.aname{font-size:11px;font-weight:800}
+.astatus{font-size:9.5px;color:rgba(255,255,255,.35);margin-top:1px}
+.dot-idle{background:#44403c}
+.dot-working{background:#f59e0b;box-shadow:0 0 6px #f59e0b;animation:blink .7s infinite}
+.dot-walking{background:#60a5fa;animation:blink .45s infinite}
+.dot-celebrating{background:#34d399;box-shadow:0 0 8px #34d399;animation:blink .35s infinite}
+.dot-coffee{background:#92400e}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Log */
+#ui-log{position:absolute;bottom:18px;left:22px;width:310px;pointer-events:all}
+.log-badge{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.log-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#f59e0b;box-shadow:0 0 5px #f59e0b}
+#log-box{background:rgba(15,8,2,.85);backdrop-filter:blur(14px);border:1px solid rgba(255,220,100,.08);border-radius:11px;padding:11px 13px;font-size:10px;font-family:monospace;max-height:130px;overflow-y:auto}
+#log-box::-webkit-scrollbar{width:3px}
+#log-box::-webkit-scrollbar-thumb{background:rgba(245,158,11,.3);border-radius:2px}
+.lent{display:flex;gap:7px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.lent:last-child{border:0;color:#fff}
+.lts{color:rgba(255,255,255,.2);flex-shrink:0}
+.ltx{color:rgba(255,255,255,.55)}
+.ltx.ok{color:#6ee7b7}
+.ltx.al{color:#fcd34d}
+
+/* CSS2D */
+.ag-lbl{background:rgba(10,5,0,.82);backdrop-filter:blur(8px);color:#fff;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:800;white-space:nowrap;border:1px solid rgba(255,220,100,.15);letter-spacing:.03em}
+.ag-bub{position:relative;background:#fffbea;color:#1c1008;border-radius:11px;padding:5px 10px;font-size:9px;font-weight:700;white-space:nowrap;max-width:150px;white-space:normal;text-align:center;line-height:1.4;box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;transition:opacity .25s}
+.ag-bub.on{opacity:1}
+.ag-bub::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#fffbea}
+.rm-lbl{color:rgba(255,255,255,.4);font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+
+/* Loading */
+#ld{position:absolute;inset:0;background:#1a1008;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:99}
+.ld-title{font-size:20px;font-weight:900;color:#f59e0b}
+.ld-bar{width:220px;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.ld-fill{height:100%;background:linear-gradient(90deg,#b45309,#f59e0b);border-radius:2px;width:0%;transition:width .3s}
+.ld-txt{font-size:11px;color:rgba(255,255,255,.35);font-family:monospace}
+</style>
+</head>
+<body>
+
+<div id="ld">
+  <div class="ld-title">The Office 3D</div>
+  <div class="ld-bar"><div class="ld-fill" id="lf"></div></div>
+  <div class="ld-txt" id="lt">Montando o escritório...</div>
+</div>
+
+<canvas id="c"></canvas>
+<div id="css2d"></div>
+
+<div id="ui">
+  <div id="ui-hd">
+    <div class="hd-badge">Andarilho Digital</div>
+    <div class="hd-title">The <span>Office</span> 3D</div>
+    <div class="hd-sub">Dunder Mifflin HQ · Arrastar = rotacionar · Scroll = zoom</div>
+  </div>
+  <div id="ui-ctrl">
+    <button class="ubtn ubtn-g" onclick="resetCam()">📷 Reset</button>
+    <button class="ubtn ubtn-p" id="btn-s" onclick="toggleOffice()">▶ Iniciar turno</button>
+  </div>
+  <div id="ui-agents"></div>
+  <div id="ui-log">
+    <div class="log-badge">Activity Log</div>
+    <div id="log-box"></div>
+  </div>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+const lf = p => { document.getElementById('lf').style.width=p+'%'; };
+const lt = t => { document.getElementById('lt').textContent=t; };
+
+// ─── SCENE ───────────────────────────────────────────────────────
+lf(10); lt('Inicializando cena...');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0f0804);
+scene.fog = new THREE.Fog(0x0f0804, 22, 40);
+
+const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
+const camera = new THREE.PerspectiveCamera(42, W()/H(), 0.1, 80);
+camera.position.set(0, 16, 18);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(W(),H());
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+
+const css2d = new CSS2DRenderer();
+css2d.setSize(W(),H());
+css2d.domElement.style.cssText='position:absolute;top:0;left:0;pointer-events:none';
+document.getElementById('css2d').appendChild(css2d.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0,0,0); controls.enableDamping=true; controls.dampingFactor=0.07;
+controls.maxPolarAngle=Math.PI/2.1; controls.minDistance=7; controls.maxDistance=32;
+
+window.addEventListener('resize',()=>{
+  camera.aspect=W()/H(); camera.updateProjectionMatrix();
+  renderer.setSize(W(),H()); css2d.setSize(W(),H());
+});
+window.resetCam=()=>{ camera.position.set(0,16,18); controls.target.set(0,0,0); };
+
+// ─── LIGHTS ──────────────────────────────────────────────────────
+lf(20); lt('Iluminação...');
+scene.add(new THREE.AmbientLight(0xfff5e0, 1.8));
+const sun = new THREE.DirectionalLight(0xfff0d0, 1.6);
+sun.position.set(8,20,10); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+['left','right','top','bottom'].forEach((s,i)=>sun.shadow.camera[s]=[-14,14,14,-14][i]);
+sun.shadow.camera.far=50; scene.add(sun);
+scene.add(Object.assign(new THREE.DirectionalLight(0x8090ff,0.3),{position:new THREE.Vector3(-8,6,-6)}));
+
+// ─── HELPERS ─────────────────────────────────────────────────────
+const box=(w,h,d,col,emit=0,emitI=0,transparent=false,opacity=1)=>{
+  const m=new THREE.MeshLambertMaterial({color:col,emissive:emit,emissiveIntensity:emitI,transparent,opacity});
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
+  mesh.castShadow=true; mesh.receiveShadow=true; return mesh;
+};
+const place=(mesh,x,y,z)=>{ mesh.position.set(x,y,z); scene.add(mesh); return mesh; };
+
+// ─── FLOOR PLAN ──────────────────────────────────────────────────
+lf(35); lt('Construindo o escritório...');
+
+// Main wooden floor
+const floorMat=new THREE.MeshLambertMaterial({color:0xc8894a});
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(22,18),floorMat);
+floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; scene.add(floor);
+
+// Carpet in bullpen
+const carpet=new THREE.Mesh(new THREE.PlaneGeometry(13,9),new THREE.MeshLambertMaterial({color:0x6b7a8d}));
+carpet.rotation.x=-Math.PI/2; carpet.position.set(-1.5,0.01,-0.5); scene.add(carpet);
+
+// ── WALLS (office boundary) ──
+const wallMat=new THREE.MeshLambertMaterial({color:0xf0ead8});
+const walls=[
+  // Outer perimeter
+  [-11,1.5,0,  0.15,3,18],[11,1.5,0,  0.15,3,18],
+  [0,1.5,-9,  22,3,0.15],[0,1.5,9,  22,3,0.15],
+  // Internal — Conference room south wall (partial)
+  [-5.5,0.75,-2, 7,1.5,0.12],
+  // Internal — Michael's office west wall
+  [4,1.5,3.5, 0.12,3,11],
+  // Internal — break room south
+  [-1.5,0.75,2, 5,1.5,0.12],
+];
+walls.forEach(([x,y,z,w,h,d])=>place(box(w,h,d,0xf0ead8),x,y,z));
+
+// ── GLASS WALLS (conference room + Michael's) ──
+const glassMat=new THREE.MeshLambertMaterial({color:0xa8c4d4,transparent:true,opacity:0.22});
+// Conference room glass front (facing bullpen)
+const cg1=new THREE.Mesh(new THREE.BoxGeometry(0.08,2.5,5),glassMat);
+place(cg1,-9,1.25,-4.5);
+// Michael's glass front
+const mg1=new THREE.Mesh(new THREE.BoxGeometry(0.08,2.5,6),glassMat);
+place(mg1,4,1.25,3);
+
+// ── CEILING TILES (subtle) ──
+const ceil=new THREE.Mesh(new THREE.PlaneGeometry(22,18),new THREE.MeshLambertMaterial({color:0xe8e4d8,side:THREE.BackSide}));
+ceil.rotation.x=Math.PI/2; ceil.position.y=3; scene.add(ceil);
+
+// Ceiling lights (strips)
+[[-4,0],[-4,4],[-4,-4],[2,0],[2,4],[2,-4],[8,0]].forEach(([x,z])=>{
+  const strip=box(3,0.06,0.4,0xffffff,0xffffff,1.5);
+  place(strip,x,2.95,z);
+  const pt=new THREE.PointLight(0xfff5d0,0.6,7);
+  pt.position.set(x,2.8,z); scene.add(pt);
+});
+
+// ── DESKS (The Office style) ──
+const deskCol=0xb8903a, deskLeg=0x7a5c20;
+function makeDesk(x,z,rotY=0){
+  const g=new THREE.Group();
+  const top=box(1.4,0.06,0.75,deskCol); top.position.y=0.78; g.add(top);
+  [[-0.6,0.6],[-0.6,-0.6],[0.6,0.6],[0.6,-0.6]].forEach(([lx,lz])=>{
+    const leg=box(0.06,0.78,0.06,deskLeg); leg.position.set(lx,0.39,lz); g.add(leg);
+  });
+  // Monitor
+  const mon=box(0.55,0.38,0.04,0x222233,0x334488,0.9);
+  mon.position.set(0.2,1.02,0.28); g.add(mon);
+  const stand=box(0.04,0.16,0.04,0x333); stand.position.set(0.2,0.85,0.3); g.add(stand);
+  g.position.set(x,0,z); g.rotation.y=rotY;
+  scene.add(g); return g;
+}
+
+// Bullpen desks
+makeDesk(-5, 0.5);    // Scout/Jim
+makeDesk(-3, 0.5);    // Analyst/Dwight
+makeDesk(-1, 0.5);    // Oscar
+makeDesk(-5,-1.5);    // Kevin/Voos
+makeDesk(-3,-1.5);    // Angela
+
+// Conference room table
+const confTable=box(4,0.09,1.8,0x8b6914);
+place(confTable,-7,0.72,5.5);
+// Conference chairs
+for(let i=-1.4;i<=1.4;i+=0.7){
+  [4.5,6.5].forEach(cz=>{ const ch=box(0.4,0.5,0.4,0x1a1a2a); place(ch,-7+i*0.5,0.25,cz); });
+}
+
+// Michael's desk (bigger, corner)
+const mDesk=new THREE.Group();
+const mTop=box(1.8,0.06,1.0,0xa07830); mTop.position.y=0.78; mDesk.add(mTop);
+[[-0.82,0.45],[-0.82,-0.45],[0.82,0.45],[0.82,-0.45]].forEach(([lx,lz])=>{
+  const l=box(0.07,0.78,0.07,0x6a4c18); l.position.set(lx,0.39,lz); mDesk.add(l);
+});
+const mMon=box(0.65,0.44,0.04,0x222233,0x334488,0.9); mMon.position.set(0,1.06,0.42); mDesk.add(mMon);
+const mMug=box(0.12,0.12,0.12,0xd4c44a,0xffee00,0.5); mMug.position.set(-0.5,0.87,0.35); mDesk.add(mMug);
+mDesk.position.set(7,0,6); scene.add(mDesk);
+
+// Break room counter + coffee machine
+const counter=box(2.5,0.06,0.6,0x9a7240); place(counter,0,0.78,7.2);
+const cofMachine=box(0.3,0.45,0.25,0x1a1a1a,0x222233,0.3); place(cofMachine,1,1.01,7.1);
+
+// Reception desk (front)
+const recDesk=box(2.2,0.72,0.7,0xb8903a); place(recDesk,0,0.36,-7);
+
+// ── ROOM LABELS ──
+function addLabel(txt,x,y,z){
+  const d=document.createElement('div'); d.className='rm-lbl'; d.textContent=txt;
+  const o=new CSS2DObject(d); o.position.set(x,y,z); scene.add(o);
+}
+addLabel('📋 Conference Room',-7,0.3,4);
+addLabel("📺 Michael's Office",7,0.3,4);
+addLabel('☕ Break Room',0,0.3,6.5);
+addLabel('💼 Bullpen',-3,0.3,-3.5);
+addLabel('📞 Reception',0,0.3,-6.5);
+
+// ─── CHIBI CHARACTERS ────────────────────────────────────────────
+lf(60); lt('Criando os agentes...');
+
+const SKIN=0xf4c8a0, SKIN_D=0xe8b888;
+
+const AGENT_DEF={
+  scout:{
+    name:'Scout', role:'Jim',
+    desk:{x:-5,z:0.5}, work:{x:-7,z:5.5},
+    hair:0x6b4218, shirt:0x3d6b9e, pants:0x2d3a52, skin:SKIN,
+    glasses:false, tie:false, mug:false, jacket:false, bodyWide:false,
+    hairSweep:true, hairLong:false, mouthSmirk:true, mouthFlat:false, bigSmile:false,
+    idle:['Varrendo o Maps...','14 abas abertas 👀','Alguém viu o Dwight?','Tudo quieto aqui'],
+    working:['14 leads achados! 🎯','Filtrando Petz...','4.9⭐ esse aqui'],
+    done:['Missão cumprida 💪','Indo pro café ☕'],
+  },
+  analyst:{
+    name:'Analyst', role:'Dwight',
+    desk:{x:-3,z:0.5}, work:{x:-7,z:6},
+    hair:0x3d2010, shirt:0xc8a830, pants:0x1e2810, skin:SKIN_D,
+    glasses:true, tie:false, mug:false, jacket:false, bodyWide:false,
+    hairSweep:false, hairLong:false, mouthSmirk:false, mouthFlat:true, bigSmile:false,
+    idle:['Monitorando o pipeline...','Bears. Beets. Leads.','A identidade é Dwight.'],
+    working:['7/14 qualificados ✓','Franquias: DESCARTADAS.','Score: FORTE.'],
+    done:['Relatório protocolado.','7 leads pro Writer.'],
+  },
+  writer:{
+    name:'Writer', role:'Pam',
+    desk:{x:0,z:-7}, work:{x:0,z:-7},
+    hair:0x9a5c2a, shirt:0xd4a0b0, pants:0x6b4a6a, skin:SKIN,
+    glasses:false, tie:false, mug:false, jacket:false, bodyWide:false,
+    hairSweep:false, hairLong:true, mouthSmirk:false, mouthFlat:false, bigSmile:false,
+    idle:['Desenhando um logo...','Claude, me ajuda?','Stalkeando o Insta deles...'],
+    working:['Escrevendo agora...','4 linhas. Perfeito. ✓','Tom: casual.'],
+    done:['8 msgs prontas! 📨','Copy aprovado ✓'],
+  },
+  tracker:{
+    name:'Tracker', role:'Michael',
+    desk:{x:7,z:6}, work:{x:-3,z:-1},
+    hair:0x1a1a1a, shirt:0x2d3e6a, pants:0x1a2340, skin:SKIN,
+    glasses:false, tie:0xc03030, mug:true, jacket:0x1e2f80, bodyWide:false,
+    hairSweep:false, hairLong:false, mouthSmirk:false, mouthFlat:false, bigSmile:true,
+    idle:["That's what she said.",'MICHAEL SCOTT aqui.','Pipeline quieto? ÓTIMO.'],
+    working:['CRM atualizado ✓','Pipeline em ALTA ↑','Sou o melhor manager.'],
+    done:['SYNC COMPLETO!','Tudo no CRM ✓'],
+  },
+  voos:{
+    name:'Voos', role:'Kevin',
+    desk:{x:-5,z:-1.5}, work:{x:-5,z:-1.5},
+    hair:0x2a1808, shirt:0x4a7848, pants:0x2a3020, skin:0xd4a878,
+    glasses:false, tie:false, mug:false, jacket:false, bodyWide:true,
+    hairSweep:false, hairLong:false, mouthSmirk:false, mouthFlat:false, bigSmile:false,
+    idle:['CNX→DAD: R$847...','Kiwi verificado.','Olhando a janela 🌏','Mmm... passagens.'],
+    working:['Consultando Kiwi...','Verificando Jun/Ago...'],
+    done:['Preços updated ✓','Alerta ativo ✓'],
+  },
+};
+
+const agents={}, aStates={}, bubT={};
+
+function mkChibi(id, def){
+  const g=new THREE.Group();
+  const bw=def.bodyWide?1.3:1;
+
+  // ── FEET ──
+  [-0.09,0.09].forEach(fx=>{
+    const ft=new THREE.Mesh(new THREE.SphereGeometry(0.085,8,8),new THREE.MeshLambertMaterial({color:def.pants}));
+    ft.scale.set(1.1*bw,0.65,1.4); ft.position.set(fx*bw,0.085,0.04); g.add(ft);
+  });
+
+  // ── LEGS ──
+  [-0.08,0.08].forEach(lx=>{
+    const lg=new THREE.Mesh(new THREE.CylinderGeometry(0.068,0.068,0.20,8),new THREE.MeshLambertMaterial({color:def.pants}));
+    lg.position.set(lx*bw,0.22,0); g.add(lg);
+  });
+
+  // ── BODY ──
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(0.20,0.24,0.32,14),new THREE.MeshLambertMaterial({color:def.shirt}));
+  body.position.y=0.47; body.scale.x=bw; body.castShadow=true; g.add(body);
+
+  // Neck
+  const collar=new THREE.Mesh(new THREE.CylinderGeometry(0.11,0.11,0.06,10),new THREE.MeshLambertMaterial({color:def.skin}));
+  collar.position.y=0.66; g.add(collar);
+
+  // Jacket lapels (Michael's suit)
+  if(def.jacket){
+    const jm=new THREE.MeshLambertMaterial({color:def.jacket});
+    [-1,1].forEach(s=>{
+      const lap=new THREE.Mesh(new THREE.BoxGeometry(0.09,0.22,0.05),jm);
+      lap.position.set(s*0.09,0.52,0.21); lap.rotation.z=-s*0.35; g.add(lap);
+    });
+  }
+
+  // Tie
+  if(def.tie){
+    const tie=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.20,0.04),new THREE.MeshLambertMaterial({color:def.tie}));
+    tie.position.set(0,0.50,0.23); g.add(tie);
+  }
+
+  // ── ARMS ──
+  [-1,1].forEach(s=>{
+    const arm=new THREE.Mesh(new THREE.CapsuleGeometry(0.07,0.19,4,8),new THREE.MeshLambertMaterial({color:def.shirt}));
+    arm.position.set(s*(0.27*bw),0.46,0); arm.rotation.z=-s*0.5; g.add(arm);
+  });
+
+  // "World's Best Boss" mug (Michael)
+  if(def.mug){
+    const mugM=new THREE.MeshLambertMaterial({color:0xfafae8});
+    const mugB=new THREE.Mesh(new THREE.CylinderGeometry(0.052,0.048,0.09,10),mugM);
+    mugB.position.set(0.37,0.33,0.05); g.add(mugB);
+    const handle=new THREE.Mesh(new THREE.TorusGeometry(0.033,0.011,6,10,Math.PI),mugM);
+    handle.rotation.y=-Math.PI/2; handle.position.set(0.435,0.33,0.05); g.add(handle);
+    const star=new THREE.Mesh(new THREE.BoxGeometry(0.016,0.016,0.01),new THREE.MeshBasicMaterial({color:0xf5c518}));
+    star.position.set(0.37,0.33,0.096); g.add(star);
+  }
+
+  // ── HEAD (bigger chibi sphere) ──
+  const HR=0.42;
+  const head=new THREE.Mesh(new THREE.SphereGeometry(HR,20,16),new THREE.MeshLambertMaterial({color:def.skin}));
+  head.position.y=1.02; head.castShadow=true; g.add(head);
+
+  // ── HAIR CAP (hemisphere) ──
+  const hairCap=new THREE.Mesh(
+    new THREE.SphereGeometry(HR+0.015,16,10,0,Math.PI*2,0,Math.PI*0.52),
+    new THREE.MeshLambertMaterial({color:def.hair})
+  );
+  hairCap.position.y=1.02; g.add(hairCap);
+
+  // Jim: side-swept messy tuft
+  if(def.hairSweep){
+    const tuft=new THREE.Mesh(new THREE.SphereGeometry(0.17,8,8),new THREE.MeshLambertMaterial({color:def.hair}));
+    tuft.scale.set(1.55,0.55,0.8); tuft.position.set(0.16,1.39,0.14); g.add(tuft);
+  }
+
+  // Pam: long flowing hair behind + side pieces
+  if(def.hairLong){
+    const lng=new THREE.Mesh(new THREE.SphereGeometry(0.28,12,10),new THREE.MeshLambertMaterial({color:def.hair}));
+    lng.scale.set(0.92,1.9,0.66); lng.position.set(0,0.87,-0.22); g.add(lng);
+    [-0.23,0.23].forEach(sx=>{
+      const side=new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshLambertMaterial({color:def.hair}));
+      side.scale.set(0.7,1.35,0.58); side.position.set(sx,0.90,-0.09); g.add(side);
+    });
+  }
+
+  // ── EYES ──
+  const EY=1.05, EZ=HR*0.88;
+  [[-0.135,0],[0.135,0]].forEach(([ex])=>{
+    const w=new THREE.Mesh(new THREE.SphereGeometry(0.094,10,10),new THREE.MeshBasicMaterial({color:0xffffff}));
+    w.position.set(ex,EY,EZ); g.add(w);
+    const p=new THREE.Mesh(new THREE.SphereGeometry(0.056,8,8),new THREE.MeshBasicMaterial({color:0x111111}));
+    p.position.set(ex,EY-0.008,EZ+0.042); g.add(p);
+    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.022,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));
+    sh.position.set(ex+0.033,EY+0.033,EZ+0.072); g.add(sh);
+  });
+
+  // ── MOUTH ──
+  const MY=0.91, MZ=HR*0.91;
+  if(def.mouthFlat){
+    // Dwight: stern flat line
+    const flat=new THREE.Mesh(new THREE.BoxGeometry(0.13,0.012,0.012),new THREE.MeshBasicMaterial({color:0x6a3010}));
+    flat.position.set(0,MY,MZ); g.add(flat);
+  } else if(def.mouthSmirk){
+    // Jim: asymmetric smirk (arc only on right side)
+    const smirk=new THREE.Mesh(new THREE.TorusGeometry(0.062,0.011,6,12,Math.PI*0.65),new THREE.MeshBasicMaterial({color:0x9b5c2a}));
+    smirk.rotation.z=Math.PI+0.55; smirk.position.set(0.025,MY,MZ); g.add(smirk);
+  } else {
+    const sr=def.bigSmile?0.10:0.08;
+    const smile=new THREE.Mesh(new THREE.TorusGeometry(sr,0.012,6,12,Math.PI),new THREE.MeshBasicMaterial({color:0x9b5c2a}));
+    smile.rotation.z=Math.PI; smile.position.set(0,MY,MZ); g.add(smile);
+  }
+
+  // ── GLASSES (Dwight) ──
+  if(def.glasses){
+    const fm=new THREE.MeshBasicMaterial({color:0x1a1a1a});
+    [-0.135,0.135].forEach(gx=>{
+      const fr=new THREE.Mesh(new THREE.TorusGeometry(0.078,0.013,6,14),fm);
+      fr.position.set(gx,EY,EZ+0.042); g.add(fr);
+    });
+    const br=new THREE.Mesh(new THREE.BoxGeometry(0.1,0.013,0.013),fm);
+    br.position.set(0,EY,EZ+0.042); g.add(br);
+  }
+
+  // ── LABEL + BUBBLE ──
+  const nd=document.createElement('div'); nd.className='ag-lbl';
+  nd.textContent=def.role+' ('+def.name+')';
+  const no=new CSS2DObject(nd); no.position.set(0,1.68,0); g.add(no);
+
+  const bd=document.createElement('div'); bd.className='ag-bub';
+  const bo=new CSS2DObject(bd); bo.position.set(0,2.22,0); g.add(bo);
+
+  const r=def.desk;
+  g.position.set(r.x+(Math.random()-.5)*.3,0,r.z+(Math.random()-.5)*.3);
+  scene.add(g);
+
+  agents[id]={g,head,bDiv:bd,tX:r.x,tZ:r.z,phase:Math.random()*Math.PI*2};
+  aStates[id]='idle';
+}
+
+Object.entries(AGENT_DEF).forEach(([id,d])=>mkChibi(id,d));
+
+// ─── AGENT CONTROL ───────────────────────────────────────────────
+lf(80); lt('UI...');
+
+function aGoto(id,pos){
+  if(!pos) return;
+  aStates[id]='walking';
+  agents[id].tX=pos.x+(Math.random()-.5)*.4;
+  agents[id].tZ=pos.z+(Math.random()-.5)*.4;
+  updCard(id);
+}
+function aState(id,s){ aStates[id]=s; updCard(id); }
+function aSay(id,msg,ms=4500){
+  const a=agents[id]; if(!a) return;
+  if(bubT[id]) clearTimeout(bubT[id]);
+  a.bDiv.textContent=msg; a.bDiv.classList.add('on');
+  bubT[id]=setTimeout(()=>a.bDiv.classList.remove('on'),ms);
+}
+function aRand(id,type='idle'){
+  const lines=AGENT_DEF[id]?.[type]||AGENT_DEF[id]?.idle||[];
+  if(lines.length) aSay(id,lines[Math.floor(Math.random()*lines.length)]);
+}
+
+function buildCards(){
+  document.getElementById('ui-agents').innerHTML=Object.entries(AGENT_DEF).map(([id,d])=>`
+    <div class="acard" id="ac-${id}" onclick="window._ac('${id}')">
+      <div class="adot dot-idle" id="ad-${id}"></div>
+      <div><div class="aname">${d.role} · ${d.name}</div><div class="astatus" id="as-${id}">Aguardando...</div></div>
+    </div>`).join('');
+}
+function updCard(id){
+  const dot=document.getElementById(`ad-${id}`);
+  const st=document.getElementById(`as-${id}`);
+  if(!dot||!st) return;
+  dot.className='adot dot-'+aStates[id];
+  st.textContent={idle:'Aguardando',working:'Trabalhando...',walking:'Em movimento',celebrating:'Missão cumprida! 🎉',coffee:'No café ☕'}[aStates[id]]||aStates[id];
+}
+window._ac=(id)=>{
+  aRand(id,{idle:'idle',working:'working',celebrating:'done',coffee:'idle',walking:'idle'}[aStates[id]]||'idle');
+  const a=agents[id];
+  if(a) controls.target.lerp(new THREE.Vector3(a.g.position.x,0.5,a.g.position.z),.5);
+};
+buildCards();
+
+// ─── LOG ─────────────────────────────────────────────────────────
+function log(msg,cls=''){
+  const b=document.getElementById('log-box');
+  if(!b) return;
+  const ts=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const d=document.createElement('div'); d.className='lent';
+  d.innerHTML=`<span class="lts">${ts}</span><span class="ltx ${cls}">${msg}</span>`;
+  b.appendChild(d); b.scrollTop=b.scrollHeight;
+  if(b.children.length>60) b.removeChild(b.firstChild);
+}
+
+// ─── ORCHESTRATION ───────────────────────────────────────────────
+let offOn=false, offTs=[], chatInt=null;
+window.toggleOffice=()=>{ offOn?stopOffice():startOffice(); };
+
+function startOffice(){
+  offOn=true;
+  document.getElementById('btn-s').textContent='⏹ Encerrar turno';
+  log('▶ Turno iniciado — Dunder Mifflin HQ');
+  Object.entries(AGENT_DEF).forEach(([id,d])=>{ aGoto(id,d.desk); setTimeout(()=>aState(id,'idle'),950); });
+
+  const T=(fn,ms)=>{ const t=setTimeout(fn,ms); offTs.push(t); };
+
+  T(()=>{ log('🔍 Scout (Jim) iniciou busca de petshops...');
+    aState('scout','working'); aRand('scout','working');
+    T(()=>{ aGoto('scout',{x:-7,z:5.5}); aSay('scout','Levando leads pra reunião →',2500);
+      T(()=>{ log('🔍 Scout → 12 leads encontrados e salvos','ok');
+        aState('scout','celebrating'); aRand('scout','done');
+        T(()=>{ aGoto('scout',{x:0,z:7}); aState('scout','coffee'); aSay('scout','☕ mereci isso'); },1500);
+      },2200);
+    },3000);
+  },800);
+
+  T(()=>{ log('🔬 Analyst (Dwight) qualificando leads...');
+    aGoto('analyst',{x:-7,z:6}); aState('analyst','working'); aRand('analyst','working');
+    T(()=>{ log('🔬 Analyst → 8 qualificados, 4 descartados (franquias)','ok');
+      aState('analyst','celebrating'); aRand('analyst','done');
+      T(()=>{ aGoto('analyst',AGENT_DEF.analyst.desk); aState('analyst','idle'); },1800);
+    },4500);
+  },3200);
+
+  T(()=>{ log('✍️ Writer (Pam) gerando mensagens via Claude Haiku...');
+    aState('writer','working'); aRand('writer','working');
+    T(()=>{ log('✍️ Writer → 8 mensagens personalizadas prontas','ok');
+      aState('writer','celebrating'); aRand('writer','done');
+      T(()=>aState('writer','idle'),2200);
+    },5500);
+  },6500);
+
+  T(()=>{ log('📊 Tracker (Michael) atualizando CRM...');
+    aGoto('tracker',{x:-3,z:-1}); aState('tracker','working'); aRand('tracker','working');
+    T(()=>{ log('📊 Tracker → pipeline: 8 leads em "encontrado"','ok');
+      aState('tracker','celebrating'); aRand('tracker','done');
+      T(()=>{ aGoto('tracker',AGENT_DEF.tracker.desk); aState('tracker','idle'); },1500);
+    },4200);
+  },8500);
+
+  T(()=>{ log('✈️ Voos (Kevin) verificando passagens...');
+    aState('voos','working'); aRand('voos','working');
+    T(()=>{ log('✈️ Voos → CNX→DAD R$847 · DAD→DPS R$923 — acima do alvo','al');
+      aState('voos','idle'); aRand('voos','done');
+    },4800);
+  },11000);
+
+  T(()=>{ log(''); log('✅ Turno concluído — Dunder Mifflin não brinca!','ok');
+    T(()=>{
+      const idle=Object.keys(AGENT_DEF).filter(id=>aStates[id]==='idle');
+      if(idle.length){ const who=idle[Math.floor(Math.random()*idle.length)];
+        aGoto(who,{x:0,z:7}); aState(who,'coffee'); aSay(who,'☕ finalmente!'); }
+    },1200);
+  },16000);
+
+  chatInt=setInterval(()=>{
+    if(!offOn) return;
+    const idle=Object.keys(AGENT_DEF).filter(id=>aStates[id]==='idle');
+    if(idle.length) aRand(idle[Math.floor(Math.random()*idle.length)],'idle');
+  },9000);
+}
+
+function stopOffice(){
+  offOn=false; offTs.forEach(clearTimeout); offTs=[];
+  if(chatInt){ clearInterval(chatInt); chatInt=null; }
+  Object.entries(AGENT_DEF).forEach(([id,d])=>{ aGoto(id,d.desk); setTimeout(()=>aState(id,'idle'),950); });
+  document.getElementById('btn-s').textContent='▶ Iniciar turno';
+  log('⏹ Turno encerrado. That\'s what she said.');
+}
+
+// ─── ANIMATION LOOP ──────────────────────────────────────────────
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const delta=Math.min(clock.getDelta(),.05);
+  const el=clock.getElapsedTime();
+  controls.update();
+
+  Object.entries(agents).forEach(([id,a])=>{
+    const s=aStates[id];
+    const dx=a.tX-a.g.position.x, dz=a.tZ-a.g.position.z;
+    const dist=Math.sqrt(dx*dx+dz*dz);
+    if(dist>.07){
+      const spd=2.6*delta;
+      a.g.position.x+=(dx/dist)*Math.min(spd,dist);
+      a.g.position.z+=(dz/dist)*Math.min(spd,dist);
+      a.g.rotation.y=Math.atan2(dx,dz);
+      if(s!=='celebrating'&&s!=='working') aStates[id]='walking';
+    } else if(s==='walking'){ aStates[id]='idle'; updCard(id); }
+
+    const ph=a.phase+el;
+    switch(aStates[id]){
+      case 'idle':
+        a.g.position.y=Math.sin(ph*1.4)*.045;
+        a.head.position.y=1.02+Math.sin(ph*1.9)*.018;
+        a.g.rotation.z=Math.sin(ph*.7)*.035;
+        break;
+      case 'working':
+        a.g.position.y=Math.sin(ph*9)*.028;
+        a.g.rotation.z=Math.sin(ph*9)*.09;
+        a.head.position.y=1.02+Math.sin(ph*11)*.03;
+        break;
+      case 'celebrating':
+        a.g.position.y=Math.abs(Math.sin(ph*8))*0.42;
+        a.g.rotation.y+=delta*4.2;
+        a.g.rotation.z=Math.sin(ph*8)*.22;
+        break;
+      case 'walking':
+        a.g.position.y=Math.abs(Math.sin(ph*10))*.1;
+        a.g.rotation.z=Math.sin(ph*8)*.13;
+        break;
+      case 'coffee':
+        a.g.position.y=Math.sin(ph*1)*.022;
+        a.g.rotation.z=Math.sin(ph*.5)*.19;
+        a.head.rotation.z=Math.sin(ph*.5)*.1;
+        break;
+    }
+  });
+
+  renderer.render(scene,camera);
+  css2d.render(scene,camera);
+}
+
+// ─── READY ───────────────────────────────────────────────────────
+lf(100); lt('Pronto!');
+setTimeout(()=>{
+  document.getElementById('ld').style.display='none';
+  log('🏢 Dunder Mifflin HQ carregado. Clique em "Iniciar turno"!');
+  log('💡 Clique nos agentes no painel para focar câmera neles.');
+},600);
+animate();
+</script>
+</body>
+</html>

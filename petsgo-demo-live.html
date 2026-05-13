@@ -3,13 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Pets Go Control</title>
-<link rel="manifest" href="/manifest.json"/>
-<meta name="theme-color" content="#47399C"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="Pets Go"/>
+<title>Pets Go Control — Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -29,7 +23,9 @@
   --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
 }
 html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+.demo-strip{position:fixed;top:0;left:0;right:0;z-index:9999;background:#F5C218;color:#3B2700;font-size:12px;font-weight:700;text-align:center;padding:5px 12px;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:8px}
+.demo-strip span{opacity:.7;font-weight:500}
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden;margin-top:28px}
 
 /* TOPBAR */
 .topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px;box-shadow:var(--shadow);z-index:10}
@@ -234,6 +230,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 </style>
 </head>
 <body>
+<div class="demo-strip">🐾 MODO DEMO <span>— Dados fictícios para demonstração. Nenhuma informação real é salva.</span><button onclick="['petsgo_crm','petsgo_sync_meta','petsgo_demo_seeded_v8'].forEach(k=>localStorage.removeItem(k));sessionStorage.clear();location.reload()" style="margin-left:12px;padding:2px 10px;background:#3B2700;color:#F5C218;border:none;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit">↺ Reset</button></div>
 <div class="app">
 
 <!-- TOPBAR -->
@@ -241,6 +238,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
   <div class="tb-brand">
     <div class="tb-logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAA/1BMVEVHS8n///////3///v//v////n///ZHS8hHSsz9//5ISspHSs5GS8lJS8ZBRchHTMRGTcE9Qcf///NISdDv8/U4PcY+RsM7OM3Z3fPd4PDw8PiWmNs6Ocn2+fFNT8s6QcS8wOeztuSEh9JdW9A6OtVjYtJzc9VAO8hRUsayt95yc8Snqt2Wl9NBQ86Jis9VXLz//+x9gMW2tvJ5d9CgouE+QL3p7vtlZMvHy+jz9ftnab9fZcaknuI2M77X2vPj5vHIy/QwMcScndGDgtSRkttxfctqad1wcNWxrt69we6Egc/X2ORYVcq0uNiTk+b18P7f4PtQU7yAfOOdptbK0OXUYTdQAAAL6UlEQVR4nO2cCVcayRbHqa2X6o2mKVqgFVCwY0ib9yIIxAE0+kZnojPjjN//s7xbTeMSITnGJNbk1O8kGrac+nur7lZVlkoajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0Wg0Gs03xylZlmNxi3svPZLvRdk1vZoZlIPopUfyvYi6orfbS1OTv/RIvg9cvNqrUoPUX8fBS4/lm+NYJZ7V+gQteBOXHM966UF9U4KSkwUbxkIfQ2Q/8cyfay2akf/28D90oZASA73NzJce07cliLYaoAykIcIoQWRDuD+XxGhax2A9gub/BamS/Z/M27TeVaQs0jnJaj25HFmj5b70oL4dpukfEILBiIPECxzxDiOC0ZvMtH6W1MazhnWEDco6iXzoDquU2exQmD9N8sbDJkOYGhu5wJKZ9DGDkLGdlVUPGNwPQxm2v+QUrdahQbCBL/3F4yACwQjddAOVl6ITRK2t7XfNUVJzI+fz7/WbmEKUH7SKbNQVbelY8chR2Z16TtK0CUPGeCsLvrCckjrDlDSCpWPxsl3pTkk/+8KP5kXh8QeMKWUYTd6n0Yp5yrnrcvgCk/QI1NDKL63lu7gl6jJgHE6VVQgVbPgeYUIIwhhv7tTkcxbn8NertYRoiUT45tZW4PmhSE8GBsV08zJa+pWonH6QCQ4aKetpuBNNZ7C2KGIEQ56SwQILAu63xHR4/kf/t+ONRrWgcbgxnjMomW665aXrdIIsQPKDffGyOtZjRuEBDJDiKiKEMrYnoPYTl6edWRUmnzQskREevmLCGCNgQnRlxUvHAraO65Cd4rlQ1ZmaDnhDiondO4W5CquxdzIabMCiBEFE6kK2bWMJAW35hDTQ5l7me9yRi9EpZwMCdiU9V9Vqn0eH0t23E/FBRjb08bgo/RAFq4LdDAPGv6R4CTdGEbcW7oaPIHOjxllYUtPZmNHrfMyvQ++knmfUzChqPywfEIxuYRBSin8ZVdMqL2zGh3VCIdQkjpo29NK+HHKjZgXRSKqxwSJLhXg+a180z04Pdg92d3cPzgbtxUtyzo67hcKS6DAKkcbjairk8Y3UdSyiciTGcvhgQliDjePB/16dJEKEoe/7FgDfwpMxqRRmnGy5RXfGP5VWx796agYMa3oo7fIhdLwgHcgJCM7kY/PXWAzjyPw0/IcDhItpi8+DwmY8sOW8HoRq9qOsYe5fzmuW6YzkQCmb7CSZWzadsvdoZfEe+JRiKcJHiv8iyRfwTaJmLyM6QjIkZG4piMfSmhAVAz+AlKa0ynMkN6iwId0pFxkeTy/kBzcVVRiegmPB9gmYwkMLhfg0C9ZNOP9o6Vw3s3IRHbi/m3fdemp6mlafMMrqaamU9bGd+0k2EOa60GbGncLTHCdWkdfACs4975vsh436KYQdBgrHkFWKG5IrpOg3Ya0zh2WmN9LbMjSqOcWshNy0DqZHe8kPG/VTSMbYgIwGFCaNXCEwE58J3m6rQyCHeRPeew4SP8PGdTUVpjPMMLmA8SbVO4XRZ5aUK3pv9q8fuJWwCREUNTwlF6KoS4UDUJjOcaGwnfLy+k9A7RhmDwtl/wDKEloZKRkQkwayDXTWAp/zS74ZAYWGfPQk+NYmBSP+7n+XIT6TQqEve58TY5FUl54824QsJlE//PI7fzxprnAbFJq1943chq+fPtB0LKvgsYp1visasoSXCh0nLA9m9Xdvw6fnJuFFBdJZcKYK+pqwwQgl24sVZLVEd5h9RYPeP4MCikym/Ist5R8PKGR3CiMzcBz+9FHyUZ7xtRxLPYWiIdtNhULTgz9fE9VcjmT53/O/4qfzvZGZDEF/PNPPu1NbKjyoueotxGQOCnHzuQrjuVQ48BVUmIJCqCaeGcnc7kepsD9UMKsRM0Qwe26sdsSxTPeuYgX3SUVbdmbaz43VaVsqHKtY5id7yEDsudlIkOQ9yVmiYN9b9BlDbPapQtMzA+54MOnMwIyCwOHcNdeftDRrTdncmCdrS+eXI3xDIKf581Hxasqedt7LsNygm4qpCP1yedXuooQHZ1JhY6pg31t2oihDJw+fNbMkuIxC4ZslrxaOrjYOD+v9Xhyt28p2aqe5wvXtj5fDh3yLEhTd3xuz/GR/1phU5yCKh72ZIfcvICu7ymomX5m1gMJ8byBUMB5awzyjHNXcu1BWC2ZFQ82+SpqELU/p4flW9LhLLFkqVNGG7nQiY/XZvYNb3JkvN5kwqhqMFg8YNWZJaeXuhFP7Q9lZ6nXrsrLvi1s/aYrO7UYhrlCYn0X7hlYw2u+WV6UtS4UqehovHsuxjePrZQebb6H1jJOVziaI83hYT1U8VbPYP5wny50ka7Gk1jCfrtYAiYOM+CoqtPzcz1e9ZQebt87IeoWz1TZ00sVMWP3qy8J5L9/5HdWWzywkr4DmnfuV69CNb6Q76rQUzEtNd2siXcpprZilDh+tsR/GFB1lwSpfUtSH/ZZ6jqZkOkN5FsO4rRCjwKKrFTJs109Wb0o5U1tO7VNfQRtyLmR4r7STIlo4QVJHK1cipmw7DFZKtLx897tXU/DYkFOOO5CtsI34dqsi7JPlDsZDSH3dLKydy+NGqMUVrPE5z5rSPo3otjLil5t0lREpOVi3B9r6gCH1+XNqKqjQi8IDeXKGbN0tIXFsrHKn7Fisqw/Fb8yglVnsWQpKNN2gghlh9+wTvbLlcb1Ppii1X629HJNUGWO4o+TODCAm+RbincIgHsgm/QOBFVoZJOV1BfDlhMHbt5XcXQOSGQQCdr8Z5cnTUeyBQoxmgq/rYkCSYBBaUfQwBthwz8CY3duFt8pOOGP3oqI0aDW0Ame1Da2wgwkmjVBVhf6ZQW20+WB8bvnwng0JqqCRv3b8zvAv+aZjFbcPcyAzpVDdnt93g0FyfXjPiyL7dXftjo0XvZV2NpqqOpqSmVVlNGtm91YZL2fXE3x7wgsq3+s1UxR+GtmZfE/lUlVHA67zo1TS/qT08Y8qqEhtKmdrI6H8fDKDGY3nKrb0F5iik7dzw0+2N8MdY6EQn8af66Fl13nareY5hRzub0uvwi4fBnRLtJftmub0cxe3wkF+bnpH0TPCJZl878gRsv17RxRMR2zNEbFJ3mjDF8Lx+JrTfLw1J5TQ2TBSMGNbYAX5zR4yFncK3WR3AnkAhVRAvkTaYbbu7pb/NzhiJk8ZK9jCWMDdtCMNNZneKvTFBZMXLCiuL87YsI3rzF190OLkIwFXXDUdFUunBWaUHcjM2vhb9mp4VHLF0V9yhhKb3QxfHTIM1sST98LKHnlLz6ntQlll473ELKmrkEdTOR3xWO7PmOVwOrCNvB7EnWFW8zbyBrFBz068R0aMSvkMx8xRsLq/xSw5aYfJw4XnELOD7us5zpNSvHkaW4FlQRrO5ITFN/zRkT6nNcj97V5X2UUIWA73R7DUGJuJRJzfyOtOMGnRxk4YmCXPcsUFrEkbZu1k+8R3zbv15pi1kfylA2jTCRTsQT2gNc7NNrvYkBdiMBiM9IfL8z9uaxumLZX30sc7gkdm0dKxAp7BKiUM/xOX1bz0dEc2yksJnI8XgT3no9SJlnuF5Xj0FzFkrwMZe69uTxCb8XWdyRVcj52128OqEKRy4wGyr/wwO6ODMJPnv5a3YsyW30aMQWBkuHq1k4Q+59w/eX8oD10yNMoC1QWC1x9CpS+xGcJt/qiY9bq/QwVi57ctUf3ide9y5/RGXtWAyb2v4nbFp3iRX2vLG6OITNpHYkUC5oZWm+UTlVKwJJtQRhihsEA/dNdeQFEImHROfHA12xjvl+PI9R6FdqsUBMl5Pb81JB0teB5wRwgb+B9h/Rt+ewuHVWeGaSqSLJLnLx+VCTLxdv3pdh3nc3lxgZYiRreFU1bwVOlXU+ue3thI/moMecPUQOO3ieph4olE5bDbao4bE7vCNhvtXuy4n7ma8W/E5DJRT9PLo93znWEaBZyreXP0ubjctxQ8WKLRaDQajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0Wg0Go1Go9FoNBqNRqPRaDQajUaj0bwo/wcLB+KCSRp3RAAAAABJRU5ErkJggg==" alt="Pets Go"/></div>
     <div class="tb-name" id="tb-nome-shop">Pets Go Control</div>
+    <span style="background:#F5C218;color:#3B2700;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.06em">DEMO</span>
   </div>
   <div class="tb-search">
     <i class="ph ph-magnifying-glass" style="color:var(--muted2)"></i>
@@ -278,10 +276,6 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <span class="nav-ico"><i class="ph ph-heartbeat"></i></span> Internação
     <span class="nav-badge nb-brand" id="badge-internacao" style="display:none">0</span>
   </div>
-  <div class="nav-item" id="nav-creche" onclick="navTo('creche')">
-    <span class="nav-ico"><i class="ph ph-paw-print"></i></span> Creche do Dia
-    <span class="nav-badge nb-yellow" id="badge-creche" style="display:none">0</span>
-  </div>
   <div class="nav-item" id="nav-pdv" onclick="navTo('pdv')">
     <span class="nav-ico"><i class="ph ph-storefront"></i></span> PDV / Caixa
   </div>
@@ -305,9 +299,6 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
   </div>
   <div class="nav-item" id="nav-config" onclick="navTo('config')">
     <span class="nav-ico"><i class="ph ph-gear"></i></span> Serviços
-  </div>
-  <div class="nav-item" id="nav-matriz" onclick="navTo('matriz')">
-    <span class="nav-ico"><i class="ph ph-table"></i></span> Matriz Central
   </div>
   <div class="sidebar-sep"></div>
   <div class="sidebar-bottom">
@@ -454,15 +445,6 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1e40af;display:flex;gap:10px;align-items:flex-start">
       <i class="ph ph-info" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>
       <div><strong>Como usar:</strong> Quando um pet chegar ao pet shop, clique em <strong>Check-in</strong>. Quando ele sair, clique em <strong>Check-out</strong>. Funciona para qualquer serviço: banho, tosa, creche, hospedagem ou consulta.</div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <div style="font-size:13px;font-weight:700;color:var(--text2)"><i class="ph ph-note-pencil" style="margin-right:5px"></i>Observações do Turno</div>
-        <span id="ci-obs-saved" style="font-size:11px;color:var(--teal);display:none">✓ Salvo</span>
-      </div>
-      <textarea id="ci-obs-turno" rows="2" placeholder="Anotações do dia para a equipe — visitas especiais, animais que precisam de atenção, recados..."
-        style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:Inter,sans-serif;font-size:13px;resize:vertical;outline:none;color:var(--text);background:var(--surface2)"
-        oninput="saveObsCheckin(this.value)"></textarea>
     </div>
     <div class="filter-row">
       <div class="svc-tab active" id="ci-tab-todos" onclick="setCiFilter('todos')">Todos</div>
@@ -711,50 +693,10 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     </div>
     <div style="background:#FFFDE6;border:1px solid #FDE68A;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#78350f;display:flex;gap:10px">
       <i class="ph ph-info" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>
-      <div><strong>Níveis de acesso:</strong> <strong>Master</strong> vê tudo · <strong>Plantonista</strong> foca em check-in, creche, hospedagem e internação · <strong>Recepcionista</strong> foca em agenda, clientes, PDV e planos</div>
+      <div><strong>Níveis de acesso:</strong> <strong>Master</strong> vê tudo e gerencia usuários · <strong>Gerente</strong> vê financeiro, estoque e operação · <strong>Recepcionista</strong> só operação do dia a dia</div>
     </div>
     <div class="card">
       <div id="usuarios-list"><div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Nenhum usuário cadastrado.</div></div>
-    </div>
-    <div class="card" style="margin-top:16px" id="card-permissoes">
-      <div style="font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px">
-        <i class="ph ph-shield-star" style="color:var(--brand)"></i> Editor de Permissões
-        <span style="font-size:11px;color:var(--muted);font-weight:400">(visível apenas para Master)</span>
-      </div>
-      <div id="permissoes-editor"><div style="font-size:12px;color:var(--muted);text-align:center;padding:16px">Carregando...</div></div>
-      <div style="margin-top:14px;text-align:right">
-        <button class="btn btn-primary btn-sm" onclick="salvarPermissoes()"><i class="ph ph-floppy-disk"></i> Salvar permissões</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CRECHE DO DIA -->
-  <div class="page" id="page-creche">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Creche do Dia</div>
-        <div class="page-sub" id="creche-sub">Animais em creche agora</div>
-      </div>
-      <button class="btn btn-ghost" onclick="renderCreche()"><i class="ph ph-arrow-clockwise"></i> Atualizar</button>
-    </div>
-    <div id="creche-list"></div>
-  </div>
-
-  <!-- MATRIZ CENTRAL -->
-  <div class="page" id="page-matriz">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Matriz Central</div>
-        <div class="page-sub" id="mat-sub">Preços por filial — padrão para toda a rede</div>
-      </div>
-      <button class="btn btn-primary" onclick="salvarMatriz()"><i class="ph ph-floppy-disk"></i> Salvar preços</button>
-    </div>
-    <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1e40af;display:flex;gap:10px;align-items:flex-start">
-      <i class="ph ph-info" style="font-size:18px;flex-shrink:0;margin-top:1px"></i>
-      <div>Configure o preço padrão de cada serviço e, opcionalmente, um preço diferente por filial. O preço da filial tem prioridade sobre o padrão na criação de agendamentos.</div>
-    </div>
-    <div class="card" style="overflow-x:auto;padding:0">
-      <div id="matriz-content" style="padding:20px">Carregando...</div>
     </div>
   </div>
 
@@ -812,20 +754,8 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <div class="card" style="max-width:720px;margin-top:14px">
       <div class="card-title"><i class="ph ph-cloud" style="font-size:15px"></i> Sincronização em Nuvem</div>
       <div id="cfg-sync-status-box" style="font-size:13px;color:var(--muted);margin-bottom:14px">Carregando status...</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="ativarSyncNuvem()" id="btn-ativar-sync"><i class="ph ph-cloud-arrow-up"></i> Ativar sincronização em nuvem</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('sync-conectar-wrap').style.display=document.getElementById('sync-conectar-wrap').style.display==='none'?'':'none'"><i class="ph ph-link"></i> Conectar a outro dispositivo</button>
-        <button class="btn btn-ghost" onclick="pullFromCloud(false)" id="btn-sync-now" style="display:none"><i class="ph ph-arrow-clockwise"></i> Sincronizar agora</button>
-      </div>
-      <div id="sync-conectar-wrap" style="display:none;margin-top:12px;background:var(--surface2);border-radius:10px;padding:14px 16px">
-        <div style="font-size:13px;font-weight:600;margin-bottom:8px">Conectar este dispositivo ao sync existente</div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Use o ID exibido no dispositivo principal (em Configurações → Sincronização).</div>
-        <div style="display:flex;gap:8px">
-          <input id="sync-shopid-input" placeholder="Ex: pets-go-control-abc123" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px"/>
-          <button class="btn btn-primary" onclick="conectarSyncExistente()"><i class="ph ph-plugs-connected"></i> Conectar</button>
-        </div>
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-top:10px">Após ativar, todos os dispositivos com o mesmo ID sincronizam automaticamente a cada 30 segundos.</div>
+      <button class="btn btn-primary" onclick="ativarSyncNuvem()" id="btn-ativar-sync"><i class="ph ph-cloud-arrow-up"></i> Ativar sincronização em nuvem</button>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px">Após ativar, todos os dispositivos com o mesmo ID de pet shop vão compartilhar os mesmos dados automaticamente.</div>
     </div>
   </div>
 
@@ -1124,10 +1054,9 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 <div class="modal-overlay" id="modal-new-plano">
   <div class="modal modal-sm">
     <div class="modal-header">
-      <div class="modal-title" id="pl-modal-title">Novo Plano</div>
+      <div class="modal-title">Novo Plano</div>
       <div class="modal-close" onclick="closeModal('modal-new-plano')"><i class="ph ph-x"></i></div>
     </div>
-    <input type="hidden" id="pl-edit-id">
     <div class="form-grid">
       <div class="form-row">
         <div class="field"><label>Grupo *</label>
@@ -1182,7 +1111,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div class="field"><label>Observações</label><textarea id="pl-obs" rows="2" placeholder="Anotações sobre o plano..."></textarea></div>
       <div class="form-footer">
         <button class="btn btn-ghost" onclick="closeModal('modal-new-plano')">Cancelar</button>
-        <button class="btn btn-primary" id="pl-modal-btn" onclick="savePlano()"><i class="ph ph-floppy-disk"></i> Criar Plano</button>
+        <button class="btn btn-primary" onclick="savePlano()"><i class="ph ph-floppy-disk"></i> Criar Plano</button>
       </div>
     </div>
   </div>
@@ -1400,10 +1329,6 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
         <div class="field"><label>Data entrada *</label><input id="int-entrada" type="date"/></div>
         <div class="field"><label>Previsão de alta</label><input id="int-previsao" type="date"/></div>
       </div>
-      <div class="form-row">
-        <div class="field"><label>Valor por diária (R$) *</label><input id="int-valor-diaria" type="number" placeholder="Ex: 150.00" step="0.01" min="0"/></div>
-        <div class="field"><label>Forma de pagamento</label><select id="int-forma-pgto"><option value="PIX">PIX</option><option value="Cartão">Cartão</option><option value="Dinheiro">Dinheiro</option><option value="Débito">Débito</option></select></div>
-      </div>
       <div class="field"><label>Diagnóstico / motivo *</label><input id="int-diag" type="text" placeholder="Ex: Parvovirose, pós-cirúrgico castração..."/></div>
       <div class="field"><label>Médico responsável</label><input id="int-medico" type="text" placeholder="Nome do veterinário"/></div>
       <div class="field"><label>Observações de admissão</label><textarea id="int-obs" rows="2" placeholder="Estado geral, peso, temperatura, anamnese rápida..."></textarea></div>
@@ -1518,7 +1443,6 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
     <div class="form-footer" style="margin-top:14px;flex-wrap:wrap;gap:8px">
       <button class="btn btn-ghost" onclick="closeModal('modal-recibo')">Fechar</button>
       <button class="btn btn-ghost btn-sm" id="btn-emitir-nfse" onclick="emitirNFSeRecibo()" title="Emitir Nota Fiscal de Serviço" style="font-size:12px"><i class="ph ph-file-text"></i> NFS-e</button>
-      <button class="btn btn-outline btn-sm" id="btn-reagendar-recibo" onclick="abrirReagendarDoRecibo()" style="font-size:12px;display:none"><i class="ph ph-calendar-plus"></i> Reagendar</button>
       <button class="btn btn-primary" onclick="imprimirRecibo()" style="flex:1;justify-content:center"><i class="ph ph-download-simple"></i> Salvar PDF</button>
     </div>
   </div>
@@ -1689,11 +1613,8 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div class="field">
         <label>Perfil de acesso</label>
         <select id="nu-role">
-          <option value="recepcionista">Recepcionista — agenda, clientes, PDV e planos</option>
-          <option value="plantonista">Plantonista — check-in, creche, hospedagem e internação</option>
-          <option value="banhista">Banhista — agenda e check-in</option>
-          <option value="tosador">Tosador — agenda e check-in</option>
-          <option value="monitor">Monitor — check-in e creche</option>
+          <option value="recepcionista">Recepcionista — operação do dia a dia</option>
+          <option value="gerente">Gerente — + financeiro e estoque</option>
           <option value="master">Master — acesso total</option>
         </select>
       </div>
@@ -1720,6 +1641,12 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
       <div style="width:56px;height:56px;background:var(--brand-light);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px"><i class="ph ph-paw-print" style="color:var(--brand)"></i></div>
       <div style="font-size:20px;font-weight:900;letter-spacing:-.02em;color:var(--text)" id="login-title">Pets Go Control</div>
       <div style="font-size:13px;color:var(--muted);margin-top:4px" id="login-sub">Faça login para continuar</div>
+    </div>
+    <!-- ACESSO RÁPIDO DEMO -->
+    <div style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:12px 14px;margin-bottom:16px;text-align:center">
+      <div style="font-size:11px;font-weight:700;color:#4338CA;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Acesso Demo</div>
+      <button onclick="document.getElementById('login-user').value='admin';document.getElementById('login-pass').value='1234';fazerLogin()" style="width:100%;padding:10px;background:#4F46E5;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Entrar como Master (admin / 1234)</button>
+      <div style="font-size:11px;color:#6366F1;margin-top:8px">Outros logins: ana, lucas, vanessa, rodrigo, carla, paulo — senha: 1234</div>
     </div>
     <!-- FORM LOGIN -->
     <div id="login-form-wrap">
@@ -1959,41 +1886,11 @@ async function ativarSyncNuvem() {
   }
 }
 
-async function conectarSyncExistente() {
-  const shopId = (document.getElementById('sync-shopid-input')?.value || '').trim().toLowerCase();
-  if (!shopId) { toast('⚠️ Digite o ID do pet shop'); return; }
-  showSyncStatus('syncing');
-  toast('⏳ Verificando ID...');
-  try {
-    const res  = await fetch(`${SYNC_URL}/sync/${shopId}`, { headers:{'Authorization':`Bearer ${SYNC_TOKEN}`} });
-    const json = await res.json();
-    if (!json.ok) { showSyncStatus('error'); toast('❌ ID não encontrado. Verifique e tente novamente.'); return; }
-    const D = JSON.parse(JSON.stringify(json.data));
-    D.config.shopId = shopId;
-    _syncVersion = json.version;
-    _dbCache = null;
-    localStorage.setItem(DB_KEY, JSON.stringify(D));
-    setSyncMeta({ version:json.version, lastSync:json.updated_at, pending:false });
-    _syncEnabled = true;
-    showSyncStatus('ok');
-    document.getElementById('sync-conectar-wrap').style.display = 'none';
-    renderConfig && renderConfig();
-    navTo && navTo('dashboard');
-    toast(`✅ Conectado! ${D.tutores?.length||0} tutores e ${D.pets?.length||0} pets carregados.`);
-  } catch(e) {
-    showSyncStatus('offline');
-    toast('❌ Sem conexão. Tente novamente.');
-  }
-}
-
 window.addEventListener('online', async () => {
   const meta = getSyncMeta();
   if (meta.pending) pushToCloud(loadDB());
   else await pullFromCloud(true);
 });
-
-// Pull periódico a cada 30 segundos para manter dispositivos sincronizados
-setInterval(() => { if (getShopId() && navigator.onLine) pullFromCloud(true); }, 30000);
 
 function getUnidades() { return loadDB().config?.filiais || []; }
 
@@ -2006,7 +1903,7 @@ function esc(s) {
 const DB_SCHEMA = {
   tutores:[], pets:[], agendamentos:[], financeiro:[], estoque:[],
   servicos:[], planos:[], funcionarios:[], contas:[], internacoes:[],
-  usuarios:[], obsCheckin:{}, precoFilial:{}, config:{}
+  usuarios:[], config:{}
 };
 
 function emptyDB() { return JSON.parse(JSON.stringify(DB_SCHEMA)); }
@@ -2097,8 +1994,6 @@ function navTo(page) {
   if (page==='hospedagem')   renderHospedagem();
   if (page==='internacao')   renderInternacao();
   if (page==='usuarios')     { renderUsuarios(); populateFilialSelectUsuario(); }
-  if (page==='matriz')       renderMatriz();
-  if (page==='creche')       renderCreche();
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────────
@@ -2511,8 +2406,7 @@ function renderAgenda() {
   const b = document.getElementById('badge-agenda');
   if (pending) { b.style.display=''; b.textContent=pending; } else b.style.display='none';
 
-  const _sf = getSessFilial();
-  let list = D.agendamentos.filter(a=>a.data===dt && (!_sf || !a.filial || a.filial===_sf));
+  let list = D.agendamentos.filter(a=>a.data===dt);
   if (agFilter!=='todos') list = list.filter(a=>a.status===agFilter);
 
   // Monta chips dinâmicos de grupo de serviço
@@ -2834,19 +2728,11 @@ function preencherPrecoAgendamento() {
   const petId  = document.getElementById('ag-pet').value;
   const pet    = D.pets.find(x=>x.id===petId);
   const porte  = pet?.porte||'';
-  // Preço por porte primeiro, depois padrão
-  let preco = svc.preco||0;
+  let preco    = svc.preco||0;
   if (porte.startsWith('Pequeno') && svc.precoP) preco = svc.precoP;
   else if (porte.startsWith('Médio') && svc.precoM)  preco = svc.precoM;
   else if (porte.startsWith('Extra') && svc.precoGG) preco = svc.precoGG;
   else if (porte.startsWith('Grande') && svc.precoG) preco = svc.precoG;
-  // Override da Matriz Central por filial do tutor
-  const tutorId = document.getElementById('ag-tutor').value;
-  const tutor   = D.tutores.find(x=>x.id===tutorId);
-  if (tutor?.filial) {
-    const override = getPrecoFilial(svcId, tutor.filial);
-    if (override !== null) preco = override;
-  }
   if (preco>0) document.getElementById('ag-valor').value = preco.toFixed(2);
 }
 
@@ -2938,10 +2824,8 @@ function renderCheckin() {
   const hoje = todayISO();
   const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t);
   const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p);
-  loadObsCheckin();
 
-  const _sfci = getSessFilial();
-  let ags = D.agendamentos.filter(a=>a.data===hoje && a.status!=='cancelado' && (!_sfci || !a.filial || a.filial===_sfci));
+  let ags = D.agendamentos.filter(a=>a.data===hoje && a.status!=='cancelado');
   const dentro = ags.filter(a=>a.status==='andamento').length;
   const b = document.getElementById('badge-checkin');
   if (dentro) { b.style.display=''; b.textContent=dentro; } else b.style.display='none';
@@ -2983,31 +2867,6 @@ function renderCheckin() {
       </div>
     </div>`;
   }).join('');
-}
-
-// ── OBS CHECKIN ───────────────────────────────────────────────────────────────
-let _obsTimer = null;
-function loadObsCheckin() {
-  const hoje = todayISO();
-  const D = loadDB();
-  const obs = (D.obsCheckin || {})[hoje] || '';
-  const el = document.getElementById('ci-obs-turno');
-  if (el) el.value = obs;
-  const saved = document.getElementById('ci-obs-saved');
-  if (saved) saved.style.display = 'none';
-}
-
-function saveObsCheckin(val) {
-  clearTimeout(_obsTimer);
-  _obsTimer = setTimeout(() => {
-    const hoje = todayISO();
-    const D = loadDB();
-    if (!D.obsCheckin) D.obsCheckin = {};
-    D.obsCheckin[hoje] = val;
-    saveDB(D);
-    const saved = document.getElementById('ci-obs-saved');
-    if (saved) { saved.style.display = ''; setTimeout(() => saved.style.display='none', 2000); }
-  }, 600);
 }
 
 // ── FINANCEIRO ────────────────────────────────────────────────────────────────
@@ -3311,139 +3170,6 @@ function delProduto(id) {
   saveDB(D); renderEstoque(); toast('🗑️ Produto removido');
 }
 
-// ── MATRIZ CENTRAL ────────────────────────────────────────────────────────────
-function getPrecoFilial(servicoId, filial) {
-  const D = loadDB();
-  const override = (D.precoFilial||{})[filial]?.[servicoId];
-  return override !== undefined ? override : null;
-}
-
-function renderMatriz() {
-  const D = loadDB();
-  const servicos = D.servicos.filter(s => s.ativo !== false);
-  const filiais  = (D.config?.filiais || []);
-  const pf       = D.precoFilial || {};
-  const el = document.getElementById('matriz-content');
-  if (!el) return;
-  document.getElementById('mat-sub').textContent =
-    `${servicos.length} serviços · ${filiais.length} filiais`;
-
-  if (!servicos.length) {
-    el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted)">Nenhum serviço cadastrado. Adicione em <b>Serviços</b> primeiro.</div>';
-    return;
-  }
-
-  const colW = '130px';
-  el.innerHTML = `
-    <table style="width:100%;border-collapse:collapse;min-width:${400 + filiais.length*140}px">
-      <thead>
-        <tr>
-          <th style="text-align:left;padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);border-bottom:2px solid var(--border);position:sticky;left:0;background:var(--surface)">Serviço</th>
-          <th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);border-bottom:2px solid var(--border);min-width:${colW};text-align:center">Padrão</th>
-          ${filiais.map(f=>`<th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--brand);border-bottom:2px solid var(--border);min-width:${colW};text-align:center">${esc(f)}</th>`).join('')}
-        </tr>
-      </thead>
-      <tbody>
-        ${servicos.map(s => {
-          const pRow = filiais.map(f => {
-            const v = pf[f]?.[s.id];
-            return `<td style="padding:8px 14px;border-bottom:1px solid var(--border);text-align:center">
-              <input type="number" min="0" step="0.01" placeholder="—"
-                value="${v !== undefined ? v : ''}"
-                data-svc="${s.id}" data-filial="${esc(f)}"
-                style="width:100px;border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:13px;text-align:center;font-family:Inter,sans-serif;background:var(--surface2);outline:none"
-                class="mat-input"/>
-            </td>`;
-          }).join('');
-          return `<tr>
-            <td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;position:sticky;left:0;background:var(--surface)">
-              <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${s.cor||'var(--brand)'};margin-right:8px;vertical-align:middle"></span>
-              ${esc(s.nome)}
-              <div style="font-size:11px;color:var(--muted);font-weight:400">${s.preco ? fmtBRL(s.preco) : '— preço padrão'}</div>
-            </td>
-            <td style="padding:8px 14px;border-bottom:1px solid var(--border);text-align:center;font-size:13px;color:var(--muted)">${s.preco ? fmtBRL(s.preco) : '—'}</td>
-            ${pRow}
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-    <div style="margin-top:16px;font-size:12px;color:var(--muted)">
-      <i class="ph ph-info"></i> Deixe o campo vazio para usar o preço padrão do serviço.
-      As filiais são gerenciadas em <b>Serviços → Perfil do Pet Shop</b>.
-    </div>`;
-}
-
-function salvarMatriz() {
-  const D = loadDB();
-  if (!D.precoFilial) D.precoFilial = {};
-  document.querySelectorAll('.mat-input').forEach(inp => {
-    const svcId  = inp.dataset.svc;
-    const filial = inp.dataset.filial;
-    const val    = parseFloat(inp.value);
-    if (!D.precoFilial[filial]) D.precoFilial[filial] = {};
-    if (!inp.value.trim() || isNaN(val)) {
-      delete D.precoFilial[filial][svcId];
-    } else {
-      D.precoFilial[filial][svcId] = val;
-    }
-  });
-  saveDB(D);
-  toast('✅ Preços da matriz salvos!');
-}
-
-// ── CRECHE DO DIA ─────────────────────────────────────────────────────────────
-function renderCreche() {
-  const D    = loadDB();
-  const hoje = todayISO();
-  const el   = document.getElementById('creche-list');
-  if (!el) return;
-
-  const _sfc = getSessFilial();
-  const creche = (D.agendamentos || []).filter(a => {
-    const dataAg = (a.data || '').slice(0,10);
-    const svc    = (a.servico || '').toLowerCase();
-    const status = a.status || '';
-    return dataAg === hoje && svc.includes('creche') && status !== 'cancelado' && (!_sfc || !a.filial || a.filial===_sfc);
-  });
-
-  document.getElementById('badge-creche').textContent  = creche.length;
-  document.getElementById('badge-creche').style.display = creche.length ? '' : 'none';
-  document.getElementById('creche-sub').textContent     = `${creche.length} animal${creche.length!==1?'is':''} em creche hoje`;
-
-  if (!creche.length) {
-    el.innerHTML = `<div class="card" style="text-align:center;padding:40px;color:var(--muted)">
-      <i class="ph ph-paw-print" style="font-size:36px;display:block;margin-bottom:12px;opacity:.35"></i>
-      <div style="font-size:14px;font-weight:600;margin-bottom:4px">Nenhum animal em creche hoje</div>
-      <div style="font-size:12px">Agendamentos com serviço "Creche" aparecem aqui</div>
-    </div>`;
-    return;
-  }
-
-  el.innerHTML = creche.map(a => {
-    const tutor = D.tutores.find(t => t.id === a.tutorId) || {};
-    const pet   = D.pets.find(p => p.id === a.petId) || {};
-    const hora  = a.hora || a.horario || '—';
-    const status = a.status || 'agendado';
-    const statusColor = status==='andamento'?'#16A34A':status==='concluido'?'var(--muted)':'var(--brand)';
-    const statusLabel = status==='andamento'?'Em creche':status==='concluido'?'Saiu':status==='agendado'?'Aguardando':'—';
-    const peso  = pet.peso ? ` · ${pet.peso} kg` : '';
-    const raca  = pet.raca ? ` · ${esc(pet.raca)}` : '';
-    const obs   = a.obs   ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;padding:8px;background:var(--bg);border-radius:6px">📋 ${esc(a.obs)}</div>` : '';
-    return `<div class="card" style="margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:14px">
-        <div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🐾</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:15px;font-weight:700">${esc(pet.nome||'—')}</div>
-          <div style="font-size:12px;color:var(--muted)">${esc(tutor.nome||'—')}${raca}${peso}</div>
-          <div style="font-size:12px;color:var(--muted)">Entrada: ${hora}</div>
-          ${obs}
-        </div>
-        <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:${statusColor}22;color:${statusColor};flex-shrink:0">${statusLabel}</span>
-      </div>
-    </div>`;
-  }).join('');
-}
-
 // ── CONFIGURAÇÕES / SERVIÇOS ──────────────────────────────────────────────────
 function renderConfig() {
   const D    = loadDB();
@@ -3455,13 +3181,10 @@ function renderConfig() {
       const meta = getSyncMeta();
       const last = meta.lastSync ? new Date(meta.lastSync).toLocaleString('pt-BR') : '—';
       syncBox.innerHTML = `<span style="color:#16A34A;font-weight:700">✅ Ativo</span> — ID: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px">${D.config.shopId}</code><br><span style="font-size:11px">Última sync: ${last}</span>`;
-      if (btnSync) { btnSync.innerHTML = '<i class="ph ph-cloud-arrow-up"></i> Ativar sincronização em nuvem'; btnSync.style.display = 'none'; }
-      const btnNow = document.getElementById('btn-sync-now');
-      if (btnNow) btnNow.style.display = '';
+      if (btnSync) btnSync.textContent = '🔄 Forçar sincronização agora';
+      if (btnSync) btnSync.onclick = () => pushToCloud(loadDB());
     } else {
       syncBox.textContent = 'Não ativado — dados salvos apenas neste dispositivo.';
-      const btnNow = document.getElementById('btn-sync-now');
-      if (btnNow) btnNow.style.display = 'none';
     }
   }
   renderConfigPerfil();
@@ -3909,33 +3632,9 @@ function savePlano() {
   const D    = loadDB();
   const tipo = document.getElementById('pl-tipo').value;
   const modo = document.getElementById('pl-modo').value;
+  const planoId = uid();
   const subtipo = (document.getElementById('pl-subtipo')?.value)||'';
   const freq    = parseInt(document.getElementById('pl-frequencia')?.value)||0;
-  const editId  = document.getElementById('pl-edit-id').value;
-
-  if (editId) {
-    // MODO EDIÇÃO — atualiza o plano existente sem tocar no histórico ou financeiro
-    const p = D.planos.find(x=>x.id===editId);
-    if (!p) return;
-    const diasUsados = p.diasUsados||0;
-    p.tipo = tipo; p.subtipo = subtipo; p.frequenciaSemana = freq||undefined;
-    p.tutorId = tutorId; p.petId = document.getElementById('pl-pet').value;
-    p.valorTotal = valor;
-    p.valorDiario = diario;
-    p.diasTotal = diasTotal;
-    p.valorRestante = Math.max(0, valor - diasUsados * diario);
-    p.modoAbate = modo;
-    p.dataInicio = inicio;
-    p.dataTermino = document.getElementById('pl-termino').value||null;
-    p.obs = document.getElementById('pl-obs').value.trim();
-    saveDB(D);
-    closeModal('modal-new-plano');
-    if (curPage==='planos') renderPlanos();
-    toast('✅ Plano atualizado!');
-    return;
-  }
-
-  const planoId = uid();
   D.planos.push({
     id:planoId, tipo, subtipo, frequenciaSemana:freq||undefined, tutorId,
     petId:        document.getElementById('pl-pet').value,
@@ -4053,9 +3752,6 @@ function setPlanosFiltro(f) {
 
 function openNovoPlanoGlobal() {
   const D = loadDB();
-  document.getElementById('pl-edit-id').value = '';
-  document.getElementById('pl-modal-title').textContent = 'Novo Plano';
-  document.getElementById('pl-modal-btn').innerHTML = '<i class="ph ph-floppy-disk"></i> Criar Plano';
   document.getElementById('pl-tutor').innerHTML =
     '<option value="">Selecionar tutor...</option>' +
     D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}">${esc(t.nome)}</option>`).join('');
@@ -4067,34 +3763,6 @@ function openNovoPlanoGlobal() {
   document.getElementById('pl-valor').value   = '';
   document.getElementById('pl-diario').value  = '';
   document.getElementById('pl-obs').value     = '';
-  onPlTipoChange();
-  openModal('modal-new-plano');
-}
-
-function openEditPlano(id) {
-  const D = loadDB();
-  const p = D.planos.find(x=>x.id===id);
-  if (!p) return;
-  const tutor = D.tutores.find(t=>t.id===p.tutorId);
-  document.getElementById('pl-edit-id').value = id;
-  document.getElementById('pl-modal-title').textContent = 'Editar Plano';
-  document.getElementById('pl-modal-btn').innerHTML = '<i class="ph ph-floppy-disk"></i> Salvar alterações';
-  document.getElementById('pl-tutor').innerHTML =
-    '<option value="">Selecionar tutor...</option>' +
-    D.tutores.filter(t=>t.status!=='inativo').map(t=>`<option value="${t.id}"${t.id===p.tutorId?' selected':''}>${esc(t.nome)}</option>`).join('');
-  const petsDoTutor = D.pets.filter(x=>x.tutorId===p.tutorId);
-  document.getElementById('pl-pet').innerHTML =
-    '<option value="">Selecionar pet...</option>' +
-    petsDoTutor.map(pet=>`<option value="${pet.id}"${pet.id===p.petId?' selected':''}>${esc(pet.nome)}</option>`).join('');
-  document.getElementById('pl-tipo').value    = p.tipo||'Creche';
-  document.getElementById('pl-subtipo').value = p.subtipo||'Mensal';
-  document.getElementById('pl-modo').value    = p.modoAbate||'manual';
-  document.getElementById('pl-valor').value   = p.valorTotal||'';
-  document.getElementById('pl-dias').value    = p.diasTotal||'';
-  document.getElementById('pl-diario').value  = p.valorDiario||'';
-  document.getElementById('pl-inicio').value  = p.dataInicio||todayISO();
-  document.getElementById('pl-termino').value = p.dataTermino||'';
-  document.getElementById('pl-obs').value     = p.obs||'';
   onPlTipoChange();
   openModal('modal-new-plano');
 }
@@ -4112,8 +3780,7 @@ function renderPlanos() {
   const D        = loadDB();
   const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t);
   const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
-  const _sfpl    = getSessFilial();
-  const todos    = (D.planos||[]).filter(p => !_sfpl || !p.filial || p.filial===_sfpl);
+  const todos    = D.planos||[];
   const ativos   = todos.filter(p=>p.status==='ativo');
   const criticos = ativos.filter(p=>diasRestantes(p)<=3);
   const vencidos = todos.filter(p=>p.status==='vencido');
@@ -4196,7 +3863,6 @@ function renderPlanos() {
         ${isManual&&p.status==='ativo'?`<button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="usarDiariaPlanoPage('${p.id}')"><i class="ph ph-check-square"></i> Usar diária</button>`:''}
         ${p.status!=='cancelado'?`<button class="btn btn-success btn-sm" onclick="openRenovar('${p.id}')"><i class="ph ph-plus-circle"></i> Renovar</button>`:''}
         <button class="btn btn-ghost btn-sm" onclick="abrirHistoricoPlano('${p.id}')" title="Ver histórico de diárias"><i class="ph ph-list-bullets"></i></button>
-        ${p.status==='ativo'?`<button class="btn btn-ghost btn-sm" onclick="openEditPlano('${p.id}')" title="Editar plano"><i class="ph ph-pencil"></i></button>`:''}
         ${p.status==='ativo'?`<button class="btn btn-ghost btn-sm" onclick="cancelPlanoFromPage('${p.id}')"><i class="ph ph-x"></i></button>`:''}
       </div>
     </div>`;
@@ -4300,89 +3966,60 @@ function _getDashContext(D) {
   const hoje = todayISO();
   const now  = new Date();
   const mes  = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const sessF = getSessFilial();
-  const filialEfetiva = sessF || (curDashFilial !== 'todas' ? curDashFilial : '');
-  const filtrando = !!filialEfetiva;
-  const tutoresF  = filtrando ? D.tutores.filter(t=>(t.unidade||t.filial||'')=== filialEfetiva) : D.tutores;
+  const filtrando = curDashFilial !== 'todas';
+  const tutoresF  = filtrando ? D.tutores.filter(t=>t.unidade===curDashFilial) : D.tutores;
   const tutorIdsF = new Set(tutoresF.map(t=>t.id));
   const petsF     = D.pets.filter(p=>tutorIdsF.has(p.tutorId));
-  const agsF      = D.agendamentos.filter(a=>
-    (!filialEfetiva || !a.filial || a.filial===filialEfetiva) && tutorIdsF.has(a.tutorId)
-  );
-  // Faturamento real: join financeiro → agendamentoId da filial selecionada
-  const agIdsMes  = new Set(agsF.filter(a=>a.data?.startsWith(mes)).map(a=>a.id));
-  const fatFilial = filtrando
-    ? D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)&&(agIdsMes.has(l.agendamentoId)||l.filial===filialEfetiva)).reduce((s,l)=>s+Number(l.valor||0),0)
-    : D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
-  return {hoje, now, mes, filtrando, filialEfetiva, tutoresF, tutorIdsF, petsF, agsF, fatFilial};
+  const agsF      = D.agendamentos.filter(a=>tutorIdsF.has(a.tutorId));
+  return {hoje, now, mes, filtrando, tutoresF, tutorIdsF, petsF, agsF};
 }
 
 function renderDashStats(D, ctx) {
-  const {hoje, now, mes, filtrando, filialEfetiva, tutoresF, tutorIdsF, petsF, agsF, fatFilial} = ctx;
-  // Filiais a partir de tutores E agendamentos
-  const filiaisSet = new Set([
-    ...D.tutores.map(t=>t.unidade||t.filial||''),
-    ...D.agendamentos.map(a=>a.filial||'')
-  ].filter(Boolean));
-  const filiais = [...filiaisSet].sort();
+  const {hoje, now, mes, filtrando, tutoresF, tutorIdsF, petsF, agsF} = ctx;
+  const filiais = [...new Set(D.tutores.map(t=>t.unidade||'').filter(Boolean))].sort();
   const tabsEl  = document.getElementById('dash-filial-tabs');
-  const isMaster = getSession()?.role === 'master';
-  if (isMaster && filiais.length > 1) {
+  if (filiais.length > 1) {
     const all = ['todas', ...filiais];
     tabsEl.innerHTML = all.map(f => {
-      const n = f==='todas'
-        ? D.tutores.filter(t=>t.status!=='inativo').length
-        : D.tutores.filter(t=>(t.unidade||t.filial||'')===f).length;
-      const label = f==='todas' ? `Toda a rede (${n})` : `${esc(f)} (${n})`;
+      const n = f==='todas' ? D.tutores.length : D.tutores.filter(t=>t.unidade===f).length;
+      const label = f==='todas' ? `Todas (${n})` : `${esc(f)} (${n})`;
       return `<div class="svc-tab${curDashFilial===f?' active':''}" data-filial="${esc(f)}" onclick="setDashFilial(this.dataset.filial)">${label}</div>`;
     }).join('');
     tabsEl.style.display = '';
   } else {
     tabsEl.style.display = 'none';
-    if (!isMaster) curDashFilial = 'todas';
+    curDashFilial = 'todas';
   }
   const ativos  = tutoresF.filter(t=>t.status!=='inativo').length;
   const inat    = tutoresF.filter(t=>t.status==='inativo').length;
   const agsHoje = agsF.filter(a=>a.data===hoje&&a.status!=='cancelado').length;
-  const sfx = filtrando ? ` · ${esc(filialEfetiva)}` : '';
-  document.getElementById('s-ativos').textContent       = ativos;
+  const fatAg  = agsF.filter(a=>a.data?.startsWith(mes)&&a.status==='concluido').reduce((s,a)=>s+Number(a.valor||0),0);
+  const fatFin = filtrando ? fatAg : D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)).reduce((s,l)=>s+Number(l.valor||0),0);
+  const sfx = filtrando ? ` · ${esc(curDashFilial)}` : '';
+  document.getElementById('s-ativos').textContent      = ativos;
   document.getElementById('s-ativos-label').textContent = `Tutores ativos${sfx}`;
-  document.getElementById('s-pets').textContent         = petsF.length;
-  document.getElementById('s-pets-label').textContent   = `Pets cadastrados${sfx}`;
-  document.getElementById('s-hoje').textContent         = agsHoje;
-  document.getElementById('s-hoje-label').textContent   = `Agendamentos hoje${sfx}`;
-  document.getElementById('s-fat').textContent          = fmtBRL(fatFilial);
-  document.getElementById('s-fat-label').textContent    = filtrando ? `Receitas/mês${sfx}` : 'Receitas do mês';
+  document.getElementById('s-pets').textContent        = petsF.length;
+  document.getElementById('s-pets-label').textContent  = `Pets cadastrados${sfx}`;
+  document.getElementById('s-hoje').textContent        = agsHoje;
+  document.getElementById('s-hoje-label').textContent  = `Agendamentos hoje${sfx}`;
+  document.getElementById('s-fat').textContent         = fmtBRL(filtrando ? fatAg : fatFin);
+  document.getElementById('s-fat-label').textContent   = filtrando ? `Serviços/mês estimados${sfx}` : 'Receitas do mês';
   document.getElementById('badge-clientes').textContent = D.tutores.filter(t=>t.status!=='inativo').length;
   const hj = now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   document.getElementById('dash-data').textContent = hj.charAt(0).toUpperCase()+hj.slice(1);
-
-  // Card "Por Filial" — tutores + agendamentos hoje + receita do mês por unidade
-  if (filiais.length > 0) {
-    const filialStats = filiais.map(f => {
-      const tCount = D.tutores.filter(t=>(t.unidade||t.filial||'')===f).length;
-      const agsFilial = D.agendamentos.filter(a=>a.filial===f);
-      const hojeF = agsFilial.filter(a=>a.data===hoje&&a.status!=='cancelado').length;
-      const agIdsMesF = new Set(agsFilial.filter(a=>a.data?.startsWith(mes)).map(a=>a.id));
-      const recF = D.financeiro.filter(l=>l.tipo==='receita'&&l.data?.startsWith(mes)&&(agIdsMesF.has(l.agendamentoId)||l.filial===f)).reduce((s,l)=>s+Number(l.valor||0),0);
-      return {f, tCount, hojeF, recF};
-    }).sort((a,b)=>b.recF-a.recF);
-    const ativo = filialEfetiva || 'todas';
-    document.getElementById('dash-filiais').innerHTML = filialStats.map(({f, tCount, hojeF, recF})=>{
-      const sel = ativo===f;
-      const dim = !sel && ativo!=='todas';
-      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;margin-bottom:4px;cursor:${isMaster?'pointer':'default'};background:${sel?'var(--brand-light)':'transparent'};transition:background .12s" onclick="${isMaster?`setDashFilial('${f}')`:''}" title="${isMaster?'Filtrar por '+esc(f):''}">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:12px;font-weight:${sel?'800':'600'};color:${sel?'var(--brand)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(f)}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">${tCount} tutores · ${hojeF} hoje</div>
-          </div>
-          <div style="font-size:12px;font-weight:700;color:${sel?'var(--brand)':'var(--text2)'};white-space:nowrap;opacity:${dim?'.45':'1'}">${fmtBRL(recF)}</div>
-        </div>`;
-    }).join('');
-  } else {
-    document.getElementById('dash-filiais').innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`;
-  }
-
+  const filialCount = {};
+  D.tutores.forEach(t=>{ const f=t.unidade||'Sem filial'; filialCount[f]=(filialCount[f]||0)+1; });
+  const entries = Object.entries(filialCount).sort((a,b)=>b[1]-a[1]);
+  const totalTutores = D.tutores.length || 1;
+  document.getElementById('dash-filiais').innerHTML = entries.length===0
+    ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
+    : entries.map(([f,n])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;${curDashFilial===f?'opacity:1':'opacity:'+(curDashFilial==='todas'?'1':'.4')}">
+        <div style="font-size:12px;font-weight:${curDashFilial===f?'800':'600'};flex:1;color:${curDashFilial===f?'var(--brand)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(f)}${curDashFilial===f?' ◀':''}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--brand);min-width:20px;text-align:right">${n}</div>
+        <div style="flex:2;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+          <div style="height:100%;background:${curDashFilial===f?'var(--brand)':'var(--muted2)'};border-radius:3px;width:${Math.round(n/totalTutores*100)}%"></div>
+        </div>
+      </div>`).join('');
   document.getElementById('dash-situacao').innerHTML = tutoresF.length===0
     ? `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sem dados</div>`
     : `<div style="display:flex;gap:12px">
@@ -4398,22 +4035,20 @@ function renderDashStats(D, ctx) {
 }
 
 function renderDashAgList(D, ctx) {
-  const {hoje, agsF, filtrando} = ctx;
+  const {hoje, agsF} = ctx;
   const tutorMap = {}; D.tutores.forEach(t=>tutorMap[t.id]=t.nome);
   const petMap   = {}; D.pets.forEach(p=>petMap[p.id]=p.nome);
-  const isMaster = getSession()?.role === 'master';
-  const showFilialBadge = isMaster && !filtrando;
   const prox = agsF
     .filter(a=>a.data>=hoje&&a.status!=='cancelado'&&a.status!=='concluido')
     .sort((a,b)=>a.data!==b.data?(a.data>b.data?1:-1):(a.hora||'').localeCompare(b.hora||''))
-    .slice(0,8);
+    .slice(0,6);
   document.getElementById('dash-ag-count').textContent = prox.length?`${prox.length} próximos`:'';
   document.getElementById('dash-ag-list').innerHTML = prox.length===0
     ? `<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-calendar" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Sem agendamentos.</div>`
     : prox.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
         <div style="font-size:12px;font-weight:800;color:var(--brand);min-width:76px">${a.data===hoje?a.hora:fmtDate(a.data)}</div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600">${esc(petMap[a.petId]||'Pet')}${showFilialBadge&&a.filial?` <span style="font-size:10px;font-weight:500;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 5px">${esc(a.filial)}</span>`:''}</div>
+          <div style="font-size:13px;font-weight:600">${esc(petMap[a.petId]||'Pet')}</div>
           <div style="font-size:11px;color:var(--muted)">${esc(tutorMap[a.tutorId]||'—')} · ${esc(a.servico||'')}</div>
         </div>
         <span class="tag ${AG_STATUS[a.status]?.cls||'tag-gray'}" style="font-size:10px">${AG_STATUS[a.status]?.label||a.status}</span>
@@ -4630,16 +4265,7 @@ ${l.formaPagamento?`<div class="row"><span class="label">Pagamento</span><span c
     </div>
     <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--muted)">Obrigado pela preferência!</div>`;
 
-  const btnRe = document.getElementById('btn-reagendar-recibo');
-  if (btnRe) btnRe.style.display = (l.agendamentoId && l.origem === 'agenda') ? '' : 'none';
-
   openModal('modal-recibo');
-}
-
-function abrirReagendarDoRecibo() {
-  if (!_reciboLanc?.agendamentoId) return;
-  closeModal('modal-recibo');
-  setTimeout(() => abrirModalReagendar(_reciboLanc.agendamentoId), 180);
 }
 
 function imprimirRecibo() {
@@ -4789,8 +4415,7 @@ function renderHospedagem() {
   const tutorMap = {}; D.tutores.forEach(t => tutorMap[t.id] = t);
   const petMap   = {}; D.pets.forEach(p => petMap[p.id] = p);
 
-  const _sfh = getSessFilial();
-  let planos = (D.planos||[]).filter(p => p.tipo === 'Hospedagem' && (!_sfh || !p.filial || p.filial===_sfh));
+  let planos = (D.planos||[]).filter(p => p.tipo === 'Hospedagem');
 
   if (_hospTab === 'ativos') {
     planos = planos.filter(p => {
@@ -5085,31 +4710,6 @@ function renderChecklist(planoId, dateISO) {
 
   let html = '';
 
-  // ── Resumo do Turno ───────────────────────────────────────────────────────
-  {
-    const feitos = [];
-    REFEICOES.forEach(r => {
-      if (ck.alimentacao?.[r.key]?.feito) feitos.push(`${r.label} ✓ ${ck.alimentacao[r.key].feitorPor ? '('+esc(ck.alimentacao[r.key].feitorPor)+')' : ''}`);
-    });
-    (ck.medicacoes||[]).forEach(m => {
-      if (m.feito) feitos.push(`💊 ${esc(m.nome)} ✓ ${m.feitorPor ? '('+esc(m.feitorPor)+')' : ''}`);
-    });
-    ATIVIDADES.forEach(at => {
-      if (ck.atividades?.[at.key]) feitos.push(`${at.label} ✓`);
-    });
-    const pendentes = [];
-    REFEICOES.forEach(r => { if (!ck.alimentacao?.[r.key]?.feito) pendentes.push(r.label); });
-    (ck.medicacoes||[]).forEach(m => { if (!m.feito) pendentes.push(`💊 ${esc(m.nome)}`); });
-    const totalOk = feitos.length, totalPend = pendentes.length;
-    html += `<div style="background:${totalPend===0?'#DCFCE7':'#FEF3C7'};border:1px solid ${totalPend===0?'#86EFAC':'#FDE68A'};border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px">
-      <div style="font-weight:700;color:${totalPend===0?'#166534':'#92400E'};margin-bottom:${feitos.length?'8px':'0'}">
-        <i class="ph ph-clipboard-text" style="margin-right:4px"></i>Resumo do dia: ${totalOk} feito${totalOk!==1?'s':''} · ${totalPend} pendente${totalPend!==1?'s':''}
-      </div>
-      ${feitos.length?`<div style="color:#166534;line-height:1.6">${feitos.join(' &nbsp;·&nbsp; ')}</div>`:''}
-      ${pendentes.length?`<div style="color:#92400E;margin-top:4px">⏳ Pendente: ${pendentes.join(', ')}</div>`:''}
-    </div>`;
-  }
-
   // ── Alimentação ──────────────────────────────────────────────────────────
   html += `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
     <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
@@ -5389,55 +4989,25 @@ function salvarInternacao() {
   const tutorId  = document.getElementById('int-tutor').value;
   const entrada  = document.getElementById('int-entrada').value;
   const diag     = document.getElementById('int-diag').value.trim();
-  const valorDiaria = parseFloat(document.getElementById('int-valor-diaria').value)||0;
-  const formaPgto   = document.getElementById('int-forma-pgto').value;
   if (!petId || !tutorId || !entrada || !diag) { toast('⚠️ Preencha tutor, pet, data e diagnóstico'); return; }
-  if (!valorDiaria) { toast('⚠️ Informe o valor por diária'); return; }
-  const previsao = document.getElementById('int-previsao').value || null;
   const D = loadDB();
-  const pet   = D.pets.find(x=>x.id===petId);
-  const tutor = D.tutores.find(x=>x.id===tutorId);
-  const intId = uid();
-
-  // Dias previstos (mínimo 1)
-  let diasPrevistos = 1;
-  if (previsao && previsao > entrada) {
-    diasPrevistos = Math.round((new Date(previsao+'T12:00:00') - new Date(entrada+'T12:00:00')) / 86400000);
-    diasPrevistos = Math.max(1, diasPrevistos);
-  }
-  const totalUpfront = valorDiaria * diasPrevistos;
-
   D.internacoes.push({
-    id: intId, petId, tutorId,
+    id: uid(),
+    petId, tutorId,
     dataEntrada:    entrada,
-    previsaoAlta:   previsao,
+    previsaoAlta:   document.getElementById('int-previsao').value || null,
     dataAlta:       null,
     status:         'internado',
     diagnostico:    diag,
     medicoResponsavel: document.getElementById('int-medico').value.trim(),
     obsAdmissao:    document.getElementById('int-obs').value.trim(),
     medicacoes:     [],
-    checklist:      {},
-    valorDiaria,
-    formaPagamento: formaPgto
+    checklist:      {}
   });
-
-  // Lançamento upfront no financeiro
-  D.financeiro.push({
-    id: uid(), tipo: 'receita',
-    valor: totalUpfront,
-    descricao: `Internação ${diasPrevistos}d — ${pet?.nome||''}${pet?.nome?' (':''}${tutor?.nome||''}${pet?.nome?')':''}`,
-    categoria: 'servicos', data: entrada,
-    formaPagamento: formaPgto,
-    origem: 'internacao', internacaoId: intId,
-    tutorId, criadoEm: new Date().toISOString(),
-    filial: tutor?.filial || ''
-  });
-
   saveDB(D);
   closeModal('modal-nova-internacao');
   renderInternacao();
-  toast(`✅ Animal internado — R$${totalUpfront.toLocaleString('pt-BR',{minimumFractionDigits:2})} lançado (${diasPrevistos} diária${diasPrevistos!==1?'s':''})`);
+  toast('✅ Animal internado');
 }
 
 function abrirProntuarioInternacao(intId) {
@@ -5469,16 +5039,6 @@ function abrirProntuarioInternacao(intId) {
   if (i.dataEntrada) chips.push(`<span style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--text2)"><i class="ph ph-sign-in" style="margin-right:4px"></i>Entrada: ${fmtDate(i.dataEntrada)}</span>`);
   if (i.previsaoAlta) chips.push(`<span style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--text2)"><i class="ph ph-calendar" style="margin-right:4px"></i>Alta prevista: ${fmtDate(i.previsaoAlta)}</span>`);
   if (i.dataAlta) chips.push(`<span style="background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--green)"><i class="ph ph-sign-out" style="margin-right:4px"></i>Alta: ${fmtDate(i.dataAlta)}</span>`);
-  // Resumo financeiro da internação
-  if (i.valorDiaria) {
-    const lancInternacao = D.financeiro.filter(l => l.internacaoId === intId);
-    const totalCobrado = lancInternacao.reduce((s,l) => s+Number(l.valor||0), 0);
-    const diasExtras   = lancInternacao.filter(l => l.origem==='internacao_extra').length;
-    let finChip = `<span style="background:rgba(71,57,156,.08);border:1px solid rgba(71,57,156,.2);border-radius:8px;padding:5px 12px;font-size:.78rem;color:var(--brand)"><i class="ph ph-currency-dollar" style="margin-right:4px"></i>${fmtBRL(i.valorDiaria)}/dia · Total: ${fmtBRL(totalCobrado)}`;
-    if (diasExtras > 0) finChip += ` · <span style="color:#dc2626;font-weight:700">${diasExtras} dia${diasExtras!==1?'s':''} extra${diasExtras!==1?'s':''}</span>`;
-    finChip += `</span>`;
-    chips.push(finChip);
-  }
   document.getElementById('int-pront-periodo').innerHTML = chips.join('');
 
   renderIntMedsLista(i.medicacoes || []);
@@ -5641,31 +5201,6 @@ function renderIntChecklist(intId, dateISO) {
   }
 
   let html = '';
-
-  // ── Resumo do Turno (Internação) ──────────────────────────────────────────
-  {
-    const feitos = [], pendentes = [];
-    (ck.medicacoes||[]).forEach(med => {
-      (med.horarios||[]).forEach(slot => {
-        if (slot.feito) feitos.push(`💊 ${esc(med.nome)} ${slot.hora} ✓${slot.feitorPor?' ('+esc(slot.feitorPor)+')'  :''}`);
-        else pendentes.push(`💊 ${esc(med.nome)} ${slot.hora}`);
-      });
-    });
-    if (ck.alimentacao?.aceitou !== null && ck.alimentacao?.aceitou !== undefined)
-      feitos.push(`🍽 Alimentação: ${ck.alimentacao.aceitou ? 'Aceitou' : 'Recusou'}`);
-    else
-      pendentes.push('🍽 Alimentação');
-    if (ck.evolucao) feitos.push('📝 Evolução registrada');
-    else pendentes.push('📝 Evolução');
-    const totalOk = feitos.length, totalPend = pendentes.length;
-    html += `<div style="background:${totalPend===0?'#DCFCE7':'#FEF3C7'};border:1px solid ${totalPend===0?'#86EFAC':'#FDE68A'};border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px">
-      <div style="font-weight:700;color:${totalPend===0?'#166534':'#92400E'};margin-bottom:${feitos.length?'8px':'0'}">
-        <i class="ph ph-clipboard-text" style="margin-right:4px"></i>Resumo do turno: ${totalOk} feito${totalOk!==1?'s':''} · ${totalPend} pendente${totalPend!==1?'s':''}
-      </div>
-      ${feitos.length?`<div style="color:#166534;line-height:1.7">${feitos.join('<br>')}</div>`:''}
-      ${pendentes.length?`<div style="color:#92400E;margin-top:6px">⏳ Pendente: ${pendentes.join(' · ')}</div>`:''}
-    </div>`;
-  }
 
   // ── Medicações ───────────────────────────────────────────────────────────
   if (ck.medicacoes && ck.medicacoes.length) {
@@ -6210,8 +5745,6 @@ function setSession(u) {
   sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id:u.id, nome:u.nome, login:u.login, role:u.role, filial:u.filial||'' }));
 }
 function clearSession() { sessionStorage.removeItem(SESSION_KEY); }
-// Retorna a filial do usuário logado, ou '' se tem acesso a todas
-function getSessFilial() { const s = getSession(); return s?.filial || ''; }
 
 function mostrarFormLogin() {
   document.getElementById('login-form-wrap').style.display = '';
@@ -6271,20 +5804,15 @@ function fazerLogout() {
   document.getElementById('login-overlay').style.display = 'flex';
 }
 
-const ROLE_LABELS = { master:'Master', plantonista:'Plantonista', recepcionista:'Recepcionista', banhista:'Banhista', tosador:'Tosador', monitor:'Monitor' };
+const ROLE_LABELS = { master:'Master', gerente:'Gerente', recepcionista:'Recepcionista' };
 const NAV_POR_ROLE = {
-  plantonista:   ['dashboard','checkin','creche','hospedagem','internacao'],
-  recepcionista: ['dashboard','clientes','agenda','checkin','pdv','planos'],
-  banhista:      ['dashboard','agenda','checkin'],
-  tosador:       ['dashboard','agenda','checkin'],
-  monitor:       ['dashboard','checkin','creche'],
-  master:        ['dashboard','clientes','agenda','checkin','creche','hospedagem','internacao','pdv','planos','financeiro','estoque','funcionarios','usuarios','config','matriz']
+  recepcionista: ['dashboard','clientes','agenda','checkin','hospedagem','internacao','pdv','planos'],
+  gerente:       ['dashboard','clientes','agenda','checkin','hospedagem','internacao','pdv','planos','financeiro','estoque'],
+  master:        ['dashboard','clientes','agenda','checkin','hospedagem','internacao','pdv','planos','financeiro','estoque','funcionarios','usuarios','config']
 };
 
 function aplicarRole(u) {
-  const D = loadDB();
-  const customPerms = D.config?.permissoesRole;
-  const permitido = (customPerms && customPerms[u.role]) ? customPerms[u.role] : (NAV_POR_ROLE[u.role] || NAV_POR_ROLE['recepcionista']);
+  const permitido = NAV_POR_ROLE[u.role] || NAV_POR_ROLE['recepcionista'];
   document.querySelectorAll('.nav-item[id^="nav-"]').forEach(el => {
     const page = el.id.replace('nav-','');
     el.style.display = permitido.includes(page) ? '' : 'none';
@@ -6307,19 +5835,10 @@ function renderUsuarios() {
     el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px"><i class="ph ph-users" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Nenhum usuário cadastrado.</div>';
     return;
   }
-  const ROLE_COLOR = {
-    master:        {c:'var(--brand)',   bg:'var(--brand-light)'},
-    plantonista:   {c:'#065f46',       bg:'var(--teal-light)'},
-    recepcionista: {c:'#78350f',       bg:'var(--yellow-light)'},
-    banhista:      {c:'#1e40af',       bg:'#dbeafe'},
-    tosador:       {c:'#6b21a8',       bg:'#f3e8ff'},
-    monitor:       {c:'#9d174d',       bg:'#fce7f3'},
-  };
   const sess = getSession();
   el.innerHTML = D.usuarios.map(u => {
-    const rc = ROLE_COLOR[u.role] || {c:'var(--muted)',bg:'var(--surface2)'};
-    const roleColor = rc.c;
-    const roleBg    = rc.bg;
+    const roleColor = u.role==='master'?'var(--brand)':u.role==='gerente'?'#065f46':'#78350f';
+    const roleBg    = u.role==='master'?'var(--brand-light)':u.role==='gerente'?'var(--teal-light)':'var(--yellow-light)';
     const isSelf    = sess && sess.id === u.id;
     return `<div class="fin-item" style="opacity:${u.ativo===false?'.45':'1'}">
       <div style="width:36px;height:36px;border-radius:8px;background:${roleBg};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${roleColor};flex-shrink:0">${(u.nome||'?')[0].toUpperCase()}</div>
@@ -6332,85 +5851,6 @@ function renderUsuarios() {
       ${!isSelf?`<button class="btn btn-danger btn-sm" onclick="deletarUsuario('${u.id}')"><i class="ph ph-trash"></i></button>`:''}
     </div>`;
   }).join('');
-  const sess = getSession();
-  const cardPerm = document.getElementById('card-permissoes');
-  if (cardPerm) {
-    cardPerm.style.display = (sess && sess.role === 'master') ? '' : 'none';
-    if (sess && sess.role === 'master') renderPermissoesEditor();
-  }
-}
-
-function renderPermissoesEditor() {
-  const D   = loadDB();
-  const el  = document.getElementById('permissoes-editor');
-  if (!el) return;
-  const ALL_PAGES = [
-    { id:'dashboard',   label:'Dashboard' },
-    { id:'clientes',    label:'Clientes & Pets' },
-    { id:'agenda',      label:'Agenda' },
-    { id:'checkin',     label:'Entrada / Saída' },
-    { id:'creche',      label:'Creche do Dia' },
-    { id:'hospedagem',  label:'Hospedagem' },
-    { id:'internacao',  label:'Internação' },
-    { id:'pdv',         label:'PDV / Caixa' },
-    { id:'planos',      label:'Planos & Pacotes' },
-    { id:'financeiro',  label:'Financeiro' },
-    { id:'estoque',     label:'Estoque' },
-    { id:'funcionarios',label:'Funcionários' },
-    { id:'usuarios',    label:'Usuários' },
-    { id:'config',      label:'Serviços' },
-    { id:'matriz',      label:'Matriz Central' }
-  ];
-  const ROLES = [
-    { key:'plantonista',   label:'Plantonista' },
-    { key:'recepcionista', label:'Recepcionista' },
-    { key:'banhista',      label:'Banhista' },
-    { key:'tosador',       label:'Tosador' },
-    { key:'monitor',       label:'Monitor' }
-  ];
-  const perms = D.config?.permissoesRole || {};
-  const effective = role => perms[role] || NAV_POR_ROLE[role] || [];
-
-  let html = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
-    <thead><tr>
-      <th style="text-align:left;padding:6px 10px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border)">Página</th>
-      ${ROLES.map(r=>`<th style="text-align:center;padding:6px 10px;font-weight:700;color:var(--brand);border-bottom:1px solid var(--border)">${r.label}</th>`).join('')}
-    </tr></thead><tbody>`;
-
-  ALL_PAGES.forEach(page => {
-    html += `<tr style="border-bottom:1px solid var(--border)">
-      <td style="padding:7px 10px;font-weight:600">${page.label}</td>`;
-    ROLES.forEach(role => {
-      const checked = effective(role.key).includes(page.id);
-      const isMaster = page.id==='usuarios' || page.id==='matriz';
-      html += `<td style="text-align:center;padding:7px 10px">
-        <input type="checkbox" data-role="${role.key}" data-page="${page.id}"
-          ${checked?'checked':''} ${isMaster?'disabled title="Sempre Master"':''}
-          style="width:16px;height:16px;cursor:pointer;accent-color:var(--brand)">
-      </td>`;
-    });
-    html += '</tr>';
-  });
-
-  html += '</tbody></table></div>';
-  el.innerHTML = html;
-}
-
-function salvarPermissoes() {
-  const D = loadDB();
-  if (!D.config) D.config = {};
-  if (!D.config.permissoesRole) D.config.permissoesRole = {};
-  document.querySelectorAll('#permissoes-editor input[type=checkbox]').forEach(cb => {
-    const role = cb.dataset.role;
-    const page = cb.dataset.page;
-    if (!D.config.permissoesRole[role]) D.config.permissoesRole[role] = [];
-    const arr = D.config.permissoesRole[role];
-    const idx = arr.indexOf(page);
-    if (cb.checked && idx === -1) arr.push(page);
-    if (!cb.checked && idx !== -1) arr.splice(idx, 1);
-  });
-  saveDB(D);
-  toast('✅ Permissões salvas!');
 }
 
 function populateFilialSelectUsuario() {
@@ -6478,65 +5918,10 @@ function exportarClientes() {
   toast(`📥 ${D.tutores.length} clientes exportados`);
 }
 
-function cobrarDiariasExtras() {
-  const D = loadDB();
-  const hoje = todayISO();
-  let changed = false;
-
-  // Internação: dias extras após previsaoAlta
-  (D.internacoes||[]).filter(i => i.status==='internado' && i.valorDiaria>0 && i.previsaoAlta && hoje>i.previsaoAlta).forEach(i => {
-    const pet   = D.pets.find(x=>x.id===i.petId);
-    const cobrados = new Set(D.financeiro.filter(l=>l.internacaoId===i.id&&l.origem==='internacao_extra').map(l=>l.data));
-    let cur = new Date(i.previsaoAlta+'T12:00:00');
-    cur.setDate(cur.getDate()+1);
-    const fim = new Date(hoje+'T12:00:00');
-    while (cur < fim) {
-      const data = cur.toISOString().slice(0,10);
-      if (!cobrados.has(data)) {
-        D.financeiro.push({
-          id:uid(), tipo:'receita', valor:i.valorDiaria,
-          descricao:`Internação extra — ${pet?.nome||'pet'} (${data})`,
-          categoria:'servicos', data, formaPagamento: i.formaPagamento||'PIX',
-          origem:'internacao_extra', internacaoId:i.id, tutorId:i.tutorId,
-          criadoEm:new Date().toISOString(), filial: D.tutores.find(t=>t.id===i.tutorId)?.filial||''
-        });
-        changed = true;
-      }
-      cur.setDate(cur.getDate()+1);
-    }
-  });
-
-  // Hospedagem: dias extras após dataTermino
-  (D.planos||[]).filter(p => p.tipo==='Hospedagem' && p.status==='ativo' && p.dataTermino && hoje>p.dataTermino && p.valorDiario>0).forEach(p => {
-    const pet   = D.pets.find(x=>x.id===p.petId);
-    const cobrados = new Set(D.financeiro.filter(l=>l.planoId===p.id&&l.origem==='hospedagem_extra').map(l=>l.data));
-    let cur = new Date(p.dataTermino+'T12:00:00');
-    cur.setDate(cur.getDate()+1);
-    const fim = new Date(hoje+'T12:00:00');
-    while (cur < fim) {
-      const data = cur.toISOString().slice(0,10);
-      if (!cobrados.has(data)) {
-        D.financeiro.push({
-          id:uid(), tipo:'receita', valor:p.valorDiario,
-          descricao:`Hospedagem extra — ${pet?.nome||'pet'} (${data})`,
-          categoria:'servicos', data, formaPagamento:'PIX',
-          origem:'hospedagem_extra', planoId:p.id, tutorId:p.tutorId,
-          criadoEm:new Date().toISOString(), filial: p.filial||''
-        });
-        changed = true;
-      }
-      cur.setDate(cur.getDate()+1);
-    }
-  });
-
-  if (changed) saveDB(D);
-}
-
 function finishInit(D) {
   applyConfig(D);
   seedServicos();
   processarAbates();
-  cobrarDiariasExtras();
   populateSel('f-unidade','');
   populateSel('e-unidade','');
   addPetField();
@@ -6669,12 +6054,492 @@ function salvarPerfil() {
   toast('✅ Perfil salvo!');
 }
 
+// ── DEMO SEED ─────────────────────────────────────────────────────────────────
+(function seedDemo() {
+  const DEMO_KEY = 'petsgo_demo_seeded_v8';
+  if (localStorage.getItem(DEMO_KEY)) return;
+  localStorage.removeItem('petsgo_crm');
+  localStorage.removeItem('petsgo_sync_meta');
+
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function dias(n) { return new Date(Date.now()+n*86400000).toISOString().slice(0,10); }
+  // SHA-256('1234') pré-computado — evita async no seed
+  const h1234 = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';
+
+  const hoje   = dias(0),  ontem  = dias(-1),  d2  = dias(-2),  d3  = dias(-3);
+  const d4     = dias(-4), d5     = dias(-5),  d6  = dias(-6),  d7  = dias(-7);
+  const d8     = dias(-8), d9     = dias(-9),  d10 = dias(-10), d11 = dias(-11);
+  const d12    = dias(-12),d13    = dias(-13), d14 = dias(-14);
+  const amanha = dias(1),  em2    = dias(2),   em3 = dias(3),   em5 = dias(5);
+
+  // ── IDs tutores ──────────────────────────────────────────────────────────────
+  const t1=uid(),t2=uid(),t3=uid(),t4=uid(),t5=uid();
+  const t6=uid(),t7=uid(),t8=uid(),t9=uid(),t10=uid();
+  const t11=uid(),t12=uid(),t13=uid(),t14=uid(),t15=uid();
+  const t16=uid(),t17=uid(),t18=uid(),t19=uid(),t20=uid();
+
+  // ── IDs pets ─────────────────────────────────────────────────────────────────
+  const p1=uid(),p2=uid(),p3=uid(),p4=uid(),p5=uid();
+  const p6=uid(),p7=uid(),p8=uid(),p9=uid(),p10=uid();
+  const p11=uid(),p12=uid(),p13=uid(),p14=uid(),p15=uid();
+  const p16=uid(),p17=uid(),p18=uid(),p19=uid(),p20=uid();
+  const p21=uid(),p22=uid(),p23=uid(),p24=uid(),p25=uid();
+
+  // ── IDs planos ───────────────────────────────────────────────────────────────
+  const pl1=uid(),pl2=uid(),pl3=uid(),pl4=uid(),pl5=uid();
+  const pl6=uid(),pl7=uid(),pl8=uid(),pl9=uid(),pl10=uid();
+
+  // ── Usuários — todos os roles ─────────────────────────────────────────────────
+  const usuarios = [
+    {id:uid(), nome:'Admin Demo',      login:'admin',   senhaHash:h1234, role:'master',        filial:'',         ativo:true, criadoEm:new Date().toISOString()},
+    {id:uid(), nome:'Ana Paula S.',    login:'ana',     senhaHash:h1234, role:'recepcionista',  filial:'Centro',   ativo:true, criadoEm:new Date().toISOString()},
+    {id:uid(), nome:'Lucas Becker',    login:'lucas',   senhaHash:h1234, role:'plantonista',    filial:'Centro',   ativo:true, criadoEm:new Date().toISOString()},
+    {id:uid(), nome:'Vanessa Corrêa',  login:'vanessa', senhaHash:h1234, role:'banhista',       filial:'Centro',   ativo:true, criadoEm:new Date().toISOString()},
+    {id:uid(), nome:'Rodrigo Farias',  login:'rodrigo', senhaHash:h1234, role:'tosador',        filial:'Zona Sul', ativo:true, criadoEm:new Date().toISOString()},
+    {id:uid(), nome:'Carla Moreira',   login:'carla',   senhaHash:h1234, role:'monitor',        filial:'Zona Sul', ativo:true, criadoEm:new Date().toISOString()},
+    {id:uid(), nome:'Paulo Henrique',  login:'paulo',   senhaHash:h1234, role:'recepcionista',  filial:'Boa Vista',ativo:true, criadoEm:new Date().toISOString()},
+  ];
+
+  // ── Tutores — 20, distribuídos em 4 filiais ──────────────────────────────────
+  const tutores = [
+    {id:t1,  nome:'Marcos Oliveira',   telefone:'(51) 99871-2341', cpf:'045.321.890-11', filial:'Centro',    status:'ativo'},
+    {id:t2,  nome:'Fernanda Costa',    telefone:'(51) 98765-4321', cpf:'123.456.789-00', filial:'Centro',    status:'ativo'},
+    {id:t3,  nome:'Rafael Souza',      telefone:'(51) 99234-5678', cpf:'987.654.321-00', filial:'Zona Sul',  status:'ativo'},
+    {id:t4,  nome:'Juliana Mendes',    telefone:'(51) 98543-1290', cpf:'456.789.123-00', filial:'Centro',    status:'ativo'},
+    {id:t5,  nome:'Carlos Ferreira',   telefone:'(51) 99312-8765', cpf:'789.123.456-00', filial:'Zona Sul',  status:'ativo'},
+    {id:t6,  nome:'Amanda Ribeiro',    telefone:'(51) 98654-3210', cpf:'321.654.987-00', filial:'Centro',    status:'ativo'},
+    {id:t7,  nome:'Bruno Almeida',     telefone:'(51) 99876-5432', cpf:'654.987.321-00', filial:'Zona Sul',  status:'ativo'},
+    {id:t8,  nome:'Patrícia Lima',     telefone:'(51) 98901-2345', cpf:'147.258.369-00', filial:'Centro',    status:'ativo'},
+    {id:t9,  nome:'Diego Martins',     telefone:'(51) 99654-7890', cpf:'258.369.147-00', filial:'Zona Sul',  status:'ativo'},
+    {id:t10, nome:'Larissa Rodrigues', telefone:'(51) 98432-1098', cpf:'369.147.258-00', filial:'Centro',    status:'ativo'},
+    {id:t11, nome:'Gustavo Pereira',   telefone:'(51) 99201-3344', cpf:'111.222.333-44', filial:'Centro',    status:'ativo'},
+    {id:t12, nome:'Roberta Andrade',   telefone:'(51) 98711-5566', cpf:'222.333.444-55', filial:'Boa Vista', status:'ativo'},
+    {id:t13, nome:'Fábio Gomes',       telefone:'(51) 99412-7788', cpf:'333.444.555-66', filial:'Boa Vista', status:'ativo'},
+    {id:t14, nome:'Natália Pires',     telefone:'(51) 98923-9900', cpf:'444.555.666-77', filial:'Boa Vista', status:'ativo'},
+    {id:t15, nome:'Eduardo Lima',      telefone:'(51) 99634-1122', cpf:'555.666.777-88', filial:'Petrópolis',status:'ativo'},
+    {id:t16, nome:'Soraya Nunes',      telefone:'(51) 98345-3344', cpf:'666.777.888-99', filial:'Petrópolis',status:'ativo'},
+    {id:t17, nome:'Henrique Borges',   telefone:'(51) 99856-5566', cpf:'777.888.999-00', filial:'Zona Sul',  status:'ativo'},
+    {id:t18, nome:'Mariana Fonseca',   telefone:'(51) 98567-7788', cpf:'888.999.000-11', filial:'Centro',    status:'ativo'},
+    {id:t19, nome:'Thiago Azevedo',    telefone:'(51) 99178-9900', cpf:'999.000.111-22', filial:'Petrópolis',status:'ativo'},
+    {id:t20, nome:'Cintia Barbosa',    telefone:'(51) 98789-1122', cpf:'000.111.222-33', filial:'Boa Vista', status:'inativo'},
+  ];
+
+  // ── Pets — 25 ────────────────────────────────────────────────────────────────
+  const pets = [
+    {id:p1,  tutorId:t1,  nome:'Thor',     especie:'Cão',  raca:'Golden Retriever', sexo:'M', peso:'32',  nascimento:'2020-03-15', obs:'Adora água, cuidado na banheira'},
+    {id:p2,  tutorId:t2,  nome:'Bolinha',  especie:'Cão',  raca:'Poodle',           sexo:'M', peso:'4.5', nascimento:'2022-07-01', obs:''},
+    {id:p3,  tutorId:t2,  nome:'Mel',      especie:'Cão',  raca:'Shih Tzu',         sexo:'F', peso:'5.2', nascimento:'2021-11-20', obs:'Usa laço rosa'},
+    {id:p4,  tutorId:t3,  nome:'Rex',      especie:'Cão',  raca:'Pastor Alemão',    sexo:'M', peso:'28',  nascimento:'2019-05-10', obs:'Dominante com outros machos'},
+    {id:p5,  tutorId:t4,  nome:'Nina',     especie:'Cão',  raca:'Labrador',         sexo:'F', peso:'24',  nascimento:'2021-02-28', obs:'Alergia a frango — internada pós-OSH'},
+    {id:p6,  tutorId:t5,  nome:'Bidu',     especie:'Cão',  raca:'Beagle',           sexo:'M', peso:'12',  nascimento:'2020-08-15', obs:'Latido intenso, avisar vizinhos'},
+    {id:p7,  tutorId:t6,  nome:'Luna',     especie:'Cão',  raca:'Border Collie',    sexo:'F', peso:'18',  nascimento:'2022-01-05', obs:'Muito ativa, precisa de atividade'},
+    {id:p8,  tutorId:t7,  nome:'Bob',      especie:'Cão',  raca:'Bulldog Francês',  sexo:'M', peso:'11',  nascimento:'2021-09-12', obs:'Ronca muito, normal'},
+    {id:p9,  tutorId:t8,  nome:'Meg',      especie:'Gato', raca:'Persa',            sexo:'F', peso:'3.8', nascimento:'2023-03-01', obs:'Banho higiênico, cuidado com garras'},
+    {id:p10, tutorId:t9,  nome:'Spike',    especie:'Cão',  raca:'Rottweiler',       sexo:'M', peso:'42',  nascimento:'2019-12-20', obs:'Focinheira obrigatória no banho'},
+    {id:p11, tutorId:t10, nome:'Coco',     especie:'Cão',  raca:'Yorkshire',        sexo:'F', peso:'3.2', nascimento:'2022-05-15', obs:'Pelo longo, tosa completa'},
+    {id:p12, tutorId:t1,  nome:'Hera',     especie:'Cão',  raca:'Husky Siberiano',  sexo:'F', peso:'22',  nascimento:'2021-07-04', obs:'Internada — gastroenterite'},
+    {id:p13, tutorId:t6,  nome:'Pretinha', especie:'Gato', raca:'SRD',              sexo:'F', peso:'4.1', nascimento:'2022-10-10', obs:'Banho higiênico mensal'},
+    {id:p14, tutorId:t11, nome:'Max',      especie:'Cão',  raca:'Labrador',         sexo:'M', peso:'30',  nascimento:'2021-04-10', obs:''},
+    {id:p15, tutorId:t11, nome:'Kira',     especie:'Cão',  raca:'Vizsla',           sexo:'F', peso:'20',  nascimento:'2022-08-20', obs:'Hospedagem — tutor viajando'},
+    {id:p16, tutorId:t12, nome:'Toby',     especie:'Cão',  raca:'Cocker Spaniel',   sexo:'M', peso:'9',   nascimento:'2022-03-05', obs:'Orelha longa, secar bem'},
+    {id:p17, tutorId:t13, nome:'Pipoca',   especie:'Cão',  raca:'Lhasa Apso',       sexo:'F', peso:'5.8', nascimento:'2023-01-14', obs:'Hospedagem — viagem família'},
+    {id:p18, tutorId:t14, nome:'Zeus',     especie:'Cão',  raca:'Boxer',            sexo:'M', peso:'32',  nascimento:'2020-11-30', obs:'Ativo e brincalhão'},
+    {id:p19, tutorId:t14, nome:'Frida',    especie:'Cão',  raca:'Basset Hound',     sexo:'F', peso:'22',  nascimento:'2021-06-18', obs:'Orelhas longas — limpeza semanal'},
+    {id:p20, tutorId:t15, nome:'Pisco',    especie:'Cão',  raca:'Dachshund',        sexo:'M', peso:'7.5', nascimento:'2022-09-01', obs:''},
+    {id:p21, tutorId:t16, nome:'Pingo',    especie:'Cão',  raca:'Maltês',           sexo:'M', peso:'3.1', nascimento:'2023-04-22', obs:'Tosa higiênica mensal'},
+    {id:p22, tutorId:t17, nome:'Arya',     especie:'Cão',  raca:'SRD',              sexo:'F', peso:'14',  nascimento:'2020-07-07', obs:''},
+    {id:p23, tutorId:t18, nome:'Duke',     especie:'Cão',  raca:'Dogue Alemão',     sexo:'M', peso:'58',  nascimento:'2021-02-14', obs:'Mesa larga necessária no banho'},
+    {id:p24, tutorId:t19, nome:'Argo',     especie:'Cão',  raca:'Border Collie',    sexo:'M', peso:'19',  nascimento:'2022-06-30', obs:''},
+    {id:p25, tutorId:t17, nome:'Bruno',    especie:'Cão',  raca:'Labradoodle',      sexo:'M', peso:'16',  nascimento:'2021-12-01', obs:'Pelo cacheado, pente fino'},
+  ];
+
+  // ── Agendamentos hoje: 17 atendimentos — casa cheia ──────────────────────────
+  const now = Date.now();
+  const agendamentos = [
+    // Concluídos de manhã
+    {id:uid(), tutorId:t1,  petId:p1,  data:hoje, hora:'07:30', servico:'Banho e Tosa',    status:'concluido', filial:'Centro',    valor:120, pago:true,  checkinAt:new Date(now-18000000).toISOString(), checkoutAt:new Date(now-14400000).toISOString()},
+    {id:uid(), tutorId:t3,  petId:p4,  data:hoje, hora:'08:00', servico:'Banho e Tosa',    status:'concluido', filial:'Zona Sul',  valor:130, pago:true,  checkinAt:new Date(now-16200000).toISOString(), checkoutAt:new Date(now-12600000).toISOString()},
+    {id:uid(), tutorId:t10, petId:p11, data:hoje, hora:'08:30', servico:'Tosa',             status:'concluido', filial:'Centro',    valor:70,  pago:true,  checkinAt:new Date(now-14400000).toISOString(), checkoutAt:new Date(now-10800000).toISOString()},
+    // Creche — andamento (entraram cedo)
+    {id:uid(), tutorId:t6,  petId:p7,  data:hoje, hora:'07:30', servico:'Creche',           status:'andamento', filial:'Centro',    valor:80,  pago:false, checkinAt:new Date(now-21600000).toISOString()},
+    {id:uid(), tutorId:t5,  petId:p6,  data:hoje, hora:'07:45', servico:'Creche',           status:'andamento', filial:'Zona Sul',  valor:80,  pago:false, checkinAt:new Date(now-21000000).toISOString()},
+    {id:uid(), tutorId:t2,  petId:p2,  data:hoje, hora:'08:00', servico:'Creche',           status:'andamento', filial:'Centro',    valor:80,  pago:false, checkinAt:new Date(now-18000000).toISOString()},
+    {id:uid(), tutorId:t17, petId:p22, data:hoje, hora:'08:15', servico:'Creche',           status:'andamento', filial:'Zona Sul',  valor:80,  pago:false, checkinAt:new Date(now-16200000).toISOString()},
+    {id:uid(), tutorId:t18, petId:p23, data:hoje, hora:'08:30', servico:'Creche',           status:'andamento', filial:'Centro',    valor:80,  pago:false, checkinAt:new Date(now-14400000).toISOString()},
+    {id:uid(), tutorId:t15, petId:p20, data:hoje, hora:'08:30', servico:'Creche',           status:'andamento', filial:'Petrópolis',valor:80,  pago:false, checkinAt:new Date(now-14400000).toISOString()},
+    // Em andamento — banho/tosa
+    {id:uid(), tutorId:t2,  petId:p3,  data:hoje, hora:'09:00', servico:'Banho',            status:'andamento', filial:'Centro',    valor:60,  pago:false, checkinAt:new Date(now-7200000).toISOString()},
+    {id:uid(), tutorId:t12, petId:p16, data:hoje, hora:'09:30', servico:'Banho e Tosa',    status:'andamento', filial:'Boa Vista', valor:110, pago:false, checkinAt:new Date(now-5400000).toISOString()},
+    // Agendados — tarde
+    {id:uid(), tutorId:t4,  petId:p5,  data:hoje, hora:'10:00', servico:'Veterinário',      status:'agendado',  filial:'Centro',    valor:250, pago:false},
+    {id:uid(), tutorId:t8,  petId:p9,  data:hoje, hora:'10:30', servico:'Banho Higiênico',  status:'agendado',  filial:'Centro',    valor:45,  pago:false},
+    {id:uid(), tutorId:t9,  petId:p10, data:hoje, hora:'11:00', servico:'Banho e Tosa',    status:'agendado',  filial:'Zona Sul',  valor:130, pago:false},
+    {id:uid(), tutorId:t14, petId:p18, data:hoje, hora:'13:00', servico:'Banho e Tosa',    status:'agendado',  filial:'Boa Vista', valor:120, pago:false},
+    {id:uid(), tutorId:t19, petId:p24, data:hoje, hora:'14:00', servico:'Adestramento',     status:'agendado',  filial:'Petrópolis',valor:200, pago:false},
+    {id:uid(), tutorId:t13, petId:p17, data:hoje, hora:'15:00', servico:'Veterinário',      status:'agendado',  filial:'Boa Vista', valor:180, pago:false},
+    {id:uid(), tutorId:t16, petId:p21, data:hoje, hora:'15:30', servico:'Tosa',             status:'agendado',  filial:'Petrópolis',valor:70,  pago:false},
+    {id:uid(), tutorId:t11, petId:p14, data:hoje, hora:'16:00', servico:'Banho e Tosa',    status:'agendado',  filial:'Centro',    valor:120, pago:false},
+    // ─── Amanhã ──────────────────────────────────────────────────────────────
+    {id:uid(), tutorId:t2,  petId:p3,  data:amanha, hora:'09:00', servico:'Banho e Tosa',  status:'agendado',  filial:'Centro',    valor:90,  pago:false},
+    {id:uid(), tutorId:t6,  petId:p7,  data:amanha, hora:'07:30', servico:'Creche',         status:'agendado',  filial:'Centro',    valor:80,  pago:false},
+    {id:uid(), tutorId:t8,  petId:p9,  data:amanha, hora:'10:00', servico:'Banho Higiênico',status:'agendado',  filial:'Centro',    valor:45,  pago:false},
+    {id:uid(), tutorId:t7,  petId:p8,  data:amanha, hora:'11:00', servico:'Veterinário',    status:'agendado',  filial:'Zona Sul',  valor:150, pago:false},
+    {id:uid(), tutorId:t14, petId:p19, data:amanha, hora:'09:30', servico:'Banho e Tosa',  status:'agendado',  filial:'Boa Vista', valor:110, pago:false},
+    // ─── Em 2 dias ───────────────────────────────────────────────────────────
+    {id:uid(), tutorId:t1,  petId:p12, data:em2, hora:'09:00', servico:'Banho e Tosa',      status:'agendado',  filial:'Centro',    valor:120, pago:false},
+    {id:uid(), tutorId:t5,  petId:p6,  data:em2, hora:'10:00', servico:'Creche',            status:'agendado',  filial:'Zona Sul',  valor:80,  pago:false},
+    {id:uid(), tutorId:t18, petId:p23, data:em2, hora:'13:00', servico:'Banho e Tosa',      status:'agendado',  filial:'Centro',    valor:130, pago:false},
+    // ─── Histórico ───────────────────────────────────────────────────────────
+    {id:uid(), tutorId:t3,  petId:p4,  data:ontem, hora:'09:30', servico:'Banho e Tosa',   status:'concluido', filial:'Zona Sul',  valor:130, pago:true},
+    {id:uid(), tutorId:t5,  petId:p6,  data:ontem, hora:'08:00', servico:'Creche',          status:'concluido', filial:'Zona Sul',  valor:80,  pago:true},
+    {id:uid(), tutorId:t6,  petId:p13, data:ontem, hora:'11:00', servico:'Banho Higiênico', status:'concluido', filial:'Centro',    valor:45,  pago:true},
+    {id:uid(), tutorId:t12, petId:p16, data:ontem, hora:'10:00', servico:'Tosa',            status:'concluido', filial:'Boa Vista', valor:70,  pago:true},
+    {id:uid(), tutorId:t8,  petId:p9,  data:d2,    hora:'09:00', servico:'Banho Higiênico', status:'concluido', filial:'Centro',    valor:45,  pago:true},
+    {id:uid(), tutorId:t10, petId:p11, data:d2,    hora:'10:00', servico:'Tosa',            status:'concluido', filial:'Centro',    valor:85,  pago:true},
+    {id:uid(), tutorId:t17, petId:p25, data:d3,    hora:'09:00', servico:'Banho e Tosa',   status:'concluido', filial:'Zona Sul',  valor:110, pago:true},
+    {id:uid(), tutorId:t1,  petId:p1,  data:d5,    hora:'08:00', servico:'Banho e Tosa',   status:'concluido', filial:'Centro',    valor:120, pago:true},
+    {id:uid(), tutorId:t9,  petId:p10, data:d7,    hora:'09:00', servico:'Banho e Tosa',   status:'concluido', filial:'Zona Sul',  valor:130, pago:true},
+    {id:uid(), tutorId:t3,  petId:p4,  data:d9,    hora:'10:00', servico:'Adestramento',   status:'concluido', filial:'Zona Sul',  valor:200, pago:true},
+    {id:uid(), tutorId:t2,  petId:p3,  data:d11,   hora:'09:00', servico:'Banho e Tosa',   status:'concluido', filial:'Centro',    valor:90,  pago:true},
+    {id:uid(), tutorId:t14, petId:p18, data:d12,   hora:'10:00', servico:'Banho e Tosa',   status:'concluido', filial:'Boa Vista', valor:120, pago:true},
+    {id:uid(), tutorId:t15, petId:p20, data:d13,   hora:'09:00', servico:'Tosa',            status:'concluido', filial:'Petrópolis',valor:70,  pago:true},
+  ];
+
+  // ── Financeiro — 50+ lançamentos no mês ──────────────────────────────────────
+  const financeiro = [
+    // Hoje — serviços pagos + PDV movimentado
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Thor (Centro)',         valor:120, formaPagamento:'PIX',          data:hoje,  categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Rex (Zona Sul)',        valor:130, formaPagamento:'Dinheiro',     data:hoje,  categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Tosa — Coco (Centro)',                 valor:70,  formaPagamento:'PIX',          data:hoje,  categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Ração Premium 15kg',                  valor:189, formaPagamento:'Cartão',       data:hoje,  categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Antipulgas Frontline x3',             valor:147, formaPagamento:'PIX',          data:hoje,  categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Petisco Natural + Vermífugo',         valor:56,  formaPagamento:'Dinheiro',     data:hoje,  categoria:'produtos',  origem:'pdv',    filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Shampoo Premium 5L',                  valor:88,  formaPagamento:'Cartão',       data:hoje,  categoria:'produtos',  origem:'pdv',    filial:'Boa Vista'},
+    // Ontem
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Rex',                  valor:130, formaPagamento:'PIX',          data:ontem, categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Creche diária — Bidu',                valor:80,  formaPagamento:'PIX',          data:ontem, categoria:'servicos', origem:'plano',  filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Banho Higiênico — Pretinha',          valor:45,  formaPagamento:'Dinheiro',     data:ontem, categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Tosa — Toby (Boa Vista)',             valor:70,  formaPagamento:'PIX',          data:ontem, categoria:'servicos', origem:'agenda', filial:'Boa Vista'},
+    {id:uid(), tipo:'receita', descricao:'Creche diária — Luna',                valor:80,  formaPagamento:'PIX',          data:ontem, categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Shampoo + Perfume Pet',               valor:97,  formaPagamento:'Cartão',       data:ontem, categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'despesa', descricao:'Produtos de limpeza (reposição)',      valor:68,  formaPagamento:'Dinheiro',     data:ontem, categoria:'despesas',  origem:'manual'},
+    // d2
+    {id:uid(), tipo:'receita', descricao:'Banho Higiênico — Meg',               valor:45,  formaPagamento:'Cartão',       data:d2,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Tosa — Coco',                         valor:85,  formaPagamento:'PIX',          data:d2,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Creche — Luna',                       valor:80,  formaPagamento:'PIX',          data:d2,    categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Hospedagem diária — Bob',             valor:120, formaPagamento:'PIX',          data:d2,    categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Ração Light 10kg',                    valor:145, formaPagamento:'Cartão',       data:d2,    categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Labradoodle Bruno',    valor:110, formaPagamento:'PIX',          data:d2,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    // d3
+    {id:uid(), tipo:'receita', descricao:'Banho — Bolinha',                     valor:60,  formaPagamento:'PIX',          data:d3,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Creche — Bidu',                       valor:80,  formaPagamento:'Dinheiro',     data:d3,    categoria:'servicos', origem:'plano',  filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Hospedagem — Thor diária',            valor:120, formaPagamento:'PIX',          data:d3,    categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Coleira + Guia Premium',              valor:89,  formaPagamento:'Cartão',       data:d3,    categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'despesa', descricao:'Compra shampoo e condicionador',      valor:210, formaPagamento:'PIX',          data:d3,    categoria:'despesas',  origem:'manual'},
+    // d4
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Bob',                  valor:110, formaPagamento:'PIX',          data:d4,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Creche — Coco',                       valor:80,  formaPagamento:'PIX',          data:d4,    categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Hospedagem — Thor diária',            valor:120, formaPagamento:'PIX',          data:d4,    categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Cirurgia OSH — Nina',                 valor:850, formaPagamento:'Cartão',       data:d4,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    // d5
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Thor',                 valor:120, formaPagamento:'PIX',          data:d5,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Veterinário — Rex',                   valor:150, formaPagamento:'Cartão',       data:d5,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Ração Premium 15kg x2',               valor:378, formaPagamento:'Cartão',       data:d5,    categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'despesa', descricao:'Energia elétrica',                    valor:380, formaPagamento:'Débito',       data:d5,    categoria:'despesas',  origem:'manual'},
+    // d6
+    {id:uid(), tipo:'receita', descricao:'Banho — Mel',                         valor:60,  formaPagamento:'PIX',          data:d6,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Adestramento — Rex',                  valor:200, formaPagamento:'Cartão',       data:d6,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Antipulgas + Vermífugo combo',        valor:76,  formaPagamento:'PIX',          data:d6,    categoria:'produtos',  origem:'pdv',    filial:'Zona Sul'},
+    // d7
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Spike',                valor:130, formaPagamento:'Cartão',       data:d7,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Creche — Luna',                       valor:80,  formaPagamento:'PIX',          data:d7,    categoria:'servicos', origem:'plano',  filial:'Centro'},
+    {id:uid(), tipo:'despesa', descricao:'Compra ração estoque (15 sacos)',     valor:2100,formaPagamento:'PIX',          data:d7,    categoria:'despesas',  origem:'manual'},
+    // d8–d14
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Thor',                 valor:120, formaPagamento:'PIX',          data:d8,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Veterinário consulta — Meg',          valor:150, formaPagamento:'Cartão',       data:d8,    categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Banho — Bidu',                        valor:70,  formaPagamento:'PIX',          data:d9,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Adestramento — Rex',                  valor:200, formaPagamento:'Cartão',       data:d9,    categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Bob',                  valor:110, formaPagamento:'Cartão',       data:d10,   categoria:'servicos', origem:'agenda', filial:'Zona Sul'},
+    {id:uid(), tipo:'despesa', descricao:'Salários (4 funcionários)',           valor:13500,formaPagamento:'Transferência',data:d10,  categoria:'despesas',  origem:'manual'},
+    {id:uid(), tipo:'receita', descricao:'Adestramento — Luna',                 valor:200, formaPagamento:'Cartão',       data:d11,   categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Hera',                 valor:120, formaPagamento:'PIX',          data:d12,   categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Banho e Tosa — Toby (Boa Vista)',     valor:120, formaPagamento:'PIX',          data:d12,   categoria:'servicos', origem:'agenda', filial:'Boa Vista'},
+    {id:uid(), tipo:'receita', descricao:'Veterinário — Nina (consulta pré-op)',valor:350, formaPagamento:'Cartão',       data:d13,   categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'despesa', descricao:'Materiais cirúrgicos',                valor:420, formaPagamento:'PIX',          data:d13,   categoria:'despesas',  origem:'manual'},
+    {id:uid(), tipo:'receita', descricao:'Banho — Mel',                         valor:60,  formaPagamento:'PIX',          data:d14,   categoria:'servicos', origem:'agenda', filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Ração + Petisco combo',               valor:215, formaPagamento:'Cartão',       data:d14,   categoria:'produtos',  origem:'pdv',    filial:'Centro'},
+    {id:uid(), tipo:'receita', descricao:'Tosa — Pingo (Petrópolis)',           valor:70,  formaPagamento:'PIX',          data:d13,   categoria:'servicos', origem:'agenda', filial:'Petrópolis'},
+  ];
+
+  // ── Estoque — 22 itens, 5 abaixo do mínimo ───────────────────────────────────
+  const estoque = [
+    {id:uid(), nome:'Shampoo Neutro 5L',         categoria:'Higiene',    quantidade:8,  unidade:'un', precoCompra:38,  precoVenda:65,  estoqueMin:3,  filial:'Centro'},
+    {id:uid(), nome:'Condicionador 5L',          categoria:'Higiene',    quantidade:5,  unidade:'un', precoCompra:42,  precoVenda:70,  estoqueMin:2,  filial:'Centro'},
+    {id:uid(), nome:'Shampoo Hipoalergênico 5L', categoria:'Higiene',    quantidade:1,  unidade:'un', precoCompra:55,  precoVenda:88,  estoqueMin:3,  filial:'Centro'},
+    {id:uid(), nome:'Ração Premium 15kg',        categoria:'Alimentos',  quantidade:14, unidade:'sc', precoCompra:140, precoVenda:189, estoqueMin:5,  filial:'Centro'},
+    {id:uid(), nome:'Ração Light 10kg',          categoria:'Alimentos',  quantidade:7,  unidade:'sc', precoCompra:98,  precoVenda:145, estoqueMin:3,  filial:'Centro'},
+    {id:uid(), nome:'Petisco Natural 250g',      categoria:'Alimentos',  quantidade:22, unidade:'un', precoCompra:12,  precoVenda:22,  estoqueMin:10, filial:'Centro'},
+    {id:uid(), nome:'Antipulgas Frontline M',    categoria:'Medicação',  quantidade:4,  unidade:'un', precoCompra:28,  precoVenda:49,  estoqueMin:10, filial:'Centro'},
+    {id:uid(), nome:'Vermífugo Drontal',         categoria:'Medicação',  quantidade:24, unidade:'un', precoCompra:18,  precoVenda:34,  estoqueMin:10, filial:'Centro'},
+    {id:uid(), nome:'Luvas descartáveis P',      categoria:'Insumos',    quantidade:2,  unidade:'cx', precoCompra:22,  precoVenda:0,   estoqueMin:5,  filial:'Centro'},
+    {id:uid(), nome:'Perfume Pet Lavanda',       categoria:'Higiene',    quantidade:15, unidade:'un', precoCompra:18,  precoVenda:32,  estoqueMin:5,  filial:'Centro'},
+    {id:uid(), nome:'Perfume Pet Cítrico',       categoria:'Higiene',    quantidade:10, unidade:'un', precoCompra:18,  precoVenda:32,  estoqueMin:5,  filial:'Centro'},
+    {id:uid(), nome:'Coleira Antipulgas M',      categoria:'Acessórios', quantidade:8,  unidade:'un', precoCompra:35,  precoVenda:59,  estoqueMin:3,  filial:'Centro'},
+    {id:uid(), nome:'Guia Retrátil 5m',         categoria:'Acessórios', quantidade:5,  unidade:'un', precoCompra:28,  precoVenda:52,  estoqueMin:2,  filial:'Centro'},
+    {id:uid(), nome:'Shampoo Neutro 5L',         categoria:'Higiene',    quantidade:6,  unidade:'un', precoCompra:38,  precoVenda:65,  estoqueMin:3,  filial:'Zona Sul'},
+    {id:uid(), nome:'Ração Premium 15kg',        categoria:'Alimentos',  quantidade:9,  unidade:'sc', precoCompra:140, precoVenda:189, estoqueMin:5,  filial:'Zona Sul'},
+    {id:uid(), nome:'Antipulgas Frontline M',    categoria:'Medicação',  quantidade:3,  unidade:'un', precoCompra:28,  precoVenda:49,  estoqueMin:10, filial:'Zona Sul'},
+    {id:uid(), nome:'Shampoo Neutro 5L',         categoria:'Higiene',    quantidade:4,  unidade:'un', precoCompra:38,  precoVenda:65,  estoqueMin:3,  filial:'Boa Vista'},
+    {id:uid(), nome:'Ração Premium 15kg',        categoria:'Alimentos',  quantidade:3,  unidade:'sc', precoCompra:140, precoVenda:189, estoqueMin:5,  filial:'Boa Vista'},
+    {id:uid(), nome:'Vermífugo Drontal',         categoria:'Medicação',  quantidade:6,  unidade:'un', precoCompra:18,  precoVenda:34,  estoqueMin:10, filial:'Boa Vista'},
+    {id:uid(), nome:'Shampoo Neutro 5L',         categoria:'Higiene',    quantidade:2,  unidade:'un', precoCompra:38,  precoVenda:65,  estoqueMin:5,  filial:'Petrópolis'},
+    {id:uid(), nome:'Antipulgas Frontline M',    categoria:'Medicação',  quantidade:2,  unidade:'un', precoCompra:28,  precoVenda:49,  estoqueMin:8,  filial:'Petrópolis'},
+    {id:uid(), nome:'Petisco Natural 250g',      categoria:'Alimentos',  quantidade:8,  unidade:'un', precoCompra:12,  precoVenda:22,  estoqueMin:10, filial:'Petrópolis'},
+  ];
+
+  const servicos = [
+    {id:uid(), nome:'Banho',           preco:60,  duracao:60,   ativo:true, cor:'#47399C'},
+    {id:uid(), nome:'Tosa',            preco:70,  duracao:90,   ativo:true, cor:'#FF136F'},
+    {id:uid(), nome:'Banho e Tosa',    preco:110, duracao:120,  ativo:true, cor:'#02B9BD'},
+    {id:uid(), nome:'Creche',          preco:80,  duracao:480,  ativo:true, cor:'#F6A61C'},
+    {id:uid(), nome:'Hospedagem',      preco:120, duracao:1440, ativo:true, cor:'#7C3AED'},
+    {id:uid(), nome:'Veterinário',     preco:150, duracao:60,   ativo:true, cor:'#DC2626'},
+    {id:uid(), nome:'Banho Higiênico', preco:45,  duracao:30,   ativo:true, cor:'#372D80'},
+    {id:uid(), nome:'Adestramento',    preco:200, duracao:60,   ativo:true, cor:'#D97706'},
+  ];
+
+  // ── Funcionários — 8, todas as filiais ───────────────────────────────────────
+  const funcionarios = [
+    {id:uid(), nome:'Ana Paula Santos',   cargo:'Recepcionista',  telefone:'(51) 99111-2222', salario:2200,  admissao:'2024-03-01', filial:'Centro',    ativo:true},
+    {id:uid(), nome:'Lucas Becker',       cargo:'Tosador',        telefone:'(51) 99333-4444', salario:2800,  admissao:'2023-08-15', filial:'Centro',    ativo:true},
+    {id:uid(), nome:'Vanessa Corrêa',     cargo:'Banhista',       telefone:'(51) 99555-6666', salario:2400,  admissao:'2024-01-10', filial:'Centro',    ativo:true},
+    {id:uid(), nome:'Dr. Rodrigo Farias', cargo:'Médico Veterinário', telefone:'(51) 99777-8888', salario:7500, admissao:'2023-05-20', filial:'Centro',  ativo:true},
+    {id:uid(), nome:'Carla Moreira',      cargo:'Banhista/Tosadora',  telefone:'(51) 99999-0001', salario:2600, admissao:'2024-06-01', filial:'Zona Sul',ativo:true},
+    {id:uid(), nome:'Paulo Henrique',     cargo:'Recepcionista',  telefone:'(51) 99212-3344', salario:2100,  admissao:'2025-01-15', filial:'Boa Vista', ativo:true},
+    {id:uid(), nome:'Simone Teixeira',    cargo:'Tosadora',       telefone:'(51) 99423-5566', salario:2700,  admissao:'2024-09-01', filial:'Boa Vista', ativo:true},
+    {id:uid(), nome:'Gustavo Leal',       cargo:'Banhista',       telefone:'(51) 99634-7788', salario:2300,  admissao:'2025-02-01', filial:'Petrópolis',ativo:true},
+  ];
+
+  // ── Checklists Hospedagem ─────────────────────────────────────────────────────
+  const checklistThor = {};
+  [d4,d3,d2,ontem,hoje].forEach((dt,idx) => {
+    checklistThor[dt] = {
+      alimentacao: {
+        manha: {feito:true,       obs:'Comeu tudo',         feitorPor:'Vanessa',   hora:'07:35'},
+        tarde: {feito:idx<4,      obs:'',                   feitorPor:idx<4?'Ana Paula':'', hora:idx<4?'12:30':null},
+        noite: {feito:idx<4,      obs:'',                   feitorPor:idx<4?'Lucas':'',     hora:idx<4?'18:05':null}
+      },
+      medicacoes: [{nome:'Doxiciclina',dose:'50mg',horarios:[
+        {hora:'08:00',feito:true,  feitorPor:'Vanessa',   horaReal:'08:05'},
+        {hora:'20:00',feito:idx<4, feitorPor:idx<4?'Lucas':'',horaReal:idx<4?'20:10':null}
+      ]}],
+      atividades: {passeio:idx<4, recreacao:idx<4, socializacao:true},
+      observacoes: ['Chegou agitado, adaptando','Bem mais calmo','Brincando com outros pets','Excelente humor, tomando sol',''][idx]
+    };
+  });
+
+  const checklistBob = {};
+  [d3,d2,ontem,hoje].forEach((dt,idx) => {
+    checklistBob[dt] = {
+      alimentacao: {
+        manha: {feito:true,  obs:'Ração seca 200g', feitorPor:'Lucas',    hora:'07:45'},
+        tarde: {feito:true,  obs:'',                 feitorPor:'Ana Paula',hora:'12:45'},
+        noite: {feito:idx<3, obs:'',                 feitorPor:idx<3?'Vanessa':'',hora:idx<3?'18:30':null}
+      },
+      medicacoes: [],
+      atividades: {passeio:true, recreacao:false, socializacao:false},
+      observacoes: idx===3?'Tutor confirmou retirada amanhã às 8h':''
+    };
+  });
+
+  const checklistKira = {};
+  [d2,ontem,hoje].forEach((dt,idx) => {
+    checklistKira[dt] = {
+      alimentacao: {
+        manha: {feito:true,  obs:'Ração 250g',  feitorPor:'Ana Paula',hora:'07:50'},
+        tarde: {feito:true,  obs:'',             feitorPor:'Lucas',    hora:'12:50'},
+        noite: {feito:idx<2, obs:'',             feitorPor:idx<2?'Vanessa':'',hora:idx<2?'18:20':null}
+      },
+      medicacoes: [],
+      atividades: {passeio:true, recreacao:true, socializacao:true},
+      observacoes: idx===2?'Muito tranquila, brinca com Thor no recreio':''
+    };
+  });
+
+  const checklistPipoca = {};
+  [ontem,hoje].forEach((dt,idx) => {
+    checklistPipoca[dt] = {
+      alimentacao: {
+        manha: {feito:true,     obs:'Ração seca 150g',feitorPor:'Ana Paula',hora:'08:00'},
+        tarde: {feito:true,     obs:'',                feitorPor:'Lucas',    hora:'13:00'},
+        noite: {feito:idx===0,  obs:'',                feitorPor:idx===0?'Vanessa':'',hora:idx===0?'18:45':null}
+      },
+      medicacoes: [],
+      atividades: {passeio:false, recreacao:true, socializacao:true},
+      observacoes: idx===1?'Tutor ligou, retira sábado':'Chegou agitada, adaptando-se bem'
+    };
+  });
+
+  // ── Checklists Internação ────────────────────────────────────────────────────
+  const checklistNina = {};
+  [d4,d3,d2,ontem,hoje].forEach((dt,idx) => {
+    checklistNina[dt] = {
+      medicacoes: [
+        {nome:'Tramadol',  dose:'2mg/kg',  via:'SC', horarios:[
+          {hora:'08:00',feito:true,  feitorPor:'Dr. Rodrigo',horaReal:'08:00'},
+          {hora:'20:00',feito:idx<4, feitorPor:idx<4?'Vanessa':'',horaReal:idx<4?'20:05':null}
+        ]},
+        {nome:'Cefazolina',dose:'22mg/kg', via:'IV', horarios:[
+          {hora:'07:00',feito:true,  feitorPor:'Dr. Rodrigo',horaReal:'07:10'},
+          {hora:'15:00',feito:idx<4, feitorPor:idx<4?'Ana Paula':'',horaReal:idx<4?'15:00':null},
+          {hora:'23:00',feito:idx<4, feitorPor:idx<4?'Vanessa':'',horaReal:idx<4?'23:10':null}
+        ]}
+      ],
+      alimentacao: {
+        aceitou: idx===0?false:true,
+        obs: ['Recusou. Normal no pós-op imediato.','Comeu metade. Evoluindo bem.','Comeu tudo! Ótimo sinal.','Apetite normal.',''][idx]
+      },
+      evolucao: [
+        'Pós-cirúrgico imediato. Animal estável. Pressão normal. Analgesia IV contínua.',
+        'Sem febre. Ferida cirúrgica limpa, sem sinais de infecção. Iniciando deambulação.',
+        'Evolução positiva. Apetite voltando. Reduzir analgesia amanhã.',
+        'Animal alerta, brincalhona. Ferida cicatrizando bem. Alta provável em 48h.',
+        ''
+      ][idx]
+    };
+  });
+
+  const checklistHera = {};
+  [ontem,hoje].forEach((dt,idx) => {
+    checklistHera[dt] = {
+      medicacoes: [
+        {nome:'Metronidazol',dose:'15mg/kg',via:'IV',horarios:[
+          {hora:'08:00',feito:true,   feitorPor:'Dr. Rodrigo',horaReal:'08:15'},
+          {hora:'20:00',feito:idx===0,feitorPor:idx===0?'Vanessa':'',horaReal:idx===0?'20:05':null}
+        ]},
+        {nome:'Probiótico',dose:'1 sachê',via:'VO',horarios:[
+          {hora:'12:00',feito:idx===0,feitorPor:idx===0?'Ana Paula':'',horaReal:idx===0?'12:00':null}
+        ]}
+      ],
+      alimentacao: {
+        aceitou: idx===0?false:true,
+        obs: idx===0?'Recusou. Vômito 2x. Dieta hidrolisada.':'Aceitou dieta. Sem vômitos desde as 10h.'
+      },
+      evolucao: idx===0
+        ?'Vômito 2x. Diarreia leve. Hidratação EV iniciada. 60ml/kg/dia.'
+        :'Melhora significativa. Sem vômitos. Hidratação oral iniciada. Alta prevista amanhã.'
+    };
+  });
+
+  const checklistSpike = {};
+  checklistSpike[hoje] = {
+    medicacoes: [
+      {nome:'Tramadol',   dose:'3mg/kg',  via:'IV',  horarios:[
+        {hora:'08:00', feito:true,  feitorPor:'Dr. Rodrigo', horaReal:'08:30'},
+        {hora:'16:00', feito:false, feitorPor:'',            horaReal:null},
+        {hora:'22:00', feito:false, feitorPor:'',            horaReal:null}
+      ]},
+      {nome:'Cetoprofeno',dose:'2mg/kg',  via:'SC',  horarios:[
+        {hora:'08:00', feito:true,  feitorPor:'Dr. Rodrigo', horaReal:'08:32'},
+        {hora:'20:00', feito:false, feitorPor:'',            horaReal:null}
+      ]}
+    ],
+    alimentacao: { aceitou: null, obs: 'Ainda em observação, ainda não ofertado.' },
+    evolucao: 'Admitido hoje por trauma por atropelamento. Rx sem fratura. Lacerações superficiais. Dor intensa controlada. Monitoramento 24h.'
+  };
+
+  // ── Planos — 10 ──────────────────────────────────────────────────────────────
+  const planos = [
+    // Creche ativos
+    {id:pl1,  tutorId:t2,  petId:p2,  tipo:'Creche', modalidade:'Diária', frequencia:5, totalDiarias:20, diariasUsadas:8,  valorDiario:80, valor:1200, dataInicio:dias(-15), status:'ativo',   filial:'Centro'},
+    {id:pl2,  tutorId:t6,  petId:p7,  tipo:'Creche', modalidade:'Diária', frequencia:5, totalDiarias:10, diariasUsadas:3,  valorDiario:80, valor:650,  dataInicio:dias(-7),  status:'ativo',   filial:'Centro'},
+    {id:pl3,  tutorId:t5,  petId:p6,  tipo:'Creche', modalidade:'Diária', frequencia:3, totalDiarias:12, diariasUsadas:5,  valorDiario:80, valor:720,  dataInicio:dias(-10), status:'ativo',   filial:'Zona Sul'},
+    {id:pl8,  tutorId:t10, petId:p11, tipo:'Creche', modalidade:'Diária', frequencia:3, totalDiarias:10, diariasUsadas:2,  valorDiario:80, valor:600,  dataInicio:dias(-5),  status:'ativo',   filial:'Centro'},
+    // Hospedagem ativos
+    {id:pl4,  tutorId:t1,  petId:p1,  tipo:'Hospedagem', status:'ativo',
+      dataInicio:d4, dataTermino:em5,
+      medicacoes:[{nome:'Doxiciclina',dose:'50mg',horarios:['08:00','20:00']}],
+      alimentacaoPadrao:'Ração Premium 200g — manhã, tarde e noite',
+      obsGerais:'Adora brincar com bola. Latido forte é normal.',
+      checklist:checklistThor, filial:'Centro', valor:120},
+    {id:pl5,  tutorId:t7,  petId:p8,  tipo:'Hospedagem', status:'ativo',
+      dataInicio:d3, dataTermino:amanha,
+      medicacoes:[], alimentacaoPadrao:'Ração seca 180g — manhã e tarde',
+      obsGerais:'Não tolera gatos por perto. Ronca ao dormir.',
+      checklist:checklistBob, filial:'Centro', valor:120},
+    {id:pl9,  tutorId:t11, petId:p15, tipo:'Hospedagem', status:'ativo',
+      dataInicio:d2, dataTermino:em3,
+      medicacoes:[], alimentacaoPadrao:'Ração seca 250g — manhã e noite',
+      obsGerais:'Muito tranquila, gosta de brincar com outros cães.',
+      checklist:checklistKira, filial:'Centro', valor:120},
+    {id:pl10, tutorId:t13, petId:p17, tipo:'Hospedagem', status:'ativo',
+      dataInicio:ontem, dataTermino:em2,
+      medicacoes:[], alimentacaoPadrao:'Ração seca 120g — manhã e tarde',
+      obsGerais:'Família viajando, WhatsApp fotos diárias.',
+      checklist:checklistPipoca, filial:'Boa Vista', valor:110},
+    // Vencidos
+    {id:pl6,  tutorId:t3,  petId:p4,  tipo:'Hospedagem', status:'vencido',
+      dataInicio:d7, dataTermino:ontem,
+      medicacoes:[], alimentacaoPadrao:'Ração seca 300g',
+      obsGerais:'Dominante, melhor box separado.', checklist:{}, filial:'Zona Sul', valor:120},
+    {id:pl7,  tutorId:t4,  petId:p5,  tipo:'Creche', modalidade:'Diária', frequencia:0, totalDiarias:15, diariasUsadas:15, valorDiario:80, valor:1800, dataInicio:dias(-35), status:'vencido', filial:'Centro'},
+  ];
+
+  // ── Internações — 3 ──────────────────────────────────────────────────────────
+  const internacoes = [
+    {id:uid(), petId:p5,  tutorId:t4,
+      dataEntrada:d4, previsaoAlta:em3, dataAlta:null, status:'internado',
+      diagnostico:'Pós-operatório de OSH (ovário-histerectomia). Sutura íntegra.',
+      medicoResponsavel:'Dr. Rodrigo Farias',
+      obsAdmissao:'Manter repouso absoluto. Evitar esforço físico. Colar elizabetano.',
+      medicacoes:[
+        {nome:'Tramadol',   dose:'2mg/kg',  via:'SC', horarios:['08:00','20:00']},
+        {nome:'Cefazolina', dose:'22mg/kg', via:'IV', horarios:['07:00','15:00','23:00']}
+      ],
+      checklist:checklistNina},
+    {id:uid(), petId:p12, tutorId:t1,
+      dataEntrada:ontem, previsaoAlta:amanha, dataAlta:null, status:'internado',
+      diagnostico:'Gastroenterite hemorrágica. Desidratação moderada (7%).',
+      medicoResponsavel:'Dr. Rodrigo Farias',
+      obsAdmissao:'Hidratação EV 60ml/kg/dia. Dieta hidrolisada. Reavaliação 24h.',
+      medicacoes:[
+        {nome:'Metronidazol', dose:'15mg/kg', via:'IV', horarios:['08:00','20:00']},
+        {nome:'Probiótico',   dose:'1 sachê', via:'VO', horarios:['12:00']}
+      ],
+      checklist:checklistHera},
+    {id:uid(), petId:p10, tutorId:t9,
+      dataEntrada:hoje, previsaoAlta:em5, dataAlta:null, status:'internado',
+      diagnostico:'Trauma por atropelamento. Lacerações superficiais. Sem fratura confirmada no Rx.',
+      medicoResponsavel:'Dr. Rodrigo Farias',
+      obsAdmissao:'Monitoramento 24h. Analgesia multimodal. Restrição de movimentos.',
+      medicacoes:[
+        {nome:'Tramadol',    dose:'3mg/kg',  via:'IV', horarios:['08:00','16:00','22:00']},
+        {nome:'Cetoprofeno', dose:'2mg/kg',  via:'SC', horarios:['08:00','20:00']}
+      ],
+      checklist:checklistSpike},
+  ];
+
+  const db = {
+    tutores, pets, agendamentos, financeiro, planos, servicos, estoque, funcionarios,
+    contas:[], internacoes, usuarios,
+    config:{
+      setupDone:true, nomePetshop:'Pets Go Control',
+      filiais:['Centro','Zona Sul','Boa Vista','Petrópolis'], corDestaque:'indigo',
+    }
+  };
+
+  localStorage.setItem('petsgo_crm', JSON.stringify(db));
+  localStorage.setItem(DEMO_KEY, '1');
+  // Auto-login como master para demo sem fricção
+  const adminU = usuarios[0];
+  sessionStorage.setItem('petsgo_session', JSON.stringify({
+    id: adminU.id, nome: adminU.nome, login: adminU.login,
+    role: adminU.role, filial: adminU.filial || ''
+  }));
+})();
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 initApp();
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
-}
 </script>
 </body>
 </html>

@@ -17,6 +17,8 @@
 //    GH_OWNER              seu username no GitHub
 //    GH_REPO               repo privado de dados (ex: andarilho-data)
 //    FATHOM_API_KEY        Meeting intel — Fathom API key
+//    KIWI_API_KEY          Kiwi Tequila API — monitorar passagens (free: tequila.kiwi.com)
+//    GUILHERME_WA          Número WhatsApp para alertas de passagens (ex: 5551999999999)
 // ═══════════════════════════════════════════════════════════════
 
 import { lerLeads, salvarLeads, appendLog, dbRead, dbUpdate } from './db.js';
@@ -531,6 +533,86 @@ Extract the following as JSON (no markdown, pure JSON):
 }
 
 // ─────────────────────────────────────────────────────────────
+// AGENTE 5 — MONITOR DE PASSAGENS (Kiwi.com Tequila API)
+// Runs daily at 08h BRT (11h UTC). Checks price for monitored routes.
+// Register free key at: tequila.kiwi.com
+// ─────────────────────────────────────────────────────────────
+
+const ROTAS_MONITORAR = [
+  { id:'cnx-dad', descricao:'Chiang Mai → Da Nang', de:'CNX', para:'DAD', dataMin:'16/06/2026', dataMax:'30/06/2026', threshold:600, adultos:2 },
+  { id:'dad-dps', descricao:'Da Nang → Bali',       de:'DAD', para:'DPS', dataMin:'16/08/2026', dataMax:'31/08/2026', threshold:700, adultos:2 },
+];
+
+async function buscarPassagem(env, rota) {
+  if (!env.KIWI_API_KEY) {
+    const sim = 550 + Math.floor(Math.random() * 300);
+    return { melhorPreco: sim, melhorVoo: `[SIMULADO] AirAsia ${rota.dataMin.slice(0,5)} — R$${sim}/pax`, link:'', _mock:true };
+  }
+  try {
+    const params = new URLSearchParams({
+      fly_from: rota.de, fly_to: rota.para,
+      date_from: rota.dataMin, date_to: rota.dataMax,
+      adults: rota.adultos, curr: 'BRL', sort: 'price', limit: 1,
+      max_stopovers: 2, one_for_city: 1,
+    });
+    const r = await fetch(`https://tequila.kiwi.com/v2/search?${params}`, {
+      headers: { 'apikey': env.KIWI_API_KEY },
+    });
+    if (!r.ok) { console.error('[VOOS] Kiwi error:', r.status); return null; }
+    const data = await r.json();
+    const voo  = data.data?.[0];
+    if (!voo) return null;
+
+    const precoPorPessoa = Math.round(voo.price / rota.adultos);
+    const cias   = [...new Set((voo.route || []).map(s => s.airline))].join('+');
+    const partida = voo.local_departure?.slice(0, 10) || rota.dataMin;
+    return {
+      melhorPreco: precoPorPessoa,
+      melhorVoo:   `${cias} ${partida} — R$${voo.price} total`,
+      link:        voo.deep_link || '',
+    };
+  } catch (e) { console.error('[VOOS] erro:', e.message); return null; }
+}
+
+async function agentVoos(env) {
+  console.log('[AGENTE 5] Monitor de passagens iniciado...');
+  const { data: historico } = await dbRead(env, 'voos.json');
+  const hist    = historico ?? [];
+  const alertas = [];
+
+  for (const rota of ROTAS_MONITORAR) {
+    const precos = await buscarPassagem(env, rota);
+    if (!precos) { console.warn(`[VOOS] sem resultado para ${rota.id}`); continue; }
+
+    hist.push({
+      rotaId:          rota.id,
+      descricao:       rota.descricao,
+      checkedAt:       new Date().toISOString(),
+      melhorPreco:     precos.melhorPreco,
+      melhorVoo:       precos.melhorVoo,
+      link:            precos.link,
+      threshold:       rota.threshold,
+      alertaDisparado: precos.melhorPreco <= rota.threshold,
+      mock:            !!precos._mock,
+    });
+
+    if (precos.melhorPreco <= rota.threshold) {
+      alertas.push({ rota: rota.descricao, preco: precos.melhorPreco });
+      const msg = `✈️ *ALERTA PASSAGEM!*\n${rota.descricao}\nPreço: R$${precos.melhorPreco}/pax\nMeta: R$${rota.threshold}\n${precos.melhorVoo}\n${precos.link}`;
+      if (env.GUILHERME_WA) await enviarWhatsApp(env, env.GUILHERME_WA, msg, 'Guilherme');
+      else console.log('[VOOS ALERTA]', msg);
+    }
+
+    console.log(`[AGENTE 5] ${rota.descricao}: R$${precos.melhorPreco}/pax (alvo R$${rota.threshold}) ${precos.melhorPreco <= rota.threshold ? '🎉' : ''}`);
+    await sleep(500);
+  }
+
+  await dbUpdate(env, 'voos.json', () => hist.slice(-500), []);
+  await appendLog(env, 'voos', alertas.length > 0 ? 'alerta' : 'ok', `${ROTAS_MONITORAR.length} rotas, ${alertas.length} alertas`);
+  return { verificadas: ROTAS_MONITORAR.length, alertas: alertas.length };
+}
+
+// ─────────────────────────────────────────────────────────────
 // CRON DISPATCH
 // UTC schedule → BRT = UTC-3
 // ─────────────────────────────────────────────────────────────
@@ -539,6 +621,7 @@ const CRON_MAP = {
   '0 13 * * 2,4': env => agentEnviarLote(env), // Ter + Qui 10h BRT
   '0 13 * * 3,6': env => agentFollowUp(env),   // Qua + Sab 10h BRT
   '0 18 * * *':   env => agentFathom(env),     // Daily 15h BRT
+  '0 11 * * *':   env => agentVoos(env),       // Daily 08h BRT
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -578,6 +661,11 @@ async function handleStatus(env) {
       prospeccao: logs?.prospeccao?.[0] || null,
       envio_lote: logs?.envio_lote?.[0] || null,
       followup:   logs?.followup?.[0]   || null,
+      voos:       logs?.voos?.[0]       || null,
+    },
+    ferramentasExtras: {
+      kiwiFlights: env.KIWI_API_KEY  ? '✅ configurado' : '⚠️ simulando',
+      guilhermeWA: env.GUILHERME_WA  ? '✅ configurado' : '⚠️ alertas só no console',
     },
   });
 }
@@ -690,6 +778,21 @@ export default {
     if (method === 'POST' && path === '/fathom/sync') {
       ctx.waitUntil(agentFathom(env).catch(e => console.error('[FATHOM SYNC] erro:', e)));
       return json({ ok: true, mensagem: 'Fathom sync iniciado.' });
+    }
+
+    // GET /voos — histórico de preços monitorados
+    if (method === 'GET' && path === '/voos') {
+      const { data } = await dbRead(env, 'voos.json');
+      const hist = data ?? [];
+      const ultima = {};
+      for (const h of hist) ultima[h.rotaId] = h;
+      return json({ rotas: ROTAS_MONITORAR, ultimaVerificacao: ultima, historico: hist.slice(-100) });
+    }
+
+    // POST /voos/check — executa agentVoos imediatamente
+    if (method === 'POST' && path === '/voos/check') {
+      ctx.waitUntil(agentVoos(env).catch(e => console.error('[VOOS CHECK] erro:', e)));
+      return json({ ok: true, mensagem: 'Verificação de passagens iniciada.' });
     }
 
     // POST /enviar/:id

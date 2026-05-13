@@ -58,8 +58,37 @@ type: project
 ## Step 4 — Update MEMORY.md
 Add a line to `MEMORY.md` index pointing to the new reflection file.
 
+## Step 5 — Sync Memory to GitHub
+After saving locally, push the memory files to `AI-AGency-files` so the daily brief agent can read them tomorrow.
+
+Run these commands via Bash:
+```bash
+# Clone or update the repo
+REPO_DIR="$HOME/AppData/Local/Temp/ai-agency-sync"
+if [ -d "$REPO_DIR/.git" ]; then
+  git -C "$REPO_DIR" pull --quiet
+else
+  git clone https://github.com/andarilho1992/AI-AGency-files "$REPO_DIR" --quiet
+fi
+
+# Copy memory files
+MEMORY_SRC="C:/Users/viaje/.claude/projects/c--Users-viaje-Projeto-1/memory"
+cp "$MEMORY_SRC"/*.md "$REPO_DIR/memory/" 2>/dev/null || true
+
+# Commit and push
+git -C "$REPO_DIR" config user.email "braziliangui1992@gmail.com"
+git -C "$REPO_DIR" config user.name "Guilherme Andrade"
+git -C "$REPO_DIR" add memory/
+git -C "$REPO_DIR" commit -m "memory: sync $(date '+%Y-%m-%d')" --quiet 2>/dev/null || true
+git -C "$REPO_DIR" push origin main --quiet
+```
+
+If push succeeds: notify "Memória sincronizada com GitHub."
+If push fails: notify "Sync falhou — brief de amanhã usará status base." and continue without blocking.
+
 ## Rules
 - Run this BEFORE closing VS Code
 - One reflection per session, not one per day
 - If session was long, capture the last 2 hours (what matters now)
 - "Exact next step" must be specific enough that cold-start Claude can execute it without asking
+- Step 5 (GitHub sync) never blocks the session close — se falhar, ignora e segue
