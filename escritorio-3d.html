@@ -181,9 +181,18 @@ const floorMat=new THREE.MeshLambertMaterial({color:0xc8894a});
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(22,18),floorMat);
 floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; scene.add(floor);
 
-// Carpet in bullpen
-const carpet=new THREE.Mesh(new THREE.PlaneGeometry(13,9),new THREE.MeshLambertMaterial({color:0x6b7a8d}));
+// Bullpen carpet (blue-grey)
+const carpet=new THREE.Mesh(new THREE.PlaneGeometry(13,9),new THREE.MeshLambertMaterial({color:0x5a6880}));
 carpet.rotation.x=-Math.PI/2; carpet.position.set(-1.5,0.01,-0.5); scene.add(carpet);
+// Conference room carpet (dark purple-grey)
+const confCarpet=new THREE.Mesh(new THREE.PlaneGeometry(5.5,7),new THREE.MeshLambertMaterial({color:0x3e3550}));
+confCarpet.rotation.x=-Math.PI/2; confCarpet.position.set(-7.5,0.012,5); scene.add(confCarpet);
+// Michael's office — premium dark wood
+const michaelFloor=new THREE.Mesh(new THREE.PlaneGeometry(6.5,5),new THREE.MeshLambertMaterial({color:0x7a4f28}));
+michaelFloor.rotation.x=-Math.PI/2; michaelFloor.position.set(7.5,0.012,5.5); scene.add(michaelFloor);
+// Reception — light marble
+const recFloor=new THREE.Mesh(new THREE.PlaneGeometry(8,3.5),new THREE.MeshLambertMaterial({color:0xd4cbb8}));
+recFloor.rotation.x=-Math.PI/2; recFloor.position.set(0,0.012,-6.5); scene.add(recFloor);
 
 // ── WALLS (office boundary) ──
 const wallMat=new THREE.MeshLambertMaterial({color:0xf0ead8});
@@ -287,7 +296,7 @@ const AGENT_DEF={
   scout:{
     name:'Scout', role:'Jim',
     desk:{x:-5,z:0.5}, work:{x:-7,z:5.5},
-    hair:0x6b4218, shirt:0x3d6b9e, pants:0x2d3a52, skin:SKIN,
+    hair:0x7c4f28, shirt:0x2563eb, pants:0x1e3a5f, skin:SKIN,
     glasses:false, tie:false, mug:false, jacket:false, bodyWide:false,
     hairSweep:true, hairLong:false, mouthSmirk:true, mouthFlat:false, bigSmile:false,
     idle:['Varrendo o Maps...','14 abas abertas 👀','Alguém viu o Dwight?','Tudo quieto aqui'],
@@ -297,7 +306,7 @@ const AGENT_DEF={
   analyst:{
     name:'Analyst', role:'Dwight',
     desk:{x:-3,z:0.5}, work:{x:-7,z:6},
-    hair:0x3d2010, shirt:0xc8a830, pants:0x1e2810, skin:SKIN_D,
+    hair:0x3d2010, shirt:0xd97706, pants:0x1c2608, skin:SKIN_D,
     glasses:true, tie:false, mug:false, jacket:false, bodyWide:false,
     hairSweep:false, hairLong:false, mouthSmirk:false, mouthFlat:true, bigSmile:false,
     idle:['Monitorando o pipeline...','Bears. Beets. Leads.','A identidade é Dwight.'],
@@ -307,7 +316,7 @@ const AGENT_DEF={
   writer:{
     name:'Writer', role:'Pam',
     desk:{x:0,z:-7}, work:{x:0,z:-7},
-    hair:0x9a5c2a, shirt:0xd4a0b0, pants:0x6b4a6a, skin:SKIN,
+    hair:0xa86c32, shirt:0xec4899, pants:0x7c3aed, skin:SKIN,
     glasses:false, tie:false, mug:false, jacket:false, bodyWide:false,
     hairSweep:false, hairLong:true, mouthSmirk:false, mouthFlat:false, bigSmile:false,
     idle:['Desenhando um logo...','Claude, me ajuda?','Stalkeando o Insta deles...'],
@@ -317,8 +326,8 @@ const AGENT_DEF={
   tracker:{
     name:'Tracker', role:'Michael',
     desk:{x:7,z:6}, work:{x:-3,z:-1},
-    hair:0x1a1a1a, shirt:0x2d3e6a, pants:0x1a2340, skin:SKIN,
-    glasses:false, tie:0xc03030, mug:true, jacket:0x1e2f80, bodyWide:false,
+    hair:0x1a1a1a, shirt:0x1d4ed8, pants:0x1a2340, skin:SKIN,
+    glasses:false, tie:0xdc2626, mug:true, jacket:0x1e3a8a, bodyWide:false,
     hairSweep:false, hairLong:false, mouthSmirk:false, mouthFlat:false, bigSmile:true,
     idle:["That's what she said.",'MICHAEL SCOTT aqui.','Pipeline quieto? ÓTIMO.'],
     working:['CRM atualizado ✓','Pipeline em ALTA ↑','Sou o melhor manager.'],
@@ -327,7 +336,7 @@ const AGENT_DEF={
   voos:{
     name:'Voos', role:'Kevin',
     desk:{x:-5,z:-1.5}, work:{x:-5,z:-1.5},
-    hair:0x2a1808, shirt:0x4a7848, pants:0x2a3020, skin:0xd4a878,
+    hair:0x2a1808, shirt:0x16a34a, pants:0x14532d, skin:0xd4a878,
     glasses:false, tie:false, mug:false, jacket:false, bodyWide:true,
     hairSweep:false, hairLong:false, mouthSmirk:false, mouthFlat:false, bigSmile:false,
     idle:['CNX→DAD: R$847...','Kiwi verificado.','Olhando a janela 🌏','Mmm... passagens.'],
@@ -340,128 +349,141 @@ const agents={}, aStates={}, bubT={};
 
 function mkChibi(id, def){
   const g=new THREE.Group();
-  const bw=def.bodyWide?1.22:1;
+  const bw=def.bodyWide?1.28:1;
+  const HR=0.52;   // big chibi head
+  const headY=1.22;
 
-  // ── FLOOR DISC (identificador de cor — visível de cima) ──
-  const disc=new THREE.Mesh(new THREE.CircleGeometry(0.55,18),
-    new THREE.MeshBasicMaterial({color:def.shirt,transparent:true,opacity:0.72}));
-  disc.rotation.x=-Math.PI/2; disc.position.y=0.015; g.add(disc);
-  const discBorder=new THREE.Mesh(new THREE.RingGeometry(0.54,0.62,18),
-    new THREE.MeshBasicMaterial({color:def.hair,transparent:true,opacity:0.9,side:THREE.DoubleSide}));
-  discBorder.rotation.x=-Math.PI/2; discBorder.position.y=0.016; g.add(discBorder);
+  // ── SHADOW ──
+  const disc=new THREE.Mesh(new THREE.CircleGeometry(0.40,14),
+    new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0.18,depthWrite:false}));
+  disc.rotation.x=-Math.PI/2; disc.position.y=0.011; g.add(disc);
 
   // ── SHOES ──
-  [-0.09,0.09].forEach(fx=>{
-    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.078,8,6),
+  [-0.092,0.092].forEach(fx=>{
+    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.084,8,6),
       new THREE.MeshLambertMaterial({color:0x1a1010}));
-    sh.scale.set(1.1*bw,0.6,1.45); sh.position.set(fx*bw,0.072,0.04); g.add(sh);
+    sh.scale.set(1.15*bw,0.55,1.5); sh.position.set(fx*bw,0.062,0.05); g.add(sh);
   });
 
   // ── LEGS ──
-  [-0.082,0.082].forEach(lx=>{
-    const lg=new THREE.Mesh(new THREE.CylinderGeometry(0.062,0.062,0.44,8),
+  [-0.086,0.086].forEach(lx=>{
+    const lg=new THREE.Mesh(new THREE.CylinderGeometry(0.066,0.066,0.38,8),
       new THREE.MeshLambertMaterial({color:def.pants}));
-    lg.position.set(lx*bw,0.3,0); g.add(lg);
+    lg.position.set(lx*bw,0.26,0); g.add(lg);
   });
 
-  // ── BODY (tall, slim — visible from isometric top-down) ──
-  const body=new THREE.Mesh(new THREE.CylinderGeometry(0.185,0.215,0.78,14),
+  // ── BODY (short + wide = chibi) ──
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(0.20,0.26,0.55,14),
     new THREE.MeshLambertMaterial({color:def.shirt}));
-  body.position.y=0.82; body.scale.x=bw; body.castShadow=true; g.add(body);
+  body.position.y=0.69; body.scale.x=bw; body.castShadow=true; g.add(body);
 
-  // Jacket lapels (Michael's suit)
+  // Jacket lapels (Michael)
   if(def.jacket){
     const jm=new THREE.MeshLambertMaterial({color:def.jacket});
     [-1,1].forEach(s=>{
-      const lap=new THREE.Mesh(new THREE.BoxGeometry(0.085,0.30,0.055),jm);
-      lap.position.set(s*0.088,0.86,0.185); lap.rotation.z=-s*0.3; g.add(lap);
+      const lap=new THREE.Mesh(new THREE.BoxGeometry(0.09,0.26,0.06),jm);
+      lap.position.set(s*0.092,0.73,0.20); lap.rotation.z=-s*0.28; g.add(lap);
     });
   }
 
   // Tie (Michael)
   if(def.tie){
-    const tie=new THREE.Mesh(new THREE.BoxGeometry(0.055,0.30,0.04),
+    const tie=new THREE.Mesh(new THREE.BoxGeometry(0.060,0.28,0.042),
       new THREE.MeshLambertMaterial({color:def.tie}));
-    tie.position.set(0,0.80,0.215); g.add(tie);
+    tie.position.set(0,0.67,0.245); g.add(tie);
   }
 
   // ── ARMS ──
   [-1,1].forEach(s=>{
-    const arm=new THREE.Mesh(new THREE.CapsuleGeometry(0.062,0.30,4,8),
+    const arm=new THREE.Mesh(new THREE.CapsuleGeometry(0.066,0.24,4,8),
       new THREE.MeshLambertMaterial({color:def.shirt}));
-    arm.position.set(s*(0.262*bw),0.80,0); arm.rotation.z=-s*0.52; g.add(arm);
+    arm.position.set(s*(0.275*bw),0.69,0); arm.rotation.z=-s*0.5; g.add(arm);
   });
 
-  // Mug (Michael — held in right hand)
+  // Mug (Michael)
   if(def.mug){
     const mugM=new THREE.MeshLambertMaterial({color:0xf8f4e0});
-    const mugB=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.046,0.092,10),mugM);
-    mugB.position.set(0.38,0.56,0.05); g.add(mugB);
-    const mh=new THREE.Mesh(new THREE.TorusGeometry(0.03,0.01,6,10,Math.PI),mugM);
-    mh.rotation.y=-Math.PI/2; mh.position.set(0.435,0.56,0.05); g.add(mh);
+    const mugB=new THREE.Mesh(new THREE.CylinderGeometry(0.054,0.050,0.098,10),mugM);
+    mugB.position.set(0.40,0.44,0.06); g.add(mugB);
+    const mh=new THREE.Mesh(new THREE.TorusGeometry(0.034,0.012,6,10,Math.PI),mugM);
+    mh.rotation.y=-Math.PI/2; mh.position.set(0.455,0.44,0.06); g.add(mh);
   }
 
   // ── NECK ──
-  const neck=new THREE.Mesh(new THREE.CylinderGeometry(0.095,0.095,0.12,10),
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(0.102,0.102,0.10,10),
     new THREE.MeshLambertMaterial({color:def.skin}));
-  neck.position.y=1.27; g.add(neck);
+  neck.position.y=1.06; g.add(neck);
 
-  // ── HEAD ──
-  const HR=0.40;
-  const head=new THREE.Mesh(new THREE.SphereGeometry(HR,20,16),
+  // ── HEAD (bigger = chibi) ──
+  const head=new THREE.Mesh(new THREE.SphereGeometry(HR,22,18),
     new THREE.MeshLambertMaterial({color:def.skin}));
-  head.position.y=1.44; head.castShadow=true; g.add(head);
+  head.position.y=headY; head.castShadow=true; g.add(head);
 
-  // ── HAIR CAP (hemisphere) ──
+  // ── HAIR CAP ──
   const hairCap=new THREE.Mesh(
-    new THREE.SphereGeometry(HR+0.018,16,10,0,Math.PI*2,0,Math.PI*0.52),
+    new THREE.SphereGeometry(HR+0.024,16,10,0,Math.PI*2,0,Math.PI*0.50),
     new THREE.MeshLambertMaterial({color:def.hair})
   );
-  hairCap.position.y=1.44; g.add(hairCap);
+  hairCap.position.y=headY; g.add(hairCap);
 
   // Jim: side-swept tuft
   if(def.hairSweep){
-    const tuft=new THREE.Mesh(new THREE.SphereGeometry(0.155,8,8),
+    const tuft=new THREE.Mesh(new THREE.SphereGeometry(0.175,10,8),
       new THREE.MeshLambertMaterial({color:def.hair}));
-    tuft.scale.set(1.55,0.52,0.8); tuft.position.set(0.14,1.78,0.13); g.add(tuft);
+    tuft.scale.set(1.6,0.46,0.72); tuft.position.set(0.15,headY+0.44,0.15); g.add(tuft);
   }
 
-  // Pam: long hair behind + sides
+  // Pam: long hair
   if(def.hairLong){
-    const lng=new THREE.Mesh(new THREE.SphereGeometry(0.26,12,10),
+    const lng=new THREE.Mesh(new THREE.SphereGeometry(0.29,12,10),
       new THREE.MeshLambertMaterial({color:def.hair}));
-    lng.scale.set(0.88,1.85,0.65); lng.position.set(0,1.25,-0.21); g.add(lng);
-    [-0.21,0.21].forEach(sx=>{
-      const side=new THREE.Mesh(new THREE.SphereGeometry(0.14,8,8),
+    lng.scale.set(0.85,1.82,0.60); lng.position.set(0,headY-0.18,-0.24); g.add(lng);
+    [-0.23,0.23].forEach(sx=>{
+      const side=new THREE.Mesh(new THREE.SphereGeometry(0.155,8,8),
         new THREE.MeshLambertMaterial({color:def.hair}));
-      side.scale.set(0.68,1.3,0.58); side.position.set(sx,1.28,-0.08); g.add(side);
+      side.scale.set(0.65,1.28,0.55); side.position.set(sx,headY-0.16,-0.09); g.add(side);
     });
   }
 
+  // ── EYEBROWS ──
+  const EBY=headY+0.16, EBZ=HR*0.86;
+  [-0.132,0.132].forEach(ex=>{
+    const eb=new THREE.Mesh(new THREE.BoxGeometry(0.108,0.026,0.026),
+      new THREE.MeshBasicMaterial({color:def.hair}));
+    eb.position.set(ex,EBY,EBZ); eb.rotation.z=ex>0?0.18:-0.18; g.add(eb);
+  });
+
   // ── EYES ──
-  const EY=1.47, EZ=HR*0.87;
-  [[-0.128,0],[0.128,0]].forEach(([ex])=>{
-    const w=new THREE.Mesh(new THREE.SphereGeometry(0.09,10,10),new THREE.MeshBasicMaterial({color:0xffffff}));
+  const EY=headY+0.05, EZ=HR*0.875;
+  [-0.138,0.138].forEach(ex=>{
+    const w=new THREE.Mesh(new THREE.SphereGeometry(0.100,12,10),new THREE.MeshBasicMaterial({color:0xffffff}));
     w.position.set(ex,EY,EZ); g.add(w);
-    const p=new THREE.Mesh(new THREE.SphereGeometry(0.053,8,8),new THREE.MeshBasicMaterial({color:0x111}));
-    p.position.set(ex,EY-0.007,EZ+0.04); g.add(p);
-    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.02,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));
-    sh.position.set(ex+0.03,EY+0.03,EZ+0.068); g.add(sh);
+    const p=new THREE.Mesh(new THREE.SphereGeometry(0.060,8,8),new THREE.MeshBasicMaterial({color:0x111111}));
+    p.position.set(ex,EY-0.006,EZ+0.048); g.add(p);
+    const sh=new THREE.Mesh(new THREE.SphereGeometry(0.022,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));
+    sh.position.set(ex+0.034,EY+0.033,EZ+0.078); g.add(sh);
+  });
+
+  // ── BLUSH (bochechas) ──
+  const blushM=new THREE.MeshBasicMaterial({color:0xff8888,transparent:true,opacity:0.32,depthWrite:false,side:THREE.DoubleSide});
+  [-0.30,0.30].forEach(bx=>{
+    const bl=new THREE.Mesh(new THREE.CircleGeometry(0.094,10),blushM);
+    bl.position.set(bx,headY-0.07,HR*0.82); g.add(bl);
   });
 
   // ── MOUTH ──
-  const MY=1.33, MZ=HR*0.90;
+  const MY=headY-0.16, MZ=HR*0.92;
   if(def.mouthFlat){
-    const flat=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.011,0.011),
-      new THREE.MeshBasicMaterial({color:0x6a3010}));
+    const flat=new THREE.Mesh(new THREE.BoxGeometry(0.135,0.013,0.013),
+      new THREE.MeshBasicMaterial({color:0x7a3808}));
     flat.position.set(0,MY,MZ); g.add(flat);
   } else if(def.mouthSmirk){
-    const smirk=new THREE.Mesh(new THREE.TorusGeometry(0.058,0.011,6,12,Math.PI*0.65),
+    const smirk=new THREE.Mesh(new THREE.TorusGeometry(0.066,0.013,6,12,Math.PI*0.62),
       new THREE.MeshBasicMaterial({color:0x9b5c2a}));
-    smirk.rotation.z=Math.PI+0.55; smirk.position.set(0.022,MY,MZ); g.add(smirk);
+    smirk.rotation.z=Math.PI+0.52; smirk.position.set(0.026,MY,MZ); g.add(smirk);
   } else {
-    const sr=def.bigSmile?0.095:0.075;
-    const smile=new THREE.Mesh(new THREE.TorusGeometry(sr,0.011,6,12,Math.PI),
+    const sr=def.bigSmile?0.108:0.082;
+    const smile=new THREE.Mesh(new THREE.TorusGeometry(sr,0.013,6,12,Math.PI),
       new THREE.MeshBasicMaterial({color:0x9b5c2a}));
     smile.rotation.z=Math.PI; smile.position.set(0,MY,MZ); g.add(smile);
   }
@@ -469,21 +491,21 @@ function mkChibi(id, def){
   // ── GLASSES (Dwight) ──
   if(def.glasses){
     const fm=new THREE.MeshBasicMaterial({color:0x1a1a1a});
-    [-0.128,0.128].forEach(gx=>{
-      const fr=new THREE.Mesh(new THREE.TorusGeometry(0.074,0.012,6,14),fm);
-      fr.position.set(gx,EY,EZ+0.04); g.add(fr);
+    [-0.138,0.138].forEach(gx=>{
+      const fr=new THREE.Mesh(new THREE.TorusGeometry(0.084,0.013,6,14),fm);
+      fr.position.set(gx,EY,EZ+0.042); g.add(fr);
     });
-    const br=new THREE.Mesh(new THREE.BoxGeometry(0.096,0.012,0.012),fm);
-    br.position.set(0,EY,EZ+0.04); g.add(br);
+    const br=new THREE.Mesh(new THREE.BoxGeometry(0.112,0.013,0.013),fm);
+    br.position.set(0,EY,EZ+0.042); g.add(br);
   }
 
   // ── LABEL + BUBBLE ──
   const nd=document.createElement('div'); nd.className='ag-lbl';
   nd.textContent=def.role+' ('+def.name+')';
-  const no=new CSS2DObject(nd); no.position.set(0,2.1,0); g.add(no);
+  const no=new CSS2DObject(nd); no.position.set(0,1.92,0); g.add(no);
 
   const bd=document.createElement('div'); bd.className='ag-bub';
-  const bo=new CSS2DObject(bd); bo.position.set(0,2.68,0); g.add(bo);
+  const bo=new CSS2DObject(bd); bo.position.set(0,2.52,0); g.add(bo);
 
   const r=def.desk;
   g.position.set(r.x+(Math.random()-.5)*.3,0,r.z+(Math.random()-.5)*.3);
@@ -650,13 +672,13 @@ function animate(){
     switch(aStates[id]){
       case 'idle':
         a.g.position.y=Math.sin(ph*1.4)*.045;
-        a.head.position.y=1.44+Math.sin(ph*1.9)*.018;
+        a.head.position.y=1.22+Math.sin(ph*1.9)*.018;
         a.g.rotation.z=Math.sin(ph*.7)*.035;
         break;
       case 'working':
         a.g.position.y=Math.sin(ph*9)*.028;
         a.g.rotation.z=Math.sin(ph*9)*.09;
-        a.head.position.y=1.44+Math.sin(ph*11)*.03;
+        a.head.position.y=1.22+Math.sin(ph*11)*.03;
         break;
       case 'celebrating':
         a.g.position.y=Math.abs(Math.sin(ph*8))*0.42;
