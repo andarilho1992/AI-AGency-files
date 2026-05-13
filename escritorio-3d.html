@@ -113,9 +113,9 @@ scene.background = new THREE.Color(0x0f0804);
 scene.fog = new THREE.Fog(0x0f0804, 22, 40);
 
 const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
-const camera = new THREE.PerspectiveCamera(42, W()/H(), 0.1, 80);
-camera.position.set(0, 16, 18);
-camera.lookAt(0, 0, 0);
+const camera = new THREE.PerspectiveCamera(48, W()/H(), 0.1, 80);
+camera.position.set(0, 9, 15);
+camera.lookAt(0, 0, -1);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
@@ -138,7 +138,7 @@ window.addEventListener('resize',()=>{
   camera.aspect=W()/H(); camera.updateProjectionMatrix();
   renderer.setSize(W(),H()); css2d.setSize(W(),H());
 });
-window.resetCam=()=>{ camera.position.set(0,16,18); controls.target.set(0,0,0); };
+window.resetCam=()=>{ camera.position.set(0,9,15); controls.target.set(0,0,-1); };
 
 // ─── LIGHTS ──────────────────────────────────────────────────────
 lf(20); lt('Iluminação...');
@@ -148,7 +148,7 @@ sun.position.set(8,20,10); sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
 ['left','right','top','bottom'].forEach((s,i)=>sun.shadow.camera[s]=[-14,14,14,-14][i]);
 sun.shadow.camera.far=50; scene.add(sun);
-scene.add(Object.assign(new THREE.DirectionalLight(0x8090ff,0.3),{position:new THREE.Vector3(-8,6,-6)}));
+const fillLight=new THREE.DirectionalLight(0x8090ff,0.3); fillLight.position.set(-8,6,-6); scene.add(fillLight);
 
 // ─── HELPERS ─────────────────────────────────────────────────────
 const box=(w,h,d,col,emit=0,emitI=0,transparent=false,opacity=1)=>{
