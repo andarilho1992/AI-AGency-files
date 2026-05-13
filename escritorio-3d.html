@@ -113,8 +113,14 @@ scene.background = new THREE.Color(0x0f0804);
 scene.fog = new THREE.Fog(0x0f0804, 22, 40);
 
 const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
-const camera = new THREE.PerspectiveCamera(45, W()/H(), 0.1, 100);
-camera.position.set(8, 24, 14);
+
+// ── ORTHOGRAPHIC CAMERA (isometric top-down, no perspective distortion) ──
+const VIEW = 12; // half-height in world units
+const camAspect = ()=>W()/H();
+const camera = new THREE.OrthographicCamera(
+  -VIEW*camAspect(), VIEW*camAspect(), VIEW, -VIEW, -30, 80
+);
+camera.position.set(10, 18, 12);
 camera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
@@ -133,14 +139,20 @@ document.getElementById('css2d').appendChild(css2d.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0,0,0); controls.enableDamping=true; controls.dampingFactor=0.07;
 controls.enableRotate=false;
-controls.screenSpacePanning=false;
-controls.minDistance=12; controls.maxDistance=45;
+controls.screenSpacePanning=true;
+controls.zoomSpeed=1.2;
 
 window.addEventListener('resize',()=>{
-  camera.aspect=W()/H(); camera.updateProjectionMatrix();
+  const a=camAspect();
+  camera.left=-VIEW*a; camera.right=VIEW*a;
+  camera.top=VIEW; camera.bottom=-VIEW;
+  camera.updateProjectionMatrix();
   renderer.setSize(W(),H()); css2d.setSize(W(),H());
 });
-window.resetCam=()=>{ camera.position.set(8,24,14); controls.target.set(0,0,0); controls.update(); };
+window.resetCam=()=>{
+  camera.position.set(10,18,12); camera.zoom=1;
+  camera.updateProjectionMatrix(); controls.target.set(0,0,0); controls.update();
+};
 
 // ─── LIGHTS ──────────────────────────────────────────────────────
 lf(20); lt('Iluminação...');
